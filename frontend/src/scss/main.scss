@@ -1,54 +1,27 @@
 @import "custom";
 @import "~bootstrap/scss/bootstrap";
 
-body {
-    
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 30px 0 0;
+    background-color: white;
 }
 
-nav {
-    height: $top-menu-height;
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: 100vh;
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 main {
-	margin-top: $top-menu-height;	
+    background-color: #F0F2FB;
+    min-height: 100vh;
 }
-
-.view {
-    margin-bottom: $button-row-height + 15;
-}
-
-.btn {
-    padding: 8px 30px !important;
-}
-
-.label {
-    font-weight: $font-medium;
-    color: $light;
-    margin-bottom: 20px;
-}
-
-hr {
-    margin: 30px 0;
-    color: $light;
-}
-
-.value {
-    font-weight: $font-regular;
-    color: $dark;
-    margin-bottom: 20px;
-}
-
-input.bottom-bordered {
-    border: none !important;
-    border-bottom: 1px solid $dark !important;        
-    border-radius: 0 !important;
-    margin-right: 20px;
-}
-
-.input-group-text {
-    border: none;
-    border-radius: 0;
-    background: none;
-}
-
-_:-ms-lang(x), .nav-item { min-width: 120px; }

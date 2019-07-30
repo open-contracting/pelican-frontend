@@ -1,5 +1,9 @@
 export const messages = {
-    search: {
-        button: 'Hledej'
+    sections: {
+        overview: 'Overview',
+        field: 'Field',
+        resource: 'Resource',
+        dataset: 'Dataset',
+        time: 'Time',
     },
 }
