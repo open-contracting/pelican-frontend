@@ -7,9 +7,11 @@
                     <ul class="nav main_nav text-left">
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
-                                <router-link to="/overview">
-                                    <span class="menu_icon_small"><font-awesome-icon icon="home" /> </span>
-                                   {{ $t("sections.overview").toUpperCase() }}
+                                <router-link to="/">
+                                    <span class="menu_icon_small">
+                                        <font-awesome-icon icon="home" />
+                                    </span>
+                                    {{ $t("sections.overview").toUpperCase() }}
                                 </router-link>
                             </a>
                         </li>
@@ -17,7 +19,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
                                 <router-link to="/field">
-                                    <span class="menu_icon_small"><font-awesome-icon icon="sliders-h"/></span>
+                                    <span class="menu_icon_small">
+                                        <font-awesome-icon icon="sliders-h" />
+                                    </span>
                                     {{ $t("sections.field").toUpperCase() }}
                                 </router-link>
                             </a>
@@ -26,7 +30,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
                                 <router-link to="/resource">
-                                    <span class="menu_icon_small"><font-awesome-icon icon="list-alt" /></span>
+                                    <span class="menu_icon_small">
+                                        <font-awesome-icon icon="list-alt" />
+                                    </span>
                                     {{ $t("sections.resource").toUpperCase() }}
                                 </router-link>
                             </a>
@@ -35,8 +41,10 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
                                 <router-link to="/dataset">
-                                    <span class="menu_icon_small"><font-awesome-icon icon="tasks" /></span>
-                                   {{ $t("sections.dataset").toUpperCase() }}
+                                    <span class="menu_icon_small">
+                                        <font-awesome-icon icon="tasks" />
+                                    </span>
+                                    {{ $t("sections.dataset").toUpperCase() }}
                                 </router-link>
                             </a>
                         </li>
@@ -44,7 +52,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" href="#">
                                 <router-link to="/time">
-                                    <span class="menu_icon_small"><font-awesome-icon icon="history"/></span>
+                                    <span class="menu_icon_small">
+                                        <font-awesome-icon icon="history" />
+                                    </span>
                                     {{ $t("sections.time").toUpperCase() }}
                                 </router-link>
                             </a>
@@ -64,7 +74,6 @@
 
 <style lang="scss">
 @import "src/scss/main";
-@import "src/scss/custom";
 
 .main_nav {
     margin-top: 30px;

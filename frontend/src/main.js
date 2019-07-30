@@ -10,9 +10,6 @@ import {messages as en} from './messages/en.js'
 import {messages as cs} from './messages/cs.js'
 
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-
 Vue.use(BootstrapVue)
 Vue.use(VueI18n);
 const i18n = new VueI18n({

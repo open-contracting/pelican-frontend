@@ -6,4 +6,5 @@ export const messages = {
         dataset: 'Dataset',
         time: 'Time',
     },
+    header: "Data Quality Assesment Results"
 }
