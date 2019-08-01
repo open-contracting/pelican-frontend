@@ -1,70 +1,68 @@
 <template>
     <div class="container-fluid" id="app">
-        <div class="row h-100">
-            <nav class="col-md-2 d-none d-md-block sidebar h-100">
-                <div class="sidebar-sticky text-center">
-                    <img src="./assets/ocp_logo.png" />
-                    <ul class="nav main_nav text-left">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <router-link to="/">
-                                    <span class="menu_icon_small">
-                                        <font-awesome-icon icon="home" />
-                                    </span>
-                                    {{ $t("sections.overview").toUpperCase() }}
-                                </router-link>
-                            </a>
-                        </li>
+        <div class="row h-100 no-gutters">
+            <nav class="col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2 sidebar h-100 text-center">
+                <img src="./assets/ocp_logo.png" /><br>
+                <ul class="nav main_nav text-left">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <router-link to="/">
+                                <span class="menu_icon_small">
+                                    <font-awesome-icon icon="home" />
+                                </span>
+                                {{ $t("sections.overview").toUpperCase() }}
+                            </router-link>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <router-link to="/field">
-                                    <span class="menu_icon_small">
-                                        <font-awesome-icon icon="sliders-h" />
-                                    </span>
-                                    {{ $t("sections.field").toUpperCase() }}
-                                </router-link>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <router-link to="/field">
+                                <span class="menu_icon_small">
+                                    <font-awesome-icon icon="sliders-h" />
+                                </span>
+                                {{ $t("sections.field").toUpperCase() }}
+                            </router-link>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <router-link to="/resource">
-                                    <span class="menu_icon_small">
-                                        <font-awesome-icon icon="list-alt" />
-                                    </span>
-                                    {{ $t("sections.resource").toUpperCase() }}
-                                </router-link>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <router-link to="/resource">
+                                <span class="menu_icon_small">
+                                    <font-awesome-icon icon="list-alt" />
+                                </span>
+                                {{ $t("sections.resource").toUpperCase() }}
+                            </router-link>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <router-link to="/dataset">
-                                    <span class="menu_icon_small">
-                                        <font-awesome-icon icon="tasks" />
-                                    </span>
-                                    {{ $t("sections.dataset").toUpperCase() }}
-                                </router-link>
-                            </a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <router-link to="/dataset">
+                                <span class="menu_icon_small">
+                                    <font-awesome-icon icon="tasks" />
+                                </span>
+                                {{ $t("sections.dataset").toUpperCase() }}
+                            </router-link>
+                        </a>
+                    </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <router-link to="/time">
-                                    <span class="menu_icon_small">
-                                        <font-awesome-icon icon="history" />
-                                    </span>
-                                    {{ $t("sections.time").toUpperCase() }}
-                                </router-link>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <router-link to="/time">
+                                <span class="menu_icon_small">
+                                    <font-awesome-icon icon="history" />
+                                </span>
+                                {{ $t("sections.time").toUpperCase() }}
+                            </router-link>
+                        </a>
+                    </li>
+                </ul>
             </nav>
 
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div class="align-items-center">
+            <main role="main" class="col-11 col-sm-10 col-md-9 col-lg-9 col-xl-10 offset-1 offset-sm-2 offset-md-3 offset-lg-3 offset-xl-2">
+                <div id="main_content" class="align-items-center">
                     <router-view />
                 </div>
             </main>
@@ -76,7 +74,10 @@
 @import "src/scss/main";
 
 .main_nav {
-    margin-top: 30px;
+    margin-top: 50px;
+    display: inline-block;
+    position: relative;
+    left: -10px;
 }
 
 .main_nav > li {
