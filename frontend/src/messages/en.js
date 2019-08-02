@@ -1,5 +1,6 @@
 export const messages = {
     sections: {
+        home: 'Home',
         overview: 'Overview',
         field: 'Field',
         resource: 'Resource',

@@ -1,9 +1,21 @@
 <template>
-    <div class="container-fluid" id="app">
-        <div class="row h-100 no-gutters">
+    <div class="container-fluid p-0" id="app">
+        <div class="row h-100">
             <nav class="col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2 sidebar h-100 text-center">
-                <img src="./assets/ocp_logo.png" /><br>
+                <img src="./assets/ocp_logo.png" />
+                <br />
                 <ul class="nav main_nav text-left">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <router-link to="/">
+                                <span class="menu_icon_small">
+                                    <font-awesome-icon icon="cogs" />
+                                </span>
+                                {{ $t("sections.home").toUpperCase() }}
+                            </router-link>
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link active" href="#">
                             <router-link to="/">
@@ -62,8 +74,10 @@
             </nav>
 
             <main role="main" class="col-11 col-sm-10 col-md-9 col-lg-9 col-xl-10 offset-1 offset-sm-2 offset-md-3 offset-lg-3 offset-xl-2">
-                <div id="main_content" class="align-items-center">
-                    <router-view />
+                <div id="main_content" class="align-items-center row">
+                    <div class="col">
+                        <router-view />
+                    </div>
                 </div>
             </main>
         </div>

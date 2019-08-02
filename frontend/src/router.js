@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Home from './views/Home.vue'
 import Overview from './views/Overview.vue'
 import Field from './views/Field.vue'
 import Resource from './views/Resource.vue'
@@ -13,6 +14,11 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [{
         path: '/',
+        name: 'home',
+        component: Home
+    },
+    {
+        path: '/overview',
         name: 'overview',
         component: Overview
     }, {

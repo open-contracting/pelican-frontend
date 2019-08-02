@@ -6,14 +6,18 @@ import store from './store'
 import './registerServiceWorker'
 import BootstrapVue from 'bootstrap-vue'
 import VueI18n from 'vue-i18n'
-import {messages as en} from './messages/en.js'
-import {messages as cs} from './messages/cs.js'
+import {
+    messages as en
+} from './messages/en.js'
+import {
+    messages as cs
+} from './messages/cs.js'
 
 
 Vue.use(BootstrapVue)
 Vue.use(VueI18n);
 const i18n = new VueI18n({
-    locale: 'cs', // set locale
+    locale: 'en', // set locale
     messages: {
         en: en,
         cs: cs
