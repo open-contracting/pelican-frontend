@@ -12,6 +12,11 @@ export default new Vuex.Store({
         datasetId: null,
         resourceLevelStats: null,
     },
+    getters: {
+        resourceLevelStats: state => {
+            return state.resourceLevelStats;
+        }
+    },
     mutations: {
         setDatasetId(state, newId) {
             state.datasetId = newId;
@@ -21,16 +26,20 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        updateDatasetId({dispatch, commit}, newId) {
+        updateDatasetId({
+            dispatch,
+            commit
+        }, newId) {
             commit("setDatasetId", newId);
             dispatch("loadResourceLevelStats");
         },
-        loadResourceLevelStats({commit, state}) {
+        loadResourceLevelStats({
+            commit,
+            state
+        }) {
             var url = CONFIG.api.baseUrl + CONFIG.api.endpoints.resourceLevelStats + "/" + state.datasetId;
             axios.get(url)
                 .then(function (response) {
-                    console.log(response);
-
                     commit("setResourceLevelStats", response["data"])
                 })
                 .catch(function (error) {
