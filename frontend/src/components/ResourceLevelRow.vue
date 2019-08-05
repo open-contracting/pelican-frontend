@@ -1,6 +1,6 @@
 <template>
     <tr class="d-flex">
-        <td class="col-6">{{ $t("resourceLevel." + name) }}</td>
+        <td class="col-5">{{ $t("resourceLevel." + name) }}</td>
         <td class="col-1 text-right">
             <span v-if=" okPercentage> 0" class="value_ok">{{ okPercentage }}%</span>
         </td>
@@ -10,6 +10,7 @@
         <td class="col-1 text-right">
             <span v-if=" naPercentage> 0" class="value_na">{{ naPercentage }}%</span>
         </td>
+        <td class="col-1 text-right"></td>
         <td class="col-3">
             <div class="stacked_line_chart">
                 <div class="ok_bar" v-bind:style="{ width: okPercentage + '%' }">&nbsp;</div>

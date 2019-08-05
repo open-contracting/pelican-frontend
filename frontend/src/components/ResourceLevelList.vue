@@ -2,10 +2,11 @@
     <table class="table table-hover">
         <thead>
             <tr class="d-flex">
-                <th class="col-6" scope="col">{{ $t("resourceLevel.check") }}</th>
+                <th class="col-5" scope="col">{{ $t("resourceLevel.check") }}</th>
                 <th class="col-1 text-center" scope="col">{{ $t("resourceLevel.ok") }}</th>
                 <th class="col-1 text-center" scope="col">{{ $t("resourceLevel.failed") }}</th>
                 <th class="col-1 text-center" scope="col">{{ $t("resourceLevel.na") }}</th>
+                <th class="col-1" scope="col">&nbsp;</th>
                 <th class="col-3" scope="col">&nbsp;</th>
             </tr>
         </thead>
