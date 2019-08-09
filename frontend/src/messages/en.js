@@ -16,9 +16,8 @@ export const messages = {
         failed: "FAILED",
         na: "N/A",
         check: "CHECK",
-        count: {
-            header: "Checked contracting processes:",
-        },
+        count_header: "Checked contracting processes:",
+        application_count_header: "Individual checks:",
         coherent: {
             categoryName: "Coherency",
             dates: {

@@ -84,6 +84,19 @@
     </div>
 </template>
 
+<script>
+export default {
+    data: function() {
+        return {
+            datasetId: "honduras_2019-07-11_16:32:23"
+        };
+    },
+    mounted() {
+        this.$store.dispatch("updateDatasetId", "honduras_2019-07-11_16:32:23");
+    }
+};
+</script>
+
 <style lang="scss">
 @import "src/scss/main";
 
