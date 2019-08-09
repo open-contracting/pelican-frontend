@@ -67,16 +67,19 @@
                     <table class="table table-sm">
                         <thead>
                             <tr class="d-flex">
-                                <th class="col-10" scope="col">{{ $t("ocid") }}</th>
+                                <th class="col-10" scope="col">{{ $t("examples.ocid") }}</th>
                                 <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="example in check.examples.failed" class="d-flex">
+                            <tr v-for="(example, index) in check.examples.failed" class="d-flex">
                                 <td class="col-10 text-left">
                                     <span class="check_name">{{ example.data.ocid }}</span>
                                 </td>
-                                <td class="col-2">{{ $t("examples.preview") }}</td>
+                                <td class="col-2 clickable" v-on:click="changePreview(index, 'failed', example.data, example.meta)">
+                                    <span v-if="index != selectedKey || selectedSection != 'failed'">{{ $t("examples.preview") }}</span>
+                                    <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == 'failed'">active</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -87,16 +90,19 @@
                     <table class="table table-sm">
                         <thead>
                             <tr class="d-flex">
-                                <th class="col-10" scope="col">{{ $t("ocid") }}</th>
+                                <th class="col-10" scope="col">{{ $t("examples.ocid") }}</th>
                                 <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="example in check.examples.passed" class="d-flex">
+                            <tr v-for="(example, index) in check.examples.passed" class="d-flex">
                                 <td class="col-10 text-left">
                                     <span class="check_name">{{ example.data.ocid }}</span>
                                 </td>
-                                <td class="col-2">{{ $t("examples.preview") }}</td>
+                                <td class="col-2 clickable" v-on:click="changePreview(index, 'passed', example.data, example.meta)">
+                                    <span v-if="index != selectedKey || selectedSection != 'passed'">{{ $t("examples.preview") }}</span>
+                                    <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == 'passed'">active</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -128,7 +134,9 @@ export default {
         return {
             check: null,
             previewData: null,
-            previewMetadata: null
+            previewMetadata: null,
+            selectedKey: null,
+            selectedSection: null
         };
     },
     components: { InlineBar, VueJsonPretty },
@@ -136,12 +144,22 @@ export default {
         this.check = this.$store.getters.resourceLevelCheckByName(
             this.$route.params.check
         );
-        this.previewMetadata = this.check.examples.failed[0].meta;
-        this.previewData = this.check.examples.failed[0].data;
+        if (this.check.examples.failed.length > 0) {
+            this.previewMetadata = this.check.examples.failed[0].meta;
+            this.previewData = this.check.examples.failed[0].data;
+            this.selectedKey = 0;
+            this.selectedSection = "failed";
+        }
     },
     methods: {
         onePercent: function() {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
+        },
+        changePreview: function(key, section, data, metaData) {
+            this.selectedKey = key;
+            this.selectedSection = section;
+            this.previewMetadata = metaData;
+            this.previewData = data;
         }
     },
     computed: {
