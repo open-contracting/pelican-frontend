@@ -17,6 +17,25 @@ body {
     background-color: white;
 }
 
+.examples {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 40%;
+    z-index: 100;
+    padding: 50px 20px 20px;
+    background-color: white;
+    overflow: scroll;
+}
+
+.examples .divider {
+    border-top: solid 1px $na_light_color;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
 main {
     min-height: 100vh;
 }

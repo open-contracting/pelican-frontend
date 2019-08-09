@@ -61,6 +61,58 @@
                         </tbody>
                     </table>
                 </div>
+
+                <h5>{{ $t("examples.failed") }}</h5>
+                <div class="result_box">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr class="d-flex">
+                                <th class="col-10" scope="col">{{ $t("ocid") }}</th>
+                                <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="example in check.examples.failed" class="d-flex">
+                                <td class="col-10 text-left">
+                                    <span class="check_name">{{ example.data.ocid }}</span>
+                                </td>
+                                <td class="col-2">{{ $t("examples.preview") }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h5>{{ $t("examples.passed") }}</h5>
+                <div class="result_box">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr class="d-flex">
+                                <th class="col-10" scope="col">{{ $t("ocid") }}</th>
+                                <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="example in check.examples.passed" class="d-flex">
+                                <td class="col-10 text-left">
+                                    <span class="check_name">{{ example.data.ocid }}</span>
+                                </td>
+                                <td class="col-2">{{ $t("examples.preview") }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col col-6">
+                <div class="examples">
+                    <h5>{{ $t("preview.metadata") }}</h5>
+                    <vue-json-pretty :highlightMouseoverNode="'True'" :data="previewMetadata"></vue-json-pretty>
+
+                    <div class="divider">&nbsp;</div>
+
+                    <h5>{{ $t("preview.ocds_data") }}</h5>
+                    <vue-json-pretty :highlightMouseoverNode="'True'" :deep="2" :data="previewData"></vue-json-pretty>
+                </div>
             </div>
         </div>
     </div>
@@ -68,19 +120,24 @@
 
 <script>
 import InlineBar from "@/components/InlineBar";
+import VueJsonPretty from "vue-json-pretty";
 
 export default {
     name: "resourceCheckDetail",
     data: function() {
         return {
-            check: null
+            check: null,
+            previewData: null,
+            previewMetadata: null
         };
     },
-    components: { InlineBar },
+    components: { InlineBar, VueJsonPretty },
     created() {
         this.check = this.$store.getters.resourceLevelCheckByName(
             this.$route.params.check
         );
+        this.previewMetadata = this.check.examples.failed[0].meta;
+        this.previewData = this.check.examples.failed[0].data;
     },
     methods: {
         onePercent: function() {
@@ -111,3 +168,7 @@ export default {
     }
 };
 </script>
+
+<style scoped lang="scss">
+@import "src/scss/variables";
+</style>

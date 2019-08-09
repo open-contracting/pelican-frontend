@@ -1,11 +1,12 @@
-from django.db.models import Count, Sum
+import random
+
+from django.db.models import Count, Max, Min, Sum
 from django.http import JsonResponse
 
 from .models import ResourceLevelCheck
 
 
 def resource_level_stats(request, dataset_id):
-
     result = {}
 
     counts = ResourceLevelCheck.objects.filter(
@@ -36,4 +37,41 @@ def resource_level_stats(request, dataset_id):
     for rate in rates:
         result[rate["check_name"]]["application_count"] = rate["application_count"]
         result[rate["check_name"]]["pass_count"] = rate["pass_count"]
+
+    for key, item in result.items():
+        max_id = ResourceLevelCheck.objects.filter(
+            check_name=key).filter(
+            dataset=dataset_id).aggregate(
+            max_id=Max("id"))["max_id"]
+
+        min_id = ResourceLevelCheck.objects.filter(
+            check_name=key).filter(
+            dataset=dataset_id).aggregate(
+            min_id=Min("id"))["min_id"]
+
+        rand_id = random.randint(min_id, min_id + (max_id - min_id))
+
+        passed_examples = ResourceLevelCheck.objects.filter(
+            check_name=key).filter(
+            dataset=dataset_id).filter(result=True).filter(id__gt=rand_id)[:5]
+
+        result[key]["examples"] = {}
+        result[key]["examples"]["passed"] = []
+        for item in passed_examples:
+            val = {}
+            val["meta"] = item.meta
+            val["data"] = item.data_item.data
+            result[key]["examples"]["passed"].append(val)
+
+        failed_examples = ResourceLevelCheck.objects.filter(
+            check_name=key).filter(
+            dataset=dataset_id).filter(result=False).filter(id__gt=rand_id)[:5]
+
+        result[key]["examples"]["failed"] = []
+        for item in failed_examples:
+            val = {}
+            val["meta"] = item.meta
+            val["data"] = item.data_item.data
+            result[key]["examples"]["failed"].append(val)
+
     return JsonResponse(result)

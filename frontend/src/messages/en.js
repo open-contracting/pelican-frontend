@@ -11,6 +11,17 @@ export const messages = {
         dataset: 'Dataset',
         time: 'Time',
     },
+    preview: {
+        metadata: "Metadata",
+        ocds_data: "OCDS Data Preview"
+    },
+    examples: {
+        failed: "Sample releases with failed rules",
+        passed: "Sample releases with passed rules",
+        actions: "actions",
+        preview: "preview",
+        ocid: "ocid",
+    },
     resourceLevel: {
         ok: "OK",
         failed: "FAILED",
