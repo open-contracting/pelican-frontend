@@ -1,6 +1,8 @@
 <template>
-    <tr class="d-flex">
-        <td class="col-5">{{ $t("resourceLevel." + name) }}</td>
+    <tr class="d-flex clickable" v-on:click="detail()">
+        <td class="col-5">
+            <span class="check_name">{{ $t("resourceLevel." + name + ".name") }}</span>
+        </td>
         <td class="col-1 text-right">
             <span v-if=" okPercentage> 0" class="value_ok">{{ okPercentage }}%</span>
         </td>
@@ -29,6 +31,12 @@ export default {
     methods: {
         onePercent: function() {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
+        },
+        detail: function() {
+            this.$router.push({
+                name: "resourceCheckDetail",
+                params: { check: this.name }
+            });
         }
     },
     computed: {
@@ -51,7 +59,7 @@ export default {
 .stacked_line_chart {
     display: inline-block;
     height: 4px;
-    background-color: #ebedf5;
+    background-color: $na_light_color;
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -65,5 +73,9 @@ export default {
 .failed_bar {
     background-color: $failed_color;
     display: inline-block;
+}
+
+.check_name {
+    padding-left: 35px;
 }
 </style>

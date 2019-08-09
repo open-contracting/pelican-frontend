@@ -6,6 +6,7 @@ import Field from './views/Field.vue'
 import Resource from './views/Resource.vue'
 import Dataset from './views/Dataset.vue'
 import Time from './views/Time.vue'
+import ResourceCheckDetail from './views/ResourceCheckDetail.vue'
 
 Vue.use(Router)
 
@@ -13,29 +14,34 @@ export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [{
-        path: '/',
-        name: 'home',
-        component: Home
-    },
-    {
-        path: '/overview',
-        name: 'overview',
-        component: Overview
-    }, {
-        path: '/field',
-        name: 'field',
-        component: Field
-    }, {
-        path: '/resource',
-        name: 'resource',
-        component: Resource
-    }, {
-        path: '/dataset',
-        name: 'dataset',
-        component: Dataset
-    }, {
-        path: '/time',
-        name: 'time',
-        component: Time
-    }]
+            path: '/',
+            name: 'home',
+            component: Home
+        },
+        {
+            path: '/overview',
+            name: 'overview',
+            component: Overview
+        }, {
+            path: '/field',
+            name: 'field',
+            component: Field
+        }, {
+            path: '/resource',
+            name: 'resource',
+            component: Resource
+        }, {
+            path: '/dataset',
+            name: 'dataset',
+            component: Dataset
+        }, {
+            path: '/time',
+            name: 'time',
+            component: Time
+        }, {
+            path: '/resource/detail/:check',
+            name: 'resourceCheckDetail',
+            component: ResourceCheckDetail
+        }
+    ]
 })

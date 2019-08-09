@@ -13,8 +13,19 @@ export default new Vuex.Store({
         resourceLevelStats: null,
     },
     getters: {
-        resourceLevelStats: state => {
-            return state.resourceLevelStats;
+        resourceLevelStatsBySection: (state) => (sectionName) => {
+            if (state.resourceLevelStats) {
+                return state.resourceLevelStats.filter(item => item.name.startsWith(sectionName));
+            }
+
+            return [];
+        },
+        resourceLevelCheckByName: (state) => (checkName) => {
+            if (state.resourceLevelStats) {
+                return state.resourceLevelStats.find(item => item.name === checkName);
+            }
+
+            return [];
         }
     },
     mutations: {
@@ -40,7 +51,12 @@ export default new Vuex.Store({
             var url = CONFIG.api.baseUrl + CONFIG.api.endpoints.resourceLevelStats + "/" + state.datasetId;
             axios.get(url)
                 .then(function (response) {
-                    commit("setResourceLevelStats", response["data"])
+                    var data = [];
+                    for (var key in response["data"]) {
+                        response["data"][key]["name"] = key;
+                        data.push(response["data"][key]);
+                    }
+                    commit("setResourceLevelStats", data);
                 })
                 .catch(function (error) {
                     console.log(error);

@@ -32,6 +32,11 @@ h4 {
     margin-top: 50px;
 }
 
+h5 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
 #main_content {
     padding-top: 50px;
     padding-left: 30px;
@@ -65,4 +70,8 @@ h4 {
 
 .table-hover tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.06)
+}
+
+.clickable {
+    cursor: pointer;
 }

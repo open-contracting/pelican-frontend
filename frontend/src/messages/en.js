@@ -1,5 +1,8 @@
 export const messages = {
     header: "Data Quality Assesment Results",
+    passed: "Passed",
+    failed: "Failed",
+    notAvailable: "Not available",
     sections: {
         home: 'Home',
         overview: 'Overview',
@@ -13,25 +16,73 @@ export const messages = {
         failed: "FAILED",
         na: "N/A",
         check: "CHECK",
+        count: {
+            header: "Checked contracting processes:",
+        },
         coherent: {
-            dates: "dates",
-            period: "period",
-            procurement_method_vs_number_of_tenderers: "procurement_method_vs_number_of_tenderers",
-            tender_status: "tender_status",
+            categoryName: "Coherency",
+            dates: {
+                name: "dates",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            period: {
+                name: "period",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            procurement_method_vs_number_of_tenderers: {
+                name: "procurement_method_vs_number_of_tenderers",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            tender_status: {
+                name: "tender_status",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
         },
         consistent: {
-            buyer_roles: "buyer_roles",
-            number_of_tenderers: "number_of_tenderers",
-            tender_value: "tender_value",
+            categoryName: "Consistency",
+            buyer_roles: {
+                name: "buyer_roles",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            number_of_tenderers: {
+                name: "number_of_tenderers",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            tender_value: {
+                name: "tender_value",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
         },
         reference: {
-            buyer_in_parties: "buyer_in_parties",
-            contract_in_awards: "contract_in_awards",
-            payee_in_parties: "payee_in_parties",
-            payer_in_parties: "payer_in_parties",
-            procuring_entity_in_parties: "procuring_entity_in_parties",
-            supplier_in_parties: "supplier_in_parties",
-            tenderer_in_parties: "tenderer_in_parties",
+            categoryName: "Reference",
+            buyer_in_parties: {
+                name: "buyer_in_parties",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            contract_in_awards: {
+                name: "contract_in_awards",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            payee_in_parties: {
+                name: "payee_in_parties",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            payer_in_parties: {
+                name: "payer_in_parties",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            procuring_entity_in_parties: {
+                name: "procuring_entity_in_parties",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            supplier_in_parties: {
+                name: "supplier_in_parties",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
+            tenderer_in_parties: {
+                name: "tenderer_in_parties",
+                description: "Check description - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+            },
         }
     }
 }
