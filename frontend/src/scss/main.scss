@@ -17,16 +17,12 @@ body {
     background-color: white;
 }
 
-.examples {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    width: 40%;
-    z-index: 100;
+.preview {
     padding: 50px 20px 20px;
     background-color: white;
-    overflow: scroll;
+    padding-top: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .examples .divider {
@@ -45,8 +41,9 @@ h3 {
 }
 
 h4 {
-    font-size: 10px;
-    color: #9B9B9B;
+    font-size: 13px;
+    color: $headings_light_color;
+    font-weight: 700;
     letter-spacing: 1px;
     margin-top: 50px;
 }
@@ -56,7 +53,7 @@ h5 {
     font-weight: 700;
 }
 
-#main_content {
+.main_content {
     padding-top: 50px;
     padding-left: 30px;
     padding-right: 30px;

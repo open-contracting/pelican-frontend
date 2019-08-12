@@ -20,6 +20,7 @@
     "numeral": "^2.0.6",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
+    "vue-fragment": "^1.5.1",
     "vue-i18n": "^8.12.0",
     "vue-json-pretty": "^1.6.0",
     "vue-router": "^3.0.3",

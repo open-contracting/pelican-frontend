@@ -23,6 +23,7 @@ export const messages = {
         ocid: "ocid",
     },
     resourceLevel: {
+        subheadline: "All Resource Level Checks",
         ok: "OK",
         failed: "FAILED",
         na: "N/A",

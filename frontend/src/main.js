@@ -14,7 +14,9 @@ import {
 import {
     messages as cs
 } from './messages/cs.js'
+import Fragment from 'vue-fragment'
 
+Vue.use(Fragment.Plugin)
 Vue.use(BootstrapVue)
 Vue.use(VueI18n);
 const i18n = new VueI18n({

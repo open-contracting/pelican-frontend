@@ -73,13 +73,7 @@
                 </ul>
             </nav>
 
-            <main role="main" class="col-11 col-sm-10 col-md-9 col-lg-9 col-xl-10 offset-1 offset-sm-2 offset-md-3 offset-lg-3 offset-xl-2">
-                <div id="main_content" class="align-items-center row">
-                    <div class="col">
-                        <router-view />
-                    </div>
-                </div>
-            </main>
+            <router-view />
         </div>
     </div>
 </template>

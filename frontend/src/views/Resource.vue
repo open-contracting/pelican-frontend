@@ -1,8 +1,8 @@
 <template>
-    <div class="resource">
+    <main role="main" class="resource main_content col-11 col-sm-10 col-md-9 col-lg-9 col-xl-10 offset-1 offset-sm-2 offset-md-3 offset-lg-3 offset-xl-2">
         <h3>{{ $t("header").toUpperCase() }}</h3>
         <h2>{{ $t("sections.resource") }}</h2>
-        <h4>ALL RESOURCE LEVEL CHECKS</h4>
+        <h4>{{ $t("resourceLevel.subheadline") }}</h4>
         <div class="result_box">
             <table class="table table-hover">
                 <thead>
@@ -16,13 +16,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <span v-for="name in sections">
+                    <span v-for="(name, index) in sections" v-bind:key="index">
                         <ResourceLevelList :section="name" />
                     </span>
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
 </template>
 
 <script>
