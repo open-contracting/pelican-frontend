@@ -3,7 +3,7 @@ import random
 from django.db.models import Count, Max, Min, Sum
 from django.http import JsonResponse
 
-from .models import ResourceLevelCheck
+from .models import DatasetLevelCheck, ResourceLevelCheck
 
 
 def resource_level_stats(request, dataset_id):
@@ -74,4 +74,17 @@ def resource_level_stats(request, dataset_id):
             val["data"] = item.data_item.data
             result[key]["examples"]["failed"].append(val)
 
+    return JsonResponse(result)
+
+
+def dataset_level_stats(request, dataset_id):
+    result = {}
+    checks = DatasetLevelCheck.objects.filter(
+        dataset=dataset_id)
+    for check in checks:
+        result[check.name] = {
+            "result": check.result,
+            "value": check.value,
+            "meta": check.meta,
+        }
     return JsonResponse(result)
