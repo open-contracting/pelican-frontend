@@ -10,8 +10,11 @@ var config = {
 if (process.env.NODE_ENV == "production") {
     Object.assign(config, {
         api: {
-            baseUrl: "https://production/",
-        }
+            baseUrl: "https://dqt.datlab.eu/",
+            endpoints: {
+                resourceLevelStats: "api/resource_level_stats",
+            },
+        },
     });
 } else {
     Object.assign(config, {
