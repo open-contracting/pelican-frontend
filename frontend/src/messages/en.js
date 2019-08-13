@@ -1,5 +1,6 @@
 export const messages = {
     header: "Data Quality Assesment Results",
+    loader: "Still loading the great stuff for you. Please be patient.",
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",

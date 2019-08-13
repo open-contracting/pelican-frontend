@@ -23,7 +23,6 @@ class DatasetLevelCheck(Model):
     result = BooleanField(blank=True, null=True)
     value = IntegerField(blank=True, null=True)
     meta = JSONField()
-    data_item = ForeignKey("DataItem", db_column="data_item_id", on_delete=CASCADE)
     dataset = ForeignKey("ProgressMonitorDataset", db_column="dataset_id", to_field="dataset_id", on_delete=CASCADE)
 
     created = DateTimeField(blank=True, null=True)
@@ -33,7 +32,6 @@ class DatasetLevelCheck(Model):
         app_label = "data"
         managed = False
         db_table = 'dataset_level_check'
-
 
 
 class FieldLevelCheck(Model):

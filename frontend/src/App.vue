@@ -81,12 +81,16 @@
 <script>
 export default {
     data: function() {
-        return {
-            datasetId: "honduras_2019-07-11_16:32:23"
-        };
+        return {};
     },
     mounted() {
-        this.$store.dispatch("updateDatasetId", "honduras_2019-07-11_16:32:23");
+        var datasetId = this.$store.getters.datasetId;
+        if (datasetId === null) {
+            this.$router.push({
+                name: "home",
+                params: {}
+            });
+        }
     }
 };
 </script>

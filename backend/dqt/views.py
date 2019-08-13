@@ -82,7 +82,7 @@ def dataset_level_stats(request, dataset_id):
     checks = DatasetLevelCheck.objects.filter(
         dataset=dataset_id)
     for check in checks:
-        result[check.name] = {
+        result[check.check_name] = {
             "result": check.result,
             "value": check.value,
             "meta": check.meta,

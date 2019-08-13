@@ -1,20 +1,14 @@
 var config = {
-    api: {
-        baseUrl: "http://localhost:8000/",
-        endpoints: {
-            resourceLevelStats: "api/resource_level_stats",
-        },
+    apiBaseUrl: "http://localhost:8000/",
+    apiEndpoints: {
+        resourceLevelStats: "api/resource_level_stats",
+        datasetLevelStats: "api/dataset_level_stats",
     },
 }
 
 if (process.env.NODE_ENV == "production") {
     Object.assign(config, {
-        api: {
-            baseUrl: "https://dqt.datlab.eu/",
-            endpoints: {
-                resourceLevelStats: "api/resource_level_stats",
-            },
-        },
+        apiBaseUrl: "https://dqt.datlab.eu/",
     });
 } else {
     Object.assign(config, {
