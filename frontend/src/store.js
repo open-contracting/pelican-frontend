@@ -73,7 +73,7 @@ export default new Vuex.Store({
                     commit("setResourceLevelStats", data);
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    throw new Error(error);
                 })
         },
         loadDatasetLevelStats({
@@ -91,7 +91,7 @@ export default new Vuex.Store({
                     commit("setDatasetLevelStats", data);
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    throw new Error(error);
                 })
         }
     }

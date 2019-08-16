@@ -23,6 +23,59 @@ export const messages = {
         preview: "preview",
         ocid: "ocid",
     },
+    datasetLevel: {
+        subheadline: "All Dataset Level Checks",
+        distribution: {
+            tender_status: {
+                name: "tender_status",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            contracts_value_repetition: {
+                name: "contracts_value_repetition",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            awards_value_repetition: {
+                name: "awards_value_repetition",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            tender_value_repetition: {
+                name: "tender_value_repetition",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            buyer: {
+                name: "buyer",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            tender_value: {
+                name: "tender_value",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            awards_value: {
+                name: "awards_value",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            contracts_value: {
+                name: "contracts_value",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+            main_procurement_category: {
+                name: "main_procurement_category",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            },
+        },
+        unique: {
+            id: {
+                name: "id",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            }
+        },
+        misc: {
+            url_availability: {
+                name: "url_availability",
+                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+            }
+        }
+    },
     resourceLevel: {
         subheadline: "All Resource Level Checks",
         ok: "OK",
