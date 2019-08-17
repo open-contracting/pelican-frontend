@@ -41,7 +41,6 @@ export default {
     mounted() {
         this.chartData.push(["Category", "Share"]);
         for (var key in this.check.meta.shares) {
-            console.log(key, this.check.meta.shares[key]);
             this.chartData.push([key, this.check.meta.shares[key].count]);
         }
     }

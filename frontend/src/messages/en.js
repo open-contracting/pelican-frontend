@@ -4,6 +4,7 @@ export const messages = {
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
+    unsufficientData: "Unsufficient data",
     sections: {
         home: 'Home',
         overview: 'Overview',
@@ -25,6 +26,11 @@ export const messages = {
     },
     datasetLevel: {
         subheadline: "All Dataset Level Checks",
+        label_0_1: "1%",
+        label_1_5: "1 - 5%",
+        label_5_20: "5 - 10%",
+        label_20_50: "20 - 50%",
+        label_50_100: "50 - 100%",
         distribution: {
             tender_status: {
                 name: "tender_status",
