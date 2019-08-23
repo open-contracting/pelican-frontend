@@ -36,6 +36,13 @@ export default new Vuex.Store({
             }
 
             return [];
+        },
+        datasetLevelCheckByName: (state) => (checkName) => {
+            if (state.datasetLevelStats) {
+                return state.datasetLevelStats.find(item => item.name === checkName);
+            }
+
+            return [];
         }
     },
     mutations: {

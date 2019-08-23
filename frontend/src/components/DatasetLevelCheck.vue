@@ -1,5 +1,5 @@
 <template>
-    <div class="dataset_result_box">
+    <div class="dataset_result_box" v-bind:class="{ clickable: check.result != undefined }" v-on:click="detail(check.name)">
         <div class="row no-gutters">
             <div class="col col-1 col-sm-1 col-lg-1">
                 <span v-if="check.result == true" class="ok_icon">
@@ -38,9 +38,8 @@
                     <div class="top3" v-if="checkType == 'top3'">
                         <table class="table table-sm">
                             <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
-                                <td>{{ item.value_amount }}amount</td>
-                                <td>{{ item.value_share}}3.57%</td>
-                                <td>{{ item.count}}</td>
+                                <td>{{ item.amount }}</td>
+                                <td class="text-right">{{ Math.round(item.share)}}%</td>
                             </tr>
                         </table>
                     </div>
@@ -53,6 +52,7 @@
 <script>
 import DonutChart from "@/components/DonutChart.vue";
 import BarChart from "@/components/BarChart.vue";
+import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
     data: function() {
@@ -60,41 +60,16 @@ export default {
     },
     components: { DonutChart, BarChart },
     props: ["check"],
-    methods: {},
-    computed: {
-        checkType() {
-            var donut = [
-                "distribution.main_procurement_category"
-                // "distribution.tender_status"
-            ];
-            if (donut.includes(this.check.name)) {
-                return "donut";
-            }
-
-            var bar = [
-                "distribution.buyer",
-                "distribution.tender_value",
-                "distribution.contracts_value",
-                "distribution.tender_status"
-            ];
-            if (bar.includes(this.check.name)) {
-                return "bar";
-            }
-
-            var numeric = ["misc.url_availability"];
-            if (numeric.includes(this.check.name)) {
-                return "numeric";
-            }
-
-            var top3 = [
-                "distribution.tender_value_repetition",
-                "distribution.contracts_value_repetition",
-                "distribution.awards_value_repetition"
-            ];
-            if (top3.includes(this.check.name)) {
-                return "top3";
-            }
-            return null;
+    mixins: [datasetMixin],
+    methods: {
+        onePercent: function() {
+            return (this.check.ok + this.check.failed + this.check.na) / 100;
+        },
+        detail: function(name) {
+            this.$router.push({
+                name: "datasetCheckDetail",
+                params: { check: name }
+            });
         }
     }
 };

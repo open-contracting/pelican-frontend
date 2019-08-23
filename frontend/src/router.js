@@ -7,6 +7,7 @@ import Resource from './views/Resource.vue'
 import Dataset from './views/Dataset.vue'
 import Time from './views/Time.vue'
 import ResourceCheckDetail from './views/ResourceCheckDetail.vue'
+import DatasetCheckDetail from './views/DatasetCheckDetail.vue'
 
 Vue.use(Router)
 
@@ -42,6 +43,10 @@ export default new Router({
             path: '/resource/detail/:check',
             name: 'resourceCheckDetail',
             component: ResourceCheckDetail
+        }, {
+            path: '/dataset/detail/:check',
+            name: 'datasetCheckDetail',
+            component: DatasetCheckDetail
         }
     ]
 })
