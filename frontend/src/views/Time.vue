@@ -1,13 +1,15 @@
 <template>
-    <div class="time">
+    <dashboard>
         <h3>{{ $t("header").toUpperCase() }}</h3>
         <h2>{{ $t("sections.time") }}</h2>
-    </div>
+    </dashboard>
 </template>
 
 <script>
+import Dashboard from "@/views/layouts/Dashboard.vue";
+
 export default {
     name: "time",
-    components: {}
+    components: { Dashboard }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <main role="main" class="resource main_content col-11 col-sm-10 col-md-9 col-lg-9 col-xl-10 offset-1 offset-sm-2 offset-md-3 offset-lg-3 offset-xl-2">
+    <dashboard>
         <h3>{{ $t("header").toUpperCase() }}</h3>
         <h2>{{ $t("sections.resource") }}</h2>
         <span v-if="loaded">
@@ -27,12 +27,13 @@
         <span v-else>
             <Loader></Loader>
         </span>
-    </main>
+    </dashboard>
 </template>
 
 <script>
 import ResourceLevelList from "@/components/ResourceLevelList.vue";
 import Loader from "@/components/Loader.vue";
+import Dashboard from "@/views/layouts/Dashboard.vue";
 
 export default {
     name: "resource",
@@ -43,7 +44,8 @@ export default {
     },
     components: {
         ResourceLevelList,
-        Loader
+        Loader,
+        Dashboard
     },
     computed: {
         loaded() {
