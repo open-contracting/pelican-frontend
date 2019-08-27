@@ -69,6 +69,7 @@ export default new Vuex.Store({
             commit,
             state
         }) {
+            commit("setResourceLevelStats", null);
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelStats + "/" + state.datasetId;
             axios.get(url)
                 .then(function (response) {
@@ -87,6 +88,7 @@ export default new Vuex.Store({
             commit,
             state
         }) {
+            commit("setDatasetLevelStats", null);
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelStats + "/" + state.datasetId;
             axios.get(url)
                 .then(function (response) {

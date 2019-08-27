@@ -1,0 +1,22 @@
+export default {
+    computed: {
+        resourceLoaded() {
+            if (this.$store.getters.resourceLevelStats != null) {
+                return true;
+            }
+            return false;
+        },
+        datasetLoaded() {
+            if (this.$store.getters.datasetLevelStats != null) {
+                return true;
+            }
+            return false;
+        },
+        atLeastOneLoaded() {
+            if (this.$store.getters.datasetLevelStats != null || this.$store.getters.resourceLevelStats != null) {
+                return true;
+            }
+            return false;
+        }
+    },
+};

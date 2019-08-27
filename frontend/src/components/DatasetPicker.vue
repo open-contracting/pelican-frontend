@@ -40,8 +40,10 @@
 const axios = require("axios");
 import { CONFIG } from "@/config.js";
 import Loader from "@/components/Loader.vue";
+import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
+    mixins: [stateMixin],
     data: function() {
         return {
             datasets: [],
@@ -55,7 +57,13 @@ export default {
     methods: {
         setDatasetId: function(datasetId) {
             this.loading = true;
-            this.$store.dispatch("updateDatasetId", datasetId);
+            if (this.$store.getters.datasetId != datasetId) {
+                this.$store.dispatch("updateDatasetId", datasetId);
+            } else {
+                this.$router.push({
+                    name: "overview"
+                });
+            }
         }
     },
     mounted() {
@@ -69,6 +77,15 @@ export default {
             .catch(function(error) {
                 throw new Error(error);
             });
+    },
+    watch: {
+        atLeastOneLoaded: function(newValue, oldValue) {
+            if (newValue) {
+                this.$router.push({
+                    name: "overview"
+                });
+            }
+        }
     }
 };
 </script>
