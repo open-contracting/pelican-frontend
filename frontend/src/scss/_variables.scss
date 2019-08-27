@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900&display=swap&subset=latin-ext');
 
+@font-face {
+    font-family: "GTEestiProDisplay-Regular";
+    src: url("/fonts/GTEestiProDisplay-Regular.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "GTEestiProDisplay-Bold";
+    src: url("/fonts/GTEestiProDisplay-Bold.otf") format("opentype");
+}
+
 $ok_color: #B9C504;
 $failed_color: #D0021B;
 $na_color: #9B9B9B;
@@ -12,11 +22,15 @@ $menu_gray: #A9ADBC;
 $text-color: #4A4A4A;
 $headings-color: #4A4A4A;
 $headings_light_color: #9B9B9B;
+$headings-font-family: "GTEestiProDisplay-Bold",
+"Helvetica Neue",
+Arial,
+sans-serif !default;
 
 $font-size-base: 1rem;
 $h3-font-size: 1rem;
 
-$font-family-sans-serif: 'Nunito Sans',
+$font-family-sans-serif: "GTEestiProDisplay-Regular",
 "Helvetica Neue",
 Arial,
 sans-serif !default;
