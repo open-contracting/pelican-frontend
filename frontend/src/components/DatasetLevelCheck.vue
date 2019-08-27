@@ -1,5 +1,5 @@
 <template>
-    <div class="dataset_result_box" v-bind:class="{ clickable: check.result != undefined }" v-on:click="detail(check.name)">
+    <div class="dataset_result_box" v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }" v-on:click="detail(check.name)">
         <div class="row no-gutters">
             <div class="col col-1 col-sm-1 col-lg-1">
                 <span v-if="check.result == true" class="ok_icon">
@@ -14,12 +14,14 @@
             </div>
 
             <div class="col col-10 col-sm-11 col-lg-11">
-                <h5 v-bind:class="{ undef: check.result == undefined }">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
-                <p v-bind:class="{ undef: check.result == undefined }">{{ $t("datasetLevel." + check.name + ".description") }}</p>
+                <h5>{{ $t("datasetLevel." + check.name + ".name") }}</h5>
+                <p>{{ $t("datasetLevel." + check.name + ".description") }}</p>
 
-                <div class="text-center undef undef_message alert alert-light" v-if="check.result == undefined">
-                    <font-awesome-icon :icon="['far', 'frown']" />
-                    {{ $t("unsufficientData") }}
+                <div class="text-center" v-if="check.result == undefined">
+                    <img class="undefined_image" src="/img/unsufficient_data.png" />
+                    <br />
+                    <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
+                    <p>{{ $t("unsufficientData.description") }}</p>
                 </div>
                 <div v-else>
                     <div v-if="checkType == 'donut'">
@@ -86,14 +88,6 @@ export default {
     color: $na_light_color;
 }
 
-.undef {
-    color: $na_light_color;
-}
-
-.undef_message {
-    font-size: 25px;
-}
-
 .dataset_result_box {
     background-color: white;
     padding: 15px;
@@ -114,6 +108,19 @@ export default {
     color: $failed_color;
 }
 
+.undef {
+    background-color: #fafbff;
+}
+
+.undefined_title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.undefined_image {
+    margin-top: 20px;
+}
 .check_numeric_value {
     font-size: 60px;
     font-weight: 700;

@@ -4,7 +4,10 @@ export const messages = {
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
-    unsufficientData: "Unsufficient data",
+    unsufficientData: {
+        title: "Unsufficient data",
+        description: "The check could not have been calculated because of unsufficient data."
+    },
     sections: {
         home: 'Home',
         overview: 'Overview',
