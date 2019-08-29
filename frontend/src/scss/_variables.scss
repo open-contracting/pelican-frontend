@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900&display=swap&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700&display=swap');
 
 @font-face {
     font-family: "GTEestiProDisplay-Regular";
@@ -34,3 +34,6 @@ $font-family-sans-serif: "GTEestiProDisplay-Regular",
 "Helvetica Neue",
 Arial,
 sans-serif !default;
+
+$font-family-mono: "Ubuntu Mono",
+monospace !default;

@@ -1,12 +1,16 @@
 <template>
-    <div class="inline_bar" v-bind:class="state" ref="bar">
+    <div class="inline_bar numeric" v-bind:class="state" ref="bar">
         <div class="bar" v-bind:style="{ width: barWidth + 'px' }">
             <span v-if="barWidth > 30">{{ percentage | formatNumber}}%</span>
             &nbsp;
         </div>
         <div class="count">
             <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatNumber}}%</span>
-            <span class="count_holder">({{ count | formatNumber}})</span>
+            <span class="count_holder">
+                <span>&#40;</span>
+                {{ count | formatNumber}}
+                <span>&#41;</span>
+            </span>
         </div>
     </div>
 </template>
@@ -50,7 +54,7 @@ export default {
     display: inline-block;
     height: 25px;
     font-size: 13px;
-    padding-top: 5px;
+    padding-top: 4px;
     padding-left: 5px;
     font-weight: 700;
 }
@@ -73,5 +77,10 @@ export default {
     font-weight: 700;
     color: $text-color;
     padding-left: 5px;
+}
+
+.reg .bar {
+    background-color: #555cb3;
+    color: white;
 }
 </style>

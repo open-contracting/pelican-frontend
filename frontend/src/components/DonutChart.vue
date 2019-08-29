@@ -4,8 +4,10 @@
 
 <script>
 import { GChart } from "vue-google-charts";
+import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
+    mixins: [datasetMixin],
     data() {
         return {
             // Array will be automatically processed with visualization.arrayToDataTable function
@@ -40,8 +42,10 @@ export default {
     components: { GChart },
     mounted() {
         this.chartData.push(["Category", "Share"]);
-        for (var key in this.check.meta.shares) {
-            this.chartData.push([key, this.check.meta.shares[key].count]);
+
+        var shares = this.orderedShares(this.check.meta.shares);
+        for (var key in shares) {
+            this.chartData.push([shares[key][0], shares[key][1].count]);
         }
     }
 };

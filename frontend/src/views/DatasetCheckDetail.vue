@@ -17,26 +17,46 @@
                 <div v-if="checkType == 'bar'">
                     <BarChartBig :check="check"></BarChartBig>
                 </div>
+
+                <div v-if="checkType == 'donut'">
+                    <table class="table table-borderless table-sm">
+                        <tbody>
+                            <tr v-for="share in shares" class="d-flex" v-bind:key="share[0]">
+                                <td class="col-3 text-right">
+                                    <span class="check_name">{{ $t(share[0]) }}</span>
+                                </td>
+                                <td class="col-9 text-right">
+                                    <InlineBar :count="share[1]['count']" :percentage="Math.round(share[1]['share'] * 10000) / 100" :state="'reg'" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <ExampleBoxes :examples="examples"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
             <h5>{{ $t("preview.metadata") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="'True'" :data="previewMetadata"></vue-json-pretty>
+            <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewMetadata"></vue-json-pretty>
 
             <div class="divider">&nbsp;</div>
-
-            <h5>{{ $t("preview.ocds_data") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="'True'" :deep="2" :data="previewData"></vue-json-pretty>
+            <span v-if="previewData">
+                <h5>{{ $t("preview.ocds_data") }}</h5>
+                <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
+            </span>
         </template>
     </dashboard-detail>
 </template>
 
 <script>
 import BarChartBig from "@/components/BarChartBig";
+import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
 import datasetMixin from "@/plugins/datasetMixins.js";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import ExampleBoxes from "@/components/ExampleBoxes.vue";
 
 export default {
     name: "datasetCheckDetail",
@@ -46,18 +66,43 @@ export default {
             check: null,
             previewData: null,
             previewMetadata: null,
-            selectedKey: null,
-            selectedSection: null
+            examples: null
         };
     },
-    components: { BarChartBig, VueJsonPretty, DashboardDetail },
+    components: {
+        BarChartBig,
+        VueJsonPretty,
+        DashboardDetail,
+        InlineBar,
+        ExampleBoxes
+    },
     created() {
         this.check = this.$store.getters.datasetLevelCheckByName(
             this.$route.params.check
         );
+        this.previewMetadata = this.check.meta;
+
+        if (this.checkType == "donut") {
+            this.examples = [];
+            for (var key in this.shares) {
+                this.examples.push([
+                    this.shares[key][0],
+                    this.shares[key][1].examples,
+                    false
+                ]);
+            }
+        }
     },
     methods: {},
-    computed: {}
+    computed: {
+        shares() {
+            if (this.checkType == "donut") {
+                return this.orderedShares(this.check.meta.shares);
+            } else {
+                return null;
+            }
+        }
+    }
 };
 </script>
 

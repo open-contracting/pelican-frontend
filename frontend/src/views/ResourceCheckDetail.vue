@@ -110,12 +110,12 @@
 
         <template v-slot:preview>
             <h5>{{ $t("preview.metadata") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="'True'" :data="previewMetadata"></vue-json-pretty>
+            <vue-json-pretty :highlightMouseoverNode="true" :data="previewMetadata"></vue-json-pretty>
 
             <div class="divider">&nbsp;</div>
 
             <h5>{{ $t("preview.ocds_data") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="'True'" :deep="2" :data="previewData"></vue-json-pretty>
+            <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
         </template>
     </dashboard-detail>
 </template>

@@ -1,31 +1,31 @@
 <template>
     <span v-if="!loading">
-        <table class="table table-hover">
+        <table class="table table-hover container">
             <thead>
-                <tr>
-                    <th class="col-3" scope="col">{{ $t("dataset.id") }}</th>
-                    <th class="col-2 text-center" scope="col">{{ $t("dataset.size") }}</th>
-                    <th class="col-2 text-center" scope="col">{{ $t("dataset.phase") }}</th>
-                    <th class="col-2 text-center" scope="col">
+                <tr class="d-flex">
+                    <th class="col-4">{{ $t("dataset.id") }}</th>
+                    <th class="col-2 text-center">{{ $t("dataset.size") }}</th>
+                    <th class="col-1 text-center">{{ $t("dataset.phase") }}</th>
+                    <th class="col-3 text-center">
                         {{ $t("created") }}
-                        <br />
+                        /
                         {{ $t("modified") }}
                     </th>
-                    <th class="col-1" scope="col">&nbsp;</th>
+                    <th class="col-2">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in datasets" v-bind:key="index">
-                    <td>{{ item.dataset_id }}</td>
-                    <td class="text-right">{{ item.size | formatNumber }}</td>
-                    <td>{{ item.phase }}</td>
-                    <td>
+                <tr v-for="(item, index) in datasets" v-bind:key="index" class="d-flex">
+                    <td class="col-4">{{ item.dataset_id }}</td>
+                    <td class="col-2 text-right numeric">{{ item.size | formatNumber }}</td>
+                    <td class="col-1">{{ item.phase }}</td>
+                    <td class="col-3 numeric text-right">
                         {{ item.created }}
                         <br />
                         {{ item.modified }}
                     </td>
-                    <td>
-                        <button @click.prevent="setDatasetId(item.dataset_id)" class="btn btn-primary mb-4" type="submit">{{ $t("selectDataset") }}</button>
+                    <td class="col-2">
+                        <button @click.prevent="setDatasetId(item.dataset_id)" class="btn btn-primary mb-4" type="submit">{{ $t("dataset.selectDataset") }}</button>
                     </td>
                 </tr>
             </tbody>
@@ -79,7 +79,7 @@ export default {
             });
     },
     watch: {
-        atLeastOneLoaded: function(newValue, oldValue) {
+        atLeastOneLoaded: function(newValue) {
             if (newValue) {
                 this.$router.push({
                     name: "overview"

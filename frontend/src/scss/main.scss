@@ -88,3 +88,11 @@ h5 {
 .vjs-tree .vjs-value__string {
     color: #6C75E1 !important;
 }
+
+.numeric {
+    font-family: $font-family-mono;
+}
+
+.clickable {
+    cursor: pointer;
+}

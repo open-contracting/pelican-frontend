@@ -41,7 +41,7 @@
                         <table class="table table-sm">
                             <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                 <td>{{ item.amount }}</td>
-                                <td class="text-right">{{ Math.round(item.share)}}%</td>
+                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
                             </tr>
                         </table>
                     </div>
@@ -82,10 +82,6 @@ export default {
 
 .ok_icon {
     color: $ok_color;
-}
-
-.undefined_icon {
-    color: $na_light_color;
 }
 
 .dataset_result_box {

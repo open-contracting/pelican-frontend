@@ -4,6 +4,14 @@ export const messages = {
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
+    created: "created",
+    modified: "modified",
+    dataset: {
+        id: "id",
+        size: "items count",
+        phase: "phase",
+        selectDataset: "show"
+    },
     unsufficientData: {
         title: "Unsufficient data",
         description: "The check could not have been calculated because of unsufficient data."
@@ -26,6 +34,8 @@ export const messages = {
         actions: "actions",
         preview: "preview",
         ocid: "ocid",
+        showMore: "show more examples",
+        showLess: "hide"
     },
     datasetLevel: {
         subheadline: "All Dataset Level Checks",
