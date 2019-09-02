@@ -1,8 +1,13 @@
 # myapp/api.py
 from tastypie.resources import ModelResource
 
-from .models import (DataItem, DatasetLevelCheck, FieldLevelCheck,
+from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
                      ProgressMonitorDataset, ResourceLevelCheck)
+
+class DatasetResource(ModelResource):
+    class Meta:
+        queryset = Dataset.objects.all()
+        resource_name = 'dataset'
 
 
 class DataItemResource(ModelResource):

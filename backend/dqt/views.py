@@ -2,8 +2,18 @@ import random
 
 from django.db.models import Count, Max, Min, Sum
 from django.http import JsonResponse
+from django.core import serializers
 
-from .models import DatasetLevelCheck, ResourceLevelCheck
+from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck
+
+
+def dataset_stats(request, dataset_id):
+    result = {}
+    dataset_meta = Dataset.objects.get(id=dataset_id)
+    result["name"] = dataset_meta.name
+    result["meta"] = dataset_meta.meta
+
+    return JsonResponse(result)
 
 
 def resource_level_stats(request, dataset_id):

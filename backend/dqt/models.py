@@ -3,11 +3,23 @@ from django.db.models import (CASCADE, BigAutoField, BigIntegerField,
                               BooleanField, CharField, DateTimeField,
                               ForeignKey, IntegerField, Model)
 
+class Dataset(Model):
+    id = BigAutoField(primary_key=True)
+    name = CharField(max_length=255, blank=False)
+    meta = JSONField()
+    created = DateTimeField(blank=True, null=True)
+    modified = DateTimeField(blank=True, null=True)
+
+    class Meta:
+        app_label = "data"
+        managed = False
+        db_table = "dataset"
+
 
 class DataItem(Model):
     id = BigAutoField(primary_key=True)
     data = JSONField()
-    dataset = ForeignKey("ProgressMonitorDataset", db_column="dataset_id", to_field="dataset_id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
 
@@ -23,7 +35,7 @@ class DatasetLevelCheck(Model):
     result = BooleanField(blank=True, null=True)
     value = IntegerField(blank=True, null=True)
     meta = JSONField()
-    dataset = ForeignKey("ProgressMonitorDataset", db_column="dataset_id", to_field="dataset_id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
 
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
@@ -40,7 +52,7 @@ class FieldLevelCheck(Model):
     result = BooleanField(blank=True, null=True)
     meta = JSONField()
     data_item = ForeignKey("DataItem", db_column="data_item_id", on_delete=CASCADE)
-    dataset = ForeignKey("ProgressMonitorDataset", db_column="dataset_id", to_field="dataset_id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
 
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
@@ -53,7 +65,7 @@ class FieldLevelCheck(Model):
 
 class ProgressMonitorDataset(Model):
     id = BigAutoField(primary_key=True)
-    dataset_id = CharField(unique=True, max_length=255, blank=True, null=True)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
     state = CharField(max_length=255, blank=True, null=True)
     phase = CharField(max_length=255, blank=True, null=True)
     size = IntegerField(blank=True, null=True)
@@ -69,7 +81,7 @@ class ProgressMonitorDataset(Model):
 
 class ProgressMonitorItem(Model):
     id = BigAutoField(primary_key=True)
-    dataset = ForeignKey("ProgressMonitorDataset", db_column="dataset_id", to_field="dataset_id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
     data_item = ForeignKey("DataItem", db_column="item_id", on_delete=CASCADE)
     state = CharField(max_length=255, blank=True, null=True)
 
@@ -91,7 +103,7 @@ class ResourceLevelCheck(Model):
     application_count = IntegerField(blank=True, null=True)
     meta = JSONField()
     data_item = ForeignKey("DataItem", db_column="data_item_id", on_delete=CASCADE)
-    dataset = ForeignKey("ProgressMonitorDataset", db_column="dataset_id", to_field="dataset_id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
 
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
