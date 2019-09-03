@@ -10,6 +10,18 @@ class Dataset(Model):
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
 
+    def get_state(self):
+        for item in self.progress.all():
+            return item.state
+
+    def get_phase(self):
+        for item in self.progress.all():
+            return item.phase
+
+    def get_size(self):
+        for item in self.progress.all():
+            return item.size
+
     class Meta:
         app_label = "data"
         managed = False
@@ -65,7 +77,7 @@ class FieldLevelCheck(Model):
 
 class ProgressMonitorDataset(Model):
     id = BigAutoField(primary_key=True)
-    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", related_name='progress', db_column="dataset_id", to_field="id", on_delete=CASCADE)
     state = CharField(max_length=255, blank=True, null=True)
     phase = CharField(max_length=255, blank=True, null=True)
     size = IntegerField(blank=True, null=True)
