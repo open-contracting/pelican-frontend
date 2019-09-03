@@ -19,7 +19,7 @@ class DataItemResource(ModelResource):
 class ProgressMonitorDatasetResource(ModelResource):
     class Meta:
         queryset = ProgressMonitorDataset.objects.all()
-        resource_name = 'dataset'
+        resource_name = 'dataset_progress'
 
 
 class ResourceLevelCheckResource(ModelResource):
