@@ -10,7 +10,7 @@
                 <table class="table table-borderless table-sm">
                     <tbody>
                         <tr class="d-flex">
-                            <td class="col-3 text-right">
+                            <td class="col-3 text-right label">
                                 <span class="check_name">{{ $t("passed") }}</span>
                             </td>
                             <td class="col-9">
@@ -18,7 +18,7 @@
                             </td>
                         </tr>
                         <tr class="d-flex">
-                            <td class="col-3 text-right">
+                            <td class="col-3 text-right label">
                                 <span class="check_name">{{ $t("failed") }}</span>
                             </td>
                             <td class="col-9">
@@ -26,7 +26,7 @@
                             </td>
                         </tr>
                         <tr class="d-flex">
-                            <td class="col-3 text-right">
+                            <td class="col-3 text-right label">
                                 <span class="check_name">{{ $t("notAvailable") }}</span>
                             </td>
                             <td class="col-9">
@@ -42,7 +42,7 @@
                 <table class="table table-borderless table-sm">
                     <tbody>
                         <tr class="d-flex">
-                            <td class="col-3 text-right">
+                            <td class="col-3 text-right label">
                                 <span class="check_name">{{ $t("passed") }}</span>
                             </td>
                             <td class="col-9">
@@ -50,7 +50,7 @@
                             </td>
                         </tr>
                         <tr class="d-flex">
-                            <td class="col-3 text-right">
+                            <td class="col-3 text-right label">
                                 <span class="check_name">{{ $t("failed") }}</span>
                             </td>
                             <td class="col-9">
@@ -186,4 +186,8 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
+.label {
+    padding-top: 6px;
+}
 </style>

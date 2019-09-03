@@ -42,8 +42,8 @@ export default {
     display: inline-block;
     height: 25px;
     color: $na_light_color;
-    font-size: 13px;
-    padding-top: 5px;
+    font-size: 14px;
+    padding-top: 4px;
 }
 
 .count_holder {
@@ -53,8 +53,8 @@ export default {
 .bar {
     display: inline-block;
     height: 25px;
-    font-size: 13px;
-    padding-top: 4px;
+    font-size: 14px;
+    padding-top: 3px;
     padding-left: 5px;
     font-weight: 700;
 }

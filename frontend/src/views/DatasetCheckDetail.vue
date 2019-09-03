@@ -21,9 +21,9 @@
                 <div v-if="checkType == 'donut'">
                     <table class="table table-borderless table-sm">
                         <tbody>
-                            <tr v-for="share in shares" class="d-flex" v-bind:key="share[0]">
-                                <td class="col-3 text-right">
-                                    <span class="check_name">{{ $t(share[0]) }}</span>
+                            <tr v-for="share in shares" class="d-flex " v-bind:key="share[0]">
+                                <td class="col-3 text-right label">
+                                    <span class="check_name">{{ share[0] }}</span>
                                 </td>
                                 <td class="col-9 text-right">
                                     <InlineBar :count="share[1]['count']" :percentage="Math.round(share[1]['share'] * 10000) / 100" :state="'reg'" />
@@ -85,11 +85,13 @@ export default {
         if (this.checkType == "donut") {
             this.examples = [];
             for (var key in this.shares) {
-                this.examples.push([
-                    this.shares[key][0],
-                    this.shares[key][1].examples,
-                    false
-                ]);
+                if (this.shares[key][1].examples.length > 0) {
+                    this.examples.push([
+                        this.shares[key][0],
+                        this.shares[key][1].examples,
+                        false
+                    ]);
+                }
             }
         }
     },
@@ -121,5 +123,9 @@ export default {
     color: white;
     font-size: 15px;
     padding: 10px;
+}
+
+.label {
+    padding-top: 6px;
 }
 </style>
