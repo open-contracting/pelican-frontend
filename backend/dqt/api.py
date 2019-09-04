@@ -6,6 +6,8 @@ from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
 
 
 class DataItemResource(ModelResource):
+    id = IntegerField(attribute="id")
+    data = DictField(attribute="data")
     class Meta:
         queryset = DataItem.objects.all()
         resource_name = 'data_item'

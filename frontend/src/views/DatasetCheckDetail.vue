@@ -34,7 +34,7 @@
                 </div>
             </div>
 
-            <ExampleBoxes :examples="examples"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -64,7 +64,7 @@ export default {
     data: function() {
         return {
             check: null,
-            previewData: null,
+            previewDataItemId: null,
             previewMetadata: null,
             examples: null
         };
@@ -95,7 +95,12 @@ export default {
             }
         }
     },
-    methods: {},
+    methods: {
+        preview: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId);
+            this.previewDataItemId = itemId;
+        }
+    },
     computed: {
         shares() {
             if (this.checkType == "donut") {
@@ -103,7 +108,10 @@ export default {
             } else {
                 return null;
             }
-        }
+        },
+        previewData() {
+            return this.$store.getters.dataItemById(this.previewDataItemId);
+        },
     }
 };
 </script>

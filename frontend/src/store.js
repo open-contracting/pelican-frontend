@@ -12,6 +12,7 @@ export default new Vuex.Store({
         datasetId: null,
         resourceLevelStats: null,
         datasetLevelStats: null,
+        dataItems: [],
     },
     getters: {
         datasetId: (state) => {
@@ -43,6 +44,16 @@ export default new Vuex.Store({
             }
 
             return [];
+        },
+        dataItemById: (state) => (itemId) => {
+            if (state.dataItems) {
+                var dataItem = state.dataItems.find(item => item.id === itemId);
+                if (dataItem != null) {
+                    return dataItem;
+                }
+            }
+
+            return null;
         }
     },
     mutations: {
@@ -54,6 +65,9 @@ export default new Vuex.Store({
         },
         setDatasetLevelStats(state, stats) {
             state.datasetLevelStats = stats;
+        },
+        addDataItem(state, item) {
+            state.dataItems.push(item);
         },
     },
     actions: {
@@ -102,6 +116,25 @@ export default new Vuex.Store({
                 .catch(function (error) {
                     throw new Error(error);
                 })
-        }
+        },
+        loadDataItem({
+            commit,
+            state
+        }, itemId) {
+            var dataItem = null;
+            if (state.dataItems) {
+                dataItem = state.dataItems.find(item => item.id === itemId);
+            }
+            if (dataItem == null) {
+                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataItem + "/" + itemId;
+                axios.get(url)
+                    .then(function (response) {
+                        commit("addDataItem", response["data"]);
+                    })
+                    .catch(function (error) {
+                        throw new Error(error);
+                    })
+            }
+        },
     }
 })
