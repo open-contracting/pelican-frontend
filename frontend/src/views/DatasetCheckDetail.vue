@@ -21,7 +21,7 @@
                 <div v-if="checkType == 'donut'">
                     <table class="table table-borderless table-sm">
                         <tbody>
-                            <tr v-for="share in shares" class="d-flex " v-bind:key="share[0]">
+                            <tr v-for="share in shares" class="d-flex" v-bind:key="share[0]">
                                 <td class="col-3 text-right label">
                                     <span class="check_name">{{ share[0] }}</span>
                                 </td>
@@ -88,9 +88,17 @@ export default {
                 if (this.shares[key][1].examples.length > 0) {
                     this.examples.push([
                         this.shares[key][0],
-                        this.shares[key][1].examples,
-                        false
+                        this.shares[key][1].examples
                     ]);
+                }
+            }
+        }
+
+        if (this.checkType == "bar") {
+            this.examples = [];
+            for (var key in this.check.meta.examples) {
+                if (this.check.meta.examples[key].length > 0) {
+                    this.examples.push([key, this.check.meta.examples[key]]);
                 }
             }
         }
@@ -111,7 +119,7 @@ export default {
         },
         previewData() {
             return this.$store.getters.dataItemById(this.previewDataItemId);
-        },
+        }
     }
 };
 </script>

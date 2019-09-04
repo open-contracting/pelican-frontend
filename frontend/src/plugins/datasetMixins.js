@@ -14,6 +14,7 @@ export default {
                 "distribution.buyer",
                 "distribution.tender_value",
                 "distribution.contracts_value",
+                "distribution.awards_value",
             ];
             if (bar.includes(this.check.name)) {
                 return "bar";
