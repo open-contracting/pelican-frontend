@@ -37,6 +37,8 @@ class ResourceLevelCheckResource(ModelResource):
 
 
 class FieldLevelCheckResource(ModelResource):
+    result = DictField(attribute='result')
+
     class Meta:
         queryset = FieldLevelCheck.objects.all()
         resource_name = 'field_level_check'
