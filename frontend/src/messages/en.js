@@ -256,5 +256,28 @@ export const messages = {
                 description: "Checks whether proper reference to an award is set for particular contract. It passes if 'awards' array contains exactly one item with a proper id (determined by contract's awardID) set"
             },
         }
+    },
+    overview: {
+        collection_metadata: "COLLECTION METADATA",
+        kingfisher_metadata: "KINGFISHER METADATA",
+        dqt_metadata: "DATA QUALITY TOOL METADATA",
+        compiled_releases: "COMPILED RELEASES",
+        compiled_releases_label: "Total Unique OCIDs",
+        prices: "PRICES",
+        period: "PERIOD",
+        lifecycle: "TENDER LIFECYCLE",        
+        lifecycle_planning: "Planning",
+        lifecycle_tender: "Tender",
+        lifecycle_award: "Award",
+        lifecycle_contract: "Contract",
+        lifecycle_implementation: "Implementation",
+        publisher: "Publisher",
+        datalicense: "Data License",
+        extensions:	"Extensions",
+        publishedFrom: "Published From",
+        publishedTo: "Published To",	
+        collectionId: "Collection ID",
+        processingFrom: "Processing Start",
+        processingTo: "Processing End"
     }
 }
