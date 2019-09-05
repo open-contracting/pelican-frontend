@@ -34,7 +34,7 @@
 
                     <div v-if="checkType == 'numeric'" class="text-center">
                         <span class="check_numeric_value">{{ check.value }}</span>
-                        <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.count }}100</span>
+                        <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.count }}</span>
                     </div>
 
                     <div class="top3" v-if="checkType == 'top3'">

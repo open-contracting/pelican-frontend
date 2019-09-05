@@ -32,6 +32,25 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div v-if="checkType == 'top3'">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>{{ $t("top3.value") }}</th>
+                                <th class="text-center">{{ $t("top3.share") }}</th>
+                                <th class="text-center">{{ $t("top3.count") }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
+                                <td>{{ item.value_str }}</td>
+                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                <td class="text-right numeric">{{ item.count | formatNumber }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
@@ -96,9 +115,25 @@ export default {
 
         if (this.checkType == "bar") {
             this.examples = [];
-            for (var key in this.check.meta.examples) {
-                if (this.check.meta.examples[key].length > 0) {
-                    this.examples.push([key, this.check.meta.examples[key]]);
+            for (var topKey in this.check.meta.examples) {
+                if (this.check.meta.examples[barKey].length > 0) {
+                    this.examples.push([
+                        barKey,
+                        this.check.meta.examples[barKey]
+                    ]);
+                }
+            }
+        }
+
+        if (this.checkType == "top3") {
+            this.examples = [];
+            var mostFrequent = this.check.meta.most_frequent;
+            for (var topKey in mostFrequent) {
+                if (mostFrequent[topKey].examples.length > 0) {
+                    this.examples.push([
+                        mostFrequent[topKey].value_str,
+                        mostFrequent[topKey].examples
+                    ]);
                 }
             }
         }
