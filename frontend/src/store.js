@@ -15,6 +15,9 @@ export default new Vuex.Store({
         dataItems: [],
     },
     getters: {
+        dataset: (state) => {
+            return state.dataset;
+        },
         datasetId: (state) => {
             return state.dataset ? state.dataset.id : null;
         },
