@@ -9,14 +9,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        datasetId: null,
+        dataset: null,
         resourceLevelStats: null,
         datasetLevelStats: null,
         dataItems: [],
     },
     getters: {
         datasetId: (state) => {
-            return state.datasetId;
+            return state.dataset ? state.dataset.id : null;
         },
         resourceLevelStats: (state) => {
             return state.resourceLevelStats;
@@ -57,8 +57,8 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        setDatasetId(state, newId) {
-            state.datasetId = newId;
+        setDataset(state, newDataset) {
+            state.dataset = newDataset;
         },
         setResourceLevelStats(state, stats) {
             state.resourceLevelStats = stats;
@@ -71,11 +71,11 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        updateDatasetId({
+        updateDataset({
             dispatch,
             commit
-        }, newId) {
-            commit("setDatasetId", newId);
+        }, newDataset) {
+            commit("setDataset", newDataset);
             dispatch("loadResourceLevelStats");
             dispatch("loadDatasetLevelStats");
         },
@@ -84,7 +84,7 @@ export default new Vuex.Store({
             state
         }) {
             commit("setResourceLevelStats", null);
-            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelStats + "/" + state.datasetId;
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelStats + "/" + state.dataset.id;
             axios.get(url)
                 .then(function (response) {
                     var data = [];
@@ -103,7 +103,7 @@ export default new Vuex.Store({
             state
         }) {
             commit("setDatasetLevelStats", null);
-            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelStats + "/" + state.datasetId;
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelStats + "/" + state.dataset.id;
             axios.get(url)
                 .then(function (response) {
                     var data = [];
