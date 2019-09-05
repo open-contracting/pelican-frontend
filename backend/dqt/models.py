@@ -27,6 +27,19 @@ class Dataset(Model):
         managed = False
         db_table = "dataset"
 
+class Report(Model):
+    id = BigAutoField(primary_key=True)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
+    type = CharField(max_length=-1, blank=True, null=True)
+    data = JSONField()
+    created = DateTimeField(blank=True, null=True)
+    modified = DateTimeField(blank=True, null=True)
+
+    class Meta:
+        app_label = "data"
+        managed = False
+        db_table = "report"
+
 
 class DataItem(Model):
     id = BigAutoField(primary_key=True)

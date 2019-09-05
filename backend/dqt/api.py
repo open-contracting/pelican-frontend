@@ -2,7 +2,7 @@
 from tastypie.fields import DictField, ToOneField, ListField, CharField, IntegerField
 from tastypie.resources import ModelResource
 from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
-                     ProgressMonitorDataset, ResourceLevelCheck)
+                     ProgressMonitorDataset, ResourceLevelCheck, Report)
 
 
 class DataItemResource(ModelResource):
@@ -28,6 +28,14 @@ class DatasetResource(ModelResource):
     class Meta:
         queryset = Dataset.objects.all()
         resource_name = 'dataset'
+
+
+class ReportResource(ModelResource):
+    data = DictField(attribute='data')
+
+    class Meta:
+        queryset = Report.objects.all()
+        resource_name = 'report'
 
 
 class ResourceLevelCheckResource(ModelResource):

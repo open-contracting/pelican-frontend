@@ -4,7 +4,7 @@ from django.urls import path
 
 from .api import (DatasetResource, DataItemResource, DatasetLevelCheckResource,
                   FieldLevelCheckResource, ProgressMonitorDatasetResource,
-                  ResourceLevelCheckResource)
+                  ResourceLevelCheckResource, ReportResource)
 from .views import dataset_stats, dataset_level_stats, resource_level_stats
 
 dataset_resource = DatasetResource()
@@ -13,6 +13,7 @@ progress_monitor_dataset_resource = ProgressMonitorDatasetResource()
 field_level_check_resource = FieldLevelCheckResource()
 resource_level_check_resource = ResourceLevelCheckResource()
 dataset_level_check_resource = DatasetLevelCheckResource()
+report_resource = ReportResource()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^api/', include(field_level_check_resource.urls)),
     url(r'^api/', include(resource_level_check_resource.urls)),
     url(r'^api/', include(dataset_level_check_resource.urls)),
+    url(r'^api/', include(report_resource.urls))
 ]
