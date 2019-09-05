@@ -156,7 +156,11 @@ def field_level_path_stats(request, dataset_id, path):
             """, [dataset_id, path]
         )
 
-        for row in cursor.fetchall():
+        while True:
+            row = cursor.fetchone()
+            if row is None:
+                break
+
             example = {
                 "meta": row[0],
                 "path": row[1],
@@ -204,7 +208,11 @@ def field_level_path_stats(request, dataset_id, path):
             """, [dataset_id, path]
         )
 
-        for row in cursor.fetchall():
+        while True:
+            row = cursor.fetchone()
+            if row is None:
+                break
+
             example = {
                 "meta": row[0],
                 "path": row[1],
