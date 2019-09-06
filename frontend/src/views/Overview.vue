@@ -8,17 +8,23 @@
                     <table v-if="collection" class="table">
                         <tbody>
                             <tr><td>{{ $t('overview.publisher')}}</td><td>{{ collection.publisher }}</td></tr>
-                            <tr><td>URL</td><td><a v-if="collection.url" :href="collection.url">{{ collection.url }}</a></td></tr>
+                            <tr><td>URL</td><td><a v-if="collection.url" :href="collection.url" target="_blank">{{ collection.url }}</a></td></tr>
                             <tr><td>OCID Prefix</td><td>{{ collection.ocid_prefix }}</td></tr>
                             <tr>
                                 <td>{{ $t('overview.datalicense')}}</td>
-                                <td><a v-if="collection.data_license" :href="collection.data_license">{{ collection.data_license }}</a></td>
+                                <td><a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a></td>
                             </tr>
                             <tr>
                                 <td>{{ $t('overview.extensions')}}</td>
                                 <td>
                                     <template v-for="(e, i) in collection.extensions">
-                                        {{ e.name }}<template v-if="i + 1 < collection.extensions.length">, </template>                                 
+                                        <a v-if="e.documentationUrl" :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
+                                           :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name" target="_blank">
+                                           {{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}
+                                        </a>
+                                        <template v-else>{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
+                                        
+                                        <template v-if="i + 1 < collection.extensions.length">, </template>                                 
                                     </template>
                                 </td>
                             </tr>
@@ -50,21 +56,23 @@
         </div>
         <div class="row">
             <div class="col-auto">
-                <overview-card :title="$t('overview.compiled_releases')" blank class="compiled_releases">
-                    <h5>{{ $t('overview.compiled_releases_label') }}</h5>
-                    {{ compiled_releases.total_unique_ocids }} 
-                </overview-card>              
+                <overview-card v-if="compiled_releases" :title="$t('overview.compiled_releases.title')" blank class="compiled_releases">
+                    <template>
+                        <h5 class="text-nowrap">{{ $t('overview.compiled_releases.value_label') }}</h5>
+                        <div class="value"><strong>{{ compiled_releases.total_unique_ocids | formatNumber }}</strong></div>
+                    </template>
+                </overview-card>
             </div>
             <div class="col">
-                <overview-card :title="$t('overview.lifecycle')" blank class="lifecycle">
+                <overview-card v-if="lifecycle" blank class="lifecycle" :title="$t('overview.lifecycle.title')" :info="$t('overview.lifecycle.info')">
                     <div class="row">
                         <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']">                            
-                            <div class="col" :key="n">
-                                <div>{{ $t("overview.lifecycle_" + n) }}</div>
-                                <div></div>
-                                <div>{{ lifecycle[n] }}</div>
+                            <div class="col mx-auto text-center" :key="n">
+                                <div class="label">{{ $t("overview.lifecycle." + n) }}</div>
+                                <div class="icon mx-auto"></div>
+                                <div class="value"><strong>{{ lifecycle[n] | formatNumber }}</strong></div>
                             </div>
-                            <div v-if="n != 'implementation'" class="col" :key="n + '-arrow'">
+                            <div v-if="n != 'implementation'" class="col align-self-center" :key="n + '-arrow'">
                                 --------------->
                             </div>
                         </template>
@@ -74,21 +82,42 @@
         </div>
         <div class="row">
             <div class="col-12 col-md-6">
-                <overview-card :title="$t('overview.prices')">
-                    <table v-if="prices">
+                <overview-card :title="$t('overview.prices.title')" :info="$t('overview.prices.info')" class="prices">
+                    <h5>{{ $t('overview.prices.value_label') }}</h5>
+                    <p>
+                        <strong>$ {{ prices.total_volume_positive | formatNumber }}</strong>
+                        in {{ prices.contracts_positive | formatNumber }} {{ $t('overview.prices.contracts') }}
+                    </p>
+                    <table v-if="prices" class="table">
+                        <thead>
+                            <tr>
+                                <th>{{ $t("overview.prices.thead.category") }}</th>
+                                <th class="text-right">{{ $t("overview.prices.thead.count") }}</th>
+                                <th>{{ $t("overview.prices.thead.share") }}</th>
+                            </tr>
+                        </thead>
                         <tbody>
-                            
+                            <tr v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']" :key="c">
+                                <td v-html="getPriceCategoryLabel(c)" />
+                                <td class="text-right">{{ prices.price_category_positive[c].contracts | formatNumber }}</td>
+                                <td>
+                                    <div class="d-flex flex-row align-items-center share_progressbar">
+                                        <div class="value">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
+                                        <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </overview-card>               
             </div>
             <div class="col-12 col-md-6">
-                <overview-card :title="$t('overview.period')">
-                    <table v-if="period">
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
+                <overview-card :title="$t('overview.period.title')" class="period">
+                    <h5>{{ $t('overview.period.subtitle') }}</h5>
+                    <p>{{ $t('overview.period.description') }}</p>
+                    <div>
+                        HISTOGRAM
+                    </div>
                 </overview-card>               
             </div>
         </div>
@@ -98,10 +127,11 @@
 <script>
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import OverviewCard from "@/components/OverviewCard.vue";
+import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
     name: "overview",
-    components: { Dashboard, OverviewCard },
+    components: { Dashboard, OverviewCard, ProgressBar },
     computed: {
         dataset: function() {
             return this.$store.getters.dataset
@@ -131,16 +161,40 @@ export default {
     methods: {
         getMetaData: function(type) {
             return this.dataset && this.dataset.meta ? this.dataset.meta[type] : null
+        },
+        getPriceCategoryLabel(categoryId) {
+            if (categoryId == "0_10000") {
+                return "$" + this.formatNumber(0) + " - $" + this.formatNumber(10000)
+            } else if (categoryId == "10001_100000") {
+                return "$" + this.formatNumber(10001) + " - $" + this.formatNumber(100000)
+            } else if (categoryId == "100001_1000000") {
+                return "$" + this.formatNumber(100001) + " - $" + this.formatNumber(1000000)
+            }  else if (categoryId == "1000001+") {
+                return "$" + this.formatNumber(1000001) + "+"
+            }
+
+            return categoryId
+        },
+        formatNumber(number) {
+            return this.$options.filters.formatNumber(number)
         }
     }
 };
 </script>
 
+
 <style lang="scss">
 @import "src/scss/main";
+.overview_card * {
+    color: $text-color;
+}
 .compiled_releases, .lifecycle {
     .result_box {
         padding: 0 !important;
+    }
+
+    .row > div {
+        margin: 0 !important;
     }
 }
 
@@ -149,12 +203,91 @@ export default {
         border-top: none;
     }
 
-    .table tr td:first-of-type {
-        font-weight: 200;
+    .table tbody tr {
+        td {
+            vertical-align: middle;
+        }
+
+        td:first-of-type {
+            font-weight: 200;
+            color: $headings_light_color;
+            white-space: nowrap;
+        }
+
+        td:nth-of-type(2) {
+            font-weight: 400;
+        }
+
+        a {
+            color: $text-color;
+            text-decoration: underline;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
     }
 
-    .table tr td:nth-of-type(2) {
-        font-weight: 400;
+    .table tbody tr a:hover {
+        text-decoration: none;
+    }
+}
+
+.prices {
+    .table thead {
+        th {
+            border-bottom: none;
+            color: $headings_light_color;
+        }        
+    }
+
+    .table tr:first-of-type td {
+        border-top: none;
+    }
+
+    .share_progressbar {
+        .value {
+            margin-right: 10px;
+            color: $headings_light_color
+        }
+    }
+}
+
+.period {
+    p {
+        color: $headings_light_color;
+    }
+}
+
+.lifecycle {
+    .icon {
+        height: 40px;
+        width: 40px;
+        background-color: $ok_color;
+        border-radius: 20px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    h4 {
+        margin-bottom: 20px;
+        margin-top: 20px
+    }
+
+    .value {
+        font-size: 20px;        
+    }
+
+    .row {
+        .col:first-of-type {
+            padding-left: 0;
+        }
+    }
+}
+
+.compiled_releases {
+    .value {
+        font-size: 40px;
     }
 }
 </style>

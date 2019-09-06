@@ -261,16 +261,39 @@ export const messages = {
         collection_metadata: "COLLECTION METADATA",
         kingfisher_metadata: "KINGFISHER METADATA",
         dqt_metadata: "DATA QUALITY TOOL METADATA",
-        compiled_releases: "COMPILED RELEASES",
-        compiled_releases_label: "Total Unique OCIDs",
-        prices: "PRICES",
-        period: "PERIOD",
-        lifecycle: "TENDER LIFECYCLE",        
-        lifecycle_planning: "Planning",
-        lifecycle_tender: "Tender",
-        lifecycle_award: "Award",
-        lifecycle_contract: "Contract",
-        lifecycle_implementation: "Implementation",
+        compiled_releases: {
+            title: "COMPILED RELEASES",
+            value_label: "Total Unique OCIDs"
+        },
+        prices: {
+            title: "PRICES",
+            value_label: "Total Value",
+            contracts: "contracts",
+            thead: {
+                category: "price category",
+                count: "contracts count",
+                share: "% of total value"
+            },
+            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could"
+                + " be converted to US dollars we used. Contracts are further broken down into several price categories."
+                + " Number of contracts for each category is displayed together with a share of those contracts on the total value."
+        },
+        period: {
+            title: "PERIOD",
+            subtitle: "Compiled Releases in Time",
+            description: "Distribution of compiled releases in time based on compiled release's Date field."
+        },
+        lifecycle: {
+            title: "TENDER LIFECYCLE",        
+            planning: "Planning",
+            tender: "Tender",
+            award: "Award",
+            contract: "Contract",
+            implementation: "Implementation",
+            info: "A number of occurrences of a particural section in all compiled releases."
+                + " While plannings and tenders can appear only once in each compiled release awards, contracts and implementation"
+                + " can be present multipletimes."
+        },
         publisher: "Publisher",
         datalicense: "Data License",
         extensions:	"Extensions",
