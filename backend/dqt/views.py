@@ -19,77 +19,6 @@ def dataset_stats(request, dataset_id):
     return JsonResponse(result)
 
 
-def resource_level_stats(request, dataset_id):
-    result = {}
-
-    counts = ResourceLevelCheck.objects.filter(
-        dataset=dataset_id).values(
-        "check_name", "result").annotate(
-        count=Count('id'))
-    for cnt in counts:
-        if cnt["check_name"] not in result:
-            result[cnt["check_name"]] = {
-                "ok": 0,
-                "failed": 0,
-                "na": 0,
-                "application_count": 0,
-                "pass_count": 0,
-            }
-
-        if cnt["result"] is None:
-            result[cnt["check_name"]]["na"] = cnt["count"]
-        if cnt["result"] is True:
-            result[cnt["check_name"]]["ok"] = cnt["count"]
-        if cnt["result"] is False:
-            result[cnt["check_name"]]["failed"] = cnt["count"]
-
-    rates = ResourceLevelCheck.objects.filter(
-        dataset=dataset_id).values("check_name").annotate(
-        application_count=Sum('application_count')).annotate(
-        pass_count=Sum('pass_count'))
-    for rate in rates:
-        result[rate["check_name"]]["application_count"] = rate["application_count"]
-        result[rate["check_name"]]["pass_count"] = rate["pass_count"]
-
-    for key, item in result.items():
-        max_id = ResourceLevelCheck.objects.filter(
-            check_name=key).filter(
-            dataset=dataset_id).aggregate(
-            max_id=Max("id"))["max_id"]
-
-        min_id = ResourceLevelCheck.objects.filter(
-            check_name=key).filter(
-            dataset=dataset_id).aggregate(
-            min_id=Min("id"))["min_id"]
-
-        rand_id = random.randint(min_id, min_id + (max_id - min_id))
-
-        passed_examples = ResourceLevelCheck.objects.filter(
-            check_name=key).filter(
-            dataset=dataset_id).filter(result=True).filter(id__gt=rand_id)[:5]
-
-        result[key]["examples"] = {}
-        result[key]["examples"]["passed"] = []
-        for item in passed_examples:
-            val = {}
-            val["meta"] = item.meta
-            val["data"] = item.data_item.data
-            result[key]["examples"]["passed"].append(val)
-
-        failed_examples = ResourceLevelCheck.objects.filter(
-            check_name=key).filter(
-            dataset=dataset_id).filter(result=False).filter(id__gt=rand_id)[:5]
-
-        result[key]["examples"]["failed"] = []
-        for item in failed_examples:
-            val = {}
-            val["meta"] = item.meta
-            val["data"] = item.data_item.data
-            result[key]["examples"]["failed"].append(val)
-
-    return JsonResponse(result)
-
-
 def dataset_level_stats(request, dataset_id):
     result = {}
     checks = DatasetLevelCheck.objects.filter(
@@ -103,6 +32,27 @@ def dataset_level_stats(request, dataset_id):
     return JsonResponse(result)
 
 
+def field_level_stats(request, dataset_id):
+    with connections["data"].cursor() as cursor:
+        cursor.execute(
+            """
+            select data
+            from report
+            where dataset_id = %s and type = 'field_level_check';
+            """, [dataset_id]
+        )
+        rows = cursor.fetchall()
+
+        if not rows:
+            return JsonResponse(
+                {
+                    "error": "no field_level_check report for dataset_id: {}".format(dataset_id)
+                }
+            )
+
+        return JsonResponse(rows[0][0])
+
+
 def field_level_path_stats(request, dataset_id, path):
     examples_cap = 20
     result = None
@@ -112,8 +62,10 @@ def field_level_path_stats(request, dataset_id, path):
             """
             select data->%s
             from report
-            where dataset_id = %s and type = 'field_level_check';
-            """, [path, dataset_id]
+            where dataset_id = %s and
+                  type = 'field_level_check' and
+                  data ? %s;
+            """, [path, dataset_id, path]
         )
         rows = cursor.fetchall()
 
@@ -242,6 +194,108 @@ def field_level_path_stats(request, dataset_id, path):
             set data = data || %s
             where dataset_id = %s and type = 'field_level_check';
             """, [json.dumps({path: result}), dataset_id]
+        )
+
+    return JsonResponse(result)
+
+
+def resource_level_stats(request, dataset_id):
+    with connections["data"].cursor() as cursor:
+        cursor.execute(
+            """
+            select data
+            from report
+            where dataset_id = %s and type = 'resource_level_check';
+            """, [dataset_id]
+        )
+        rows = cursor.fetchall()
+
+        if not rows:
+            return JsonResponse(
+                {
+                    "error": "no resource_level_check report for dataset_id: {}".format(dataset_id)
+                }
+            )
+
+        return JsonResponse(rows[0][0])
+
+
+def resource_level_check_name_stats(request, dataset_id, check_name):
+    examples_cap = 20
+    result = None
+
+    with connections["data"].cursor() as cursor:
+        cursor.execute(
+            """
+            select data->%s
+            from report
+            where dataset_id = %s and
+                  type = 'resource_level_check' and
+                  data ? %s;
+            """, [check_name, dataset_id, check_name]
+        )
+        rows = cursor.fetchall()
+
+        if not rows:
+            return JsonResponse(
+                {
+                    "error": "no results for dataset_id: {}, check_name: '{}' combination".format(
+                        dataset_id,
+                        check_name
+                    )
+                }
+            )
+
+        result = rows[0][0]
+
+        # examples for this dataset_id, check_name combinations is cached
+        if result["examples_filled"]:
+            return JsonResponse(result)
+
+        # picking examples
+        passed_sampler = ReservoirSampler(examples_cap)
+        failed_sampler = ReservoirSampler(examples_cap)
+        undefined_sampler = ReservoirSampler(examples_cap)
+
+        cursor.execute(
+            """
+            select result->'meta' as meta, result->'checks'->%s as result
+            from resource_level_check
+            where dataset_id = %s;
+            """, [check_name, dataset_id]
+        )
+
+        while True:
+            row = cursor.fetchone()
+            if row is None:
+                break
+
+            example = {
+                "meta": row[0],
+                "result": row[1]
+            }
+
+            if example["result"]["result"] is True:
+                passed_sampler.process(example)
+            elif example["result"]["result"] is False:            
+                failed_sampler.process(example)
+            elif example["result"]["result"] is None:
+                undefined_sampler.process(example)
+            else:
+                raise ValueError()
+
+        result["passed_examples"] = passed_sampler.retrieve_samples()
+        result["failed_examples"] = failed_sampler.retrieve_samples()
+        result["undefined_examples"] = undefined_sampler.retrieve_samples()
+
+        # saving examples
+        result["examples_filled"] = True
+        cursor.execute(
+            """
+            update report
+            set data = data || %s
+            where dataset_id = %s and type = 'resource_level_check';
+            """, [json.dumps({check_name: result}), dataset_id]
         )
 
     return JsonResponse(result)

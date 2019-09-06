@@ -8,6 +8,7 @@ from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
 class DataItemResource(ModelResource):
     id = IntegerField(attribute="id")
     data = DictField(attribute="data")
+
     class Meta:
         queryset = DataItem.objects.all()
         resource_name = 'data_item'
@@ -39,6 +40,8 @@ class ReportResource(ModelResource):
 
 
 class ResourceLevelCheckResource(ModelResource):
+    result = DictField(attribute='result')
+
     class Meta:
         queryset = ResourceLevelCheck.objects.all()
         resource_name = 'resource_level_check'
@@ -50,6 +53,7 @@ class FieldLevelCheckResource(ModelResource):
     class Meta:
         queryset = FieldLevelCheck.objects.all()
         resource_name = 'field_level_check'
+
 
 class DatasetLevelCheckResource(ModelResource):
     class Meta:
