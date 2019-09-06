@@ -4,14 +4,12 @@ export default {
             var donut = [
                 "distribution.main_procurement_category",
                 "distribution.tender_status",
-                // "distribution.tender_status"
             ];
             if (donut.includes(this.check.name)) {
                 return "donut";
             }
 
             var bar = [
-                "distribution.buyer",
                 "distribution.tender_value",
                 "distribution.contracts_value",
                 "distribution.awards_value",
@@ -33,7 +31,17 @@ export default {
             if (top3.includes(this.check.name)) {
                 return "top3";
             }
-            return null;
+
+            var unique = [
+                "unique.id",
+                "consistent.related_process_title",
+                "reference.related_process_identifier"
+            ];
+            if (unique.includes(this.check.name)) {
+                return "unique";
+            }
+
+            throw "unknow check type - " + this.check.name;
         }
     },
     methods: {

@@ -115,7 +115,7 @@ export default {
 
         if (this.checkType == "bar") {
             this.examples = [];
-            for (var topKey in this.check.meta.examples) {
+            for (var barKey in this.check.meta.examples) {
                 if (this.check.meta.examples[barKey].length > 0) {
                     this.examples.push([
                         barKey,
