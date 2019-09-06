@@ -42,9 +42,18 @@ h4 {
     color: $headings_light_color;
     cursor: pointer;
     margin-left: 20px;
+    border: 1px solid $headings_light_color;
+    border-radius: 9px;
+    height: 18px;
+    width: 18px;
+    display: inline-block;
+    text-align: center;
+    font-family: $font-family-thin;
+    line-height: 18px;
 }
 
 .info:hover {
     color: $text_color;
+    border-color: $text-color;
 }    
 </style>

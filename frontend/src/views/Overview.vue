@@ -82,7 +82,7 @@
         </div>
         <div class="row">
             <div class="col-12 col-md-6">
-                <overview-card :title="$t('overview.prices.title')" :info="$t('overview.prices.info')" class="prices">
+                <overview-card v-if="prices" :title="$t('overview.prices.title')" :info="$t('overview.prices.info')" class="prices">
                     <h5>{{ $t('overview.prices.value_label') }}</h5>
                     <p>
                         <strong>$ {{ prices.total_volume_positive | formatNumber }}</strong>
@@ -103,7 +103,7 @@
                                 <td>
                                     <div class="d-flex flex-row align-items-center share_progressbar">
                                         <div class="value">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
-                                        <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
+                                        <progress-bar :value="(prices.price_category_positive[c].share * 100)" class="flex-fill" />
                                     </div>
                                 </td>
                             </tr>
@@ -112,11 +112,30 @@
                 </overview-card>               
             </div>
             <div class="col-12 col-md-6">
-                <overview-card :title="$t('overview.period.title')" class="period">
+                <overview-card v-if="period" :title="$t('overview.period.title')" class="period">
                     <h5>{{ $t('overview.period.subtitle') }}</h5>
                     <p>{{ $t('overview.period.description') }}</p>
-                    <div>
-                        HISTOGRAM
+                    <div>                        
+                        <GChart type="ColumnChart" :data="period_histogram"
+                            :options="{
+                                legend: 'none',
+                                bar: {groupWidth: '95%'},
+                                colors: ['#6C75E1'],
+                                hAxis: {
+                                    baselineColor: 'transparent',
+                                    gridlines: {
+                                        color: 'transparent'                                        
+                                    },
+                                    showTextEvery: parseInt(period_histogram.length / 2.1),
+                                    slantedText: false
+                                },
+                                vAxis: {
+                                    baselineColor: 'transparent',
+                                    gridlines: {
+                                        color: 'transparent'                                        
+                                    }
+                                }
+                            }"/>                        
                     </div>
                 </overview-card>               
             </div>
@@ -128,10 +147,12 @@
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import OverviewCard from "@/components/OverviewCard.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
+import { GChart } from 'vue-google-charts';
+
 
 export default {
     name: "overview",
-    components: { Dashboard, OverviewCard, ProgressBar },
+    components: { Dashboard, OverviewCard, ProgressBar, GChart },
     computed: {
         dataset: function() {
             return this.$store.getters.dataset
@@ -156,6 +177,15 @@ export default {
         },
         period: function() {
             return this.getMetaData('period')
+        },
+        period_histogram: function() {
+            var hist = [["date","count"]]
+            if (this.period) {
+                this.period.forEach(function(p) { 
+                    hist.push([p.date_str, p.count]) 
+                })
+            }
+            return hist
         }
     },
     methods: {
@@ -212,6 +242,7 @@ export default {
             font-weight: 200;
             color: $headings_light_color;
             white-space: nowrap;
+            font-family: $font-family-thin;
         }
 
         td:nth-of-type(2) {
@@ -238,6 +269,7 @@ export default {
         th {
             border-bottom: none;
             color: $headings_light_color;
+            font-size: 12px;
         }        
     }
 
@@ -250,6 +282,10 @@ export default {
             margin-right: 10px;
             color: $headings_light_color
         }
+    }
+
+    h5 + p {
+        font-size: 25px !important;
     }
 }
 
