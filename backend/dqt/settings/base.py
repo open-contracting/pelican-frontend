@@ -73,36 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dqt.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'OPTIONS': {
-            'options': '-c search_path=django,public'
-        },
-        'NAME': 'dqt',
-        'USER': 'dqt',
-        'PASSWORD': 'dqt',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
-
-    'data': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'OPTIONS': {
-            'options': '-c search_path=development,public'
-        },
-        'NAME': 'dqt',
-        'USER': 'dqt',
-        'PASSWORD': 'dqt',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    },
-}
-
 DATABASE_ROUTERS = ['dqt.routers.DbRouter']
 
 # Password validation

@@ -8,6 +8,12 @@ var config = {
     },
 }
 
+if (process.env.VUE_APP_SERVER == "kuba_dev01") {
+    Object.assign(config, {
+        apiBaseUrl: "http://localhost:22004/",
+    });
+}
+
 if (process.env.NODE_ENV == "production") {
     Object.assign(config, {
         apiBaseUrl: "https://dqt.datlab.eu/",
