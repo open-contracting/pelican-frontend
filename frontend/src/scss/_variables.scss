@@ -10,6 +10,11 @@
     src: url("/fonts/GTEestiProDisplay-Bold.otf") format("opentype");
 }
 
+@font-face {
+    font-family: "GTEestiProDisplay-Thin";
+    src: url("/fonts/GTEestiProDisplay-Thin.otf") format("opentype");
+}
+
 $ok_color: #B9C504;
 $failed_color: #D0021B;
 $na_color: #9B9B9B;
@@ -37,3 +42,8 @@ sans-serif !default;
 
 $font-family-mono: "Ubuntu Mono",
 monospace !default;
+
+$font-family-thin: "GTEestiProDisplay-Thin",
+"Helvetica Neue",
+Arial,
+sans-serif !default;

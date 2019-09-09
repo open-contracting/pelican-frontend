@@ -24,7 +24,7 @@
                         {{ item.modified }}
                     </td>
                     <td class="col-2">
-                        <button @click.prevent="setDatasetId(item.id)" class="btn btn-primary mb-4" type="submit">{{ $t("dataset.selectDataset") }}</button>
+                        <button @click.prevent="setDataset(item)" class="btn btn-primary mb-4" type="submit">{{ $t("dataset.selectDataset") }}</button>
                     </td>
                 </tr>
             </tbody>
@@ -46,7 +46,6 @@ export default {
     data: function() {
         return {
             datasets: [],
-            datasetId: "uk_2019-08-23_14:42:39",
             loading: false
         };
     },
@@ -54,10 +53,10 @@ export default {
         Loader
     },
     methods: {
-        setDatasetId: function(datasetId) {
+        setDataset: function(dataset) {
             this.loading = true;
-            if (this.$store.getters.datasetId != datasetId) {
-                this.$store.dispatch("updateDatasetId", datasetId);
+            if (this.$store.getters.datasetId != dataset.id) {
+                this.$store.dispatch("updateDataset", dataset);
             } else {
                 this.$router.push({
                     name: "overview"
