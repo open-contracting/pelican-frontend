@@ -1,0 +1,12 @@
+autopep8==1.4.4
+Django==2.2.3
+django-cors-headers==3.0.2
+django-tastypie==0.14.2
+psycopg2-binary==2.8.3
+pycodestyle==2.5.0
+python-dateutil==2.8.0
+python-mimeparse==1.6.0
+pytz==2019.1
+simplejson==3.16.0
+six==1.12.0
+sqlparse==0.3.0
