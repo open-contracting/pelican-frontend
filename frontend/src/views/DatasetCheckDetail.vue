@@ -51,6 +51,31 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div v-if="checkType == 'numeric'">
+                    <div class="row text-center">
+                        <div class="numeric_result color_ok col-4">
+                            <div class="check_numeric_value">
+                                {{ check.meta.total_passed }}
+                            </div>
+                            {{ $t("datasetLevel.numeric.passed") }}
+                        </div>
+
+                        <div class="numeric_result color_failed col-4">
+                            <div class="check_numeric_value">
+                                {{ check.meta.total_processed - check.meta.total_passed }}
+                            </div>
+                            {{ $t("datasetLevel.numeric.failed") }}
+                        </div>
+
+                        <div class="numeric_result color_na col-4">
+                            <div class="check_numeric_value">
+                                {{ check.meta.total_processed }}
+                            </div>
+                            {{ $t("datasetLevel.numeric.processed") }}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
@@ -137,6 +162,27 @@ export default {
                 }
             }
         }
+
+        if (this.checkType == "numeric") {
+            this.examples = [];
+            var failed = this.check.meta.failed_examples;
+            var passed = this.check.meta.passed_examples;
+
+            if (failed.length > 0) {
+                this.examples.push([
+                    this.$t("datasetLevel.numeric.failedExamples"),
+                    failed
+                ]);
+            }
+
+            if (passed.length > 0) {
+                this.examples.push([
+                    this.$t("datasetLevel.numeric.passedExamples"),
+                    passed
+                ]);
+            }
+
+        }
     },
     methods: {
         preview: function(itemId) {
@@ -179,4 +225,20 @@ export default {
 .label {
     padding-top: 6px;
 }
+
+.numeric_result {
+    display: inline-block;
+}
+
+.check_numeric_value {
+    display: block;
+    font-size: 60px;
+    font-weight: 700;
+}
+
+.check_numeric_count {
+    font-size: 30px;
+    font-weight: 700;
+}
+
 </style>

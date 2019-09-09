@@ -117,6 +117,7 @@ export default {
 .undefined_image {
     margin-top: 20px;
 }
+
 .check_numeric_value {
     font-size: 60px;
     font-weight: 700;

@@ -69,6 +69,18 @@ h5 {
     font-weight: 700;
 }
 
+.color_ok {
+    color: $ok_color;
+}
+
+.color_failed {
+    color: $failed_color;
+}
+
+.color_na {
+    color: $na_color;
+}
+
 .table th {
     border-top: none;
 }

@@ -93,6 +93,13 @@ export const messages = {
                 name: "url_availability",
                 description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
             }
+        },
+        numeric: {
+            passed: "passed",
+            processed: "tested",
+            failed: "failed",
+            failedExamples: "Failed examples",
+            passedExamples: "Passed examples",
         }
     },
     resourceLevel: {
@@ -122,31 +129,31 @@ export const messages = {
                 description: "Checks that there are no contracts for a given award if its status is pending, cancelled or unsuccessful."
             },
             contracts_status: {
-                name: "Contract status - transactions",                                                                    
+                name: "Contract status - transactions",
                 description: "Checks that there are no transactions for a given contract if its status is pending, cancelled."
             },
             milestone_status: {
-                name: "Milestone status - dateMet",                                                                    
+                name: "Milestone status - dateMet",
                 description: "Checks that dateMet is not set or is empty if milestone's status is either 'scheduled' or 'notMet'."
             },
             value_realistic: {
-                name: "Realisitic value",                                                                    
+                name: "Realisitic value",
                 description: "Checks whether the value's amount converted to USD is between -5 billion USD and 5 billion USD"
             },
             dates: {
-                name: "Realisitic value",                                                                    
+                name: "Realisitic value",
                 description: "Checks the logical chain of dates within a contracting process. Tender's tenderPeriod has to end before tender's contractPeriod starts. It also has to end before any award is awarded or any contract is signed. All contracts signature date as well as awards dates has to be lower or equal to the compiled release's date. A contract cannot be signed before the related award is awarded. Each contract has to be signed before any transaction for this contract happens."
             },
             milestones_dates: {
-                name: "Contracting process dates",                                                                    
+                name: "Contracting process dates",
                 description: "Checks that the date when a milestone was met is after the date when it was last modified. Both dates have to be lower or equal to the compiled release's date"
             },
             amendments_dates: {
-                name: "Amendment dates",                                                                    
+                name: "Amendment dates",
                 description: "Depending to which phase of contracting process the specific amendment belongs it checks that it was amended after tender period started or after the particular award was awarded or after the particular contract was signed. All date also has to be lower or equal to the compiled release's date"
             },
             document_dates: {
-                name: "Document dates",                                                                    
+                name: "Document dates",
                 description: "Checks that the publication date of a document is lower or equal to the modification date and that both are lower or equal to the compiled release's date"
             },
         },
@@ -284,7 +291,7 @@ export const messages = {
             description: "Distribution of compiled releases in time based on compiled release's Date field."
         },
         lifecycle: {
-            title: "TENDER LIFECYCLE",        
+            title: "TENDER LIFECYCLE",
             planning: "Planning",
             tender: "Tender",
             award: "Award",
@@ -298,7 +305,7 @@ export const messages = {
         datalicense: "Data License",
         extensions:	"Extensions",
         publishedFrom: "Published From",
-        publishedTo: "Published To",	
+        publishedTo: "Published To",
         collectionId: "Collection ID",
         processingFrom: "Processing Start",
         processingTo: "Processing End"
