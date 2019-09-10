@@ -3,6 +3,7 @@ var config = {
     apiEndpoints: {
         dataset: "api/dataset",
         resourceLevelStats: "api/resource_level_stats",
+        resourceLevelCheckDetail: "api/resource_level_check_name_stats",
         datasetLevelStats: "api/dataset_level_stats",
         dataItem: "api/data_item",
     },

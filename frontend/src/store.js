@@ -11,6 +11,7 @@ export default new Vuex.Store({
     state: {
         dataset: null,
         resourceLevelStats: null,
+        resourceCheckExamples: null,
         datasetLevelStats: null,
         dataItems: [],
     },
@@ -66,6 +67,10 @@ export default new Vuex.Store({
         setResourceLevelStats(state, stats) {
             state.resourceLevelStats = stats;
         },
+        setResourceLevelCheckDetail(state, data) {
+            state.resourceLevelStats.forEach(function (item, i) { if (item.name == data.name) state.resourceLevelStats[i] = data; });
+            //state.resourceLevelStats = stats;
+        },
         setDatasetLevelStats(state, stats) {
             state.datasetLevelStats = stats;
         },
@@ -96,6 +101,20 @@ export default new Vuex.Store({
                         data.push(response["data"][key]);
                     }
                     commit("setResourceLevelStats", data);
+                })
+                .catch(function (error) {
+                    throw new Error(error);
+                })
+        },
+        loadResourceLevelCheckDetail({
+            commit,
+            state
+        }, checkName) {
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelCheckDetail + "/" + state.dataset.id + "/" + checkName;
+            axios.get(url)
+                .then(function (response) {
+                    response["data"]["name"] = checkName;
+                    commit("setResourceLevelCheckDetail", response["data"]);
                 })
                 .catch(function (error) {
                     throw new Error(error);

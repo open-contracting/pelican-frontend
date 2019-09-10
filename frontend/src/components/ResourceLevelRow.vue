@@ -23,15 +23,16 @@
 </template>
 
 <script>
+
+import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
+
 export default {
     data: function() {
         return {};
     },
+    mixins: [resourceCheckMixin],
     props: ["check", "name"],
     methods: {
-        onePercent: function() {
-            return (this.check.ok + this.check.failed + this.check.na) / 100;
-        },
         detail: function() {
             this.$router.push({
                 name: "resourceCheckDetail",
@@ -39,17 +40,6 @@ export default {
             });
         }
     },
-    computed: {
-        okPercentage() {
-            return Math.round(this.check.ok / this.onePercent());
-        },
-        failedPercentage() {
-            return Math.round(this.check.failed / this.onePercent());
-        },
-        naPercentage() {
-            return Math.round(this.check.na / this.onePercent());
-        }
-    }
 };
 </script>
 
