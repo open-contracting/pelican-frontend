@@ -53,7 +53,7 @@ def field_level_stats(request, dataset_id):
         return JsonResponse(rows[0][0])
 
 
-def field_level_path_stats(request, dataset_id, path):
+def field_level_detail(request, dataset_id, path):
     examples_cap = 20
     result = None
 
@@ -220,7 +220,7 @@ def resource_level_stats(request, dataset_id):
         return JsonResponse(rows[0][0])
 
 
-def resource_level_check_name_stats(request, dataset_id, check_name):
+def resource_level_detail(request, dataset_id, check_name):
     examples_cap = 20
     result = None
 
