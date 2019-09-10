@@ -121,13 +121,10 @@ class ProgressMonitorItem(Model):
 
 class ResourceLevelCheck(Model):
     id = BigAutoField(primary_key=True)
-    check_name = CharField(max_length=-1, blank=True, null=True)
-    result = BooleanField(blank=True, null=True)
-    pass_count = IntegerField(blank=True, null=True)
-    application_count = IntegerField(blank=True, null=True)
-    meta = JSONField()
     data_item = ForeignKey("DataItem", db_column="data_item_id", on_delete=CASCADE)
     dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
+    result = JSONField()
+    data_item = ForeignKey("DataItem", db_column="data_item_id", on_delete=CASCADE)
 
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
