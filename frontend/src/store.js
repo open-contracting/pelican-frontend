@@ -14,6 +14,7 @@ export default new Vuex.Store({
         resourceCheckExamples: null,
         datasetLevelStats: null,
         dataItems: [],
+        fieldLevelStats: null
     },
     getters: {
         dataset: (state) => {
@@ -58,7 +59,10 @@ export default new Vuex.Store({
             }
 
             return null;
-        }
+        },
+        fieldLevelStats: (state) => {
+            return state.fieldLevelStats;
+        },
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -81,6 +85,9 @@ export default new Vuex.Store({
         addDataItem(state, item) {
             state.dataItems.push(item);
         },
+        setFieldLevelStats(state, stats) {
+            state.fieldLevelStats = stats;
+        }
     },
     actions: {
         updateDataset({
@@ -90,6 +97,7 @@ export default new Vuex.Store({
             commit("setDataset", newDataset);
             dispatch("loadResourceLevelStats");
             dispatch("loadDatasetLevelStats");
+            dispatch("loadFieldLevelStats");
         },
         loadResourceLevelStats({
             commit,
@@ -169,5 +177,15 @@ export default new Vuex.Store({
                     })
             }
         },
+        loadFieldLevelStats({ commit, state }) {
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
+            axios.get(url)
+                .then(function (response) {
+                    commit("setFieldLevelStats", response["data"]);
+                })
+                .catch(function (error) {
+                    throw new Error(error);
+                })
+        }
     }
 })
