@@ -88,25 +88,11 @@ export default {
     mixins: [resourceCheckMixin],
     data: function() {
         return {
-            check: null,
             previewMetaData: null,
             previewDataItemId: null
         };
     },
     components: { InlineBar, VueJsonPretty, DashboardDetail, ExampleBoxes },
-    created() {
-        this.$store.dispatch('loadResourceLevelCheckDetail', this.$route.params.check);
-        this.check = this.$store.getters.resourceLevelCheckByName(
-            this.$route.params.check
-        );
-
-        // if (this.check.failed_examples.length > 0) {
-        //     this.previewMetadata = this.check.examples.failed[0].meta;
-        //     this.previewData = this.check.examples.failed[0].data;
-        //     this.selectedKey = 0;
-        //     this.selectedSection = "failed";
-        // }
-    },
     methods: {
         preview: function(itemId) {
             this.$store.dispatch("loadDataItem", itemId);
@@ -126,37 +112,43 @@ export default {
         }
     },
     computed: {
+        check() {
+            var stats = this.$store.getters.resourceLevelStats;
+            return stats.find(item => item.name === this.$route.params.check);
+        },
         examples() {
             var examples = [];
-            var failed = this.check.failed_examples;
-            var passed = this.check.passed_examples;
-            var undefined = this.check.undefined_examples;
+            if (this.check != [] && this.check.name != undefined) {
+                var failed = this.check.failed_examples;
+                var passed = this.check.passed_examples;
+                var undefined = this.check.undefined_examples;
 
-            if (failed.length > 0) {
-                examples.push([
-                    this.$t("core.failedExamples"),
-                    failed.map(function(val){
-                        return val.meta;
-                    })
-                ]);
-            }
+                if (failed.length > 0) {
+                    examples.push([
+                        this.$t("core.failedExamples"),
+                        failed.map(function(val){
+                            return val.meta;
+                        })
+                    ]);
+                }
 
-            if (passed.length > 0) {
-                examples.push([
-                    this.$t("core.passedExamples"),
-                    passed.map(function(val){
-                        return val.meta;
-                    })
-                ]);
-            }
+                if (passed.length > 0) {
+                    examples.push([
+                        this.$t("core.passedExamples"),
+                        passed.map(function(val){
+                            return val.meta;
+                        })
+                    ]);
+                }
 
-            if (undefined.length > 0) {
-                examples.push([
-                    this.$t("core.undefinedExamples"),
-                    undefined.map(function(val){
-                        return val.meta;
-                    })
-                ]);
+                if (undefined.length > 0) {
+                    examples.push([
+                        this.$t("core.undefinedExamples"),
+                        undefined.map(function(val){
+                            return val.meta;
+                        })
+                    ]);
+                }
             }
 
             return examples;

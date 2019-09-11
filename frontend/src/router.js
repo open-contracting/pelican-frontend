@@ -8,6 +8,7 @@ import Dataset from './views/Dataset.vue'
 import Time from './views/Time.vue'
 import ResourceCheckDetail from './views/ResourceCheckDetail.vue'
 import DatasetCheckDetail from './views/DatasetCheckDetail.vue'
+import store from './store'
 
 Vue.use(Router)
 
@@ -42,7 +43,11 @@ export default new Router({
         }, {
             path: '/resource/detail/:check',
             name: 'resourceCheckDetail',
-            component: ResourceCheckDetail
+            component: ResourceCheckDetail,
+            beforeEnter: (to, from, next) => {
+                store.dispatch('loadResourceLevelCheckDetail', to.params.check);
+                next();
+            }
         }, {
             path: '/dataset/detail/:check',
             name: 'datasetCheckDetail',

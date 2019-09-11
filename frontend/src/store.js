@@ -40,14 +40,14 @@ export default new Vuex.Store({
                 return state.resourceLevelStats.find(item => item.name === checkName);
             }
 
-            return [];
+            return null;
         },
         datasetLevelCheckByName: (state) => (checkName) => {
             if (state.datasetLevelStats) {
                 return state.datasetLevelStats.find(item => item.name === checkName);
             }
 
-            return [];
+            return null;
         },
         dataItemById: (state) => (itemId) => {
             if (state.dataItems) {
@@ -68,8 +68,10 @@ export default new Vuex.Store({
             state.resourceLevelStats = stats;
         },
         setResourceLevelCheckDetail(state, data) {
-            state.resourceLevelStats.forEach(function (item, i) { if (item.name == data.name) state.resourceLevelStats[i] = data; });
-            //state.resourceLevelStats = stats;
+            var updatedStats = [];
+            updatedStats = updatedStats.concat(state.resourceLevelStats);
+            updatedStats.forEach(function (item, i) { if (item.name == data.name) updatedStats[i] = data; });
+            state.resourceLevelStats = updatedStats;
         },
         setDatasetLevelStats(state, stats) {
             state.datasetLevelStats = stats;
