@@ -1,13 +1,35 @@
 <template>
     <div class="progress_bar">
-        <div class="inner" :style="{width: value + '%'}"></div>
+        <template v-for="(b, i) in allBars">
+            <div v-if="b.value" :class="['inner', b.class]" :key="i" :style="{width: b.value + '%', 'background-color': b.color}">&nbsp;</div>
+        </template>
     </div>
 </template>
 
 <script>
 export default {
     name: "overview-card",
-    props: ["value"]
+    props: ["bars", "value", "ok", "failed"],
+    computed: {
+        allBars: function() {
+            var result = []
+
+            if (this.value) {
+                result.push({value: this.value})
+            }
+            if (this.ok) {
+                result.push({value: this.ok, class: "ok"})
+            }
+            if (this.failed) {
+                result.push({value: this.failed, class: "failed"})
+            }
+            if (this.bars) {
+                result.concat(this.bars)
+            }
+
+            return result
+        }
+    }
 };
 </script>
 
@@ -16,20 +38,25 @@ export default {
 
 .progress_bar {
     width: 100%;
-    height: 5px;
-    background-color: $na_color;
+    height: 4px;
+    background-color: $na_light_color;
     display: inline-block;
     position: relative;
-    border-radius: 2.5px;
+    overflow: hidden;
+    border-radius: 2px;
 
     .inner {
         background-color: $primary;
-        height: 5px;
+        height: 4px;
         display: inline-block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border-radius: 2.5px;
+
+        &.ok {
+            background-color: $ok_color;
+        }
+
+        &.failed {
+            background-color: $failed_color;
+        }
     }
 }
 </style>
