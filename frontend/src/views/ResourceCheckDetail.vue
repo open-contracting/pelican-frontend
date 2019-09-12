@@ -114,7 +114,13 @@ export default {
     computed: {
         check() {
             var stats = this.$store.getters.resourceLevelStats;
-            return stats.find(item => item.name === this.$route.params.check);
+            if (stats != null) {
+                return stats.find(
+                    item => item.name === this.$route.params.check
+                );
+            } else {
+                return null;
+            }
         },
         examples() {
             var examples = [];
@@ -126,7 +132,7 @@ export default {
                 if (failed.length > 0) {
                     examples.push([
                         this.$t("core.failedExamples"),
-                        failed.map(function(val){
+                        failed.map(function(val) {
                             return val.meta;
                         })
                     ]);
@@ -135,7 +141,7 @@ export default {
                 if (passed.length > 0) {
                     examples.push([
                         this.$t("core.passedExamples"),
-                        passed.map(function(val){
+                        passed.map(function(val) {
                             return val.meta;
                         })
                     ]);
@@ -144,7 +150,7 @@ export default {
                 if (undefined.length > 0) {
                     examples.push([
                         this.$t("core.undefinedExamples"),
-                        undefined.map(function(val){
+                        undefined.map(function(val) {
                             return val.meta;
                         })
                     ]);

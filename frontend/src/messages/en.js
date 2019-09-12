@@ -1,11 +1,19 @@
 export const messages = {
     header: "Data Quality Assesment Results",
-    loader: "Still loading the great stuff for you. Please be patient.",
+    loader: {
+        generic: "Still loading the great stuff for you. Please be patient.",
+        examples: "Generating random examples for you. Please be patient, this takes some time for big datasets"
+    },
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
     created: "created",
     modified: "modified",
+    core: {
+        passedExamples: "Passed examples",
+        failedExamples: "Failed examples",
+        undefinedExamples: "Undefined examples",
+    },
     dataset: {
         id: "id",
         size: "items count",
@@ -281,9 +289,9 @@ export const messages = {
                 count: "contracts count",
                 share: "% of total value"
             },
-            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could"
-                + " be converted to US dollars we used. Contracts are further broken down into several price categories."
-                + " Number of contracts for each category is displayed together with a share of those contracts on the total value."
+            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could" +
+                " be converted to US dollars we used. Contracts are further broken down into several price categories." +
+                " Number of contracts for each category is displayed together with a share of those contracts on the total value."
         },
         period: {
             title: "PERIOD",
@@ -297,13 +305,13 @@ export const messages = {
             award: "Award",
             contract: "Contract",
             implementation: "Implementation",
-            info: "A number of occurrences of a particural section in all compiled releases."
-                + " While plannings and tenders can appear only once in each compiled release awards, contracts and implementation"
-                + " can be present multipletimes."
+            info: "A number of occurrences of a particural section in all compiled releases." +
+                " While plannings and tenders can appear only once in each compiled release awards, contracts and implementation" +
+                " can be present multipletimes."
         },
         publisher: "Publisher",
         datalicense: "Data License",
-        extensions:	"Extensions",
+        extensions: "Extensions",
         publishedFrom: "Published From",
         publishedTo: "Published To",
         collectionId: "Collection ID",

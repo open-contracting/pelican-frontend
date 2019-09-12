@@ -29,14 +29,14 @@ export default new Vuex.Store({
             return state.datasetLevelStats;
         },
         resourceLevelStatsBySection: (state) => (sectionName) => {
-            if (state.resourceLevelStats) {
+            if (state.resourceLevelStats != null) {
                 return state.resourceLevelStats.filter(item => item.name.startsWith(sectionName));
             }
 
             return [];
         },
         resourceLevelCheckByName: (state) => (checkName) => {
-            if (state.resourceLevelStats) {
+            if (state.resourceLevelStats != null) {
                 return state.resourceLevelStats.find(item => item.name === checkName);
             }
 
@@ -70,7 +70,9 @@ export default new Vuex.Store({
         setResourceLevelCheckDetail(state, data) {
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.resourceLevelStats);
-            updatedStats.forEach(function (item, i) { if (item.name == data.name) updatedStats[i] = data; });
+            updatedStats.forEach(function (item, i) {
+                if (item.name == data.name) updatedStats[i] = data;
+            });
             state.resourceLevelStats = updatedStats;
         },
         setDatasetLevelStats(state, stats) {
@@ -110,17 +112,24 @@ export default new Vuex.Store({
         },
         loadResourceLevelCheckDetail({
             commit,
-            state
+            state,
+            getters
         }, checkName) {
-            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelCheckDetail + "/" + state.dataset.id + "/" + checkName;
-            axios.get(url)
-                .then(function (response) {
-                    response["data"]["name"] = checkName;
-                    commit("setResourceLevelCheckDetail", response["data"]);
-                })
-                .catch(function (error) {
-                    throw new Error(error);
-                })
+            var checkDetail = getters.resourceLevelCheckByName(checkName);
+
+            if (checkDetail != null && !checkDetail.examplesLoaded) {
+                if (state.dataset != null && checkName != null) {
+                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelCheckDetail + "/" + state.dataset.id + "/" + checkName;
+                    axios.get(url)
+                        .then(function (response) {
+                            response["data"]["name"] = checkName;
+                            commit("setResourceLevelCheckDetail", response["data"]);
+                        })
+                        .catch(function (error) {
+                            throw new Error(error);
+                        })
+                }
+            }
         },
         loadDatasetLevelStats({
             commit,

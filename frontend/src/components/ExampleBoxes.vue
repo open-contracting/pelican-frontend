@@ -1,5 +1,13 @@
 <template>
     <span>
+        <span v-if="examples.length < 1">
+            <div class="result_box loader text-center">
+                <div class="spinner">
+                    <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                </div>
+                {{ $t("loader.examples") }}
+            </div>
+        </span>
         <span v-for="section in examples" v-bind:key="section[0]">
             <h5>{{ section[0] }}</h5>
             <div class="result_box">
@@ -68,7 +76,7 @@ export default {
         preview: function(key, section, id) {
             this.selectedKey = key;
             this.selectedSection = section;
-            this.$emit('preview', id);
+            this.$emit("preview", id);
         },
         showMore: function(section) {
             this.openSections.push(section);
@@ -91,5 +99,16 @@ export default {
 
 .moreLess {
     padding-top: 25px;
+}
+
+.loader {
+    font-size: 19px;
+    font-weight: 700;
+    padding: 40px;
+}
+
+.spinner {
+    margin-bottom: 20px;
+    font-size: 40px;
 }
 </style>

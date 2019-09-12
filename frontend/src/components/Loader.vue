@@ -3,7 +3,7 @@
         <div class="spinner">
             <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
         </div>
-        {{ $t("loader") }}
+        {{ $t("loader.generic") }}
     </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
 }
 
 .spinner {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     font-size: 40px;
 }
 </style>
