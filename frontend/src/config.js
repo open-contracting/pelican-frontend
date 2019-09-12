@@ -6,6 +6,7 @@ var config = {
         resourceLevelCheckDetail: "api/resource_level_detail",
         datasetLevelStats: "api/dataset_level_stats",
         dataItem: "api/data_item",
+        fieldStats: "api/field_level_stats"
     },
 }
 

@@ -18,16 +18,15 @@
                 {{ $t("sections.overview").toUpperCase() }}
             </b-nav-item>
 
-            <!-- <li class="nav-item">
-                <a class="nav-link active" href="#">
-                    <router-link to="/field">
-                        <span class="menu_icon_small">
-                            <font-awesome-icon icon="sliders-h" />
-                        </span>
-                        {{ $t("sections.field").toUpperCase() }}
-                    </router-link>
-                </a>
-            </li>-->
+            <b-nav-item class="nav-item" to="/field" :disabled="!fieldLoaded">
+                <span v-if="fieldLoaded" class="menu_icon_small">
+                    <font-awesome-icon icon="sliders-h" />
+                </span>
+                <span v-else class="menu_icon_spinner">
+                    <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                </span>
+                {{ $t("sections.field").toUpperCase() }}
+            </b-nav-item>
 
             <b-nav-item class="nav-item" to="/resource" :disabled="!resourceLoaded">
                 <span v-if="resourceLoaded" class="menu_icon_small">
@@ -89,6 +88,7 @@ export default {
     display: block;
     margin-top: 10px;
     font-size: 0.8em;
+    width: 100%;
 }
 
 .main_nav a {
