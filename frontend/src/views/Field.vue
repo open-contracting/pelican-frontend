@@ -94,8 +94,6 @@ export default {
                 qualityShare: this.okShare(this.stats[k].quality)
             }))
         }
-
-        this.sortByName()
     },
     methods: {
         okShare: function(item) {
