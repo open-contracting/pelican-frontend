@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name: "overview-card",
+    name: "progress-bar",
     props: ["bars", "value", "ok", "failed"],
     computed: {
         allBars: function() {
