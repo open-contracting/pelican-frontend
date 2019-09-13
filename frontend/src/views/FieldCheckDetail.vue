@@ -17,11 +17,10 @@
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
 
-            <ExampleBoxes :examples="failedCoverageExamples" v-on:preview="preview"></ExampleBoxes>
-
-            <ExampleBoxes :examples="failedQualityExamples" v-on:preview="preview"></ExampleBoxes>
-
-            <ExampleBoxes :examples="passedExamples" v-on:preview="preview"></ExampleBoxes>
+            <ExampleBoxes
+                :examples="failedCoverageExamples.concat(failedQualityExamples).concat(passedExamples)"
+                v-on:preview="preview"
+                :loaded="check.examples_filled" />
         </template>
 
         <template v-slot:preview>

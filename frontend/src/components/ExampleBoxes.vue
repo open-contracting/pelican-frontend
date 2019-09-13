@@ -1,6 +1,6 @@
 <template>
     <span>
-        <span v-if="examples.length < 1">
+        <span v-if="!loaded">
             <div class="result_box loader text-center">
                 <div class="spinner">
                     <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
@@ -71,7 +71,10 @@ export default {
             selectedSection: null
         };
     },
-    props: ["examples"],
+    props: {
+        examples: Array,
+        loaded: Boolean
+    },
     methods: {
         preview: function(key, section, id) {
             this.selectedKey = key;

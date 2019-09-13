@@ -11,7 +11,7 @@
             <h5>{{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}</h5>
             <CheckDetailResultBox :check="check" pass nonPass />
             
-            <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
