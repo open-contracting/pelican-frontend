@@ -91,6 +91,8 @@ export const messages = {
             },
         },
         unique: {
+            ok: "All values are unique.",
+            failed: "There are non-unique values.",
             id: {
                 name: "id",
                 description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
@@ -322,11 +324,11 @@ export const messages = {
         title: "Field Level Checks",
         description: [
             "Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.",
-            "Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is"
-                + " the number of occurence of its parent structure. For example, if there is 50k awards in a dataset containing 90k suppliers in total"
-                + " awards.title check can be performed 50.000x but awards.suppliers.id can be performed 90.000x",
-            "Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can"
-                + " be performed. These controls run only for fields that are present in the dataset."
+            "Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is" +
+            " the number of occurence of its parent structure. For example, if there is 50k awards in a dataset containing 90k suppliers in total" +
+            " awards.title check can be performed 50.000x but awards.suppliers.id can be performed 90.000x",
+            "Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can" +
+            " be performed. These controls run only for fields that are present in the dataset."
         ],
         all: "ALL CHECKS",
         table: {

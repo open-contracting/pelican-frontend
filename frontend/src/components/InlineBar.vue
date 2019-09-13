@@ -4,9 +4,9 @@
             <span v-if="barWidth > 30">{{ percentage | formatNumber}}%</span>
             &nbsp;
         </div>
-        <div class="count">
+        <div v-if="barWidth <= 30" class="count">
             <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatNumber}}%</span>
-            <span class="count_holder">
+            <span v-if="showCount" class="count_holder">
                 <span>&#40;</span>
                 {{ count | formatNumber}}
                 <span>&#41;</span>
@@ -22,10 +22,15 @@ export default {
             barWidth: 0
         };
     },
-    props: ["percentage", "count", "state"],
+    props: ["percentage", "count", "state", "showCount"],
     mounted() {
-        this.barWidth =
-            ((this.$refs.bar.clientWidth - 100) / 100) * this.percentage;
+        if (this.showCount) {
+            this.barWidth =
+                ((this.$refs.bar.clientWidth - 100) / 100) * this.percentage;
+        } else {
+            this.barWidth =
+                (this.$refs.bar.clientWidth / 100) * this.percentage;
+        }
     }
 };
 </script>
@@ -36,6 +41,8 @@ export default {
     width: 100%;
     text-align: left;
     display: inline-block;
+    position: relative;
+    top: -3px;
 }
 
 .count {

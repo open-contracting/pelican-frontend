@@ -2,8 +2,8 @@
     <dashboard-detail>
         <template v-slot:content>
             <h3>{{ $t("header").toUpperCase() }}</h3>
-            <h2>{{ $t("resourceLevel." + check.name + ".name") }}</h2>
-            <p>{{ $t("resourceLevel." + check.name + ".description") }}</p>
+            <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
+            <p v-if="check">{{ $t("resourceLevel." + check.name + ".description") }}</p>
 
             <h5>{{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}</h5>
             <div class="result_box">

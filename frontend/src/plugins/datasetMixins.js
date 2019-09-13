@@ -4,6 +4,16 @@ export default {
             var donut = [
                 "distribution.main_procurement_category",
                 "distribution.tender_status",
+                "distribution.tender_procurement_method",
+                "distribution.tender_award_criteria",
+                "distribution.tender_submission_method",
+                "distribution.awards_status",
+                "distribution.contracts_status",
+                "distribution.milestone_status",
+                "distribution.milestone_type",
+                "distribution.document_document_type",
+                "distribution.value_currency",
+                "distribution.related_process_relation"
             ];
             if (donut.includes(this.check.name)) {
                 return "donut";
@@ -42,7 +52,14 @@ export default {
             }
 
             throw "unknow check type - " + this.check.name;
-        }
+        },
+        shares() {
+            if (this.checkType == "donut") {
+                return this.orderedShares(this.check.meta.shares);
+            } else {
+                return null;
+            }
+        },
     },
     methods: {
         orderedShares: function (shares) {

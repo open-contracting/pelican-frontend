@@ -1,7 +1,7 @@
 <template>
     <div class="dataset_result_box" v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }" v-on:click="detail(check.name)">
         <div class="row no-gutters">
-            <div class="col col-1 col-sm-1 col-lg-1">
+            <div class="col col-2 col-sm-2 col-lg-1 text-left">
                 <span v-if="check.result == true" class="ok_icon">
                     <font-awesome-icon :icon="['far', 'check-circle']" />
                 </span>
@@ -13,37 +13,49 @@
                 </span>
             </div>
 
-            <div class="col col-10 col-sm-11 col-lg-11">
-                <h5>{{ $t("datasetLevel." + check.name + ".name") }}</h5>
-                <p>{{ $t("datasetLevel." + check.name + ".description") }}</p>
-
-                <div class="text-center" v-if="check.result == undefined">
-                    <img class="undefined_image" src="/img/unsufficient_data.png" />
-                    <br />
-                    <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                    <p>{{ $t("unsufficientData.description") }}</p>
+            <div class="col col-10 col-sm-10 col-lg-11">
+                <div class="row">
+                    <div class="col-12">
+                        <h5>{{ $t("datasetLevel." + check.name + ".name") }}</h5>
+                        <p>{{ $t("datasetLevel." + check.name + ".description") }}</p>
+                    </div>
                 </div>
-                <div v-else>
-                    <div v-if="checkType == 'donut'">
-                        <DonutChart :check="check"></DonutChart>
-                    </div>
 
-                    <div v-if="checkType == 'bar'">
-                        <BarChart :check="check"></BarChart>
-                    </div>
+                <div class="row h-100 align-items-center">
+                    <div class="col-12">
+                        <div class="chartEnvelope text-center" v-if="check.result == undefined">
+                            <img class="undefined_image" src="/img/unsufficient_data.png" />
+                            <br />
+                            <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
+                            <p>{{ $t("unsufficientData.description") }}</p>
+                        </div>
+                        <div v-else>
+                            <div v-if="checkType == 'donut'">
+                                <div class="chartEnvelope">
+                                    <DonutChart :check="check"></DonutChart>
+                                </div>
+                            </div>
 
-                    <div v-if="checkType == 'numeric'" class="text-center">
-                        <span class="check_numeric_value">{{ check.meta.total_passed }}</span>
-                        <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed }}</span>
-                    </div>
+                            <div v-if="checkType == 'bar'">
+                                <div class="chartEnvelope">
+                                    <BarChart :check="check"></BarChart>
+                                </div>
+                            </div>
 
-                    <div class="top3" v-if="checkType == 'top3'">
-                        <table class="table table-sm">
-                            <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
-                                <td>{{ item.amount }}</td>
-                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
-                            </tr>
-                        </table>
+                            <div v-if="checkType == 'numeric'" class="text-center">
+                                <span class="check_numeric_value">{{ check.meta.total_passed }}</span>
+                                <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed }}</span>
+                            </div>
+
+                            <div class="top3" v-if="checkType == 'top3'">
+                                <table class="table table-sm">
+                                    <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
+                                        <td>{{ item.value_str }}</td>
+                                        <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,10 +97,17 @@ export default {
 }
 
 .dataset_result_box {
+    display: inline-block;
     background-color: white;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 25px;
+    min-height: 340px;
+}
+
+.chartEnvelope {
+    position: relative;
+    top: -50px;
 }
 
 .dataset_result_box h5 {

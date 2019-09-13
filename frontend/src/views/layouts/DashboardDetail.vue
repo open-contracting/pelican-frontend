@@ -6,7 +6,11 @@
             <slot name="content" />
         </main>
         <div class="preview col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
-            <slot name="preview" />
+            <div class="row">
+                <div class="preview_envelope col col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
+                    <slot name="preview" />
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -25,4 +29,17 @@ export default {
 
 <style lang="scss">
 @import "src/scss/main";
+
+.preview {
+    position: relative;
+}
+
+.preview_envelope {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow-y: scroll;
+    padding: 30px;
+}
 </style>
