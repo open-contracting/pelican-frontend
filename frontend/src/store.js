@@ -63,6 +63,13 @@ export default new Vuex.Store({
         fieldLevelStats: (state) => {
             return state.fieldLevelStats;
         },
+        fieldLevelCheckByPath: (state) => (checkName) => {
+            if (state.fieldLevelStats != null && state.fieldLevelStats.hasOwnProperty(checkName)) {
+                return state.fieldLevelStats[checkName];
+            }
+
+            return null;
+        }
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -87,7 +94,14 @@ export default new Vuex.Store({
         },
         setFieldLevelStats(state, stats) {
             state.fieldLevelStats = stats;
-        }
+        },
+        setFieldLevelCheckDetail(state, data) {
+            var updatedStats = [];
+            updatedStats = Object.assign({}, state.fieldLevelStats);
+            updatedStats[data.path] = data;
+
+            state.fieldLevelStats = updatedStats;
+        },
     },
     actions: {
         updateDataset({
@@ -186,6 +200,27 @@ export default new Vuex.Store({
                 .catch(function (error) {
                     throw new Error(error);
                 })
-        }
+        },
+        loadFieldLevelCheckDetail({
+            commit,
+            state,
+            getters
+        }, path) {
+            var checkDetail = getters.fieldLevelCheckByPath(path);
+
+            if (checkDetail != null && !checkDetail.examplesLoaded) {
+                if (state.dataset != null && path != null) {
+                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldDetail + "/" + state.dataset.id + "/" + path;
+                    axios.get(url)
+                        .then(function (response) {
+                            response["data"]["path"] = path;
+                            commit("setFieldLevelCheckDetail", response["data"]);
+                        })
+                        .catch(function (error) {
+                            throw new Error(error);
+                        })
+                }
+            }
+        },
     }
 })

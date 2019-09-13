@@ -43,7 +43,7 @@
                 <tbody>
                     <template v-for="n in tableData">
                         <tr :key="n.name">
-                            <td rowspan="2">{{ n.name }}</td>
+                            <td rowspan="2" @click="detail(n.name)">{{ n.name }}</td>
                             
                             <td class="percent">{{ n.coverageShare | formatNumber }}%</td>
                             <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
@@ -138,6 +138,12 @@ export default {
                     return 0
                 }
             }, asc)
+        },
+        detail(path) {
+            this.$router.push({
+                name: "fieldCheckDetail",
+                params: { path: path }
+            });
         }
     }
 };
