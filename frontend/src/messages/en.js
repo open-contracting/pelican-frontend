@@ -336,5 +336,16 @@ export const messages = {
                 quality: "QUALITY"
             }
         }
+    },
+    fieldDetail: {
+        checks: "checks",
+        coverage: {
+            label: "Coverage",
+            "exists.count_header" : "Exists",
+            "non_empty.count_header" : "Non-Empty"
+        },
+        quality: {
+            label: "Quality"
+        }
     }
 }

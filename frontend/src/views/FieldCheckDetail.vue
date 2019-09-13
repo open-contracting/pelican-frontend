@@ -2,20 +2,26 @@
     <dashboard-detail>
         <template v-if="check" v-slot:content>
             <h3>{{ $t("header").toUpperCase() }}</h3>
-            <h2>{{ $t("fieldLevel." + check.path + ".name") }}</h2>
-            <p>{{ $t("fieldLevel." + check.path + ".description") }}</p>
+            <h2>{{ $t("fieldDetail." + check.path + ".name") }}</h2>
+            <p>{{ $t("fieldDetail." + check.path + ".description") }}</p>
 
             <template v-for="(c, k) in check.coverage.checks">
-                <h5 :key="k">{{ $t("fieldLevel.coverage." + k + ".count_header") }}: {{ c.passed_count + c.failed_count + c.undefined_count | formatNumber }}</h5>
+                <h5 :key="k">&ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
+                     {{ c.passed_count + c.failed_count | formatNumber }}</h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
 
             <template v-for="(c, k) in check.quality.checks">
-                <h5 :key="k">{{ $t("fieldLevel.quality." + k + ".count_header") }}: {{ c.passed_count + c.failed_count + c.undefined_count | formatNumber }}</h5>
+                <h5 :key="k">&ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
+                     {{ c.passed_count + c.failed_count | formatNumber }}</h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
+            <ExampleBoxes :examples="failedCoverageExamples" v-on:preview="preview"></ExampleBoxes>
+
+            <ExampleBoxes :examples="failedQualityExamples" v-on:preview="preview"></ExampleBoxes>
+
+            <ExampleBoxes :examples="passedExamples" v-on:preview="preview"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -47,40 +53,77 @@ export default {
     components: { VueJsonPretty, DashboardDetail, ExampleBoxes, CheckDetailResultBox },
     methods: {
         preview: function(itemId) {
-            // this.$store.dispatch("loadDataItem", itemId);
-            // this.previewDataItemId = itemId;
+            this.$store.dispatch("loadDataItem", itemId);
+            this.previewDataItemId = itemId;
 
-            // var allExamples = [];
-            // allExamples = allExamples.concat(this.check.failed_examples);
-            // allExamples = allExamples.concat(this.check.passed_examples);
-            // allExamples = allExamples.concat(this.check.undefined_examples);
+            var result = this.allExamples.find(function(element) {
+                return element.meta.item_id == itemId;
+            });
 
-            // var result = allExamples.find(function(element) {
-            //     return element.meta.item_id == itemId;
-            // });
-            // if (result) {
-            //     this.previewMetaData = result.result;
-            // }
+            if (result) {
+                this.previewMetaData = result.result;
+            }
         }
     },
     computed: {
+        allExamples() {
+            if (!this.check) {
+                return []
+            }
+
+            var allExamples = []
+            if (this.check.coverage) {
+                allExamples = allExamples.concat(this.check.coverage.failed_examples)
+                allExamples = allExamples.concat(this.check.coverage.passed_examples)
+            }
+            if (this.check.quality) {
+                allExamples = allExamples.concat(this.check.quality.failed_examples)
+                allExamples = allExamples.concat(this.check.quality.passed_examples)
+            }
+
+            return allExamples
+        },
         check() {
             return this.$store.getters.fieldLevelCheckByPath(this.$route.params.path)
         },
-        examples() {
+        failedCoverageExamples() {
             var examples = [];
             if (this.check != [] && this.check.path != undefined) {
                 var failed = this.check.coverage.failed_examples;
-                var passed = this.check.coverage.passed_examples;
 
                 if (failed.length > 0) {
                     examples.push([
-                        this.$t("core.failedExamples"),
+                        this.$t("fieldDetail.coverage.label") + " - " + this.$t("core.failedExamples"),
                         failed.map(function(val) {
                             return val.meta;
                         })
                     ]);
                 }
+            }
+
+            return examples;
+        },
+        failedQualityExamples() {
+            var examples = [];
+            if (this.check != [] && this.check.path != undefined) {
+                var failed = this.check.quality.failed_examples;
+
+                if (failed.length > 0) {
+                    examples.push([
+                        this.$t("fieldDetail.quality.label") + " - " + this.$t("core.failedExamples"),
+                        failed.map(function(val) {
+                            return val.meta;
+                        })
+                    ]);
+                }
+            }
+
+            return examples;
+        },
+        passedExamples() {
+            var examples = [];
+            if (this.check != [] && this.check.path != undefined) {
+                var passed = this.check.coverage.passed_examples.concat(this.check.quality.passed_examples);
 
                 if (passed.length > 0) {
                     examples.push([
