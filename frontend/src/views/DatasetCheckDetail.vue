@@ -1,82 +1,80 @@
 <template>
     <dashboard-detail>
-        <template v-slot:content>
-            <span v-if="check != null">
-                <h3>{{ $t("header").toUpperCase() }}</h3>
-                <div class="row">
-                    <div class="col col-10">
-                        <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
-                    </div>
-                    <div class="col col-2">
-                        <span v-if="check.result == true" class="badge badge-pill ok_status">{{ $t("passed") }}</span>
-                        <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
-                    </div>
+        <template v-if="check != null" v-slot:content>
+            <h3>{{ $t("header").toUpperCase() }}</h3>
+            <div class="row">
+                <div class="col col-10">
+                    <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
                 </div>
-                <p>{{ $t("datasetLevel." + check.name + ".description") }}</p>
+                <div class="col col-2">
+                    <span v-if="check.result == true" class="badge badge-pill ok_status">{{ $t("passed") }}</span>
+                    <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
+                </div>
+            </div>
+            <p>{{ $t("datasetLevel." + check.name + ".description") }}</p>
 
-                <div class="result_box">
-                    <div v-if="checkType == 'bar'">
-                        <BarChartBig :check="check"></BarChartBig>
-                    </div>
+            <div class="result_box">
+                <div v-if="checkType == 'bar'">
+                    <BarChartBig :check="check"></BarChartBig>
+                </div>
 
-                    <div v-if="checkType == 'unique'">{{ $t("datasetLevel.unique.ok") }}</div>
+                <div v-if="checkType == 'unique'">{{ $t("datasetLevel.unique.ok") }}</div>
 
-                    <div v-if="checkType == 'donut'">
-                        <table class="table table-borderless table-sm">
-                            <tbody>
-                                <tr v-for="share in shares" v-bind:key="share[0]">
-                                    <td class="text-right label">
-                                        <span class="check_name">{{ share[0] }}</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <InlineBar :count="share[1]['count']" :percentage="Math.round(share[1]['share'] * 10000) / 100" :state="'reg'" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div v-if="checkType == 'donut'">
+                    <table class="table table-borderless table-sm">
+                        <tbody>
+                            <tr v-for="share in shares" v-bind:key="share[0]">
+                                <td class="text-right label">
+                                    <span class="check_name">{{ share[0] }}</span>
+                                </td>
+                                <td class="text-right">
+                                    <InlineBar :count="share[1]['count']" :percentage="Math.round(share[1]['share'] * 10000) / 100" :state="'reg'" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <div v-if="checkType == 'top3'">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>{{ $t("top3.value") }}</th>
-                                    <th class="text-center">{{ $t("top3.share") }}</th>
-                                    <th class="text-center">{{ $t("top3.count") }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
-                                    <td>{{ item.value_str }}</td>
-                                    <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
-                                    <td class="text-right numeric">{{ item.count | formatNumber }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div v-if="checkType == 'top3'">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>{{ $t("top3.value") }}</th>
+                                <th class="text-center">{{ $t("top3.share") }}</th>
+                                <th class="text-center">{{ $t("top3.count") }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
+                                <td>{{ item.value_str }}</td>
+                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                <td class="text-right numeric">{{ item.count | formatNumber }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <div v-if="checkType == 'numeric'">
-                        <div class="row text-center">
-                            <div class="numeric_result color_ok col-4">
-                                <div class="check_numeric_value">{{ check.meta.total_passed }}</div>
-                                {{ $t("datasetLevel.numeric.passed") }}
-                            </div>
+                <div v-if="checkType == 'numeric'">
+                    <div class="row text-center">
+                        <div class="numeric_result color_ok col-4">
+                            <div class="check_numeric_value">{{ check.meta.total_passed }}</div>
+                            {{ $t("datasetLevel.numeric.passed") }}
+                        </div>
 
-                            <div class="numeric_result color_failed col-4">
-                                <div class="check_numeric_value">{{ check.meta.total_processed - check.meta.total_passed }}</div>
-                                {{ $t("datasetLevel.numeric.failed") }}
-                            </div>
+                        <div class="numeric_result color_failed col-4">
+                            <div class="check_numeric_value">{{ check.meta.total_processed - check.meta.total_passed }}</div>
+                            {{ $t("datasetLevel.numeric.failed") }}
+                        </div>
 
-                            <div class="numeric_result color_na col-4">
-                                <div class="check_numeric_value">{{ check.meta.total_processed }}</div>
-                                {{ $t("datasetLevel.numeric.processed") }}
-                            </div>
+                        <div class="numeric_result color_na col-4">
+                            <div class="check_numeric_value">{{ check.meta.total_processed }}</div>
+                            {{ $t("datasetLevel.numeric.processed") }}
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
-            </span>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="true"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>

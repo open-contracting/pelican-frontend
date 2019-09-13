@@ -7,7 +7,7 @@
         </main>
         <div class="preview col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
             <div class="row">
-                <div class="preview_envelope col col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
+                <div class="preview_envelope col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
                     <slot name="preview" />
                 </div>
             </div>
@@ -29,9 +29,16 @@ export default {
 
 <style lang="scss">
 @import "src/scss/main";
-
 .preview {
+    background-color: white;
     position: relative;
+}
+
+.examples .divider {
+    border-top: solid 1px $na_light_color;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .preview_envelope {

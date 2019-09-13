@@ -1,16 +1,16 @@
 <template>
     <dashboard-detail>
-        <template v-slot:content>
+        <template v-if="check" v-slot:content>
             <h3>{{ $t("header").toUpperCase() }}</h3>
             <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
             <p v-if="check">{{ $t("resourceLevel." + check.name + ".description") }}</p>
 
             <h5>{{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}</h5>
             <CheckDetailResultBox :check="check" ok failed na />
-            
+
             <h5>{{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}</h5>
             <CheckDetailResultBox :check="check" pass nonPass />
-            
+
             <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
         </template>
 
@@ -42,7 +42,12 @@ export default {
             previewDataItemId: null
         };
     },
-    components: { VueJsonPretty, DashboardDetail, ExampleBoxes, CheckDetailResultBox },
+    components: {
+        VueJsonPretty,
+        DashboardDetail,
+        ExampleBoxes,
+        CheckDetailResultBox
+    },
     methods: {
         preview: function(itemId) {
             this.$store.dispatch("loadDataItem", itemId);
