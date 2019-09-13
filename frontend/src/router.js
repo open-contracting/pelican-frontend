@@ -8,6 +8,7 @@ import Dataset from './views/Dataset.vue'
 import Time from './views/Time.vue'
 import ResourceCheckDetail from './views/ResourceCheckDetail.vue'
 import DatasetCheckDetail from './views/DatasetCheckDetail.vue'
+import FieldCheckDetail from './views/FieldCheckDetail.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -52,6 +53,14 @@ export default new Router({
             path: '/dataset/detail/:check',
             name: 'datasetCheckDetail',
             component: DatasetCheckDetail
+        }, {
+            path: '/field/detail/:path',
+            name: 'fieldCheckDetail',
+            component: FieldCheckDetail,
+            beforeEnter: (to, from, next) => {
+                store.dispatch('loadFieldLevelCheckDetail', to.params.path);
+                next();
+            }
         }
     ]
 })

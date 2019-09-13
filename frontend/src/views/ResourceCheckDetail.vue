@@ -6,62 +6,12 @@
             <p v-if="check">{{ $t("resourceLevel." + check.name + ".description") }}</p>
 
             <h5>{{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}</h5>
-            <div class="result_box">
-                <table class="table table-borderless table-sm">
-                    <tbody>
-                        <tr class="d-flex">
-                            <td class="col-3 text-right label">
-                                <span class="check_name">{{ $t("passed") }}</span>
-                            </td>
-                            <td class="col-9">
-                                <InlineBar :count="check.passed_count" :percentage="okPercentage" :state="'ok'" />
-                            </td>
-                        </tr>
-                        <tr class="d-flex">
-                            <td class="col-3 text-right label">
-                                <span class="check_name">{{ $t("failed") }}</span>
-                            </td>
-                            <td class="col-9">
-                                <InlineBar :count="check.failed_count" :percentage="failedPercentage" :state="'failed'" />
-                            </td>
-                        </tr>
-                        <tr class="d-flex">
-                            <td class="col-3 text-right label">
-                                <span class="check_name">{{ $t("notAvailable") }}</span>
-                            </td>
-                            <td class="col-9">
-                                <InlineBar :count="check.undefined_count" :percentage="naPercentage" :state="'na'" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
+            <CheckDetailResultBox :check="check" ok failed na />
+            
             <h5>{{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}</h5>
-            <div class="result_box">
-                <table class="table table-borderless table-sm">
-                    <tbody>
-                        <tr class="d-flex">
-                            <td class="col-3 text-right label">
-                                <span class="check_name">{{ $t("passed") }}</span>
-                            </td>
-                            <td class="col-9">
-                                <InlineBar :count="check.passed_count" :percentage="passPercentage" :state="'ok'" />
-                            </td>
-                        </tr>
-                        <tr class="d-flex">
-                            <td class="col-3 text-right label">
-                                <span class="check_name">{{ $t("failed") }}</span>
-                            </td>
-                            <td class="col-9">
-                                <InlineBar :count="check.failed_count" :percentage="nonpassPercentage" :state="'failed'" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
+            <CheckDetailResultBox :check="check" pass nonPass />
+            
+            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -77,11 +27,11 @@
 </template>
 
 <script>
-import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
+import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 
 export default {
     name: "resourceCheckDetail",
@@ -92,7 +42,7 @@ export default {
             previewDataItemId: null
         };
     },
-    components: { InlineBar, VueJsonPretty, DashboardDetail, ExampleBoxes },
+    components: { VueJsonPretty, DashboardDetail, ExampleBoxes, CheckDetailResultBox },
     methods: {
         preview: function(itemId) {
             this.$store.dispatch("loadDataItem", itemId);
