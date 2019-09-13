@@ -209,8 +209,8 @@ export default new Vuex.Store({
                         var item = response["data"][key]
                         data.push(Object.assign({}, item, {
                             path: key,
-                            coverageOkShare: okShare(item.coverage),
-                            qualityOkShare: okShare(item.quality)
+                            coverageOkShare: Math.round(okShare(item.coverage)),
+                            qualityOkShare: Math.round(okShare(item.quality))
                         }))
                     }
                     

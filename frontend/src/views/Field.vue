@@ -41,7 +41,7 @@
                     </th>
                 </thead>
                 <tbody v-for="n in stats" :key="n.path">
-                    <tr  @click="detail(n.path)">
+                    <tr @click="detail(n.path)">
                         <td rowspan="2">{{ n.path }}</td>
                         
                         <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
@@ -49,14 +49,17 @@
                         <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
                         <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
 
-                        <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
-                        <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
-                        <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                        <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
+                        <template v-if="n.quality.total_count">
+                            <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
+                            <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
+                            <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
+                            <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
+                        </template>
+                        <td colspan="4" v-else></td>
                     </tr>
                     <tr class="bar_row">
-                        <td class="bar" colspan=4><ProgressBar :ok="n.coverageOkShare"/></td>
-                        <td class="bar" colspan=4><ProgressBar :ok="n.qualityOkShare"/></td>
+                        <td class="bar" colspan=4><ProgressBar :ok="n.coverageOkShare"/></td>                        
+                        <td class="bar" colspan=4><ProgressBar v-if="n.quality.total_count" :ok="n.qualityOkShare"/></td>                        
                     </tr>
                 </tbody>
             </table>
@@ -72,7 +75,6 @@ export default {
     name: "field",
     data: function() {
         return {
-            tableData: [],
             sortedBy: null,
             isAscendingSorted: null,
         }
@@ -108,6 +110,10 @@ export default {
                     return -1
                 } else if (a.coverageOkShare > b.coverageOkShare) {
                     return 1
+                } else if (a.coverage.total_count < b.coverage.total_count) {
+                    return -1
+                } else if (a.coverage.total_count > b.coverage.total_count) {
+                    return 1
                 } else {
                     return a.path.localeCompare(b.path)
                 }
@@ -121,6 +127,10 @@ export default {
                 if (a.qualityOkShare < b.qualityOkShare) {
                     return -1
                 } else if (a.qualityOkShare > b.qualityOkShare) {
+                    return 1
+                } else if (a.quality.total_count < b.quality.total_count) {
+                    return -1
+                } else if (a.quality.total_count > b.quality.total_count) {
                     return 1
                 } else {
                     return a.path.localeCompare(b.path)
