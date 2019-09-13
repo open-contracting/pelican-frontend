@@ -40,26 +40,24 @@
                         </div>
                     </th>
                 </thead>
-                <tbody>
-                    <template v-for="n in stats">
-                        <tr :key="n.path">
-                            <td rowspan="2" @click="detail(n.path)">{{ n.path }}</td>
-                            
-                            <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
-                            <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
-                            <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                            <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
+                <tbody v-for="n in stats" :key="n.path">
+                    <tr  @click="detail(n.path)">
+                        <td rowspan="2">{{ n.path }}</td>
+                        
+                        <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
+                        <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
+                        <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
+                        <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
 
-                            <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
-                            <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
-                            <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                            <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
-                        </tr>
-                        <tr :key="n.path + '-bar'" class="bar_row">
-                            <td class="bar" colspan=4><ProgressBar :ok="n.coverageOkShare"/></td>
-                            <td class="bar" colspan=4><ProgressBar :ok="n.qualityOkShare"/></td>
-                        </tr>
-                    </template>
+                        <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
+                        <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
+                        <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
+                        <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
+                    </tr>
+                    <tr class="bar_row">
+                        <td class="bar" colspan=4><ProgressBar :ok="n.coverageOkShare"/></td>
+                        <td class="bar" colspan=4><ProgressBar :ok="n.qualityOkShare"/></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -186,7 +184,13 @@ export default {
         }
     }
 
+    tbody:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+    }
+
     tbody tr {
+        cursor: pointer;
+
         &.bar_row td {
             border-bottom: 1px solid $na_light_color;
             padding-top: 0;
