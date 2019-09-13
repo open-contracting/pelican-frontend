@@ -78,7 +78,7 @@
                 </div>
             </div>
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>

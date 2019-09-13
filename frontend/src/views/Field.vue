@@ -16,8 +16,8 @@
                         <div class="d-flex align-items-center">
                             <div>{{ $t('field.table.head.object') }}</div>
                             <div class="sort_buttons">
-                                <div :class="['asc', {active: sortedBy == 'name' && isAscendingSorted}]" @click.stop="sortByName()"></div>
-                                <div :class="['desc', {active: sortedBy == 'name' && !isAscendingSorted}]" @click.stop="sortByName(false)"></div>
+                                <div :class="['asc', {active: sortedBy == 'name' && isAscendingSorted}]" @click.stop="sortByPath()"></div>
+                                <div :class="['desc', {active: sortedBy == 'name' && !isAscendingSorted}]" @click.stop="sortByPath(false)"></div>
                             </div>
                         </div>
                     </th>
@@ -40,26 +40,27 @@
                         </div>
                     </th>
                 </thead>
-                <tbody>
-                    <template v-for="n in tableData">
-                        <tr :key="n.name">
-                            <td rowspan="2">{{ n.name }}</td>
-                            
-                            <td class="percent">{{ n.coverageShare | formatNumber }}%</td>
-                            <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
-                            <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                            <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
+                <tbody v-for="n in stats" :key="n.path">
+                    <tr @click="detail(n.path)">
+                        <td rowspan="2">{{ n.path }}</td>
+                        
+                        <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
+                        <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
+                        <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
+                        <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
 
-                            <td class="percent">{{ n.qualityShare | formatNumber }}%</td>
+                        <template v-if="n.quality.total_count">
+                            <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
                             <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
                             <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
                             <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
-                        </tr>
-                        <tr :key="n.name + '-bar'" class="bar_row">
-                            <td class="bar" colspan=4><ProgressBar :ok="n.coverageShare"/></td>
-                            <td class="bar" colspan=4><ProgressBar :ok="n.qualityShare"/></td>
-                        </tr>
-                    </template>
+                        </template>
+                        <td colspan="4" v-else></td>
+                    </tr>
+                    <tr class="bar_row">
+                        <td class="bar" colspan=4><ProgressBar :ok="n.coverageOkShare"/></td>                        
+                        <td class="bar" colspan=4><ProgressBar v-if="n.quality.total_count" :ok="n.qualityOkShare"/></td>                        
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -74,7 +75,6 @@ export default {
     name: "field",
     data: function() {
         return {
-            tableData: [],
             sortedBy: null,
             isAscendingSorted: null,
         }
@@ -85,43 +85,37 @@ export default {
             return this.$store.getters.fieldLevelStats
         }
     },
-    mounted: function() {
-        var k
-        for (k in this.stats) {
-            this.tableData.push(Object.assign({}, this.stats[k], {
-                name: k,
-                coverageShare: this.okShare(this.stats[k].coverage),
-                qualityShare: this.okShare(this.stats[k].quality)
-            }))
-        }
-    },
     methods: {
         okShare: function(item) {
             var result = item.passed_count / item.total_count * 100
             return isNaN(result) ? 0 : result
         },
         sort: function(comparator, asc = true) {
-            this.tableData.sort(comparator)
+            this.stats.sort(comparator)
             if (!asc) {
-                this.tableData.reverse()
+                this.stats.reverse()
             }
         },
-        sortByName: function(asc = true) {
+        sortByPath: function(asc = true) {
             this.sortedBy = "name"
             this.isAscendingSorted =  asc
-            this.sort((a, b) => a.name.localeCompare(b.name), asc)
+            this.sort((a, b) => a.path.localeCompare(b.path), asc)
         },
         sortByCoverage: function(asc = true) {
             this.sortedBy = "coverage"
             this.isAscendingSorted =  asc
 
             this.sort(function(a, b) {
-                if (a.coverageShare < b.coverageShare) {
+                if (a.coverageOkShare < b.coverageOkShare) {
                     return -1
-                } else if (a.coverageShare > b.coverageShare) {
+                } else if (a.coverageOkShare > b.coverageOkShare) {
+                    return 1
+                } else if (a.coverage.total_count < b.coverage.total_count) {
+                    return -1
+                } else if (a.coverage.total_count > b.coverage.total_count) {
                     return 1
                 } else {
-                    return 0
+                    return a.path.localeCompare(b.path)
                 }
             }, asc)
         },
@@ -130,14 +124,24 @@ export default {
             this.isAscendingSorted =  asc
             
             this.sort(function(a, b) {
-                if (a.qualityShare < b.qualityShare) {
+                if (a.qualityOkShare < b.qualityOkShare) {
                     return -1
-                } else if (a.qualityShare > b.qualityShare) {
+                } else if (a.qualityOkShare > b.qualityOkShare) {
+                    return 1
+                } else if (a.quality.total_count < b.quality.total_count) {
+                    return -1
+                } else if (a.quality.total_count > b.quality.total_count) {
                     return 1
                 } else {
-                    return 0
+                    return a.path.localeCompare(b.path)
                 }
             }, asc)
+        },
+        detail(path) {
+            this.$router.push({
+                name: "fieldCheckDetail",
+                params: { path: path }
+            });
         }
     }
 };
@@ -190,7 +194,13 @@ export default {
         }
     }
 
+    tbody:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+    }
+
     tbody tr {
+        cursor: pointer;
+
         &.bar_row td {
             border-bottom: 1px solid $na_light_color;
             padding-top: 0;

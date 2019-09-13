@@ -63,6 +63,13 @@ export default new Vuex.Store({
         fieldLevelStats: (state) => {
             return state.fieldLevelStats;
         },
+        fieldLevelCheckByPath: (state) => (path) => {
+            if (state.fieldLevelStats != null) {
+                return state.fieldLevelStats.find(item => item.path === path);
+            }
+
+            return null;
+        }
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -87,7 +94,17 @@ export default new Vuex.Store({
         },
         setFieldLevelStats(state, stats) {
             state.fieldLevelStats = stats;
-        }
+        },
+        setFieldLevelCheckDetail(state, data) {
+            var updatedStats = [];
+            updatedStats = updatedStats.concat(state.fieldLevelStats);
+
+            updatedStats.forEach(function (item, i) {
+                if (item.path == data.path) updatedStats[i] = data;
+            });
+
+            state.fieldLevelStats = updatedStats;
+        },
     },
     actions: {
         updateDataset({
@@ -179,13 +196,50 @@ export default new Vuex.Store({
         },
         loadFieldLevelStats({ commit, state }) {
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
+            
+            var okShare = function(item) {
+                var result = item.passed_count / item.total_count * 100
+                return isNaN(result) ? 0 : result
+            }
+
             axios.get(url)
                 .then(function (response) {
-                    commit("setFieldLevelStats", response["data"]);
+                    var data = [];
+                    for (var key in response["data"]) {                        
+                        var item = response["data"][key]
+                        data.push(Object.assign({}, item, {
+                            path: key,
+                            coverageOkShare: Math.round(okShare(item.coverage)),
+                            qualityOkShare: Math.round(okShare(item.quality))
+                        }))
+                    }
+                    
+                    commit("setFieldLevelStats", data);
                 })
                 .catch(function (error) {
                     throw new Error(error);
                 })
-        }
+        },
+        loadFieldLevelCheckDetail({
+            commit,
+            state,
+            getters
+        }, path) {
+            var checkDetail = getters.fieldLevelCheckByPath(path);
+
+            if (checkDetail != null && !checkDetail.examplesLoaded) {
+                if (state.dataset != null && path != null) {
+                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldDetail + "/" + state.dataset.id + "/" + path;
+                    axios.get(url)
+                        .then(function (response) {
+                            response["data"]["path"] = path;
+                            commit("setFieldLevelCheckDetail", response["data"]);
+                        })
+                        .catch(function (error) {
+                            throw new Error(error);
+                        })
+                }
+            }
+        },
     }
 })
