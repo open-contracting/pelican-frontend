@@ -16,8 +16,8 @@
                         <div class="d-flex align-items-center">
                             <div>{{ $t('field.table.head.object') }}</div>
                             <div class="sort_buttons">
-                                <div :class="['asc', {active: sortedBy == 'name' && isAscendingSorted}]" @click.stop="sortByName()"></div>
-                                <div :class="['desc', {active: sortedBy == 'name' && !isAscendingSorted}]" @click.stop="sortByName(false)"></div>
+                                <div :class="['asc', {active: sortedBy == 'name' && isAscendingSorted}]" @click.stop="sortByPath()"></div>
+                                <div :class="['desc', {active: sortedBy == 'name' && !isAscendingSorted}]" @click.stop="sortByPath(false)"></div>
                             </div>
                         </div>
                     </th>
@@ -41,23 +41,23 @@
                     </th>
                 </thead>
                 <tbody>
-                    <template v-for="n in tableData">
-                        <tr :key="n.name">
-                            <td rowspan="2" @click="detail(n.name)">{{ n.name }}</td>
+                    <template v-for="n in stats">
+                        <tr :key="n.path">
+                            <td rowspan="2" @click="detail(n.path)">{{ n.path }}</td>
                             
-                            <td class="percent">{{ n.coverageShare | formatNumber }}%</td>
+                            <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
                             <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
                             <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
                             <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
 
-                            <td class="percent">{{ n.qualityShare | formatNumber }}%</td>
+                            <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
                             <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
                             <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
                             <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
                         </tr>
-                        <tr :key="n.name + '-bar'" class="bar_row">
-                            <td class="bar" colspan=4><ProgressBar :ok="n.coverageShare"/></td>
-                            <td class="bar" colspan=4><ProgressBar :ok="n.qualityShare"/></td>
+                        <tr :key="n.path + '-bar'" class="bar_row">
+                            <td class="bar" colspan=4><ProgressBar :ok="n.coverageOkShare"/></td>
+                            <td class="bar" colspan=4><ProgressBar :ok="n.qualityOkShare"/></td>
                         </tr>
                     </template>
                 </tbody>
@@ -85,43 +85,33 @@ export default {
             return this.$store.getters.fieldLevelStats
         }
     },
-    mounted: function() {
-        var k
-        for (k in this.stats) {
-            this.tableData.push(Object.assign({}, this.stats[k], {
-                name: k,
-                coverageShare: this.okShare(this.stats[k].coverage),
-                qualityShare: this.okShare(this.stats[k].quality)
-            }))
-        }
-    },
     methods: {
         okShare: function(item) {
             var result = item.passed_count / item.total_count * 100
             return isNaN(result) ? 0 : result
         },
         sort: function(comparator, asc = true) {
-            this.tableData.sort(comparator)
+            this.stats.sort(comparator)
             if (!asc) {
-                this.tableData.reverse()
+                this.stats.reverse()
             }
         },
-        sortByName: function(asc = true) {
+        sortByPath: function(asc = true) {
             this.sortedBy = "name"
             this.isAscendingSorted =  asc
-            this.sort((a, b) => a.name.localeCompare(b.name), asc)
+            this.sort((a, b) => a.path.localeCompare(b.path), asc)
         },
         sortByCoverage: function(asc = true) {
             this.sortedBy = "coverage"
             this.isAscendingSorted =  asc
 
             this.sort(function(a, b) {
-                if (a.coverageShare < b.coverageShare) {
+                if (a.coverageOkShare < b.coverageOkShare) {
                     return -1
-                } else if (a.coverageShare > b.coverageShare) {
+                } else if (a.coverageOkShare > b.coverageOkShare) {
                     return 1
                 } else {
-                    return 0
+                    return a.path.localeCompare(b.path)
                 }
             }, asc)
         },
@@ -130,12 +120,12 @@ export default {
             this.isAscendingSorted =  asc
             
             this.sort(function(a, b) {
-                if (a.qualityShare < b.qualityShare) {
+                if (a.qualityOkShare < b.qualityOkShare) {
                     return -1
-                } else if (a.qualityShare > b.qualityShare) {
+                } else if (a.qualityOkShare > b.qualityOkShare) {
                     return 1
                 } else {
-                    return 0
+                    return a.path.localeCompare(b.path)
                 }
             }, asc)
         },

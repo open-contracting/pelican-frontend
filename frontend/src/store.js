@@ -63,9 +63,9 @@ export default new Vuex.Store({
         fieldLevelStats: (state) => {
             return state.fieldLevelStats;
         },
-        fieldLevelCheckByPath: (state) => (checkName) => {
-            if (state.fieldLevelStats != null && state.fieldLevelStats.hasOwnProperty(checkName)) {
-                return state.fieldLevelStats[checkName];
+        fieldLevelCheckByPath: (state) => (path) => {
+            if (state.fieldLevelStats != null) {
+                return state.fieldLevelStats.find(item => item.path === path);
             }
 
             return null;
@@ -97,8 +97,11 @@ export default new Vuex.Store({
         },
         setFieldLevelCheckDetail(state, data) {
             var updatedStats = [];
-            updatedStats = Object.assign({}, state.fieldLevelStats);
-            updatedStats[data.path] = data;
+            updatedStats = updatedStats.concat(state.fieldLevelStats);
+
+            updatedStats.forEach(function (item, i) {
+                if (item.path == data.path) updatedStats[i] = data;
+            });
 
             state.fieldLevelStats = updatedStats;
         },
@@ -193,9 +196,25 @@ export default new Vuex.Store({
         },
         loadFieldLevelStats({ commit, state }) {
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
+            
+            var okShare = function(item) {
+                var result = item.passed_count / item.total_count * 100
+                return isNaN(result) ? 0 : result
+            }
+
             axios.get(url)
                 .then(function (response) {
-                    commit("setFieldLevelStats", response["data"]);
+                    var data = [];
+                    for (var key in response["data"]) {                        
+                        var item = response["data"][key]
+                        data.push(Object.assign({}, item, {
+                            path: key,
+                            coverageOkShare: okShare(item.coverage),
+                            qualityOkShare: okShare(item.quality)
+                        }))
+                    }
+                    
+                    commit("setFieldLevelStats", data);
                 })
                 .catch(function (error) {
                     throw new Error(error);
