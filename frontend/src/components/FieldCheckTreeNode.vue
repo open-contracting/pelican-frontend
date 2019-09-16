@@ -18,11 +18,11 @@
                     
                     <td class="col">{{ data._check.coverage.passed_count }}</td>
                     <td class="col">{{ data._check.coverage.failed_count }}</td>
-                    <td class="col-2"><ProgressBar :ok="data._check.coverageOkShare"/></td>
+                    <td class="col-2"><ProgressBar :ok="data._check.coverageOkShare" :failed="data._check.coverageFailedShare"/></td>
                     
                     <td class="col">{{ data._check.quality.passed_count }}</td>
                     <td class="col">{{ data._check.quality.failed_count }}</td>
-                    <td class="col-2"><ProgressBar :ok="data._check.qualityOkShare"/></td>
+                    <td class="col-2"><ProgressBar :ok="data._check.qualityOkShare" :failed="data._check.qualityFailedShare"/></td>
                 </tr>
             </template>
 
