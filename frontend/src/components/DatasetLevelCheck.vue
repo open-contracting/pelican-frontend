@@ -16,8 +16,8 @@
             <div class="col col-10 col-sm-10 col-lg-11">
                 <div class="row">
                     <div class="col-12">
-                        <h5>{{ $t("datasetLevel." + check.name + ".name") }}</h5>
-                        <p>{{ $t("datasetLevel." + check.name + ".description") }}</p>
+                        <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
+                        <p class="check_description">{{ $t("datasetLevel." + check.name + ".description") }}</p>
                     </div>
                 </div>
 
@@ -48,12 +48,34 @@
                             </div>
 
                             <div class="top3" v-if="checkType == 'top3'">
-                                <table class="table table-sm">
-                                    <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
-                                        <td>{{ item.value_str }}</td>
-                                        <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
-                                    </tr>
-                                </table>
+                                <div class="chartEnvelope">
+                                    <table class="table table-sm">
+                                        <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
+                                            <td>{{ item.value_str }}</td>
+                                            <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="biggest_share" v-if="checkType == 'biggest_share'">
+                                <div class="row">
+                                    <div
+                                        class="col col-12 text-center total_share"
+                                        v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
+                                    >{{ Math.round(check.meta.ocid_share * 10000) / 100 }}%</div>
+                                </div>
+                                <div class="row">
+                                    <div
+                                        class="col col-12 text-center ocid_count"
+                                    >{{ check.meta.ocid_count | formatNumber }}&nbsp;from&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
+                                </div>
+                            </div>
+
+                            <div class="single_value_share" v-if="checkType == 'single_value_share'">
+                                <div class="chartEnvelope">
+                                    <BarChartSingleValue :check="check"></BarChartSingleValue>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,13 +88,14 @@
 <script>
 import DonutChart from "@/components/DonutChart.vue";
 import BarChart from "@/components/BarChart.vue";
+import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
     data: function() {
         return {};
     },
-    components: { DonutChart, BarChart },
+    components: { DonutChart, BarChart, BarChartSingleValue },
     props: ["check"],
     mixins: [datasetMixin],
     methods: {
@@ -80,10 +103,12 @@ export default {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
         },
         detail: function(name) {
-            this.$router.push({
-                name: "datasetCheckDetail",
-                params: { check: name }
-            });
+            if (this.check.result != undefined) {
+                this.$router.push({
+                    name: "datasetCheckDetail",
+                    params: { check: name }
+                });
+            }
         }
     }
 };
@@ -91,6 +116,14 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
+.check_headline {
+    overflow-wrap: break-word;
+}
+
+.check_description {
+    overflow-wrap: break-word;
+}
 
 .ok_icon {
     color: $ok_color;
@@ -149,5 +182,15 @@ export default {
 
 .top3 > .table > tr:nth-child(1) > td {
     border-top: none;
+}
+
+.biggest_share .total_share {
+    font-size: 70px;
+    font-weight: 700;
+}
+
+.biggest_share .ocid_count {
+    font-size: 15px;
+    font-weight: 700;
 }
 </style>

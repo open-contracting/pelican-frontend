@@ -4,6 +4,8 @@ export const messages = {
         generic: "Still loading the great stuff for you. Please be patient.",
         examples: "Generating random examples for you. Please be patient, this takes some time for big datasets"
     },
+    ocid: "ocid",
+    ocids: "ocids",
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
@@ -52,6 +54,12 @@ export const messages = {
         label_5_20: "5 - 10%",
         label_20_50: "20 - 50%",
         label_50_100: "50 - 100%",
+        label_1: "1",
+        label_2_20: "2 - 10",
+        label_21_50: "21 - 50",
+        label_51_100: "51 - 100",
+        label_100: "100+",
+        examples: "Examples",
         distribution: {
             tender_status: {
                 name: "tender_status",
@@ -343,8 +351,12 @@ export const messages = {
         checks: "checks",
         coverage: {
             label: "Coverage",
-            exists: { count_header : "Exists" },
-            non_empty: { count_header : "Non-Empty" }
+            exists: {
+                count_header: "Exists"
+            },
+            non_empty: {
+                count_header: "Non-Empty"
+            }
         },
         quality: {
             label: "Quality"

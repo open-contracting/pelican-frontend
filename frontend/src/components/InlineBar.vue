@@ -2,11 +2,18 @@
     <div class="inline_bar numeric" v-bind:class="state" ref="bar">
         <div class="bar" v-bind:style="{ width: barWidth + 'px' }">
             <span v-if="barWidth > 30">{{ percentage | formatNumber}}%</span>
-            &nbsp;
+            <span v-else>&nbsp;</span>
         </div>
         <div v-if="barWidth <= 30" class="count">
             <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatNumber}}%</span>
             <span v-if="showCount" class="count_holder">
+                <span>&#40;</span>
+                {{ count | formatNumber}}
+                <span>&#41;</span>
+            </span>
+        </div>
+        <div v-if="barWidth > 30 && showCount" class="count">
+            <span class="count_holder">
                 <span>&#40;</span>
                 {{ count | formatNumber}}
                 <span>&#41;</span>

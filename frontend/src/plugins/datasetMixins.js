@@ -51,7 +51,22 @@ export default {
                 return "unique";
             }
 
+            var biggest_share = [
+                "distribution.buyer_repetition"
+            ];
+            if (biggest_share.includes(this.check.name)) {
+                return "biggest_share";
+            }
+
+            var single_value_share = [
+                "distribution.buyer"
+            ];
+            if (single_value_share.includes(this.check.name)) {
+                return "single_value_share";
+            }
+
             throw "unknow check type - " + this.check.name;
+
         },
         shares() {
             if (this.checkType == "donut") {

@@ -72,6 +72,37 @@
                         </div>
                     </div>
                 </div>
+
+                <div v-if="checkType == 'biggest_share'" class="biggest_share">
+                    <div class="row text-left">
+                        <div class="col-8 specifics">
+                            <span v-for="(item, index) in check.meta.specifics" v-bind:key="index">
+                                <h3>{{ index }}</h3>
+                                <p class="specifics_values">{{ item }}</p>
+                            </span>
+                        </div>
+
+                        <div class="numeric_result col-4">
+                            <div class="row">
+                                <div
+                                    class="col col-12 text-center total_share"
+                                    v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
+                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 | formatNumber }}%</div>
+                            </div>
+                            <div class="row">
+                                <div
+                                    class="col col-12 text-center ocid_count"
+                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;from&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="checkType == 'single_value_share'" class="single_value_share">
+                    <div class="row text-center">
+                        <BarChartSingleValue :check="check" :showCount="true"></BarChartSingleValue>
+                    </div>
+                </div>
             </div>
 
             <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="true"></ExampleBoxes>
@@ -92,6 +123,7 @@
 
 <script>
 import BarChartBig from "@/components/BarChartBig";
+import BarChartSingleValue from "@/components/BarChartSingleValue";
 import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
 import datasetMixin from "@/plugins/datasetMixins.js";
@@ -114,7 +146,8 @@ export default {
         VueJsonPretty,
         DashboardDetail,
         InlineBar,
-        ExampleBoxes
+        ExampleBoxes,
+        BarChartSingleValue
     },
     created() {
         this.check = this.$store.getters.datasetLevelCheckByName(
@@ -180,6 +213,19 @@ export default {
                     ]);
                 }
             }
+
+            if (
+                this.checkType == "biggest_share" ||
+                this.checkType == "single_value_share"
+            ) {
+                this.examples = [];
+                if (this.check.meta.examples.length > 0) {
+                    this.examples.push([
+                        this.$t("datasetLevel.examples"),
+                        this.check.meta.examples
+                    ]);
+                }
+            }
         }
     },
     methods: {
@@ -230,5 +276,19 @@ export default {
 .check_numeric_count {
     font-size: 30px;
     font-weight: 700;
+}
+
+.biggest_share .total_share {
+    font-size: 70px;
+    font-weight: 700;
+}
+
+.biggest_share .ocid_count {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.biggest_share .specifics_values {
+    overflow-wrap: break-word;
 }
 </style>
