@@ -12,17 +12,23 @@
 
         <b-row class="action_bar">
             <b-col class="text-left">
-                <b-input-group>
+                <b-input-group class="search_input">
                     <template v-slot:prepend>
-                        <b-input-group-text></b-input-group-text>
+                        <b-input-group-text>
+                            <font-awesome-icon icon="search" />
+                        </b-input-group-text>
                     </template>
-                    <b-input :model="search" />
+                    <b-input :model="search" :placeholder="$t('field.search')"/>
                 </b-input-group>
             </b-col>
             <b-col class="text-right">
                 <b-button-group>
-                    <b-button @click="layout = 'table'">TABLE</b-button>
-                    <b-button @click="layout = 'tree'">TREE</b-button>
+                    <button @click="$store.commit('setFieldCheckLayout', 'table')" :class="['btn', {active: layout == 'table'}]">
+                        <font-awesome-icon icon="bars" />
+                    </button>
+                    <button @click="$store.commit('setFieldCheckLayout', 'tree')" :class="['btn', {active: layout == 'tree'}]">
+                        <font-awesome-icon icon="align-right" />
+                    </button>
                 </b-button-group>
             </b-col>
         </b-row>
@@ -43,14 +49,16 @@ export default {
     name: "field",
     data: function() {
         return {
-            search: null,
-            layout: "table"
+            search: null
         }
     },
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
         stats: function() {
             return this.$store.getters.fieldLevelStats
+        },
+        layout: function() {
+            return this.$store.getters.fieldCheckLayout
         }
     },
     methods: {
@@ -71,4 +79,30 @@ export default {
     color: $headings_light_color;
 }
 
+.action_bar {
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    button {
+        background-color: transparent;
+        border-color: $text-color;
+        color: $text-color;
+
+        &:hover, &.active {
+            border-color: $primary;
+            color: $primary;
+        }
+    }
+}
+
+.search_input {
+    .input-group-text {
+        background-color: transparent;
+        border-right: none;
+    }
+    input {
+        background-color: transparent;
+        border-left: none;
+    }
+}
 </style>

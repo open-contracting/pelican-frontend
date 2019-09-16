@@ -14,7 +14,8 @@ export default new Vuex.Store({
         resourceCheckExamples: null,
         datasetLevelStats: null,
         dataItems: [],
-        fieldLevelStats: null
+        fieldLevelStats: null,
+        fieldCheckLayout: "table"
     },
     getters: {
         dataset: (state) => {
@@ -69,6 +70,9 @@ export default new Vuex.Store({
             }
 
             return null;
+        },
+        fieldCheckLayout: function (state) {
+            return state.fieldCheckLayout
         }
     },
     mutations: {
@@ -105,6 +109,9 @@ export default new Vuex.Store({
 
             state.fieldLevelStats = updatedStats;
         },
+        setFieldCheckLayout(state, layout) {
+            state.fieldCheckLayout = layout
+        }
     },
     actions: {
         updateDataset({

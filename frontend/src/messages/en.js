@@ -345,7 +345,8 @@ export const messages = {
                 coverage: "COVERAGE",
                 quality: "QUALITY"
             }
-        }
+        },
+        search: "Search object by name"
     },
     fieldDetail: {
         checks: "checks",
