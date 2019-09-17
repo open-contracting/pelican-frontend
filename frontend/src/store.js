@@ -14,7 +14,9 @@ export default new Vuex.Store({
         resourceCheckExamples: null,
         datasetLevelStats: null,
         dataItems: [],
-        fieldLevelStats: null
+        fieldLevelStats: null,
+        fieldCheckLayout: "table",
+        fieldCheckExpandedNodes: []
     },
     getters: {
         dataset: (state) => {
@@ -69,6 +71,16 @@ export default new Vuex.Store({
             }
 
             return null;
+        },
+        fieldCheckLayout: function (state) {
+            return state.fieldCheckLayout
+        },
+        isFieldCheckExpanded: (state) => (path) => {
+            if (state.fieldCheckExpandedNodes != null) {
+                return state.fieldCheckExpandedNodes.includes(path);
+            }
+
+            return false;
         }
     },
     mutations: {
@@ -105,6 +117,17 @@ export default new Vuex.Store({
 
             state.fieldLevelStats = updatedStats;
         },
+        setFieldCheckLayout(state, layout) {
+            state.fieldCheckLayout = layout
+        },
+        addFieldCheckExpandedNode(state, path) {
+            if (!state.fieldCheckExpandedNodes.includes(path)) {
+                state.fieldCheckExpandedNodes.push(path)
+            }
+        },
+        removeFieldCheckExpandedNode(state, path) {
+            state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter(v => !v.startsWith(path))
+        }
     },
     actions: {
         updateDataset({
@@ -202,6 +225,11 @@ export default new Vuex.Store({
                 return isNaN(result) ? 0 : result
             }
 
+            var failedShare = function(item) {
+                var result = item.failed_count / item.total_count * 100
+                return isNaN(result) ? 0 : result
+            }
+
             axios.get(url)
                 .then(function (response) {
                     var data = [];
@@ -210,7 +238,9 @@ export default new Vuex.Store({
                         data.push(Object.assign({}, item, {
                             path: key,
                             coverageOkShare: Math.round(okShare(item.coverage)),
-                            qualityOkShare: Math.round(okShare(item.quality))
+                            coverageFailedShare: Math.round(failedShare(item.coverage)),
+                            qualityOkShare: Math.round(okShare(item.quality)),
+                            qualityFailedShare: Math.round(failedShare(item.quality))
                         }))
                     }
                     
