@@ -1,7 +1,8 @@
 <template>
     <span class="tree_node">
-        <tr class="node_head d-flex clickable" @click="expanded = !expanded" :style="{marginLeft: (depth * 20) + 'px'}">
+        <tr class="node_head d-flex clickable" @click="expanded = !expanded">            
             <td class="col-12">
+                <div :class="'indent-' + depth" />
                 <div class="switcher text-center">
                     <font-awesome-icon v-if="!expanded" icon="chevron-right" />
                     <font-awesome-icon v-else icon="chevron-down" />
@@ -9,12 +10,10 @@
                 {{ data._path.substring(data._path.lastIndexOf('.') + 1) }}
             </td>
         </tr>
-        
         <template v-if="expanded">
             <template v-if="data._check">
-                <tr class="node_data d-flex clickable" @click="$emit('field-check-detail', data._path)"
-                    :style="{marginLeft: (depth * 20) + 'px'}">
-                    <td class="col-4">{{ data._path }}</td>
+                <tr class="node_data d-flex clickable" @click="$emit('field-check-detail', data._path)">                    
+                    <td class="col-4 path"><div :class="'indent-' + (depth + 1)" />{{ data._path }}</td>
                     
                     <td class="col">{{ data._check.coverage.passed_count }}</td>
                     <td class="col">{{ data._check.coverage.failed_count }}</td>
@@ -78,6 +77,12 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/main";
 
+$indent-width-px: 35px;
+
+@function indent-with($depth) {
+    @return ($depth * $indent-width-px);
+}
+
 .switcher {
     display: inline-block;
     font-size: 80%;
@@ -88,10 +93,21 @@ export default {
 .node_data {
     td {
         border-top: none;
-    }
 
-    td:first-of-type {
-        padding-left: 47px;
+        &.path {
+            color: $headings_light_color;
+            font-family: $font-family-thin;
+        }
+    }
+}
+
+div[class^="indent-"] {
+    display: inline-block;    
+}
+
+@for $depth from 0 to 10 {
+    .indent-#{$depth} {
+        width: indent-with($depth);
     }
 }
 </style>
