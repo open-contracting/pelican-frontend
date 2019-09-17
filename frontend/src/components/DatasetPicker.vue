@@ -16,16 +16,15 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in datasets" v-bind:key="index" class="d-flex">
-                    <td class="col-4">{{ item.dataset_id }}</td>
+                    <td class="col-4">{{ item.name }}</td>
                     <td class="col-2 text-right numeric">{{ item.size | formatNumber }}</td>
                     <td class="col-1">{{ item.phase }}</td>
                     <td class="col-3 numeric text-right">
-                        {{ item.created }}
-                        <br />
+                        {{ item.created }}<br>
                         {{ item.modified }}
                     </td>
                     <td class="col-2">
-                        <button @click.prevent="setDatasetId(item.dataset_id)" class="btn btn-primary mb-4" type="submit">{{ $t("dataset.selectDataset") }}</button>
+                        <button @click.prevent="setDataset(item)" class="btn btn-primary mb-4" type="submit">{{ $t("dataset.selectDataset") }}</button>
                     </td>
                 </tr>
             </tbody>
@@ -47,7 +46,6 @@ export default {
     data: function() {
         return {
             datasets: [],
-            datasetId: "uk_2019-08-23_14:42:39",
             loading: false
         };
     },
@@ -55,10 +53,10 @@ export default {
         Loader
     },
     methods: {
-        setDatasetId: function(datasetId) {
+        setDataset: function(dataset) {
             this.loading = true;
-            if (this.$store.getters.datasetId != datasetId) {
-                this.$store.dispatch("updateDatasetId", datasetId);
+            if (this.$store.getters.datasetId != dataset.id) {
+                this.$store.dispatch("updateDataset", dataset);
             } else {
                 this.$router.push({
                     name: "overview"

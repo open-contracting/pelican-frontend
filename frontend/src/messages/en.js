@@ -1,11 +1,21 @@
 export const messages = {
     header: "Data Quality Assesment Results",
-    loader: "Still loading the great stuff for you. Please be patient.",
+    loader: {
+        generic: "Still loading the great stuff for you. Please be patient.",
+        examples: "Generating random examples for you. Please be patient, this takes some time for big datasets"
+    },
+    ocid: "ocid",
+    ocids: "ocids",
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
     created: "created",
     modified: "modified",
+    core: {
+        passedExamples: "Passed examples",
+        failedExamples: "Failed examples",
+        undefinedExamples: "Undefined examples",
+    },
     dataset: {
         id: "id",
         size: "items count",
@@ -44,6 +54,12 @@ export const messages = {
         label_5_20: "5 - 10%",
         label_20_50: "20 - 50%",
         label_50_100: "50 - 100%",
+        label_1: "1",
+        label_2_20: "2 - 10",
+        label_21_50: "21 - 50",
+        label_51_100: "51 - 100",
+        label_100: "100+",
+        examples: "Examples",
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
@@ -92,6 +108,8 @@ export const messages = {
             },
         },
         unique: {
+            ok: "All values are unique.",
+            failed: "There are non-unique values.",
             id: {
                 name: "id",
                 description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
@@ -102,6 +120,13 @@ export const messages = {
                 name: "url_availability",
                 description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
             }
+        },
+        numeric: {
+            passed: "passed",
+            processed: "tested",
+            failed: "failed",
+            failedExamples: "Failed examples",
+            passedExamples: "Passed examples",
         }
     },
     resourceLevel: {
@@ -131,31 +156,31 @@ export const messages = {
                 description: "Checks that there are no contracts for a given award if its status is pending, cancelled or unsuccessful."
             },
             contracts_status: {
-                name: "Contract status - transactions",                                                                    
+                name: "Contract status - transactions",
                 description: "Checks that there are no transactions for a given contract if its status is pending, cancelled."
             },
             milestone_status: {
-                name: "Milestone status - dateMet",                                                                    
+                name: "Milestone status - dateMet",
                 description: "Checks that dateMet is not set or is empty if milestone's status is either 'scheduled' or 'notMet'."
             },
             value_realistic: {
-                name: "Realisitic value",                                                                    
+                name: "Realisitic value",
                 description: "Checks whether the value's amount converted to USD is between -5 billion USD and 5 billion USD"
             },
             dates: {
-                name: "Realisitic value",                                                                    
+                name: "Realisitic value",
                 description: "Checks the logical chain of dates within a contracting process. Tender's tenderPeriod has to end before tender's contractPeriod starts. It also has to end before any award is awarded or any contract is signed. All contracts signature date as well as awards dates has to be lower or equal to the compiled release's date. A contract cannot be signed before the related award is awarded. Each contract has to be signed before any transaction for this contract happens."
             },
             milestones_dates: {
-                name: "Contracting process dates",                                                                    
+                name: "Contracting process dates",
                 description: "Checks that the date when a milestone was met is after the date when it was last modified. Both dates have to be lower or equal to the compiled release's date"
             },
             amendments_dates: {
-                name: "Amendment dates",                                                                    
+                name: "Amendment dates",
                 description: "Depending to which phase of contracting process the specific amendment belongs it checks that it was amended after tender period started or after the particular award was awarded or after the particular contract was signed. All date also has to be lower or equal to the compiled release's date"
             },
             document_dates: {
-                name: "Document dates",                                                                    
+                name: "Document dates",
                 description: "Checks that the publication date of a document is lower or equal to the modification date and that both are lower or equal to the compiled release's date"
             },
         },
@@ -264,6 +289,87 @@ export const messages = {
                 name: "Contract - Award",
                 description: "Checks whether proper reference to an award is set for particular contract. It passes if 'awards' array contains exactly one item with a proper id (determined by contract's awardID) set"
             },
+        }
+    },
+    overview: {
+        collection_metadata: "COLLECTION METADATA",
+        kingfisher_metadata: "KINGFISHER METADATA",
+        dqt_metadata: "DATA QUALITY TOOL METADATA",
+        compiled_releases: {
+            title: "COMPILED RELEASES",
+            value_label: "Total Unique OCIDs"
+        },
+        prices: {
+            title: "PRICES",
+            value_label: "Total Value",
+            contracts: "contracts",
+            thead: {
+                category: "price category",
+                count: "contracts count",
+                share: "% of total value"
+            },
+            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could" +
+                " be converted to US dollars we used. Contracts are further broken down into several price categories." +
+                " Number of contracts for each category is displayed together with a share of those contracts on the total value."
+        },
+        period: {
+            title: "PERIOD",
+            subtitle: "Compiled Releases in Time",
+            description: "Distribution of compiled releases in time based on compiled release's Date field."
+        },
+        lifecycle: {
+            title: "TENDER LIFECYCLE",
+            planning: "Planning",
+            tender: "Tender",
+            award: "Award",
+            contract: "Contract",
+            implementation: "Implementation",
+            info: "A number of occurrences of a particural section in all compiled releases." +
+                " While plannings and tenders can appear only once in each compiled release awards, contracts and implementation" +
+                " can be present multipletimes."
+        },
+        publisher: "Publisher",
+        datalicense: "Data License",
+        extensions: "Extensions",
+        publishedFrom: "Published From",
+        publishedTo: "Published To",
+        collectionId: "Collection ID",
+        processingFrom: "Processing Start",
+        processingTo: "Processing End"
+    },
+    field: {
+        title: "Field Level Checks",
+        description: [
+            "Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.",
+            "Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is" +
+            " the number of occurence of its parent structure. For example, if there is 50k awards in a dataset containing 90k suppliers in total" +
+            " awards.title check can be performed 50.000x but awards.suppliers.id can be performed 90.000x",
+            "Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can" +
+            " be performed. These controls run only for fields that are present in the dataset."
+        ],
+        all: "ALL CHECKS",
+        table: {
+            head: {
+                object: "OBJECT",
+                coverage: "COVERAGE",
+                quality: "QUALITY"
+            }
+        },
+        search: "Search object by name"
+    },
+    fieldDetail: {
+        checks: "checks",
+        coverage: {
+            label: "Coverage",
+            exists: {
+                count_header: "Exists"
+            },
+            non_empty: {
+                count_header: "Non-Empty"
+            }
+        },
+        quality: {
+            label: "Quality"
         }
     }
 }

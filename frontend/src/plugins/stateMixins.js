@@ -12,8 +12,15 @@ export default {
             }
             return false;
         },
+        fieldLoaded() {
+            if (this.$store.getters.fieldLevelStats != null) {
+                return true;
+            }
+            return false;
+        },
         atLeastOneLoaded() {
-            if (this.$store.getters.datasetLevelStats != null || this.$store.getters.resourceLevelStats != null) {
+            if (this.$store.getters.datasetLevelStats != null || this.$store.getters.resourceLevelStats != null
+                || this.$store.getters.fieldLevelStats != null) {
                 return true;
             }
             return false;

@@ -1,57 +1,58 @@
 <template>
-    <div id="sidebar" class="col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2 text-center">
-        <p>
-            <img src="@/assets/ocp_logo.png" />
-        </p>
-        <b-nav class="main_nav text-left">
-            <b-nav-item class="nav-item" to="/">
-                <span class="menu_icon_small">
-                    <font-awesome-icon icon="cogs" />
-                </span>
-                {{ $t("sections.home").toUpperCase() }}
-            </b-nav-item>
-
-            <b-nav-item class="nav-item" to="/overview">
-                <span class="menu_icon_small">
-                    <font-awesome-icon icon="home" />
-                </span>
-                {{ $t("sections.overview").toUpperCase() }}
-            </b-nav-item>
-
-            <!-- <li class="nav-item">
-                <a class="nav-link active" href="#">
-                    <router-link to="/field">
+    <div id="sidebar" class="col col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2 text-center">
+        <div class="row">
+            <div id="sidebar_envelope" class="col col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2">
+                <p>
+                    <img src="@/assets/ocp_logo.png" />
+                </p>
+                <b-nav class="main_nav text-left">
+                    <b-nav-item class="nav-item" to="/">
                         <span class="menu_icon_small">
+                            <font-awesome-icon icon="cogs" />
+                        </span>
+                        {{ $t("sections.home").toUpperCase() }}
+                    </b-nav-item>
+
+                    <b-nav-item class="nav-item" to="/overview">
+                        <span class="menu_icon_small">
+                            <font-awesome-icon icon="home" />
+                        </span>
+                        {{ $t("sections.overview").toUpperCase() }}
+                    </b-nav-item>
+
+                    <b-nav-item class="nav-item" to="/field" :disabled="!fieldLoaded">
+                        <span v-if="fieldLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="sliders-h" />
                         </span>
+                        <span v-else class="menu_icon_spinner">
+                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                        </span>
                         {{ $t("sections.field").toUpperCase() }}
-                    </router-link>
-                </a>
-            </li>-->
+                    </b-nav-item>
 
-            <b-nav-item class="nav-item" to="/resource" :disabled="!resourceLoaded">
-                <span v-if="resourceLoaded" class="menu_icon_small">
-                    <font-awesome-icon icon="list-alt" />
-                </span>
-                <span v-else class="menu_icon_spinner">
-                    <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
-                </span>
-                {{ $t("sections.resource").toUpperCase() }}
-            </b-nav-item>
+                    <b-nav-item class="nav-item" to="/resource" :disabled="!resourceLoaded">
+                        <span v-if="resourceLoaded" class="menu_icon_small">
+                            <font-awesome-icon icon="list-alt" />
+                        </span>
+                        <span v-else class="menu_icon_spinner">
+                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                        </span>
+                        {{ $t("sections.resource").toUpperCase() }}
+                    </b-nav-item>
 
-            <b-nav-item class="nav-item" to="/dataset" :disabled="!datasetLoaded">
-                <router-link to="/dataset">
-                    <span v-if="datasetLoaded" class="menu_icon_small">
-                        <font-awesome-icon icon="tasks" />
-                    </span>
-                    <span v-else class="menu_icon_spinner">
-                        <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
-                    </span>
-                    {{ $t("sections.dataset").toUpperCase() }}
-                </router-link>
-            </b-nav-item>
+                    <b-nav-item class="nav-item" to="/dataset" :disabled="!datasetLoaded">
+                        <router-link to="/dataset">
+                            <span v-if="datasetLoaded" class="menu_icon_small">
+                                <font-awesome-icon icon="tasks" />
+                            </span>
+                            <span v-else class="menu_icon_spinner">
+                                <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                            </span>
+                            {{ $t("sections.dataset").toUpperCase() }}
+                        </router-link>
+                    </b-nav-item>
 
-            <!-- <li class="nav-item">
+                    <!-- <li class="nav-item">
                 <a class="nav-link active" href="#">
                     <router-link to="/time">
                         <span class="menu_icon_small">
@@ -60,8 +61,10 @@
                         {{ $t("sections.time").toUpperCase() }}
                     </router-link>
                 </a>
-            </li>-->
-        </b-nav>
+                    </li>-->
+                </b-nav>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -89,6 +92,7 @@ export default {
     display: block;
     margin-top: 10px;
     font-size: 0.8em;
+    width: 100%;
 }
 
 .main_nav a {
@@ -122,7 +126,15 @@ export default {
 
 #sidebar {
     background-color: white;
-    padding-top: 50px;
-    padding-left: 30px;
+    position: relative;
+}
+
+#sidebar_envelope {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    overflow-y: scroll;
+    padding: 30px;
 }
 </style>

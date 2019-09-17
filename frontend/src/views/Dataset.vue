@@ -5,7 +5,7 @@
         <span v-if="loaded">
             <h4>{{ $t("datasetLevel.subheadline") }}</h4>
             <div class="row">
-                <div v-for="(check, index) in datasetLevelStats" v-bind:key="index" class="col col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div v-for="(check, index) in datasetLevelStats" v-bind:key="index" class="col col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
                     <DatasetLevelCheck :check="check"></DatasetLevelCheck>
                 </div>
             </div>

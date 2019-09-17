@@ -1,5 +1,13 @@
 <template>
     <span>
+        <span v-if="!loaded">
+            <div class="result_box loader text-center">
+                <div class="spinner">
+                    <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                </div>
+                {{ $t("loader.examples") }}
+            </div>
+        </span>
         <span v-for="section in examples" v-bind:key="section[0]">
             <h5>{{ section[0] }}</h5>
             <div class="result_box">
@@ -15,12 +23,12 @@
                             <td class="col-10 text-left numeric">
                                 <span class="check_name">{{ item.ocid }}</span>
                             </td>
-                            <td class="col-2 clickable" v-on:click="changePreview(index, section[0], item)">
+                            <td class="col-2 clickable" v-on:click="preview(index, section[0], item.item_id)">
                                 <span v-if="index != selectedKey || selectedSection != section[0]">{{ $t("examples.preview") }}</span>
                                 <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == section[0]">active</span>
                             </td>
                         </tr>
-                        <tr v-if="!visibleSections(section[0])">
+                        <tr v-if="!visibleSections(section[0]) && section[1].length > 5">
                             <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore(section[0])">
                                 <a>
                                     <font-awesome-icon icon="chevron-down" />
@@ -31,9 +39,9 @@
                         <span v-if="visibleSections(section[0])">
                             <tr v-for="(item, index) in section[1].slice(5, )" class="d-flex" v-bind:key="index">
                                 <td class="col-10 text-left numeric">
-                                    <span class="check_name">{{ item.ocid }}</span>
+                                    <span class="check_name">{{ item.ocid }} {{ item.item_id }}</span>
                                 </td>
-                                <td class="col-2 clickable" v-on:click="changePreview(index + 5, section[0], item)">
+                                <td class="col-2 clickable" v-on:click="preview(index + 5, section[0], item.item_id)">
                                     <span v-if="index + 5 != selectedKey || selectedSection != section[0]">{{ $t("examples.preview") }}</span>
                                     <span class="badge badge-primary" v-if="index + 5 == selectedKey && selectedSection == section[0]">active</span>
                                 </td>
@@ -63,12 +71,15 @@ export default {
             selectedSection: null
         };
     },
-    props: ["examples"],
+    props: {
+        examples: Array,
+        loaded: Boolean
+    },
     methods: {
-        changePreview: function(key, section, item) {
+        preview: function(key, section, id) {
             this.selectedKey = key;
             this.selectedSection = section;
-            this.previewData = item;
+            this.$emit("preview", id);
         },
         showMore: function(section) {
             this.openSections.push(section);
@@ -91,5 +102,16 @@ export default {
 
 .moreLess {
     padding-top: 25px;
+}
+
+.loader {
+    font-size: 19px;
+    font-weight: 700;
+    padding: 40px;
+}
+
+.spinner {
+    margin-bottom: 20px;
+    font-size: 40px;
 }
 </style>

@@ -42,7 +42,11 @@ export default {
                 var check = this.resourceLevelStats[item];
                 sum =
                     sum +
-                    check.ok / ((check.ok + check.failed + check.na) / 100);
+                    check.passed_count /
+                        ((check.passed_count +
+                            check.failed_count +
+                            check.undefined_count) /
+                            100);
             }
 
             return Math.round(sum / this.resourceLevelStats.length);
