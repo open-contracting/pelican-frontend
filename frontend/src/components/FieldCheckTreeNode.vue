@@ -1,29 +1,30 @@
 <template>
     <span class="tree_node">
         <tr class="node_head d-flex clickable">
-            <td class="col-4" @click="emitDetailEvent(data._path)">
+            <td class="col-4" @click="check && emitDetailEvent(path)">
                 <div class="d-flex flex-row align-items-center">
                     <div :class="'indent-' + depth" />
-                    <div v-if="hasChildren" class="switcher text-center" @click.stop="expandChildren">
+                    <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
                         <template v-if="hasChildren">
                             <font-awesome-icon v-if="!expanded" icon="chevron-right" />
                             <font-awesome-icon v-else icon="chevron-down" />
                         </template>
                     </div>
                     <div v-else class="switcher"></div>
-                    <div class="name flex-fill">{{ data._path.substring(data._path.lastIndexOf('.') + 1) }}</div>
+                    <div class="name flex-fill">{{ path.substring(path.lastIndexOf('.') + 1) }}</div>
                 </div>
             </td>
 
-            <template v-if="data._check">
-                <td class="col">{{ data._check.coverage.passed_count }}</td>
-                <td class="col">{{ data._check.coverage.failed_count }}</td>
-                <td class="col-2"><ProgressBar :ok="data._check.coverageOkShare" :failed="data._check.coverageFailedShare"/></td>
+            <template v-if="check">
+                <td class="col">{{ check.coverage.passed_count }}</td>
+                <td class="col">{{ check.coverage.failed_count }}</td>
+                <td class="col-2"><ProgressBar :ok="check.coverageOkShare" :failed="check.coverageFailedShare"/></td>
                 
-                <td class="col">{{ data._check.quality.passed_count }}</td>
-                <td class="col">{{ data._check.quality.failed_count }}</td>
-                <td class="col-2"><ProgressBar :ok="data._check.qualityOkShare" :failed="data._check.qualityFailedShare"/></td>
+                <td class="col">{{ check.quality.passed_count }}</td>
+                <td class="col">{{ check.quality.failed_count }}</td>
+                <td class="col-2"><ProgressBar :ok="check.qualityOkShare" :failed="check.qualityFailedShare"/></td>
             </template>
+            <td v-else class="col-8"></td>
         </tr>
 
         <span v-if="hasChildren && expanded" class="node_children">
@@ -39,8 +40,7 @@ import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
     data: function() {
-        return {
-            expanded: false            
+        return {            
         };
     },
     props: {
@@ -50,9 +50,9 @@ export default {
     },
     name: "tree-node",
     components: { ProgressBar },
-    mounted: function() {
+    mounted: function() {        
         if (this.expand) {
-            this.expanded = true;
+            this.expanded = true
         }
     },
     computed: {
@@ -64,14 +64,29 @@ export default {
         },
         hasChildren: function() {
             return Object.keys(this.children).length > 0
+        },
+        expanded: {
+            get: function() {
+                return this.$store.getters.isFieldCheckExpanded(this.path)
+            },
+            set: function(value) {
+                if (value) {
+                    this.$store.commit('addFieldCheckExpandedNode', this.path)
+                } else {
+                    this.$store.commit('removeFieldCheckExpandedNode', this.path)                    
+                }
+            }
+        },
+        path: function() {
+            return this.data._path
+        },
+        check: function() {
+            return this.data._check
         }
     },
     methods: {
         emitDetailEvent: function(path) {
             this.$emit('field-check-detail', path)
-        },
-        expandChildren: function() {
-            this.expanded = !this.expanded
         }
     }
 };

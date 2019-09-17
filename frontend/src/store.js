@@ -15,7 +15,8 @@ export default new Vuex.Store({
         datasetLevelStats: null,
         dataItems: [],
         fieldLevelStats: null,
-        fieldCheckLayout: "table"
+        fieldCheckLayout: "table",
+        fieldCheckExpandedNodes: []
     },
     getters: {
         dataset: (state) => {
@@ -73,6 +74,13 @@ export default new Vuex.Store({
         },
         fieldCheckLayout: function (state) {
             return state.fieldCheckLayout
+        },
+        isFieldCheckExpanded: (state) => (path) => {
+            if (state.fieldCheckExpandedNodes != null) {
+                return state.fieldCheckExpandedNodes.includes(path);
+            }
+
+            return false;
         }
     },
     mutations: {
@@ -111,6 +119,14 @@ export default new Vuex.Store({
         },
         setFieldCheckLayout(state, layout) {
             state.fieldCheckLayout = layout
+        },
+        addFieldCheckExpandedNode(state, path) {
+            if (!state.fieldCheckExpandedNodes.includes(path)) {
+                state.fieldCheckExpandedNodes.push(path)
+            }
+        },
+        removeFieldCheckExpandedNode(state, path) {
+            state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter(v => !v.startsWith(path))
         }
     },
     actions: {
