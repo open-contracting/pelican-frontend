@@ -1,36 +1,36 @@
 <template>
     <span class="tree_node">
-        <tr class="node_head d-flex clickable" @click="expanded = !expanded">            
-            <td class="col-12">
-                <div :class="'indent-' + depth" />
-                <div class="switcher text-center">
-                    <font-awesome-icon v-if="!expanded" icon="chevron-right" />
-                    <font-awesome-icon v-else icon="chevron-down" />
+        <tr class="node_head d-flex clickable">
+            <td class="col-4" @click="emitDetailEvent(data._path)">
+                <div class="d-flex flex-row align-items-center">
+                    <div :class="'indent-' + depth" />
+                    <div v-if="hasChildren" class="switcher text-center" @click.stop="expandChildren">
+                        <template v-if="hasChildren">
+                            <font-awesome-icon v-if="!expanded" icon="chevron-right" />
+                            <font-awesome-icon v-else icon="chevron-down" />
+                        </template>
+                    </div>
+                    <div v-else class="switcher"></div>
+                    <div class="name flex-fill">{{ data._path.substring(data._path.lastIndexOf('.') + 1) }}</div>
                 </div>
-                {{ data._path.substring(data._path.lastIndexOf('.') + 1) }}
             </td>
-        </tr>
-        <template v-if="expanded">
-            <template v-if="data._check">
-                <tr class="node_data d-flex clickable" @click="$emit('field-check-detail', data._path)">                    
-                    <td class="col-4 path"><div :class="'indent-' + (depth + 1)" />{{ data._path }}</td>
-                    
-                    <td class="col">{{ data._check.coverage.passed_count }}</td>
-                    <td class="col">{{ data._check.coverage.failed_count }}</td>
-                    <td class="col-2"><ProgressBar :ok="data._check.coverageOkShare" :failed="data._check.coverageFailedShare"/></td>
-                    
-                    <td class="col">{{ data._check.quality.passed_count }}</td>
-                    <td class="col">{{ data._check.quality.failed_count }}</td>
-                    <td class="col-2"><ProgressBar :ok="data._check.qualityOkShare" :failed="data._check.qualityFailedShare"/></td>
-                </tr>
-            </template>
 
-            <span v-if="hasChildren" class="node_children">
-                <template v-for="n in children">                
-                    <tree-node :key="n._path" :data="n" :depth="depth + 1" v-on:field-check-detail="reemitDetailEvent"/>
-                </template>
-            </span>
-        </template>
+            <template v-if="data._check">
+                <td class="col">{{ data._check.coverage.passed_count }}</td>
+                <td class="col">{{ data._check.coverage.failed_count }}</td>
+                <td class="col-2"><ProgressBar :ok="data._check.coverageOkShare" :failed="data._check.coverageFailedShare"/></td>
+                
+                <td class="col">{{ data._check.quality.passed_count }}</td>
+                <td class="col">{{ data._check.quality.failed_count }}</td>
+                <td class="col-2"><ProgressBar :ok="data._check.qualityOkShare" :failed="data._check.qualityFailedShare"/></td>
+            </template>
+        </tr>
+
+        <span v-if="hasChildren && expanded" class="node_children">
+            <template v-for="n in children">                
+                <tree-node :key="n._path" :data="n" :depth="depth + 1" v-on:field-check-detail="emitDetailEvent"/>
+            </template>
+        </span>
     </span>
 </template>
 
@@ -67,8 +67,11 @@ export default {
         }
     },
     methods: {
-        reemitDetailEvent: function(path) {
+        emitDetailEvent: function(path) {
             this.$emit('field-check-detail', path)
+        },
+        expandChildren: function() {
+            this.expanded = !this.expanded
         }
     }
 };
@@ -83,26 +86,28 @@ $indent-width-px: 35px;
     @return ($depth * $indent-width-px);
 }
 
-.switcher {
-    display: inline-block;
-    font-size: 80%;
-    width: 30px;
-    color: $primary;
+.node_head {
+    .switcher {
+        display: inline-block;
+        font-size: 80%;
+        width: 30px;
+        color: $primary;
+        position: relative;
+    }
+
+    .name {
+        display: inline-block;
+    }
 }
 
 .node_data {
     td {
         border-top: none;
-
-        &.path {
-            color: $headings_light_color;
-            font-family: $font-family-thin;
-        }
     }
 }
 
 div[class^="indent-"] {
-    display: inline-block;    
+    display: inline-block;
 }
 
 @for $depth from 0 to 10 {

@@ -26,7 +26,7 @@
             </tr>
         </thead>
         <tbody>
-            <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" expand v-on:field-check-detail="reemitDetailEvent"/>
+            <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" v-on:field-check-detail="reemitDetailEvent"/>
         </tbody>
     </table>
 </template>
