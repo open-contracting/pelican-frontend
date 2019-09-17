@@ -46,40 +46,49 @@ export const messages = {
         label_50_100: "50 - 100%",
         distribution: {
             tender_status: {
-                name: "tender_status",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Tender status distribution",
+                description: "Calculates a frequenfy of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases",
+                description_long: "Calculates a frequenfy of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases"
             },
             contracts_value_repetition: {
-                name: "contracts_value_repetition",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Contracts value repetition",
+                description: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders.",
+                description: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
             },
             awards_value_repetition: {
-                name: "awards_value_repetition",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Awards value repetition",
+                description: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders.",
+                description: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
             },
             tender_value_repetition: {
-                name: "tender_value_repetition",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Tender value repetition",
+                description: "Examines that tender values are not repeating to frequently. 3 most frequent <i>tender.value.amount</i> and <i>tender.value.currency</i> combinations should appear in fewer than 10% of tenders.",
+                description_long: "Examines that values are not repeating to frequently. 3 most frequent <i>tender.value.amount</i> and <i>tender.value.currency</i> combinations should appear in fewer than 10% of tenders."
             },
             buyer: {
-                name: "buyer",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Buyer distribution",
+                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
+                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
             },
             tender_value: {
-                name: "tender_value",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Tender value distribution",
+                description: "If sum of 1% of top tender values is more than 50% of sum of all tender values it may indicate some insanely high published numbers.",
+                description_long: "Checks that the sum of the top 1% of <i>tender.value</i> values is < 50%. Displays share of each interval of top values on the overall awards value."
             },
             awards_value: {
-                name: "awards_value",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Awards value distribution",
+                description: "If sum of 1% of top award values is more than 50% of sum of all award values it may indicate some insanely high published numbers.",
+                description_long: "Checks that the sum of the top 1% of <i>awards[i].value</i> values is < 50%. Displays share of each interval of top values on the overall awards value."
             },
             contracts_value: {
-                name: "contracts_value",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Contracts value distribution",
+                description: "If sum of 1% of top contract values is more than 50% of sum of all contract values it may indicate some insanely high published numbers.",
+                description: "Checks that the sum of the top 1% of contracts[i].value values is < 50%. Displays share of each interval of top values on the overall contracts value."
             },
             main_procurement_category: {
-                name: "main_procurement_category",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "Main procurement category distribution",
+                description: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs in more than 95 % cases which would be unnatural distribution.",
+                description_long: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs more than 95 % of the time."
             },
         },
         unique: {
