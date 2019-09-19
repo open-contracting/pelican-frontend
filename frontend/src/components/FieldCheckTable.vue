@@ -34,15 +34,15 @@
                 <td rowspan="2">{{ n.path }}</td>
                 
                 <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
-                <td class="ratio pr-0 text-right">({{ n.coverage.passed_count }}</td>
+                <td class="ratio pr-0 text-right">({{ n.coverage.passed_count | formatNumber }}</td>
                 <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                <td class="ratio pl-0 text-left">{{ n.coverage.total_count }})</td>
+                <td class="ratio pl-0 text-left">{{ n.coverage.total_count | formatNumber}})</td>
 
                 <template v-if="n.quality.total_count">
                     <td class="percent">{{ n.qualityOkShare | formatNumber }}%</td>
-                    <td class="ratio pr-0 text-right">({{ n.quality.passed_count }}</td>
+                    <td class="ratio pr-0 text-right">({{ n.quality.passed_count | formatNumber }}</td>
                     <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                    <td class="ratio pl-0 text-left">{{ n.quality.total_count }})</td>
+                    <td class="ratio pl-0 text-left">{{ n.quality.total_count | formatNumber }})</td>
                 </template>
                 <td colspan="4" v-else></td>
             </tr>
