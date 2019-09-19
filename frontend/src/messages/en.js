@@ -63,18 +63,18 @@ export const messages = {
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
-                description: "Calculates a frequenfy of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases",
-                description_long: "Calculates a frequenfy of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases"
+                description: "Calculates a frequency of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases",
+                description_long: "Calculates a frequency of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases"
             },
             contracts_value_repetition: {
                 name: "Contracts value repetition",
                 description: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders.",
-                description: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
+                description_long: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
             },
             awards_value_repetition: {
                 name: "Awards value repetition",
                 description: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders.",
-                description: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
+                description_long: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
             },
             tender_value_repetition: {
                 name: "Tender value repetition",
@@ -84,7 +84,7 @@ export const messages = {
             buyer: {
                 name: "Buyer distribution",
                 description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
-                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
+                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
             },
             tender_value: {
                 name: "Tender value distribution",
@@ -99,12 +99,62 @@ export const messages = {
             contracts_value: {
                 name: "Contracts value distribution",
                 description: "If sum of 1% of top contract values is more than 50% of sum of all contract values it may indicate some insanely high published numbers.",
-                description: "Checks that the sum of the top 1% of contracts[i].value values is < 50%. Displays share of each interval of top values on the overall contracts value."
+                description_long: "Checks that the sum of the top 1% of contracts[i].value values is < 50%. Displays share of each interval of top values on the overall contracts value."
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
                 description: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs in more than 95 % cases which would be unnatural distribution.",
                 description_long: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs more than 95 % of the time."
+            },
+            tender_procurement_method: {
+                name: "Procurement method distribution",
+                description: "Calculates a frequency of occurence of different procurement methods. The check passes if <i>open</i> procurement method is present in 0.1 - 99% cases",
+                description_long: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs more than 95 % of the time."
+            },
+            tender_award_criteria: {
+                name: "Award criteria distribution",
+                description: "Calculates a frequency of occurence of different award criteria. This check passes always and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different award criteria. This check passes always and serves only for data presentation"
+            },
+            tender_submission_method: {
+                name: "Submission method distribution",
+                description: "Calculates a frequency of occurence of different submission methods. This check passes always and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different submission methods. This check passes always and serves only for data presentation"
+            },
+            awards_status: {
+                name: "Award status distribution",
+                description: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases",
+                description_long: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases"
+            },
+            contract_status: {
+                name: "Contract status distribution",
+                description: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases",
+                description_long: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases"
+            },
+            milestone_status: {
+                name: "Milestone status distribution",
+                description: "Calculates a frequency of occurence of different statuses of milestones. All milestones from all phases of contracting process are included. The check passes if <i>met</i> status is present in 0.1 - 99% cases",
+                description_long: "Calculates a frequency of occurence of different statuses of milestones. All milestones from all phases of contracting process are included. The check passes if <i>met</i> status is present in 0.1 - 99% cases"
+            },
+            milestone_type: {
+                name: "Milestone type distribution",
+                description: "Calculates a frequency of occurence of different types of milestones. All milestones from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different types of milestones. All milestones from all phases of contracting process are included. This check passes everytime and serves only for data presentation"
+            },
+            document_type: {
+                name: "Document type distribution",
+                description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation"
+            },
+            value_currency: {
+                name: "Currency distribution",
+                description: "Calculates a frequency of occurence of different currencies. Currencies from all value objects from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different currencies. Currencies from all value objects from all phases of contracting process are included. This check passes everytime and serves only for data presentation"
+            },
+            related_process_relation: {
+                name: "Related process relation distribution",
+                description: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation",
+                description_long: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation"
             },
         },
         unique: {
@@ -117,8 +167,23 @@ export const messages = {
         },
         misc: {
             url_availability: {
-                name: "url_availability",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                name: "URL availability",
+                description: "This check examines a random sample of URLs collected accross the whole data collection a tests whether request to these URL returns valid response",
+                description_long: "This check examines a random sample of URLs collected accross the whole data collection a tests whether request to these URL returns valid response"
+            }
+        },
+        consistent: {
+            related_process_title: {
+                name: "Related processes tile consistency",
+                description: "If two related processes with <i>ocid</i> scheme are detected it's tested that they have the same title. <i>relatedProcesses[i].title</i> or <i>contracts[i].relatedProcesses[j].title</i> is compared to tender.title of corresponding compiled release.",
+                description_long: "If two related processes with <i>ocid</i> scheme are detected it's tested that they have the same title. <i>relatedProcesses[i].title</i> or <i>contracts[i].relatedProcesses[j].title</i> is compared to tender.title of corresponding compiled release."
+            }
+        },
+        reference: {
+            related_process_identifier: {
+                name: "Related processes identifier reference",
+                description: "If compiled release references to some related process using <i>ocid</i>scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection",
+                description_long: "If compiled release references to some related process using <i>ocid</i>scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection"
             }
         },
         numeric: {
