@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-12">
                         <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
-                        <p class="check_description">{{ $t("datasetLevel." + check.name + ".description") }}</p>
+                        <p class="check_description" v-html="$t('datasetLevel.' + check.name + '.description')"></p>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@
                             <img class="undefined_image" src="/img/unsufficient_data.png" />
                             <br />
                             <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                            <p>{{ $t("unsufficientData.description") }}</p>
+                            <span v-html="$t('unsufficientData.description')"></span>
                         </div>
                         <div v-else>
                             <div v-if="checkType == 'donut'">
