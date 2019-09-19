@@ -27,7 +27,7 @@
                             <img class="undefined_image" src="/img/unsufficient_data.png" />
                             <br />
                             <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                            <span v-html="$t('unsufficientData.description')"></span>
+                            <p v-html="$t('unsufficientData.description')"></p>
                         </div>
                         <div v-else>
                             <div v-if="checkType == 'donut'">
