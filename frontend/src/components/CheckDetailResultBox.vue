@@ -7,7 +7,7 @@
                         <span class="check_name">{{ $t("passed") }}</span>
                     </td>
                     <td class="col-9">
-                        <InlineBar :count="check.passed_count" :percentage="okPercentage" :state="'ok'" />
+                        <InlineBar :count="check.passed_count" :percentage="okPercentage" :state="'ok'" :showCount="true" />
                     </td>
                 </tr>
                 <tr v-if="failed && 'failed_count' in check" class="d-flex">
@@ -15,7 +15,7 @@
                         <span class="check_name">{{ $t("failed") }}</span>
                     </td>
                     <td class="col-9">
-                        <InlineBar :count="check.failed_count" :percentage="failedPercentage" :state="'failed'" />
+                        <InlineBar :count="check.failed_count" :percentage="failedPercentage" :state="'failed'" :showCount="true" />
                     </td>
                 </tr>
                 <tr v-if="na && 'undefined_count' in check" class="d-flex">
@@ -23,7 +23,7 @@
                         <span class="check_name">{{ $t("notAvailable") }}</span>
                     </td>
                     <td class="col-9">
-                        <InlineBar :count="check.undefined_count" :percentage="naPercentage" :state="'na'" />
+                        <InlineBar :count="check.undefined_count" :percentage="naPercentage" :state="'na'" :showCount="true" />
                     </td>
                 </tr>
                 <tr v-if="pass && 'passed_count' in check" class="d-flex">
@@ -31,7 +31,7 @@
                         <span class="check_name">{{ $t("passed") }}</span>
                     </td>
                     <td class="col-9">
-                        <InlineBar :count="check.passed_count" :percentage="passPercentage" :state="'ok'" />
+                        <InlineBar :count="check.passed_count" :percentage="passPercentage" :state="'ok'" :showCount="true" />
                     </td>
                 </tr>
                 <tr v-if="nonPass && 'failed_count' in check" class="d-flex">
@@ -39,7 +39,7 @@
                         <span class="check_name">{{ $t("failed") }}</span>
                     </td>
                     <td class="col-9">
-                        <InlineBar :count="check.failed_count" :percentage="nonpassPercentage" :state="'failed'" />
+                        <InlineBar :count="check.failed_count" :percentage="nonpassPercentage" :state="'failed'" :showCount="true" />
                     </td>
                 </tr>
             </tbody>
@@ -58,16 +58,15 @@ export default {
         failed: Boolean,
         na: Boolean,
         pass: Boolean,
-        nonPass: Boolean,
+        nonPass: Boolean
     },
     data: function() {
         return {};
     },
-    mixins: [ ResourceCheckMixins ],
+    mixins: [ResourceCheckMixins],
     components: { InlineBar }
 };
 </script>
 
 <style scoped lang="scss">
-
 </style>
