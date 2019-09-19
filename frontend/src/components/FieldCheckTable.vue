@@ -5,8 +5,8 @@
                 <div class="d-flex align-items-center">
                     <div>{{ $t('field.table.head.object') }}</div>
                     <div class="sort_buttons">
-                        <div :class="['asc', {active: sortedBy == 'name' && isAscendingSorted}]" @click.stop="sortByPath()"></div>
-                        <div :class="['desc', {active: sortedBy == 'name' && !isAscendingSorted}]" @click.stop="sortByPath(false)"></div>
+                        <div :class="['asc', {active: sortedBy == 'path' && isAscendingSorted}]" @click.stop="sortByPath()"></div>
+                        <div :class="['desc', {active: sortedBy == 'path' && !isAscendingSorted}]" @click.stop="sortByPath(false)"></div>
                     </div>
                 </div>
             </th>
@@ -56,66 +56,33 @@
 
 <script>
 import ProgressBar from "@/components/ProgressBar.vue";
+import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     data: function() {
         return {
-            sortedBy: null,
-            isAscendingSorted: null
         };
     },
     props: ["stats"],
     components: { ProgressBar },
-    methods: {
-        sort: function(comparator, asc = true) {            
-            this.stats.sort(comparator)
-            if (!asc) {
-                this.stats.reverse()
-            }
-
-            this.$emit('field-check-table-sort', {by: this.sortedBy, asc: this.isAscendingSorted})
+    mixins: [fieldCheckMixins],
+    computed: {
+        sortedBy: function() {
+            var value = this.$store.getters.fieldCheckSortedBy
+            return value == null ? this.defaultSorting.by : value
         },
-        sortByPath: function(asc = true) {
-            this.sortedBy = "name"
-            this.isAscendingSorted =  asc            
-            this.sort((a, b) => a.path.localeCompare(b.path), asc)
+        isAscendingSorted: function() {
+            var value = this.$store.getters.fieldCheckSortedAscending
+            return value == null ? this.defaultSorting.asc : value
         },
-        sortByCoverage: function(asc = true) {
-            this.sortedBy = "coverage"
-            this.isAscendingSorted =  asc
-
-            this.sort(function(a, b) {
-                if (a.coverageOkShare < b.coverageOkShare) {
-                    return -1
-                } else if (a.coverageOkShare > b.coverageOkShare) {
-                    return 1
-                } else if (a.coverage.total_count < b.coverage.total_count) {
-                    return -1
-                } else if (a.coverage.total_count > b.coverage.total_count) {
-                    return 1
-                } else {
-                    return a.path.localeCompare(b.path)
-                }
-            }, asc)
-        },
-        sortByQuality: function(asc = true) {
-            this.sortedBy = "quality"
-            this.isAscendingSorted =  asc
-            
-            this.sort(function(a, b) {
-                if (a.qualityOkShare < b.qualityOkShare) {
-                    return -1
-                } else if (a.qualityOkShare > b.qualityOkShare) {
-                    return 1
-                } else if (a.quality.total_count < b.quality.total_count) {
-                    return -1
-                } else if (a.quality.total_count > b.quality.total_count) {
-                    return 1
-                } else {
-                    return a.path.localeCompare(b.path)
-                }
-            }, asc)
+        defaultSorting: function() {
+            return {by: "processingOrder", asc: true}
         }
+    },
+    mounted: function() {
+        this.$on('field-check-table-sort', (data) => this.$store.commit('setFieldCheckSorting', data))
+
+        this.sortBy(this.sortedBy, this.isAscendingSorted)
     }
 };
 </script>

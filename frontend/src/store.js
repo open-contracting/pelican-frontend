@@ -17,7 +17,8 @@ export default new Vuex.Store({
         fieldLevelStats: null,
         timeVarianceLevelStats: null,
         fieldCheckLayout: "table",
-        fieldCheckExpandedNodes: []
+        fieldCheckExpandedNodes: [],
+        fieldCheckSorting: null
     },
     getters: {
         dataset: (state) => {
@@ -93,6 +94,12 @@ export default new Vuex.Store({
 
             return null;
         },
+        fieldCheckSortedBy: (state) => {
+            return state.fieldCheckSorting != null ? state.fieldCheckSorting.by : null
+        },
+        fieldCheckSortedAscending: (state) => {
+            return state.fieldCheckSorting != null ? state.fieldCheckSorting.asc : null
+        }
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -142,6 +149,12 @@ export default new Vuex.Store({
         setTimeVarianceLevelStats(state, stats) {
             state.timeVarianceLevelStats = stats;
         },
+        setFieldCheckSorting(state, sorting) {
+            state.fieldCheckSorting = sorting
+        },
+        resetFieldCheckSorting(state) {
+            state.fieldCheckSorting = null
+        }
     },
     actions: {
         updateDataset({
@@ -263,6 +276,7 @@ export default new Vuex.Store({
                     }
 
                     commit("setFieldLevelStats", data);
+                    commit("resetFieldCheckSorting");
                 })
                 .catch(function (error) {
                     throw new Error(error);

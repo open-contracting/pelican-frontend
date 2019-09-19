@@ -26,13 +26,14 @@
             </tr>
         </thead>
         <tbody>
-            <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" v-on:field-check-detail="reemitDetailEvent"/>
+            <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" v-on:field-check-detail="emitDetailEvent"/>
         </tbody>
     </table>
 </template>
 
 <script>
 import FieldCheckTreeNode from "@/components/FieldCheckTreeNode.vue";
+import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     data: function() {
@@ -41,9 +42,13 @@ export default {
     },
     props: ["stats"],
     components: { FieldCheckTreeNode },
+    mixins: [fieldCheckMixins],
     computed: {
         tree: function() {
             var root = {}
+            
+            this.sortByProcessingOrder()
+
             this.stats.forEach(function(n) {
                 var node = root
                 n.path.split(".").forEach(function(p) {
@@ -60,7 +65,7 @@ export default {
         }
     },
     methods: {
-        reemitDetailEvent: function(path) {
+        emitDetailEvent: function(path) {
             this.$emit('field-check-detail', path)
         }
     }
