@@ -161,6 +161,7 @@ export default new Vuex.Store({
             dispatch,
             commit
         }, newDataset) {
+            dispatch("resetDatasetStats");
             commit("setDataset", newDataset);
             dispatch("loadResourceLevelStats");
             dispatch("loadDatasetLevelStats");
@@ -245,10 +246,9 @@ export default new Vuex.Store({
                     })
             }
         },
-        loadFieldLevelStats({
-            commit,
-            state
-        }) {
+        loadFieldLevelStats({ commit, state }) {
+            commit("setFieldLevelStats", null);
+
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
 
             var okShare = function (item) {
@@ -322,5 +322,10 @@ export default new Vuex.Store({
                     throw new Error(error);
                 })
         },
+        resetDatasetStats({ commit }) {
+            commit("setFieldLevelStats", null);
+            commit("setDatasetLevelStats", null);
+            commit("setResourceLevelStats", null);
+        }
     }
 })
