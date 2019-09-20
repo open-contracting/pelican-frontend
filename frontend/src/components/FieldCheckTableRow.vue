@@ -1,5 +1,5 @@
 <template>
-    <tbody>
+    <tbody v-if="check">
         <tr>
             <td rowspan="2"><slot>{{ check.path }}</slot></td>
             
