@@ -39,15 +39,17 @@ export default {
     data: function() {
         return {
         };
-    },
-    props: ["stats"],
+    },    
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
     computed: {
+        stats: function() {
+            return this.$store.getters.fieldLevelStats
+        },
         tree: function() {
             var root = {}
             
-            this.sortByProcessingOrder()
+            this.sortByProcessingOrder(this.stats)
 
             this.stats.forEach(function(n) {
                 var node = root
