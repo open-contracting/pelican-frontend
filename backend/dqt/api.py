@@ -2,7 +2,7 @@
 from tastypie.fields import DictField, ToOneField, ListField, CharField, IntegerField
 from tastypie.resources import ModelResource
 from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
-                     ProgressMonitorDataset, ResourceLevelCheck, Report)
+                     ProgressMonitorDataset, ResourceLevelCheck, Report, TimeVarianceLevelCheck)
 
 
 class DataItemResource(ModelResource):
@@ -59,3 +59,14 @@ class DatasetLevelCheckResource(ModelResource):
     class Meta:
         queryset = DatasetLevelCheck.objects.all()
         resource_name = 'dataset_level_check'
+
+
+class TimeVarianceLevelCheckResource(ModelResource):
+    meta = DictField(attribute='meta')
+
+    class Meta:
+        queryset = TimeVarianceLevelCheck.objects.all()
+        resource_name = 'time_variance_level_check'
+        filtering = {
+            "dataset": ('exact'),
+        }

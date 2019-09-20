@@ -20,7 +20,6 @@
 </template>
 
 <script>
-
 import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ProgressBar from "@/components/ProgressBar.vue";
 
@@ -38,7 +37,7 @@ export default {
                 params: { check: this.name }
             });
         }
-    },
+    }
 };
 </script>
 

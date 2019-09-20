@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.core import serializers
 from django.db import connections
 
-from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report
+from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck
 from .tools import ReservoirSampler
 
 
@@ -277,7 +277,7 @@ def resource_level_detail(request, dataset_id, check_name):
 
             if example["result"]["result"] is True:
                 passed_sampler.process(example)
-            elif example["result"]["result"] is False:            
+            elif example["result"]["result"] is False:
                 failed_sampler.process(example)
             elif example["result"]["result"] is None:
                 undefined_sampler.process(example)
@@ -298,4 +298,18 @@ def resource_level_detail(request, dataset_id, check_name):
             """, [json.dumps({check_name: result}), dataset_id]
         )
 
+    return JsonResponse(result)
+
+
+def time_variance_level_stats(request, dataset_id):
+    result = {}
+    checks = TimeVarianceLevelCheck.objects.all().filter(dataset=dataset_id)
+    for check in checks:
+        result[check.check_name] = {
+            "coverage_value": check.coverage_value,
+            "coverage_result": check.coverage_result,
+            "check_value": check.check_value,
+            "check_result": check.check_result,
+            "meta": check.meta
+        }
     return JsonResponse(result)

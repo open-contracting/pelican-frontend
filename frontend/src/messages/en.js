@@ -436,5 +436,22 @@ export const messages = {
         quality: {
             label: "Quality"
         }
+    },
+    timeLevel: {
+        checkResult: "Check result",
+        coverageResult: "Coverage result",
+        subheadline: "All Time Variance Level Checks",
+        phase_stable: {
+            name: "Phase stability",
+            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+        },
+        ocid: {
+            name: "OCID existence",
+            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+        },
+        tender_title: {
+            name: "Tender title stability",
+            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+        },
     }
 }

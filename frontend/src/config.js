@@ -5,6 +5,7 @@ var config = {
         resourceLevelStats: "api/resource_level_stats",
         resourceLevelCheckDetail: "api/resource_level_detail",
         datasetLevelStats: "api/dataset_level_stats",
+        timeVarianceLevelStats: "api/time_variance_level_stats",
         dataItem: "api/data_item",
         fieldStats: "api/field_level_stats",
         fieldDetail: "api/field_level_detail"

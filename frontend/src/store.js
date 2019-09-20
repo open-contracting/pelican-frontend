@@ -15,6 +15,7 @@ export default new Vuex.Store({
         datasetLevelStats: null,
         dataItems: [],
         fieldLevelStats: null,
+        timeVarianceLevelStats: null,
         fieldCheckLayout: "table",
         fieldCheckExpandedNodes: []
     },
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         },
         datasetLevelStats: (state) => {
             return state.datasetLevelStats;
+        },
+        timeVarianceLevelStats: (state) => {
+            return state.timeVarianceLevelStats;
         },
         resourceLevelStatsBySection: (state) => (sectionName) => {
             if (state.resourceLevelStats != null) {
@@ -81,7 +85,14 @@ export default new Vuex.Store({
             }
 
             return false;
-        }
+        },
+        timeVarianceLevelCheckByName: (state) => (checkName) => {
+            if (state.timeVarianceLevelStats) {
+                return state.timeVarianceLevelStats.find(item => item.name === checkName);
+            }
+
+            return null;
+        },
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -127,7 +138,10 @@ export default new Vuex.Store({
         },
         removeFieldCheckExpandedNode(state, path) {
             state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter(v => !v.startsWith(path))
-        }
+        },
+        setTimeVarianceLevelStats(state, stats) {
+            state.timeVarianceLevelStats = stats;
+        },
     },
     actions: {
         updateDataset({
@@ -138,6 +152,7 @@ export default new Vuex.Store({
             dispatch("loadResourceLevelStats");
             dispatch("loadDatasetLevelStats");
             dispatch("loadFieldLevelStats");
+            dispatch("loadTimeVarianceLevelStats");
         },
         loadResourceLevelStats({
             commit,
@@ -217,15 +232,18 @@ export default new Vuex.Store({
                     })
             }
         },
-        loadFieldLevelStats({ commit, state }) {
+        loadFieldLevelStats({
+            commit,
+            state
+        }) {
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
-            
-            var okShare = function(item) {
+
+            var okShare = function (item) {
                 var result = item.passed_count / item.total_count * 100
                 return isNaN(result) ? 0 : result
             }
 
-            var failedShare = function(item) {
+            var failedShare = function (item) {
                 var result = item.failed_count / item.total_count * 100
                 return isNaN(result) ? 0 : result
             }
@@ -233,7 +251,7 @@ export default new Vuex.Store({
             axios.get(url)
                 .then(function (response) {
                     var data = [];
-                    for (var key in response["data"]) {                        
+                    for (var key in response["data"]) {
                         var item = response["data"][key]
                         data.push(Object.assign({}, item, {
                             path: key,
@@ -243,7 +261,7 @@ export default new Vuex.Store({
                             qualityFailedShare: Math.round(failedShare(item.quality))
                         }))
                     }
-                    
+
                     commit("setFieldLevelStats", data);
                 })
                 .catch(function (error) {
@@ -270,6 +288,25 @@ export default new Vuex.Store({
                         })
                 }
             }
+        },
+        loadTimeVarianceLevelStats({
+            commit,
+            state
+        }) {
+            commit("setTimeVarianceLevelStats", null);
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.timeVarianceLevelStats + "/" + state.dataset.id;
+            axios.get(url)
+                .then(function (response) {
+                    var data = [];
+                    for (var key in response["data"]) {
+                        response["data"][key]["name"] = key;
+                        data.push(response["data"][key]);
+                    }
+                    commit("setTimeVarianceLevelStats", data);
+                })
+                .catch(function (error) {
+                    throw new Error(error);
+                })
         },
     }
 })

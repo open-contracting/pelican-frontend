@@ -3,6 +3,7 @@ from django.db.models import (CASCADE, BigAutoField, BigIntegerField,
                               BooleanField, CharField, DateTimeField,
                               ForeignKey, IntegerField, Model)
 
+
 class Dataset(Model):
     id = BigAutoField(primary_key=True)
     name = CharField(max_length=255, blank=False)
@@ -26,6 +27,7 @@ class Dataset(Model):
         app_label = "data"
         managed = False
         db_table = "dataset"
+
 
 class Report(Model):
     id = BigAutoField(primary_key=True)
@@ -85,6 +87,26 @@ class FieldLevelCheck(Model):
         app_label = "data"
         managed = False
         db_table = 'field_level_check'
+
+
+class TimeVarianceLevelCheck(Model):
+    id = BigAutoField(primary_key=True)
+    dataset = ForeignKey("Dataset", db_column="dataset_id", to_field="id", on_delete=CASCADE)
+
+    check_name = CharField(max_length=-1, blank=True, null=True)
+    coverage_result = BooleanField(blank=True, null=True)
+    coverage_value = IntegerField(blank=True, null=True)
+    check_result = BooleanField(blank=True, null=True)
+    check_value = IntegerField(blank=True, null=True)
+    meta = JSONField()
+
+    created = DateTimeField(blank=True, null=True)
+    modified = DateTimeField(blank=True, null=True)
+
+    class Meta:
+        app_label = "data"
+        managed = False
+        db_table = 'time_variance_level_check'
 
 
 class ProgressMonitorDataset(Model):

@@ -11,7 +11,7 @@
                     <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
                 </div>
             </div>
-            <p v-html=" $t('datasetLevel.' + check.name + '.description')"></p>
+            <p v-html=" $t('datasetLevel.' + check.name + '.description_long')"></p>
 
             <div class="result_box">
                 <div v-if="checkType == 'bar'">

@@ -4,9 +4,9 @@ from django.urls import path
 
 from .api import (DatasetResource, DataItemResource, DatasetLevelCheckResource,
                   FieldLevelCheckResource, ProgressMonitorDatasetResource,
-                  ResourceLevelCheckResource, ReportResource)
+                  ResourceLevelCheckResource, ReportResource, TimeVarianceLevelCheckResource)
 from .views import dataset_stats, dataset_level_stats, field_level_stats, resource_level_stats, \
-    field_level_detail, resource_level_detail
+    field_level_detail, resource_level_detail, time_variance_level_stats
 
 dataset_resource = DatasetResource()
 data_item_resource = DataItemResource()
@@ -15,6 +15,7 @@ field_level_check_resource = FieldLevelCheckResource()
 resource_level_check_resource = ResourceLevelCheckResource()
 dataset_level_check_resource = DatasetLevelCheckResource()
 report_resource = ReportResource()
+time_variance_level_check_resource = TimeVarianceLevelCheckResource()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,6 +23,7 @@ urlpatterns = [
     path('api/field_level_stats/<dataset_id>', field_level_stats, name='field_level_stats'),
     path('api/resource_level_stats/<dataset_id>', resource_level_stats, name='resource_level_stats'),
     path('api/dataset_level_stats/<dataset_id>', dataset_level_stats, name='dataset_level_stats'),
+    path('api/time_variance_level_stats/<dataset_id>', time_variance_level_stats, name='time_variance_level_stats'),
     path('api/field_level_detail/<dataset_id>/<path>', field_level_detail, name='field_level_detail'),
     path('api/resource_level_detail/<dataset_id>/<check_name>', resource_level_detail, name='resource_level_detail'),
     url(r'^api/', include(dataset_resource.urls)),
@@ -30,5 +32,6 @@ urlpatterns = [
     url(r'^api/', include(field_level_check_resource.urls)),
     url(r'^api/', include(resource_level_check_resource.urls)),
     url(r'^api/', include(dataset_level_check_resource.urls)),
-    url(r'^api/', include(report_resource.urls))
+    url(r'^api/', include(report_resource.urls)),
+    url(r'^api/', include(time_variance_level_check_resource.urls))
 ]

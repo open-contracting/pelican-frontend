@@ -18,9 +18,15 @@ export default {
             }
             return false;
         },
+        timeVarianceLoaded() {
+            if (this.$store.getters.timeVarianceLevelStats != null) {
+                return true;
+            }
+            return false;
+        },
         atLeastOneLoaded() {
-            if (this.$store.getters.datasetLevelStats != null || this.$store.getters.resourceLevelStats != null
-                || this.$store.getters.fieldLevelStats != null) {
+            if (this.$store.getters.datasetLevelStats != null || this.$store.getters.resourceLevelStats != null ||
+                this.$store.getters.fieldLevelStats != null || this.$store.getters.timeVarianceLevelStats != null) {
                 return true;
             }
             return false;
