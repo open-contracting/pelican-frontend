@@ -43,6 +43,14 @@ export default {
         },
         sortByQuality: function(asc = true) {            
             this.sort((a, b) => {
+                if (a.quality.total_count == 0) {
+                    if (b.quality.total_count == 0) {
+                        a.path.localeCompare(b.path)
+                    }
+
+                    return asc ? 1 : -1;                        
+                }
+
                 var comparison = this.compareNumbers(a.qualityOkShare, b.qualityOkShare)
                 if (comparison == 0) {
                     comparison = this.compareNumbers(a.quality.total_count, b.quality.total_count)
