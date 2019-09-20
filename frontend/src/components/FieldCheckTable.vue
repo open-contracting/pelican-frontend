@@ -29,8 +29,8 @@
                 </div>
             </th>
         </thead>
-        <tbody v-for="n in stats" :key="n.path">
-            <tr @click="$emit('field-check-detail', n.path)">
+        <tbody v-for="n in stats" :key="n.path" @click="$emit('field-check-detail', n.path)">
+            <tr>
                 <td rowspan="2">{{ n.path }}</td>
                 
                 <td class="percent">{{ n.coverageOkShare | formatNumber }}%</td>
