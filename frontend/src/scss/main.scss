@@ -1,9 +1,9 @@
 @import "variables";
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-vue/src/index.scss';
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-vue/src/index.scss";
 
 body {
-    background-color: #F0F2FB;
+    background-color: #f0f2fb;
     font-size: 14px;
 }
 
@@ -23,11 +23,12 @@ h2 {
 }
 
 h4 {
-    font-size: 13px;
+    font-size: 10px;
     color: $headings_light_color;
     font-weight: 700;
     letter-spacing: 1px;
     margin-top: 50px;
+    text-transform: uppercase;
 }
 
 h5 {
@@ -79,7 +80,7 @@ h5 {
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.06)
+    background-color: rgba(0, 0, 0, 0.06);
 }
 
 .clickable {
@@ -91,7 +92,7 @@ h5 {
 }
 
 .vjs-tree .vjs-value__string {
-    color: #6C75E1 !important;
+    color: #6c75e1 !important;
 }
 
 .numeric {
@@ -100,4 +101,8 @@ h5 {
 
 .clickable {
     cursor: pointer;
+}
+
+.break_word {
+    overflow-wrap: break-word;
 }
