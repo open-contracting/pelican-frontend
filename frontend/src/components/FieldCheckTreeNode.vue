@@ -10,7 +10,7 @@
                     </template>
                 </div>
                 <div v-else class="switcher"></div>
-                <div class="name flex-fill">{{ path.substring(path.lastIndexOf('.') + 1) }}</div>
+                <div class="name flex-fill" :title="path">{{ path.substring(path.lastIndexOf('.') + 1) }}</div>
             </div>
         </FieldCheckTableRow>
 
