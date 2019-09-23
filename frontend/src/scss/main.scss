@@ -4,6 +4,7 @@
 
 body {
     background-color: #F0F2FB;
+    font-size: 14px;
 }
 
 main {
@@ -12,6 +13,13 @@ main {
 
 h3 {
     letter-spacing: 0.12px;
+    font-size: 13px;
+    font-family: $font-family-thin;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 h4 {

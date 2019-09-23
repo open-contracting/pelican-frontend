@@ -1,7 +1,7 @@
 <template>
     <dashboard-detail>
         <template v-if="check != null" v-slot:content>
-            <h3>{{ $t("header").toUpperCase() }}</h3>
+            <h3>{{ $t("header") }}</h3>
             <h2>{{ $t("timeLevel." + check.name + ".name") }}</h2>
             <p v-html=" $t('timeLevel.' + check.name + '.descriptionLong')"></p>
 

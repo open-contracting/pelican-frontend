@@ -1,6 +1,6 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header").toUpperCase() }}</h3>
+        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("sections.resource") }}</h2>
         <span v-if="loaded">
             <h4>{{ $t("resourceLevel.subheadline") }}</h4>

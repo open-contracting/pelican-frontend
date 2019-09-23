@@ -136,6 +136,6 @@ export default {
     left: 0px;
     bottom: 0px;
     overflow-y: scroll;
-    padding: 30px;
+    padding: 50px 30px 30px 30px;
 }
 </style>

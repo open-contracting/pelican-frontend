@@ -1,7 +1,7 @@
 <template>
     <dashboard-detail>
         <template v-if="check" v-slot:content>
-            <h3>{{ $t("header").toUpperCase() }}</h3>
+            <h3>{{ $t("header") }}</h3>
             <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
             <p v-if="check">{{ $t("resourceLevel." + check.name + ".description") }}</p>
 

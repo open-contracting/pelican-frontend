@@ -1,6 +1,6 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header").toUpperCase() }}</h3>
+        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("field.title") }}</h2>
         <div class="description">
             <p>{{ $t('field.description[0]') }}</p>
@@ -15,10 +15,10 @@
                 <b-input-group class="search_input">
                     <template v-slot:prepend>
                         <b-input-group-text>
-                            <font-awesome-icon icon="search" @click="submitSearch"/>
+                            <font-awesome-icon icon="search" @click="submitSearch" />
                         </b-input-group-text>
                     </template>
-                    <b-form-input v-model="search" :placeholder="$t('field.search')" @keyup.enter="submitSearch"/>
+                    <b-form-input v-model="search" :placeholder="$t('field.search')" @keyup.enter="submitSearch" />
                 </b-input-group>
             </b-col>
             <b-col class="text-right">
@@ -40,7 +40,7 @@
         </b-row>
 
         <div class="result_box">
-            <FieldCheckTable v-if="layout == 'table'" v-on:field-check-detail="detail" ref="field-check-table"/>
+            <FieldCheckTable v-if="layout == 'table'" v-on:field-check-detail="detail" ref="field-check-table" />
             <FieldCheckTree v-else-if="layout == 'tree'" v-on:field-check-detail="detail" ref="field-check-tree" />
         </div>
     </dashboard>
@@ -56,16 +56,16 @@ export default {
     data: function() {
         return {
             search: null
-        }
+        };
     },
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
         layout: function() {
-            return this.$store.getters.fieldCheckLayout
+            return this.$store.getters.fieldCheckLayout;
         }
     },
     mounted: function() {
-        this.search = this.$store.getters.fieldCheckSearch
+        this.search = this.$store.getters.fieldCheckSearch;
     },
     methods: {
         detail: function(path) {
@@ -75,10 +75,10 @@ export default {
             });
         },
         resetTableSorting: function() {
-            this.$refs['field-check-table'].resetSorting()
+            this.$refs["field-check-table"].resetSorting();
         },
         submitSearch: function() {
-            this.$store.commit('setFieldCheckSearch', this.search);
+            this.$store.commit("setFieldCheckSearch", this.search);
         }
     }
 };
@@ -112,7 +112,8 @@ mark {
         border-color: $text-color;
         color: $text-color;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
             border-color: $primary;
             color: $primary;
         }
