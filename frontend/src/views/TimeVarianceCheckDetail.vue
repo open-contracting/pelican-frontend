@@ -3,7 +3,7 @@
         <template v-if="check != null" v-slot:content>
             <h3>{{ $t("header").toUpperCase() }}</h3>
             <h2>{{ $t("timeLevel." + check.name + ".name") }}</h2>
-            <p v-html=" $t('timeLevel.' + check.name + '.description_long')"></p>
+            <p v-html=" $t('timeLevel.' + check.name + '.descriptionLong')"></p>
 
             <h5>{{ $t("timeLevel.coverage.header") }} {{ check.meta.total_count | formatNumber }}</h5>
             <div class="result_box">
