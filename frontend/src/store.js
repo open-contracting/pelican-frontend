@@ -17,7 +17,9 @@ export default new Vuex.Store({
         fieldLevelStats: null,
         timeVarianceLevelStats: null,
         fieldCheckLayout: "table",
-        fieldCheckExpandedNodes: []
+        fieldCheckExpandedNodes: [],
+        fieldCheckSorting: null,
+        fieldCheckSearch: null
     },
     getters: {
         dataset: (state) => {
@@ -93,6 +95,15 @@ export default new Vuex.Store({
 
             return null;
         },
+        fieldCheckSortedBy: (state) => {
+            return state.fieldCheckSorting != null ? state.fieldCheckSorting.by : null
+        },
+        fieldCheckSortedAscending: (state) => {
+            return state.fieldCheckSorting != null ? state.fieldCheckSorting.asc : null
+        },
+        fieldCheckSearch: (state) => {
+            return state.fieldCheckSearch
+        }
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -142,12 +153,25 @@ export default new Vuex.Store({
         setTimeVarianceLevelStats(state, stats) {
             state.timeVarianceLevelStats = stats;
         },
+        collapseAllFieldCheckExpandedNodes(state) {
+            state.fieldCheckExpandedNodes = []
+        },
+        setFieldCheckSorting(state, sorting) {
+            state.fieldCheckSorting = sorting
+        },
+        resetFieldCheckSorting(state) {
+            state.fieldCheckSorting = null
+        },
+        setFieldCheckSearch(state, search) {
+            state.fieldCheckSearch = search
+        }
     },
     actions: {
         updateDataset({
             dispatch,
             commit
         }, newDataset) {
+            dispatch("resetDatasetEnv");
             commit("setDataset", newDataset);
             dispatch("loadResourceLevelStats");
             dispatch("loadDatasetLevelStats");
@@ -232,10 +256,9 @@ export default new Vuex.Store({
                     })
             }
         },
-        loadFieldLevelStats({
-            commit,
-            state
-        }) {
+        loadFieldLevelStats({ commit, state }) {
+            commit("setFieldLevelStats", null);
+
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
 
             var okShare = function (item) {
@@ -263,6 +286,7 @@ export default new Vuex.Store({
                     }
 
                     commit("setFieldLevelStats", data);
+                    commit("resetFieldCheckSorting");
                 })
                 .catch(function (error) {
                     throw new Error(error);
@@ -308,5 +332,14 @@ export default new Vuex.Store({
                     throw new Error(error);
                 })
         },
+        resetDatasetEnv({ commit }) {
+            commit("setFieldLevelStats", null);
+            commit("setDatasetLevelStats", null);
+            commit("setResourceLevelStats", null);
+            commit("resetFieldCheckSorting");
+            commit("setFieldCheckSearch", null);
+            commit("collapseAllFieldCheckExpandedNodes"),
+            commit("setFieldCheckLayout", "table");            
+        }
     }
 })

@@ -420,7 +420,8 @@ export const messages = {
                 quality: "QUALITY"
             }
         },
-        search: "Search object by name"
+        search: "Search object by name",
+        hidden: "Another {n} checks was hidden"
     },
     fieldDetail: {
         checks: "checks",
