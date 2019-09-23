@@ -18,7 +18,8 @@ export default new Vuex.Store({
         timeVarianceLevelStats: null,
         fieldCheckLayout: "table",
         fieldCheckExpandedNodes: [],
-        fieldCheckSorting: null
+        fieldCheckSorting: null,
+        fieldCheckSearch: null
     },
     getters: {
         dataset: (state) => {
@@ -99,6 +100,9 @@ export default new Vuex.Store({
         },
         fieldCheckSortedAscending: (state) => {
             return state.fieldCheckSorting != null ? state.fieldCheckSorting.asc : null
+        },
+        fieldCheckSearch: (state) => {
+            return state.fieldCheckSearch
         }
     },
     mutations: {
@@ -149,11 +153,17 @@ export default new Vuex.Store({
         setTimeVarianceLevelStats(state, stats) {
             state.timeVarianceLevelStats = stats;
         },
+        collapseAllFieldCheckExpandedNodes(state) {
+            state.fieldCheckExpandedNodes = []
+        },
         setFieldCheckSorting(state, sorting) {
             state.fieldCheckSorting = sorting
         },
         resetFieldCheckSorting(state) {
             state.fieldCheckSorting = null
+        },
+        setFieldCheckSearch(state, search) {
+            state.fieldCheckSearch = search
         }
     },
     actions: {
@@ -161,7 +171,7 @@ export default new Vuex.Store({
             dispatch,
             commit
         }, newDataset) {
-            dispatch("resetDatasetStats");
+            dispatch("resetDatasetEnv");
             commit("setDataset", newDataset);
             dispatch("loadResourceLevelStats");
             dispatch("loadDatasetLevelStats");
@@ -322,10 +332,14 @@ export default new Vuex.Store({
                     throw new Error(error);
                 })
         },
-        resetDatasetStats({ commit }) {
+        resetDatasetEnv({ commit }) {
             commit("setFieldLevelStats", null);
             commit("setDatasetLevelStats", null);
             commit("setResourceLevelStats", null);
+            commit("resetFieldCheckSorting");
+            commit("setFieldCheckSearch", null);
+            commit("collapseAllFieldCheckExpandedNodes"),
+            commit("setFieldCheckLayout", "table");            
         }
     }
 })

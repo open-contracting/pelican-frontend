@@ -18,9 +18,7 @@
             </th>
         </thead>
         
-        <!-- <tbody> -->
-            <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" v-on:field-check-detail="emitDetailEvent"/>
-        <!-- </tbody> -->
+        <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" v-on:field-check-detail="emitDetailEvent"/>
     </table>
 </template>
 

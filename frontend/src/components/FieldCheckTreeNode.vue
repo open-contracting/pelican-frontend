@@ -1,6 +1,7 @@
 <template>
     <fragment>
-        <FieldCheckTableRow :key="path" :check="check" :class="{'d-none': hide}" @click.native="$emit('field-check-detail', path)">
+        <FieldCheckTableRow v-if="isSearched(data)" :key="path" :check="check" :class="{'d-none': hide}"
+            @click.native="$emit('field-check-detail', path)">
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
                 <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
@@ -10,12 +11,12 @@
                     </template>
                 </div>
                 <div v-else class="switcher"></div>
-                <div class="name flex-fill" :title="path">{{ path.substring(path.lastIndexOf('.') + 1) }}</div>
+                <div class="name flex-fill" :title="path" v-html="highlightSearch(dirName)"></div>
             </div>
         </FieldCheckTableRow>
 
         <template v-if="hasChildren">
-            <template v-for="n in children">                
+            <template v-for="n in children">        
                 <tree-node :key="n._path" :data="n" :depth="depth + 1" v-on:field-check-detail="emitDetailEvent" :hide="!expanded" />
             </template>
         </template>
@@ -23,9 +24,9 @@
 </template>
 
 <script>
-import ProgressBar from "@/components/ProgressBar.vue";
 import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
-import { VFragment } from 'vue-fragment'
+import { Fragment } from 'vue-fragment'
+import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     data: function() {
@@ -39,7 +40,8 @@ export default {
         hide: {type:Boolean, default: false}
     },
     name: "tree-node",
-    components: { ProgressBar, FieldCheckTableRow, VFragment },
+    components: { FieldCheckTableRow, Fragment },
+    mixins: [ fieldCheckMixins ],
     mounted: function() {        
         if (this.expand) {
             this.expanded = true
@@ -47,10 +49,7 @@ export default {
     },
     computed: {
         children: function() {
-            var result = Object.assign({}, this.data)
-            delete result._check
-            delete result._path
-            return result
+            return this.getChildren(this.data)
         },
         hasChildren: function() {
             return Object.keys(this.children).length > 0
@@ -72,11 +71,32 @@ export default {
         },
         check: function() {
             return this.data._check
+        },
+        dirName: function() {
+            return this.path.substring(this.path.lastIndexOf('.') + 1)
         }
     },
     methods: {
         emitDetailEvent: function(path) {
             this.$emit('field-check-detail', path)
+        },
+        isSearched: function(node) {            
+            if (this.search) {
+                if (node._path.toLowerCase().includes(this.search.toLowerCase())) {
+                    return true
+                } else {
+                    var children = this.getChildren(node)
+                    return Object.keys(children).some(n => this.isSearched(children[n]))
+                }
+            }
+
+            return true
+        },
+        getChildren: function(node) {
+            var result = Object.assign({}, node)
+            delete result._check
+            delete result._path
+            return result
         }
     }
 };

@@ -15,10 +15,10 @@
                 <b-input-group class="search_input">
                     <template v-slot:prepend>
                         <b-input-group-text>
-                            <font-awesome-icon icon="search" />
+                            <font-awesome-icon icon="search" @click="submitSearch"/>
                         </b-input-group-text>
                     </template>
-                    <b-input :model="search" :placeholder="$t('field.search')"/>
+                    <b-form-input v-model="search" :placeholder="$t('field.search')" @keyup.enter="submitSearch"/>
                 </b-input-group>
             </b-col>
             <b-col class="text-right">
@@ -64,6 +64,9 @@ export default {
             return this.$store.getters.fieldCheckLayout
         }
     },
+    mounted: function() {
+        this.search = this.$store.getters.fieldCheckSearch
+    },
     methods: {
         detail: function(path) {
             this.$router.push({
@@ -73,10 +76,21 @@ export default {
         },
         resetTableSorting: function() {
             this.$refs['field-check-table'].resetSorting()
+        },
+        submitSearch: function() {
+            this.$store.commit('setFieldCheckSearch', this.search);
         }
     }
 };
 </script>
+
+<style lang="scss">
+@import "src/scss/_variables";
+
+mark {
+    background-color: $primary !important;
+}
+</style>
 
 <style scoped lang="scss">
 @import "src/scss/main";
@@ -109,6 +123,7 @@ export default {
     .input-group-text {
         background-color: transparent;
         border-right: none;
+        cursor: pointer;
     }
     input {
         background-color: transparent;

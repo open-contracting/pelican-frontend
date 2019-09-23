@@ -3,6 +3,11 @@ export default {
         return {
         };
     },
+    computed: {
+        search: function() {
+            return this.$store.getters.fieldCheckSearch
+        }
+    },
     methods: {
         sort: function(checks, comparator, sortedBy, asc = true) {
             if (checks != null) {
@@ -67,6 +72,9 @@ export default {
         },
         compareNumbers: function(a, b) {
             return a - b
-        }
+        },
+        highlightSearch: function(str) {
+            return this.search ? str.replace(new RegExp("(" + this.search + ")", "i"), '<mark>$1</mark>') : str
+        }       
     },
 };

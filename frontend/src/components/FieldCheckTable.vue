@@ -31,8 +31,8 @@
         </thead>
         
         <template v-for="n in tableData">
-            <FieldCheckTableRow :key="n.path" :check="n" @click.native="$emit('field-check-detail', n.path)">
-                {{ n.path }}
+            <FieldCheckTableRow v-if="isSearched(n)" :key="n.path" :check="n" @click.native="$emit('field-check-detail', n.path)">
+                <span v-html="highlightSearch(n.path)" />
                 <template v-if="hasHidden(n)">
                     <div class="hide_button">
                         <i>{{ $t('field.hidden', { n: n._hidden.length }) }}</i>
@@ -42,8 +42,12 @@
                     </div>
                 </template>
             </FieldCheckTableRow>
-            <FieldCheckTableRow v-for="h in n._hidden" :check="h" :key="h.path" :class="['hidden', {'d-none': isHidden(n)}]"
-                @click.native="$emit('field-check-detail', h.path)"/>    
+            <template v-for="h in n._hidden">
+                <FieldCheckTableRow v-if="isSearched(h)" :check="h" :key="h.path" :class="['hidden', {'d-none': isHidden(n)}]"
+                    @click.native="$emit('field-check-detail', h.path)">
+                    <span v-html="highlightSearch(h.path)" />
+                </FieldCheckTableRow>
+            </template>
         </template>
     </table>
 </template>
@@ -119,6 +123,9 @@ export default {
         },
         resetSorting: function() {
             this.sortByProcessingOrder(this.tableData)
+        },
+        isSearched: function(check) {
+            return !this.search || (check && check.path.toLowerCase().includes(this.search.toLowerCase()))
         }
     }
 };
@@ -136,6 +143,7 @@ export default {
         .hide_button {
             font-size: 14px;
             font-family: $font-family-thin;
+            white-space: nowrap;
         }
     }
 }
