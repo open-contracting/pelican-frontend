@@ -66,6 +66,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/scss/main";
 
+.table {
+    thead {
+        th {            
+            color: $headings_light_color;
+            font-family: $headings-font-family;
+        }
+    }
+}
 
 </style>
