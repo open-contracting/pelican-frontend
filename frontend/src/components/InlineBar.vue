@@ -49,7 +49,6 @@ export default {
     text-align: left;
     display: inline-block;
     position: relative;
-    top: -3px;
 }
 
 .count {
