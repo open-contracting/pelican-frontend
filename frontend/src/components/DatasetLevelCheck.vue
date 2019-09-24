@@ -1,81 +1,85 @@
 <template>
-    <div class="dataset_result_box" v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }" v-on:click="detail(check.name)">
-        <div class="row no-gutters">
-            <div class="col col-2 col-sm-2 col-lg-1 text-left">
-                <span v-if="check.result == true" class="ok_icon">
-                    <font-awesome-icon :icon="['far', 'check-circle']" />
-                </span>
-                <span v-if="check.result == false" class="failed_icon">
-                    <font-awesome-icon :icon="['far', 'times-circle']" />
-                </span>
-                <span v-if="check.result == undefined" class="undefined_icon">
-                    <font-awesome-icon :icon="['far', 'question-circle']" />
-                </span>
-            </div>
-
-            <div class="col col-10 col-sm-10 col-lg-11">
-                <div class="row">
-                    <div class="col-12">
-                        <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
-                        <p class="check_description" v-html="$t('datasetLevel.' + check.name + '.description')"></p>
-                    </div>
+    <div
+        class="card mb-4 dataset_result_box result_box"
+        v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }"
+        v-on:click="detail(check.name)"
+    >
+        <div class="card-body">
+            <div class="row no-gutters">
+                <div class="col col-2 col-sm-2 col-lg-1 text-left">
+                    <span v-if="check.result == true" class="ok_icon">
+                        <font-awesome-icon :icon="['far', 'check-circle']" />
+                    </span>
+                    <span v-if="check.result == false" class="failed_icon">
+                        <font-awesome-icon :icon="['far', 'times-circle']" />
+                    </span>
+                    <span v-if="check.result == undefined" class="undefined_icon">
+                        <font-awesome-icon :icon="['far', 'question-circle']" />
+                    </span>
                 </div>
 
-                <div class="row h-100 align-items-center">
-                    <div class="col-12">
-                        <div class="chartEnvelope text-center" v-if="check.result == undefined">
-                            <img class="undefined_image" src="/img/unsufficient_data.png" />
-                            <br />
-                            <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                            <p v-html="$t('unsufficientData.description')"></p>
+                <div class="col col-10 col-sm-10 col-lg-11">
+                    <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
+                    <p class="check_description" v-html="$t('datasetLevel.' + check.name + '.description')"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="row justify-content-end">
+                <div class="col col-10 col-sm-10 col-lg-11">
+                    <div class="chartEnvelope text-center" v-if="check.result == undefined">
+                        <img class="undefined_image" src="/img/unsufficient_data.png" />
+                        <br />
+                        <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
+                        <p v-html="$t('unsufficientData.description')"></p>
+                    </div>
+                    <div v-else>
+                        <div v-if="checkType == 'donut'">
+                            <div class="chartEnvelope">
+                                <DonutChart :check="check"></DonutChart>
+                            </div>
                         </div>
-                        <div v-else>
-                            <div v-if="checkType == 'donut'">
-                                <div class="chartEnvelope">
-                                    <DonutChart :check="check"></DonutChart>
-                                </div>
-                            </div>
 
-                            <div v-if="checkType == 'bar'">
-                                <div class="chartEnvelope">
-                                    <BarChart :check="check"></BarChart>
-                                </div>
+                        <div v-if="checkType == 'bar'">
+                            <div class="chartEnvelope">
+                                <BarChart :check="check"></BarChart>
                             </div>
+                        </div>
 
-                            <div v-if="checkType == 'numeric'" class="text-center">
-                                <span class="check_numeric_value">{{ check.meta.total_passed }}</span>
-                                <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed }}</span>
+                        <div v-if="checkType == 'numeric'" class="text-center">
+                            <span class="check_numeric_value">{{ check.meta.total_passed }}</span>
+                            <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed }}</span>
+                        </div>
+
+                        <div class="top3" v-if="checkType == 'top3'">
+                            <div class="chartEnvelope">
+                                <table class="table table-sm">
+                                    <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
+                                        <td>{{ item.value_str }}</td>
+                                        <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                    </tr>
+                                </table>
                             </div>
+                        </div>
 
-                            <div class="top3" v-if="checkType == 'top3'">
-                                <div class="chartEnvelope">
-                                    <table class="table table-sm">
-                                        <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
-                                            <td>{{ item.value_str }}</td>
-                                            <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
-                                        </tr>
-                                    </table>
-                                </div>
+                        <div class="biggest_share" v-if="checkType == 'biggest_share'">
+                            <div class="row">
+                                <div
+                                    class="col col-12 text-center total_share"
+                                    v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
+                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 }}%</div>
                             </div>
-
-                            <div class="biggest_share" v-if="checkType == 'biggest_share'">
-                                <div class="row">
-                                    <div
-                                        class="col col-12 text-center total_share"
-                                        v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                    >{{ Math.round(check.meta.ocid_share * 10000) / 100 }}%</div>
-                                </div>
-                                <div class="row">
-                                    <div
-                                        class="col col-12 text-center ocid_count"
-                                    >{{ check.meta.ocid_count | formatNumber }}&nbsp;from&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
-                                </div>
+                            <div class="row">
+                                <div
+                                    class="col col-12 text-center ocid_count"
+                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;from&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
                             </div>
+                        </div>
 
-                            <div class="single_value_share" v-if="checkType == 'single_value_share'">
-                                <div class="chartEnvelope">
-                                    <BarChartSingleValue :check="check"></BarChartSingleValue>
-                                </div>
+                        <div class="single_value_share" v-if="checkType == 'single_value_share'">
+                            <div class="chartEnvelope">
+                                <BarChartSingleValue :check="check"></BarChartSingleValue>
                             </div>
                         </div>
                     </div>
@@ -132,15 +136,9 @@ export default {
 .dataset_result_box {
     display: inline-block;
     background-color: white;
-    padding: 15px;
+    padding: 0px;
     border-radius: 10px;
-    margin-bottom: 25px;
-    min-height: 340px;
-}
-
-.chartEnvelope {
-    position: relative;
-    top: -50px;
+    border: 0px;
 }
 
 .dataset_result_box h5 {
