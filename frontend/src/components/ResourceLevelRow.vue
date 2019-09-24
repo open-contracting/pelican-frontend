@@ -1,26 +1,24 @@
 <template>
     <tr class="d-flex clickable" v-on:click="detail()">
-        <td class="col-5">
-            <span class="check_name">{{ $t("resourceLevel." + name + ".name") }}</span>
+        <td class="col-9 col-lg-5 break_word check_name">
+            <span>{{ $t("resourceLevel." + name + ".name") }}</span>
         </td>
-        <td class="col-1 text-right">
+        <td class="col-1 col-lg-1 text-right">
             <span v-if=" okPercentage> 0" class="value_ok">{{ okPercentage }}%</span>
         </td>
-        <td class="col-1 text-right">
+        <td class="col-1 col-lg-1 text-right">
             <span v-if=" failedPercentage> 0" class="value_failed">{{ failedPercentage }}%</span>
         </td>
-        <td class="col-1 text-right">
+        <td class="col-1 col-lg-1 text-right">
             <span v-if=" naPercentage> 0" class="value_na">{{ naPercentage }}%</span>
         </td>
-        <td class="col-1 text-right"></td>
-        <td class="col-3">
+        <td class="col-4 d-none d-lg-block progress_column">
             <ProgressBar :ok="okPercentage" :failed="failedPercentage" />
         </td>
     </tr>
 </template>
 
 <script>
-
 import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ProgressBar from "@/components/ProgressBar.vue";
 
@@ -38,7 +36,7 @@ export default {
                 params: { check: this.name }
             });
         }
-    },
+    }
 };
 </script>
 
@@ -46,6 +44,10 @@ export default {
 @import "src/scss/variables";
 
 .check_name {
-    padding-left: 35px;
+    padding-left: 65px;
+}
+
+.progress_column {
+    padding-left: 40px;
 }
 </style>

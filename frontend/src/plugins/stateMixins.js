@@ -18,12 +18,14 @@ export default {
             }
             return false;
         },
-        atLeastOneLoaded() {
-            if (this.$store.getters.datasetLevelStats != null || this.$store.getters.resourceLevelStats != null
-                || this.$store.getters.fieldLevelStats != null) {
+        timeVarianceLoaded() {
+            if (this.$store.getters.timeVarianceLevelStats != null) {
                 return true;
             }
             return false;
+        },
+        atLeastOneLoaded() {
+            return this.datasetLoaded || this.resourceLoaded || this.fieldLoaded || this.timeVarianceLoaded;
         }
     },
 };

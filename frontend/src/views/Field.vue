@@ -1,6 +1,6 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header").toUpperCase() }}</h3>
+        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("field.title") }}</h2>
         <div class="description">
             <p>{{ $t('field.description[0]') }}</p>
@@ -15,13 +15,19 @@
                 <b-input-group class="search_input">
                     <template v-slot:prepend>
                         <b-input-group-text>
-                            <font-awesome-icon icon="search" />
+                            <font-awesome-icon icon="search" @click="submitSearch" />
                         </b-input-group-text>
                     </template>
-                    <b-input :model="search" :placeholder="$t('field.search')"/>
+                    <b-form-input v-model="search" :placeholder="$t('field.search')" @keyup.enter="submitSearch" />
                 </b-input-group>
             </b-col>
             <b-col class="text-right">
+                <b-button-group v-if="layout == 'table'">
+                    <button @click="resetTableSorting()" :class="['btn', 'reset-table-sorting']">
+                        <font-awesome-icon icon="list-ol" />
+                    </button>
+                </b-button-group>
+
                 <b-button-group>
                     <button @click="$store.commit('setFieldCheckLayout', 'table')" :class="['btn', {active: layout == 'table'}]">
                         <font-awesome-icon icon="bars" />
@@ -34,8 +40,8 @@
         </b-row>
 
         <div class="result_box">
-            <FieldCheckTable v-if="layout == 'table'" :stats="stats" v-on:field-check-detail="detail" />
-            <FieldCheckTree v-else-if="layout == 'tree'" :stats="stats" v-on:field-check-detail="detail" />
+            <FieldCheckTable v-if="layout == 'table'" v-on:field-check-detail="detail" ref="field-check-table" />
+            <FieldCheckTree v-else-if="layout == 'tree'" v-on:field-check-detail="detail" ref="field-check-tree" />
         </div>
     </dashboard>
 </template>
@@ -50,27 +56,41 @@ export default {
     data: function() {
         return {
             search: null
-        }
+        };
     },
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
-        stats: function() {
-            return this.$store.getters.fieldLevelStats
-        },
         layout: function() {
-            return this.$store.getters.fieldCheckLayout
+            return this.$store.getters.fieldCheckLayout;
         }
     },
+    mounted: function() {
+        this.search = this.$store.getters.fieldCheckSearch;
+    },
     methods: {
-        detail(path) {
+        detail: function(path) {
             this.$router.push({
                 name: "fieldCheckDetail",
                 params: { path: path }
             });
+        },
+        resetTableSorting: function() {
+            this.$refs["field-check-table"].resetSorting();
+        },
+        submitSearch: function() {
+            this.$store.commit("setFieldCheckSearch", this.search);
         }
     }
 };
 </script>
+
+<style lang="scss">
+@import "src/scss/_variables";
+
+mark {
+    background-color: $primary !important;
+}
+</style>
 
 <style scoped lang="scss">
 @import "src/scss/main";
@@ -83,12 +103,17 @@ export default {
     margin-top: 15px;
     margin-bottom: 15px;
 
+    .btn-group {
+        margin-left: 15px;
+    }
+
     button {
         background-color: transparent;
         border-color: $text-color;
         color: $text-color;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
             border-color: $primary;
             color: $primary;
         }
@@ -99,6 +124,7 @@ export default {
     .input-group-text {
         background-color: transparent;
         border-right: none;
+        cursor: pointer;
     }
     input {
         background-color: transparent;

@@ -9,6 +9,7 @@ import Time from './views/Time.vue'
 import ResourceCheckDetail from './views/ResourceCheckDetail.vue'
 import DatasetCheckDetail from './views/DatasetCheckDetail.vue'
 import FieldCheckDetail from './views/FieldCheckDetail.vue'
+import TimeVarianceCheckDetail from './views/TimeVarianceCheckDetail.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -61,6 +62,10 @@ export default new Router({
                 store.dispatch('loadFieldLevelCheckDetail', to.params.path);
                 next();
             }
-        }
+        }, {
+            path: '/time/detail/:check',
+            name: 'timeVarianceCheckDetail',
+            component: TimeVarianceCheckDetail
+        },
     ]
 })

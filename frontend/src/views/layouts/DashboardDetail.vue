@@ -32,6 +32,12 @@ export default {
 .preview {
     background-color: white;
     position: relative;
+    font-size: 12px;
+}
+
+.vjs-tree {
+    font-family: $font-family-mono;
+    font-size: 13px;
 }
 
 .examples .divider {

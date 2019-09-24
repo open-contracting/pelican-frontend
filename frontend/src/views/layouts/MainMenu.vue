@@ -52,16 +52,17 @@
                         </router-link>
                     </b-nav-item>
 
-                    <!-- <li class="nav-item">
-                <a class="nav-link active" href="#">
-                    <router-link to="/time">
-                        <span class="menu_icon_small">
-                            <font-awesome-icon icon="history" />
-                        </span>
-                        {{ $t("sections.time").toUpperCase() }}
-                    </router-link>
-                </a>
-                    </li>-->
+                    <b-nav-item class="nav-item" to="/time" :disabled="!timeVarianceLoaded">
+                        <router-link to="/time">
+                            <span v-if="timeVarianceLoaded" class="menu_icon_small">
+                                <font-awesome-icon icon="history" />
+                            </span>
+                            <span v-else class="menu_icon_spinner">
+                                <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                            </span>
+                            {{ $t("sections.time").toUpperCase() }}
+                        </router-link>
+                    </b-nav-item>
                 </b-nav>
             </div>
         </div>
@@ -135,6 +136,6 @@ export default {
     left: 0px;
     bottom: 0px;
     overflow-y: scroll;
-    padding: 30px;
+    padding: 50px 30px 30px 30px;
 }
 </style>

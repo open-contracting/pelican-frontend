@@ -1,35 +1,56 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header").toUpperCase() }}</h3>
+        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("sections.overview") }}</h2>
         <div class="row">
             <div class="col-12 col-md-6">
                 <overview-card :title="$t('overview.collection_metadata')" class="collection_metadata">
                     <table v-if="collection" class="table">
                         <tbody>
-                            <tr><td>{{ $t('overview.publisher')}}</td><td>{{ collection.publisher }}</td></tr>
-                            <tr><td>URL</td><td><a v-if="collection.url" :href="collection.url" target="_blank">{{ collection.url }}</a></td></tr>
-                            <tr><td>OCID Prefix</td><td>{{ collection.ocid_prefix }}</td></tr>
+                            <tr>
+                                <td>{{ $t('overview.publisher')}}</td>
+                                <td>{{ collection.publisher }}</td>
+                            </tr>
+                            <tr>
+                                <td>URL</td>
+                                <td>
+                                    <a v-if="collection.url" :href="collection.url" target="_blank">{{ collection.url }}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>OCID Prefix</td>
+                                <td>{{ collection.ocid_prefix }}</td>
+                            </tr>
                             <tr>
                                 <td>{{ $t('overview.datalicense')}}</td>
-                                <td><a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a></td>
+                                <td>
+                                    <a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a>
+                                </td>
                             </tr>
                             <tr>
                                 <td>{{ $t('overview.extensions')}}</td>
                                 <td>
                                     <template v-for="(e, i) in collection.extensions">
-                                        <a v-if="e.documentationUrl" :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
-                                           :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name" target="_blank">
-                                           {{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}
-                                        </a>
+                                        <a
+                                            v-if="e.documentationUrl"
+                                            :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
+                                            :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
                                         <template v-else>{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
-                                        
-                                        <template v-if="i + 1 < collection.extensions.length">, </template>                                 
+
+                                        <template v-if="i + 1 < collection.extensions.length">,</template>
                                     </template>
                                 </td>
                             </tr>
-                            <tr><td>{{ $t('overview.publishedFrom')}}</td><td>{{ collection.published_from }}</td></tr>
-                            <tr><td>{{ $t('overview.publishedTo')}}</td><td>{{ collection.published_to }}</td></tr>
+                            <tr>
+                                <td>{{ $t('overview.publishedFrom')}}</td>
+                                <td>{{ collection.published_from }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $t('overview.publishedTo')}}</td>
+                                <td>{{ collection.published_to }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </overview-card>
@@ -38,17 +59,32 @@
                 <overview-card :title="$t('overview.kingfisher_metadata')" class="kingfisher_metadata">
                     <table v-if="kingfisher" class="table">
                         <tbody>
-                            <tr><td>{{ $t('overview.collectionId')}}</td><td>{{ kingfisher.collection_id }}</td></tr>
-                            <tr><td>{{ $t('overview.processingFrom')}}</td><td>{{ kingfisher.processing_start }}</td></tr>
-                            <tr><td>{{ $t('overview.processingTo')}}</td><td>{{ kingfisher.processing_end }}</td></tr>
+                            <tr>
+                                <td>{{ $t('overview.collectionId')}}</td>
+                                <td>{{ kingfisher.collection_id }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $t('overview.processingFrom')}}</td>
+                                <td>{{ kingfisher.processing_start }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $t('overview.processingTo')}}</td>
+                                <td>{{ kingfisher.processing_end }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </overview-card>
                 <overview-card :title="$t('overview.dqt_metadata')" class="dqt_metadata">
                     <table v-if="data_quality" class="table">
-                        <tbody>                            
-                            <tr><td>{{ $t('overview.processingFrom')}}</td><td>{{ data_quality.processing_start }}</td></tr>
-                            <tr><td>{{ $t('overview.processingTo')}}</td><td>{{ data_quality.processing_end }}</td></tr>
+                        <tbody>
+                            <tr>
+                                <td>{{ $t('overview.processingFrom')}}</td>
+                                <td>{{ data_quality.processing_start }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $t('overview.processingTo')}}</td>
+                                <td>{{ data_quality.processing_end }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </overview-card>
@@ -59,24 +95,26 @@
                 <overview-card v-if="compiled_releases" :title="$t('overview.compiled_releases.title')" blank class="compiled_releases">
                     <template>
                         <h5 class="text-nowrap">{{ $t('overview.compiled_releases.value_label') }}</h5>
-                        <div class="value"><strong>{{ compiled_releases.total_unique_ocids | formatNumber }}</strong></div>
+                        <div class="value">
+                            <strong>{{ compiled_releases.total_unique_ocids | formatNumber }}</strong>
+                        </div>
                     </template>
                 </overview-card>
             </div>
             <div class="col">
                 <overview-card v-if="lifecycle" blank class="lifecycle" :title="$t('overview.lifecycle.title')" :info="$t('overview.lifecycle.info')">
                     <div class="row">
-                        <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']">                            
+                        <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']">
                             <div class="col mx-auto text-center" :key="n">
                                 <div class="label">{{ $t("overview.lifecycle." + n) }}</div>
                                 <div class="icon mx-auto"></div>
-                                <div class="value"><strong>{{ lifecycle[n] | formatNumber }}</strong></div>
+                                <div class="value">
+                                    <strong>{{ lifecycle[n] | formatNumber }}</strong>
+                                </div>
                             </div>
-                            <div v-if="n != 'implementation'" class="col align-self-center" :key="n + '-arrow'">
-                                --------------->
-                            </div>
+                            <div v-if="n != 'implementation'" class="col align-self-center" :key="n + '-arrow'">---------------></div>
                         </template>
-                    </div>                    
+                    </div>
                 </overview-card>
             </div>
         </div>
@@ -109,14 +147,16 @@
                             </tr>
                         </tbody>
                     </table>
-                </overview-card>               
+                </overview-card>
             </div>
             <div class="col-12 col-md-6">
                 <overview-card v-if="period" :title="$t('overview.period.title')" class="period">
                     <h5>{{ $t('overview.period.subtitle') }}</h5>
                     <p>{{ $t('overview.period.description') }}</p>
-                    <div>                        
-                        <GChart type="ColumnChart" :data="period_histogram"
+                    <div>
+                        <GChart
+                            type="ColumnChart"
+                            :data="period_histogram"
                             :options="{
                                 legend: 'none',
                                 bar: {groupWidth: '95%'},
@@ -124,7 +164,7 @@
                                 hAxis: {
                                     baselineColor: 'transparent',
                                     gridlines: {
-                                        color: 'transparent'                                        
+                                        color: 'transparent'
                                     },
                                     showTextEvery: parseInt(period_histogram.length / 2.1),
                                     slantedText: false
@@ -132,81 +172,98 @@
                                 vAxis: {
                                     baselineColor: 'transparent',
                                     gridlines: {
-                                        color: 'transparent'                                        
+                                        color: 'transparent'
                                     }
                                 }
-                            }"/>                        
+                            }"
+                        />
                     </div>
-                </overview-card>               
+                </overview-card>
             </div>
         </div>
-    </dashboard>    
+    </dashboard>
 </template>
 
 <script>
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import OverviewCard from "@/components/OverviewCard.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
-import { GChart } from 'vue-google-charts';
-
+import { GChart } from "vue-google-charts";
 
 export default {
     name: "overview",
     components: { Dashboard, OverviewCard, ProgressBar, GChart },
     computed: {
         dataset: function() {
-            return this.$store.getters.dataset
+            return this.$store.getters.dataset;
         },
         collection: function() {
-            return this.getMetaData('collection_metadata')
+            return this.getMetaData("collection_metadata");
         },
         kingfisher: function() {
-            return this.getMetaData('kingfisher_metadata')
+            return this.getMetaData("kingfisher_metadata");
         },
         data_quality: function() {
-            return this.getMetaData('data_quality_tool_metadata')
+            return this.getMetaData("data_quality_tool_metadata");
         },
         compiled_releases: function() {
-            return this.getMetaData('compiled_releases')
+            return this.getMetaData("compiled_releases");
         },
         lifecycle: function() {
-            return this.getMetaData('tender_lifecycle')
+            return this.getMetaData("tender_lifecycle");
         },
         prices: function() {
-            return this.getMetaData('prices')
+            return this.getMetaData("prices");
         },
         period: function() {
-            return this.getMetaData('period')
+            return this.getMetaData("period");
         },
         period_histogram: function() {
-            var hist = [["date","count"]]
+            var hist = [["date", "count"]];
             if (this.period) {
-                this.period.forEach(function(p) { 
-                    hist.push([p.date_str, p.count]) 
-                })
+                this.period.forEach(function(p) {
+                    hist.push([p.date_str, p.count]);
+                });
             }
-            return hist
+            return hist;
         }
     },
     methods: {
         getMetaData: function(type) {
-            return this.dataset && this.dataset.meta ? this.dataset.meta[type] : null
+            return this.dataset && this.dataset.meta
+                ? this.dataset.meta[type]
+                : null;
         },
         getPriceCategoryLabel(categoryId) {
             if (categoryId == "0_10000") {
-                return "$" + this.formatNumber(0) + " - $" + this.formatNumber(10000)
+                return (
+                    "$" +
+                    this.formatNumber(0) +
+                    " - $" +
+                    this.formatNumber(10000)
+                );
             } else if (categoryId == "10001_100000") {
-                return "$" + this.formatNumber(10001) + " - $" + this.formatNumber(100000)
+                return (
+                    "$" +
+                    this.formatNumber(10001) +
+                    " - $" +
+                    this.formatNumber(100000)
+                );
             } else if (categoryId == "100001_1000000") {
-                return "$" + this.formatNumber(100001) + " - $" + this.formatNumber(1000000)
-            }  else if (categoryId == "1000001+") {
-                return "$" + this.formatNumber(1000001) + "+"
+                return (
+                    "$" +
+                    this.formatNumber(100001) +
+                    " - $" +
+                    this.formatNumber(1000000)
+                );
+            } else if (categoryId == "1000001+") {
+                return "$" + this.formatNumber(1000001) + "+";
             }
 
-            return categoryId
+            return categoryId;
         },
         formatNumber(number) {
-            return this.$options.filters.formatNumber(number)
+            return this.$options.filters.formatNumber(number);
         }
     }
 };
@@ -218,7 +275,8 @@ export default {
 .overview_card * {
     color: $text-color;
 }
-.compiled_releases, .lifecycle {
+.compiled_releases,
+.lifecycle {
     .result_box {
         padding: 0 !important;
     }
@@ -228,7 +286,9 @@ export default {
     }
 }
 
-.collection_metadata, .kingfisher_metadata, .dqt_metadata {
+.collection_metadata,
+.kingfisher_metadata,
+.dqt_metadata {
     .table tr:first-of-type td {
         border-top: none;
     }
@@ -270,7 +330,7 @@ export default {
             border-bottom: none;
             color: $headings_light_color;
             font-size: 12px;
-        }        
+        }
     }
 
     .table tr:first-of-type td {
@@ -280,7 +340,7 @@ export default {
     .share_progressbar {
         .value {
             margin-right: 10px;
-            color: $headings_light_color
+            color: $headings_light_color;
         }
     }
 
@@ -307,11 +367,11 @@ export default {
 
     h4 {
         margin-bottom: 20px;
-        margin-top: 20px
+        margin-top: 20px;
     }
 
     .value {
-        font-size: 20px;        
+        font-size: 20px;
     }
 
     .row {

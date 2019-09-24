@@ -425,7 +425,8 @@ export const messages = {
                 quality: "QUALITY"
             }
         },
-        search: "Search object by name"
+        search: "Search object by name",
+        hidden: "Another {n} checks was hidden"
     },
     fieldDetail: {
         checks: "checks",
@@ -441,5 +442,38 @@ export const messages = {
         quality: {
             label: "Quality"
         }
+    },
+    timeLevel: {
+        checkResult: "Check result",
+        coverageResult: "Coverage result",
+        subheadline: "All Time Variance Level Checks",
+        coverage: {
+            header: "Contracting realeases processed:",
+            ok: "Ok",
+            failed: "Not included"
+        },
+        check: {
+            header: "Contracting realeases checked:",
+            ok: "Ok",
+            failed: "Failed"
+        },
+        phase_stable: {
+            name: "Phase stability",
+            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools.",
+            descriptionLong: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+
+        },
+        ocid: {
+            name: "OCID existence",
+            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools.",
+            descriptionLong: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+
+        },
+        tender_title: {
+            name: "Tender title stability",
+            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools.",
+            descriptionLong: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+
+        },
     }
 }

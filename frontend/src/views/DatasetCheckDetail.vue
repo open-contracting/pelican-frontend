@@ -1,7 +1,7 @@
 <template>
     <dashboard-detail>
         <template v-if="check != null" v-slot:content>
-            <h3>{{ $t("header").toUpperCase() }}</h3>
+            <h3>{{ $t("header") }}</h3>
             <div class="row">
                 <div class="col col-10">
                     <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
@@ -11,7 +11,7 @@
                     <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
                 </div>
             </div>
-            <p v-html=" $t('datasetLevel.' + check.name + '.description')"></p>
+            <p v-html=" $t('datasetLevel.' + check.name + '.description_long')"></p>
 
             <div class="result_box">
                 <div v-if="checkType == 'bar'">
