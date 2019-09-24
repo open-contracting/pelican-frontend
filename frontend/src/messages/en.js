@@ -99,7 +99,7 @@ export const messages = {
             contracts_value: {
                 name: "Contracts value distribution",
                 description: "If sum of 1% of top contract values is more than 50% of sum of all contract values it may indicate some insanely high published numbers.",
-                description_long: "Checks that the sum of the top 1% of contracts[i].value values is < 50%. Displays share of each interval of top values on the overall contracts value."
+                description_long: "This check processes all <i>contract[i].value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all contracts values converted to USD.</li><li>It orders all value in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount</li></ul>. For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
@@ -126,7 +126,7 @@ export const messages = {
                 description: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases",
                 description_long: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases"
             },
-            contract_status: {
+            contracts_status: {
                 name: "Contract status distribution",
                 description: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases",
                 description_long: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases"
@@ -156,6 +156,11 @@ export const messages = {
                 description: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation",
                 description_long: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation"
             },
+            document_document_type: {
+                name: "Document type distribution",
+                description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+            },
         },
         unique: {
             ok: "All values are unique.",
@@ -168,8 +173,8 @@ export const messages = {
         misc: {
             url_availability: {
                 name: "URL availability",
-                description: "This check examines a random sample of URLs collected accross the whole data collection a tests whether request to these URL returns valid response",
-                description_long: "This check examines a random sample of URLs collected accross the whole data collection a tests whether request to these URL returns valid response"
+                description: "This check examines a random sample of URLs collected accross the whole data collection and tests whether requests to these URLs returns valid response. This check passes if all responses are valid.",
+                description_long: "This check examines a random sample of URLs collected accross the whole data collection and tests whether requests to these URLs returns valid response. This check passes if all responses are valid"
             }
         },
         consistent: {
