@@ -8,6 +8,7 @@ class Dataset(Model):
     id = BigAutoField(primary_key=True)
     name = CharField(max_length=255, blank=False)
     meta = JSONField()
+    ancestor_id = BigIntegerField(blank=True, null=True)
     created = DateTimeField(blank=True, null=True)
     modified = DateTimeField(blank=True, null=True)
 
