@@ -15,10 +15,10 @@
                 <b-input-group class="search_input">
                     <template v-slot:prepend>
                         <b-input-group-text>
-                            <font-awesome-icon icon="search" @click="submitSearch" />
+                            <font-awesome-icon icon="search"/>
                         </b-input-group-text>
                     </template>
-                    <b-form-input v-model="search" :placeholder="$t('field.search')" @keyup.enter="submitSearch" />
+                    <b-form-input v-model="search" :placeholder="$t('field.search')" />
                 </b-input-group>
             </b-col>
             <b-col class="text-right">
@@ -55,8 +55,25 @@ export default {
     name: "field",
     data: function() {
         return {
-            search: null
+            search: null,
+            submitPrepared: false
         };
+    },
+    watch: {
+        search: function(value) {
+            if (value === null || value === "") {
+                this.$store.commit("setFieldCheckSearch", null)
+            } else {
+                if (!this.submitPrepared) {
+                    setTimeout(() => {
+                        this.submitSearch()
+                        this.submitPrepared = false
+                    }, 300)
+
+                    this.submitPrepared = true
+                }
+            }            
+        }
     },
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
@@ -124,7 +141,6 @@ mark {
     .input-group-text {
         background-color: transparent;
         border-right: none;
-        cursor: pointer;
     }
     input {
         background-color: transparent;
