@@ -1,6 +1,5 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("sections.time") }}</h2>
         <h4>{{ $t("timeLevel.subheadline") }}</h4>
         <div class="row">

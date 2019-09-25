@@ -61,7 +61,8 @@ export default {
 </script>
 
 <style>
-.label {
+.table td.label {
     width: 80px;
+    padding-top: 7px;
 }
 </style>

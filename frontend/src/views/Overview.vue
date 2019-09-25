@@ -1,6 +1,5 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("sections.overview") }}</h2>
         <div class="row">
             <div class="col-12 col-md-6">

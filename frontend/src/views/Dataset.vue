@@ -1,6 +1,5 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("sections.dataset") }}</h2>
         <span v-if="loaded">
             <h4>{{ $t("datasetLevel.subheadline") }}</h4>

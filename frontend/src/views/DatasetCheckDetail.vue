@@ -1,7 +1,6 @@
 <template>
     <dashboard-detail>
         <template v-if="check != null" v-slot:content>
-            <h3>{{ $t("header") }}</h3>
             <div class="row">
                 <div class="col col-10">
                     <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>

@@ -1,6 +1,5 @@
 <template>
     <plain>
-        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("sections.home") }}</h2>
         <div class="result_box">
             <DatasetPicker />

@@ -7,13 +7,13 @@
         <div class="card-body">
             <div class="row no-gutters">
                 <div class="col col-2 col-sm-2 col-lg-1 text-left">
-                    <span v-if="check.result == true" class="ok_icon">
+                    <span v-if="check.result == true" class="result_icon ok_icon">
                         <font-awesome-icon :icon="['far', 'check-circle']" />
                     </span>
-                    <span v-if="check.result == false" class="failed_icon">
+                    <span v-if="check.result == false" class="result_icon failed_icon">
                         <font-awesome-icon :icon="['far', 'times-circle']" />
                     </span>
-                    <span v-if="check.result == undefined" class="undefined_icon">
+                    <span v-if="check.result == undefined" class="result_icon undefined_icon">
                         <font-awesome-icon :icon="['far', 'question-circle']" />
                     </span>
                 </div>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="card-body">
-            <div class="row justify-content-end">
+            <div class="row no-gutters justify-content-end">
                 <div class="col col-10 col-sm-10 col-lg-11">
                     <div class="chartEnvelope text-center" v-if="check.result == undefined">
                         <img class="undefined_image" src="/img/unsufficient_data.png" />
@@ -54,7 +54,7 @@
 
                         <div class="top3" v-if="checkType == 'top3'">
                             <div class="chartEnvelope">
-                                <table class="table table-sm">
+                                <table id="top3_table" class="table table-sm">
                                     <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                         <td>{{ item.value_str }}</td>
                                         <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
@@ -121,6 +121,14 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/variables";
 
+.result_icon {
+    font-size: 16px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
 .check_headline {
     overflow-wrap: break-word;
 }
@@ -156,6 +164,10 @@ export default {
 
 .undef {
     background-color: #fafbff;
+    filter: alpha(opacity=60);
+    -moz-opacity: 0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
 }
 
 .undefined_title {
@@ -178,7 +190,7 @@ export default {
     font-weight: 700;
 }
 
-.top3 > .table > tr:nth-child(1) > td {
+#top3_table > tr:nth-child(1) > td {
     border-top: none;
 }
 

@@ -1,7 +1,6 @@
 <template>
     <dashboard-detail>
         <template v-if="check" v-slot:content>
-            <h3>{{ $t("header") }}</h3>
             <h2>{{ $t("fieldDetail." + check.path + ".name") }}</h2>
             <p class="description">{{ $t("fieldDetail." + check.path + ".description") }}</p>
 

@@ -1,7 +1,6 @@
 <template>
     <dashboard-detail>
         <template v-if="check" v-slot:content>
-            <h3>{{ $t("header") }}</h3>
             <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
             <p v-if="check">{{ $t("resourceLevel." + check.name + ".description") }}</p>
 
@@ -123,8 +122,4 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
-
-.label {
-    padding-top: 6px;
-}
 </style>

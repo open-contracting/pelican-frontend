@@ -1,6 +1,5 @@
 <template>
     <dashboard>
-        <h3>{{ $t("header") }}</h3>
         <h2>{{ $t("field.title") }}</h2>
         <div class="description">
             <p>{{ $t('field.description[0]') }}</p>

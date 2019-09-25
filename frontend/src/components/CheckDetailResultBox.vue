@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.label {
+.table td.label {
     padding-top: 8px;
 }
 </style>
