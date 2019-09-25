@@ -89,17 +89,17 @@ export const messages = {
             tender_value: {
                 name: "Tender value distribution",
                 description: "If sum of 1% of top tender values is more than 50% of sum of all tender values it may indicate some insanely high published numbers.",
-                description_long: "Checks that the sum of the top 1% of <i>tender.value</i> values is < 50%. Displays share of each interval of top values on the overall awards value."
+                description_long: "This check processes all <i>tender.value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all tenders values converted to USD.</li><li>It orders all values in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount.</li></ul> For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
             },
             awards_value: {
                 name: "Awards value distribution",
                 description: "If sum of 1% of top award values is more than 50% of sum of all award values it may indicate some insanely high published numbers.",
-                description_long: "Checks that the sum of the top 1% of <i>awards[i].value</i> values is < 50%. Displays share of each interval of top values on the overall awards value."
+                description_long: "This check processes all <i>awards[i].value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all awards values converted to USD.</li><li>It orders all values in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount.</li></ul> For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
             },
             contracts_value: {
                 name: "Contracts value distribution",
                 description: "If sum of 1% of top contract values is more than 50% of sum of all contract values it may indicate some insanely high published numbers.",
-                description_long: "Checks that the sum of the top 1% of contracts[i].value values is < 50%. Displays share of each interval of top values on the overall contracts value."
+                description_long: "This check processes all <i>contract[i].value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all contracts values converted to USD.</li><li>It orders all values in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount.</li></ul> For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
@@ -126,7 +126,7 @@ export const messages = {
                 description: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases",
                 description_long: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases"
             },
-            contract_status: {
+            contracts_status: {
                 name: "Contract status distribution",
                 description: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases",
                 description_long: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases"
@@ -156,6 +156,11 @@ export const messages = {
                 description: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation",
                 description_long: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation"
             },
+            document_document_type: {
+                name: "Document type distribution",
+                description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
+            },
         },
         unique: {
             ok: "All values are unique.",
@@ -168,8 +173,8 @@ export const messages = {
         misc: {
             url_availability: {
                 name: "URL availability",
-                description: "This check examines a random sample of URLs collected accross the whole data collection a tests whether request to these URL returns valid response",
-                description_long: "This check examines a random sample of URLs collected accross the whole data collection a tests whether request to these URL returns valid response"
+                description: "This check examines a random sample of URLs collected accross the whole data collection and tests whether requests to these URLs returns valid response. This check passes if all responses are valid.",
+                description_long: "This check examines a random sample of URLs collected accross the whole data collection and tests whether requests to these URLs returns valid response. This check passes if all responses are valid"
             }
         },
         consistent: {
@@ -182,8 +187,8 @@ export const messages = {
         reference: {
             related_process_identifier: {
                 name: "Related processes identifier reference",
-                description: "If compiled release references to some related process using <i>ocid</i>scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection",
-                description_long: "If compiled release references to some related process using <i>ocid</i>scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection"
+                description: "If compiled release references to some related process using <i>ocid</i> scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection",
+                description_long: "If compiled release references to some related process using <i>ocid</i> scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection"
             }
         },
         numeric: {
@@ -214,38 +219,38 @@ export const messages = {
             },
             tender_status: {
                 name: "Tender status - awards and contracts",
-                description: "Checks that there are no awards or contracts if the status of tender is planning, planned, active, cancelled, unsuccessful or withdrawn."
+                description: "Checks that there are no awards or contracts if the status of tender is <i>planning</i>, <i>planned</i>, <i>active</i>, <i>cancelled</i>, <i>unsuccessful</i> or <i>withdrawn</i>."
             },
             awards_status: {
                 name: "Awards status - contracts",
-                description: "Checks that there are no contracts for a given award if its status is pending, cancelled or unsuccessful."
+                description: "Checks that there are no contracts for a given award if its status is <i>pending</i>, <i>cancelled</i> or <i>unsuccessful</i>."
             },
             contracts_status: {
                 name: "Contract status - transactions",
-                description: "Checks that there are no transactions for a given contract if its status is pending, cancelled."
+                description: "Checks that there are no transactions for a given contract if its status is <i>pending</i>, <i>cancelled</i>."
             },
             milestone_status: {
                 name: "Milestone status - dateMet",
-                description: "Checks that dateMet is not set or is empty if milestone's status is either 'scheduled' or 'notMet'."
+                description: "Checks that dateMet is not set or is empty if milestone's status is either <i>scheduled</i> or <i>notMet</i>."
             },
             value_realistic: {
                 name: "Realisitic value",
                 description: "Checks whether the value's amount converted to USD is between -5 billion USD and 5 billion USD"
             },
             dates: {
-                name: "Realisitic value",
-                description: "Checks the logical chain of dates within a contracting process. Tender's tenderPeriod has to end before tender's contractPeriod starts. It also has to end before any award is awarded or any contract is signed. All contracts signature date as well as awards dates has to be lower or equal to the compiled release's date. A contract cannot be signed before the related award is awarded. Each contract has to be signed before any transaction for this contract happens."
+                name: "Coherent dates",
+                description: "Checks the logical chain of dates within a contracting process. Tender's tenderPeriod has to end before tender's contractPeriod starts. It also has to end before any award is awarded or any contract is signed. All contracts signature dates as well as awards dates has to be lower or equal to the compiled release's date. A contract cannot be signed before the related award is awarded. Each contract has to be signed before any transaction for this contract happens. Following pairs of dates are being compared if both are available (first has to be lower or the second): <ul><li>tender.tenderPeriod.endDate, tender.contractPeriod.startDate</li><li>tender.tenderPeriod.endDate, any contracts[i].dateSigned</li><li>any contracts[i].dateSigned, date</li><li>tender.tenderPeriod.endDate, any awards[i].date</li><li>any awards[i].date, date</li><li>awards[i].date, contracts[j].dateSigned - only pairs where awards[i].id = contracts[j].awardID</li><li>contracts[i].dateSigned, contracts[i].implementation.transactions[j].date - only compare transactions that relates to the specific contract (those that are nested in a particular contract object)</li></ul>"
             },
             milestones_dates: {
-                name: "Contracting process dates",
+                name: "Milestones dates",
                 description: "Checks that the date when a milestone was met is after the date when it was last modified. Both dates have to be lower or equal to the compiled release's date"
             },
             amendments_dates: {
                 name: "Amendment dates",
                 description: "Depending to which phase of contracting process the specific amendment belongs it checks that it was amended after tender period started or after the particular award was awarded or after the particular contract was signed. All date also has to be lower or equal to the compiled release's date"
             },
-            document_dates: {
-                name: "Document dates",
+            documents_dates: {
+                name: "Documents dates",
                 description: "Checks that the publication date of a document is lower or equal to the modification date and that both are lower or equal to the compiled release's date"
             },
         },
@@ -261,15 +266,15 @@ export const messages = {
             },
             contracts_value: {
                 name: "Contracts value - award value",
-                description: "Compares a total value of all contracts related to one award. The sum of all relevant contract values does not differ from the matching award's value by more than 50%"
+                description: "Compares a total value of all contracts related to one award and checks that the sum of all relevant contract values does not differ from the matching award's value by more than 50%. All considered values either have the same currency or can be converted to USD using compiled releases <i>date</i> field."
             },
             contracts_implementation_transactions_value: {
                 name: "Contract value - transactions value",
-                description: "Compares a total value of all transactions related to one contract. The sum of all transaction values is less or equal to contract's value"
+                description: "Compares a total value of all transactions related to one contract and checks that the sum of all transaction values is less or equal to contract's value. All considered values either have the same currency or can be converted to USD using compiled releases <i>date</i> field."
             },
-            parties_role: {
+            parties_roles: {
                 name: "Parties roles",
-                description: "Examines whether parties are assigned to correct roles by checking that a given party is also referenced from a correct place in a compiled release. For example when a party has a role 'supplier' it has to be referenced from at least one award's 'suppliers' array."
+                description: "Examines whether parties are assigned to correct roles by checking that a given party is also referenced from a correct place in a compiled release. For example when a party has a role 'supplier' it has to be referenced from at least one award's 'suppliers' array. Roles that are being tester are <ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul>"
             },
             period_duration_in_days: {
                 name: "Period duration",
@@ -435,7 +440,37 @@ export const messages = {
             }
         },
         quality: {
-            label: "Quality"
+            label: "Quality",
+            ocid_prefix_check: {
+                count_header: "Registered prefix"
+            },
+            date_time: {
+                count_header: "Realistic datetime"
+            },
+            email: {
+                count_header: "Email format"
+            },
+            identifier_scheme: {
+                count_header: "Identifier scheme"
+            },
+            telephone: {
+                count_header: "Telephone format"
+            },
+            document_description_length: {
+                count_header: "Document description length"
+            },
+            document_type: {
+                count_header: "Coherent document type"
+            },
+            document_format_codelist: {
+                count_header: "Document format"
+            },
+            number_checks: {
+                count_header: "Non-negative value"
+            },
+            language: {
+                count_header: "Two-letter lowercase ISO639-1 code"
+            }
         }
     },
     timeLevel: {
