@@ -147,6 +147,9 @@ export default new Vuex.Store({
                 state.fieldCheckExpandedNodes.push(path)
             }
         },
+        setFieldCheckExpandedNodes(state, nodes) {            
+            state.fieldCheckExpandedNodes = nodes
+        },
         removeFieldCheckExpandedNode(state, path) {
             state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter(v => !v.startsWith(path))
         },
@@ -340,6 +343,47 @@ export default new Vuex.Store({
             commit("setFieldCheckSearch", null);
             commit("collapseAllFieldCheckExpandedNodes"),
             commit("setFieldCheckLayout", "table");            
+        },
+        setExpandedNodesForSearch({ getters, commit }) {
+            if (getters.fieldLevelStats) {
+                commit("collapseAllFieldCheckExpandedNodes")
+
+                if (getters.fieldCheckSearch) {
+                    var nodes = []
+                    var remaining = []
+                    var search = getters.fieldCheckSearch.toLowerCase()
+                    // select paths that match the search
+                    getters.fieldLevelStats.forEach(n => {
+                        if (n.path.toLowerCase().includes(search)) {
+                            nodes.push(n.path)
+                        } else {
+                            remaining.push(n.path)
+                        }
+                    })
+
+                    // add parents
+                    remaining.forEach(n => {
+                        if (nodes.some(m => m.startsWith(n))) {
+                            nodes.push(n)
+                        }
+                    })
+                    
+                    // collapse matched nodes without matching child
+                    var matched = [...nodes]
+                    nodes = nodes.filter(n => {
+                        // keep parent without match
+                        if (!n.toLowerCase().includes(search)) {
+                            return true
+                        }
+                        
+                        return matched.some(m => {
+                            return m.startsWith(n + ".") && m.substr(n.length).toLowerCase().includes(search)
+                        })
+                    })
+
+                    commit("setFieldCheckExpandedNodes", nodes)
+                }
+            }        
         }
     }
 })

@@ -18,7 +18,7 @@
             </th>
         </thead>
         
-        <FieldCheckTreeNode v-for="n in tree" :key="n._path" :data="n" v-on:field-check-detail="emitDetailEvent"/>
+        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" v-on:field-check-detail="emitDetailEvent"/>
     </table>
 </template>
 
@@ -33,6 +33,11 @@ export default {
     },    
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
+    watch: {
+        search: function() {
+            this.$store.dispatch("setExpandedNodesForSearch")
+        }
+    },
     computed: {
         stats: function() {
             return this.$store.getters.fieldLevelStats
@@ -46,7 +51,7 @@ export default {
                 var node = root
                 n.path.split(".").forEach(function(p) {
                     if (!node.hasOwnProperty(p)) {
-                        node[p] = { "_path": (node._path ? node._path + "." : "") + p }
+                        node[p] = {}
                     }                    
                     node = node[p]
                 })
