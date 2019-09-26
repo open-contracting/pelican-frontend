@@ -181,7 +181,6 @@ export const messages = {
             related_process_title: {
                 name: "Related processes tile consistency",
                 description: "Related process reference should have the same title as the related process itself.",
-                description: "If two related processes with <i>ocid</i> scheme are detected it's tested that they have the same title. <i>relatedProcesses[i].title</i> or <i>contracts[i].relatedProcesses[j].title</i> is compared to tender.title of corresponding compiled release.",
                 description_long: "If two related processes with <i>ocid</i> scheme are detected it's tested that they have the same title. <i>relatedProcesses[i].title</i> or <i>contracts[i].relatedProcesses[j].title</i> is compared to tender.title of corresponding compiled release."
             }
         },
