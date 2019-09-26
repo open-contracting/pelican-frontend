@@ -1,4 +1,7 @@
+
+import time
 import random
+import intervals as I
 import simplejson as json
 
 from django.db.models import Count, Max, Min, Sum
@@ -221,7 +224,10 @@ def resource_level_stats(request, dataset_id):
 
 
 def resource_level_detail(request, dataset_id, check_name):
+    start_time = time.time()
+
     examples_cap = 20
+    fragments_cap = 20
     result = None
 
     with connections["data"].cursor() as cursor:
@@ -253,18 +259,191 @@ def resource_level_detail(request, dataset_id, check_name):
             return JsonResponse(result)
 
         # picking examples
-        passed_sampler = ReservoirSampler(examples_cap)
-        failed_sampler = ReservoirSampler(examples_cap)
-        undefined_sampler = ReservoirSampler(examples_cap)
-
         cursor.execute(
             """
-            select result->'meta' as meta, result->'checks'->%s as result
-            from resource_level_check
+            select min(id) as min_id, max(id) as max_id
+            from data_item
             where dataset_id = %s;
-            """, [check_name, dataset_id]
+            """, [dataset_id]
         )
+        min_id, max_id = cursor.fetchall()[0]
 
+        # passed
+        if result["passed_count"] <= examples_cap:
+            cursor.execute(
+                """
+                select id, result->'meta' as meta, result->'checks'->%s as result
+                from resource_level_check as main
+                where data_item_id >= %s and
+                      data_item_id <= %s and
+                      dataset_id = %s and
+                      result->'checks'->%s->'result' = 'true';
+                """, [check_name, min_id, max_id, dataset_id, check_name]
+            )
+            result["passed_examples"] = [
+                {
+                    "meta": row[1],
+                    "result": row[2]
+                }
+                for row in cursor.fetchall()
+            ]
+
+        else:
+            examples = []
+            intervals = I.closed(min_id, max_id)
+            randomness_switch = True
+            while len(examples) < examples_cap and not intervals.is_empty():
+                interval = random.choice(intervals)
+
+                if len(intervals) > fragments_cap:
+                    randomness_switch = False
+
+                start = random.randint(interval.lower, interval.upper) if randomness_switch else interval.lower
+                end = interval.upper
+
+                cursor.execute(
+                    """
+                    select id, result->'meta' as meta, result->'checks'->%s as result
+                    from resource_level_check as main
+                    where data_item_id >= %s and
+                        data_item_id <= %s and
+                        dataset_id = %s and
+                        result->'checks'->%s->'result' = 'true'
+                    limit 1;
+                    """, [check_name, start, end, dataset_id, check_name]
+                )
+                row = cursor.fetchone()
+
+                if row is not None:
+                    examples.append(
+                        {
+                            "meta": row[1],
+                            "result": row[2]
+                        }
+                    )
+                    intervals -= I.open(start - 1, row[0] + 1)
+                else:
+                    intervals -= I.open(start - 1, end + 1)
+
+            result["passed_examples"] = examples
+
+        # failed
+        if result["failed_count"] <= examples_cap:
+            cursor.execute(
+                """
+                select id, result->'meta' as meta, result->'checks'->%s as result
+                from resource_level_check as main
+                where data_item_id >= %s and
+                      data_item_id <= %s and
+                      dataset_id = %s and
+                      result->'checks'->%s->'result' = 'false';
+                """, [check_name, min_id, max_id, dataset_id, check_name]
+            )
+            result["failed_examples"] = [
+                {
+                    "meta": row[1],
+                    "result": row[2]
+                }
+                for row in cursor.fetchall()
+            ]
+
+        else:
+            examples = []
+            intervals = I.closed(min_id, max_id)
+            randomness_switch = True
+            while len(examples) < examples_cap and not intervals.is_empty():
+                interval = random.choice(intervals)
+
+                if len(intervals) > fragments_cap:
+                    randomness_switch = False
+
+                start = random.randint(interval.lower, interval.upper) if randomness_switch else interval.lower
+                end = interval.upper
+
+                cursor.execute(
+                    """
+                    select id, result->'meta' as meta, result->'checks'->%s as result
+                    from resource_level_check as main
+                    where data_item_id >= %s and
+                        data_item_id <= %s and
+                        dataset_id = %s and
+                        result->'checks'->%s->'result' = 'false'
+                    limit 1;
+                    """, [check_name, start, end, dataset_id, check_name]
+                )
+                row = cursor.fetchone()
+
+                if row is not None:
+                    examples.append(
+                        {
+                            "meta": row[1],
+                            "result": row[2]
+                        }
+                    )
+                    intervals -= I.open(start - 1, row[0] + 1)
+                else:
+                    intervals -= I.open(start - 1, end + 1)
+
+            result["failed_examples"] = examples
+
+        # undefined
+        if result["undefined_count"] <= examples_cap:
+            cursor.execute(
+                """
+                select id, result->'meta' as meta, result->'checks'->%s as result
+                from resource_level_check as main
+                where data_item_id >= %s and
+                      data_item_id <= %s and
+                      dataset_id = %s and
+                      result->'checks'->%s->'result' = 'null';
+                """, [check_name, min_id, max_id, dataset_id, check_name]
+            )
+            result["undefined_examples"] = [
+                {
+                    "meta": row[1],
+                    "result": row[2]
+                }
+                for row in cursor.fetchall()
+            ]
+
+        else:
+            examples = []
+            intervals = I.closed(min_id, max_id)
+            randomness_switch = True
+            while len(examples) < examples_cap and not intervals.is_empty():
+                interval = random.choice(intervals)
+
+                if len(intervals) > fragments_cap:
+                    randomness_switch = False
+
+                start = random.randint(interval.lower, interval.upper) if randomness_switch else interval.lower
+                end = interval.upper
+
+                cursor.execute(
+                    """
+                    select id, result->'meta' as meta, result->'checks'->%s as result
+                    from resource_level_check as main
+                    where data_item_id >= %s and
+                        data_item_id <= %s and
+                        dataset_id = %s and
+                        result->'checks'->%s->'result' = 'null'
+                    limit 1;
+                    """, [check_name, start, end, dataset_id, check_name]
+                )
+                row = cursor.fetchone()
+
+                if row is not None:
+                    examples.append(
+                        {
+                            "meta": row[1],
+                            "result": row[2]
+                        }
+                    )
+                    intervals -= I.open(start - 1, row[0] + 1)
+                else:
+                    intervals -= I.open(start - 1, end + 1)
+
+<<<<<<< HEAD
         while True:
             row = cursor.fetchone()
             if row is None:
@@ -287,6 +466,9 @@ def resource_level_detail(request, dataset_id, check_name):
         result["passed_examples"] = passed_sampler.retrieve_samples()
         result["failed_examples"] = failed_sampler.retrieve_samples()
         result["undefined_examples"] = undefined_sampler.retrieve_samples()
+=======
+            result["undefined_examples"] = examples
+>>>>>>> resource_level_detail view optimized
 
         # saving examples
         result["examples_filled"] = True
@@ -297,6 +479,8 @@ def resource_level_detail(request, dataset_id, check_name):
             where dataset_id = %s and type = 'resource_level_check';
             """, [json.dumps({check_name: result}), dataset_id]
         )
+
+    result["time"] = time.time() - start_time
 
     return JsonResponse(result)
 
