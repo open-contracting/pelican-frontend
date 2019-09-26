@@ -19,7 +19,8 @@ export default new Vuex.Store({
         fieldCheckLayout: "table",
         fieldCheckExpandedNodes: [],
         fieldCheckSorting: null,
-        fieldCheckSearch: null
+        fieldCheckSearch: null,
+        datasetSearch: null
     },
     getters: {
         dataset: (state) => {
@@ -103,6 +104,9 @@ export default new Vuex.Store({
         },
         fieldCheckSearch: (state) => {
             return state.fieldCheckSearch
+        },
+        datasetSearch: (state) => {
+            return state.datasetSearch
         }
     },
     mutations: {
@@ -167,6 +171,9 @@ export default new Vuex.Store({
         },
         setFieldCheckSearch(state, search) {
             state.fieldCheckSearch = search
+        },
+        setDatasetSearch(state, search) {
+            state.datasetSearch = search
         }
     },
     actions: {
