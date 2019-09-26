@@ -38,6 +38,11 @@ export default {
             this.$store.dispatch("setExpandedNodesForSearch")
         }
     },
+    mounted: function() {
+        if (this.search) {
+            this.$store.dispatch("setExpandedNodesForSearch")
+        }
+    },
     computed: {
         stats: function() {
             return this.$store.getters.fieldLevelStats
