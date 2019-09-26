@@ -56,29 +56,25 @@ export default {
     data: function() {
         return {
             search: null,
-            submitPrepared: false
+            submitTimeout: null
         };
     },
     watch: {
         search: function(value) {
-            if (value === null || value === "") {
-                this.$store.commit("setFieldCheckSearch", null)
-            } else {
-                if (!this.submitPrepared) {
-                    setTimeout(() => {
-                        this.submitSearch()
-                        this.submitPrepared = false
-                    }, 300)
-
-                    this.submitPrepared = true
-                }
-            }            
+            if (this.submitTimeout) {
+                clearTimeout(this.submitTimeout)
+            }
+              
+            this.submitTimeout = setTimeout(() => this.submitSearch(), this.submitTimeLimit)
         }
     },
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
         layout: function() {
             return this.$store.getters.fieldCheckLayout;
+        },
+        submitTimeLimit: function() {
+            return 400
         }
     },
     mounted: function() {
