@@ -125,7 +125,7 @@ export default {
             this.sortByProcessingOrder(this.tableData)
         },
         isSearched: function(check) {
-            return !this.search || (check && check.path.toLowerCase().includes(this.search.toLowerCase()))
+            return !this.search || (check && this.isPathSearched(check.path))
         }
     }
 };

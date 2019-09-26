@@ -345,16 +345,23 @@ export default new Vuex.Store({
             commit("setFieldCheckLayout", "table");            
         },
         setExpandedNodesForSearch({ getters, commit }) {
+            var isPathSearched = function(path) {
+                if (getters.fieldCheckSearch && path) {
+                    return path.toLowerCase().includes(getters.fieldCheckSearch.toLowerCase())
+                }           
+                
+                return false
+            }
+
             if (getters.fieldLevelStats) {
                 commit("collapseAllFieldCheckExpandedNodes")
 
                 if (getters.fieldCheckSearch) {
                     var nodes = []
                     var remaining = []
-                    var search = getters.fieldCheckSearch.toLowerCase()
                     // select paths that match the search
                     getters.fieldLevelStats.forEach(n => {
-                        if (n.path.toLowerCase().includes(search)) {
+                        if (isPathSearched(n.path)) {
                             nodes.push(n.path)
                         } else {
                             remaining.push(n.path)
@@ -363,7 +370,7 @@ export default new Vuex.Store({
 
                     // add parents
                     remaining.forEach(n => {
-                        if (nodes.some(m => m.startsWith(n))) {
+                        if (nodes.some(m => m.startsWith(n + "."))) {
                             nodes.push(n)
                         }
                     })
@@ -372,12 +379,12 @@ export default new Vuex.Store({
                     var matched = [...nodes]
                     nodes = nodes.filter(n => {
                         // keep parent without match
-                        if (!n.toLowerCase().includes(search)) {
+                        if (!isPathSearched(n)) {
                             return true
                         }
                         
                         return matched.some(m => {
-                            return m.startsWith(n + ".") && m.substr(n.length).toLowerCase().includes(search)
+                            return m.startsWith(n + ".") && isPathSearched(m.substr(n.length))
                         })
                     })
 

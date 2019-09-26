@@ -75,6 +75,13 @@ export default {
         },
         highlightSearch: function(str) {
             return this.search ? str.replace(new RegExp("(" + this.search + ")", "i"), '<mark>$1</mark>') : str
+        },
+        isPathSearched: function(path) {
+            if (this.search && path) {
+                return path.toLowerCase().includes(this.search.toLowerCase())
+            }           
+            
+            return false
         }       
     },
 };

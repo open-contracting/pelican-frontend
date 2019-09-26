@@ -81,7 +81,7 @@ export default {
         },
         isSearched: function(node) {            
             if (this.search) {
-                if (node._check.path.toLowerCase().includes(this.search.toLowerCase())) {
+                if (this.isPathSearched(node._check.path)) {
                     return true
                 } else {
                     return Object.values(this.getChildren(node)).some(n => this.isSearched(n))
