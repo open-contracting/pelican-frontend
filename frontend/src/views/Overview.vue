@@ -7,6 +7,12 @@
                     <table v-if="collection" class="table">
                         <tbody>
                             <tr>
+                                <td>{{ $t('overview.compiled_releases.value_label') }}</td>
+                                <td>
+                                    <span class="ocid_count">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>{{ $t('overview.publisher')}}</td>
                                 <td>{{ collection.publisher }}</td>
                             </tr>
@@ -89,37 +95,34 @@
                 </overview-card>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-auto">
-                <overview-card v-if="compiled_releases" :title="$t('overview.compiled_releases.title')" blank class="compiled_releases">
-                    <template>
-                        <h5 class="text-nowrap">{{ $t('overview.compiled_releases.value_label') }}</h5>
-                        <div class="value">
-                            <strong>{{ compiled_releases.total_unique_ocids | formatNumber }}</strong>
-                        </div>
-                    </template>
-                </overview-card>
-            </div>
-            <div class="col">
-                <overview-card v-if="lifecycle" blank class="lifecycle" :title="$t('overview.lifecycle.title')" :info="$t('overview.lifecycle.info')">
+            <div class="col col-12 lifecycle">
+                <h4>{{ $t('overview.lifecycle.title') }}</h4>
+                <div class="result_box">
                     <div class="row">
                         <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']">
-                            <div class="col mx-auto text-center" :key="n">
-                                <div class="label">{{ $t("overview.lifecycle." + n) }}</div>
-                                <div class="icon mx-auto"></div>
-                                <div class="value">
+                            <div class="col col-sm-2 col-md text-center lifecycle_phase" :key="n">
+                                <div class="lifecycle_label">{{ $t("overview.lifecycle." + n) }}</div>
+                                <div class="icon">
+                                    <img class="lifecycle_icon" v-bind:src="'/img/icons/' + n + '_icon.png'" />
+                                </div>
+                                <div class="lifecycle_value">
                                     <strong>{{ lifecycle[n] | formatNumber }}</strong>
                                 </div>
                             </div>
-                            <div v-if="n != 'implementation'" class="col align-self-center" :key="n + '-arrow'">---------------></div>
+                            <div v-if="n != 'implementation'" class="lifecycle_arrow" :key="n + '-arrow'">
+                                <font-awesome-icon icon="long-arrow-alt-right" />
+                            </div>
                         </template>
                     </div>
-                </overview-card>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6">
-                <overview-card v-if="prices" :title="$t('overview.prices.title')" :info="$t('overview.prices.info')" class="prices">
+            <div class="col-12 col-md-6 prices">
+                <h4>{{ $t('overview.prices.title') }}</h4>
+                <div class="result_box">
                     <h5>{{ $t('overview.prices.value_label') }}</h5>
                     <p>
                         <strong>$ {{ prices.total_volume_positive | formatNumber }}</strong>
@@ -146,10 +149,11 @@
                             </tr>
                         </tbody>
                     </table>
-                </overview-card>
+                </div>
             </div>
-            <div class="col-12 col-md-6">
-                <overview-card v-if="period" :title="$t('overview.period.title')" class="period">
+            <div class="col-12 col-md-6 period">
+                <h4>{{ $t('overview.period.title') }}</h4>
+                <div class="result_box">
                     <h5>{{ $t('overview.period.subtitle') }}</h5>
                     <p>{{ $t('overview.period.description') }}</p>
                     <div>
@@ -177,7 +181,7 @@
                             }"
                         />
                     </div>
-                </overview-card>
+                </div>
             </div>
         </div>
     </dashboard>
@@ -274,15 +278,9 @@ export default {
 .overview_card * {
     color: $text-color;
 }
-.compiled_releases,
-.lifecycle {
-    .result_box {
-        padding: 0 !important;
-    }
 
-    .row > div {
-        margin: 0 !important;
-    }
+.ocid_count {
+    font-size: 24px;
 }
 
 .collection_metadata,
@@ -354,36 +352,31 @@ export default {
     }
 }
 
-.lifecycle {
-    .icon {
-        height: 40px;
-        width: 40px;
-        background-color: $ok_color;
-        border-radius: 20px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
-
-    h4 {
-        margin-bottom: 20px;
-        margin-top: 20px;
-    }
-
-    .value {
-        font-size: 20px;
-    }
-
-    .row {
-        .col:first-of-type {
-            padding-left: 0;
-        }
-    }
-}
-
 .compiled_releases {
     .value {
         font-size: 40px;
     }
+}
+
+.lifecycle_phase {
+    margin-bottom: 20px;
+}
+
+.lifecycle_icon {
+    width: 35px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.lifecycle_arrow {
+    padding-top: 40px;
+}
+
+.lifecycle_value {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
 }
 </style>
 

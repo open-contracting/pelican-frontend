@@ -1,12 +1,15 @@
 <template>
-    <h3>
+    <h1>
+        <i>id</i>
+        {{ dataset.id }} |
         <span class="name">{{ dataset.name }}</span>
-        <br />
-        <i>id:</i>
-        {{ dataset.id }}
-        <i>created:</i>
+        |
+        <i>size</i>
+        {{ dataset.size | formatNumber}}
+        |
+        <i>created</i>
         {{ dataset.meta.data_quality_tool_metadata.processing_start }}
-    </h3>
+    </h1>
 </template>
 
 <script>

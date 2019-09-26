@@ -7,9 +7,7 @@
             </h4>
         </slot>
         <div :class="['content', 'result_box', {'blank': blank}]">
-            <div class="row">
-            <div class="col-11 mx-auto"><slot></slot></div>            
-            </div>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -32,12 +30,6 @@ export default {
     border: none;
 }
 
-h4 {
-    margin-bottom: 20px;
-    margin-top: 20px;
-    white-space: nowrap;
-}
-
 .info {
     color: $headings_light_color;
     cursor: pointer;
@@ -55,5 +47,5 @@ h4 {
 .info:hover {
     color: $text_color;
     border-color: $text-color;
-}    
+}
 </style>

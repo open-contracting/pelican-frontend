@@ -11,10 +11,11 @@ main {
     min-height: 100vh;
 }
 
-h3 {
+h1 {
     letter-spacing: 0.12px;
     font-size: 13px;
     font-family: $font-family-thin;
+    margin-bottom: 41px;
 }
 
 h2 {
@@ -27,7 +28,7 @@ h4 {
     color: $headings_light_color;
     font-weight: 700;
     letter-spacing: 1px;
-    margin-top: 50px;
+    margin-top: 20px;
     text-transform: uppercase;
 }
 
@@ -37,7 +38,7 @@ h5 {
 }
 
 .main_content {
-    padding-top: 50px;
+    padding-top: 5px;
     padding-left: 30px;
     padding-right: 30px;
 }
