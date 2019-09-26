@@ -1,6 +1,6 @@
 <template>
     <fragment>
-        <FieldCheckTableRow :key="path" :check="check" v-show="!(hide || !isSearched(data))" @click.native="emitDetailEvent">
+        <FieldCheckTableRow :key="path" :check="check" v-show="!(hide || !isSearched(data))" @click.native="emitDetailEvent(path)">
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
                 <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
