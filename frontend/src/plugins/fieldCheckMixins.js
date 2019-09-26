@@ -5,6 +5,9 @@ export default {
     },
     computed: {
         search: function() {
+            return this.searchRaw ? this.searchRaw.toLowerCase() : null
+        },
+        searchRaw: function() {
             return this.$store.getters.fieldCheckSearch
         }
     },
@@ -74,7 +77,20 @@ export default {
             return a - b
         },
         highlightSearch: function(str) {
-            return this.search ? str.replace(new RegExp("(" + this.search + ")", "i"), '<mark>$1</mark>') : str
-        }       
+            if (!this.search) {
+                return str
+            }
+            // escape regex special characters
+            var search_esc = this.search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+            return str.replace(new RegExp("(" + search_esc + ")", "ig"), '<mark>$1</mark>')
+        },
+        isPathSearched: function(path) {
+            if (this.search && path) {
+                var path_lc = path.toLowerCase()                
+                return path_lc.includes(this.search)                
+            }
+
+            return false
+        }
     },
 };
