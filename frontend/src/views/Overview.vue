@@ -2,23 +2,24 @@
     <dashboard>
         <h2>{{ $t("sections.overview") }}</h2>
         <div class="row">
-            <div class="col-12 col-md-6">
-                <overview-card :title="$t('overview.collection_metadata')" class="collection_metadata">
+            <div class="col-12 col-xl-6">
+                <h4>{{ $t('overview.collection_metadata') }}</h4>
+                <div class="result_box collection_metadata">
                     <table v-if="collection" class="table">
                         <tbody>
                             <tr>
                                 <td>{{ $t('overview.compiled_releases.value_label') }}</td>
-                                <td>
+                                <td class="break_word">
                                     <span class="ocid_count">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>{{ $t('overview.publisher')}}</td>
-                                <td>{{ collection.publisher }}</td>
+                                <td class="break_word">{{ collection.publisher }}</td>
                             </tr>
                             <tr>
                                 <td>URL</td>
-                                <td>
+                                <td class="break_word">
                                     <a v-if="collection.url" :href="collection.url" target="_blank">{{ collection.url }}</a>
                                 </td>
                             </tr>
@@ -28,13 +29,13 @@
                             </tr>
                             <tr>
                                 <td>{{ $t('overview.datalicense')}}</td>
-                                <td>
+                                <td class="break_word">
                                     <a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td>{{ $t('overview.extensions')}}</td>
-                                <td>
+                                <td class="break_word">
                                     <template v-for="(e, i) in collection.extensions">
                                         <a
                                             v-if="e.documentationUrl"
@@ -58,41 +59,50 @@
                             </tr>
                         </tbody>
                     </table>
-                </overview-card>
+                </div>
             </div>
-            <div class="col-12 col-md-6">
-                <overview-card :title="$t('overview.kingfisher_metadata')" class="kingfisher_metadata">
-                    <table v-if="kingfisher" class="table">
-                        <tbody>
-                            <tr>
-                                <td>{{ $t('overview.collectionId')}}</td>
-                                <td>{{ kingfisher.collection_id }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.processingFrom')}}</td>
-                                <td>{{ kingfisher.processing_start }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.processingTo')}}</td>
-                                <td>{{ kingfisher.processing_end }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </overview-card>
-                <overview-card :title="$t('overview.dqt_metadata')" class="dqt_metadata">
-                    <table v-if="data_quality" class="table">
-                        <tbody>
-                            <tr>
-                                <td>{{ $t('overview.processingFrom')}}</td>
-                                <td>{{ data_quality.processing_start }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.processingTo')}}</td>
-                                <td>{{ data_quality.processing_end }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </overview-card>
+            <div class="col-12 col-xl-6">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-xl-12">
+                        <h4>{{ $t('overview.kingfisher_metadata') }}</h4>
+                        <div class="result_box collection_metadata kingfisher_metadata">
+                            <table v-if="kingfisher" class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $t('overview.collectionId')}}</td>
+                                        <td>{{ kingfisher.collection_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $t('overview.processingFrom')}}</td>
+                                        <td>{{ kingfisher.processing_start }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $t('overview.processingTo')}}</td>
+                                        <td>{{ kingfisher.processing_end }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl-12">
+                        <h4>{{ $t('overview.dqt_metadata') }}</h4>
+                        <div class="result_box collection_metadata kingfisher_metadata dqt_metadata">
+                            <table v-if="data_quality" class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $t('overview.processingFrom')}}</td>
+                                        <td>{{ data_quality.processing_start }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ $t('overview.processingTo')}}</td>
+                                        <td>{{ data_quality.processing_end }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -189,13 +199,12 @@
 
 <script>
 import Dashboard from "@/views/layouts/Dashboard.vue";
-import OverviewCard from "@/components/OverviewCard.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 import { GChart } from "vue-google-charts";
 
 export default {
     name: "overview",
-    components: { Dashboard, OverviewCard, ProgressBar, GChart },
+    components: { Dashboard, ProgressBar, GChart },
     computed: {
         dataset: function() {
             return this.$store.getters.dataset;

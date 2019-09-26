@@ -20,7 +20,8 @@
                     <td class="col-2 text-right numeric">{{ item.size | formatNumber }}</td>
                     <td class="col-1">{{ item.phase }}</td>
                     <td class="col-3 numeric text-right">
-                        {{ item.created }}<br>
+                        {{ item.created }}
+                        <br />
                         {{ item.modified }}
                     </td>
                     <td class="col-2">
