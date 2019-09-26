@@ -347,8 +347,10 @@ export default new Vuex.Store({
         setExpandedNodesForSearch({ getters, commit }) {
             var isPathSearched = function(path) {
                 if (getters.fieldCheckSearch && path) {
-                    return path.toLowerCase().includes(getters.fieldCheckSearch.toLowerCase())
-                }           
+                    var search_lc = getters.fieldCheckSearch.toLowerCase()
+                    var path_lc = path.toLowerCase()
+                    return path_lc.includes(search_lc)
+                }
                 
                 return false
             }
