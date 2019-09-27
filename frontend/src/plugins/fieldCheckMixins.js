@@ -1,8 +1,7 @@
+import sortMixins from "@/plugins/sortMixins.js";
+
 export default {
-    data: function() {
-        return {
-        };
-    },
+    mixins: [sortMixins],
     computed: {
         search: function() {
             return this.searchRaw ? this.searchRaw.toLowerCase() : null
@@ -12,13 +11,9 @@ export default {
         }
     },
     methods: {
-        sort: function(checks, comparator, sortedBy, asc = true) {
+        _sort: function(checks, comparator, sortedBy, asc = true) {
             if (checks != null) {
-                checks.sort(comparator)
-                if (!asc) {
-                    checks.reverse()
-                }
-
+                this.sort(checks, comparator, asc)                
                 this.$emit('field-check-table-sort', {by: sortedBy, asc: asc})
             }
         },
@@ -34,10 +29,10 @@ export default {
             }
         },
         sortByPath: function(checks, asc = true) {        
-            this.sort(checks, (a, b) => a.path.localeCompare(b.path), "path", asc)
+            this._sort(checks, (a, b) => a.path.localeCompare(b.path), "path", asc)
         },
         sortByCoverage: function(checks, asc = true) {
-            this.sort(checks, (a, b) => {
+            this._sort(checks, (a, b) => {
                 var comparison = this.compareNumbers(a.coverageOkShare, b.coverageOkShare)
                 if (comparison == 0) {
                     comparison = this.compareNumbers(a.coverage.total_count, b.coverage.total_count)
@@ -50,7 +45,7 @@ export default {
             }, "coverage", asc)
         },
         sortByQuality: function(checks, asc = true) {            
-            this.sort(checks, (a, b) => {
+            this._sort(checks, (a, b) => {
                 if (a.quality.total_count == 0) {
                     if (b.quality.total_count == 0) {
                         return a.path.localeCompare(b.path)
@@ -73,11 +68,8 @@ export default {
             }, "quality", asc)
         },
         sortByProcessingOrder: function(checks, asc = true) {
-            this.sort(checks, (a, b) => this.compareNumbers(a.processing_order, b.processing_order), "processingOrder", asc)
-        },
-        compareNumbers: function(a, b) {
-            return a - b
-        },
+            this._sort(checks, (a, b) => this.compareNumbers(a.processing_order, b.processing_order), "processingOrder", asc)
+        },        
         highlightSearch: function(str) {
             if (!this.search) {
                 return str
@@ -94,5 +86,5 @@ export default {
 
             return false
         }
-    },
+    }
 };

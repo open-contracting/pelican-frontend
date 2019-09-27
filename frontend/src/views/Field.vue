@@ -49,37 +49,28 @@
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
+import searchFieldMixins from "@/plugins/searchFieldMixins.js";
 
 export default {
     name: "field",
     data: function() {
         return {
-            search: null,
-            submitTimeout: null
         };
     },
-    watch: {
-        search: function(value) {
-            if (this.submitTimeout) {
-                clearTimeout(this.submitTimeout)
-            }
-              
-            this.submitTimeout = setTimeout(() => this.submitSearch(), this.submitTimeLimit)
-        }
-    },
+    mixins: [searchFieldMixins],    
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
         layout: function() {
             return this.$store.getters.fieldCheckLayout;
-        },
-        submitTimeLimit: function() {
-            return 400
-        }
-    },
-    mounted: function() {
-        this.search = this.$store.getters.fieldCheckSearch;
+        }        
     },
     methods: {
+        searchGetter: function() {
+            return this.$store.getters.fieldCheckSearch
+        },
+        searchSetter: function() {
+            this.$store.commit("setFieldCheckSearch", this.search)
+        },
         detail: function(path) {
             this.$router.push({
                 name: "fieldCheckDetail",
@@ -88,9 +79,6 @@ export default {
         },
         resetTableSorting: function() {
             this.$refs["field-check-table"].resetSorting();
-        },
-        submitSearch: function() {
-            this.$store.commit("setFieldCheckSearch", this.search);
         }
     }
 };
