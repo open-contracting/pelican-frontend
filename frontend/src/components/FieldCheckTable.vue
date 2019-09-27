@@ -166,5 +166,6 @@ export default {
 .hidden_row {
     color: $na_color;
     border-left: 2px solid $na_light_color;
+    background-color: #f9f9f9;
 }
 </style>
