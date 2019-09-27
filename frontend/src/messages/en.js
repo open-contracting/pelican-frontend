@@ -21,7 +21,8 @@ export const messages = {
         size: "items count",
         phase: "phase",
         selectDataset: "show",
-        search: "Search dataset by id"
+        search: "Search dataset by id",
+        timeVariance: "time variance checks"
     },
     unsufficientData: {
         title: "Unsufficient data",

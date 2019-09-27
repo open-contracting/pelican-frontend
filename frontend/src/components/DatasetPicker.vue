@@ -25,7 +25,7 @@
                     <th class="col-1 align-self-center clickable" @click="sortBy('size')">
                         <SortButtons :label="$t('dataset.size')" :active="sortedBy == 'size'" :asc="isAscendingSorted"
                             :on-asc="() => sortBy('size')" :on-desc="() => sortBy('size', false)" />
-                    <th class="col-3 align-self-center clickable" @click="sortBy('phase')">
+                    <th class="col-2 align-self-center clickable" @click="sortBy('phase')">
                         <SortButtons :label="$t('dataset.phase')" :active="sortedBy == 'phase'" :asc="isAscendingSorted"
                             :on-asc="() => sortBy('phase')" :on-desc="() => sortBy('phase', false)" />
                     </th>
@@ -37,20 +37,21 @@
                             <span class="modified">{{ $t("modified") }}</span>
                         </SortButtons>                        
                     </th>
-                    <th class="col">&nbsp;</th>
+                    <th class="col align-self-center text-left">{{ $t('dataset.timeVariance')}} </th>
                 </tr>
             </thead>
 
             <tbody>
                 <template v-for="(item, index) in datasets">
-                    <tr v-if="isSearched(item.name)" v-bind:key="index" @click="setDataset(item)" class="clickable d-flex align-items-center">
-                        <td class="col-4">{{ item.name }}</td>
+                    <tr v-if="isSearched(item.name)" v-bind:key="index" @click="setDataset(item)"
+                        :class="['clickable', 'd-flex', 'align-items-center', {disabled: !isDatasetImported(item)}]"
+                    >
+                        <td class="col-4">                            
+                            {{ item.name }}
+                            <span class="dataset_id">( {{ item.id }} )</span>
+                        </td>
                         <td class="col-1 numeric">{{ item.size | formatNumber }}</td>
-                        <td class="col-3 phase_cell">
-                            <!-- <ProgressBar v-if="item.state == 'FAILED'" :failed="getDatasetProgress(item)" />
-                            <ProgressBar v-else-if="item.phase == 'CHECKED' && item.state == 'OK'" :ok="100" />
-                            <ProgressBar v-else :value="getDatasetProgress(item)" /> -->
-
+                        <td class="col-2 phase_cell">
                             <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
                                 <font-awesome-icon :icon="['far', 'check-circle']" class="text-success"/> {{ item.phase }}
                             </template>
@@ -58,31 +59,26 @@
                                 <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger"/> {{ item.phase }}
                             </template>
                             <template v-else>
-                                <b-row class="progress_label">
+                                <b-row class="progress_label no-gutters">
                                     <b-col v-for="p in phases" :key="p">
-                                        <template v-if="p == item.phase">
-                                            <font-awesome-icon v-if="item.state == 'FAILED'" icon="exclamation-triangle" class="state-failed" />
-                                            {{ p }}
-                                        </template>
+                                        <template v-if="p == item.phase">{{ p }}</template>
                                     </b-col>
                                 </b-row>
 
                                 <ProgressBar  :value="getDatasetProgress(item)" />
                             </template>
                         </td>
-                        <td class="col numeric text-right">
+                        <td class="col numeric">
                             <span class="created">{{ item.created }}</span><br/>
                             <span class="modified">{{ item.modified }}</span>
                         </td>
-                        <td class="col text-right">
-                            <button v-if="item.ancestor_id" class="btn btn-sm btn-outline-primary time_varinace"
+                        <td class="col">
+                            <b-link v-if="item.ancestor_id" class="time_varinace break_word"
                                 @click.stop="setDataset(item, {name: 'time'})"
                                 :title="getDatasetName(item.ancestor_id)"
                             >
-                                <div class="d-flex align-items-center">
-                                    <font-awesome-icon icon="history"/><span class="label">{{ getDatasetName(item.ancestor_id) }}</span>
-                                </div>
-                            </button>
+                                <font-awesome-icon icon="history"/>{{ getDatasetName(item.ancestor_id) }}
+                            </b-link>
                         </td>
                     </tr>
                 </template>
@@ -148,6 +144,10 @@ export default {
             return !this.search || name.toLowerCase().includes(this.search.toLowerCase())
         },
         setDataset: function(dataset, route = {name: "overview"}) {
+            if (!this.isDatasetImported(dataset)) {
+                return
+            }
+
             this.loading = true;
             this.afterUpdateRoute = route
             if (this.$store.getters.datasetId != dataset.id) {
@@ -199,6 +199,9 @@ export default {
 
             this.sort(this.datasets, comp, asc)
             this.$store.commit('setDatasetSorting', {by: by, asc: asc})
+        },
+        isDatasetImported: function(dataset) {
+            return dataset.phase == 'CHECKED' && dataset.state == 'OK'
         }
     },
     mounted() {
@@ -225,12 +228,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "src/scss/main";
 
 table {
     tbody {
         tr {
             border-bottom: 1px solid $na_light_color;
+
+            &.disabled {
+                cursor: not-allowed;
+
+                a {
+                    cursor: not-allowed;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
         }
     }
 
@@ -250,8 +264,14 @@ table {
             color: $headings_light_color;
         }
 
-        &:nth-of-type(2), &:nth-of-type(4), &:nth-of-type(5) {
+        &:nth-of-type(4) {
             white-space: nowrap;
+        }
+
+        .dataset_id {
+            color: $na_color;
+            font-family: $font-family-thin;
+            font-size: 14px;
         }
     }
 
@@ -271,16 +291,13 @@ table {
         }
     }
 
-    .btn.time_varinace {
+    .time_varinace {
         font-family: $font-family-thin;
-
-        .label {
-            max-width: 100px;
-            display: inline-block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-left: 4px;
+        color: $primary;
+        max-width: 110px;
+        
+        svg {
+            margin-right: 4px;
         }
     }
 }
