@@ -53,10 +53,12 @@ export default {
             this.sort(checks, (a, b) => {
                 if (a.quality.total_count == 0) {
                     if (b.quality.total_count == 0) {
-                        a.path.localeCompare(b.path)
+                        return a.path.localeCompare(b.path)
                     }
 
-                    return asc ? 1 : -1;                        
+                    return asc ? 1 : -1;
+                } else if (b.quality.total_count == 0) {
+                    return asc ? -1 : 1;
                 }
 
                 var comparison = this.compareNumbers(a.qualityOkShare, b.qualityOkShare)
