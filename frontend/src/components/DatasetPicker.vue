@@ -9,7 +9,7 @@
                                 <font-awesome-icon icon="search"/>
                             </b-input-group-text>
                         </template>
-                        <b-form-input v-model="search" :placeholder="$t('field.search')" />
+                        <b-form-input v-model="search" :placeholder="$t('dataset.search')" />
                     </b-input-group>
                 </b-col>
             </b-row>
@@ -45,29 +45,42 @@
                 <template v-for="(item, index) in datasets">
                     <tr v-if="isSearched(item.name)" v-bind:key="index" @click="setDataset(item)" class="clickable d-flex align-items-center">
                         <td class="col-4">{{ item.name }}</td>
-                        <td class="col-1">{{ item.size | formatNumber }}</td>
-                        <td class="col-3">
-                            <b-row class="phase_row">
-                                <b-col v-for="p in phases" :key="p">
-                                    <template v-if="p == item.phase">
-                                        <font-awesome-icon v-if="item.state == 'FAILED'" icon="exclamation-triangle" class="state-failed" />
-                                        {{ p }}
-                                    </template>
-                                </b-col>
-                            </b-row>
+                        <td class="col-1 numeric">{{ item.size | formatNumber }}</td>
+                        <td class="col-3 phase_cell">
+                            <!-- <ProgressBar v-if="item.state == 'FAILED'" :failed="getDatasetProgress(item)" />
+                            <ProgressBar v-else-if="item.phase == 'CHECKED' && item.state == 'OK'" :ok="100" />
+                            <ProgressBar v-else :value="getDatasetProgress(item)" /> -->
 
-                            <ProgressBar v-if="item.state == 'FAILED'" :failed="getDatasetProgress(item)" />
-                            <ProgressBar v-else-if="item.phase == 'CHECKED' && item.state == 'OK'" :ok="getDatasetProgress(item)" />
-                            <ProgressBar v-else :value="getDatasetProgress(item)" />
+                            <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
+                                <font-awesome-icon :icon="['far', 'check-circle']" class="text-success"/> {{ item.phase }}
+                            </template>
+                            <template v-else-if="item.state == 'FAILED'">
+                                <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger"/> {{ item.phase }}
+                            </template>
+                            <template v-else>
+                                <b-row class="progress_label">
+                                    <b-col v-for="p in phases" :key="p">
+                                        <template v-if="p == item.phase">
+                                            <font-awesome-icon v-if="item.state == 'FAILED'" icon="exclamation-triangle" class="state-failed" />
+                                            {{ p }}
+                                        </template>
+                                    </b-col>
+                                </b-row>
+
+                                <ProgressBar  :value="getDatasetProgress(item)" />
+                            </template>
                         </td>
                         <td class="col numeric text-right">
                             <span class="created">{{ item.created }}</span><br/>
                             <span class="modified">{{ item.modified }}</span>
                         </td>
                         <td class="col text-right">
-                            <button v-if="item.ancestor_id" class="btn btn-sm btn-outline-primary time_varinace" @click.stop="setDataset(item, {name: 'time'})">
+                            <button v-if="item.ancestor_id" class="btn btn-sm btn-outline-primary time_varinace"
+                                @click.stop="setDataset(item, {name: 'time'})"
+                                :title="getDatasetName(item.ancestor_id)"
+                            >
                                 <div class="d-flex align-items-center">
-                                    <font-awesome-icon icon="history"/><span class="ml-1">{{ getDatasetName(item.ancestor_id) }}</span>
+                                    <font-awesome-icon icon="history"/><span class="label">{{ getDatasetName(item.ancestor_id) }}</span>
                                 </div>
                             </button>
                         </td>
@@ -242,21 +255,33 @@ table {
         }
     }
 
-    .phase_row {
-        font-size: 11px;
+    .phase_cell {
         font-family: $font-family-thin;
 
-        .col {
-            white-space: nowrap;
-        }
+        .progress_label {
+            font-size: 11px;
 
-        .state-failed {
-            color: $failed_color;
+            .col {
+                white-space: nowrap;
+            }
+
+            .state-failed {
+                color: $failed_color;
+            }
         }
     }
 
     .btn.time_varinace {
         font-family: $font-family-thin;
+
+        .label {
+            max-width: 100px;
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-left: 4px;
+        }
     }
 }
 
