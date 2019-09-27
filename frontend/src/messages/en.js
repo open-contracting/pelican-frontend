@@ -20,7 +20,8 @@ export const messages = {
         id: "id",
         size: "items count",
         phase: "phase",
-        selectDataset: "show"
+        selectDataset: "show",
+        search: "Search dataset by id"
     },
     unsufficientData: {
         title: "Unsufficient data",
