@@ -1,5 +1,5 @@
 <template>
-    <h1>
+    <h1 v-if="dataset">
         <i>id</i>
         {{ dataset.id }} |
         <span class="name">{{ dataset.name }}</span>

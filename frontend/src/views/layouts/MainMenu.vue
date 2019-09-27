@@ -1,26 +1,26 @@
 <template>
-    <div id="sidebar" class="col col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2 text-center">
+    <div id="sidebar" class="col d-xl-block col-xl-2 text-center">
         <div class="row">
-            <div id="sidebar_envelope" class="col col-1 col-sm-2 col-md-3 col-lg-3 col-xl-2">
+            <div id="sidebar_envelope" class="col col-xl-2">
                 <p>
-                    <img src="@/assets/ocp_logo.png" />
+                    <img id="logo" src="@/assets/ocp_logo.png" />
                 </p>
                 <b-nav class="main_nav text-left">
-                    <b-nav-item class="nav-item" to="/">
+                    <b-nav-item id="home_link" to="/">
                         <span class="menu_icon_small">
                             <font-awesome-icon icon="cogs" />
                         </span>
                         {{ $t("sections.home").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item class="nav-item" to="/overview">
+                    <b-nav-item to="/overview">
                         <span class="menu_icon_small">
                             <font-awesome-icon icon="home" />
                         </span>
                         {{ $t("sections.overview").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item class="nav-item" to="/field" :disabled="!fieldLoaded">
+                    <b-nav-item to="/field" :disabled="!fieldLoaded">
                         <span v-if="fieldLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="sliders-h" />
                         </span>
@@ -30,7 +30,7 @@
                         {{ $t("sections.field").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item class="nav-item" to="/resource" :disabled="!resourceLoaded">
+                    <b-nav-item to="/resource" :disabled="!resourceLoaded">
                         <span v-if="resourceLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="list-alt" />
                         </span>
@@ -40,28 +40,24 @@
                         {{ $t("sections.resource").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item class="nav-item" to="/dataset" :disabled="!datasetLoaded">
-                        <router-link to="/dataset">
-                            <span v-if="datasetLoaded" class="menu_icon_small">
-                                <font-awesome-icon icon="tasks" />
-                            </span>
-                            <span v-else class="menu_icon_spinner">
-                                <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
-                            </span>
-                            {{ $t("sections.dataset").toUpperCase() }}
-                        </router-link>
+                    <b-nav-item to="/dataset" :disabled="!datasetLoaded">
+                        <span v-if="datasetLoaded" class="menu_icon_small">
+                            <font-awesome-icon icon="tasks" />
+                        </span>
+                        <span v-else class="menu_icon_spinner">
+                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                        </span>
+                        {{ $t("sections.dataset").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item class="nav-item" to="/time" :disabled="!timeVarianceLoaded">
-                        <router-link to="/time">
-                            <span v-if="timeVarianceLoaded" class="menu_icon_small">
-                                <font-awesome-icon icon="history" />
-                            </span>
-                            <span v-else class="menu_icon_spinner">
-                                <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
-                            </span>
-                            {{ $t("sections.time").toUpperCase() }}
-                        </router-link>
+                    <b-nav-item to="/time" :disabled="!timeVarianceLoaded">
+                        <span v-if="timeVarianceLoaded" class="menu_icon_small">
+                            <font-awesome-icon icon="history" />
+                        </span>
+                        <span v-else class="menu_icon_spinner">
+                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                        </span>
+                        {{ $t("sections.time").toUpperCase() }}
                     </b-nav-item>
                 </b-nav>
             </div>
@@ -137,5 +133,70 @@ export default {
     bottom: 0px;
     overflow-y: scroll;
     padding: 50px 30px 30px 30px;
+}
+
+#sidebar_envelope .main_nav .nav-item .router-link-active {
+    color: $primary;
+}
+
+#sidebar_envelope .main_nav #home_link .nav-link {
+    color: $menu_gray;
+}
+
+@media (max-width: 1199.98px) {
+    #logo {
+        width: 60px;
+    }
+
+    #sidebar {
+        position: relative;
+        width: 70px;
+    }
+
+    #sidebar_envelope {
+        background-color: white;
+        position: fixed;
+        width: 75px;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        overflow-y: scroll;
+        padding: 60px 0px 0px 0px;
+        z-index: 100;
+        border-right: 1px solid $na_light_color;
+    }
+
+    #sidebar_envelope .nav-item {
+        text-align: center;
+        margin-top: 0px;
+    }
+
+    #sidebar_envelope .main_nav a {
+        color: $na_color;
+    }
+
+    #sidebar_envelope .nav-item :hover,
+    #sidebar_envelope .main_nav .nav-item .router-link-active:hover,
+    #sidebar_envelope .main_nav #home_link .nav-link:hover {
+        background-color: $na_color;
+        color: white;
+    }
+
+    #sidebar_envelope .nav-link {
+        padding: 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #sidebar_envelope .main_nav .menu_icon_small {
+        margin-right: 0px;
+        display: block;
+        margin: auto;
+    }
+
+    #sidebar_envelope .main_nav .menu_icon_small::after {
+        content: "\A";
+        white-space: pre;
+    }
 }
 </style>

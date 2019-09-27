@@ -2,9 +2,11 @@
     <div class="row h-100">
         <main-menu></main-menu>
 
-        <main role="main" class="main main_content col-11 col-sm-10 col-md-9 col-lg-9 col-xl-10">
-            <DatasetHeader></DatasetHeader>
-            <slot />
+        <main role="main" class="main main_content col col-12 col-xl-10">
+            <div class="main_envelope">
+                <DatasetHeader></DatasetHeader>
+                <slot />
+            </div>
         </main>
     </div>
 </template>
@@ -32,4 +34,10 @@ export default {
 
 <style lang="scss">
 @import "src/scss/main";
+
+@media (max-width: 1199.98px) {
+    .main_envelope {
+        padding-left: 80px;
+    }
+}
 </style>

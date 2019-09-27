@@ -2,14 +2,20 @@
     <div class="row h-100">
         <main-menu></main-menu>
 
-        <main role="main" class="dataset_level_check_detail main_content col col-11 col-sm-10 col-md-5 col-lg-5 col-xl-5">
-            <DatasetHeader></DatasetHeader>
-            <slot name="content" />
-        </main>
-        <div class="preview col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
-            <div class="row">
-                <div class="preview_envelope col col-11 col-sm-10 col-md-4 col-lg-4 col-xl-5">
-                    <slot name="preview" />
+        <div class="col col-12 col-xl-10">
+            <div class="main_envelope">
+                <div class="row">
+                    <main role="main" class="dataset_level_check_detail main_content col col-7 col-xl-6">
+                        <DatasetHeader></DatasetHeader>
+                        <slot name="content" />
+                    </main>
+                    <div class="preview col col-5 col-xl-6">
+                        <div class="row">
+                            <div class="preview_envelope col col-5 col-xl-5">
+                                <slot name="preview" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,5 +70,15 @@ export default {
     bottom: 0px;
     overflow-y: scroll;
     padding: 30px;
+}
+
+@media (max-width: 1199.98px) {
+    .main_envelope {
+        padding-left: 80px;
+    }
+
+    .preview_envelope {
+        padding-left: 50px;
+    }
 }
 </style>
