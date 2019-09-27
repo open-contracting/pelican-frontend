@@ -2,32 +2,32 @@
     <table class="table table-hover">
         <thead>
             <tr class="d-flex">
-                <th>
-                    <div class="d-flex align-items-center">
-                        <div>{{ $t('field.table.head.object') }}</div>
-                        <div class="sort_buttons">
-                            <div :class="['asc', {active: sortedBy == 'path' && isAscendingSorted}]" @click.stop="sortByPath(tableData)"></div>
-                            <div :class="['desc', {active: sortedBy == 'path' && !isAscendingSorted}]" @click.stop="sortByPath(tableData, false)"></div>
-                        </div>
-                    </div>
+                <th @click="sortByPath(tableData)">
+                    <SortButtons
+                        :label="$t('field.table.head.object')"
+                        :active="sortedBy == 'path'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortByPath(tableData)"
+                        :on-desc="() => sortByPath(tableData, false)"
+                    />
                 </th>
-                <th @click="sortByCoverage()">
-                    <div class="d-flex align-items-center">
-                        <span>{{ $t('field.table.head.coverage') }}</span>
-                        <div class="sort_buttons">
-                            <div :class="['asc', {active: sortedBy == 'coverage' && isAscendingSorted}]" @click.stop="sortByCoverage(tableData)"></div>
-                            <div :class="['desc', {active: sortedBy == 'coverage' && !isAscendingSorted}]" @click.stop="sortByCoverage(tableData, false)"></div>
-                        </div>
-                    </div>
+                <th colspan="4" @click="sortByCoverage(tableData)">
+                    <SortButtons
+                        :label="$t('field.table.head.coverage')"
+                        :active="sortedBy == 'coverage'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortByCoverage(tableData)"
+                        :on-desc="() => sortByCoverage(tableData, false)"
+                    />
                 </th>
-                <th @click="sortByQuality()">
-                    <div class="d-flex align-items-center">
-                        <span>{{ $t('field.table.head.quality') }}</span>
-                        <div class="sort_buttons">
-                            <div :class="['asc', {active: sortedBy == 'quality' && isAscendingSorted}]" @click.stop="sortByQuality(tableData)"></div>
-                            <div :class="['desc', {active: sortedBy == 'quality' && !isAscendingSorted}]" @click.stop="sortByQuality(tableData, false)"></div>
-                        </div>
-                    </div>
+                <th colspan="4" @click="sortByQuality(tableData)">
+                    <SortButtons
+                        :label="$t('field.table.head.quality')"
+                        :active="sortedBy == 'quality'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortByQuality(tableData)"
+                        :on-desc="() => sortByQuality(tableData, false)"
+                    />
                 </th>
             </tr>
         </thead>
@@ -64,6 +64,7 @@
 <script>
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
+import SortButtons from "@/components/SortButtons.vue";
 
 export default {
     data: function() {
@@ -71,7 +72,7 @@ export default {
             showHidden: {}
         };
     },
-    components: { FieldCheckTableRow },
+    components: { FieldCheckTableRow, SortButtons },
     mixins: [fieldCheckMixins],
     computed: {
         stats: function() {
