@@ -2,7 +2,7 @@
     <dashboard-detail>
         <template v-if="check" v-slot:content>
             <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
-            <p v-if="check">{{ $t("resourceLevel." + check.name + ".description") }}</p>
+            <p v-html="$t('resourceLevel.' + check.name + '.description')"></p>
 
             <h5>{{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}</h5>
             <CheckDetailResultBox :check="check" ok failed na />

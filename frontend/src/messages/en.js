@@ -430,6 +430,7 @@ export const messages = {
     },
     fieldDetail: {
         checks: "checks",
+        path: "Field path",
         coverage: {
             label: "Coverage",
             exists: {

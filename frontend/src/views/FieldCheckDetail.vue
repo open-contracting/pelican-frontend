@@ -1,8 +1,7 @@
 <template>
     <dashboard-detail>
         <template v-if="check" v-slot:content>
-            <h2>{{ $t("fieldDetail." + check.path + ".name") }}</h2>
-            <p class="description">{{ $t("fieldDetail." + check.path + ".description") }}</p>
+            <h2>{{ $t("fieldDetail.path") }}: {{ check.path }}</h2>
 
             <template v-for="(c, k) in check.coverage.checks">
                 <h5 :key="k">
