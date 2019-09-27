@@ -1,24 +1,28 @@
 <template>
-    <table class="table table-borderless tree">
+    <table class="table table-hover tree">
         <thead>
-            <th>
-                <div class="d-flex align-items-center">
-                    <div>{{ $t('field.table.head.object') }}</div>
-                </div>
-            </th>
-            <th @click="sortByCoverage()">
-                <div class="d-flex align-items-center">
-                    <span>{{ $t('field.table.head.coverage') }}</span>
-                </div>
-            </th>
-            <th @click="sortByQuality()">
-                <div class="d-flex align-items-center">
-                    <span>{{ $t('field.table.head.quality') }}</span>
-                </div>
-            </th>
+            <tr class="d-flex">
+                <th class="col col-4">
+                    <div class="d-flex align-items-center">
+                        <div>{{ $t('field.table.head.object') }}</div>
+                    </div>
+                </th>
+                <th class="col col-4" @click="sortByCoverage()">
+                    <div class="d-flex align-items-center">
+                        <span>{{ $t('field.table.head.coverage') }}</span>
+                    </div>
+                </th>
+                <th class="col col-4" @click="sortByQuality()">
+                    <div class="d-flex align-items-center">
+                        <span>{{ $t('field.table.head.quality') }}</span>
+                    </div>
+                </th>
+            </tr>
         </thead>
 
-        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" v-on:field-check-detail="emitDetailEvent" />
+        <tbody>
+            <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" v-on:field-check-detail="emitDetailEvent" />
+        </tbody>
     </table>
 </template>
 

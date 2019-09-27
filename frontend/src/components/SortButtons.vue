@@ -1,6 +1,8 @@
 <template>
     <div class="d-flex align-items-center">
-        <div><slot>{{ label }}</slot></div>
+        <div>
+            <slot>{{ label }}</slot>
+        </div>
         <div class="sort_buttons">
             <div :class="['asc', {active: active && asc}]" @click.stop="onAsc()"></div>
             <div :class="['desc', {active: active && !asc}]" @click.stop="onDesc()"></div>
@@ -11,8 +13,7 @@
 <script>
 export default {
     data: function() {
-        return {
-        };
+        return {};
     },
     props: {
         label: String,
@@ -31,29 +32,31 @@ export default {
     margin-left: 10px;
 
     & > div {
-        width: 0; 
+        width: 0;
         height: 0;
         border-color: $headings_light_color;
         cursor: pointer;
     }
 
-    .asc {           
+    .asc {
         border-left: 5px solid transparent;
-        border-right: 5px solid transparent;                    
+        border-right: 5px solid transparent;
         border-bottom: 8px solid $headings_light_color;
         margin-bottom: 4px;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
             border-bottom-color: $headings_color;
         }
     }
 
     .desc {
         border-left: 5px solid transparent;
-        border-right: 5px solid transparent;                    
+        border-right: 5px solid transparent;
         border-top: 8px solid $headings_light_color;
 
-        &:hover, &.active {
+        &:hover,
+        &.active {
             border-top-color: $headings_color;
         }
     }

@@ -427,7 +427,7 @@ export const messages = {
             }
         },
         search: "Search object by name",
-        hidden: "Another {n} checks was hidden"
+        hidden: " {n} hidden"
     },
     fieldDetail: {
         checks: "checks",

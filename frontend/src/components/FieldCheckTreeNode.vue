@@ -1,6 +1,6 @@
 <template>
     <fragment>
-        <FieldCheckTableRow :key="path" :check="check" v-show="!(hide || !isSearched(data))" @click.native="emitDetailEvent(path)">
+        <FieldCheckTableRow :key="path" :check="check" v-bind:class="{ hidden: (hide || !isSearched(data)) }" @click.native="emitDetailEvent(path)">
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
                 <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
@@ -16,7 +16,7 @@
 
         <template v-if="hasChildren">
             <template v-for="n in children">
-                <tree-node :key="n._path" :data="n" :depth="depth + 1" v-on:field-check-detail="emitDetailEvent" :hide="!expanded"/>
+                <tree-node :key="n._path" :data="n" :depth="depth + 1" v-on:field-check-detail="emitDetailEvent" :hide="!expanded" />
             </template>
         </template>
     </fragment>
@@ -24,76 +24,80 @@
 
 <script>
 import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
-import { Fragment } from 'vue-fragment'
+import { Fragment } from "vue-fragment";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     data: function() {
-        return {            
-        };
+        return {};
     },
     props: {
         data: Object,
         expand: Boolean,
-        depth: {type: Number, default: 0},
-        hide: {type: Boolean, default: false}
+        depth: { type: Number, default: 0 },
+        hide: { type: Boolean, default: false }
     },
     name: "tree-node",
     components: { FieldCheckTableRow, Fragment },
-    mixins: [ fieldCheckMixins ],
-    mounted: function() {        
+    mixins: [fieldCheckMixins],
+    mounted: function() {
         if (this.expand) {
-            this.expanded = true
+            this.expanded = true;
         }
     },
     computed: {
         children: function() {
-            return this.getChildren(this.data)
+            return this.getChildren(this.data);
         },
         hasChildren: function() {
-            return Object.keys(this.children).length > 0
+            return Object.keys(this.children).length > 0;
         },
         expanded: {
-            get: function() {                
-                return this.$store.getters.isFieldCheckExpanded(this.path)
+            get: function() {
+                return this.$store.getters.isFieldCheckExpanded(this.path);
             },
             set: function(value) {
                 if (value) {
-                    this.$store.commit('addFieldCheckExpandedNode', this.path)
+                    this.$store.commit("addFieldCheckExpandedNode", this.path);
                 } else {
-                    this.$store.commit('removeFieldCheckExpandedNode', this.path)                    
+                    this.$store.commit(
+                        "removeFieldCheckExpandedNode",
+                        this.path
+                    );
                 }
             }
         },
         path: function() {
-            return this.data._check.path
+            return this.data._check.path;
         },
         check: function() {
-            return this.data._check
+            return this.data._check;
         },
         name: function() {
-            return this.path.substring(this.path.lastIndexOf('.') + 1)
+            return this.path.substring(this.path.lastIndexOf(".") + 1);
         }
     },
     methods: {
         emitDetailEvent: function(path) {
-            this.$emit('field-check-detail', path)
+            this.$emit("field-check-detail", path);
         },
-        isSearched: function(node) {            
+        isSearched: function(node) {
             if (this.search) {
                 if (this.isPathSearched(node._check.path)) {
-                    return true
+                    return true;
                 } else {
-                    return Object.values(this.getChildren(node)).some(n => this.isSearched(n))
+                    return Object.values(this.getChildren(node)).some(n =>
+                        this.isSearched(n)
+                    );
                 }
             }
 
-            return true
+            return true;
         },
         getChildren: function(node) {
-            var result = Object.assign({}, node)
-            delete result._check
-            return result
+            var result = Object.assign({}, node);
+            delete result._check;
+            return result;
         }
     }
 };
@@ -134,5 +138,9 @@ div[class^="indent-"] {
     .indent-#{$depth} {
         width: indent-with($depth);
     }
+}
+
+.hidden {
+    display: none !important;
 }
 </style>

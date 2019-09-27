@@ -2,7 +2,7 @@
     <table class="table table-hover">
         <thead>
             <tr class="d-flex">
-                <th @click="sortByPath(tableData)">
+                <th class="col col-4" @click="sortByPath(tableData)">
                     <SortButtons
                         :label="$t('field.table.head.object')"
                         :active="sortedBy == 'path'"
@@ -11,7 +11,7 @@
                         :on-desc="() => sortByPath(tableData, false)"
                     />
                 </th>
-                <th colspan="4" @click="sortByCoverage(tableData)">
+                <th class="col col-4" @click="sortByCoverage(tableData)">
                     <SortButtons
                         :label="$t('field.table.head.coverage')"
                         :active="sortedBy == 'coverage'"
@@ -20,7 +20,7 @@
                         :on-desc="() => sortByCoverage(tableData, false)"
                     />
                 </th>
-                <th colspan="4" @click="sortByQuality(tableData)">
+                <th class="col col-4" @click="sortByQuality(tableData)">
                     <SortButtons
                         :label="$t('field.table.head.quality')"
                         :active="sortedBy == 'quality'"
@@ -37,11 +37,11 @@
                 <FieldCheckTableRow v-if="isSearched(n)" :key="n.path" :check="n" @click.native="$emit('field-check-detail', n.path)">
                     <span v-html="highlightSearch(n.path)" />
                     <template v-if="hasHidden(n)">
-                        <div class="hide_button">
-                            <i>{{ $t('field.hidden', { n: n._hidden.length }) }}</i>
-                            <button @click.stop="switchHidden(n)" :class="['btn', {disabled: isHidden(n)}]">
-                                <font-awesome-icon icon="eye-slash" />
-                            </button>
+                        <div>
+                            <span class="hide_button" @click.stop="switchHidden(n)">
+                                <font-awesome-icon icon="eye-slash" class="hidden_icon" />
+                                <i>{{ $t('field.hidden', { n: n._hidden.length }) }}</i>
+                            </span>
                         </div>
                     </template>
                 </FieldCheckTableRow>
@@ -50,7 +50,7 @@
                         v-if="isSearched(h)"
                         :check="h"
                         :key="h.path"
-                        :class="['hidden', {'d-none': isHidden(n)}]"
+                        :class="['hidden_row', {'hidden': isHidden(n)}]"
                         @click.native="$emit('field-check-detail', h.path)"
                     >
                         <span v-html="highlightSearch(h.path)" />
@@ -145,18 +145,26 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/main";
+.hide_button {
+    color: $na_color;
+    font-size: 10px;
+}
 
-.table {
-    tbody {
-        &.hidden {
-            color: $na_color;
-        }
+.hide_button:hover {
+    color: $text-color;
+}
 
-        .hide_button {
-            font-size: 14px;
-            font-family: $font-family-thin;
-            white-space: nowrap;
-        }
-    }
+.hidden_icon {
+    position: relative;
+    top: -1px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.hidden_row {
+    color: $na_color;
+    border-left: 2px solid $na_light_color;
 }
 </style>

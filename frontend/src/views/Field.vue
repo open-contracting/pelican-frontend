@@ -14,7 +14,7 @@
                 <b-input-group class="search_input">
                     <template v-slot:prepend>
                         <b-input-group-text>
-                            <font-awesome-icon icon="search"/>
+                            <font-awesome-icon icon="search" />
                         </b-input-group-text>
                     </template>
                     <b-form-input v-model="search" :placeholder="$t('field.search')" />
@@ -54,22 +54,21 @@ import searchFieldMixins from "@/plugins/searchFieldMixins.js";
 export default {
     name: "field",
     data: function() {
-        return {
-        };
+        return {};
     },
-    mixins: [searchFieldMixins],    
+    mixins: [searchFieldMixins],
     components: { Dashboard, FieldCheckTable, FieldCheckTree },
     computed: {
         layout: function() {
             return this.$store.getters.fieldCheckLayout;
-        }        
+        }
     },
     methods: {
         searchGetter: function() {
-            return this.$store.getters.fieldCheckSearch
+            return this.$store.getters.fieldCheckSearch;
         },
         searchSetter: function() {
-            this.$store.commit("setFieldCheckSearch", this.search)
+            this.$store.commit("setFieldCheckSearch", this.search);
         },
         detail: function(path) {
             this.$router.push({

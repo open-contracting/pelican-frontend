@@ -1,33 +1,43 @@
 <template>
     <tr v-if="check" class="d-flex">
-        <td class="col col-4">
+        <td class="col col-4 break_word">
             <slot>{{ check.path }}</slot>
         </td>
 
         <td class="col col-4">
-            <div class="row no-gutters">
-                <div class="col col-2 text-right coverage_result">{{ check.coverageOkShare | formatNumber }}%</div>
+            <div class="row h-100 no-gutters align-items-center">
+                <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
+                    <span class="field_check_result_value">{{ check.coverageOkShare | formatNumber }}%</span>
+                </div>
                 <div
-                    class="col col-6 numeric coverage_count text-right"
+                    class="col col-9 col-lg-7 col-xl-5 numeric field_check_count d-flex align-items-center justify-content-end"
                 >({{ check.coverage.passed_count | formatNumber }}/{{ check.coverage.total_count | formatNumber}})</div>
-                <div class="col col-4 coverage_bar">
-                    <ProgressBar :ok="check.coverageOkShare" />
+                <div class="col col-12 col-lg-3 col-xl-5 field_check_bar d-flex align-items-center justify-content-end">
+                    <span class="field_check_bar_envelope">
+                        <ProgressBar :ok="check.coverageOkShare" />
+                    </span>
                 </div>
             </div>
         </td>
 
         <template v-if="check.quality.total_count">
-            <td class="col col-2">
-                <div class="row no-gutters">
-                    <div class="col col-1 text-right">{{ check.qualityOkShare | formatNumber }}%</div>
-                    <div class="col numeric text-right">({{ check.quality.passed_count | formatNumber }}/{{ check.quality.total_count | formatNumber }})</div>
+            <td class="col col-4">
+                <div class="row h-100 no-gutters align-items-center">
+                    <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
+                        <span class="field_check_result_value">{{ check.qualityOkShare | formatNumber }}%</span>
+                    </div>
+                    <div
+                        class="col col-9 col-lg-7 col-xl-5 numeric field_check_count d-flex align-items-center justify-content-end"
+                    >({{ check.quality.passed_count | formatNumber }}/{{ check.quality.total_count | formatNumber }})</div>
+                    <div class="col col-12 col-lg-3 col-xl-5 field_check_bar d-flex align-items-center justify-content-end">
+                        <span class="field_check_bar_envelope">
+                            <ProgressBar v-if="check.quality.total_count" :ok="check.qualityOkShare" />
+                        </span>
+                    </div>
                 </div>
             </td>
-            <td class="col col-2">
-                <ProgressBar v-if="check.quality.total_count" :ok="check.qualityOkShare" />
-            </td>
         </template>
-        <td class="col col-4" colspan="1" v-else></td>
+        <td class="col col-4" v-else></td>
     </tr>
 </template>
 
@@ -49,25 +59,31 @@ export default {
 
 tbody tr {
     cursor: pointer;
-
-    td {
-        vertical-align: middle;
-    }
 }
 
-.coverage_result {
+.field_check_result {
     color: #4a4a4a;
     font-family: $font-family-bold;
     font-size: 16px;
     font-weight: 700;
-    line-height: 19px;
+    line-height: 16px;
 }
 
-.coverage_count {
-    color: $na_light_color;
+.field_check_result_value {
+    position: relative;
+    top: 1px;
 }
 
-.coverage_bar {
-    padding-right: 15px;
+.field_check_count {
+    color: $na_color;
+    font-size: 12px;
+    align-items: center;
+}
+
+.field_check_bar_envelope {
+    padding-left: 10px;
+    width: 100%;
+    position: relative;
+    top: -1px;
 }
 </style>
