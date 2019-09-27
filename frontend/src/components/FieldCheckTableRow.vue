@@ -1,26 +1,34 @@
 <template>
-    <tbody v-if="check">
-        <tr>
-            <td rowspan="2"><slot>{{ check.path }}</slot></td>
-            
-            <td class="percent">{{ check.coverageOkShare | formatNumber }}%</td>
-            <td class="ratio pr-0 text-right">({{ check.coverage.passed_count | formatNumber }}</td>
-            <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-            <td class="ratio pl-0 text-left">{{ check.coverage.total_count | formatNumber}})</td>
+    <tr v-if="check" class="d-flex">
+        <td class="col col-4">
+            <slot>{{ check.path }}</slot>
+        </td>
 
-            <template v-if="check.quality.total_count">
-                <td class="percent">{{ check.qualityOkShare | formatNumber }}%</td>
-                <td class="ratio pr-0 text-right">({{ check.quality.passed_count | formatNumber }}</td>
-                <td class="ratio px-0 text-center">&nbsp;/&nbsp;</td>
-                <td class="ratio pl-0 text-left">{{ check.quality.total_count | formatNumber }})</td>
-            </template>
-            <td colspan="4" v-else></td>
-        </tr>
-        <tr class="bar_row">
-            <td class="bar" colspan=4><ProgressBar :ok="check.coverageOkShare"/></td>                        
-            <td class="bar" colspan=4><ProgressBar v-if="check.quality.total_count" :ok="check.qualityOkShare"/></td>                        
-        </tr>
-    </tbody>    
+        <td class="col col-4">
+            <div class="row no-gutters">
+                <div class="col col-2 text-right coverage_result">{{ check.coverageOkShare | formatNumber }}%</div>
+                <div
+                    class="col col-6 numeric coverage_count text-right"
+                >({{ check.coverage.passed_count | formatNumber }}/{{ check.coverage.total_count | formatNumber}})</div>
+                <div class="col col-4 coverage_bar">
+                    <ProgressBar :ok="check.coverageOkShare" />
+                </div>
+            </div>
+        </td>
+
+        <template v-if="check.quality.total_count">
+            <td class="col col-2">
+                <div class="row no-gutters">
+                    <div class="col col-1 text-right">{{ check.qualityOkShare | formatNumber }}%</div>
+                    <div class="col numeric text-right">({{ check.quality.passed_count | formatNumber }}/{{ check.quality.total_count | formatNumber }})</div>
+                </div>
+            </td>
+            <td class="col col-2">
+                <ProgressBar v-if="check.quality.total_count" :ok="check.qualityOkShare" />
+            </td>
+        </template>
+        <td class="col col-4" colspan="1" v-else></td>
+    </tr>
 </template>
 
 <script>
@@ -28,8 +36,7 @@ import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
     data: function() {
-        return {
-        };
+        return {};
     },
     name: "field-check-table-row",
     props: ["check"],
@@ -40,45 +47,27 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/main";
 
-tbody:hover {
-    background-color: rgba(0, 0, 0, 0.06);
-}
-
 tbody tr {
     cursor: pointer;
 
-    &.bar_row td {
-        border-bottom: 1px solid $na_light_color;
-        padding-top: 0;
-    }
-    
-    &:not(.bar_row) td:not(:first-of-type) {        
-        padding-bottom: 0;
-    }
-
-    &:not(.bar_row) td:first-of-type {        
-        border-bottom: 1px solid $na_light_color;
-        width: 1px;
-    }
-
     td {
         vertical-align: middle;
-
-        &.percent {
-            font-family: $headings-font-family;
-            white-space: nowrap;
-        }
-
-        &.ratio {
-            color: $na_color;
-            font-family: $font-family-mono;
-            white-space: nowrap;                
-            text-align: right;
-
-            &:not(:first-of-type) {
-                width: 1px;
-            }
-        }
     }
+}
+
+.coverage_result {
+    color: #4a4a4a;
+    font-family: $font-family-bold;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 19px;
+}
+
+.coverage_count {
+    color: $na_light_color;
+}
+
+.coverage_bar {
+    padding-right: 15px;
 }
 </style>

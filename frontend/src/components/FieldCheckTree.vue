@@ -6,19 +6,19 @@
                     <div>{{ $t('field.table.head.object') }}</div>
                 </div>
             </th>
-            <th colspan="4" @click="sortByCoverage()">
+            <th @click="sortByCoverage()">
                 <div class="d-flex align-items-center">
                     <span>{{ $t('field.table.head.coverage') }}</span>
                 </div>
             </th>
-            <th colspan="4" @click="sortByQuality()">
+            <th @click="sortByQuality()">
                 <div class="d-flex align-items-center">
                     <span>{{ $t('field.table.head.quality') }}</span>
                 </div>
             </th>
         </thead>
-        
-        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" v-on:field-check-detail="emitDetailEvent"/>
+
+        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" v-on:field-check-detail="emitDetailEvent" />
     </table>
 </template>
 
@@ -28,48 +28,47 @@ import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     data: function() {
-        return {
-        };
-    },    
+        return {};
+    },
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
     watch: {
         search: function() {
-            this.$store.dispatch("setExpandedNodesForSearch")
+            this.$store.dispatch("setExpandedNodesForSearch");
         }
     },
     mounted: function() {
         if (this.search) {
-            this.$store.dispatch("setExpandedNodesForSearch")
+            this.$store.dispatch("setExpandedNodesForSearch");
         }
     },
     computed: {
         stats: function() {
-            return this.$store.getters.fieldLevelStats
+            return this.$store.getters.fieldLevelStats;
         },
         tree: function() {
-            var root = {}
-            
-            this.sortByProcessingOrder(this.stats)
+            var root = {};
+
+            this.sortByProcessingOrder(this.stats);
 
             this.stats.forEach(function(n) {
-                var node = root
+                var node = root;
                 n.path.split(".").forEach(function(p) {
                     if (!node.hasOwnProperty(p)) {
-                        node[p] = {}
-                    }                    
-                    node = node[p]
-                })
+                        node[p] = {};
+                    }
+                    node = node[p];
+                });
 
-                node["_check"] = n
-            })
+                node["_check"] = n;
+            });
 
-            return root
+            return root;
         }
     },
     methods: {
         emitDetailEvent: function(path) {
-            this.$emit('field-check-detail', path)
+            this.$emit("field-check-detail", path);
         }
     }
 };
@@ -80,11 +79,10 @@ export default {
 
 .table {
     thead {
-        th {            
+        th {
             color: $headings_light_color;
             font-family: $headings-font-family;
         }
     }
 }
-
 </style>
