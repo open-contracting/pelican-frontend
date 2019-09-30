@@ -1,85 +1,104 @@
 <template>
-    <span v-if="!loading">        
-        <b-container class="px-0">
-            <b-row class="action_bar no-gutters">
-                <b-col class="col-4 text-left">
-                    <SearchInput :placeholder="$t('dataset.search')"
-                        :preset="search"
-                        :on-update="(search) => $store.commit('setDatasetSearch', search)"
+    <span v-if="!loading">
+        <div class="picker_table">
+            <div class="row">
+                <div class="search_input col col-12 col-md-4">
+                    <SearchInput :placeholder="$t('dataset.search')" :preset="search" :on-update="(search) => $store.commit('setDatasetSearch', search)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="th col-4 align-self-center clickable" @click="sortBy('id')">
+                    <SortButtons
+                        :label="$t('dataset.id')"
+                        :active="sortedBy == 'id'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortBy('id')"
+                        :on-desc="() => sortBy('id', false)"
                     />
-                </b-col>
-            </b-row>
-        </b-container>
-
-        <table class="table table-hover table-borderless container">
-            <thead>
-                <tr class="d-flex">
-                    <th class="col-4 align-self-center clickable" @click="sortBy('id')">
-                        <SortButtons :label="$t('dataset.id')" :active="sortedBy == 'id'" :asc="isAscendingSorted"
-                            :on-asc="() => sortBy('id')" :on-desc="() => sortBy('id', false)" />
-                    </th>
-                    <th class="col-1 align-self-center clickable" @click="sortBy('size')">
-                        <SortButtons :label="$t('dataset.size')" :active="sortedBy == 'size'" :asc="isAscendingSorted"
-                            :on-asc="() => sortBy('size')" :on-desc="() => sortBy('size', false)" />
-                    <th class="col-2 align-self-center clickable" @click="sortBy('phase')">
-                        <SortButtons :label="$t('dataset.phase')" :active="sortedBy == 'phase'" :asc="isAscendingSorted"
-                            :on-asc="() => sortBy('phase')" :on-desc="() => sortBy('phase', false)" />
-                    </th>
-                    <th class="col align-self-center clickable" @click="sortBy('created')">
-                        <SortButtons :active="sortedBy == 'created'" :asc="isAscendingSorted"
-                            :on-asc="() => sortBy('created')" :on-desc="() => sortBy('created', false)">
-                            <span class="created">{{ $t("created") }}</span>
-                            <br/>
-                            <span class="modified">{{ $t("modified") }}</span>
-                        </SortButtons>                        
-                    </th>
-                    <th class="col align-self-center text-left">{{ $t('dataset.timeVariance')}} </th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <template v-for="(item, index) in datasets">
-                    <tr v-if="isSearched(item.name)" v-bind:key="index" @click="setDataset(item)"
-                        :class="['clickable', 'd-flex', 'align-items-center', {disabled: !isDatasetImported(item)}]"
+                </div>
+                <div class="th col-1 align-self-center clickable" @click="sortBy('size')">
+                    <SortButtons
+                        :label="$t('dataset.size')"
+                        :active="sortedBy == 'size'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortBy('size')"
+                        :on-desc="() => sortBy('size', false)"
+                    />
+                </div>
+                <div class="th col-2 align-self-center clickable" @click="sortBy('phase')">
+                    <SortButtons
+                        :label="$t('dataset.phase')"
+                        :active="sortedBy == 'phase'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortBy('phase')"
+                        :on-desc="() => sortBy('phase', false)"
+                    />
+                </div>
+                <div class="th col align-self-center clickable" @click="sortBy('created')">
+                    <SortButtons
+                        :active="sortedBy == 'created'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortBy('created')"
+                        :on-desc="() => sortBy('created', false)"
                     >
-                        <td class="col-4">                            
-                            {{ item.name }}
-                            <span class="dataset_id">( {{ item.id }} )</span>
-                        </td>
-                        <td class="col-1 numeric">{{ item.size | formatNumber }}</td>
-                        <td class="col-2 phase_cell">
-                            <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
-                                <font-awesome-icon :icon="['far', 'check-circle']" class="text-success"/> {{ item.phase }}
-                            </template>
-                            <template v-else-if="item.state == 'FAILED'">
-                                <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger"/> {{ item.phase }}
-                            </template>
-                            <template v-else>
-                                <b-row class="progress_label no-gutters">
-                                    <b-col v-for="p in phases" :key="p">
-                                        <template v-if="p == item.phase">{{ p }}</template>
-                                    </b-col>
-                                </b-row>
+                        <span class="created">{{ $t("created") }}</span>
+                        <br />
+                        <span class="modified">{{ $t("modified") }}</span>
+                    </SortButtons>
+                </div>
+                <div class="td col align-self-center text-left">{{ $t('dataset.timeVariance')}}</div>
+            </div>
 
-                                <ProgressBar  :value="getDatasetProgress(item)" />
-                            </template>
-                        </td>
-                        <td class="col numeric">
-                            <span class="created">{{ item.created }}</span><br/>
-                            <span class="modified">{{ item.modified }}</span>
-                        </td>
-                        <td class="col">
-                            <b-link v-if="item.ancestor_id" class="time_varinace break_word"
-                                @click.stop="setDataset(item, {name: 'time'})"
-                                :title="getDatasetName(item.ancestor_id)"
-                            >
-                                <font-awesome-icon icon="history"/>{{ getDatasetName(item.ancestor_id) }}
-                            </b-link>
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
+            <template v-for="(item, index) in datasets">
+                <div
+                    v-if="isSearched(item.name)"
+                    v-bind:key="index"
+                    @click="setDataset(item)"
+                    :class="['row','tr', 'clickable', 'align-items-center', {disabled: !isDatasetImported(item)}]"
+                >
+                    <div class="td col-4">
+                        {{ item.name }}
+                        <span class="dataset_id">( {{ item.id }} )</span>
+                    </div>
+                    <div class="td col-1 numeric">{{ item.size | formatNumber }}</div>
+                    <div class="td col-2 phase_cell">
+                        <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
+                            <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
+                            {{ item.phase }}
+                        </template>
+                        <template v-else-if="item.state == 'FAILED'">
+                            <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger" />
+                            {{ item.phase }}
+                        </template>
+                        <template v-else>
+                            <b-row class="progress_label no-gutters">
+                                <b-col v-for="p in phases" :key="p">
+                                    <template v-if="p == item.phase">{{ p }}</template>
+                                </b-col>
+                            </b-row>
+
+                            <ProgressBar :value="getDatasetProgress(item)" />
+                        </template>
+                    </div>
+                    <div class="td col numeric">
+                        <span class="created">{{ item.created }}</span>
+                        <br />
+                        <span class="modified">{{ item.modified }}</span>
+                    </div>
+                    <div class="td col">
+                        <b-link
+                            v-if="item.ancestor_id"
+                            class="time_varinace break_word"
+                            @click.stop="setDataset(item, {name: 'time'})"
+                            :title="getDatasetName(item.ancestor_id)"
+                        >
+                            <font-awesome-icon icon="history" />
+                            {{ getDatasetName(item.ancestor_id) }}
+                        </b-link>
+                    </div>
+                </div>
+            </template>
+        </div>
     </span>
     <span v-else>
         <Loader></Loader>
@@ -102,7 +121,7 @@ export default {
         return {
             datasets: [],
             loading: false,
-            afterUpdateRoute: {name: "overview"}
+            afterUpdateRoute: { name: "overview" }
         };
     },
     components: {
@@ -112,38 +131,47 @@ export default {
         SearchInput
     },
     computed: {
-        search: function(){
-            return this.$store.getters.datasetSearch
+        search: function() {
+            return this.$store.getters.datasetSearch;
         },
         phases: function() {
-            return ['PLANNED','CONTRACTING_PROCESS','DATASET','TIME_VARIANCE','CHECKED']
+            return [
+                "PLANNED",
+                "CONTRACTING_PROCESS",
+                "DATASET",
+                "TIME_VARIANCE",
+                "CHECKED"
+            ];
         },
         states: function() {
-            return ['WAITING', 'IN_PROGRESS', 'OK', 'FAILED']
+            return ["WAITING", "IN_PROGRESS", "OK", "FAILED"];
         },
         sortedBy: function() {
-            var value = this.$store.getters.datasetSortedBy
-            return value == null ? this.defaultSorting.by : value
+            var value = this.$store.getters.datasetSortedBy;
+            return value == null ? this.defaultSorting.by : value;
         },
         isAscendingSorted: function() {
-            var value = this.$store.getters.datasetSortedAscending
-            return value == null ? this.defaultSorting.asc : value
+            var value = this.$store.getters.datasetSortedAscending;
+            return value == null ? this.defaultSorting.asc : value;
         },
         defaultSorting: function() {
-            return {by: "created", asc: false}
+            return { by: "created", asc: false };
         }
     },
     methods: {
         isSearched: function(name) {
-            return !this.search || name.toLowerCase().includes(this.search.toLowerCase())
+            return (
+                !this.search ||
+                name.toLowerCase().includes(this.search.toLowerCase())
+            );
         },
-        setDataset: function(dataset, route = {name: "overview"}) {
+        setDataset: function(dataset, route = { name: "overview" }) {
             if (!this.isDatasetImported(dataset)) {
-                return
+                return;
             }
 
             this.loading = true;
-            this.afterUpdateRoute = route
+            this.afterUpdateRoute = route;
             if (this.$store.getters.datasetId != dataset.id) {
                 this.$store.dispatch("updateDataset", dataset);
             } else {
@@ -152,63 +180,69 @@ export default {
         },
         getDatasetName: function(id) {
             if (this.datasets) {
-                var ds = this.datasets.find(n => n.id == id)
+                var ds = this.datasets.find(n => n.id == id);
                 if (ds) {
-                    return ds.name
+                    return ds.name;
                 }
             }
 
-            return null
+            return null;
         },
         getDatasetProgress: function(dataset) {
-            return (this.phases.indexOf(dataset.phase) + 1) * 20
+            return (this.phases.indexOf(dataset.phase) + 1) * 20;
         },
         sortBy: function(by, asc = true) {
             if (!this.datasets) {
-                return
+                return;
             }
 
             var comp;
             if (by == "created") {
-                comp = (a, b) => a.created.localeCompare(b.created)
-            } else if (by == 'id') {
-                comp = (a, b) => a.id.localeCompare(b.id)
-            } else if (by == 'size') {
-                comp = (a, b) => this.compareNumbers(a.size, b.size)
-            } else if (by == 'phase') {
+                comp = (a, b) => a.created.localeCompare(b.created);
+            } else if (by == "id") {
+                comp = (a, b) => a.id.localeCompare(b.id);
+            } else if (by == "size") {
+                comp = (a, b) => this.compareNumbers(a.size, b.size);
+            } else if (by == "phase") {
                 comp = (a, b) => {
                     if (a.phase == b.phase) {
                         if (a.state == b.state) {
                             return a.id.localeCompare(b.id);
                         } else {
-                            return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state))
+                            return this.compareNumbers(
+                                this.states.indexOf(a.state),
+                                this.states.indexOf(b.state)
+                            );
                         }
                     } else {
-                        return this.compareNumbers(this.phases.indexOf(a.phase), this.phases.indexOf(b.phase))
-                    }                    
-                }
+                        return this.compareNumbers(
+                            this.phases.indexOf(a.phase),
+                            this.phases.indexOf(b.phase)
+                        );
+                    }
+                };
             } else {
                 throw new Error("Uknown sorting method " + by);
             }
 
-            this.sort(this.datasets, comp, asc)
-            this.$store.commit('setDatasetSorting', {by: by, asc: asc})
+            this.sort(this.datasets, comp, asc);
+            this.$store.commit("setDatasetSorting", { by: by, asc: asc });
         },
         isDatasetImported: function(dataset) {
-            return dataset.phase == 'CHECKED' && dataset.state == 'OK'
+            return dataset.phase == "CHECKED" && dataset.state == "OK";
         }
     },
     mounted() {
         var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
-            axios
-                .get(url)
-                .then(response => {
-                    this.datasets = response["data"]["objects"]
-                    this.sortBy(this.sortedBy, this.isAscendingSorted)
-                })
-                .catch(function(error) {
-                    throw new Error(error);
-                });
+        axios
+            .get(url)
+            .then(response => {
+                this.datasets = response["data"]["objects"];
+                this.sortBy(this.sortedBy, this.isAscendingSorted);
+            })
+            .catch(function(error) {
+                throw new Error(error);
+            });
     },
     watch: {
         atLeastOneLoaded: function(newValue) {
@@ -223,75 +257,77 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/main";
 
-table {
-    tbody {
-        tr {
-            border-bottom: 1px solid $na_light_color;
+.picker_table {
+    padding: 30px;
+}
 
-            &.disabled {
-                cursor: not-allowed;
+.search_input {
+    margin-bottom: 20px;
+}
 
-                a {
-                    cursor: not-allowed;
-                    &:hover {
-                        text-decoration: none;
-                    }
-                }
+.tr {
+    &.disabled {
+        cursor: not-allowed;
+
+        a {
+            cursor: not-allowed;
+            &:hover {
+                text-decoration: none;
             }
         }
     }
+}
 
-    th {
-        .modified {
-            font-family: $font-family-thin;
-            color: $headings_light_color;
-        }
+.th {
+    .modified {
+        font-family: $font-family-thin;
+        color: $headings_light_color;
+    }
+}
+
+.td {
+    .created {
+        font-weight: 700;
     }
 
-    td {
-        .created {
-            font-weight: 700;
-        }
-        
-        .modified {
-            color: $headings_light_color;
-        }
+    .modified {
+        color: $headings_light_color;
+    }
 
-        &:nth-of-type(4) {
+    &:nth-of-type(4) {
+        white-space: nowrap;
+    }
+
+    .dataset_id {
+        color: $na_color;
+        font-family: $font-family-thin;
+        font-size: 14px;
+    }
+}
+
+.phase_cell {
+    font-family: $font-family-thin;
+
+    .progress_label {
+        font-size: 11px;
+
+        .col {
             white-space: nowrap;
         }
 
-        .dataset_id {
-            color: $na_color;
-            font-family: $font-family-thin;
-            font-size: 14px;
+        .state-failed {
+            color: $failed_color;
         }
     }
+}
 
-    .phase_cell {
-        font-family: $font-family-thin;
+.time_varinace {
+    font-family: $font-family-thin;
+    color: $primary;
+    max-width: 110px;
 
-        .progress_label {
-            font-size: 11px;
-
-            .col {
-                white-space: nowrap;
-            }
-
-            .state-failed {
-                color: $failed_color;
-            }
-        }
-    }
-
-    .time_varinace {
-        font-family: $font-family-thin;
-        color: $primary;
-        max-width: 110px;
-        
-        svg {
-            margin-right: 4px;
-        }
+    svg {
+        margin-right: 4px;
     }
 }
 

@@ -1,21 +1,21 @@
 <template>
-    <tr class="d-flex clickable" v-on:click="detail()">
-        <td class="col-9 col-lg-5 break_word check_name">
+    <div class="row d-flex clickable" v-on:click="detail()">
+        <div class="col-9 col-lg-5 break_word check_name">
             <span>{{ $t("resourceLevel." + name + ".name") }}</span>
-        </td>
-        <td class="col-1 col-lg-1 text-right">
+        </div>
+        <div class="col-1 col-lg-1 text-right">
             <span v-if=" okPercentage> 0" class="value_ok">{{ okPercentage }}%</span>
-        </td>
-        <td class="col-1 col-lg-1 text-right">
+        </div>
+        <div class="col-1 col-lg-1 text-right">
             <span v-if=" failedPercentage> 0" class="value_failed">{{ failedPercentage }}%</span>
-        </td>
-        <td class="col-1 col-lg-1 text-right">
+        </div>
+        <div class="col-1 col-lg-1 text-right">
             <span v-if=" naPercentage> 0" class="value_na">{{ naPercentage }}%</span>
-        </td>
-        <td class="col-4 d-none d-lg-block progress_column">
+        </div>
+        <div class="col-4 d-none d-lg-block progress_column">
             <ProgressBar :ok="okPercentage" :failed="failedPercentage" />
-        </td>
-    </tr>
+        </div>
+    </div>
 </template>
 
 <script>

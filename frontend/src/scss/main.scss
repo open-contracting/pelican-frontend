@@ -109,3 +109,15 @@ h5 {
 .break_word {
     overflow-wrap: break-word;
 }
+
+.tr {
+    border-top: solid 1px #E8ECEF;
+}
+
+.tr:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+.td {
+    padding: 12px;
+}

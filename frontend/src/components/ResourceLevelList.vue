@@ -1,7 +1,7 @@
 <template>
     <span v-if="resourceLevelStats.length > 0">
-        <tr class="d-flex clickable" v-on:click="showChecks = !showChecks">
-            <td class="col-4 col-lg-5 category" scope="col">
+        <div class="row clickable" v-on:click="showChecks = !showChecks">
+            <div class="col-4 col-lg-5 category" scope="col">
                 <div class="switcher text-center" v-if="!showChecks">
                     <font-awesome-icon icon="chevron-right" />
                 </div>
@@ -9,12 +9,12 @@
                     <font-awesome-icon icon="chevron-down" />
                 </div>
                 {{ $t("resourceLevel." + section + ".categoryName") }}
-            </td>
-            <td
+            </div>
+            <div
                 class="col-8 col-lg-7 text-right text-lg-left info_message"
                 scope="col"
-            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore }}%</td>
-        </tr>
+            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore }}%</div>
+        </div>
         <span class="checks" v-if="showChecks">
             <ResourceLevelRow v-for="(value, name, index) in resourceLevelStats" :check="value" :name="value.name" v-bind:key="name" v-bind:index="index"></ResourceLevelRow>
         </span>

@@ -4,22 +4,16 @@
         <span v-if="loaded">
             <h4>{{ $t("resourceLevel.subheadline") }}</h4>
             <div class="result_box">
-                <table class="table table-hover">
-                    <thead>
-                        <tr class="d-flex">
-                            <th class="col-9 col-lg-5" scope="col">{{ $t("resourceLevel.check") }}</th>
-                            <th class="col-1 text-center" scope="col">{{ $t("resourceLevel.ok") }}</th>
-                            <th class="col-1 text-center" scope="col">{{ $t("resourceLevel.failed") }}</th>
-                            <th class="col-1 text-center" scope="col">{{ $t("resourceLevel.na") }}</th>
-                            <th class="col-4 d-none d-lg-block" scope="col">&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <span v-for="(name, index) in sections" v-bind:key="index">
-                            <ResourceLevelList :section="name" />
-                        </span>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-9 col-lg-5" scope="col">{{ $t("resourceLevel.check") }}</div>
+                    <div class="col-1 text-center" scope="col">{{ $t("resourceLevel.ok") }}</div>
+                    <div class="col-1 text-center" scope="col">{{ $t("resourceLevel.failed") }}</div>
+                    <div class="col-1 text-center" scope="col">{{ $t("resourceLevel.na") }}</div>
+                    <div class="col-4 d-none d-lg-block" scope="col">&nbsp;</div>
+                </div>
+                <span v-for="(name, index) in sections" v-bind:key="index">
+                    <ResourceLevelList :section="name" />
+                </span>
             </div>
         </span>
         <span v-else>
