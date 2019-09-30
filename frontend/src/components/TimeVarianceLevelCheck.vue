@@ -3,10 +3,10 @@
         <div class="card-body">
             <div class="row no-gutters">
                 <div class="col col-2 col-sm-2 col-lg-1 text-left">
-                    <span v-if="check.result == true" class="result_icon ok_icon">
+                    <span v-if="result == true" class="result_icon ok_icon">
                         <font-awesome-icon :icon="['far', 'check-circle']" />
                     </span>
-                    <span v-if="check.result == false" class="result_icon failed_icon">
+                    <span v-if="result == false" class="result_icon failed_icon">
                         <font-awesome-icon :icon="['far', 'times-circle']" />
                     </span>
                 </div>
@@ -68,6 +68,14 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/variables";
 
+.result_icon {
+    font-size: 16px;
+}
+
+.card-body {
+    padding: 15px;
+}
+
 .check_headline {
     overflow-wrap: break-word;
 }
@@ -83,7 +91,7 @@ export default {
 .time_variance_result_box {
     display: inline-block;
     background-color: white;
-    padding: 15px;
+    padding: 0px;
     border-radius: 10px;
     margin-bottom: 25px;
     min-height: 340px;
