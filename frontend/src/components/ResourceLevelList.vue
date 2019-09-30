@@ -1,7 +1,7 @@
 <template>
     <span v-if="resourceLevelStats.length > 0">
-        <div class="row clickable" v-on:click="showChecks = !showChecks">
-            <div class="col-4 col-lg-5 category" scope="col">
+        <div class="tr row clickable" v-on:click="showChecks = !showChecks">
+            <div class="td col-4 col-lg-5 category" scope="col">
                 <div class="switcher text-center" v-if="!showChecks">
                     <font-awesome-icon icon="chevron-right" />
                 </div>
@@ -11,7 +11,7 @@
                 {{ $t("resourceLevel." + section + ".categoryName") }}
             </div>
             <div
-                class="col-8 col-lg-7 text-right text-lg-left info_message"
+                class="td col-8 col-lg-7 text-right text-lg-left info_message"
                 scope="col"
             >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore }}%</div>
         </div>

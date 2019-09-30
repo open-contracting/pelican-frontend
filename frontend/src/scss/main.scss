@@ -110,6 +110,10 @@ h5 {
     overflow-wrap: break-word;
 }
 
+.thr {
+    border-bottom: solid 2px #E8ECEF;
+}
+
 .tr {
     border-top: solid 1px #E8ECEF;
 }
@@ -119,5 +123,9 @@ h5 {
 }
 
 .td {
+    padding: 12px;
+}
+
+.th {
     padding: 12px;
 }

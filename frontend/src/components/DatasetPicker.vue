@@ -6,7 +6,7 @@
                     <SearchInput :placeholder="$t('dataset.search')" :preset="search" :on-update="(search) => $store.commit('setDatasetSearch', search)" />
                 </div>
             </div>
-            <div class="row">
+            <div class="thr row">
                 <div class="th col-4 align-self-center clickable" @click="sortBy('id')">
                     <SortButtons
                         :label="$t('dataset.id')"

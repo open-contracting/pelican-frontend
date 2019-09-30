@@ -4,12 +4,12 @@
         <span v-if="loaded">
             <h4>{{ $t("resourceLevel.subheadline") }}</h4>
             <div class="result_box">
-                <div class="row">
-                    <div class="col-9 col-lg-5" scope="col">{{ $t("resourceLevel.check") }}</div>
-                    <div class="col-1 text-center" scope="col">{{ $t("resourceLevel.ok") }}</div>
-                    <div class="col-1 text-center" scope="col">{{ $t("resourceLevel.failed") }}</div>
-                    <div class="col-1 text-center" scope="col">{{ $t("resourceLevel.na") }}</div>
-                    <div class="col-4 d-none d-lg-block" scope="col">&nbsp;</div>
+                <div class="thr row">
+                    <div class="th col-9 col-lg-5" scope="col">{{ $t("resourceLevel.check") }}</div>
+                    <div class="th col-1 text-center" scope="col">{{ $t("resourceLevel.ok") }}</div>
+                    <div class="th col-1 text-center" scope="col">{{ $t("resourceLevel.failed") }}</div>
+                    <div class="th col-1 text-center" scope="col">{{ $t("resourceLevel.na") }}</div>
+                    <div class="th col-4 d-none d-lg-block" scope="col">&nbsp;</div>
                 </div>
                 <span v-for="(name, index) in sections" v-bind:key="index">
                     <ResourceLevelList :section="name" />
