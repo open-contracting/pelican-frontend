@@ -158,7 +158,7 @@ export default new Vuex.Store({
                 state.fieldCheckExpandedNodes.push(path)
             }
         },
-        setFieldCheckExpandedNodes(state, nodes) {            
+        setFieldCheckExpandedNodes(state, nodes) {
             state.fieldCheckExpandedNodes = nodes
         },
         removeFieldCheckExpandedNode(state, path) {
@@ -233,6 +233,7 @@ export default new Vuex.Store({
                     axios.get(url)
                         .then(function (response) {
                             response["data"]["name"] = checkName;
+                            response["data"]["examples_filled"] = true;
                             commit("setResourceLevelCheckDetail", response["data"]);
                         })
                         .catch(function (error) {
@@ -279,7 +280,10 @@ export default new Vuex.Store({
                     })
             }
         },
-        loadFieldLevelStats({ commit, state }) {
+        loadFieldLevelStats({
+            commit,
+            state
+        }) {
             commit("setFieldLevelStats", null);
 
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
@@ -328,6 +332,7 @@ export default new Vuex.Store({
                     axios.get(url)
                         .then(function (response) {
                             response["data"]["path"] = path;
+                            response["data"]["examples_filled"] = true;
                             commit("setFieldLevelCheckDetail", response["data"]);
                         })
                         .catch(function (error) {
@@ -355,23 +360,28 @@ export default new Vuex.Store({
                     throw new Error(error);
                 })
         },
-        resetDatasetEnv({ commit }) {
+        resetDatasetEnv({
+            commit
+        }) {
             commit("setFieldLevelStats", null);
             commit("setDatasetLevelStats", null);
             commit("setResourceLevelStats", null);
             commit("resetFieldCheckSorting");
             commit("setFieldCheckSearch", null);
             commit("collapseAllFieldCheckExpandedNodes"),
-            commit("setFieldCheckLayout", "table");            
+                commit("setFieldCheckLayout", "table");
         },
-        setExpandedNodesForSearch({ getters, commit }) {
-            var isPathSearched = function(path) {
+        setExpandedNodesForSearch({
+            getters,
+            commit
+        }) {
+            var isPathSearched = function (path) {
                 if (getters.fieldCheckSearch && path) {
                     var search_lc = getters.fieldCheckSearch.toLowerCase()
                     var path_lc = path.toLowerCase()
                     return path_lc.includes(search_lc)
                 }
-                
+
                 return false
             }
 
@@ -396,7 +406,7 @@ export default new Vuex.Store({
                             nodes.push(n)
                         }
                     })
-                    
+
                     // collapse matched nodes without matching child
                     var matched = [...nodes]
                     nodes = nodes.filter(n => {
@@ -404,7 +414,7 @@ export default new Vuex.Store({
                         if (!isPathSearched(n)) {
                             return true
                         }
-                        
+
                         return matched.some(m => {
                             return m.startsWith(n + ".") && isPathSearched(m.substr(n.length))
                         })
@@ -412,7 +422,7 @@ export default new Vuex.Store({
 
                     commit("setFieldCheckExpandedNodes", nodes)
                 }
-            }        
+            }
         }
     }
 })

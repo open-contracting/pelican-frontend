@@ -50,7 +50,7 @@
                         {{ $t("sections.dataset").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item to="/time" :disabled="!timeVarianceLoaded">
+                    <b-nav-item to="/time" v-if="showTimeVariance">
                         <span v-if="timeVarianceLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="history" />
                         </span>
@@ -72,6 +72,17 @@ export default {
     mixins: [stateMixin],
     data: function() {
         return {};
+    },
+    computed: {
+        showTimeVariance() {
+            if (
+                this.$store.getters.timeVarianceLevelStats != null &&
+                this.$store.getters.timeVarianceLevelStats.length > 0
+            ) {
+                return true;
+            }
+            return false;
+        }
     }
 };
 </script>

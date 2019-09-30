@@ -108,7 +108,7 @@ export default {
             if (this.check != [] && this.check.path != undefined) {
                 var failed = this.check.coverage.failed_examples;
 
-                if (failed.length > 0) {
+                if (failed != undefined && failed.length > 0) {
                     examples.push([
                         this.$t("fieldDetail.coverage.label") +
                             " - " +
@@ -127,7 +127,7 @@ export default {
             if (this.check != [] && this.check.path != undefined) {
                 var failed = this.check.quality.failed_examples;
 
-                if (failed.length > 0) {
+                if (failed != undefined && failed.length > 0) {
                     examples.push([
                         this.$t("fieldDetail.quality.label") +
                             " - " +
@@ -144,11 +144,16 @@ export default {
         passedExamples() {
             var examples = [];
             if (this.check != [] && this.check.path != undefined) {
-                var passed = this.check.coverage.passed_examples.concat(
-                    this.check.quality.passed_examples
-                );
+                var passed = [];
+                if (this.check.coverage.passed_examples != undefined) {
+                    passed = passed.concat(this.check.coverage.passed_examples);
+                }
 
-                if (passed.length > 0) {
+                if (this.check.quality.passed_examples != undefined) {
+                    passed = passed.concat(this.check.quality.passed_examples);
+                }
+
+                if (passed != undefined && passed.length > 0) {
                     examples.push([
                         this.$t("core.passedExamples"),
                         passed.map(function(val) {
