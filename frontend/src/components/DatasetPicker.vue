@@ -3,14 +3,10 @@
         <b-container class="px-0">
             <b-row class="action_bar no-gutters">
                 <b-col class="col-4 text-left">
-                    <b-input-group class="search_input">
-                        <template v-slot:prepend>
-                            <b-input-group-text>
-                                <font-awesome-icon icon="search"/>
-                            </b-input-group-text>
-                        </template>
-                        <b-form-input v-model="search" :placeholder="$t('dataset.search')" />
-                    </b-input-group>
+                    <SearchInput :placeholder="$t('dataset.search')"
+                        :preset="search"
+                        :on-update="(search) => $store.commit('setDatasetSearch', search)"
+                    />
                 </b-col>
             </b-row>
         </b-container>
@@ -98,10 +94,10 @@ import ProgressBar from "@/components/ProgressBar.vue";
 import SortButtons from "@/components/SortButtons.vue";
 import stateMixin from "@/plugins/stateMixins.js";
 import sortMixins from "@/plugins/sortMixins.js";
-import searchFieldMixins from "@/plugins/searchFieldMixins.js";
+import SearchInput from "@/components/SearchInput.vue";
 
 export default {
-    mixins: [stateMixin, sortMixins, searchFieldMixins],
+    mixins: [stateMixin, sortMixins],
     data: function() {
         return {
             datasets: [],
@@ -112,9 +108,13 @@ export default {
     components: {
         Loader,
         ProgressBar,
-        SortButtons
+        SortButtons,
+        SearchInput
     },
     computed: {
+        search: function(){
+            return this.$store.getters.datasetSearch
+        },
         phases: function() {
             return ['PLANNED','CONTRACTING_PROCESS','DATASET','TIME_VARIANCE','CHECKED']
         },
@@ -134,12 +134,6 @@ export default {
         }
     },
     methods: {
-        searchGetter: function() {
-            return this.$store.getters.datasetSearch
-        },
-        searchSetter: function() {
-            this.$store.commit("setDatasetSearch", this.search)
-        },
         isSearched: function(name) {
             return !this.search || name.toLowerCase().includes(this.search.toLowerCase())
         },
@@ -206,7 +200,6 @@ export default {
     },
     mounted() {
         var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
-            var self = this;
             axios
                 .get(url)
                 .then(response => {
@@ -305,16 +298,5 @@ table {
 .action_bar {
     margin-top: 15px;
     margin-bottom: 15px;
-
-    .search_input {
-        .input-group-text {
-            background-color: transparent;
-            border-right: none;
-        }
-        input {
-            background-color: transparent;
-            border-left: none;
-        }
-    }
 }
 </style>

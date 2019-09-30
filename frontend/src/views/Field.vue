@@ -11,14 +11,10 @@
 
         <b-row class="action_bar">
             <b-col class="text-left">
-                <b-input-group class="search_input">
-                    <template v-slot:prepend>
-                        <b-input-group-text>
-                            <font-awesome-icon icon="search" />
-                        </b-input-group-text>
-                    </template>
-                    <b-form-input v-model="search" :placeholder="$t('field.search')" />
-                </b-input-group>
+                <SearchInput :placeholder="$t('field.search')"
+                    :preset="search"
+                    :on-update="(search) => $store.commit('setFieldCheckSearch', search)"
+                />
             </b-col>
             <b-col class="text-right">
                 <b-button-group v-if="layout == 'table'">
@@ -49,27 +45,23 @@
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
-import searchFieldMixins from "@/plugins/searchFieldMixins.js";
+import SearchInput from "@/components/SearchInput.vue";
 
 export default {
     name: "field",
     data: function() {
         return {};
     },
-    mixins: [searchFieldMixins],
-    components: { Dashboard, FieldCheckTable, FieldCheckTree },
+    components: { Dashboard, FieldCheckTable, FieldCheckTree, SearchInput },
     computed: {
         layout: function() {
             return this.$store.getters.fieldCheckLayout;
+        },
+        search: function() {
+            return this.$store.getters.fieldCheckSearch;
         }
     },
     methods: {
-        searchGetter: function() {
-            return this.$store.getters.fieldCheckSearch;
-        },
-        searchSetter: function() {
-            this.$store.commit("setFieldCheckSearch", this.search);
-        },
         detail: function(path) {
             this.$router.push({
                 name: "fieldCheckDetail",
@@ -116,17 +108,6 @@ mark {
             border-color: $primary;
             color: $primary;
         }
-    }
-}
-
-.search_input {
-    .input-group-text {
-        background-color: transparent;
-        border-right: none;
-    }
-    input {
-        background-color: transparent;
-        border-left: none;
     }
 }
 </style>
