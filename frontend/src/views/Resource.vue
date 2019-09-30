@@ -3,7 +3,7 @@
         <h2>{{ $t("sections.resource") }}</h2>
         <span v-if="loaded">
             <h4>{{ $t("resourceLevel.subheadline") }}</h4>
-            <div class="result_box">
+            <div class="resource_result_box">
                 <div class="thr row">
                     <div class="th col-9 col-lg-5" scope="col">{{ $t("resourceLevel.check") }}</div>
                     <div class="th col-1 text-center" scope="col">{{ $t("resourceLevel.ok") }}</div>
@@ -49,3 +49,13 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.resource_result_box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
+    border: 0;
+}
+</style>

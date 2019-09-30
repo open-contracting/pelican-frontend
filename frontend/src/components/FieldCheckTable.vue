@@ -1,64 +1,60 @@
 <template>
-    <table class="table table-hover">
-        <thead>
-            <tr class="d-flex">
-                <th class="col col-4" @click="sortByPath(tableData)">
-                    <SortButtons
-                        :label="$t('field.table.head.object')"
-                        :active="sortedBy == 'path'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortByPath(tableData)"
-                        :on-desc="() => sortByPath(tableData, false)"
-                    />
-                </th>
-                <th class="col col-4" @click="sortByCoverage(tableData)">
-                    <SortButtons
-                        :label="$t('field.table.head.coverage')"
-                        :active="sortedBy == 'coverage'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortByCoverage(tableData)"
-                        :on-desc="() => sortByCoverage(tableData, false)"
-                    />
-                </th>
-                <th class="col col-4" @click="sortByQuality(tableData)">
-                    <SortButtons
-                        :label="$t('field.table.head.quality')"
-                        :active="sortedBy == 'quality'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortByQuality(tableData)"
-                        :on-desc="() => sortByQuality(tableData, false)"
-                    />
-                </th>
-            </tr>
-        </thead>
+    <div>
+        <div class="thr row">
+            <div class="th col col-4" @click="sortByPath(tableData)">
+                <SortButtons
+                    :label="$t('field.table.head.object')"
+                    :active="sortedBy == 'path'"
+                    :asc="isAscendingSorted"
+                    :on-asc="() => sortByPath(tableData)"
+                    :on-desc="() => sortByPath(tableData, false)"
+                />
+            </div>
+            <div class="th col col-4" @click="sortByCoverage(tableData)">
+                <SortButtons
+                    :label="$t('field.table.head.coverage')"
+                    :active="sortedBy == 'coverage'"
+                    :asc="isAscendingSorted"
+                    :on-asc="() => sortByCoverage(tableData)"
+                    :on-desc="() => sortByCoverage(tableData, false)"
+                />
+            </div>
+            <div class="th col col-4" @click="sortByQuality(tableData)">
+                <SortButtons
+                    :label="$t('field.table.head.quality')"
+                    :active="sortedBy == 'quality'"
+                    :asc="isAscendingSorted"
+                    :on-asc="() => sortByQuality(tableData)"
+                    :on-desc="() => sortByQuality(tableData, false)"
+                />
+            </div>
+        </div>
 
-        <tbody>
-            <template v-for="n in tableData">
-                <FieldCheckTableRow v-if="isSearched(n)" :key="n.path" :check="n" @click.native="$emit('field-check-detail', n.path)">
-                    <span v-html="highlightSearch(n.path)" />
-                    <template v-if="hasHidden(n)">
-                        <div>
-                            <span class="hide_button" @click.stop="switchHidden(n)">
-                                <font-awesome-icon icon="eye-slash" class="hidden_icon" />
-                                <i>{{ $t('field.hidden', { n: n._hidden.length }) }}</i>
-                            </span>
-                        </div>
-                    </template>
-                </FieldCheckTableRow>
-                <template v-for="h in n._hidden">
-                    <FieldCheckTableRow
-                        v-if="isSearched(h)"
-                        :check="h"
-                        :key="h.path"
-                        :class="['hidden_row', {'hidden': isHidden(n)}]"
-                        @click.native="$emit('field-check-detail', h.path)"
-                    >
-                        <span v-html="highlightSearch(h.path)" />
-                    </FieldCheckTableRow>
+        <template v-for="n in tableData">
+            <FieldCheckTableRow v-if="isSearched(n)" :key="n.path" :check="n" @click.native="$emit('field-check-detail', n.path)">
+                <span v-html="highlightSearch(n.path)" />
+                <template v-if="hasHidden(n)">
+                    <div>
+                        <span class="hide_button" @click.stop="switchHidden(n)">
+                            <font-awesome-icon icon="eye-slash" class="hidden_icon" />
+                            <i>{{ $t('field.hidden', { n: n._hidden.length }) }}</i>
+                        </span>
+                    </div>
                 </template>
+            </FieldCheckTableRow>
+            <template v-for="h in n._hidden">
+                <FieldCheckTableRow
+                    v-if="isSearched(h)"
+                    :check="h"
+                    :key="h.path"
+                    :class="['hidden_row', {'hidden': isHidden(n)}]"
+                    @click.native="$emit('field-check-detail', h.path)"
+                >
+                    <span v-html="highlightSearch(h.path)" />
+                </FieldCheckTableRow>
             </template>
-        </tbody>
-    </table>
+        </template>
+    </div>
 </template>
 
 <script>

@@ -1,10 +1,10 @@
 <template>
-    <tr v-if="check" class="d-flex">
-        <td class="col col-4 break_word">
+    <div v-if="check" class="tr row clickable">
+        <div class="td col col-4 break_word">
             <slot>{{ check.path }}</slot>
-        </td>
+        </div>
 
-        <td class="col col-4">
+        <div class="td col col-4">
             <div class="row h-100 no-gutters align-items-center">
                 <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
                     <span class="field_check_result_value">{{ check.coverageOkShare | formatNumber }}%</span>
@@ -18,10 +18,10 @@
                     </span>
                 </div>
             </div>
-        </td>
+        </div>
 
         <template v-if="check.quality.total_count">
-            <td class="col col-4">
+            <div class="td col col-4">
                 <div class="row h-100 no-gutters align-items-center">
                     <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
                         <span class="field_check_result_value">{{ check.qualityOkShare | formatNumber }}%</span>
@@ -35,10 +35,10 @@
                         </span>
                     </div>
                 </div>
-            </td>
+            </div>
         </template>
-        <td class="col col-4" v-else></td>
-    </tr>
+        <div class="td col col-4" v-else></div>
+    </div>
 </template>
 
 <script>

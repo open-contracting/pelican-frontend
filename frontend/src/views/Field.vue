@@ -11,10 +11,7 @@
 
         <b-row class="action_bar">
             <b-col class="text-left">
-                <SearchInput :placeholder="$t('field.search')"
-                    :preset="search"
-                    :on-update="(search) => $store.commit('setFieldCheckSearch', search)"
-                />
+                <SearchInput :placeholder="$t('field.search')" :preset="search" :on-update="(search) => $store.commit('setFieldCheckSearch', search)" />
             </b-col>
             <b-col class="text-right">
                 <b-button-group v-if="layout == 'table'">
@@ -34,7 +31,7 @@
             </b-col>
         </b-row>
 
-        <div class="result_box">
+        <div class="field_result_box">
             <FieldCheckTable v-if="layout == 'table'" v-on:field-check-detail="detail" ref="field-check-table" />
             <FieldCheckTree v-else-if="layout == 'tree'" v-on:field-check-detail="detail" ref="field-check-tree" />
         </div>
@@ -77,6 +74,14 @@ export default {
 
 <style lang="scss">
 @import "src/scss/_variables";
+
+.field_result_box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
+    border: 0;
+}
 
 mark {
     background-color: $primary !important;
