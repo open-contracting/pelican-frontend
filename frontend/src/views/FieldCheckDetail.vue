@@ -7,6 +7,8 @@
                 <h5 :key="k">
                     &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
                     {{ c.passed_count + c.failed_count | formatNumber }}
+                    &nbsp;
+                    <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header.tooltip')"></Tooltip>
                 </h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
@@ -15,6 +17,8 @@
                 <h5 :key="k">
                     &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
                     {{ c.passed_count + c.failed_count | formatNumber }}
+                    &nbsp;
+                    <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header.tooltip')"></Tooltip>
                 </h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
@@ -43,6 +47,7 @@ import VueJsonPretty from "vue-json-pretty";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     name: "fieldCheckDetail",
@@ -56,7 +61,8 @@ export default {
         VueJsonPretty,
         DashboardDetail,
         ExampleBoxes,
-        CheckDetailResultBox
+        CheckDetailResultBox,
+        Tooltip
     },
     methods: {
         preview: function(itemId) {

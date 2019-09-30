@@ -4,10 +4,18 @@
             <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
             <p v-html="$t('resourceLevel.' + check.name + '.description')"></p>
 
-            <h5>{{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}</h5>
+            <h5>
+                {{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}
+                &nbsp;
+                <Tooltip :text="$t('resourceLevel.count_header.tooltip')"></Tooltip>
+            </h5>
+
             <CheckDetailResultBox :check="check" ok failed na />
 
-            <h5>{{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}</h5>
+            <h5>
+                {{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}&nbsp;
+                <Tooltip :text="$t('resourceLevel.application_count_header.tooltip')"></Tooltip>
+            </h5>
             <CheckDetailResultBox :check="check" pass nonPass />
 
             <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
@@ -31,6 +39,7 @@ import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     name: "resourceCheckDetail",
@@ -45,7 +54,8 @@ export default {
         VueJsonPretty,
         DashboardDetail,
         ExampleBoxes,
-        CheckDetailResultBox
+        CheckDetailResultBox,
+        Tooltip
     },
     methods: {
         preview: function(itemId) {
