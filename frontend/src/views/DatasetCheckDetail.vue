@@ -27,7 +27,12 @@
                                     <span class="check_name">{{ share[0] }}</span>
                                 </td>
                                 <td class="text-right">
-                                    <InlineBar :count="share[1]['count']" :percentage="Math.round(share[1]['share'] * 10000) / 100" :state="'reg'" />
+                                    <InlineBar
+                                        :count="share[1]['count']"
+                                        :percentage="Math.round(share[1]['share'] * 10000) / 100"
+                                        :state="'reg'"
+                                        showCount="true"
+                                    />
                                 </td>
                             </tr>
                         </tbody>
