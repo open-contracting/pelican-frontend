@@ -3,8 +3,25 @@
         <h2>{{ $t("sections.time") }}</h2>
         <h4>{{ $t("timeLevel.subheadline") }}</h4>
         <div class="row">
-            <div v-for="(check, index) in timeVarianceLevelStats" v-bind:key="index" class="col col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
-                <TimeVarianceLevelCheck :check="check"></TimeVarianceLevelCheck>
+            <div class="card-deck col-12">
+                <template v-for="(check, index) in timeVarianceLevelStats">
+                    <TimeVarianceLevelCheck v-bind:key="index" :check="check"></TimeVarianceLevelCheck>
+
+                    <div class="w-100 d-none d-sm-block d-md-none" v-bind:key="'sm' + index">
+                        <!-- wrap every 2-->
+                    </div>
+
+                    <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-md-block d-lg-none" v-bind:key="'md' + index">
+                        <!-- wrap every 2-->
+                    </div>
+                    <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-lg-block d-xl-none" v-bind:key="'lg' + index">
+                        <!-- wrap every 2-->
+                    </div>
+
+                    <div v-if="(index + 1) % 3 == 0" class="w-100 d-none d-xl-block" v-bind:key="'xl' + index">
+                        <!-- wrap every 2-->
+                    </div>
+                </template>
             </div>
         </div>
     </dashboard>
