@@ -4,7 +4,10 @@
             <h2>{{ $t("timeLevel." + check.name + ".name") }}</h2>
             <p v-html=" $t('timeLevel.' + check.name + '.descriptionLong')"></p>
 
-            <h5>{{ $t("timeLevel.coverage.header") }} {{ check.meta.total_count | formatNumber }}</h5>
+            <h5>
+                {{ $t("timeLevel.coverage.header") }} {{ check.meta.total_count | formatNumber }}
+                <Tooltip :text="$t('timeLevel.coverage.header_tooltip')"></Tooltip>
+            </h5>
             <div class="result_box">
                 <table class="table table-borderless table-sm">
                     <tbody>
@@ -33,7 +36,10 @@
                 </table>
             </div>
 
-            <h5>{{ $t("timeLevel.check.header") }} {{ check.meta.coverage_count | formatNumber }}</h5>
+            <h5>
+                {{ $t("timeLevel.check.header") }} {{ check.meta.coverage_count | formatNumber }}
+                <Tooltip :text="$t('timeLevel.check.header_tooltip')"></Tooltip>
+            </h5>
             <div class="result_box">
                 <table class="table table-borderless table-sm">
                     <tbody>
@@ -139,6 +145,7 @@
 import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     name: "timeVarianceCheckDetail",
@@ -153,7 +160,8 @@ export default {
     components: {
         VueJsonPretty,
         DashboardDetail,
-        InlineBar
+        InlineBar,
+        Tooltip
     },
     created() {
         this.check = this.$store.getters.timeVarianceLevelCheckByName(
