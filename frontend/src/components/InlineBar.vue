@@ -64,6 +64,7 @@ export default {
     padding-top: 3px;
     padding-left: 5px;
     font-weight: 700;
+    border-radius: 8px;
 }
 
 .ok .bar {
