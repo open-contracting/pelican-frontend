@@ -93,6 +93,7 @@ export default {
 
 #logo {
     width: 90%;
+    max-width: 200px;
 }
 
 .main_nav {

@@ -136,6 +136,10 @@ input::placeholder,
     color: $na_color;
 }
 
+.form-control:focus {
+    background-color: transparent;
+}
+
 .description {
     margin-bottom: 50px;
     color: $headings_light_color;
