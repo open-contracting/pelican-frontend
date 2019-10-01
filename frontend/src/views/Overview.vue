@@ -10,7 +10,7 @@
                             <tr>
                                 <td>{{ $t('overview.compiled_releases.value_label') }}</td>
                                 <td class="break_word">
-                                    <span class="ocid_count">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
+                                    <span class="ocid_count bold">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
                                 </td>
                             </tr>
                             <tr>
