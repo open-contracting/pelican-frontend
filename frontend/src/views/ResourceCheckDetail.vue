@@ -7,14 +7,14 @@
             <h5>
                 {{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}
                 &nbsp;
-                <Tooltip :text="$t('resourceLevel.count_header.tooltip')"></Tooltip>
+                <Tooltip :text="$t('resourceLevel.count_header_tooltip')"></Tooltip>
             </h5>
 
             <CheckDetailResultBox :check="check" ok failed na />
 
             <h5>
                 {{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}&nbsp;
-                <Tooltip :text="$t('resourceLevel.application_count_header.tooltip')"></Tooltip>
+                <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')"></Tooltip>
             </h5>
             <CheckDetailResultBox :check="check" pass nonPass />
 

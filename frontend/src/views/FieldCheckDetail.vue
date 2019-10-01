@@ -8,7 +8,7 @@
                     &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
                     {{ c.passed_count + c.failed_count | formatNumber }}
                     &nbsp;
-                    <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header.tooltip')"></Tooltip>
+                    <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')"></Tooltip>
                 </h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
@@ -18,7 +18,7 @@
                     &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
                     {{ c.passed_count + c.failed_count | formatNumber }}
                     &nbsp;
-                    <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header.tooltip')"></Tooltip>
+                    <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')"></Tooltip>
                 </h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
