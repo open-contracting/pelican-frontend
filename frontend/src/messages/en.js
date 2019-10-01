@@ -93,9 +93,8 @@ export const messages = {
             },
             buyer_repetition: {
                 name: "Buyer repetition",
-                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
-                1-50% vsech zakazek
-                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
+                description: "",
+                description_long: "",
             },
             tender_value: {
                 name: "Tender value distribution",
