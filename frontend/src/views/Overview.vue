@@ -20,7 +20,10 @@
                             <tr>
                                 <td>URL</td>
                                 <td class="break_word">
-                                    <a v-if="collection.url" :href="collection.url" target="_blank">{{ collection.url }}</a>
+                                    <a v-if="collection.url && collection.url.startsWith('http')" :href="collection.url" target="_blank">{{ collection.url }}</a>
+                                    <template v-else>
+                                        <template v-if="collection.url">{{ collection.url }}</template>
+                                    </template>
                                 </td>
                             </tr>
                             <tr>
