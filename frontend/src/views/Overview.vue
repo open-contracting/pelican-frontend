@@ -114,7 +114,10 @@
 
         <div class="row">
             <div class="col col-12 lifecycle">
-                <h4>{{ $t('overview.lifecycle.title') }}</h4>
+                <h4>
+                    {{ $t('overview.lifecycle.title') }}
+                    <Tooltip :text="$t('overview.lifecycle.info')"></Tooltip>
+                </h4>
                 <div class="result_box">
                     <div class="row">
                         <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']">
@@ -137,12 +140,17 @@
         </div>
         <div class="row">
             <div class="col-12 col-md-6 prices">
-                <h4>{{ $t('overview.prices.title') }}</h4>
+                <h4>
+                    {{ $t('overview.prices.title') }}
+                    <Tooltip :text="$t('overview.prices.info')"></Tooltip>
+                </h4>
                 <div class="result_box">
                     <h5>{{ $t('overview.prices.value_label') }}</h5>
                     <p>
-                        <strong>$ {{ prices.total_volume_positive | formatNumber }}</strong>
-                        in {{ prices.contracts_positive | formatNumber }} {{ $t('overview.prices.contracts') }}
+                        <strong class="bold">$ {{ prices.total_volume_positive | formatNumber }}</strong>
+                        in
+                        <strong class="bold">{{ prices.contracts_positive | formatNumber }}</strong>
+                        {{ $t('overview.prices.contracts') }}
                     </p>
                     <table v-if="prices" class="table">
                         <thead>
@@ -155,11 +163,13 @@
                         <tbody>
                             <tr v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']" :key="c">
                                 <td v-html="getPriceCategoryLabel(c)" />
-                                <td class="text-right">{{ prices.price_category_positive[c].contracts | formatNumber }}</td>
+                                <td class="text-right numeric">{{ prices.price_category_positive[c].contracts | formatNumber }}</td>
                                 <td>
-                                    <div class="d-flex flex-row align-items-center share_progressbar">
-                                        <div class="value">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
-                                        <progress-bar :value="(prices.price_category_positive[c].share * 100)" class="flex-fill" />
+                                    <div class="row align-items-center share_progressbar no-gutters">
+                                        <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
+                                        <div class="col col-9 value progress_holder d-flex align-items-center">
+                                            <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -207,10 +217,11 @@
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
 import { GChart } from "vue-google-charts";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     name: "overview",
-    components: { Dashboard, ProgressBar, GChart },
+    components: { Dashboard, ProgressBar, GChart, Tooltip },
     computed: {
         dataset: function() {
             return this.$store.getters.dataset;
@@ -351,8 +362,11 @@ export default {
 
     .share_progressbar {
         .value {
-            margin-right: 10px;
             color: $headings_light_color;
+        }
+
+        .progress_holder {
+            padding-left: 5px;
         }
     }
 
