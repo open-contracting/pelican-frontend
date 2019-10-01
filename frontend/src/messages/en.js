@@ -34,8 +34,8 @@ export const messages = {
         home: 'Home',
         overview: 'Overview',
         field: 'Field',
-        resource: 'Resource',
-        dataset: 'Dataset',
+        resource: 'Compiled release',
+        dataset: 'Collection',
         time: 'Time',
     },
     preview: {
@@ -211,8 +211,10 @@ export const messages = {
         failed: "FAILED",
         na: "N/A",
         check: "CHECK",
-        count_header: "Checked contracting processes:",
+        count_header: "Checked compiled releases:",
+        count_header_tooltip: "Total number of compiled releases in a collection. For each compiled release the check is evaluated right once. It either passes, fails or there are insufficient data, therefore, the result is unavailable. This statistic shows what is the percentage of compiled releases that has problematic data.",
         application_count_header: "Individual checks:",
+        application_count_header_tooltip: "One check can consist of multiple individual checks that controls the same logical rule using multiple instances of the same data structure (e.g. multiple suppliers). This statistic shows what is the percentage of passed and failed individual checks.",
         coherent: {
             categoryName: "Coherency",
             period: {
@@ -441,43 +443,55 @@ export const messages = {
         coverage: {
             label: "Coverage",
             exists: {
-                count_header: "Exists"
+                count_header: "Exists",
+                count_header_tooltip: "There can be as many occurences of each field as is the number of occurences of its parent structure. This check inspects that the parent structure has particular JSON key set. For example for field path 'tender.title' it checks whether all 'tender' objects have 'title' key set"
             },
             non_empty: {
-                count_header: "Non-Empty"
+                count_header: "Non-Empty",
+                count_header_tooltip: "This check is a part of coverage checks and controls whether the particular field does not have empty value. Except null values also empty strings and empty arrays are considered to be empty fields."
             }
         },
         quality: {
             label: "Quality",
             ocid_prefix_check: {
-                count_header: "Registered prefix"
+                count_header: "Registered prefix",
+                count_header_tooltip: "To pass this check 'ocid' must start with a registered prefix."
             },
             date_time: {
-                count_header: "Realistic datetime"
+                count_header: "Realistic datetime",
+                count_header_tooltip: "To pass this check value of a given field must fulfill the condition 1970-01-01 <= value <= 2050-01-01"
             },
             email: {
-                count_header: "Email format"
+                count_header: "Email format",
+                count_header_tooltip: "To pass this check value of a given field must be a string with a valid email format"
             },
             identifier_scheme: {
-                count_header: "Identifier scheme"
+                count_header: "Identifier scheme",
+                count_header_tooltip: "To pass this check value of a given field must be a value from org-id.guide scheme list"
             },
             telephone: {
-                count_header: "Telephone format"
+                count_header: "Telephone format",
+                count_header_tooltip: "To pass this check value of a given field must be a string with a valid phone format"
             },
             document_description_length: {
-                count_header: "Document description length"
+                count_header: "Document description length",
+                count_header_tooltip: "To pass this check value of a given field must be a string not longer than 250 words"
             },
             document_type: {
-                count_header: "Coherent document type"
+                count_header: "Coherent document type",
+                count_header_tooltip: "If the 'documentType' value is a code in the extended 'documentType' codelist, and the section for the code is non-empty, then the section must include a section of OCDS document where the document is published"
             },
             document_format_codelist: {
-                count_header: "Document format"
+                count_header: "Document format",
+                count_header_tooltip: "To pass this check 'format' of the document must be a value from IANA Media Types codelist"
             },
             number_checks: {
-                count_header: "Non-negative value"
+                count_header: "Non-negative value",
+                count_header_tooltip: "The value of a given must be a non-negative number to pass this check"
             },
             language: {
-                count_header: "Two-letter lowercase ISO639-1 code"
+                count_header: "Two-letter lowercase ISO639-1 code",
+                count_header_tooltip: "To pass this check value of a given field must be a two-letter lowercase ISO639-1 code"
             }
         }
     },
@@ -487,12 +501,14 @@ export const messages = {
         coverageResult: "Coverage result",
         subheadline: "All Time Variance Level Checks",
         coverage: {
-            header: "Contracting realeases processed:",
-            ok: "Ok",
+            header: "Compiled realeases processed:",
+            header_tooltip: "This number says how many compiled releases from the older version of the dataset fulfill all conditions to be compared with the newer version. OCID presence is a must have. On top of some other conditions might be added. For example 'tender.title' must be set for Tender title stability check. The statistis says how many compiled releases that fullfiled all condition were also included in the newer version of a dataset, therefore the final check can be performed.",
+            ok: "Included",
             failed: "Not included"
         },
         check: {
-            header: "Contracting realeases checked:",
+            header: "Compiled realease pairs checked:",
+            header_tooltip: "This number says how many pairs (old and new) of compiled releases was eventually checked by a given rule (e.g. Tender title stability or Phase stability)",
             ok: "Ok",
             failed: "Failed"
         },
