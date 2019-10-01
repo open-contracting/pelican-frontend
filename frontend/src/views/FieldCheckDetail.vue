@@ -6,7 +6,9 @@
             <template v-for="(c, k) in check.coverage.checks">
                 <h5 :key="k">
                     &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
-                    {{ c.passed_count + c.failed_count | formatNumber }}
+                    <span
+                        class="bold"
+                    >{{ c.passed_count + c.failed_count | formatNumber }}</span>
                     &nbsp;
                     <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')"></Tooltip>
                 </h5>
@@ -16,7 +18,9 @@
             <template v-for="(c, k) in check.quality.checks">
                 <h5 :key="k">
                     &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checks") }}:
-                    {{ c.passed_count + c.failed_count | formatNumber }}
+                    <span
+                        class="bold"
+                    >{{ c.passed_count + c.failed_count | formatNumber }}</span>
                     &nbsp;
                     <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')"></Tooltip>
                 </h5>

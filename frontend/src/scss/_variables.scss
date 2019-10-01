@@ -15,6 +15,11 @@
     src: url("/fonts/GTEestiProDisplay-Thin.otf") format("opentype");
 }
 
+@font-face {
+    font-family: "GTEestiProDisplay-Medium";
+    src: url("/fonts/GTEestiProDisplay-Medium.otf") format("opentype");
+}
+
 $ok_color: #B9C504;
 $failed_color: #D0021B;
 $na_color: #9B9B9B;
@@ -51,6 +56,11 @@ Arial,
 sans-serif !default;
 
 $font-family-bold: "GTEestiProDisplay-Bold",
+"Helvetica Neue",
+Arial,
+sans-serif !default;
+
+$font-family-medium: "GTEestiProDisplay-Medium",
 "Helvetica Neue",
 Arial,
 sans-serif !default;

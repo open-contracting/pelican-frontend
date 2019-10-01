@@ -5,7 +5,8 @@
             <p v-html="$t('resourceLevel.' + check.name + '.description')"></p>
 
             <h5>
-                {{ $t("resourceLevel.count_header") }} {{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}
+                {{ $t("resourceLevel.count_header") }}
+                <span class="bold">{{ check.passed_count + check.failed_count + check.undefined_count | formatNumber }}</span>
                 &nbsp;
                 <Tooltip :text="$t('resourceLevel.count_header_tooltip')"></Tooltip>
             </h5>
@@ -13,7 +14,8 @@
             <CheckDetailResultBox :check="check" ok failed na />
 
             <h5>
-                {{ $t("resourceLevel.application_count_header") }} {{ applicationCount() | formatNumber }}&nbsp;
+                {{ $t("resourceLevel.application_count_header") }}
+                <span class="bold">{{ applicationCount() | formatNumber }}</span>&nbsp;
                 <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')"></Tooltip>
             </h5>
             <CheckDetailResultBox :check="check" pass nonPass />

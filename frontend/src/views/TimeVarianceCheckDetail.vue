@@ -5,7 +5,8 @@
             <p v-html=" $t('timeLevel.' + check.name + '.descriptionLong')"></p>
 
             <h5>
-                {{ $t("timeLevel.coverage.header") }} {{ check.meta.total_count | formatNumber }}
+                {{ $t("timeLevel.coverage.header") }}
+                <span class="bold">{{ check.meta.total_count | formatNumber }}</span>
                 &nbsp;
                 <Tooltip :text="$t('timeLevel.coverage.header_tooltip')"></Tooltip>
             </h5>
@@ -38,7 +39,8 @@
             </div>
 
             <h5>
-                {{ $t("timeLevel.check.header") }} {{ check.meta.coverage_count | formatNumber }}
+                {{ $t("timeLevel.check.header") }}
+                <span class="bold">{{ check.meta.coverage_count | formatNumber }}</span>
                 &nbsp;
                 <Tooltip :text="$t('timeLevel.check.header_tooltip')"></Tooltip>
             </h5>
