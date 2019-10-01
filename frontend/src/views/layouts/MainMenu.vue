@@ -3,7 +3,7 @@
         <div class="row">
             <div id="sidebar_envelope" class="col col-xl-2">
                 <p>
-                    <img id="logo" src="@/assets/ocp_logo.png" />
+                    <img id="logo" src="@/assets/ocp_logo.svg" />
                 </p>
                 <b-nav class="main_nav text-left">
                     <b-nav-item id="home_link" to="/">
@@ -90,6 +90,10 @@ export default {
 
 <style lang="scss">
 @import "src/scss/main";
+
+#logo {
+    width: 90%;
+}
 
 .main_nav {
     margin-top: 50px;
