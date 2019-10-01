@@ -386,9 +386,7 @@ export const messages = {
                 count: "contracts count",
                 share: "% of total value"
             },
-            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could" +
-                " be converted to US dollars we used. Contracts are further broken down into several price categories." +
-                " Number of contracts for each category is displayed together with a share of those contracts on the total value."
+            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could be converted to US dollars we used. Contracts are further broken down into several price categories. Number of contracts for each category is displayed together with a share of those contracts on the total value."
         },
         period: {
             title: "PERIOD",
@@ -402,9 +400,7 @@ export const messages = {
             award: "Award",
             contract: "Contract",
             implementation: "Implementation",
-            info: "A number of occurrences of a particural section in all compiled releases." +
-                " While plannings and tenders can appear only once in each compiled release awards, contracts and implementation" +
-                " can be present multipletimes."
+            info: "A number of occurrences of a particural section in all compiled releases. While plannings and tenders can appear only once in each compiled release awards, contracts and implementation can be present multipletimes."
         },
         publisher: "Publisher",
         datalicense: "Data License",
@@ -418,14 +414,7 @@ export const messages = {
     },
     field: {
         title: "Field Level Checks",
-        description: [
-            "Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.",
-            "<p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is" +
-            " the number of occurence of its parent structure. For example, if there is 50k awards in a dataset containing 90k suppliers in total" +
-            " awards.title check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p>",
-            "<p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can" +
-            " be performed. These controls run only for fields that are present in the dataset.</p>"
-        ],
+        description: "Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.<p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is the number of occurence of its parent structure. For example, if there is 50k <i>awards</i> in a dataset containing 90k <i>suppliers</i> in total <i>awards.title</i> check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p><p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can be performed. These controls run only for fields that are present in the dataset.</p>",
         all: "ALL CHECKS",
         table: {
             head: {
