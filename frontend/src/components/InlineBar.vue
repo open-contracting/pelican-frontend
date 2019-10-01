@@ -7,17 +7,11 @@
         <div v-if="barWidth <= 30" class="count">
             <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatNumber}}%</span>
             <span v-if="showCount" class="count_holder">
-                <span>&#40;</span>
-                {{ count | formatNumber}}
-                <span>&#41;</span>
+                <span class="count_holder">({{ count | formatNumber}})</span>
             </span>
         </div>
         <div v-if="barWidth > 30 && showCount" class="count">
-            <span class="count_holder">
-                <span>&#40;</span>
-                {{ count | formatNumber}}
-                <span>&#41;</span>
-            </span>
+            <span class="count_holder">({{ count | formatNumber}})</span>
         </div>
     </div>
 </template>
@@ -54,7 +48,7 @@ export default {
 .count {
     display: inline-block;
     height: 25px;
-    color: $na_light_color;
+    color: $na_color;
     font-size: 14px;
     padding-top: 4px;
 }

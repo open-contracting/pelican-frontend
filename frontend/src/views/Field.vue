@@ -16,7 +16,7 @@
             <b-col class="text-right">
                 <b-button-group v-if="layout == 'table'">
                     <button @click="resetTableSorting()" :class="['btn', 'reset-table-sorting']">
-                        <font-awesome-icon icon="list-ol" />
+                        <font-awesome-icon icon="sort-numeric-down" />
                     </button>
                 </b-button-group>
 
