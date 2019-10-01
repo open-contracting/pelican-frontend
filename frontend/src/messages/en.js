@@ -491,7 +491,7 @@ export const messages = {
         subheadline: "All Time Variance Level Checks",
         coverage: {
             header: "Compiled realeases processed:",
-            header_tooltip: "This number says how many compiled releases from the older version of the dataset fulfill all conditions to be compared with the newer version. OCID presence is a must have. On top of some other conditions might be added. For example 'tender.title' must be set for Tender title stability check. The statistis says how many compiled releases that fullfiled all condition were also included in the newer version of a dataset, therefore the final check can be performed.",
+            header_tooltip: "This number says how many compiled releases from the older version of the dataset fulfill all conditions so that it can be compared with the newer version. OCID presence is a must have. On top of that, some other conditions might be added. For example 'tender.title' must be set for 'Tender title stability' check. The statistis says how many compiled releases that fullfiled all conditions were also found in the newer version of a dataset so that the final check can be performed.",
             ok: "Included",
             failed: "Not included"
         },
