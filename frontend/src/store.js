@@ -123,11 +123,11 @@ export default new Vuex.Store({
         setResourceLevelStats(state, stats) {
             state.resourceLevelStats = stats;
         },
-        setResourceLevelCheckDetail(state, data) {
+        setResourceLevelCheckDetail(state, { name, data }) {
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.resourceLevelStats);
             updatedStats.forEach(function (item, i) {
-                if (item.name == data.name) updatedStats[i] = data;
+                if (item.name == name) Object.assign(updatedStats[i], data);
             });
             state.resourceLevelStats = updatedStats;
         },
@@ -140,12 +140,12 @@ export default new Vuex.Store({
         setFieldLevelStats(state, stats) {
             state.fieldLevelStats = stats;
         },
-        setFieldLevelCheckDetail(state, data) {
+        setFieldLevelCheckDetail(state, { path, data }) {
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.fieldLevelStats);
 
             updatedStats.forEach(function (item, i) {
-                if (item.path == data.path) updatedStats[i] = data;
+                if (item.path == path) Object.assign(updatedStats[i], data)
             });
 
             state.fieldLevelStats = updatedStats;
@@ -232,9 +232,8 @@ export default new Vuex.Store({
                     var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelCheckDetail + "/" + state.dataset.id + "/" + checkName;
                     axios.get(url)
                         .then(function (response) {
-                            response["data"]["name"] = checkName;
                             response["data"]["examples_filled"] = true;
-                            commit("setResourceLevelCheckDetail", response["data"]);
+                            commit("setResourceLevelCheckDetail", { name: checkName, data: response["data"] });
                         })
                         .catch(function (error) {
                             throw new Error(error);
@@ -331,9 +330,8 @@ export default new Vuex.Store({
                     var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldDetail + "/" + state.dataset.id + "/" + path;
                     axios.get(url)
                         .then(function (response) {
-                            response["data"]["path"] = path;
                             response["data"]["examples_filled"] = true;
-                            commit("setFieldLevelCheckDetail", response["data"]);
+                            commit("setFieldLevelCheckDetail", { path: path, data: response["data"] });
                         })
                         .catch(function (error) {
                             throw new Error(error);
@@ -368,8 +366,8 @@ export default new Vuex.Store({
             commit("setResourceLevelStats", null);
             commit("resetFieldCheckSorting");
             commit("setFieldCheckSearch", null);
-            commit("collapseAllFieldCheckExpandedNodes"),
-                commit("setFieldCheckLayout", "table");
+            commit("collapseAllFieldCheckExpandedNodes");
+            commit("setFieldCheckLayout", "table");
         },
         setExpandedNodesForSearch({
             getters,

@@ -88,8 +88,13 @@ export const messages = {
             },
             buyer: {
                 name: "Buyer distribution",
-                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
-                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if the share of single OCID buyers is > 50%",
+                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
+                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
+            },
+            buyer_repetition: {
+                name: "Buyer repetition",
+                description: "",
+                description_long: "",
             },
             tender_value: {
                 name: "Tender value distribution",
@@ -205,7 +210,7 @@ export const messages = {
         }
     },
     resourceLevel: {
-        description: "Resource level checks inspects the data quality from the perspective of a single compiled release. Each check can use various information from the whole compiled release to confirm that the logic of the data is correct. It's possible that one logical rule can be applied several times to a single compiled release because of two reasons <ul><li>the same data structure (e.g. OrganizationReference) can be found under various JSON keys</li><li>there migth be multiple occurences of the same data structure within one array</li></ul>.In such case a result of a check is an aggregation of results of all individual checks. The check passes  if all the individual checks pass.",
+        description: "Resource level checks inspects the data quality from the perspective of a single compiled release. Each check can use various information from the whole compiled release to confirm that the logic of the data is correct. It's possible that one logical rule can be applied several times to a single compiled release because of two reasons <ul><li>the same data structure (e.g. OrganizationReference) can be found under various JSON keys</li><li>there migth be multiple occurences of the same data structure within one array</li></ul>In such case a result of a check is an aggregation of results of all individual checks. The check passes  if all the individual checks pass.",
         subheadline: "All Resource Level Checks",
         ok: "OK",
         failed: "FAILED",
@@ -414,7 +419,7 @@ export const messages = {
     },
     field: {
         title: "Field Level Checks",
-        description: "Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.<p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is the number of occurence of its parent structure. For example, if there is 50k <i>awards</i> in a dataset containing 90k <i>suppliers</i> in total <i>awards.title</i> check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p><p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can be performed. These controls run only for fields that are present in the dataset.</p>",
+        description: "<p>Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.</p><p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is the number of occurence of its parent structure. For example, if there is 50k <i>awards</i> in a dataset containing 90k <i>suppliers</i> in total <i>awards.title</i> check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p><p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can be performed. These controls run only for fields that are present in the dataset.</p>",
         all: "ALL CHECKS",
         table: {
             head: {
