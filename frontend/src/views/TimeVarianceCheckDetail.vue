@@ -52,7 +52,7 @@
                                 <span class="check_name">{{ $t("timeLevel.check.ok") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.check_count" :percentage="check.check_value" :state="'ok'" :showCount="true" />
+                                <InlineBar :count="check.meta.ok_count" :percentage="check.check_value" :state="'ok'" :showCount="true" />
                             </td>
                         </tr>
                         <tr class="d-flex">
