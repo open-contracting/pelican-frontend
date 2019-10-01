@@ -16,8 +16,10 @@ export const messages = {
         failedExamples: "Failed examples",
         undefinedExamples: "Undefined examples",
     },
+    kingfisherId: "kingfisher ID",
     dataset: {
         id: "id",
+        name: "name",
         size: "items count",
         phase: "phase",
         selectDataset: "show",

@@ -9,11 +9,11 @@
             <div class="thr row">
                 <div class="th col-4 align-self-center clickable" @click="sortBy('id')">
                     <SortButtons
-                        :label="$t('dataset.id')"
-                        :active="sortedBy == 'id'"
+                        :label="$t('dataset.name')"
+                        :active="sortedBy == 'name'"
                         :asc="isAscendingSorted"
-                        :on-asc="() => sortBy('id')"
-                        :on-desc="() => sortBy('id', false)"
+                        :on-asc="() => sortBy('name')"
+                        :on-desc="() => sortBy('name', false)"
                     />
                 </div>
                 <div class="th col-1 align-self-center clickable" @click="sortBy('size')">
@@ -25,6 +25,7 @@
                         :on-desc="() => sortBy('size', false)"
                     />
                 </div>
+                <div class="th col-1 align-self-center clickable" @click="sortBy('size')">{{ $t('kingfisherId') }}</div>
                 <div class="th col-2 align-self-center clickable" @click="sortBy('phase')">
                     <SortButtons
                         :label="$t('dataset.phase')"
@@ -60,14 +61,19 @@
                         {{ item.name }}
                         <span class="dataset_id">( {{ item.id }} )</span>
                     </div>
-                    <div class="td col-1 numeric">{{ item.size | formatNumber }}</div>
-                    <div class="td col-2 phase_cell">
+                    <div class="td col-1 numeric text-right">{{ item.size | formatNumber }}</div>
+                    <div class="td col-1 numeric text-right">{{ item.meta.kingfisher_metadata.collection_id }}</div>
+                    <div class="td col-2 phase_cell align-items-center align-middle">
                         <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
-                            <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
+                            <span class="small_icon">
+                                <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
+                            </span>
                             {{ item.phase }}
                         </template>
                         <template v-else-if="item.state == 'FAILED'">
-                            <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger" />
+                            <span class="small_icon">
+                                <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger" />
+                            </span>
                             {{ item.phase }}
                         </template>
                         <template v-else>
@@ -92,7 +98,9 @@
                             @click.stop="setDataset(item, {name: 'time'})"
                             :title="getDatasetName(item.ancestor_id)"
                         >
-                            <font-awesome-icon icon="history" />
+                            <span class="small_icon">
+                                <font-awesome-icon icon="history" />
+                            </span>
                             {{ getDatasetName(item.ancestor_id) }}
                         </b-link>
                     </div>
@@ -199,8 +207,8 @@ export default {
             var comp;
             if (by == "created") {
                 comp = (a, b) => a.created.localeCompare(b.created);
-            } else if (by == "id") {
-                comp = (a, b) => a.id.localeCompare(b.id);
+            } else if (by == "name") {
+                comp = (a, b) => a.name.localeCompare(b.name);
             } else if (by == "size") {
                 comp = (a, b) => this.compareNumbers(a.size, b.size);
             } else if (by == "phase") {
@@ -256,6 +264,15 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/main";
+
+.form-control::placeholder {
+    color: red;
+}
+
+.small_icon {
+    position: relative;
+    top: -1px;
+}
 
 .picker_table {
     padding: 30px;

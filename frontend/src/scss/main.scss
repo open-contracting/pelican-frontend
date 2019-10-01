@@ -129,3 +129,9 @@ h5 {
 .th {
     padding: 12px;
 }
+
+.form-control::-webkit-input-placeholder,
+input::placeholder,
+.form-control::placeholder {
+    color: $na_color;
+}
