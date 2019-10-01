@@ -50,6 +50,7 @@ export const messages = {
         showLess: "hide"
     },
     datasetLevel: {
+        description: "Collection checks focuses on a single field or structure in OCDS and inspects whether it has naturall distribution or whether the value repetition is not unexpectedly high. For some of the checks there are rules that may cause that the check fails (too frequent price value) but there are also checks that always pass. The purpose of such checks is to visualize the collection content but there can be no significant failure (document type distribution).",
         subheadline: "All Dataset Level Checks",
         label_0_1: "1%",
         label_1_5: "1 - 5%",
@@ -202,6 +203,7 @@ export const messages = {
         }
     },
     resourceLevel: {
+        description: "Resource level checks inspects the data quality from the perspective of a single compiled release. Each check can use various information from the whole compiled release to confirm that the logic of the data is correct. It's possible that one logical rule can be applied several times to a single compiled release because of two reasons <ul><li>the same data structure (e.g. OrganizationReference) can be found under various JSON keys</li><li>there migth be multiple occurences of the same data structure within one array</li></ul>.In such case a result of a check is an aggregation of results of all individual checks. The check passes  if all the individual checks pass.",
         subheadline: "All Resource Level Checks",
         ok: "OK",
         failed: "FAILED",
@@ -413,11 +415,11 @@ export const messages = {
         title: "Field Level Checks",
         description: [
             "Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.",
-            "Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is" +
+            "<p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is" +
             " the number of occurence of its parent structure. For example, if there is 50k awards in a dataset containing 90k suppliers in total" +
-            " awards.title check can be performed 50.000x but awards.suppliers.id can be performed 90.000x",
-            "Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can" +
-            " be performed. These controls run only for fields that are present in the dataset."
+            " awards.title check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p>",
+            "<p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can" +
+            " be performed. These controls run only for fields that are present in the dataset.</p>"
         ],
         all: "ALL CHECKS",
         table: {
@@ -477,6 +479,7 @@ export const messages = {
         }
     },
     timeLevel: {
+        description: "<p>Time-based checks provide an insight into how a particular dataset developed in time. It's based on comparison of compiled releases with the same ocid, therefore, the first and most important check controls that ocids are not disappearing when the dataset is updated. The rest of checks then compares pairs of compiled releases and inspects specific information to asses whether the compiled release changed or not changet in an expected way. Each check consists of two numbers</p><p>Coverage - says what is the percentage of compiled releases from the older dataset appropriate for a particular checks that are also present in a newer version of a dataset</p><p>Check result - says what's the percentage of successfully checked pairs of compiled releases when the specific rule could be applied.</p>",
         checkResult: "Check result",
         coverageResult: "Coverage result",
         subheadline: "All Time Variance Level Checks",
@@ -492,20 +495,20 @@ export const messages = {
         },
         phase_stable: {
             name: "Phase stability",
-            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools.",
-            descriptionLong: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+            description: "To check that the contracting process has an expected progression existence and counts of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> is being inspected",
+            descriptionLong: "This check controls that each compiled release in the newer version of dataset has the same or higher number of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> objects than in the older version. If the compiled release with the same ocid is present in both versions of the dataset it checks that:<ul><li><i>planning</i> exists in the new version if it existed in the old version</li><li><i>tender</i> exists in the new version if it existed in the old version</li><li>size of <i>awards</i> in the new version is higher or equal to the size of <i>awards</i> in the old version</li><li>size of <i>contracts</i> in the new version is higher or equal to the size of <i>contracts</i> in the old version</li></ul> The comparison of a pair of compiled releases fails if at least one of the above-described comparisons fails"
 
         },
         ocid: {
             name: "OCID existence",
-            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools.",
-            descriptionLong: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+            description: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection.",
+            descriptionLong: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection. This check takes one by one each ocid from older version of a dataset a controls that it's also present in a newer version of a dataset.",
 
         },
         tender_title: {
             name: "Tender title stability",
-            description: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools.",
-            descriptionLong: "Generate Lorem Ipsum placeholder text for use in your graphic, print and web layouts, and discover plugins for your favorite writing, design and blogging tools."
+            description: "The tender should not be changing its title during the life cycle of the contracting process. This check controls that the <i>tender.title</i> remains the same through the time.",
+            descriptionLong: "For all pairs of compiled releases determined by the same <i>ocid</i> in both older and newer version of the same dataset the <i>tender.title</i> field is being compared. Only those compiled realeses that have a <i>tender.title</i> set in the older verion are being taken into consideration. The titles does not need to be necessarily 100% the same, small typos are allowed. Before the comparison all white spaces are removed and values are converted to lower case."
 
         },
     }
