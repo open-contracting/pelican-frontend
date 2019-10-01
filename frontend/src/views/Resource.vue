@@ -1,6 +1,7 @@
 <template>
     <dashboard>
         <h2>{{ $t("sections.resource") }}</h2>
+        <div class="description" v-html=" $t('resourceLevel.description')"></div>
         <span v-if="loaded">
             <h4>{{ $t("resourceLevel.subheadline") }}</h4>
             <div class="resource_result_box">

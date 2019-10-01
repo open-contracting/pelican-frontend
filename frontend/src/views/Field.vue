@@ -1,11 +1,7 @@
 <template>
     <dashboard>
         <h2>{{ $t("field.title") }}</h2>
-        <div class="description">
-            <p>{{ $t('field.description[0]') }}</p>
-            <p>{{ $t('field.description[1]') }}</p>
-            <p>{{ $t('field.description[2]') }}</p>
-        </div>
+        <div class="description" v-html=" $t('field.description')"></div>
 
         <h4>{{ $t('field.all') }}</h4>
 
@@ -90,10 +86,6 @@ mark {
 
 <style scoped lang="scss">
 @import "src/scss/main";
-
-.description {
-    color: $headings_light_color;
-}
 
 .action_bar {
     margin-top: 15px;

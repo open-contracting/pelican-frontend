@@ -135,3 +135,8 @@ input::placeholder,
 .form-control::placeholder {
     color: $na_color;
 }
+
+.description {
+    margin-bottom: 50px;
+    color: $headings_light_color;
+}

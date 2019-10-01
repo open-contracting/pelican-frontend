@@ -1,6 +1,7 @@
 <template>
     <dashboard>
         <h2>{{ $t("sections.time") }}</h2>
+        <div class="description" v-html=" $t('timeLevel.description')"></div>
         <h4>{{ $t("timeLevel.subheadline") }}</h4>
         <div class="row">
             <div class="card-deck col-12">
