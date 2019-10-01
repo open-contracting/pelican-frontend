@@ -43,7 +43,10 @@
                                             :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
                                             target="_blank"
                                         >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                        <template v-else>{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
+                                        <template v-else>
+                                            <template v-if="e.name">{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
+                                            <template v-else>{{ $t('overview.extensionsUnsupported') }}</template>
+                                        </template>
 
                                         <template v-if="i + 1 < collection.extensions.length">,</template>
                                     </template>

@@ -403,6 +403,7 @@ export const messages = {
         publisher: "Publisher",
         datalicense: "Data License",
         extensions: "Extensions",
+        extensionsUnsupported: "Unsupported format",
         publishedFrom: "Published From",
         publishedTo: "Published To",
         collectionId: "Collection ID",
