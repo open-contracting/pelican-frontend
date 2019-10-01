@@ -1,5 +1,5 @@
 <template>
-    <div class="card mb-4 time_variance_result_box result_box" v-on:click="detail(check.name)">
+    <div class="card mb-4 time_variance_result_box result_box clickable" v-on:click="detail(check.name)">
         <div class="card-body">
             <div class="row no-gutters">
                 <div class="col col-2 col-sm-2 col-lg-1 text-left">

@@ -172,7 +172,15 @@ export default {
             return examples;
         },
         previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId);
+            var result = this.$store.getters.dataItemById(
+                this.previewDataItemId
+            );
+
+            if (result) {
+                return result["data"];
+            }
+
+            return null;
         }
     }
 };
