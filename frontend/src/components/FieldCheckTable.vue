@@ -10,7 +10,7 @@
                     :on-desc="() => sortByPath(tableData, false)"
                 />
             </div>
-            <div class="th col col-4" @click="sortByCoverage(tableData)">
+            <div class="th col col-4 justify-content-center d-flex" @click="sortByCoverage(tableData)">
                 <SortButtons
                     :label="$t('field.table.head.coverage')"
                     :active="sortedBy == 'coverage'"
@@ -19,7 +19,7 @@
                     :on-desc="() => sortByCoverage(tableData, false)"
                 />
             </div>
-            <div class="th col col-4" @click="sortByQuality(tableData)">
+            <div class="th col col-4 justify-content-center d-flex" @click="sortByQuality(tableData)">
                 <SortButtons
                     :label="$t('field.table.head.quality')"
                     :active="sortedBy == 'quality'"

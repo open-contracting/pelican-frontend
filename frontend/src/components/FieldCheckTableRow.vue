@@ -10,9 +10,9 @@
                     <span class="field_check_result_value">{{ check.coverageOkShare | formatNumber }}%</span>
                 </div>
                 <div
-                    class="col col-9 col-lg-7 col-xl-5 numeric field_check_count d-flex align-items-center justify-content-end"
+                    class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
                 >({{ check.coverage.passed_count | formatNumber }}/{{ check.coverage.total_count | formatNumber}})</div>
-                <div class="col col-12 col-lg-3 col-xl-5 field_check_bar d-flex align-items-center justify-content-end">
+                <div class="col col-12 col-lg-3 col-xl-4 col-xxl-6 col-xxxxl-7 field_check_bar d-flex align-items-center justify-content-end">
                     <span class="field_check_bar_envelope">
                         <ProgressBar :ok="check.coverageOkShare" />
                     </span>
@@ -27,9 +27,9 @@
                         <span class="field_check_result_value">{{ check.qualityOkShare | formatNumber }}%</span>
                     </div>
                     <div
-                        class="col col-9 col-lg-7 col-xl-5 numeric field_check_count d-flex align-items-center justify-content-end"
+                        class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
                     >({{ check.quality.passed_count | formatNumber }}/{{ check.quality.total_count | formatNumber }})</div>
-                    <div class="col col-12 col-lg-3 col-xl-5 field_check_bar d-flex align-items-center justify-content-end">
+                    <div class="col col-12 col-lg-3 col-xl-4 col-xxl-6 col-xxxxl-7 field_check_bar d-flex align-items-center justify-content-end">
                         <span class="field_check_bar_envelope">
                             <ProgressBar v-if="check.quality.total_count" :ok="check.qualityOkShare" />
                         </span>

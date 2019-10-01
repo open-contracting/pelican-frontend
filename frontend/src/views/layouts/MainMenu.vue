@@ -164,6 +164,10 @@ export default {
         width: 60px;
     }
 
+    .main_nav > li {
+        font-size: 0.6em;
+    }
+
     #sidebar {
         position: relative;
         width: 70px;
