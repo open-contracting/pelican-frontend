@@ -51,7 +51,7 @@
                         <tbody>
                             <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                 <td>{{ item.value_str }}</td>
-                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100 | formatNumber2D }}%</td>
                                 <td class="text-right numeric">{{ item.count | formatNumber }}</td>
                             </tr>
                         </tbody>
@@ -91,7 +91,7 @@
                                 <div
                                     class="col col-12 text-center total_share"
                                     v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 | formatNumber }}%</div>
+                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 | formatNumber2D }}%</div>
                             </div>
                             <div class="row">
                                 <div

@@ -57,7 +57,7 @@
                                 <table id="top3_table" class="table table-sm">
                                     <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                         <td>{{ item.value_str }}</td>
-                                        <td class="text-right numeric">{{ Math.round(item.share * 100) / 100}}%</td>
+                                        <td class="text-right numeric">{{ Math.round(item.share * 100) / 100 | formatNumber2D}}%</td>
                                     </tr>
                                 </table>
                             </div>
