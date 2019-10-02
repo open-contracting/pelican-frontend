@@ -23,8 +23,10 @@
                             <td class="col-10 text-left numeric">
                                 <span class="check_name">{{ item.ocid }}</span>
                             </td>
-                            <td class="col-2 clickable" v-on:click="preview(index, section[0], item.item_id)">
-                                <span v-if="index != selectedKey || selectedSection != section[0]">{{ $t("examples.preview") }}</span>
+                            <td class="col-2 clickable">
+                                <span v-if="index != selectedKey || selectedSection != section[0]">
+                                    <a v-on:click.stop.prevent="preview(index, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                </span>
                                 <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == section[0]">active</span>
                             </td>
                         </tr>
@@ -41,8 +43,10 @@
                                 <td class="col-10 text-left numeric">
                                     <span class="check_name">{{ item.ocid }}</span>
                                 </td>
-                                <td class="col-2 clickable" v-on:click="preview(index + 5, section[0], item.item_id)">
-                                    <span v-if="index + 5 != selectedKey || selectedSection != section[0]">{{ $t("examples.preview") }}</span>
+                                <td class="col-2 clickable">
+                                    <span v-if="index + 5 != selectedKey || selectedSection != section[0]">
+                                        <a v-on:click.stop.prevent="preview(index + 5, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                    </span>
                                     <span class="badge badge-primary" v-if="index + 5 == selectedKey && selectedSection == section[0]">active</span>
                                 </td>
                             </tr>
