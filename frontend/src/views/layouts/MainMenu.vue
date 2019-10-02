@@ -1,10 +1,8 @@
 <template>
     <div id="sidebar" class="col d-xl-block col-xl-2 text-center">
         <div class="row">
-            <div id="sidebar_envelope" class="col col-xl-2">
-                <p>
-                    <img id="logo" src="@/assets/ocp_logo.svg" />
-                </p>
+            <div id="sidebar_envelope" class="col col-xl-2 text-center">
+                <img id="logo" src="@/assets/ocp_logo.svg" />
                 <b-nav class="main_nav text-left">
                     <b-nav-item id="home_link" to="/">
                         <span class="menu_icon_small">
@@ -92,7 +90,7 @@ export default {
 @import "src/scss/main";
 
 #logo {
-    width: 90%;
+    width: 80%;
     max-width: 200px;
 }
 
@@ -148,7 +146,7 @@ export default {
     left: 0px;
     bottom: 0px;
     overflow-y: scroll;
-    padding: 50px 5px 30px 5px;
+    padding: 50px 5px 30px 0px;
 }
 
 #sidebar_envelope .main_nav .nav-item .router-link-active {

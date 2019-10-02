@@ -59,7 +59,7 @@
                 >
                     <div class="td col-4">
                         {{ item.name }}
-                        <span class="dataset_id">( {{ item.id }} )</span>
+                        <span class="dataset_id">(Id {{ item.id }})</span>
                     </div>
                     <div class="td col-1 numeric text-right">{{ item.size | formatNumber }}</div>
                     <div class="td col-1 numeric text-right">{{ item.meta.kingfisher_metadata.collection_id }}</div>

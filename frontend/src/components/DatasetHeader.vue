@@ -1,13 +1,12 @@
 <template>
     <h1 v-if="dataset">
-        <i>id</i>
-        {{ dataset.id }} |
         <span class="name">{{ dataset.name }}</span>
+        (Id {{ dataset.id }})
         |
-        <i>size</i>
+        Size
         {{ dataset.size | formatNumber}}
         |
-        <i>created</i>
+        Created
         {{ dataset.meta.data_quality_tool_metadata.processing_start }}
     </h1>
 </template>
@@ -36,8 +35,15 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/main";
 
-.name {
-    font-family: $font-family-bold;
+h1 {
+    font-size: 13px;
+    font-family: $font-family-thin;
+    margin-bottom: 40px;
+    text-align: right;
     color: $headings_light_color;
+}
+
+.name {
+    font-family: $font-family-sans-serif;
 }
 </style>
