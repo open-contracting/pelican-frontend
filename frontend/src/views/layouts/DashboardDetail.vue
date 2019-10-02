@@ -2,7 +2,7 @@
     <div class="row h-100">
         <main-menu></main-menu>
 
-        <div class="col col-12 col-xl-10">
+        <div class="col col-12">
             <div class="main_envelope">
                 <div class="row">
                     <main role="main" class="dataset_level_check_detail main_content col col-7 col-xl-6">
@@ -79,6 +79,12 @@ export default {
 
     .preview_envelope {
         padding-left: 50px;
+    }
+}
+
+@media (min-width: 1199.98px) {
+    .main_envelope {
+        padding-left: 215px;
     }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid p-0" id="app">
+    <div class="container-fluid" id="app">
         <router-view />
     </div>
 </template>

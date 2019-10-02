@@ -2,7 +2,7 @@
     <div class="row h-100">
         <main-menu></main-menu>
 
-        <main role="main" class="main main_content col col-12 col-xl-10">
+        <main role="main" class="main main_content col col-12">
             <div class="main_envelope">
                 <DatasetHeader></DatasetHeader>
                 <slot />
@@ -38,6 +38,12 @@ export default {
 @media (max-width: 1199.98px) {
     .main_envelope {
         padding-left: 80px;
+    }
+}
+
+@media (min-width: 1199.98px) {
+    .main_envelope {
+        padding-left: 215px;
     }
 }
 </style>
