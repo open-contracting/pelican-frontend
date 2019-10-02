@@ -2,17 +2,18 @@
     <div class="card mb-4 time_variance_result_box result_box clickable" v-on:click="detail(check.name)">
         <div class="card-body">
             <div class="row no-gutters">
-                <div class="col col-2 col-sm-2 col-lg-1 text-left">
-                    <span v-if="result == true" class="result_icon ok_icon">
-                        <font-awesome-icon :icon="['far', 'check-circle']" />
-                    </span>
-                    <span v-if="result == false" class="result_icon failed_icon">
-                        <font-awesome-icon :icon="['far', 'times-circle']" />
-                    </span>
+                <div class="col col-10 col-sm-10 col-lg-10">
+                    <h5 class="check_headline">{{ $t("timeLevel." + check.name + ".name") }}</h5>
                 </div>
 
-                <div class="col col-10 col-sm-10 col-lg-11">
-                    <h5 class="check_headline">{{ $t("timeLevel." + check.name + ".name") }}</h5>
+                <div class="col col-2 col-sm-2 col-lg-2 text-right">
+                    <span v-if="result == true" class="badge badge-pill ok_status">{{ $t("passed") }}</span>
+                    <span v-if="result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
+                </div>
+            </div>
+
+            <div class="row no-gutters">
+                <div class="col col-12">
                     <p class="check_description" v-html="$t('timeLevel.' + check.name + '.description')"></p>
                 </div>
             </div>
@@ -68,8 +69,18 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/variables";
 
-.result_icon {
-    font-size: 16px;
+.ok_status {
+    background-color: $ok_color;
+    color: white;
+    font-size: 10px;
+    padding: 8px;
+}
+
+.failed_status {
+    background-color: $failed_color;
+    color: white;
+    font-size: 10px;
+    padding: 8px;
 }
 
 .card-body {
@@ -78,6 +89,7 @@ export default {
 
 .check_headline {
     overflow-wrap: break-word;
+    margin-bottom: 20px;
 }
 
 .check_description {
@@ -91,7 +103,7 @@ export default {
 .time_variance_result_box {
     display: inline-block;
     background-color: white;
-    padding: 0px;
+    padding: 5px;
     border-radius: 10px;
     margin-bottom: 25px;
     min-height: 340px;

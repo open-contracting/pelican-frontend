@@ -6,20 +6,18 @@
     >
         <div class="card-body">
             <div class="row no-gutters">
-                <div class="col col-2 col-sm-2 col-lg-1 text-left">
-                    <span v-if="check.result == true" class="result_icon ok_icon">
-                        <font-awesome-icon :icon="['far', 'check-circle']" />
-                    </span>
-                    <span v-if="check.result == false" class="result_icon failed_icon">
-                        <font-awesome-icon :icon="['far', 'times-circle']" />
-                    </span>
-                    <span v-if="check.result == undefined" class="result_icon undefined_icon">
-                        <font-awesome-icon :icon="['far', 'question-circle']" />
-                    </span>
+                <div class="col col-10 col-sm-10 col-lg-10">
+                    <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
                 </div>
 
-                <div class="col col-10 col-sm-10 col-lg-11">
-                    <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
+                <div class="col col-2 col-sm-2 col-lg-2 text-right">
+                    <span v-if="check.result == true" class="badge badge-pill ok_status">{{ $t("passed") }}</span>
+                    <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
+                </div>
+            </div>
+
+            <div class="row no-gutters">
+                <div class="col col-12">
                     <p class="check_description" v-html="$t('datasetLevel.' + check.name + '.description')"></p>
                 </div>
             </div>
@@ -27,7 +25,7 @@
 
         <div class="card-body">
             <div class="row no-gutters justify-content-end">
-                <div class="col col-10 col-sm-10 col-lg-11">
+                <div class="col col-12">
                     <div class="chartEnvelope text-center" v-if="check.result == undefined">
                         <img class="undefined_image" src="/img/unsufficient_data.png" />
                         <br />
@@ -121,8 +119,18 @@ export default {
 <style scoped lang="scss">
 @import "src/scss/variables";
 
-.result_icon {
-    font-size: 16px;
+.ok_status {
+    background-color: $ok_color;
+    color: white;
+    font-size: 10px;
+    padding: 8px;
+}
+
+.failed_status {
+    background-color: $failed_color;
+    color: white;
+    font-size: 10px;
+    padding: 8px;
 }
 
 .card-body {
@@ -131,6 +139,7 @@ export default {
 
 .check_headline {
     overflow-wrap: break-word;
+    margin-bottom: 20px;
 }
 
 .check_description {
@@ -144,7 +153,7 @@ export default {
 .dataset_result_box {
     display: inline-block;
     background-color: white;
-    padding: 0px;
+    padding: 5px;
     border-radius: 10px;
     border: 0px;
 }
