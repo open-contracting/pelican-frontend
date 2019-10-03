@@ -16,7 +16,8 @@ export default {
                 legend: {
                     alignment: "center"
                 },
-                chartArea: { left: 10, top: 20, width: "100%", height: "100%" },
+                fontName: "GTEestiProDisplay-Regular",
+                chartArea: { left: 10, top: 20, width: "100%", height: "85%" },
                 pieHole: 0.4,
                 colors: [
                     "#555CB3",

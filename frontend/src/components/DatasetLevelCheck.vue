@@ -26,7 +26,7 @@
         <div class="card-body">
             <div class="row no-gutters justify-content-end">
                 <div class="col col-12">
-                    <div class="chartEnvelope text-center" v-if="check.result == undefined">
+                    <div class="chart_envelope text-center" v-if="check.result == undefined">
                         <img class="undefined_image" src="/img/unsufficient_data.png" />
                         <br />
                         <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
@@ -34,13 +34,13 @@
                     </div>
                     <div v-else>
                         <div v-if="checkType == 'donut'">
-                            <div class="chartEnvelope">
+                            <div class="chart_envelope">
                                 <DonutChart :check="check"></DonutChart>
                             </div>
                         </div>
 
                         <div v-if="checkType == 'bar'">
-                            <div class="chartEnvelope">
+                            <div class="chart_envelope">
                                 <BarChart :check="check"></BarChart>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="top3" v-if="checkType == 'top3'">
-                            <div class="chartEnvelope">
+                            <div class="chart_envelope">
                                 <table id="top3_table" class="table table-sm">
                                     <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                         <td>{{ item.value_str }}</td>
@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="single_value_share" v-if="checkType == 'single_value_share'">
-                            <div class="chartEnvelope">
+                            <div class="chart_envelope">
                                 <BarChartSingleValue :check="check"></BarChartSingleValue>
                             </div>
                         </div>
@@ -118,6 +118,10 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
+.chart_envelope {
+    margin-bottom: 10px;
+}
 
 .ok_status {
     background-color: $ok_color;
