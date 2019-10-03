@@ -4,67 +4,65 @@
         <div class="row">
             <div class="col-12 col-xl-6">
                 <h4>{{ $t('overview.collection_metadata') }}</h4>
-                <div class="result_box collection_metadata">
-                    <table v-if="collection" class="table">
-                        <tbody>
-                            <tr>
-                                <td>{{ $t('overview.compiled_releases.value_label') }}</td>
-                                <td class="break_word">
-                                    <span class="ocid_count bold">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.publisher')}}</td>
-                                <td class="break_word">{{ collection.publisher }}</td>
-                            </tr>
-                            <tr>
-                                <td>URL</td>
-                                <td class="break_word">
-                                    <a v-if="collection.url && collection.url.startsWith('http')" :href="collection.url" target="_blank">{{ collection.url }}</a>
+                <div class="result_box collection_metadata col col-12">
+                    <div class="table_hl" v-if="collection">
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.compiled_releases.value_label') }}</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">
+                                <span class="ocid_count bold">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
+                            </div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publisher')}}</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">{{ collection.publisher }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">URL</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">
+                                <a v-if="collection.url && collection.url.startsWith('http')" :href="collection.url" target="_blank">{{ collection.url }}</a>
+                                <template v-else>
+                                    <template v-if="collection.url">{{ collection.url }}</template>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">OCID Prefix</div>
+                            <div class="td col col-8 d-flex align-items-center">{{ collection.ocid_prefix }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.datalicense')}}</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">
+                                <a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a>
+                            </div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.extensions')}}</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">
+                                <template v-for="(e, i) in collection.extensions">
+                                    <a
+                                        v-if="e.documentationUrl"
+                                        :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
+                                        :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                        target="_blank"
+                                    >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
                                     <template v-else>
-                                        <template v-if="collection.url">{{ collection.url }}</template>
+                                        <template v-if="e.name">{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
+                                        <template v-else>{{ $t('overview.extensionsUnsupported') }}</template>
                                     </template>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>OCID Prefix</td>
-                                <td>{{ collection.ocid_prefix }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.datalicense')}}</td>
-                                <td class="break_word">
-                                    <a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.extensions')}}</td>
-                                <td class="break_word">
-                                    <template v-for="(e, i) in collection.extensions">
-                                        <a
-                                            v-if="e.documentationUrl"
-                                            :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
-                                            :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
-                                            target="_blank"
-                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                        <template v-else>
-                                            <template v-if="e.name">{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
-                                            <template v-else>{{ $t('overview.extensionsUnsupported') }}</template>
-                                        </template>
 
-                                        <template v-if="i + 1 < collection.extensions.length">,</template>
-                                    </template>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.publishedFrom')}}</td>
-                                <td>{{ collection.published_from }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ $t('overview.publishedTo')}}</td>
-                                <td>{{ collection.published_to }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    <template v-if="i + 1 < collection.extensions.length">,</template>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publishedFrom')}}</div>
+                            <div class="td col col-8 d-flex align-items-center">{{ collection.published_from }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publishedTo')}}</div>
+                            <div class="td col col-8 d-flex align-items-center">{{ collection.published_to }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-xl-6">
@@ -72,40 +70,36 @@
                     <div class="col-12 col-md-6 col-xl-12">
                         <h4>{{ $t('overview.kingfisher_metadata') }}</h4>
                         <div class="result_box collection_metadata kingfisher_metadata">
-                            <table v-if="kingfisher" class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $t('overview.collectionId')}}</td>
-                                        <td>{{ kingfisher.collection_id }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $t('overview.processingFrom')}}</td>
-                                        <td>{{ kingfisher.processing_start }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $t('overview.processingTo')}}</td>
-                                        <td>{{ kingfisher.processing_end }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table_hl" v-if="kingfisher">
+                                <div class="tr row">
+                                    <div class="td col col-6">{{ $t('overview.collectionId')}}</div>
+                                    <div class="td col col-6">{{ kingfisher.collection_id }}</div>
+                                </div>
+                                <div class="tr row">
+                                    <div class="td col col-6">{{ $t('overview.processingFrom')}}</div>
+                                    <div class="td col col-6">{{ kingfisher.processing_start }}</div>
+                                </div>
+                                <div class="tr row">
+                                    <div class="td col col-6">{{ $t('overview.processingTo')}}</div>
+                                    <div class="td col col-6">{{ kingfisher.processing_end }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-12 col-md-6 col-xl-12">
                         <h4>{{ $t('overview.dqt_metadata') }}</h4>
                         <div class="result_box collection_metadata kingfisher_metadata dqt_metadata">
-                            <table v-if="data_quality" class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>{{ $t('overview.processingFrom')}}</td>
-                                        <td>{{ data_quality.processing_start }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ $t('overview.processingTo')}}</td>
-                                        <td>{{ data_quality.processing_end }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div v-if="data_quality" class="table_hl">
+                                <div class="tr row">
+                                    <div class="td col col-6">{{ $t('overview.processingFrom')}}</div>
+                                    <div class="td col col-6">{{ data_quality.processing_start }}</div>
+                                </div>
+                                <div class="tr row">
+                                    <div class="td col col-6">{{ $t('overview.processingTo')}}</div>
+                                    <div class="td col col-6">{{ data_quality.processing_end }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,35 +140,31 @@
                 </h4>
                 <div class="result_box">
                     <h5>{{ $t('overview.prices.value_label') }}</h5>
-                    <p>
+                    <p class="total_value">
                         <strong class="bold">$ {{ prices.total_volume_positive | formatNumber }}</strong>
                         in
                         <strong class="bold">{{ prices.contracts_positive | formatNumber }}</strong>
                         {{ $t('overview.prices.contracts') }}
                     </p>
-                    <table v-if="prices" class="table">
-                        <thead>
-                            <tr>
-                                <th>{{ $t("overview.prices.thead.category") }}</th>
-                                <th class="text-right">{{ $t("overview.prices.thead.count") }}</th>
-                                <th>{{ $t("overview.prices.thead.share") }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']" :key="c">
-                                <td v-html="getPriceCategoryLabel(c)" />
-                                <td class="text-right numeric">{{ prices.price_category_positive[c].contracts | formatNumber }}</td>
-                                <td>
-                                    <div class="row align-items-center share_progressbar no-gutters">
-                                        <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
-                                        <div class="col col-9 value progress_holder d-flex align-items-center">
-                                            <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
-                                        </div>
+                    <div class v-if="prices">
+                        <div class="thr row">
+                            <div class="th col col-4">{{ $t("overview.prices.thead.category") }}</div>
+                            <div class="th col col-4 text-right">{{ $t("overview.prices.thead.count") }}</div>
+                            <div class="th col col-4 text-center">{{ $t("overview.prices.thead.share") }}</div>
+                        </div>
+                        <div class="row tr" v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']" :key="c">
+                            <div class="td col col-4" v-html="getPriceCategoryLabel(c)" />
+                            <div class="td col col-4 text-right numeric">{{ prices.price_category_positive[c].contracts | formatNumber }}</div>
+                            <div class="td col col-4">
+                                <div class="row align-items-center share_progressbar no-gutters">
+                                    <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
+                                    <div class="col col-9 value progress_holder d-flex align-items-center">
+                                        <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-12 col-md-6 period">
@@ -301,84 +291,21 @@ export default {
 
 <style lang="scss">
 @import "src/scss/main";
-.overview_card * {
-    color: $text-color;
-}
 
 .ocid_count {
     font-size: 24px;
 }
 
-.collection_metadata,
-.kingfisher_metadata,
-.dqt_metadata {
-    .table tr:first-of-type td {
-        border-top: none;
-    }
-
-    .table tbody tr {
-        td {
-            vertical-align: middle;
-        }
-
-        td:first-of-type {
-            font-weight: 200;
-            color: $headings_light_color;
-            white-space: nowrap;
-            font-family: $font-family-thin;
-        }
-
-        td:nth-of-type(2) {
-            font-weight: 400;
-        }
-
-        a {
-            color: $text-color;
-            text-decoration: underline;
-        }
-
-        a:hover {
-            text-decoration: none;
-        }
-    }
-
-    .table tbody tr a:hover {
-        text-decoration: none;
-    }
+.tr:first-of-type .td {
+    border-top: none;
 }
 
-.prices {
-    .table thead {
-        th {
-            border-bottom: none;
-            color: $headings_light_color;
-            font-size: 12px;
-        }
-    }
-
-    .table tr:first-of-type td {
-        border-top: none;
-    }
-
-    .share_progressbar {
-        .value {
-            color: $headings_light_color;
-        }
-
-        .progress_holder {
-            padding-left: 5px;
-        }
-    }
-
-    h5 + p {
-        font-size: 25px !important;
-    }
+.total_value {
+    font-size: 25px;
 }
 
-.period {
-    p {
-        color: $headings_light_color;
-    }
+div.col.col-9.value.progress_holder {
+    padding-left: 5px;
 }
 
 .compiled_releases {

@@ -6,12 +6,12 @@
                     <div>{{ $t('field.table.head.object') }}</div>
                 </div>
             </div>
-            <div class="th col col-4" @click="sortByCoverage()">
+            <div class="th col col-4 justify-content-center d-flex" @click="sortByCoverage()">
                 <div class="d-flex align-items-center">
                     <span>{{ $t('field.table.head.coverage') }}</span>
                 </div>
             </div>
-            <div class="th col col-4" @click="sortByQuality()">
+            <div class="th col col-4 justify-content-center d-flex" @click="sortByQuality()">
                 <div class="d-flex align-items-center">
                     <span>{{ $t('field.table.head.quality') }}</span>
                 </div>

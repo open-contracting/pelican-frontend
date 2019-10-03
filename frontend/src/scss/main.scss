@@ -42,7 +42,7 @@ h5 {
 .result_box {
     background-color: white;
     border-radius: 10px;
-    padding: 25px;
+    padding: 35px;
     box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
     border: 0;
 }
@@ -74,8 +74,8 @@ h5 {
     color: $na_color;
 }
 
-.table th {
-    border-top: none;
+.table {
+    color: $text-color;
 }
 
 .table-hover tbody tr:hover {
@@ -124,6 +124,9 @@ h5 {
 
 .th {
     padding: 12px;
+    font-family: $font-family-bold;
+    text-transform: lowercase;
+    color: #9B9B9B;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -143,4 +146,8 @@ input::placeholder,
 
 .bold {
     font-family: $font-family-bold;
+}
+
+.table_hl>div:nth-child(1) {
+    border-top: none;
 }
