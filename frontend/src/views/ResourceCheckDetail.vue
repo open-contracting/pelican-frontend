@@ -2,7 +2,7 @@
     <dashboard-detail>
         <template v-if="check" v-slot:content>
             <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
-            <p v-html="$t('resourceLevel.' + check.name + '.description')"></p>
+            <p class="description" v-html="$t('resourceLevel.' + check.name + '.description')"></p>
 
             <h5>
                 {{ $t("resourceLevel.count_header") }}

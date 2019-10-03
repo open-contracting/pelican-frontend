@@ -144,6 +144,7 @@ export default {
 
 .check_description {
     overflow-wrap: break-word;
+    color: $headings_light_color;
 }
 
 .ok_icon {
