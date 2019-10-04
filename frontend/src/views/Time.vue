@@ -15,7 +15,7 @@
                     <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-md-block d-lg-none" v-bind:key="'md' + index">
                         <!-- wrap every 2-->
                     </div>
-                    <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-lg-block d-xl-none" v-bind:key="'lg' + index">
+                    <div v-if="(index + 1) % 3 == 0" class="w-100 d-none d-lg-block d-xl-none" v-bind:key="'lg' + index">
                         <!-- wrap every 2-->
                     </div>
 

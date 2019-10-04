@@ -79,19 +79,19 @@
 
                 <div v-if="checkType == 'biggest_share'" class="biggest_share">
                     <div class="row text-left">
-                        <div class="col-8 specifics">
+                        <div class="col-7 specifics">
                             <span v-for="(item, index) in check.meta.specifics" v-bind:key="index">
                                 <h3>{{ index }}</h3>
                                 <p class="specifics_values">{{ item }}</p>
                             </span>
                         </div>
 
-                        <div class="numeric_result col-4">
+                        <div class="numeric_result col-5">
                             <div class="row">
                                 <div
                                     class="col col-12 text-center total_share"
                                     v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 | formatNumber2D }}%</div>
+                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 | formatNumber }}%</div>
                             </div>
                             <div class="row">
                                 <div

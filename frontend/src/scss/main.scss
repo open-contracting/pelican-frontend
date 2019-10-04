@@ -151,3 +151,25 @@ input::placeholder,
 .table_hl>div:nth-child(1) {
     border-top: none;
 }
+
+.table thead th {
+    border-top: none;
+}
+
+.undef {
+    background-color: #fafbff;
+    filter: alpha(opacity=60);
+    -moz-opacity: 0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
+}
+
+.undefined_title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.undefined_image {
+    margin-top: 20px;
+}

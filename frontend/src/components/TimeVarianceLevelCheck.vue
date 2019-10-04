@@ -1,5 +1,9 @@
 <template>
-    <div class="card mb-4 time_variance_result_box result_box clickable" v-on:click="detail(check.name)">
+    <div
+        class="card col-md-6 col-lg-4 mb-4 time_variance_result_box result_box"
+        v-on:click="detail(check.name)"
+        v-bind:class="{ clickable: check.coverage_result != undefined, undef: check.coverage_result == undefined }"
+    >
         <div class="card-body">
             <div class="row no-gutters">
                 <div class="col col-10 col-sm-10 col-lg-10">
@@ -21,21 +25,31 @@
 
         <div class="card-body">
             <div class="row no-gutters justify-content-end">
-                <div class="col col-10 col-sm-10 col-lg-11">
-                    <div class="row">
-                        <div class="col col-6 text-center">
-                            <h6>{{ $t("timeLevel.coverageResult") }}</h6>
+                <div class="col col-12">
+                    <template v-if="check.coverage_result != null">
+                        <div class="row">
+                            <div class="col col-6 text-center">
+                                <h6>{{ $t("timeLevel.coverageResult") }}</h6>
+                            </div>
+                            <div class="col col-6 text-center">
+                                <h6>{{ $t("timeLevel.checkResult") }}</h6>
+                            </div>
                         </div>
-                        <div class="col col-6 text-center">
-                            <h6>{{ $t("timeLevel.checkResult") }}</h6>
+                        <div class="row">
+                            <div class="col col-6 text-center">
+                                <span class="result_percentage" v-bind:class="{ color_failed: !check.coverage_result }">{{ check.coverage_value }}</span> %
+                            </div>
+                            <div class="col col-6 text-center">
+                                <span class="result_percentage" v-bind:class="{ color_failed: !check.check_result }">{{ check.check_value }}</span> %
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-6 text-center">
-                            <span class="result_percentage" v-bind:class="{ color_failed: !check.coverage_result }">{{ check.coverage_value }}</span> %
-                        </div>
-                        <div class="col col-6 text-center">
-                            <span class="result_percentage" v-bind:class="{ color_failed: !check.check_result }">{{ check.check_value }}</span> %
+                    </template>
+                    <div v-else class="row">
+                        <div class="col col-12 text-center">
+                            <img class="undefined_image" src="/img/unsufficient_data.png" />
+                            <br />
+                            <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
+                            <p v-html="$t('unsufficientData.description')"></p>
                         </div>
                     </div>
                 </div>

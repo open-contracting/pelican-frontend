@@ -176,24 +176,6 @@ export default {
     color: $failed_color;
 }
 
-.undef {
-    background-color: #fafbff;
-    filter: alpha(opacity=60);
-    -moz-opacity: 0.6;
-    -khtml-opacity: 0.6;
-    opacity: 0.6;
-}
-
-.undefined_title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-.undefined_image {
-    margin-top: 20px;
-}
-
 .check_numeric_value {
     font-size: 60px;
     font-weight: 700;
