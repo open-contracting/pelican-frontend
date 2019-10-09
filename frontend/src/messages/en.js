@@ -47,6 +47,8 @@ export const messages = {
         passed: "Sample releases with passed rules",
         actions: "actions",
         preview: "preview",
+        previewOld: "preview old",
+        previewNew: "preview new",
         ocid: "ocid",
         showMore: "show more examples",
         showLess: "hide"

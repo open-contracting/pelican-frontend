@@ -60,43 +60,40 @@
                                 <span class="check_name">{{ $t("timeLevel.check.failed") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar
-                                    :count="check.meta.coverage_count - check.meta.check_count"
-                                    :percentage="100 - check.check_value"
-                                    :state="'failed'"
-                                    :showCount="true"
-                                />
+                                <InlineBar :count="check.meta.failed_count" :percentage="100 - check.check_value" :state="'failed'" :showCount="true" />
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="result_box" v-if="check.meta.examples">
+            <div class="result_box" v-if="check.meta.examples.length > 0">
                 <table class="table table-sm">
                     <thead>
                         <tr class="d-flex">
-                            <th class="col-6" scope="col">{{ $t("timeLevel.examples.oldItemOcid") }}</th>
-                            <th class="col-6" scope="col">{{ $t("timeLevel.examples.newTiemOcid") }}</th>
+                            <th class="col-10" scope="col">{{ $t("ocid") }}</th>
+                            <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in check.meta.examples.slice(0, 5)" class="d-flex" v-bind:key="index">
-                            <td class="col-6 text-left numeric">
+                            <td class="col-9 text-left numeric d-flex align-items-center">
                                 <span class="check_name">{{ item.ocid }}</span>
-                                <br />
-                                <span v-if="index != selectedKey || selectedSection != section[0]">{{ $t("examples.preview") }}</span>
-                                <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == section[0]">active</span>
                             </td>
-                            <td class="col-6 text-left numeric">
-                                <span class="check_name">{{ item.new_item_ocid }}</span>
+                            <td class="col-3 text-right numeric">
+                                <span v-if="(index + 'new') != selectedKey">
+                                    <a v-on:click.stop.prevent="preview(index + 'new', item.item_id)" href="#">{{ $t("examples.previewOld") }}</a>
+                                </span>
+                                <span v-else class="badge badge-primary">active</span>
                                 <br />
-                                <span v-if="index != selectedKey">{{ $t("examples.preview") }}</span>
-                                <span class="badge badge-primary" v-if="index == selectedKey">active</span>
+                                <span v-if="(index + 'old') != selectedKey">
+                                    <a v-on:click.stop.prevent="preview(index + 'old', item.new_item_id)" href="#">{{ $t("examples.previewNew") }}</a>
+                                </span>
+                                <span v-else class="badge badge-primary">active</span>
                             </td>
                         </tr>
                         <tr v-if="!showMore">
-                            <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore(section[0])">
+                            <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore = true">
                                 <a>
                                     <font-awesome-icon icon="chevron-down" />
                                     {{ $t("examples.showMore") }}
@@ -104,23 +101,25 @@
                             </td>
                         </tr>
                         <span v-if="showMore">
-                            <tr v-for="(item, index) in check.meta.examples.slice.slice(5, )" class="d-flex" v-bind:key="index">
-                                <td class="col-6 text-left numeric">
+                            <tr v-for="(item, index) in check.meta.examples.slice(0, 5)" class="d-flex" v-bind:key="index">
+                                <td class="col-9 text-left numeric d-flex align-items-center">
                                     <span class="check_name">{{ item.ocid }}</span>
-                                    <br />
-                                    <span v-if="index != selectedKey || selectedSection != section[0]">{{ $t("examples.preview") }}</span>
-                                    <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == section[0]">active</span>
                                 </td>
-                                <td class="col-6 text-left numeric">
-                                    <span class="check_name">{{ item.new_item_ocid }}</span>
+                                <td class="col-3 text-right numeric">
+                                    <span v-if="(index + 5 + 'new') != selectedKey">
+                                        <a v-on:click.stop.prevent="preview(index + 5 + 'new', item.item_id)" href="#">{{ $t("examples.previewOld") }}</a>
+                                    </span>
+                                    <span v-else class="badge badge-primary">active</span>
                                     <br />
-                                    <span v-if="index != selectedKey">{{ $t("examples.preview") }}</span>
-                                    <span class="badge badge-primary" v-if="index == selectedKey">active</span>
+                                    <span v-if="(index + 5 + 'old') != selectedKey">
+                                        <a v-on:click.stop.prevent="preview(index + 5 + 'old', item.new_item_id)" href="#">{{ $t("examples.previewNew") }}</a>
+                                    </span>
+                                    <span v-else class="badge badge-primary">active</span>
                                 </td>
                             </tr>
                         </span>
                         <tr v-if="showMore">
-                            <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showLess(section[0])">
+                            <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore = false">
                                 <a>
                                     <font-awesome-icon icon="chevron-up" />
                                     {{ $t("examples.showLess") }}
@@ -158,7 +157,9 @@ export default {
             check: null,
             previewDataItemId: null,
             previewMetadata: null,
-            examples: null
+            examples: null,
+            showMore: false,
+            selectedKey: null
         };
     },
     components: {
@@ -173,18 +174,28 @@ export default {
         );
 
         if (this.check != null) {
-            this.previewMetadata = this.check.meta;
+            this.previewMetadata = Object.assign({}, this.check.meta);
+            delete this.previewMetadata.examples;
         }
     },
     methods: {
-        preview: function(itemId) {
+        preview: function(selectedKey, itemId) {
+            this.selectedKey = selectedKey;
             this.$store.dispatch("loadDataItem", itemId);
             this.previewDataItemId = itemId;
         }
     },
     computed: {
         previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId);
+            var result = this.$store.getters.dataItemById(
+                this.previewDataItemId
+            );
+
+            if (result) {
+                return result["data"];
+            }
+
+            return null;
         },
         coverageState() {
             return this.check.coverage_result ? "ok" : "failed";

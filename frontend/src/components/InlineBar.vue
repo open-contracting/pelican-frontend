@@ -20,17 +20,20 @@
 export default {
     data: function() {
         return {
-            barWidth: 0
+            barWidth: 1
         };
     },
     props: ["percentage", "count", "state", "showCount"],
     mounted() {
-        if (this.showCount) {
-            this.barWidth =
-                ((this.$refs.bar.clientWidth - 100) / 100) * this.percentage;
-        } else {
-            this.barWidth =
-                (this.$refs.bar.clientWidth / 100) * this.percentage;
+        if (this.percentage > 0) {
+            if (this.showCount) {
+                this.barWidth =
+                    ((this.$refs.bar.clientWidth - 100) / 100) *
+                    this.percentage;
+            } else {
+                this.barWidth =
+                    (this.$refs.bar.clientWidth / 100) * this.percentage;
+            }
         }
     }
 };
