@@ -393,7 +393,7 @@ export const messages = {
                 count: "Contracts count",
                 share: "% of total"
             },
-            info: "This excludes: contract values with missing amounts, missing currencies, non-numeric amounts and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future."
+            info: "This excludes: contract values with missing amounts, missing currencies, non-numeric amounts, negative amounts, and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future. To determine the number of excluded contract values, compare the number of contracts here to the number of objects in the contract stage, above."
         },
         period: {
             title: "Release Dates",
@@ -420,17 +420,17 @@ export const messages = {
         processingTo: "Finished processing at"
     },
     field: {
-        title: "Field Level Checks",
-        description: "<p>Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.</p><p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is the number of occurence of its parent structure. For example, if there is 50k <i>awards</i> in a dataset containing 90k <i>suppliers</i> in total <i>awards.title</i> check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p><p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can be performed. These controls run only for fields that are present in the dataset.</p>",
-        all: "ALL CHECKS",
+        title: "Field-Level Checks",
+        description: "<p>These checks operate on compiled releases at the level of individual fields, which are analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, is not null, and is not empty (whether it is an object, array or string), then the test passes.</p><p>If a field is on an object in an array, then the test is run for each object in the array. Example: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. Example: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test runs. The quality checks differ per field, and are described in detail on sub-pages. Examples: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
+        all: "All Checks",
         table: {
             head: {
-                object: "OBJECT",
-                coverage: "COVERAGE",
-                quality: "QUALITY"
+                object: "Field path",
+                coverage: "Coverage",
+                quality: "Quality"
             }
         },
-        search: "Search object by name",
+        search: "Search field by name",
         hidden: " {n} hidden"
     },
     fieldDetail: {
