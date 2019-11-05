@@ -1,42 +1,42 @@
 export const messages = {
-    header: "Data Quality Assesment Results",
+    header: "Data Quality Assessment Results",
     loader: {
-        generic: "Still loading the great stuff for you. Please be patient.",
-        examples: "Generating random examples for you. Please be patient, this takes some time for big datasets"
+        generic: "Loading… Please be patient.",
+        examples: "Generating random examples… This takes some time for big datasets. Please be patient."
     },
     ocid: "ocid",
     ocids: "ocids",
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
-    created: "created",
-    modified: "modified",
+    created: "Created",
+    modified: "Modified",
     core: {
         passedExamples: "Passed examples",
         failedExamples: "Failed examples",
-        undefinedExamples: "Undefined examples",
+        undefinedExamples: "Undefined examples"
     },
-    kingfisherId: "kingfisher ID",
+    kingfisherId: "Kingfisher ID",
     dataset: {
-        id: "id",
-        name: "name",
-        size: "items count",
-        phase: "phase",
-        selectDataset: "show",
-        search: "Search dataset by id",
-        timeVariance: "time variance checks"
+        id: "ID",
+        name: "Name",
+        size: "Items count",
+        phase: "Phase",
+        selectDataset: "Show",
+        search: "Search dataset by name",
+        timeVariance: "Time variance checks"
     },
     unsufficientData: {
-        title: "Unsufficient data",
-        description: "The check could not have been calculated because of unsufficient data."
+        title: "Insufficient data",
+        description: "Data was insufficient to calculate the check."
     },
     sections: {
-        home: 'Home',
-        overview: 'Overview',
-        field: 'Field',
-        resource: 'Compiled release',
-        dataset: 'Collection',
-        time: 'Time',
+        home: "Home",
+        overview: "Overview",
+        field: "Field",
+        resource: "Compiled release",
+        dataset: "Collection",
+        time: "Time"
     },
     preview: {
         metadata: "Metadata",
@@ -91,12 +91,12 @@ export const messages = {
             buyer: {
                 name: "Buyer distribution",
                 description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
-                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
+                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID."
             },
             buyer_repetition: {
                 name: "Buyer repetition",
                 description: "",
-                description_long: "",
+                description_long: ""
             },
             tender_value: {
                 name: "Tender value distribution",
@@ -171,8 +171,8 @@ export const messages = {
             document_document_type: {
                 name: "Document type distribution",
                 description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-            },
+                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation"
+            }
         },
         unique: {
             ok: "All values are unique.",
@@ -208,7 +208,7 @@ export const messages = {
             processed: "tested",
             failed: "failed",
             failedExamples: "Failed examples",
-            passedExamples: "Passed examples",
+            passedExamples: "Passed examples"
         }
     },
     resourceLevel: {
@@ -267,7 +267,7 @@ export const messages = {
             documents_dates: {
                 name: "Documents dates",
                 description: "Checks that the publication date of a document is lower or equal to the modification date and that both are lower or equal to the compiled release's date"
-            },
+            }
         },
         consistent: {
             categoryName: "Consistency",
@@ -342,7 +342,7 @@ export const messages = {
             tenderer_name_in_parties: {
                 name: "Tenderer's name",
                 description: "Checks that the name of a tenderer is the same for 'tenderers' OrganizationReference as well as for the referenced Organization in 'parties' array"
-            },
+            }
         },
         reference: {
             categoryName: "Reference",
@@ -373,51 +373,51 @@ export const messages = {
             contract_in_awards: {
                 name: "Contract - Award",
                 description: "Checks whether proper reference to an award is set for particular contract. It passes if 'awards' array contains exactly one item with a proper id (determined by contract's awardID) set"
-            },
+            }
         }
     },
     overview: {
-        collection_metadata: "COLLECTION METADATA",
-        kingfisher_metadata: "KINGFISHER METADATA",
-        dqt_metadata: "DATA QUALITY TOOL METADATA",
+        collection_metadata: "Collection Metadata",
+        kingfisher_metadata: "Kingfisher Metadata",
+        dqt_metadata: "Data Quality Tool Metadata",
         compiled_releases: {
-            title: "COMPILED RELEASES",
+            title: "Compiled Releases",
             value_label: "Total Unique OCIDs"
         },
         prices: {
-            title: "PRICES",
-            value_label: "Total Value",
+            title: "Contract Values",
+            value_label: "Total Contract Value",
             contracts: "contracts",
             thead: {
-                category: "price category",
-                count: "contracts count",
-                share: "% of total value"
+                category: "Value range (USD)",
+                count: "Contracts count",
+                share: "% of total"
             },
-            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could be converted to US dollars we used. Contracts are further broken down into several price categories. Number of contracts for each category is displayed together with a share of those contracts on the total value."
+            info: "This excludes: contract values with missing amounts, missing currencies, non-numeric amounts and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future."
         },
         period: {
-            title: "PERIOD",
-            subtitle: "Compiled Releases in Time",
-            description: "Distribution of compiled releases in time based on compiled release's Date field."
+            title: "Release Dates",
+            subtitle: "Release Date Distribution",
+            description: "The distribution of release dates of all compiled releases."
         },
         lifecycle: {
-            title: "TENDER LIFECYCLE",
+            title: "Objects per Stage",
             planning: "Planning",
             tender: "Tender",
             award: "Award",
             contract: "Contract",
             implementation: "Implementation",
-            info: "A number of occurrences of a particural section in all compiled releases. While plannings and tenders can appear only once in each compiled release awards, contracts and implementation can be present multipletimes."
+            info: "In OCDS, data is organized into objects, for each stage of a contracting process. Each compiled release has: at most one Planning object, at most one Tender object, any number of Award objects, and any number of Contract objects. Each Contract object has at most one Implementation object. As such, the number of Award objects can exceed the number of unique OCIDs, but the number of Tender objects can't."
         },
-        publisher: "Publisher",
-        datalicense: "Data License",
+        publisher: "Publisher name",
+        datalicense: "License",
         extensions: "Extensions",
         extensionsUnsupported: "Unsupported format",
-        publishedFrom: "Published From",
-        publishedTo: "Published To",
+        publishedFrom: "Published from",
+        publishedTo: "Published to",
         collectionId: "Collection ID",
-        processingFrom: "Processing Start",
-        processingTo: "Processing End"
+        processingFrom: "Started processing at",
+        processingTo: "Finished processing at"
     },
     field: {
         title: "Field Level Checks",
@@ -512,19 +512,16 @@ export const messages = {
             name: "Phase stability",
             description: "To check that the contracting process has an expected progression existence and counts of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> is being inspected",
             descriptionLong: "This check controls that each compiled release in the newer version of dataset has the same or higher number of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> objects than in the older version. If the compiled release with the same ocid is present in both versions of the dataset it checks that:<ul><li><i>planning</i> exists in the new version if it existed in the old version</li><li><i>tender</i> exists in the new version if it existed in the old version</li><li>size of <i>awards</i> in the new version is higher or equal to the size of <i>awards</i> in the old version</li><li>size of <i>contracts</i> in the new version is higher or equal to the size of <i>contracts</i> in the old version</li></ul> The comparison of a pair of compiled releases fails if at least one of the above-described comparisons fails"
-
         },
         ocid: {
             name: "OCID existence",
             description: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection.",
-            descriptionLong: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection. This check takes one by one each ocid from older version of a dataset a controls that it's also present in a newer version of a dataset.",
-
+            descriptionLong: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection. This check takes one by one each ocid from older version of a dataset a controls that it's also present in a newer version of a dataset."
         },
         tender_title: {
             name: "Tender title stability",
             description: "The tender should not be changing its title during the life cycle of the contracting process. This check controls that the <i>tender.title</i> remains the same through the time.",
             descriptionLong: "For all pairs of compiled releases determined by the same <i>ocid</i> in both older and newer version of the same dataset the <i>tender.title</i> field is being compared. Only those compiled realeses that have a <i>tender.title</i> set in the older verion are being taken into consideration. The titles does not need to be necessarily 100% the same, small typos are allowed. Before the comparison all white spaces are removed and values are converted to lower case."
-
-        },
+        }
     }
 }
