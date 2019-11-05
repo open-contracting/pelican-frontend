@@ -421,7 +421,7 @@ export const messages = {
     },
     field: {
         title: "Field-Level Checks",
-        description: "<p>These checks operate on compiled releases at the level of individual fields, which are analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, is not null, and is not empty (whether it is an object, array or string), then the test passes.</p><p>If a field is on an object in an array, then the test is run for each object in the array. Example: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. Example: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test runs. The quality checks differ per field, and are described in detail on sub-pages. Examples: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
+        description: "<p>These checks operate on compiled releases at the level of individual fields, which are analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, and its value is neither null nor empty (whether it is an object, array or string), then the test passes.</p><p>If a field is on an object in an array, then the test is run for each object in the array. Example: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. Example: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test runs. The quality checks differ per field, and are described in detail on sub-pages. Examples: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
         all: "All Checks",
         table: {
             head: {
@@ -434,60 +434,60 @@ export const messages = {
         hidden: " {n} hidden"
     },
     fieldDetail: {
-        checks: "checks",
+        checked: "checked",
         path: "Field path",
         coverage: {
             label: "Coverage",
             exists: {
-                count_header: "Exists",
-                count_header_tooltip: "There can be as many occurences of each field as is the number of occurences of its parent structure. This check inspects that the parent structure has particular JSON key set. For example for field path 'tender.title' it checks whether all 'tender' objects have 'title' key set"
+                count_header: "Field is set",
+                count_header_tooltip: "There is one test per <i>possible</i> occurrence of the field. Example: If the parent <code>tender</code> field is set in 10 compiled releases, then the child <code>tender.id</code> field is reported out of 10. If there are 100 entries across all <code>awards</code> arrays in all compiled releases, then the <code>awards.id</code> field is reported out of 100."
             },
             non_empty: {
-                count_header: "Non-Empty",
-                count_header_tooltip: "This check is a part of coverage checks and controls whether the particular field does not have empty value. Except null values also empty strings and empty arrays are considered to be empty fields."
+                count_header: "Field isn't null or empty",
+                count_header_tooltip: "There is one test per <i>actual</i> occurrence of the field. The test passes if the field value is neither null nor empty (i.e. it is not an empty string, empty array or empty object). See the above check for other details."
             }
         },
         quality: {
             label: "Quality",
             ocid_prefix_check: {
-                count_header: "Registered prefix",
-                count_header_tooltip: "To pass this check 'ocid' must start with a registered prefix."
+                count_header: "OCID prefix is registered",
+                count_header_tooltip: "The value is a string and starts with a registered OCID prefix."
             },
             date_time: {
-                count_header: "Realistic datetime",
-                count_header_tooltip: "To pass this check value of a given field must fulfill the condition 1970-01-01 <= value <= 2050-01-01"
+                count_header: "Date is realistic",
+                count_header_tooltip: "The value is a string, starts in YYYY-MM-DD format, isn't before 1970 and isn't after 2050."
             },
             email: {
-                count_header: "Email format",
-                count_header_tooltip: "To pass this check value of a given field must be a string with a valid email format"
+                count_header: "Email address is valid",
+                count_header_tooltip: "The value is a valid address according to RFC 2822."
             },
             identifier_scheme: {
-                count_header: "Identifier scheme",
-                count_header_tooltip: "To pass this check value of a given field must be a value from org-id.guide scheme list"
+                count_header: "Identifier scheme is recognized",
+                count_header_tooltip: "The value is a string and is an org-id.guide code."
             },
             telephone: {
-                count_header: "Telephone format",
-                count_header_tooltip: "To pass this check value of a given field must be a string with a valid phone format"
+                count_header: "Phone number is possible",
+                count_header_tooltip: "The value is a possible number according to Google's libphonenumber."
             },
             document_description_length: {
-                count_header: "Document description length",
-                count_header_tooltip: "To pass this check value of a given field must be a string not longer than 250 words"
+                count_header: "Length is 250 characters or less",
+                count_header_tooltip: "The length of the value is less than or equal to 250."
             },
             document_type: {
-                count_header: "Coherent document type",
-                count_header_tooltip: "If the 'documentType' value is a code in the extended 'documentType' codelist, and the section for the code is non-empty, then the section must include a section of OCDS document where the document is published"
+                count_header: "Document type is coherent",
+                count_header_tooltip: "The document type is appropriate to the field path. Specifically, the value is a documentType code, and the code's 'Section' corresponds to the field's path."
             },
             document_format_codelist: {
-                count_header: "Document format",
-                count_header_tooltip: "To pass this check 'format' of the document must be a value from IANA Media Types codelist"
+                count_header: "Document format is recognized",
+                count_header_tooltip: "The value is a string and is either an IANA Media Type or the 'offline/print' code."
             },
             number_checks: {
-                count_header: "Non-negative value",
-                count_header_tooltip: "The value of a given must be a non-negative number to pass this check"
+                count_header: "Number is non-negative",
+                count_header_tooltip: "The value isn't a complex number, can be parsed as a floating-point number, and is non-negative."
             },
             language: {
-                count_header: "Two-letter lowercase ISO639-1 code",
-                count_header_tooltip: "To pass this check value of a given field must be a two-letter lowercase ISO639-1 code"
+                count_header: "Language code is recognized",
+                count_header_tooltip: "The value is a string and is a two-letter, lowercase, ISO 639-1 code."
             }
         }
     },
