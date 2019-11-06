@@ -2,7 +2,7 @@ export const messages = {
     header: "Data Quality Assessment Results",
     loader: {
         generic: "Loading… Please be patient.",
-        examples: "Generating random examples… This takes some time for big datasets. Please be patient."
+        examples: "Generating random examples… This takes some time for large datasets. Please be patient."
     },
     ocid: "ocid",
     ocids: "ocids",
@@ -20,10 +20,10 @@ export const messages = {
     dataset: {
         id: "ID",
         name: "Name",
-        size: "Items count",
-        phase: "Phase",
+        size: "Count",
+        phase: "Status",
         selectDataset: "Show",
-        search: "Search dataset by name",
+        search: "Search report by name",
         timeVariance: "Time-based checks"
     },
     unsufficientData: {
@@ -509,19 +509,19 @@ export const messages = {
             failed: "Failed"
         },
         phase_stable: {
-            name: "Phase stability",
-            description: "To check that the contracting process has an expected progression existence and counts of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> is being inspected",
-            descriptionLong: "This check controls that each compiled release in the newer version of dataset has the same or higher number of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> objects than in the older version. If the compiled release with the same ocid is present in both versions of the dataset it checks that:<ul><li><i>planning</i> exists in the new version if it existed in the old version</li><li><i>tender</i> exists in the new version if it existed in the old version</li><li>size of <i>awards</i> in the new version is higher or equal to the size of <i>awards</i> in the old version</li><li>size of <i>contracts</i> in the new version is higher or equal to the size of <i>contracts</i> in the old version</li></ul> The comparison of a pair of compiled releases fails if at least one of the above-described comparisons fails"
+            name: "Stage stability",
+            description: "A compiled release in the newer collection should have at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection.",
+            descriptionLong: "A compiled release in the newer collection should have at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection."
         },
         ocid: {
             name: "OCID persistence",
             description: "All OCIDs in an older collection of a data source should be present in this newer collection of the same source.",
-            descriptionLong: "<p>All OCIDs in an older collection of a data source should be present in this newer collection of the same source.</p><p>This check always has the same results for pairs found and pairs checked, because no further tests are run in the latter step.</p>"
+            descriptionLong: "<p>All OCIDs in an older collection of a data source should be present in this newer collection of the same source.</p><p>This check always has the same results for pairs found and pairs passed, because no further tests are run in the latter step.</p>"
         },
         tender_title: {
             name: "Tender title stability",
-            description: "The tender should not be changing its title during the life cycle of the contracting process. This check controls that the <i>tender.title</i> remains the same through the time.",
-            descriptionLong: "For all pairs of compiled releases determined by the same <i>ocid</i> in both older and newer version of the same dataset the <i>tender.title</i> field is being compared. Only those compiled realeses that have a <i>tender.title</i> set in the older verion are being taken into consideration. The titles does not need to be necessarily 100% the same, small typos are allowed. Before the comparison all white spaces are removed and values are converted to lower case."
+            description: "The tender title should be invariant across time.",
+            descriptionLong: "<p>The tender title should be invariant across time.</p><p>If an older compiled release sets the <code>tender.title</code> field, then it is attempted to be paired with a newer compiled release. If the lowercased, whitespace-normalized values of the two <code>tender.title</code> fields in the two compiled releases are equal, the test passes.</p>"
         }
     }
 }
