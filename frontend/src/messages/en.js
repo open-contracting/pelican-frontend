@@ -12,8 +12,8 @@ export const messages = {
     created: "Created",
     modified: "Modified",
     core: {
-        passedExamples: "Passed examples",
-        failedExamples: "Failed examples",
+        passedExamples: "Sample of successes",
+        failedExamples: "Sample of failures",
         undefinedExamples: "Undefined examples"
     },
     kingfisherId: "Kingfisher ID",
@@ -24,7 +24,7 @@ export const messages = {
         phase: "Phase",
         selectDataset: "Show",
         search: "Search dataset by name",
-        timeVariance: "Time variance checks"
+        timeVariance: "Time-based checks"
     },
     unsufficientData: {
         title: "Insufficient data",
@@ -40,18 +40,18 @@ export const messages = {
     },
     preview: {
         metadata: "Metadata",
-        ocds_data: "OCDS Data Preview"
+        ocds_data: "Data Preview"
     },
     examples: {
         failed: "Sample releases with failed rules",
         passed: "Sample releases with passed rules",
-        actions: "actions",
-        preview: "preview",
+        actions: "Actions",
+        preview: "Preview",
         previewOld: "preview old",
         previewNew: "preview new",
         ocid: "ocid",
-        showMore: "show more examples",
-        showLess: "hide"
+        showMore: "Show more examples",
+        showLess: "Show fewer examples"
     },
     datasetLevel: {
         description: "Collection checks focuses on a single field or structure in OCDS and inspects whether it has naturall distribution or whether the value repetition is not unexpectedly high. For some of the checks there are rules that may cause that the check fails (too frequent price value) but there are also checks that always pass. The purpose of such checks is to visualize the collection content but there can be no significant failure (document type distribution).",
@@ -415,14 +415,14 @@ export const messages = {
         extensionsUnsupported: "Unsupported format",
         publishedFrom: "Published from",
         publishedTo: "Published to",
-        collectionId: "Collection ID",
+        collectionId: "Compiled Collection ID",
         processingFrom: "Started processing at",
         processingTo: "Finished processing at"
     },
     field: {
         title: "Field-Level Checks",
         description: "<p>These checks operate on compiled releases at the level of individual fields, which are analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, and its value is neither null nor empty (whether it is an object, array or string), then the test passes.</p><p>If a field is on an object in an array, then the test is run for each object in the array. Example: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. Example: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test runs. The quality checks differ per field, and are described in detail on sub-pages. Examples: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
-        all: "All Checks",
+        all: "All Field-Level Checks",
         table: {
             head: {
                 object: "Field path",
@@ -492,20 +492,20 @@ export const messages = {
         }
     },
     timeLevel: {
-        description: "<p>Time-based checks provide an insight into how a particular dataset developed in time. It's based on comparison of compiled releases with the same ocid, therefore, the first and most important check controls that ocids are not disappearing when the dataset is updated. The rest of checks then compares pairs of compiled releases and inspects specific information to asses whether the compiled release changed or not changet in an expected way. Each check consists of two numbers</p><p>Coverage - says what is the percentage of compiled releases from the older dataset appropriate for a particular checks that are also present in a newer version of a dataset</p><p>Check result - says what's the percentage of successfully checked pairs of compiled releases when the specific rule could be applied.</p>",
-        checkResult: "Check result",
-        coverageResult: "Coverage result",
-        subheadline: "All Time Variance Level Checks",
+        description: "<p>Time-based checks focus on changes within a dataset over time. Each check has two steps:</p><ul><li><b>Find pairs:</b> The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. Example: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.</li><li><b>Check pairs:</b> Once a pair is found, the check is run. Example: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.</li></ul>",
+        checkResult: "Pairs passed",
+        coverageResult: "Pairs found",
+        subheadline: "All Time-Based Checks",
         coverage: {
-            header: "Compiled realeases processed:",
-            header_tooltip: "This number says how many compiled releases from the older version of the dataset fulfill all conditions so that it can be compared with the newer version. OCID presence is a must have. On top of that, some other conditions might be added. For example 'tender.title' must be set for 'Tender title stability' check. The statistis says how many compiled releases that fullfiled all conditions were also found in the newer version of a dataset so that the final check can be performed.",
-            ok: "Included",
-            failed: "Not included"
+            header: "Finding compiled release pairs:",
+            header_tooltip: "The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. Example: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.",
+            ok: "Found",
+            failed: "Not found"
         },
         check: {
-            header: "Compiled realease pairs checked:",
-            header_tooltip: "This number says how many pairs (old and new) of compiled releases was eventually checked by a given rule (e.g. Tender title stability or Phase stability)",
-            ok: "Ok",
+            header: "Checking compiled release pairs:",
+            header_tooltip: "Once a pair is found, the check is run. Example: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.",
+            ok: "Passed",
             failed: "Failed"
         },
         phase_stable: {
@@ -514,9 +514,9 @@ export const messages = {
             descriptionLong: "This check controls that each compiled release in the newer version of dataset has the same or higher number of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> objects than in the older version. If the compiled release with the same ocid is present in both versions of the dataset it checks that:<ul><li><i>planning</i> exists in the new version if it existed in the old version</li><li><i>tender</i> exists in the new version if it existed in the old version</li><li>size of <i>awards</i> in the new version is higher or equal to the size of <i>awards</i> in the old version</li><li>size of <i>contracts</i> in the new version is higher or equal to the size of <i>contracts</i> in the old version</li></ul> The comparison of a pair of compiled releases fails if at least one of the above-described comparisons fails"
         },
         ocid: {
-            name: "OCID existence",
-            description: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection.",
-            descriptionLong: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection. This check takes one by one each ocid from older version of a dataset a controls that it's also present in a newer version of a dataset."
+            name: "OCID persistence",
+            description: "All OCIDs in an older collection of a data source should be present in this newer collection of the same source.",
+            descriptionLong: "<p>All OCIDs in an older collection of a data source should be present in this newer collection of the same source.</p><p>This check always has the same results for pairs found and pairs checked, because no further tests are run in the latter step.</p>"
         },
         tender_title: {
             name: "Tender title stability",
