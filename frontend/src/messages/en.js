@@ -14,7 +14,7 @@ export const messages = {
     core: {
         passedExamples: "Sample of successes",
         failedExamples: "Sample of failures",
-        undefinedExamples: "Undefined examples"
+        undefinedExamples: "Sample of unprocessed data"
     },
     kingfisherId: "Kingfisher ID",
     dataset: {
@@ -47,8 +47,8 @@ export const messages = {
         passed: "Sample releases with passed rules",
         actions: "Actions",
         preview: "Preview",
-        previewOld: "preview old",
-        previewNew: "preview new",
+        previewOld: "Preview old",
+        previewNew: "Preview new",
         ocid: "ocid",
         showMore: "Show more examples",
         showLess: "Show fewer examples"
@@ -212,12 +212,12 @@ export const messages = {
         }
     },
     resourceLevel: {
-        description: "Resource level checks inspects the data quality from the perspective of a single compiled release. Each check can use various information from the whole compiled release to confirm that the logic of the data is correct. It's possible that one logical rule can be applied several times to a single compiled release because of two reasons <ul><li>the same data structure (e.g. OrganizationReference) can be found under various JSON keys</li><li>there migth be multiple occurences of the same data structure within one array</li></ul>In such case a result of a check is an aggregation of results of all individual checks. The check passes  if all the individual checks pass.",
-        subheadline: "All Resource Level Checks",
-        ok: "OK",
-        failed: "FAILED",
+        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID<code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><p>A check is 'N/A' if the relevant fields are not set. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p>",
+        subheadline: "All Resource-Level Checks",
+        ok: "Passed",
+        failed: "Failed",
         na: "N/A",
-        check: "CHECK",
+        check: "Check",
         count_header: "Checked compiled releases:",
         count_header_tooltip: "Total number of compiled releases in a collection. For each compiled release the check is evaluated right once. It either passes, fails or there are insufficient data, therefore, the result is unavailable. This statistic shows what is the percentage of compiled releases that has problematic data.",
         application_count_header: "Individual checks:",
@@ -249,7 +249,7 @@ export const messages = {
                 description: "Checks that dateMet is not set or is empty if milestone's status is either <i>scheduled</i> or <i>notMet</i>."
             },
             value_realistic: {
-                name: "Realisitic value",
+                name: "Realistic value",
                 description: "Checks whether the value's amount converted to USD is between -5 billion USD and 5 billion USD"
             },
             dates: {
@@ -347,32 +347,32 @@ export const messages = {
         reference: {
             categoryName: "Reference",
             buyer_in_parties: {
-                name: "Buyer to parties",
-                description: "Checks that the 'id' from 'buyer' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Buyer organization reference",
+                description: "<code>buyer.id</code> is present and matches the <code>id</code> of a party."
             },
             payee_in_parties: {
-                name: "Payee to parties",
-                description: "Checks that the 'id' from 'payee' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Payee organization reference",
+                description: "Every <code>contracts[].implementation.transactions[].payee.id</code> is present and matches the <code>id</code> of a party."
             },
             payer_in_parties: {
-                name: "Payer to parties",
-                description: "Checks that the 'id' from 'payer' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Payer organization reference",
+                description: "Every <code>contracts[].implementation.transactions[].payer.id</code> is present and matches the <code>id</code> of a party."
             },
             procuring_entity_in_parties: {
-                name: "Procuring entity to parties",
-                description: "Checks that the 'id' from 'procuringEntity' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Procuring entity organization reference",
+                description: "<code>tender.procuringEntity.id</code> is present and matches the <code>id</code> of a party."
             },
             supplier_in_parties: {
-                name: "Supplier to parties",
-                description: "Checks that the 'id' from 'suppliers' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Supplier organization references",
+                description: "Each <code>awards[].suppliers[].id</code> is present and matches the <code>id</code> of a party."
             },
             tenderer_in_parties: {
-                name: "Tenderer to parties",
-                description: "Checks that the 'id' from 'tenderers' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Tenderer organization references",
+                description: "Each <code>tender.tenderers[].id</code> is present and matches the <code>id</code> of a party."
             },
             contract_in_awards: {
-                name: "Contract - Award",
-                description: "Checks whether proper reference to an award is set for particular contract. It passes if 'awards' array contains exactly one item with a proper id (determined by contract's awardID) set"
+                name: "Award reference",
+                description: "Each <code>contracts[].awardID</code> is present and matches the <code>awardID</code> of exactly one award. The test is skipped if there are no awards."
             }
         }
     },
@@ -421,7 +421,7 @@ export const messages = {
     },
     field: {
         title: "Field-Level Checks",
-        description: "<p>These checks operate on compiled releases at the level of individual fields, which are analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, and its value is neither null nor empty (whether it is an object, array or string), then the test passes.</p><p>If a field is on an object in an array, then the test is run for each object in the array. Example: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. Example: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test runs. The quality checks differ per field, and are described in detail on sub-pages. Examples: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
+        description: "<p>These checks operate on individual fields within compiled releases; each occurrence of each field is analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, and its value is neither null nor empty (whether it is an object, array or string), then the coverage test passes.</p><p>If a field is on an object in an array, then the coverage test is run for each object in the array. <i>Example</i>: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. <i>Example</i>: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test is run. The quality checks differ per field, and are described in detail on sub-pages. <i>Examples</i>: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
         all: "All Field-Level Checks",
         table: {
             head: {
@@ -440,7 +440,7 @@ export const messages = {
             label: "Coverage",
             exists: {
                 count_header: "Field is set",
-                count_header_tooltip: "There is one test per <i>possible</i> occurrence of the field. Example: If the parent <code>tender</code> field is set in 10 compiled releases, then the child <code>tender.id</code> field is reported out of 10. If there are 100 entries across all <code>awards</code> arrays in all compiled releases, then the <code>awards.id</code> field is reported out of 100."
+                count_header_tooltip: "There is one test per <i>possible</i> occurrence of the field. <i>Example</i>: If the parent <code>tender</code> field is set in 10 compiled releases, then the child <code>tender.id</code> field is reported out of 10. If there are 100 entries across all <code>awards</code> arrays in all compiled releases, then the <code>awards.id</code> field is reported out of 100."
             },
             non_empty: {
                 count_header: "Field isn't null or empty",
@@ -470,7 +470,7 @@ export const messages = {
                 count_header_tooltip: "The value is a possible number according to Google's libphonenumber."
             },
             document_description_length: {
-                count_header: "Length is 250 characters or less",
+                count_header: "Has 250 characters or less",
                 count_header_tooltip: "The length of the value is less than or equal to 250."
             },
             document_type: {
@@ -492,19 +492,19 @@ export const messages = {
         }
     },
     timeLevel: {
-        description: "<p>Time-based checks focus on changes within a dataset over time. Each check has two steps:</p><ul><li><b>Find pairs:</b> The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. Example: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.</li><li><b>Check pairs:</b> Once a pair is found, the check is run. Example: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.</li></ul>",
+        description: "<p>These checks focus on changes within a dataset over time. Each check has two steps:</p><ul><li><b>Find pairs:</b> The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. <i>Example</i>: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.</li><li><b>Check pairs:</b> Once a pair is found, the check is run. <i>Example</i>: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.</li></ul>",
         checkResult: "Pairs passed",
         coverageResult: "Pairs found",
         subheadline: "All Time-Based Checks",
         coverage: {
             header: "Finding compiled release pairs:",
-            header_tooltip: "The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. Example: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.",
+            header_tooltip: "The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. <i>Example</i>: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.",
             ok: "Found",
             failed: "Not found"
         },
         check: {
             header: "Checking compiled release pairs:",
-            header_tooltip: "Once a pair is found, the check is run. Example: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.",
+            header_tooltip: "Once a pair is found, the check is run. <i>Example</i>: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.",
             ok: "Passed",
             failed: "Failed"
         },
