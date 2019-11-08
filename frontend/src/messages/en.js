@@ -296,52 +296,52 @@ export const messages = {
                 description: "Compares date fields within a given period with 'durationInDays' field. Duration in days must be equal to the difference between startDate and endDate. If endDate is not set then durationInDays must be equal to the difference between startDate and maxExtentDate."
             },
             buyer_in_parties_roles: {
-                name: "Party has a 'buyer' role",
-                description: "Examines whether organization from a 'parties' array referenced from a buyer field has a 'buyer' role set."
+                name: "Buyer's role",
+                description: "The party referenced by the <code>buyer</code> field has 'buyer' in its <code>roles</code> array."
             },
             supplier_in_parties_roles: {
-                name: "Party has a 'supplier' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific supplier has a 'supplier' role set."
+                name: "Supplier's role",
+                description: "Each party referenced by a <code>awards[].suppliers</code> entry has 'supplier' in its <code>roles</code> array."
             },
             tenderer_in_parties_roles: {
-                name: "Party has a 'tenderer' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific tenderer has a 'tenderer' role set."
+                name: "Tenderer's role",
+                description: "Each party referenced by a <code>tender.tenderers</code> entry has 'tenderer' in its <code>roles</code> array."
             },
             procuring_entity_in_parties_roles: {
-                name: "Party has a 'procuringEntity' role",
-                description: "Examines whether organization from a 'parties' array referenced from a tender's procuringEntity field has a 'procuringEntity' role set."
+                name: "Procuring entity's role",
+                description: "The party referenced by the <code>tender.procuringEntity</code> field has 'procuringEntity' in its <code>roles</code> array."
             },
             payer_in_parties_roles: {
-                name: "Party has a 'payer' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific payer has a 'payer' role set."
+                name: "Payer's role",
+                description: "Each party referenced by a <code>contracts[].implementation.transactions[].payer</code> field has 'payer' in its <code>roles</code> array."
             },
             payee_in_parties_roles: {
-                name: "Party has a 'payee' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific payee has a 'payee' role set."
+                name: "Payee's role",
+                description: "Each party referenced by a <code>contracts[].implementation.transactions[].payee</code> field has 'payee' in its <code>roles</code> array."
             },
             buyer_name_in_parties: {
                 name: "Buyer's name",
-                description: "Checks that the name of a buyer is the same for 'buyer' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                description: "The <code>buyer</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
             },
             payee_name_in_parties: {
                 name: "Payee's name",
-                description: "Checks that the name of a payee is the same for 'payee' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                description: "Each <code>contracts[].implementation.transactions[].payee</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
             },
             payer_name_in_parties: {
                 name: "Payer's name",
-                description: "Checks that the name of a payer is the same for 'payer' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                description: "Each <code>contracts[].implementation.transactions[].payer</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
             },
             procuring_entity_name_in_parties: {
                 name: "Procuring entity's name",
-                description: "Checks that the name of a procuring entity is the same for 'procuringEntity' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                description: "The <code>tender.procuringEntity</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
             },
             supplier_name_in_parties: {
                 name: "Supplier's name",
-                description: "Checks that the name of a supplier is the same for 'suppliers' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                description: "Each <code>awards[].suppliers</code> entry has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
             },
             tenderer_name_in_parties: {
                 name: "Tenderer's name",
-                description: "Checks that the name of a tenderer is the same for 'tenderers' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                description: "Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
             }
         },
         reference: {
