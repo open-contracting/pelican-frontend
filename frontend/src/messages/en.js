@@ -55,7 +55,7 @@ export const messages = {
     },
     datasetLevel: {
         description: "Collection checks focuses on a single field or structure in OCDS and inspects whether it has naturall distribution or whether the value repetition is not unexpectedly high. For some of the checks there are rules that may cause that the check fails (too frequent price value) but there are also checks that always pass. The purpose of such checks is to visualize the collection content but there can be no significant failure (document type distribution).",
-        subheadline: "All Dataset Level Checks",
+        subheadline: "All Collection-Level Checks",
         label_0_1: "1%",
         label_1_5: "1 - 5%",
         label_5_20: "5 - 10%",
@@ -212,45 +212,45 @@ export const messages = {
         }
     },
     resourceLevel: {
-        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID<code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><p>A check is 'N/A' if the relevant fields are not set. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p>",
-        subheadline: "All Resource-Level Checks",
+        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID<code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p>",
+        subheadline: "All Compiled Release-Level Checks",
         ok: "Passed",
         failed: "Failed",
         na: "N/A",
         check: "Check",
-        count_header: "Checked compiled releases:",
-        count_header_tooltip: "Total number of compiled releases in a collection. For each compiled release the check is evaluated right once. It either passes, fails or there are insufficient data, therefore, the result is unavailable. This statistic shows what is the percentage of compiled releases that has problematic data.",
-        application_count_header: "Individual checks:",
+        count_header: "Compiled releases checked:",
+        count_header_tooltip: "Each compiled release is checked, and either it passes, it fails or the check is inapplicable.",
+        application_count_header: "Individual instances checked:",
         application_count_header_tooltip: "One check can consist of multiple individual checks that controls the same logical rule using multiple instances of the same data structure (e.g. multiple suppliers). This statistic shows what is the percentage of passed and failed individual checks.",
         coherent: {
-            categoryName: "Coherency",
+            categoryName: "Coherence",
             period: {
-                name: "Period start and end date",
-                description: "Checks that the startDate of a period is lower or equal to the endDate of a given period."
+                name: "Start dates aren't after end dates",
+                description: "<p>For each period, <code>startDate</code> should be less than or equal to <code>endDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that cannot be parsed.</p>"
             },
             procurement_method_vs_number_of_tenderers: {
-                name: "Procurement method - number of tenderers",
-                description: "Checks that 'numberOfTenderers' is 0 or 1 if procurementMethod is 'direct'."
+                name: "At most one tenderer for sole sourcing",
+                description: "If the <code>tender.procurementMethod</code> is 'direct', then the <code>tender.numberOfTenderers</code> should be at most 1."
             },
             tender_status: {
-                name: "Tender status - awards and contracts",
-                description: "Checks that there are no awards or contracts if the status of tender is <i>planning</i>, <i>planned</i>, <i>active</i>, <i>cancelled</i>, <i>unsuccessful</i> or <i>withdrawn</i>."
+                name: "No awards or contracts for incomplete tenders",
+                description: "If <code>tender.status</code> is incomplete ('planning', 'planned', 'active', 'cancelled', 'unsuccessful' or 'withdrawn'), then <code>awards</code> and <code>contracts</code> should be blank."
             },
             awards_status: {
-                name: "Awards status - contracts",
-                description: "Checks that there are no contracts for a given award if its status is <i>pending</i>, <i>cancelled</i> or <i>unsuccessful</i>."
+                name: "No contracts for inactive awards",
+                description: "If an award's <code>status</code> is inactive ('pending', 'cancelled', 'unsuccessful'), then no contract's <code>awardID</code> should match the award's <code>id</code>."
             },
             contracts_status: {
-                name: "Contract status - transactions",
-                description: "Checks that there are no transactions for a given contract if its status is <i>pending</i>, <i>cancelled</i>."
+                name: "No transactions for unsigned contracts",
+                description: "If a contract's <code>status</code> is unsigned ('pending' or 'cancelled'), then its <code>implementation.transactions</code> should be blank."
             },
             milestone_status: {
-                name: "Milestone status - dateMet",
-                description: "Checks that dateMet is not set or is empty if milestone's status is either <i>scheduled</i> or <i>notMet</i>."
+                name: "No date met for unmet milestones",
+                description: "If a milestone's <code>status</code> is unmet ('scheduled' or 'notMet'), then its <code>dateMet</code> should be blank."
             },
             value_realistic: {
-                name: "Realistic value",
-                description: "Checks whether the value's amount converted to USD is between -5 billion USD and 5 billion USD"
+                name: "Monetary values are realistic",
+                description: "<p>Each monetary value should be between -5 billion USD and +5 billion USD.</p><p>Since the test operates on all value objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the value.</p>"
             },
             dates: {
                 name: "Coherent dates",
@@ -289,11 +289,11 @@ export const messages = {
             },
             parties_roles: {
                 name: "Parties are referenced",
-                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example:</i> If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</id> field is missing, as it cannot be referenced."
+                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</id> field is missing, as it cannot be referenced."
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
-                description: "For each period, <code>durationInDays</code> should be equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> isn't set, then <code>durationInDays</code> should be equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>. The test silently ignores any dates that cannot be parsed."
+                description: "<p>For each period, <code>durationInDays</code> should be equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> isn't set, then <code>durationInDays</code> should be equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that cannot be parsed.</p>"
             },
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",
