@@ -272,76 +272,76 @@ export const messages = {
         consistent: {
             categoryName: "Consistency",
             number_of_tenderers: {
-                name: "Number of tenderers - tenderers size",
-                description: "Checks whether number of tenderers is consistent with a size of tenderers array. This can be only checked if both values are set."
+                name: "Number of tenderers is consistent",
+                description: "<p>The value of the <code>numberOfTenderers</code> field is equal to the number of entries in the <code>tenderers</code> array.</p><p>The test is skipped if the <code>tenderers</code> field is not an array.</p>"
             },
             tender_value: {
-                name: "Tender value - planning budget",
-                description: "Compares value of tender and amount of a budget. This check can be performed if both values are positive or negative numbers, both have 'amount' and 'currency' set and both values either have the same currency or can be converted to USD. If so, the check passes if value of a tender does not differ from budget by more than 50 %. 100% is a budget amount."
+                name: "Planning budget is commensurate with tender value",
+                description: "<p><code>planning.budget.amount</code> should not be less than 50%, or more than 150%, of <code>tender.value</code>, after conversion to USD if necessary.</p><p>The test is skipped if an amount is missing or zero, if a currency is missing or unknown, or if the two amounts aren't both positive or both negative.</p>"
             },
             contracts_value: {
-                name: "Contracts value - award value",
-                description: "Compares a total value of all contracts related to one award and checks that the sum of all relevant contract values does not differ from the matching award's value by more than 50%. All considered values either have the same currency or can be converted to USD using compiled releases <i>date</i> field."
+                name: "Contract values are commensurate with award value",
+                description: "<p>For each award, the sum of its contract's values should not be less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>The test is skipped if any contract's <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_implementation_transactions_value: {
-                name: "Contract value - transactions value",
-                description: "Compares a total value of all transactions related to one contract and checks that the sum of all transaction values is less or equal to contract's value. All considered values either have the same currency or can be converted to USD using compiled releases <i>date</i> field."
+                name: "Transaction values are commensurate with contract value",
+                description: "<p>For each contract, the sum of its transaction's values should be less than or equal to the contract's value, after conversion to USD if necessary.</p><p>The test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the contract and its transactions.</p>"
             },
             parties_roles: {
-                name: "Parties roles",
-                description: "Examines whether parties are assigned to correct roles by checking that a given party is also referenced from a correct place in a compiled release. For example when a party has a role 'supplier' it has to be referenced from at least one award's 'suppliers' array. Roles that are being tester are <ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul>"
+                name: "Parties are referenced",
+                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example:</i> If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</id> field is missing, as it cannot be referenced."
             },
             period_duration_in_days: {
-                name: "Period duration",
-                description: "Compares date fields within a given period with 'durationInDays' field. Duration in days must be equal to the difference between startDate and endDate. If endDate is not set then durationInDays must be equal to the difference between startDate and maxExtentDate."
+                name: "Period's duration is consistent with start and end dates",
+                description: "For each period, <code>durationInDays</code> should be equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> isn't set, then <code>durationInDays</code> should be equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>. The test silently ignores any dates that cannot be parsed."
             },
             buyer_in_parties_roles: {
-                name: "Buyer's role",
+                name: "Buyer's role is set",
                 description: "The party referenced by the <code>buyer</code> field has 'buyer' in its <code>roles</code> array."
             },
             supplier_in_parties_roles: {
-                name: "Supplier's role",
+                name: "Supplier's role is set",
                 description: "Each party referenced by a <code>awards[].suppliers</code> entry has 'supplier' in its <code>roles</code> array."
             },
             tenderer_in_parties_roles: {
-                name: "Tenderer's role",
+                name: "Tenderer's role is set",
                 description: "Each party referenced by a <code>tender.tenderers</code> entry has 'tenderer' in its <code>roles</code> array."
             },
             procuring_entity_in_parties_roles: {
-                name: "Procuring entity's role",
+                name: "Procuring entity's role is set",
                 description: "The party referenced by the <code>tender.procuringEntity</code> field has 'procuringEntity' in its <code>roles</code> array."
             },
             payer_in_parties_roles: {
-                name: "Payer's role",
+                name: "Payer's role is set",
                 description: "Each party referenced by a <code>contracts[].implementation.transactions[].payer</code> field has 'payer' in its <code>roles</code> array."
             },
             payee_in_parties_roles: {
-                name: "Payee's role",
+                name: "Payee's role is set",
                 description: "Each party referenced by a <code>contracts[].implementation.transactions[].payee</code> field has 'payee' in its <code>roles</code> array."
             },
             buyer_name_in_parties: {
-                name: "Buyer's name",
-                description: "The <code>buyer</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
+                name: "Buyer's name is consistent",
+                description: "<p>The <code>buyer</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             payee_name_in_parties: {
-                name: "Payee's name",
-                description: "Each <code>contracts[].implementation.transactions[].payee</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
+                name: "Payee's name is consistent",
+                description: "<p>Each <code>contracts[].implementation.transactions[].payee</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             payer_name_in_parties: {
-                name: "Payer's name",
-                description: "Each <code>contracts[].implementation.transactions[].payer</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
+                name: "Payer's name is consistent",
+                description: "<p>Each <code>contracts[].implementation.transactions[].payer</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             procuring_entity_name_in_parties: {
-                name: "Procuring entity's name",
-                description: "The <code>tender.procuringEntity</code> field has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
+                name: "Procuring entity's name is consistent",
+                description: "<p>The <code>tender.procuringEntity</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             supplier_name_in_parties: {
-                name: "Supplier's name",
-                description: "Each <code>awards[].suppliers</code> entry has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
+                name: "Supplier's name is consistent",
+                description: "<p>Each <code>awards[].suppliers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             tenderer_name_in_parties: {
-                name: "Tenderer's name",
-                description: "Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references. The test is skipped if the referencing <code>id</code> isn't present or if it doesn't match the <code>id</code> of exactly one party."
+                name: "Tenderer's name is consistent",
+                description: "<p>Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             }
         },
         reference: {
@@ -372,7 +372,7 @@ export const messages = {
             },
             contract_in_awards: {
                 name: "Award reference",
-                description: "Each <code>contracts[].awardID</code> is present and matches the <code>awardID</code> of exactly one award. The test is skipped if there are no awards."
+                description: "<p>Each <code>contracts[].awardID</code> is present and matches the <code>awardID</code> of exactly one award.</p><p>The test is skipped if there are no awards.</p>"
             }
         }
     },
