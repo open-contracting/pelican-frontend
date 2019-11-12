@@ -1,61 +1,61 @@
 export const messages = {
-    header: "Data Quality Assesment Results",
+    header: "Data Quality Assessment Results",
     loader: {
-        generic: "Still loading the great stuff for you. Please be patient.",
-        examples: "Generating random examples for you. Please be patient, this takes some time for big datasets"
+        generic: "Loading… Please be patient.",
+        examples: "Generating random examples… This takes some time for large datasets. Please be patient."
     },
     ocid: "ocid",
     ocids: "ocids",
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
-    created: "created",
-    modified: "modified",
+    created: "Created",
+    modified: "Modified",
     core: {
-        passedExamples: "Passed examples",
-        failedExamples: "Failed examples",
-        undefinedExamples: "Undefined examples",
+        passedExamples: "Sample of successes",
+        failedExamples: "Sample of failures",
+        undefinedExamples: "Sample of unprocessed data"
     },
-    kingfisherId: "kingfisher ID",
+    kingfisherId: "Kingfisher ID",
     dataset: {
-        id: "id",
-        name: "name",
-        size: "items count",
-        phase: "phase",
-        selectDataset: "show",
-        search: "Search dataset by id",
-        timeVariance: "time variance checks"
+        id: "ID",
+        name: "Name",
+        size: "Count",
+        phase: "Status",
+        selectDataset: "Show",
+        search: "Search report by name",
+        timeVariance: "Time-based checks"
     },
     unsufficientData: {
-        title: "Unsufficient data",
-        description: "The check could not have been calculated because of unsufficient data."
+        title: "Insufficient data",
+        description: "Data was insufficient to calculate the check."
     },
     sections: {
-        home: 'Home',
-        overview: 'Overview',
-        field: 'Field',
-        resource: 'Compiled release',
-        dataset: 'Collection',
-        time: 'Time',
+        home: "Home",
+        overview: "Overview",
+        field: "Field",
+        resource: "Compiled release",
+        dataset: "Collection",
+        time: "Time"
     },
     preview: {
         metadata: "Metadata",
-        ocds_data: "OCDS Data Preview"
+        ocds_data: "Data Preview"
     },
     examples: {
         failed: "Sample releases with failed rules",
         passed: "Sample releases with passed rules",
-        actions: "actions",
-        preview: "preview",
-        previewOld: "preview old",
-        previewNew: "preview new",
+        actions: "Actions",
+        preview: "Preview",
+        previewOld: "Preview old",
+        previewNew: "Preview new",
         ocid: "ocid",
-        showMore: "show more examples",
-        showLess: "hide"
+        showMore: "Show more examples",
+        showLess: "Show fewer examples"
     },
     datasetLevel: {
         description: "Collection checks focuses on a single field or structure in OCDS and inspects whether it has naturall distribution or whether the value repetition is not unexpectedly high. For some of the checks there are rules that may cause that the check fails (too frequent price value) but there are also checks that always pass. The purpose of such checks is to visualize the collection content but there can be no significant failure (document type distribution).",
-        subheadline: "All Dataset Level Checks",
+        subheadline: "All Collection-Level Checks",
         label_0_1: "1%",
         label_1_5: "1 - 5%",
         label_5_20: "5 - 10%",
@@ -91,12 +91,12 @@ export const messages = {
             buyer: {
                 name: "Buyer distribution",
                 description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
-                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
+                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID."
             },
             buyer_repetition: {
                 name: "Buyer repetition",
                 description: "",
-                description_long: "",
+                description_long: ""
             },
             tender_value: {
                 name: "Tender value distribution",
@@ -171,8 +171,8 @@ export const messages = {
             document_document_type: {
                 name: "Document type distribution",
                 description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-            },
+                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation"
+            }
         },
         unique: {
             ok: "All values are unique.",
@@ -208,49 +208,49 @@ export const messages = {
             processed: "tested",
             failed: "failed",
             failedExamples: "Failed examples",
-            passedExamples: "Passed examples",
+            passedExamples: "Passed examples"
         }
     },
     resourceLevel: {
-        description: "Resource level checks inspects the data quality from the perspective of a single compiled release. Each check can use various information from the whole compiled release to confirm that the logic of the data is correct. It's possible that one logical rule can be applied several times to a single compiled release because of two reasons <ul><li>the same data structure (e.g. OrganizationReference) can be found under various JSON keys</li><li>there migth be multiple occurences of the same data structure within one array</li></ul>In such case a result of a check is an aggregation of results of all individual checks. The check passes  if all the individual checks pass.",
-        subheadline: "All Resource Level Checks",
-        ok: "OK",
-        failed: "FAILED",
+        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID<code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p>",
+        subheadline: "All Compiled Release-Level Checks",
+        ok: "Passed",
+        failed: "Failed",
         na: "N/A",
-        check: "CHECK",
-        count_header: "Checked compiled releases:",
-        count_header_tooltip: "Total number of compiled releases in a collection. For each compiled release the check is evaluated right once. It either passes, fails or there are insufficient data, therefore, the result is unavailable. This statistic shows what is the percentage of compiled releases that has problematic data.",
-        application_count_header: "Individual checks:",
+        check: "Check",
+        count_header: "Compiled releases checked:",
+        count_header_tooltip: "Each compiled release is checked, and either it passes, it fails or the check is inapplicable.",
+        application_count_header: "Individual instances checked:",
         application_count_header_tooltip: "One check can consist of multiple individual checks that controls the same logical rule using multiple instances of the same data structure (e.g. multiple suppliers). This statistic shows what is the percentage of passed and failed individual checks.",
         coherent: {
-            categoryName: "Coherency",
+            categoryName: "Coherence",
             period: {
-                name: "Period start and end date",
-                description: "Checks that the startDate of a period is lower or equal to the endDate of a given period."
+                name: "Start dates aren't after end dates",
+                description: "<p>For each period, <code>startDate</code> should be less than or equal to <code>endDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that cannot be parsed.</p>"
             },
             procurement_method_vs_number_of_tenderers: {
-                name: "Procurement method - number of tenderers",
-                description: "Checks that 'numberOfTenderers' is 0 or 1 if procurementMethod is 'direct'."
+                name: "At most one tenderer for sole sourcing",
+                description: "If the <code>tender.procurementMethod</code> is 'direct', then the <code>tender.numberOfTenderers</code> should be at most 1."
             },
             tender_status: {
-                name: "Tender status - awards and contracts",
-                description: "Checks that there are no awards or contracts if the status of tender is <i>planning</i>, <i>planned</i>, <i>active</i>, <i>cancelled</i>, <i>unsuccessful</i> or <i>withdrawn</i>."
+                name: "No awards or contracts for incomplete tenders",
+                description: "If <code>tender.status</code> is incomplete ('planning', 'planned', 'active', 'cancelled', 'unsuccessful' or 'withdrawn'), then <code>awards</code> and <code>contracts</code> should be blank."
             },
             awards_status: {
-                name: "Awards status - contracts",
-                description: "Checks that there are no contracts for a given award if its status is <i>pending</i>, <i>cancelled</i> or <i>unsuccessful</i>."
+                name: "No contracts for inactive awards",
+                description: "If an award's <code>status</code> is inactive ('pending', 'cancelled', 'unsuccessful'), then no contract's <code>awardID</code> should match the award's <code>id</code>."
             },
             contracts_status: {
-                name: "Contract status - transactions",
-                description: "Checks that there are no transactions for a given contract if its status is <i>pending</i>, <i>cancelled</i>."
+                name: "No transactions for unsigned contracts",
+                description: "If a contract's <code>status</code> is unsigned ('pending' or 'cancelled'), then its <code>implementation.transactions</code> should be blank."
             },
             milestone_status: {
-                name: "Milestone status - dateMet",
-                description: "Checks that dateMet is not set or is empty if milestone's status is either <i>scheduled</i> or <i>notMet</i>."
+                name: "No date met for unmet milestones",
+                description: "If a milestone's <code>status</code> is unmet ('scheduled' or 'notMet'), then its <code>dateMet</code> should be blank."
             },
             value_realistic: {
-                name: "Realisitic value",
-                description: "Checks whether the value's amount converted to USD is between -5 billion USD and 5 billion USD"
+                name: "Monetary values are realistic",
+                description: "<p>Each monetary value should be between -5 billion USD and +5 billion USD.</p><p>Since the test operates on all value objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the value.</p>"
             },
             dates: {
                 name: "Coherent dates",
@@ -267,264 +267,261 @@ export const messages = {
             documents_dates: {
                 name: "Documents dates",
                 description: "Checks that the publication date of a document is lower or equal to the modification date and that both are lower or equal to the compiled release's date"
-            },
+            }
         },
         consistent: {
             categoryName: "Consistency",
             number_of_tenderers: {
-                name: "Number of tenderers - tenderers size",
-                description: "Checks whether number of tenderers is consistent with a size of tenderers array. This can be only checked if both values are set."
+                name: "Number of tenderers is consistent",
+                description: "<p>The value of the <code>numberOfTenderers</code> field is equal to the number of entries in the <code>tenderers</code> array.</p><p>The test is skipped if the <code>tenderers</code> field is not an array.</p>"
             },
             tender_value: {
-                name: "Tender value - planning budget",
-                description: "Compares value of tender and amount of a budget. This check can be performed if both values are positive or negative numbers, both have 'amount' and 'currency' set and both values either have the same currency or can be converted to USD. If so, the check passes if value of a tender does not differ from budget by more than 50 %. 100% is a budget amount."
+                name: "Planning budget is commensurate with tender value",
+                description: "<p><code>planning.budget.amount</code> should not be less than 50%, or more than 150%, of <code>tender.value</code>, after conversion to USD if necessary.</p><p>The test is skipped if an amount is missing or zero, if a currency is missing or unknown, or if the two amounts aren't both positive or both negative.</p>"
             },
             contracts_value: {
-                name: "Contracts value - award value",
-                description: "Compares a total value of all contracts related to one award and checks that the sum of all relevant contract values does not differ from the matching award's value by more than 50%. All considered values either have the same currency or can be converted to USD using compiled releases <i>date</i> field."
+                name: "Contract values are commensurate with award value",
+                description: "<p>For each award, the sum of its contract's values should not be less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>The test is skipped if any contract's <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_implementation_transactions_value: {
-                name: "Contract value - transactions value",
-                description: "Compares a total value of all transactions related to one contract and checks that the sum of all transaction values is less or equal to contract's value. All considered values either have the same currency or can be converted to USD using compiled releases <i>date</i> field."
+                name: "Transaction values are commensurate with contract value",
+                description: "<p>For each contract, the sum of its transaction's values should be less than or equal to the contract's value, after conversion to USD if necessary.</p><p>The test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the contract and its transactions.</p>"
             },
             parties_roles: {
-                name: "Parties roles",
-                description: "Examines whether parties are assigned to correct roles by checking that a given party is also referenced from a correct place in a compiled release. For example when a party has a role 'supplier' it has to be referenced from at least one award's 'suppliers' array. Roles that are being tester are <ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul>"
+                name: "Parties are referenced",
+                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</id> field is missing, as it cannot be referenced."
             },
             period_duration_in_days: {
-                name: "Period duration",
-                description: "Compares date fields within a given period with 'durationInDays' field. Duration in days must be equal to the difference between startDate and endDate. If endDate is not set then durationInDays must be equal to the difference between startDate and maxExtentDate."
+                name: "Period's duration is consistent with start and end dates",
+                description: "<p>For each period, <code>durationInDays</code> should be equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> isn't set, then <code>durationInDays</code> should be equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that cannot be parsed.</p>"
             },
             buyer_in_parties_roles: {
-                name: "Party has a 'buyer' role",
-                description: "Examines whether organization from a 'parties' array referenced from a buyer field has a 'buyer' role set."
+                name: "Buyer's role is set",
+                description: "The party referenced by the <code>buyer</code> field has 'buyer' in its <code>roles</code> array."
             },
             supplier_in_parties_roles: {
-                name: "Party has a 'supplier' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific supplier has a 'supplier' role set."
+                name: "Supplier's role is set",
+                description: "Each party referenced by a <code>awards[].suppliers</code> entry has 'supplier' in its <code>roles</code> array."
             },
             tenderer_in_parties_roles: {
-                name: "Party has a 'tenderer' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific tenderer has a 'tenderer' role set."
+                name: "Tenderer's role is set",
+                description: "Each party referenced by a <code>tender.tenderers</code> entry has 'tenderer' in its <code>roles</code> array."
             },
             procuring_entity_in_parties_roles: {
-                name: "Party has a 'procuringEntity' role",
-                description: "Examines whether organization from a 'parties' array referenced from a tender's procuringEntity field has a 'procuringEntity' role set."
+                name: "Procuring entity's role is set",
+                description: "The party referenced by the <code>tender.procuringEntity</code> field has 'procuringEntity' in its <code>roles</code> array."
             },
             payer_in_parties_roles: {
-                name: "Party has a 'payer' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific payer has a 'payer' role set."
+                name: "Payer's role is set",
+                description: "Each party referenced by a <code>contracts[].implementation.transactions[].payer</code> field has 'payer' in its <code>roles</code> array."
             },
             payee_in_parties_roles: {
-                name: "Party has a 'payee' role",
-                description: "Examines whether organization from a 'parties' array referenced from a specific payee has a 'payee' role set."
+                name: "Payee's role is set",
+                description: "Each party referenced by a <code>contracts[].implementation.transactions[].payee</code> field has 'payee' in its <code>roles</code> array."
             },
             buyer_name_in_parties: {
-                name: "Buyer's name",
-                description: "Checks that the name of a buyer is the same for 'buyer' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                name: "Buyer's name is consistent",
+                description: "<p>The <code>buyer</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             payee_name_in_parties: {
-                name: "Payee's name",
-                description: "Checks that the name of a payee is the same for 'payee' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                name: "Payee's name is consistent",
+                description: "<p>Each <code>contracts[].implementation.transactions[].payee</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             payer_name_in_parties: {
-                name: "Payer's name",
-                description: "Checks that the name of a payer is the same for 'payer' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                name: "Payer's name is consistent",
+                description: "<p>Each <code>contracts[].implementation.transactions[].payer</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             procuring_entity_name_in_parties: {
-                name: "Procuring entity's name",
-                description: "Checks that the name of a procuring entity is the same for 'procuringEntity' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                name: "Procuring entity's name is consistent",
+                description: "<p>The <code>tender.procuringEntity</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             supplier_name_in_parties: {
-                name: "Supplier's name",
-                description: "Checks that the name of a supplier is the same for 'suppliers' OrganizationReference as well as for the referenced Organization in 'parties' array"
+                name: "Supplier's name is consistent",
+                description: "<p>Each <code>awards[].suppliers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             tenderer_name_in_parties: {
-                name: "Tenderer's name",
-                description: "Checks that the name of a tenderer is the same for 'tenderers' OrganizationReference as well as for the referenced Organization in 'parties' array"
-            },
+                name: "Tenderer's name is consistent",
+                description: "<p>Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
+            }
         },
         reference: {
             categoryName: "Reference",
             buyer_in_parties: {
-                name: "Buyer to parties",
-                description: "Checks that the 'id' from 'buyer' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Buyer organization reference",
+                description: "<code>buyer.id</code> is present and matches the <code>id</code> of a party."
             },
             payee_in_parties: {
-                name: "Payee to parties",
-                description: "Checks that the 'id' from 'payee' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Payee organization reference",
+                description: "Every <code>contracts[].implementation.transactions[].payee.id</code> is present and matches the <code>id</code> of a party."
             },
             payer_in_parties: {
-                name: "Payer to parties",
-                description: "Checks that the 'id' from 'payer' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Payer organization reference",
+                description: "Every <code>contracts[].implementation.transactions[].payer.id</code> is present and matches the <code>id</code> of a party."
             },
             procuring_entity_in_parties: {
-                name: "Procuring entity to parties",
-                description: "Checks that the 'id' from 'procuringEntity' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Procuring entity organization reference",
+                description: "<code>tender.procuringEntity.id</code> is present and matches the <code>id</code> of a party."
             },
             supplier_in_parties: {
-                name: "Supplier to parties",
-                description: "Checks that the 'id' from 'suppliers' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Supplier organization references",
+                description: "Each <code>awards[].suppliers[].id</code> is present and matches the <code>id</code> of a party."
             },
             tenderer_in_parties: {
-                name: "Tenderer to parties",
-                description: "Checks that the 'id' from 'tenderers' OrganizationReference references to an existing Organization in 'parties' array"
+                name: "Tenderer organization references",
+                description: "Each <code>tender.tenderers[].id</code> is present and matches the <code>id</code> of a party."
             },
             contract_in_awards: {
-                name: "Contract - Award",
-                description: "Checks whether proper reference to an award is set for particular contract. It passes if 'awards' array contains exactly one item with a proper id (determined by contract's awardID) set"
-            },
+                name: "Award reference",
+                description: "<p>Each <code>contracts[].awardID</code> is present and matches the <code>awardID</code> of exactly one award.</p><p>The test is skipped if there are no awards.</p>"
+            }
         }
     },
     overview: {
-        collection_metadata: "COLLECTION METADATA",
-        kingfisher_metadata: "KINGFISHER METADATA",
-        dqt_metadata: "DATA QUALITY TOOL METADATA",
+        collection_metadata: "Collection Metadata",
+        kingfisher_metadata: "Kingfisher Metadata",
+        dqt_metadata: "Data Quality Tool Metadata",
         compiled_releases: {
-            title: "COMPILED RELEASES",
+            title: "Compiled Releases",
             value_label: "Total Unique OCIDs"
         },
         prices: {
-            title: "PRICES",
-            value_label: "Total Value",
+            title: "Contract Values",
+            value_label: "Total Contract Value",
             contracts: "contracts",
             thead: {
-                category: "price category",
-                count: "contracts count",
-                share: "% of total value"
+                category: "Value range (USD)",
+                count: "Contracts count",
+                share: "% of total"
             },
-            info: "This visualization show the total value of contracts in US dollars. Only contracts for which value could be converted to US dollars we used. Contracts are further broken down into several price categories. Number of contracts for each category is displayed together with a share of those contracts on the total value."
+            info: "This excludes: contract values with missing amounts, missing currencies, non-numeric amounts, negative amounts, and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future. To determine the number of excluded contract values, compare the number of contracts here to the number of objects in the contract stage, above."
         },
         period: {
-            title: "PERIOD",
-            subtitle: "Compiled Releases in Time",
-            description: "Distribution of compiled releases in time based on compiled release's Date field."
+            title: "Release Dates",
+            subtitle: "Release Date Distribution",
+            description: "The distribution of release dates of all compiled releases."
         },
         lifecycle: {
-            title: "TENDER LIFECYCLE",
+            title: "Objects per Stage",
             planning: "Planning",
             tender: "Tender",
             award: "Award",
             contract: "Contract",
             implementation: "Implementation",
-            info: "A number of occurrences of a particural section in all compiled releases. While plannings and tenders can appear only once in each compiled release awards, contracts and implementation can be present multipletimes."
+            info: "In OCDS, data is organized into objects, for each stage of a contracting process. Each compiled release has: at most one Planning object, at most one Tender object, any number of Award objects, and any number of Contract objects. Each Contract object has at most one Implementation object. As such, the number of Award objects can exceed the number of unique OCIDs, but the number of Tender objects can't."
         },
-        publisher: "Publisher",
-        datalicense: "Data License",
+        publisher: "Publisher name",
+        datalicense: "License",
         extensions: "Extensions",
         extensionsUnsupported: "Unsupported format",
-        publishedFrom: "Published From",
-        publishedTo: "Published To",
-        collectionId: "Collection ID",
-        processingFrom: "Processing Start",
-        processingTo: "Processing End"
+        publishedFrom: "Published from",
+        publishedTo: "Published to",
+        collectionId: "Compiled Collection ID",
+        processingFrom: "Started processing at",
+        processingTo: "Finished processing at"
     },
     field: {
-        title: "Field Level Checks",
-        description: "<p>Field level checks control each field separately without using information from other fields. Each field can be checked on two levels.</p><p>Coverage - presence of a field is checked. Empty field is considered to be missing. Each field can be checked as many times as is the number of occurence of its parent structure. For example, if there is 50k <i>awards</i> in a dataset containing 90k <i>suppliers</i> in total <i>awards.title</i> check can be performed 50.000x but awards.suppliers.id can be performed 90.000x</p><p>Quality - once the field is present additional quality checks like is it a non-negative number or is it a two-letter lowercase ISO639-1 code can be performed. These controls run only for fields that are present in the dataset.</p>",
-        all: "ALL CHECKS",
+        title: "Field-Level Checks",
+        description: "<p>These checks operate on individual fields within compiled releases; each occurrence of each field is analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, and its value is neither null nor empty (whether it is an object, array or string), then the coverage test passes.</p><p>If a field is on an object in an array, then the coverage test is run for each object in the array. <i>Example</i>: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. <i>Example</i>: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test is run. The quality checks differ per field, and are described in detail on sub-pages. <i>Examples</i>: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
+        all: "All Field-Level Checks",
         table: {
             head: {
-                object: "OBJECT",
-                coverage: "COVERAGE",
-                quality: "QUALITY"
+                object: "Field path",
+                coverage: "Coverage",
+                quality: "Quality"
             }
         },
-        search: "Search object by name",
+        search: "Search field by name",
         hidden: " {n} hidden"
     },
     fieldDetail: {
-        checks: "checks",
+        checked: "checked",
         path: "Field path",
         coverage: {
             label: "Coverage",
             exists: {
-                count_header: "Exists",
-                count_header_tooltip: "There can be as many occurences of each field as is the number of occurences of its parent structure. This check inspects that the parent structure has particular JSON key set. For example for field path 'tender.title' it checks whether all 'tender' objects have 'title' key set"
+                count_header: "Field is set",
+                count_header_tooltip: "There is one test per <i>possible</i> occurrence of the field. <i>Example</i>: If the parent <code>tender</code> field is set in 10 compiled releases, then the child <code>tender.id</code> field is reported out of 10. If there are 100 entries across all <code>awards</code> arrays in all compiled releases, then the <code>awards.id</code> field is reported out of 100."
             },
             non_empty: {
-                count_header: "Non-Empty",
-                count_header_tooltip: "This check is a part of coverage checks and controls whether the particular field does not have empty value. Except null values also empty strings and empty arrays are considered to be empty fields."
+                count_header: "Field isn't null or empty",
+                count_header_tooltip: "There is one test per <i>actual</i> occurrence of the field. The test passes if the field value is neither null nor empty (i.e. it is not an empty string, empty array or empty object). See the above check for other details."
             }
         },
         quality: {
             label: "Quality",
             ocid_prefix_check: {
-                count_header: "Registered prefix",
-                count_header_tooltip: "To pass this check 'ocid' must start with a registered prefix."
+                count_header: "OCID prefix is registered",
+                count_header_tooltip: "The value is a string and starts with a registered OCID prefix."
             },
             date_time: {
-                count_header: "Realistic datetime",
-                count_header_tooltip: "To pass this check value of a given field must fulfill the condition 1970-01-01 <= value <= 2050-01-01"
+                count_header: "Date is realistic",
+                count_header_tooltip: "The value is a string, starts in YYYY-MM-DD format, isn't before 1970 and isn't after 2050."
             },
             email: {
-                count_header: "Email format",
-                count_header_tooltip: "To pass this check value of a given field must be a string with a valid email format"
+                count_header: "Email address is valid",
+                count_header_tooltip: "The value is a valid address according to RFC 2822."
             },
             identifier_scheme: {
-                count_header: "Identifier scheme",
-                count_header_tooltip: "To pass this check value of a given field must be a value from org-id.guide scheme list"
+                count_header: "Identifier scheme is recognized",
+                count_header_tooltip: "The value is a string and is an org-id.guide code."
             },
             telephone: {
-                count_header: "Telephone format",
-                count_header_tooltip: "To pass this check value of a given field must be a string with a valid phone format"
+                count_header: "Phone number is possible",
+                count_header_tooltip: "The value is a possible number according to Google's libphonenumber."
             },
             document_description_length: {
-                count_header: "Document description length",
-                count_header_tooltip: "To pass this check value of a given field must be a string not longer than 250 words"
+                count_header: "Has 250 characters or less",
+                count_header_tooltip: "The length of the value is less than or equal to 250."
             },
             document_type: {
-                count_header: "Coherent document type",
-                count_header_tooltip: "If the 'documentType' value is a code in the extended 'documentType' codelist, and the section for the code is non-empty, then the section must include a section of OCDS document where the document is published"
+                count_header: "Document type is coherent",
+                count_header_tooltip: "The document type is appropriate to the field path. Specifically, the value is a documentType code, and the code's 'Section' corresponds to the field's path."
             },
             document_format_codelist: {
-                count_header: "Document format",
-                count_header_tooltip: "To pass this check 'format' of the document must be a value from IANA Media Types codelist"
+                count_header: "Document format is recognized",
+                count_header_tooltip: "The value is a string and is either an IANA Media Type or the 'offline/print' code."
             },
             number_checks: {
-                count_header: "Non-negative value",
-                count_header_tooltip: "The value of a given must be a non-negative number to pass this check"
+                count_header: "Number is non-negative",
+                count_header_tooltip: "The value isn't a complex number, can be parsed as a floating-point number, and is non-negative."
             },
             language: {
-                count_header: "Two-letter lowercase ISO639-1 code",
-                count_header_tooltip: "To pass this check value of a given field must be a two-letter lowercase ISO639-1 code"
+                count_header: "Language code is recognized",
+                count_header_tooltip: "The value is a string and is a two-letter, lowercase, ISO 639-1 code."
             }
         }
     },
     timeLevel: {
-        description: "<p>Time-based checks provide an insight into how a particular dataset developed in time. It's based on comparison of compiled releases with the same ocid, therefore, the first and most important check controls that ocids are not disappearing when the dataset is updated. The rest of checks then compares pairs of compiled releases and inspects specific information to asses whether the compiled release changed or not changet in an expected way. Each check consists of two numbers</p><p>Coverage - says what is the percentage of compiled releases from the older dataset appropriate for a particular checks that are also present in a newer version of a dataset</p><p>Check result - says what's the percentage of successfully checked pairs of compiled releases when the specific rule could be applied.</p>",
-        checkResult: "Check result",
-        coverageResult: "Coverage result",
-        subheadline: "All Time Variance Level Checks",
+        description: "<p>These checks focus on changes within a dataset over time. Each check has two steps:</p><ul><li><b>Find pairs:</b> The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. <i>Example</i>: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.</li><li><b>Check pairs:</b> Once a pair is found, the check is run. <i>Example</i>: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.</li></ul>",
+        checkResult: "Pairs passed",
+        coverageResult: "Pairs found",
+        subheadline: "All Time-Based Checks",
         coverage: {
-            header: "Compiled realeases processed:",
-            header_tooltip: "This number says how many compiled releases from the older version of the dataset fulfill all conditions so that it can be compared with the newer version. OCID presence is a must have. On top of that, some other conditions might be added. For example 'tender.title' must be set for 'Tender title stability' check. The statistis says how many compiled releases that fullfiled all conditions were also found in the newer version of a dataset so that the final check can be performed.",
-            ok: "Included",
-            failed: "Not included"
+            header: "Finding compiled release pairs:",
+            header_tooltip: "The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. <i>Example</i>: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.",
+            ok: "Found",
+            failed: "Not found"
         },
         check: {
-            header: "Compiled realease pairs checked:",
-            header_tooltip: "This number says how many pairs (old and new) of compiled releases was eventually checked by a given rule (e.g. Tender title stability or Phase stability)",
-            ok: "Ok",
+            header: "Checking compiled release pairs:",
+            header_tooltip: "Once a pair is found, the check is run. <i>Example</i>: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.",
+            ok: "Passed",
             failed: "Failed"
         },
         phase_stable: {
-            name: "Phase stability",
-            description: "To check that the contracting process has an expected progression existence and counts of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> is being inspected",
-            descriptionLong: "This check controls that each compiled release in the newer version of dataset has the same or higher number of <i>planning</i>, <i>tender</i>, <i>awards</i> and <i>contracts</i> objects than in the older version. If the compiled release with the same ocid is present in both versions of the dataset it checks that:<ul><li><i>planning</i> exists in the new version if it existed in the old version</li><li><i>tender</i> exists in the new version if it existed in the old version</li><li>size of <i>awards</i> in the new version is higher or equal to the size of <i>awards</i> in the old version</li><li>size of <i>contracts</i> in the new version is higher or equal to the size of <i>contracts</i> in the old version</li></ul> The comparison of a pair of compiled releases fails if at least one of the above-described comparisons fails"
-
+            name: "Stage stability",
+            description: "A compiled release in the newer collection should have at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection.",
+            descriptionLong: "A compiled release in the newer collection should have at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection."
         },
         ocid: {
-            name: "OCID existence",
-            description: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection.",
-            descriptionLong: "OCID is a globally unique identifier for a contracting process. Once the contracting process is launched and present in a collection it should be always present in all future versions of a collection. This check takes one by one each ocid from older version of a dataset a controls that it's also present in a newer version of a dataset.",
-
+            name: "OCID persistence",
+            description: "All OCIDs in an older collection of a data source should be present in this newer collection of the same source.",
+            descriptionLong: "<p>All OCIDs in an older collection of a data source should be present in this newer collection of the same source.</p><p>This check always has the same results for pairs found and pairs passed, because no further tests are run in the latter step.</p>"
         },
         tender_title: {
             name: "Tender title stability",
-            description: "The tender should not be changing its title during the life cycle of the contracting process. This check controls that the <i>tender.title</i> remains the same through the time.",
-            descriptionLong: "For all pairs of compiled releases determined by the same <i>ocid</i> in both older and newer version of the same dataset the <i>tender.title</i> field is being compared. Only those compiled realeses that have a <i>tender.title</i> set in the older verion are being taken into consideration. The titles does not need to be necessarily 100% the same, small typos are allowed. Before the comparison all white spaces are removed and values are converted to lower case."
-
-        },
+            description: "The tender title should be invariant across time.",
+            descriptionLong: "<p>The tender title should be invariant across time.</p><p>If an older compiled release sets the <code>tender.title</code> field, then it is attempted to be paired with a newer compiled release. If the lowercased, whitespace-normalized values of the two <code>tender.title</code> fields in the two compiled releases are equal, the test passes.</p>"
+        }
     }
 }
