@@ -67,7 +67,7 @@
                 </table>
             </div>
 
-            <div class="result_box" v-if="check.meta.examples.length > 0">
+            <div class="result_box" v-if="check.meta.examples && check.meta.examples.length > 0">
                 <table class="table table-sm">
                     <thead>
                         <tr class="d-flex">
