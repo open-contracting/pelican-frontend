@@ -1,5 +1,5 @@
 <template>
-    <dashboard>
+    <dashboard v-if="dataset">
         <h2>{{ $t("sections.overview") }}</h2>
         <div class="row">
             <div class="col-12 col-xl-6">

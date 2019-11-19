@@ -1,5 +1,8 @@
 export default {
     computed: {
+        datasetId() {
+            return this.$store.getters.datasetId;
+        },
         resourceLoaded() {
             if (this.$store.getters.resourceLevelStats != null) {
                 return true;
@@ -25,7 +28,12 @@ export default {
             return false;
         },
         atLeastOneLoaded() {
-            return this.datasetLoaded || this.resourceLoaded || this.fieldLoaded || this.timeVarianceLoaded;
+            return (
+                this.datasetLoaded ||
+                this.resourceLoaded ||
+                this.fieldLoaded ||
+                this.timeVarianceLoaded
+            );
         }
-    },
+    }
 };

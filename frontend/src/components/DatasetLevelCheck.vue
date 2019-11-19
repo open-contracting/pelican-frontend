@@ -108,7 +108,10 @@ export default {
             if (this.check.result != undefined) {
                 this.$router.push({
                     name: "datasetCheckDetail",
-                    params: { check: name }
+                    params: {
+                        check: name,
+                        datasetId: this.$store.getters.datasetId
+                    }
                 });
             }
         }

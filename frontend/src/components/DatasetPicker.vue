@@ -180,6 +180,7 @@ export default {
 
             this.loading = true;
             this.afterUpdateRoute = route;
+            this.afterUpdateRoute.params = { datasetId: dataset.id };
             if (this.$store.getters.datasetId != dataset.id) {
                 this.$store.dispatch("updateDataset", dataset);
             } else {

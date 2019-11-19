@@ -1,21 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Overview from './views/Overview.vue'
-import Field from './views/Field.vue'
-import Resource from './views/Resource.vue'
-import Dataset from './views/Dataset.vue'
-import Time from './views/Time.vue'
-import ResourceCheckDetail from './views/ResourceCheckDetail.vue'
-import DatasetCheckDetail from './views/DatasetCheckDetail.vue'
-import FieldCheckDetail from './views/FieldCheckDetail.vue'
-import TimeVarianceCheckDetail from './views/TimeVarianceCheckDetail.vue'
-import store from './store'
+import Vue from "vue";
+import Router from "vue-router";
+import Home from "./views/Home.vue";
+import Overview from "./views/Overview.vue";
+import Field from "./views/Field.vue";
+import Resource from "./views/Resource.vue";
+import Dataset from "./views/Dataset.vue";
+import Time from "./views/Time.vue";
+import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
+import DatasetCheckDetail from "./views/DatasetCheckDetail.vue";
+import FieldCheckDetail from "./views/FieldCheckDetail.vue";
+import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
+import store from "./store";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
-    mode: 'history',
+    mode: "history",
     base: process.env.BASE_URL,
     scrollBehavior() {
         return {
@@ -23,55 +23,128 @@ export default new Router({
             y: 0
         };
     },
-    routes: [{
-            path: '/',
-            name: 'home',
+    routes: [
+        {
+            path: "/",
+            name: "home",
             component: Home
         },
         {
-            path: '/overview',
-            name: 'overview',
-            component: Overview
-        }, {
-            path: '/field',
-            name: 'field',
-            component: Field
-        }, {
-            path: '/resource',
-            name: 'resource',
-            component: Resource
-        }, {
-            path: '/dataset',
-            name: 'dataset',
-            component: Dataset
-        }, {
-            path: '/time',
-            name: 'time',
-            component: Time
-        }, {
-            path: '/resource/detail/:check',
-            name: 'resourceCheckDetail',
+            path: "/overview/:datasetId",
+            name: "overview",
+            component: Overview,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        },
+        {
+            path: "/field/:datasetId",
+            name: "field",
+            component: Field,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        },
+        {
+            path: "/resource/:datasetId",
+            name: "resource",
+            component: Resource,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        },
+        {
+            path: "/dataset/:datasetId",
+            name: "dataset",
+            component: Dataset,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        },
+        {
+            path: "/time/:datasetId",
+            name: "time",
+            component: Time,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        },
+        {
+            path: "/resource/:datasetId/detail/:check",
+            name: "resourceCheckDetail",
             component: ResourceCheckDetail,
             beforeEnter: (to, from, next) => {
-                store.dispatch('loadResourceLevelCheckDetail', to.params.check);
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store
+                        .dispatch("loadDataset", to.params.datasetId)
+                        .then(() => {
+                            store.dispatch(
+                                "loadResourceLevelCheckDetail",
+                                to.params.path
+                            );
+                        });
+                }
+                store.dispatch("loadResourceLevelCheckDetail", to.params.check);
                 next();
             }
-        }, {
-            path: '/dataset/detail/:check',
-            name: 'datasetCheckDetail',
-            component: DatasetCheckDetail
-        }, {
-            path: '/field/detail/:path',
-            name: 'fieldCheckDetail',
+        },
+        {
+            path: "/dataset/:datasetId/detail/:check",
+            name: "datasetCheckDetail",
+            component: DatasetCheckDetail,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        },
+        {
+            path: "/field/:datasetId/detail/:path",
+            name: "fieldCheckDetail",
             component: FieldCheckDetail,
             beforeEnter: (to, from, next) => {
-                store.dispatch('loadFieldLevelCheckDetail', to.params.path);
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store
+                        .dispatch("loadDataset", to.params.datasetId)
+                        .then(() => {
+                            store.dispatch(
+                                "loadFieldLevelCheckDetail",
+                                to.params.path
+                            );
+                        });
+                } else {
+                    store.dispatch("loadFieldLevelCheckDetail", to.params.path);
+                }
+
                 next();
             }
-        }, {
-            path: '/time/detail/:check',
-            name: 'timeVarianceCheckDetail',
-            component: TimeVarianceCheckDetail
         },
+        {
+            path: "/time/:datasetId/detail/:check",
+            name: "timeVarianceCheckDetail",
+            component: TimeVarianceCheckDetail,
+            beforeEnter: (to, from, next) => {
+                if (store.getters.datasetId != to.params.datasetId) {
+                    store.dispatch("loadDataset", to.params.datasetId);
+                }
+                next();
+            }
+        }
     ]
-})
+});
