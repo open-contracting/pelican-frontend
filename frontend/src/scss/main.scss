@@ -177,5 +177,6 @@ input::placeholder,
 code {
     color: $ok_color;
     background-color: white;
-    padding: 3px;
+    padding: 4px;
+    border: dotted 1px $ok_color;
 }
