@@ -173,3 +173,9 @@ input::placeholder,
 .undefined_image {
     margin-top: 20px;
 }
+
+code {
+    color: $ok_color;
+    background-color: white;
+    padding: 3px;
+}
