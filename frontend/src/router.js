@@ -95,11 +95,16 @@ export default new Router({
                         .then(() => {
                             store.dispatch(
                                 "loadResourceLevelCheckDetail",
-                                to.params.path
+                                to.params.check
                             );
                         });
+                } else {
+                    store.dispatch(
+                        "loadResourceLevelCheckDetail",
+                        to.params.check
+                    );
                 }
-                store.dispatch("loadResourceLevelCheckDetail", to.params.check);
+
                 next();
             }
         },
