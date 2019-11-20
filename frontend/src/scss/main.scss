@@ -149,7 +149,7 @@ input::placeholder,
     font-family: $font-family-bold;
 }
 
-.table_hl > div:nth-child(1) {
+.table_hl>div:nth-child(1) {
     border-top: none;
 }
 
@@ -180,4 +180,12 @@ code {
     background-color: white;
     padding: 3px;
     border: dotted 1px $ok_color;
+}
+
+
+.tooltip_text code {
+    color: #e7ec90;
+    background-color: gray;
+    padding: 3px;
+    border: dotted 1px #e7ec90;
 }

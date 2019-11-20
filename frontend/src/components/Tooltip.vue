@@ -3,7 +3,9 @@
         <span :id="tooltipId">
             <font-awesome-icon icon="info-circle" />
         </span>
-        <b-tooltip :target="tooltipId" triggers="hover">{{ text }}</b-tooltip>
+        <b-tooltip :target="tooltipId" triggers="hover">
+            <span class="tooltip_text" v-html="text"></span>
+        </b-tooltip>
     </span>
 </template>
 
