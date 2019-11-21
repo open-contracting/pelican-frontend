@@ -15,10 +15,10 @@
 
             <h5>
                 {{ $t("resourceLevel.application_count_header") }}
-                <span class="bold">{{ applicationCount() | formatNumber }}</span>&nbsp;
+                <span class="bold">{{ check.individual_application_count | formatNumber }}</span>&nbsp;
                 <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')"></Tooltip>
             </h5>
-            <CheckDetailResultBox :check="check" pass nonPass />
+            <CheckDetailResultBox :check="check" individualPass individualNonPass />
 
             <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled"></ExampleBoxes>
         </template>

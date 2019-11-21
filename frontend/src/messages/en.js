@@ -271,7 +271,7 @@ export const messages = {
         count_header: "Compiled releases checked:",
         count_header_tooltip:
             "Each compiled release is checked, and either it passes, it fails or the check is inapplicable.",
-        application_count_header: "Individual instances checked:",
+        application_count_header: "Individual checks performed:",
         application_count_header_tooltip:
             "One check can consist of multiple individual checks that controls the same logical rule using multiple instances of the same data structure (e.g. multiple suppliers). This statistic shows what is the percentage of passed and failed individual checks.",
         coherent: {

@@ -1,11 +1,11 @@
 export default {
     methods: {
-        onePercent: function () {
-            return (this.check.total_count) / 100;
+        onePercent: function() {
+            return this.check.total_count / 100;
         },
         applicationCount() {
             return this.check.passed_count + this.check.failed_count;
-        },
+        }
     },
     computed: {
         okPercentage() {
@@ -27,5 +27,17 @@ export default {
                 this.check.failed_count / (this.applicationCount() / 100)
             );
         },
+        individualPassPercentage() {
+            return Math.round(
+                this.check.individual_passed_count /
+                    (this.check.individual_application_count / 100)
+            );
+        },
+        individualFailedPercentage() {
+            return Math.round(
+                this.check.individual_failed_count /
+                    (this.check.individual_application_count / 100)
+            );
+        }
     }
 };
