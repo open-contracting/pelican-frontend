@@ -94,8 +94,6 @@ export default {
 
                 return order.indexOf(nameA) - order.indexOf(nameB);
             });
-
-            return result;
         },
         avgScore() {
             var sum = 0;
