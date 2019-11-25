@@ -220,8 +220,8 @@ export const messages = {
         check: "Check",
         count_header: "Compiled releases checked:",
         count_header_tooltip: "Each compiled release is checked, and either it passes, it fails or the check is inapplicable.",
-        application_count_header: "Individual instances checked:",
-        application_count_header_tooltip: "One check can consist of multiple individual checks that controls the same logical rule using multiple instances of the same data structure (e.g. multiple suppliers). This statistic shows what is the percentage of passed and failed individual checks.",
+        application_count_header: "Individual tests performed:",
+        application_count_header_tooltip: "One 'check' can be made up of many 'tests'; for example, when checking whether start dates aren't after end dates, each pair of start dates and end dates is <i>tested</i>. This shows the proportion of tests that passed or failed, instead of the proportion of compiled releases that passed or failed.",
         coherent: {
             categoryName: "Coherence",
             period: {
@@ -289,7 +289,7 @@ export const messages = {
             },
             parties_roles: {
                 name: "Parties are referenced",
-                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</id> field is missing, as it cannot be referenced."
+                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code> field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced."
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
