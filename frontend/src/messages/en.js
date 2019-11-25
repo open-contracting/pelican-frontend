@@ -62,7 +62,7 @@ export const messages = {
         label_20_50: "20 - 50%",
         label_50_100: "50 - 100%",
         label_1: "1",
-        label_2_20: "2 - 10",
+        label_2_20: "2 - 20",
         label_21_50: "21 - 50",
         label_51_100: "51 - 100",
         label_100: "100+",
@@ -253,20 +253,20 @@ export const messages = {
                 description: "<p>Each monetary value should be between -5 billion USD and +5 billion USD.</p><p>Since the test operates on all value objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the value.</p>"
             },
             dates: {
-                name: "Coherent dates",
-                description: "Checks the logical chain of dates within a contracting process. Tender's tenderPeriod has to end before tender's contractPeriod starts. It also has to end before any award is awarded or any contract is signed. All contracts signature dates as well as awards dates has to be lower or equal to the compiled release's date. A contract cannot be signed before the related award is awarded. Each contract has to be signed before any transaction for this contract happens. Following pairs of dates are being compared if both are available (first has to be lower or the second): <ul><li>tender.tenderPeriod.endDate, tender.contractPeriod.startDate</li><li>tender.tenderPeriod.endDate, any contracts[i].dateSigned</li><li>any contracts[i].dateSigned, date</li><li>tender.tenderPeriod.endDate, any awards[i].date</li><li>any awards[i].date, date</li><li>awards[i].date, contracts[j].dateSigned - only pairs where awards[i].id = contracts[j].awardID</li><li>contracts[i].dateSigned, contracts[i].implementation.transactions[j].date - only compare transactions that relates to the specific contract (those that are nested in a particular contract object)</li></ul>"
+                name: "Contracting process timeline",
+                description: "<p>All dates relating to stages of the contracting process should follow a coherent timeline.</p><ul><li><code>tender.tenderPeriod.endDate <= tender.contractPeriod.startDate</code>: The last day for submissions shouldn't be after the contract's anticipated start date.</li><li><code>tender.tenderPeriod.endDate <= awards[].date</code>: The last day for submissions shouldn't be after an award's date.</li><li><code>tender.tenderPeriod.endDate <= contracts[].dateSigned</code>: The last day for submissions shouldn't be after a contract's signature date.</li><li><code>awards[i].date <= contracts[].dateSigned</code>: An award's date shouldn't be after the signature date of any of its related contracts.</li><li><code>contracts[].dateSigned <= contracts[].implementation.transactions[].date</code>: A contract's signature date shouldn't be after the date of any of its related transactions.</li></ul><p>Also, each award's <code>date</code> and each contract's <code>dateSigned</code> shouldn't be after the release date.<p><p>Since the test operates on multiple dates, the test silently ignores any dates that cannot be parsed.</p>"
             },
             milestones_dates: {
-                name: "Milestones dates",
-                description: "Checks that the date when a milestone was met is after the date when it was last modified. Both dates have to be lower or equal to the compiled release's date"
+                name: "Milestone dates",
+                description: "<p>For each milestone, <code>dateModified</code> and <code>dateMet</code> shouldn't be after the release date.</p><p>Since the test operates on all milestone objects, the test silently ignores any dates that cannot be parsed.</p>"
             },
             amendments_dates: {
                 name: "Amendment dates",
-                description: "Depending to which phase of contracting process the specific amendment belongs it checks that it was amended after tender period started or after the particular award was awarded or after the particular contract was signed. All date also has to be lower or equal to the compiled release's date"
+                description: "<p>For each amendment, <code>date</code> shouldn't be after the release date, and: a tender amendment's <code>date</code> shouldn't be before the <code>tenderPeriod</code>; an award amendment's <code>date</code> shouldn't be before the award's <code>date</code>; a contract amendment's <code>date</code> shouldn't be before the contract's <code>dateSigned</code>.</p><p>Since the test operates on all amendment objects, the test silently ignores any dates that cannot be parsed.</p>"
             },
             documents_dates: {
-                name: "Documents dates",
-                description: "Checks that the publication date of a document is lower or equal to the modification date and that both are lower or equal to the compiled release's date"
+                name: "Document dates",
+                description: "<p>For each document, <code>datePublished</code> and <code>dateModified</code> shouldn't be after the release date, and <code>datePublished</code> shouldn't be after <code>dateModified</code>.</p><p>Since the test operates on all document objects, the test silently ignores any dates that cannot be parsed.</p>"
             }
         },
         consistent: {
