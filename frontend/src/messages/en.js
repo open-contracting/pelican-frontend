@@ -54,7 +54,7 @@ export const messages = {
         showLess: "Show fewer examples"
     },
     datasetLevel: {
-        description: "<p>These checks operate on a collection: all compiled releases from a given source at a single point in time. There are five types of checks:</p><ul><li><p><b>Distribution</b>: The distribution of a field's values suggests no omissions or inaccuracies. <i>Examples</i>: If all <code>procurementMethod</code> fields have a value of 'open', then the collection either omits or misreports non-open methods; if all <code>tender.status</code> fields have a value of 'active', then the collection either omits or misreports non-active statuses.</p></li><li><p><b>Repetition</b>: The repetition of a field's values suggests no data entry or mapping issues. <i>Examples</i>: If the contract value is zero 10% of the time, there might be a data mapping issue; if the award value is $25,000 10% of the time, there might be a data entry issue.</p></li><li><p><b>Uniqueness</b>: A field's values are unique across the collection.</p></li><li><p><b>Availability</b>: A random sample of URL values return non-error HTTP codes.</p></li><li><p><b>Related processes</b>: A related process reference field has a valid target within the collection, and its <code>title</code> is consistent with the target's <code>tender.title</code>.</p></li></ul><p>Some checks report distributions, but do not pass or fail; for example, the distribution of document types has no pass-fail criterion.</p><p>Some of these checks might, in principle, serve as red flags. The difference is that red flags are more sensitive. These checks have higher thresholds for failure; i.e. the data must not only be suspect (mild outliers) but <i>bad</i> (extreme outlier).</p>",
+        description: "<p>These checks operate on a collection: all compiled releases from a given source at a single point in time. There are five types of checks:</p><ul><li><p><b>Distribution</b>: The distribution of a field's values suggests no omissions or inaccuracies. <i>Examples</i>: If all <code>procurementMethod</code> fields have a value of 'open', then the collection either omits or misreports non-open methods; if all <code>tender.status</code> fields have a value of 'active', then the collection either omits or misreports non-active statuses.</p></li><li><p><b>Repetition</b>: The repetition of a field's values suggests no data entry or mapping issues. <i>Examples</i>: If the contract value is zero 10% of the time, there might be a data mapping issue; if the award value is $25,000 10% of the time, there might be a data entry issue.</p></li><li><p><b>Uniqueness</b>: A field's values are unique across the collection.</p></li><li><p><b>Availability</b>: A random sample of URL values return no responses with HTTP error codes.</p></li><li><p><b>Related processes</b>: A related process reference field has a valid target within the collection, and its <code>title</code> is consistent with the target's <code>tender.title</code>.</p></li></ul><p>Some checks report distributions, but don't pass or fail; for example, the distribution of document types has no pass-fail criterion.</p><p>Some of these checks might, in principle, serve as red flags. The difference is that red flags are more sensitive. These checks have higher thresholds for failure; i.e. the data needs to be not only suspect (mild outliers) but <i>bad</i> (extreme outlier).</p>",
         subheadline: "All Collection-Level Checks",
         label_0_1: "top 1%",
         label_1_5: "top 1-5%",
@@ -70,58 +70,58 @@ export const messages = {
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
-                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes should each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes should each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
+                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             contracts_value_repetition: {
                 name: "Contracts value repetition",
-                description: "Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.",
-                description_long: "<p>Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
+                description: "Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
+                description_long: "<p>Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
             },
             awards_value_repetition: {
                 name: "Awards value repetition",
-                description: "Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.",
-                description_long: "<p>Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
+                description: "Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
+                description_long: "<p>Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
             },
             tender_value_repetition: {
                 name: "Tender value repetition",
-                description: "Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.",
-                description_long: "<p>Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
+                description: "Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
+                description_long: "<p>Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
             },
             buyer: {
                 name: "Buyer distribution",
-                description: "Fewer than 50% of all buyers should be present in only one compiled release. Failure indicates issues in buyer identification.",
-                description_long: "<p>Fewer than 50% of all buyers should be present in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>. For illustration purposes, the share of all buyers present in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both set in fewer than 1,000 compiled releases.</p>"
+                description: "Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification.",
+                description_long: "<p>Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>. For illustration purposes, the share of all buyers identified in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both present in fewer than 1,000 compiled releases.</p>"
             },
             buyer_repetition: {
                 name: "Buyer repetition",
-                description: "The most common buyer should not be present in less than 1% or more than 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation.",
-                description_long: "<p>The most common buyer should not be present in less than 1% or more than 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both set in fewer than 1,000 compiled releases.</p>"
+                description: "The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation.",
+                description_long: "<p>The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both present in fewer than 1,000 compiled releases.</p>"
             },
             tender_value: {
                 name: "Tender value distribution",
-                description: "The sum of the top 1% of tender values should not exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%.",
-                description_long: "<p>The sum of the top 1% of tender values should not exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                description: "The sum of the top 1% of tender values doesn't exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%.",
+                description_long: "<p>The sum of the top 1% of tender values doesn't exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             awards_value: {
                 name: "Awards value distribution",
-                description: "The sum of the top 1% of award values should not exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%.",
-                description_long: "<p>The sum of the top 1% of award values should not exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                description: "The sum of the top 1% of award values doesn't exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%.",
+                description_long: "<p>The sum of the top 1% of award values doesn't exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_value: {
                 name: "Contracts value distribution",
-                description: "The sum of the top 1% of contract values should not exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%.",
-                description_long: "<p>The sum of the top 1% of contract values should not exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                description: "The sum of the top 1% of contract values doesn't exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%.",
+                description_long: "<p>The sum of the top 1% of contract values doesn't exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
-                description: "Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code should occur in more than 95% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code should occur in more than 95% of cases.</p><p>The test is skipped if the field is never set.</p>"
+                description: "Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             tender_procurement_method: {
                 name: "Procurement method distribution",
-                description: "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code should occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code should occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
+                description: "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             tender_award_criteria: {
                 name: "Award criteria distribution",
@@ -135,18 +135,18 @@ export const messages = {
             },
             awards_status: {
                 name: "Award status distribution",
-                description: "Visualizes the distribution of <code>awards.status</code> values. The 'active' code should occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code should occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
+                description: "Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             contracts_status: {
                 name: "Contract status distribution",
-                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes should each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes should each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
+                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             milestone_status: {
                 name: "Milestone status distribution",
-                description: "Visualizes the distribution of milestone <code>status</code> values. The 'met' code should occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code should occur in between 1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never set.</p>"
+                description: "Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never present.</p>"
             },
             milestone_type: {
                 name: "Milestone type distribution",
@@ -180,22 +180,22 @@ export const messages = {
         misc: {
             url_availability: {
                 name: "URL availability",
-                description: "This check examines a random sample of URLs collected accross the whole data collection and tests whether requests to these URLs returns valid response. This check passes if all responses are valid.",
-                description_long: "This check examines a random sample of URLs collected accross the whole data collection and tests whether requests to these URLs returns valid response. This check passes if all responses are valid"
+                description: "A random sample of 100 URL values return no responses with HTTP error codes.",
+                description_long: "A random sample of 100 URL values return no responses with HTTP error codes. The URL fields are: <ul><li><code>planning.documents.url</code></li><li><code>tender.documents.url</code></li><li><code>awards.documents.url</code></li><li><code>contracts.documents.url</code></li></ul>"
             }
         },
         consistent: {
             related_process_title: {
-                name: "Related processes tile consistency",
-                description: "Related process reference should have the same title as the related process itself.",
-                description_long: "If two related processes with <i>ocid</i> scheme are detected it's tested that they have the same title. <i>relatedProcesses[i].title</i> or <i>contracts[i].relatedProcesses[j].title</i> is compared to tender.title of corresponding compiled release."
+                name: "Tender's title is consistent",
+                description: "A related process object has the same value for its <code>title</code> field as the <code>tender.title</code> field of the compiled release it references.",
+                description_long: "A related process object has the same value for its <code>title</code> field as the <code>tender.title</code> field of the compiled release it references. The related process fields are: <ul><li><code>contracts.relatedProcesses</code></li><li><code>relatedProcesses</code></li></ul>"
             }
         },
         reference: {
             related_process_identifier: {
-                name: "Related processes identifier reference",
-                description: "If compiled release references to some related process using <i>ocid</i> scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection",
-                description_long: "If compiled release references to some related process using <i>ocid</i> scheme in <i>relatedProcesses[i]</i> or <i>contracts[i].relatedProcesses[j]</i> compiled release with such ocid must exist in a collection"
+                name: "Related process reference",
+                description: "If a related process has a <code>scheme</code> of 'ocid' and its <code>identifier</code> is present, then its <code>identifier</code> matches the <code>ocid</code> of a compiled release.",
+                description_long: "If a related process has a <code>scheme</code> of 'ocid' and its <code>identifier</code> is present, then its <code>identifier</code> matches the <code>ocid</code> of a compiled release. The related process fields are: <ul><li><code>contracts.relatedProcesses</code></li><li><code>relatedProcesses</code></li></ul>"
             }
         },
         numeric: {
@@ -207,7 +207,7 @@ export const messages = {
         }
     },
     resourceLevel: {
-        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID<code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p>",
+        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values are identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field has 'buyer' in its <code>roles</code> array; the monetary value of an award is commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID<code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><p>A check is 'N/A' if the relevant fields are blank; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts</code> field is blank, then the award reference check is not run.</p>",
         subheadline: "All Compiled Release-Level Checks",
         ok: "Passed",
         failed: "Failed",
@@ -221,47 +221,47 @@ export const messages = {
             categoryName: "Coherence",
             period: {
                 name: "Start dates aren't after end dates",
-                description: "<p>For each period, <code>startDate</code> should be less than or equal to <code>endDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that cannot be parsed.</p>"
+                description: "<p>For each period, <code>startDate</code> is less than or equal to <code>endDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             procurement_method_vs_number_of_tenderers: {
                 name: "At most one tenderer for sole sourcing",
-                description: "If the <code>tender.procurementMethod</code> is 'direct', then the <code>tender.numberOfTenderers</code> should be at most 1."
+                description: "If the <code>tender.procurementMethod</code> is 'direct', then the <code>tender.numberOfTenderers</code> is at most 1."
             },
             tender_status: {
                 name: "No awards or contracts for incomplete tenders",
-                description: "If <code>tender.status</code> is incomplete ('planning', 'planned', 'active', 'cancelled', 'unsuccessful' or 'withdrawn'), then <code>awards</code> and <code>contracts</code> should be blank."
+                description: "If <code>tender.status</code> is incomplete ('planning', 'planned', 'active', 'cancelled', 'unsuccessful' or 'withdrawn'), then <code>awards</code> and <code>contracts</code> are blank."
             },
             awards_status: {
                 name: "No contracts for inactive awards",
-                description: "If an award's <code>status</code> is inactive ('pending', 'cancelled', 'unsuccessful'), then no contract's <code>awardID</code> should match the award's <code>id</code>."
+                description: "If an award's <code>status</code> is inactive ('pending', 'cancelled', 'unsuccessful'), then no contract's <code>awardID</code> matches the award's <code>id</code>."
             },
             contracts_status: {
                 name: "No transactions for unsigned contracts",
-                description: "If a contract's <code>status</code> is unsigned ('pending' or 'cancelled'), then its <code>implementation.transactions</code> should be blank."
+                description: "If a contract's <code>status</code> is unsigned ('pending' or 'cancelled'), then its <code>implementation.transactions</code> is blank."
             },
             milestone_status: {
                 name: "No date met for unmet milestones",
-                description: "If a milestone's <code>status</code> is unmet ('scheduled' or 'notMet'), then its <code>dateMet</code> should be blank."
+                description: "If a milestone's <code>status</code> is unmet ('scheduled' or 'notMet'), then its <code>dateMet</code> is blank."
             },
             value_realistic: {
                 name: "Monetary values are realistic",
-                description: "<p>Each monetary value should be between -5 billion USD and +5 billion USD.</p><p>Since the test operates on all value objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the value.</p>"
+                description: "<p>Each monetary value is between -5 billion USD and +5 billion USD.</p><p>Since the test operates on all value objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the value.</p>"
             },
             dates: {
                 name: "Contracting process timeline",
-                description: "<p>All dates relating to stages of the contracting process should follow a coherent timeline.</p><ul><li><code>tender.tenderPeriod.endDate <= tender.contractPeriod.startDate</code>: The last day for submissions shouldn't be after the contract's anticipated start date.</li><li><code>tender.tenderPeriod.endDate <= awards[].date</code>: The last day for submissions shouldn't be after an award's date.</li><li><code>tender.tenderPeriod.endDate <= contracts[].dateSigned</code>: The last day for submissions shouldn't be after a contract's signature date.</li><li><code>awards[i].date <= contracts[].dateSigned</code>: An award's date shouldn't be after the signature date of any of its related contracts.</li><li><code>contracts[].dateSigned <= contracts[].implementation.transactions[].date</code>: A contract's signature date shouldn't be after the date of any of its related transactions.</li></ul><p>Also, each award's <code>date</code> and each contract's <code>dateSigned</code> shouldn't be after the release date.<p><p>Since the test operates on multiple dates, the test silently ignores any dates that cannot be parsed.</p>"
+                description: "<p>All dates relating to stages of the contracting process follow a coherent timeline.</p><ul><li><code>tender.tenderPeriod.endDate <= tender.contractPeriod.startDate</code>: The last day for submissions isn't after the contract's anticipated start date.</li><li><code>tender.tenderPeriod.endDate <= awards[].date</code>: The last day for submissions isn't after an award's date.</li><li><code>tender.tenderPeriod.endDate <= contracts[].dateSigned</code>: The last day for submissions isn't after a contract's signature date.</li><li><code>awards[i].date <= contracts[].dateSigned</code>: An award's date isn't after the signature date of any of its related contracts.</li><li><code>contracts[].dateSigned <= contracts[].implementation.transactions[].date</code>: A contract's signature date isn't after the date of any of its related transactions.</li></ul><p>Also, each award's <code>date</code> and each contract's <code>dateSigned</code> aren't after the release date.<p><p>Since the test operates on multiple dates, the test silently ignores any dates that can't be parsed.</p>"
             },
             milestones_dates: {
                 name: "Milestone dates",
-                description: "<p>For each milestone, <code>dateModified</code> and <code>dateMet</code> shouldn't be after the release date.</p><p>Since the test operates on all milestone objects, the test silently ignores any dates that cannot be parsed.</p>"
+                description: "<p>For each milestone, <code>dateModified</code> and <code>dateMet</code> aren't after the release date.</p><p>Since the test operates on all milestone objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             amendments_dates: {
                 name: "Amendment dates",
-                description: "<p>For each amendment, <code>date</code> shouldn't be after the release date, and: a tender amendment's <code>date</code> shouldn't be before the <code>tenderPeriod</code>; an award amendment's <code>date</code> shouldn't be before the award's <code>date</code>; a contract amendment's <code>date</code> shouldn't be before the contract's <code>dateSigned</code>.</p><p>Since the test operates on all amendment objects, the test silently ignores any dates that cannot be parsed.</p>"
+                description: "<p>For each amendment, <code>date</code> isn't after the release date, and: a tender amendment's <code>date</code> isn't before the <code>tenderPeriod</code>; an award amendment's <code>date</code> isn't before the award's <code>date</code>; a contract amendment's <code>date</code> isn't before the contract's <code>dateSigned</code>.</p><p>Since the test operates on all amendment objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             documents_dates: {
                 name: "Document dates",
-                description: "<p>For each document, <code>datePublished</code> and <code>dateModified</code> shouldn't be after the release date, and <code>datePublished</code> shouldn't be after <code>dateModified</code>.</p><p>Since the test operates on all document objects, the test silently ignores any dates that cannot be parsed.</p>"
+                description: "<p>For each document, <code>datePublished</code> and <code>dateModified</code> aren't after the release date, and <code>datePublished</code> isn't after <code>dateModified</code>.</p><p>Since the test operates on all document objects, the test silently ignores any dates that can't be parsed.</p>"
             }
         },
         consistent: {
@@ -272,23 +272,23 @@ export const messages = {
             },
             tender_value: {
                 name: "Planning budget is commensurate with tender value",
-                description: "<p><code>planning.budget.amount</code> should not be less than 50%, or more than 150%, of <code>tender.value</code>, after conversion to USD if necessary.</p><p>The test is skipped if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                description: "<p><code>planning.budget.amount</code> isn't less than 50%, or more than 150%, of <code>tender.value</code>, after conversion to USD if necessary.</p><p>The test is skipped if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_value: {
                 name: "Contract values are commensurate with award value",
-                description: "<p>For each award, the sum of its contract's values should not be less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>Since the test operates on all award and contract values, the test silently ignores any contract whose <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                description: "<p>For each award, the sum of its contract's values isn't less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>Since the test operates on all award and contract values, the test silently ignores any contract whose <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_implementation_transactions_value: {
                 name: "Transaction values are commensurate with contract value",
-                description: "<p>For each contract, the sum of its transaction's values should be less than or equal to the contract's value, after conversion to USD if necessary.</p><p>Since the test operates on all contract and transaction objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the contract and its transactions.</p>"
+                description: "<p>For each contract, the sum of its transaction's values is less than or equal to the contract's value, after conversion to USD if necessary.</p><p>Since the test operates on all contract and transaction objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the contract and its transactions.</p>"
             },
             parties_roles: {
                 name: "Parties are referenced",
-                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code> field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced."
+                description: "<p>For each role of each party, there is a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it is referenced by at least one award's <code>suppliers</code> entry and at least one transaction's <code>payee</code> field. The roles to test are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The 'buyer' role is not tested, because there can be multiple buyers in the <code>parties</code> array, but there is only one <code>buyer</code> field for the primary buyer.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
-                description: "<p>For each period, <code>durationInDays</code> should be equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> isn't set, then <code>durationInDays</code> should be equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that cannot be parsed.</p>"
+                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",
