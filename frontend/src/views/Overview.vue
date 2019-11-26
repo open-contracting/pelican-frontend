@@ -1,5 +1,5 @@
 <template>
-    <dashboard>
+    <dashboard v-if="dataset">
         <h2>{{ $t("sections.overview") }}</h2>
         <div class="row">
             <div class="col-12 col-xl-6">
@@ -76,11 +76,11 @@
                                     <div class="td col col-6">{{ kingfisher.collection_id }}</div>
                                 </div>
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.processingFrom')}}</div>
+                                    <div class="td col col-6">{{ $t('overview.kingfisher_processingFrom')}}</div>
                                     <div class="td col col-6">{{ kingfisher.processing_start }}</div>
                                 </div>
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.processingTo')}}</div>
+                                    <div class="td col col-6">{{ $t('overview.kingfisher_processingTo')}}</div>
                                     <div class="td col col-6">{{ kingfisher.processing_end }}</div>
                                 </div>
                             </div>

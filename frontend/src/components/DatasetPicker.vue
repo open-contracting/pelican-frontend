@@ -62,7 +62,7 @@
                         <span class="dataset_id">(Id {{ item.id }})</span>
                     </div>
                     <div class="td col-1 numeric text-right">{{ item.size | formatNumber }}</div>
-                    <div class="td col-1 numeric text-right">{{ item.meta.kingfisher_metadata.collection_id }}</div>
+                    <div v-if="item.meta.kingfisher_metadata" class="td col-1 numeric text-right">{{ item.meta.kingfisher_metadata.collection_id }}</div>
                     <div class="td col-2 phase_cell align-items-center align-middle">
                         <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
                             <span class="small_icon">
@@ -180,6 +180,7 @@ export default {
 
             this.loading = true;
             this.afterUpdateRoute = route;
+            this.afterUpdateRoute.params = { datasetId: dataset.id };
             if (this.$store.getters.datasetId != dataset.id) {
                 this.$store.dispatch("updateDataset", dataset);
             } else {

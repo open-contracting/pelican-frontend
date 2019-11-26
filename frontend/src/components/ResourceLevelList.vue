@@ -37,7 +37,63 @@ export default {
             var result = this.$store.getters.resourceLevelStatsBySection(
                 this.section
             );
-            return result;
+
+            var order = [
+                "reference.buyer_in_parties",
+                "reference.procuring_entity_in_parties",
+                "reference.tenderer_in_parties",
+                "reference.supplier_in_parties",
+                "reference.payer_in_parties",
+                "reference.payee_in_parties",
+                "reference.contract_in_awards",
+                "consistent.tender_value",
+                "consistent.contracts_value",
+                "consistent.contracts_implementation_transactions_value",
+                "consistent.parties_roles",
+                "consistent.period_duration_in_days",
+                "consistent.number_of_tenderers",
+                "consistent.buyer_in_parties_roles",
+                "consistent.tenderer_in_parties_roles",
+                "consistent.procuring_entity_in_parties_roles",
+                "consistent.supplier_in_parties_roles",
+                "consistent.payer_in_parties_roles",
+                "consistent.payee_in_parties_roles",
+                "consistent.buyer_name_in_parties",
+                "consistent.tenderer_name_in_parties",
+                "consistent.procuring_entity_name_in_parties",
+                "consistent.supplier_name_in_parties",
+                "consistent.payer_name_in_parties",
+                "consistent.payee_name_in_parties",
+                "coherent.tender_status",
+                "coherent.awards_status",
+                "coherent.contracts_status",
+                "coherent.milestone_status",
+                "coherent.dates",
+                "coherent.milestones_dates",
+                "coherent.amendments_dates",
+                "coherent.documents_dates",
+                "coherent.value_realistic",
+                "coherent.period",
+                "coherent.procurement_method_vs_number_of_tenderers"
+            ];
+
+            return result.sort(function(a, b) {
+                var nameA = a["name"];
+                var nameB = b["name"];
+                if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+
+                    return 1;
+                } else if (order.indexOf(nameA) < 0) {
+                    return 1;
+                } else if (order.indexOf(nameB) < 0) {
+                    return -1;
+                }
+
+                return order.indexOf(nameA) - order.indexOf(nameB);
+            });
         },
         avgScore() {
             var sum = 0;

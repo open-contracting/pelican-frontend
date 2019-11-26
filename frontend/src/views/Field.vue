@@ -58,7 +58,10 @@ export default {
         detail: function(path) {
             this.$router.push({
                 name: "fieldCheckDetail",
-                params: { path: path }
+                params: {
+                    path: path,
+                    datasetId: this.$store.getters.datasetId
+                }
             });
         },
         resetTableSorting: function() {

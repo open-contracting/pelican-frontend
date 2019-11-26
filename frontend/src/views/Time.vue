@@ -44,7 +44,10 @@ export default {
         detail: function(name) {
             this.$router.push({
                 name: "timeVarianceCheckDetail",
-                params: { check: name }
+                params: {
+                    check: name,
+                    datasetId: this.$store.getters.datasetId
+                }
             });
         }
     }

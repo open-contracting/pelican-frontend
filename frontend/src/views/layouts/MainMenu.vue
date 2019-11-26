@@ -11,14 +11,14 @@
                         {{ $t("sections.home").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item to="/overview">
+                    <b-nav-item :to="{ name: 'overview', params: { datasetId: datasetId}}">
                         <span class="menu_icon_small">
                             <font-awesome-icon icon="home" />
                         </span>
                         {{ $t("sections.overview").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item to="/field" :disabled="!fieldLoaded">
+                    <b-nav-item :to="{ name: 'field', params: { datasetId: datasetId}}" :disabled="!fieldLoaded">
                         <span v-if="fieldLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="sliders-h" />
                         </span>
@@ -28,7 +28,7 @@
                         {{ $t("sections.field").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item to="/resource" :disabled="!resourceLoaded">
+                    <b-nav-item :to="{ name: 'resource', params: { datasetId: datasetId}}" :disabled="!resourceLoaded">
                         <span v-if="resourceLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="list-alt" />
                         </span>
@@ -38,7 +38,7 @@
                         {{ $t("sections.resource").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item to="/dataset" :disabled="!datasetLoaded">
+                    <b-nav-item :to="{ name: 'dataset', params: { datasetId: datasetId}}" :disabled="!datasetLoaded">
                         <span v-if="datasetLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="tasks" />
                         </span>
@@ -48,7 +48,7 @@
                         {{ $t("sections.dataset").toUpperCase() }}
                     </b-nav-item>
 
-                    <b-nav-item to="/time" v-if="showTimeVariance">
+                    <b-nav-item :to="{ name: 'time', params: { datasetId: datasetId}}" v-if="showTimeVariance">
                         <span v-if="timeVarianceLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="history" />
                         </span>

@@ -33,7 +33,10 @@ export default {
         detail: function() {
             this.$router.push({
                 name: "resourceCheckDetail",
-                params: { check: this.name }
+                params: {
+                    check: this.name,
+                    datasetId: this.$store.getters.datasetId
+                }
             });
         }
     }

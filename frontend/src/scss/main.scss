@@ -107,11 +107,11 @@ h5 {
 }
 
 .thr {
-    border-bottom: solid 2px #E8ECEF;
+    border-bottom: solid 2px #e8ecef;
 }
 
 .tr {
-    border-top: solid 1px #E8ECEF;
+    border-top: solid 1px #e8ecef;
 }
 
 .tr:hover {
@@ -126,7 +126,7 @@ h5 {
     padding: 12px;
     font-family: $font-family-bold;
     text-transform: lowercase;
-    color: #9B9B9B;
+    color: #9b9b9b;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -142,6 +142,7 @@ input::placeholder,
 .description {
     margin-bottom: 50px;
     color: $headings_light_color;
+    line-height: 25px;
 }
 
 .bold {
@@ -172,4 +173,19 @@ input::placeholder,
 
 .undefined_image {
     margin-top: 20px;
+}
+
+code {
+    color: $ok_color;
+    background-color: white;
+    padding: 3px;
+    border: dotted 1px $ok_color;
+}
+
+
+.tooltip_text code {
+    color: #e7ec90;
+    background-color: gray;
+    padding: 3px;
+    border: dotted 1px #e7ec90;
 }
