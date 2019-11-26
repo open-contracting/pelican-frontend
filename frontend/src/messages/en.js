@@ -54,13 +54,13 @@ export const messages = {
         showLess: "Show fewer examples"
     },
     datasetLevel: {
-        description: "Collection checks focuses on a single field or structure in OCDS and inspects whether it has naturall distribution or whether the value repetition is not unexpectedly high. For some of the checks there are rules that may cause that the check fails (too frequent price value) but there are also checks that always pass. The purpose of such checks is to visualize the collection content but there can be no significant failure (document type distribution).",
+        description: "<p>These checks operate on a collection: all compiled releases from a given source at a single point in time. There are five types of checks:</p><ul><li><p><b>Distribution</b>: The distribution of a field's values suggests no omissions or inaccuracies. <i>Examples</i>: If all <code>procurementMethod</code> fields have a value of 'open', then the collection either omits or misreports non-open methods; if all <code>tender.status</code> fields have a value of 'active', then the collection either omits or misreports non-active statuses.</p></li><li><p><b>Repetition</b>: The repetition of a field's values suggests no data entry or mapping issues. <i>Examples</i>: If the contract value is zero 10% of the time, there might be a data mapping issue; if the award value is $25,000 10% of the time, there might be a data entry issue.</p></li><li><p><b>Uniqueness</b>: A field's values are unique across the collection.</p></li><li><p><b>Availability</b>: A random sample of URL values return non-error HTTP codes.</p></li><li><p><b>Related processes</b>: A related process reference field has a valid target within the collection, and its <code>title</code> is consistent with the target's <code>tender.title</code>.</p></li></ul><p>Some checks report distributions, but do not pass or fail; for example, the distribution of document types has no pass-fail criterion.</p><p>Some of these checks might, in principle, serve as red flags. The difference is that red flags are more sensitive. These checks have higher thresholds for failure; i.e. the data must not only be suspect (mild outliers) but <i>bad</i> (extreme outlier).</p>",
         subheadline: "All Collection-Level Checks",
-        label_0_1: "1%",
-        label_1_5: "1 - 5%",
-        label_5_20: "5 - 10%",
-        label_20_50: "20 - 50%",
-        label_50_100: "50 - 100%",
+        label_0_1: "top 1%",
+        label_1_5: "top 1-5%",
+        label_5_20: "top 5-20%",
+        label_20_50: "top 20-50%",
+        label_50_100: "last 50%",
         label_1: "1",
         label_2_20: "2 - 20",
         label_21_50: "21 - 50",
@@ -70,116 +70,111 @@ export const messages = {
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
-                description: "Calculates a frequency of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases",
-                description_long: "Calculates a frequency of occurence of different tender statuses. The check passes if <i>active</i> and <i>complete</i> status is present in 0.1 - 99% cases"
+                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes should each occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes should each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
             },
             contracts_value_repetition: {
                 name: "Contracts value repetition",
-                description: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders.",
-                description_long: "Examines that contract values are not repeating to frequently. 3 most frequent <i>contracts[i].value.amount</i> and <i>contracts[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
+                description: "Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.",
+                description_long: "<p>Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
             },
             awards_value_repetition: {
                 name: "Awards value repetition",
-                description: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders.",
-                description_long: "Examines that award values are not repeating to frequently. 3 most frequent <i>awards[i].value.amount</i> and <i>awards[i].value.currency</i> combinations should appear in fewer than 10% of tenders."
+                description: "Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.",
+                description_long: "<p>Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
             },
             tender_value_repetition: {
                 name: "Tender value repetition",
-                description: "Examines that tender values are not repeating to frequently. 3 most frequent <i>tender.value.amount</i> and <i>tender.value.currency</i> combinations should appear in fewer than 10% of tenders.",
-                description_long: "Examines that values are not repeating to frequently. 3 most frequent <i>tender.value.amount</i> and <i>tender.value.currency</i> combinations should appear in fewer than 10% of tenders."
+                description: "Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.",
+                description_long: "<p>Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs should appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
             },
             buyer: {
                 name: "Buyer distribution",
-                description: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID.",
-                description_long: "This check examines a suspicious number of small buyers having only one OCID. This can indicate a problem in publishing buyers identifiers. It fails if more than 50% of all buyers have just one OCID."
+                description: "Fewer than 50% of all buyers should be present in only one compiled release. Failure indicates issues in buyer identification.",
+                description_long: "<p>Fewer than 50% of all buyers should be present in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>. For illustration purposes, the share of all buyers present in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both set in fewer than 1,000 compiled releases.</p>"
             },
             buyer_repetition: {
                 name: "Buyer repetition",
-                description: "",
-                description_long: ""
+                description: "The most common buyer should not be present in less than 1% or more than 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation.",
+                description_long: "<p>The most common buyer should not be present in less than 1% or more than 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both set in fewer than 1,000 compiled releases.</p>"
             },
             tender_value: {
                 name: "Tender value distribution",
-                description: "If sum of 1% of top tender values is more than 50% of sum of all tender values it may indicate some insanely high published numbers.",
-                description_long: "This check processes all <i>tender.value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all tenders values converted to USD.</li><li>It orders all values in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount.</li></ul> For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
+                description: "The sum of the top 1% of tender values should not exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%.",
+                description_long: "<p>The sum of the top 1% of tender values should not exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             awards_value: {
                 name: "Awards value distribution",
-                description: "If sum of 1% of top award values is more than 50% of sum of all award values it may indicate some insanely high published numbers.",
-                description_long: "This check processes all <i>awards[i].value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all awards values converted to USD.</li><li>It orders all values in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount.</li></ul> For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
+                description: "The sum of the top 1% of award values should not exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%.",
+                description_long: "<p>The sum of the top 1% of award values should not exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_value: {
                 name: "Contracts value distribution",
-                description: "If sum of 1% of top contract values is more than 50% of sum of all contract values it may indicate some insanely high published numbers.",
-                description_long: "This check processes all <i>contract[i].value</i> values which has both amount and currency set. <ul><li>It converts all values to USD using compiled releases <i>date</i> field.</li><li>It calculates a total amount of all contracts values converted to USD.</li><li>It orders all values in descending order and checks that the 1% of top values (10 out of 1000 even that the 11th value is the same as 10th) is not more than 50% of the total amount.</li></ul> For illustration purposes also the share of other groups of values is shown. For example 20 - 50% shows what is the share of values 201-500 (considering 1000 values) in ordered list of values."
+                description: "The sum of the top 1% of contract values should not exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%.",
+                description_long: "<p>The sum of the top 1% of contract values should not exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
-                description: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs in more than 95 % cases which would be unnatural distribution.",
-                description_long: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs more than 95 % of the time."
+                description: "Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code should occur in more than 95% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code should occur in more than 95% of cases.</p><p>The test is skipped if the field is never set.</p>"
             },
             tender_procurement_method: {
                 name: "Procurement method distribution",
-                description: "Calculates a frequency of occurence of different procurement methods. The check passes if <i>open</i> procurement method is present in 0.1 - 99% cases",
-                description_long: "Checks that no value of <i>tender.mainProcurementCategory</i> occurs more than 95 % of the time."
+                description: "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code should occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code should occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
             },
             tender_award_criteria: {
                 name: "Award criteria distribution",
-                description: "Calculates a frequency of occurence of different award criteria. This check passes always and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different award criteria. This check passes always and serves only for data presentation"
+                description: "Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed.",
+                description_long: "Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed."
             },
             tender_submission_method: {
                 name: "Submission method distribution",
-                description: "Calculates a frequency of occurence of different submission methods. This check passes always and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different submission methods. This check passes always and serves only for data presentation"
+                description: "Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed.",
+                description_long: "Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed."
             },
             awards_status: {
                 name: "Award status distribution",
-                description: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases",
-                description_long: "Calculates a frequency of occurence of different statuses of awards. The check passes if <i>active</i> status is present in 0.1 - 99% cases"
+                description: "Visualizes the distribution of <code>awards.status</code> values. The 'active' code should occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code should occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
             },
             contracts_status: {
                 name: "Contract status distribution",
-                description: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases",
-                description_long: "Calculates a frequency of occurence of different statuses of contracts. The check passes if <i>active</i> and <i>terminated</i> status is present in 0.1 - 99% cases"
+                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes should each occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes should each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never set.</p>"
             },
             milestone_status: {
                 name: "Milestone status distribution",
-                description: "Calculates a frequency of occurence of different statuses of milestones. All milestones from all phases of contracting process are included. The check passes if <i>met</i> status is present in 0.1 - 99% cases",
-                description_long: "Calculates a frequency of occurence of different statuses of milestones. All milestones from all phases of contracting process are included. Namely: <ul><li>planning.milestones.status</li><li>tender.milestones.status</li><li>contracts.milestones.status</li><li>contracts.implementation.milestones.status</li></ul>The check passes if <i>met</i> status is present in 0.1 - 99% cases"
+                description: "Visualizes the distribution of milestone <code>status</code> values. The 'met' code should occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code should occur in between 1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never set.</p>"
             },
             milestone_type: {
                 name: "Milestone type distribution",
-                description: "Calculates a frequency of occurence of different types of milestones. All milestones from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different types of milestones. All milestones from all phases of contracting process are included. Namely: <ul><li>planning.milestones.type</li><li>tender.milestones.type</li><li>contracts.milestones.type</li><li>contracts.implementation.milestones.type</li></ul>This check passes everytime and serves only for data presentation"
-            },
-            document_type: {
-                name: "Document type distribution",
-                description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. Namely: <ul><li>planning.documents.documentType</li><li>tender.documents.documentType</li><li>awards.documents.documentType</li><li>contracts.documents.documentType</li><li>contracts.implementation.documents.documentType</li><li>contracts.milestones.documents.documentType</li></ul>This check passes everytime and serves only for data presentation"
+                description: "Visualizes the distribution of milestone <code>type</code> values. No test is performed.",
+                description_long: "Visualizes the distribution of milestone <code>type</code> values. No test is performed. The milestone fields are: <ul><li><code>planning.milestones.type</code></li><li><code>tender.milestones.type</code></li><li><code>awards.milestones.type</code></li><li><code>contracts.implementation.milestones.type</code></li></ul>"
             },
             value_currency: {
                 name: "Currency distribution",
-                description: "Calculates a frequency of occurence of different currencies. Currencies from all value objects from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different currencies. Currencies from all value objects from all phases of contracting process are included. Namely: <ul><li>tender.value.currency</li><li>tender.minValue.currency</li><li>awards.value.currency</li><li>contracts.value.currency</li><li>planning.budget.value.currency</li><li>contracts.implementation.transactions.value.currency</li></ul>This check passes everytime and serves only for data presentation"
+                description: "Visualizes the distribution of <code>currency</code> values. No test is performed.",
+                description_long: "Visualizes the distribution of <code>currency</code> values. No test is performed. The fields are: <ul><li><code>planning.budget.value.currency</code></li><li><code>tender.value.currency</code></li><li><code>tender.minValue.currency</code></li><li><code>awards.value.currency</code></li><li><code>contracts.value.currency</code></li><li><code>contracts.implementation.transactions.value.currency</code></li></ul>"
             },
             related_process_relation: {
                 name: "Related process relation distribution",
-                description: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a freque   ncy of occurence of different relations between related processes. This check passes everytime and serves only for data presentation"
+                description: "Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed.",
+                description_long: "Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed."
             },
             document_document_type: {
                 name: "Document type distribution",
-                description: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation",
-                description_long: "Calculates a frequency of occurence of different types of documents. All documents from all phases of contracting process are included. This check passes everytime and serves only for data presentation"
+                description: "Visualizes the distribution of document <code>documentType</code> values. No test is performed.",
+                description_long: "Visualizes the distribution of document <code>documentType</code> values. No test is performed. The document fields are: <ul><li><code>planning.documents.documentType</code></li><li><code>tender.documents.documentType</code></li><li><code>awards.documents.documentType</code></li><li><code>contracts.documents.documentType</code></li><li><code>contracts.implementation.documents.documentType</code></li></ul>"
             }
         },
         unique: {
             ok: "All values are unique.",
-            failed: "There are non-unique values.",
+            failed: "Not all values are unique.",
             id: {
                 name: "id",
-                description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                description: "Please ignore until further notice."
             }
         },
         misc: {
@@ -277,19 +272,19 @@ export const messages = {
             },
             tender_value: {
                 name: "Planning budget is commensurate with tender value",
-                description: "<p><code>planning.budget.amount</code> should not be less than 50%, or more than 150%, of <code>tender.value</code>, after conversion to USD if necessary.</p><p>The test is skipped if an amount is missing or zero, if a currency is missing or unknown, or if the two amounts aren't both positive or both negative.</p>"
+                description: "<p><code>planning.budget.amount</code> should not be less than 50%, or more than 150%, of <code>tender.value</code>, after conversion to USD if necessary.</p><p>The test is skipped if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_value: {
                 name: "Contract values are commensurate with award value",
-                description: "<p>For each award, the sum of its contract's values should not be less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>The test is skipped if any contract's <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                description: "<p>For each award, the sum of its contract's values should not be less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>Since the test operates on all award and contract values, the test silently ignores any contract whose <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_implementation_transactions_value: {
                 name: "Transaction values are commensurate with contract value",
-                description: "<p>For each contract, the sum of its transaction's values should be less than or equal to the contract's value, after conversion to USD if necessary.</p><p>The test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the contract and its transactions.</p>"
+                description: "<p>For each contract, the sum of its transaction's values should be less than or equal to the contract's value, after conversion to USD if necessary.</p><p>Since the test operates on all contract and transaction objects, the test silently ignores any missing or non-numeric amounts and any missing or unknown currencies. If currency conversion is necessary, but the release date is invalid, before 1999, or in the future, the test silently ignores the contract and its transactions.</p>"
             },
             parties_roles: {
                 name: "Parties are referenced",
-                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code> field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced."
+                description: "<p>For each considered role of each party, there should be a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it should be referenced by at least one award's <code>suppliers</code> array and at least one transaction's <code>payee</code> field. The roles considered are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced."
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
@@ -325,11 +320,11 @@ export const messages = {
             },
             payee_name_in_parties: {
                 name: "Payee's name is consistent",
-                description: "<p>Each <code>contracts[].implementation.transactions[].payee</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
+                description: "<p>Each <code>contracts[].implementation.transactions[].payee</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             payer_name_in_parties: {
                 name: "Payer's name is consistent",
-                description: "<p>Each <code>contracts[].implementation.transactions[].payer</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
+                description: "<p>Each <code>contracts[].implementation.transactions[].payer</code> field has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             procuring_entity_name_in_parties: {
                 name: "Procuring entity's name is consistent",
@@ -337,11 +332,11 @@ export const messages = {
             },
             supplier_name_in_parties: {
                 name: "Supplier's name is consistent",
-                description: "<p>Each <code>awards[].suppliers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
+                description: "<p>Each <code>awards[].suppliers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             tenderer_name_in_parties: {
                 name: "Tenderer's name is consistent",
-                description: "<p>Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
+                description: "<p>Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             }
         },
         reference: {
