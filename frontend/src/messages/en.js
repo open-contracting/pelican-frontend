@@ -413,7 +413,9 @@ export const messages = {
         publishedTo: "Published to",
         collectionId: "Compiled Collection ID",
         processingFrom: "Started processing at",
-        processingTo: "Finished processing at"
+        processingTo: "Finished processing at",
+        kingfisher_processingFrom: "Started collecting at",
+        kingfisher_processingTo: "Finished compiling at"
     },
     field: {
         title: "Field-Level Checks",
