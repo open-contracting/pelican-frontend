@@ -19,7 +19,9 @@ export default new Vuex.Store({
         fieldCheckSorting: null,
         fieldCheckSearch: null,
         datasetSearch: null,
-        datasetSorting: null
+        datasetSorting: null,
+
+        resourceCheckExpandedNodes: []
     },
     getters: {
         dataset: state => {
@@ -128,7 +130,14 @@ export default new Vuex.Store({
             return state.datasetSorting != null
                 ? state.datasetSorting.asc
                 : null;
-        }
+        },
+        isResourceCheckExpanded: state => section => {
+            if (state.resourceCheckExpandedNodes != null) {
+                return state.resourceCheckExpandedNodes.includes(section);
+            }
+
+            return false;
+        },
     },
     mutations: {
         setDataset(state, newDataset) {
@@ -203,7 +212,17 @@ export default new Vuex.Store({
         },
         resetDatasetSorting(state) {
             state.datasetSorting = null;
-        }
+        },
+        addResourceCheckExpandedNode(state, section) {
+            if (!state.resourceCheckExpandedNodes.includes(section)) {
+                state.resourceCheckExpandedNodes.push(section);
+            }
+        },
+        removeResourceCheckExpandedNode(state, section) {
+            state.resourceCheckExpandedNodes = state.resourceCheckExpandedNodes.filter(
+                v => !v.startsWith(section)
+            );
+        },
     },
     actions: {
         updateDataset({ dispatch, commit }, newDataset) {

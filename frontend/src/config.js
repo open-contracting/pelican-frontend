@@ -18,6 +18,12 @@ if (process.env.VUE_APP_SERVER == "kuba_dev01") {
     });
 }
 
+if (process.env.VUE_APP_SERVER == "mirek_dev01") {
+    Object.assign(config, {
+        apiBaseUrl: "http://localhost:25005/",
+    });
+}
+
 if (process.env.NODE_ENV == "production") {
     Object.assign(config, {
         apiBaseUrl: "https://dqt.datlab.eu/",

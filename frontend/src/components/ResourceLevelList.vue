@@ -110,7 +110,19 @@ export default {
 
             return Math.round(sum / this.resourceLevelStats.length);
         }
-    }
+    },
+    mounted() {
+        this.showChecks = this.$store.getters.isResourceCheckExpanded(this.section);
+    },
+    watch: {
+        showChecks: function (newShowChecks) {
+            if (newShowChecks) {
+                this.$store.commit("addResourceCheckExpandedNode", this.section);
+            } else {
+                this.$store.commit("removeResourceCheckExpandedNode", this.section);
+            }
+        }
+    },
 };
 </script>
 
