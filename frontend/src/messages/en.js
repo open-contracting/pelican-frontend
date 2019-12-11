@@ -67,6 +67,7 @@ export const messages = {
         label_51_100: "51 - 100",
         label_100: "100+",
         examples: "Examples",
+        from: "from",
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
