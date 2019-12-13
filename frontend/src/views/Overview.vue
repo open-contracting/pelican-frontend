@@ -37,7 +37,7 @@
                         </div>
                         <div class="tr row">
                             <div class="td col col-4 d-flex align-items-center">{{ $t('overview.extensions')}}</div>
-                            <div class="td col col-8 d-flex align-items-center break_word">
+                            <div class="td col col-8">
                                 <template v-for="(e, i) in collection.extensions">
                                     <a
                                         v-if="e.documentationUrl"
@@ -50,7 +50,7 @@
                                         <template v-else>{{ $t('overview.extensionsUnsupported') }}</template>
                                     </template>
 
-                                    <template v-if="i + 1 < collection.extensions.length">,</template>
+                                    <template v-if="i + 1 < collection.extensions.length">, </template>
                                 </template>
                             </div>
                         </div>
