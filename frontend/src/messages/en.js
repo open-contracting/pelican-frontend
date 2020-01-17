@@ -68,6 +68,13 @@ export const messages = {
         label_100: "100+",
         examples: "Examples",
         from: "from",
+        sections: {
+            status_distribution: "Status distribution",
+            value_distribution: "Value distribution",
+            other_distribution: "Other distribution",
+            repetition: "Repetition",
+            other: "Other"
+        },
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
