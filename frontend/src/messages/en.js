@@ -26,7 +26,7 @@ export const messages = {
         search: "Search report by name",
         timeVariance: "Time-based checks"
     },
-    unsufficientData: {
+    insufficientData: {
         title: "Insufficient data",
         description: "Data was insufficient to calculate the check."
     },

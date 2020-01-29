@@ -27,10 +27,13 @@
             <div class="row no-gutters justify-content-end">
                 <div class="col col-12">
                     <div class="chart_envelope text-center" v-if="check.result == undefined">
-                        <img class="undefined_image" src="/img/unsufficient_data.png" />
+                        <img class="undefined_image" src="/img/insufficient_data.png" />
                         <br />
-                        <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                        <p v-html="$t('unsufficientData.description')"></p>
+                        <div class="undefined_title">
+                            {{ $t("insufficientData.title") }}
+                            <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')"></Tooltip>
+                        </div>
+                        <p v-html="$t('insufficientData.description')"></p>
                     </div>
                     <div v-else>
                         <div v-if="checkType == 'donut'">
@@ -92,12 +95,13 @@ import DonutChart from "@/components/DonutChart.vue";
 import BarChart from "@/components/BarChart.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import datasetMixin from "@/plugins/datasetMixins.js";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     data: function() {
         return {};
     },
-    components: { DonutChart, BarChart, BarChartSingleValue },
+    components: { DonutChart, BarChart, BarChartSingleValue, Tooltip },
     props: ["check"],
     mixins: [datasetMixin],
     methods: {
@@ -121,6 +125,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
 
 .chart_envelope {
     margin-bottom: 10px;

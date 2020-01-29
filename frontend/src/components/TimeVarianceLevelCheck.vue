@@ -46,10 +46,10 @@
                     </template>
                     <div v-else class="row">
                         <div class="col col-12 text-center">
-                            <img class="undefined_image" src="/img/unsufficient_data.png" />
+                            <img class="undefined_image" src="/img/insufficient_data.png" />
                             <br />
-                            <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                            <p v-html="$t('unsufficientData.description')"></p>
+                            <div class="undefined_title">{{ $t("insufficientData.title") }}</div>
+                            <p v-html="$t('insufficientData.description')"></p>
                         </div>
                     </div>
                 </div>
