@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="true"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="true" :previewDisabled="loadingPreviewData"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -117,7 +117,17 @@
             <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewMetadata"></vue-json-pretty>
 
             <div class="divider">&nbsp;</div>
-            <span v-if="previewData">
+            
+            <span v-if="loadingPreviewData">
+                <div class="result_box loader text-center">
+                    <div class="spinner">
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                    </div>
+                    {{ $t("loader.data") }}
+                </div>
+            </span>
+
+            <span v-else-if="previewData">
                 <h5>{{ $t("preview.ocds_data") }}</h5>
                 <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
             </span>
@@ -142,7 +152,8 @@ export default {
             check: null,
             previewDataItemId: null,
             previewMetadata: null,
-            examples: null
+            examples: null,
+            loadingPreviewData: false
         };
     },
     components: {
@@ -234,7 +245,10 @@ export default {
     },
     methods: {
         preview: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId);
+            this.loadingPreviewData = true;
+            this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                this.loadingPreviewData = false;
+            });
             this.previewDataItemId = itemId;
         }
     },

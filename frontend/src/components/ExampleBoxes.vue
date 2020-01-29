@@ -25,7 +25,8 @@
                             </td>
                             <td class="col-2 clickable">
                                 <span v-if="index != selectedKey || selectedSection != section[0]">
-                                    <a v-on:click.stop.prevent="preview(index, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                    <a v-if="!previewDisabled" v-on:click.stop.prevent="preview(index, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                    <a v-else>{{ $t("examples.preview") }}</a>
                                 </span>
                                 <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == section[0]">active</span>
                             </td>
@@ -45,7 +46,8 @@
                                 </td>
                                 <td class="col-2 clickable">
                                     <span v-if="index + 5 != selectedKey || selectedSection != section[0]">
-                                        <a v-on:click.stop.prevent="preview(index + 5, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                        <a v-if="!previewDisabled" v-on:click.stop.prevent="preview(index + 5, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                        <a v-else>{{ $t("examples.preview") }}</a>
                                     </span>
                                     <span class="badge badge-primary" v-if="index + 5 == selectedKey && selectedSection == section[0]">active</span>
                                 </td>
@@ -77,7 +79,8 @@ export default {
     },
     props: {
         examples: Array,
-        loaded: Boolean
+        loaded: Boolean,
+        previewDisabled: Boolean
     },
     methods: {
         preview: function(key, section, id) {

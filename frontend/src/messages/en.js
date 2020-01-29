@@ -2,7 +2,8 @@ export const messages = {
     header: "Data Quality Assessment Results",
     loader: {
         generic: "Loading… Please be patient.",
-        examples: "Generating random examples… This takes some time for large datasets. Please be patient."
+        examples: "Generating random examples… This takes some time for large datasets. Please be patient.",
+        data: "Loading data preview. Please be patient."
     },
     ocid: "ocid",
     ocids: "ocids",
