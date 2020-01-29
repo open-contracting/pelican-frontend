@@ -68,6 +68,8 @@ export const messages = {
         label_100: "100+",
         examples: "Examples",
         from: "from",
+        insufficientShown: "Hide not calculated checks",
+        insufficientHidden: "Show not calculated checks",
         sections: {
             status_distribution: "Status distribution",
             value_distribution: "Value distribution",

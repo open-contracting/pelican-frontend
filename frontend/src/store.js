@@ -21,9 +21,13 @@ export default new Vuex.Store({
         datasetSearch: null,
         datasetSorting: null,
 
-        resourceCheckExpandedNodes: []
+        resourceCheckExpandedNodes: [],
+        insufficientShown: true
     },
     getters: {
+        insufficientShown: state => {
+            return state.insufficientShown;
+        },
         dataset: state => {
             return state.dataset;
         },
@@ -140,6 +144,9 @@ export default new Vuex.Store({
         },
     },
     mutations: {
+        setInsufficientShown(state, newInsufficientShown) {
+            state.insufficientShown = newInsufficientShown;
+        },
         setDataset(state, newDataset) {
             state.dataset = newDataset;
         },

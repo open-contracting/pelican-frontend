@@ -35,7 +35,6 @@ import DatasetLevelCheck from "@/components/DatasetLevelCheck.vue";
 export default {
     data: function() {
         return {
-            showInsufficient: true,
             sections: {
                 status_distribution: [
                     "distribution.tender_status",
@@ -70,26 +69,32 @@ export default {
                     "consistent.related_process_title",
                     "reference.related_process_identifier"
                 ]
-            }
+            },
         };
     },
-    props: ["section"],
+    props: ["section", "insufficientShown"],
     components: { DatasetLevelCheck },
     computed: {
-        datasetLevelStats() {
-            if ( !(this.section in this.sections) ) return [];
-
-            return this.sections[this.section].map(item => 
-                this.$store.getters.datasetLevelCheckByName(item)
-            ).filter(item =>
-                !(item == null)
-            );
-        },
         loaded() {
             if (this.$store.getters.datasetLevelStats != null) {
                 return true;
             }
             return false;
+        },
+        datasetLevelStats() {
+            if ( !(this.section in this.sections) ) {
+                return [];
+            } else if (this.insufficientShown) {
+                return this.sections[this.section].map(item => 
+                    this.$store.getters.datasetLevelCheckByName(item)
+                );
+            } else {
+                return this.sections[this.section].map(item => 
+                    this.$store.getters.datasetLevelCheckByName(item)
+                ).filter(item =>
+                    !(item.result == null)
+                );
+            }
         }
     }
 };
