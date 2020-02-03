@@ -189,3 +189,28 @@ code {
     padding: 3px;
     border: dotted 1px #e7ec90;
 }
+
+/**
+$grid-breakpoints: (xxxs: 0,
+    xxs: 320px,
+    xs: 568px,
+    sm: 667px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1440px,
+    xxxl: 1600px,
+    xxxxl: 2000px);
+    **/
+
+@media (min-width: 768px) {
+    .card-deck .card {
+        max-width: 45%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-deck .card {
+        max-width: 30%;
+    }
+}

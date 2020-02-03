@@ -40,12 +40,12 @@ export default {
                     "distribution.tender_status",
                     "distribution.awards_status",
                     "distribution.contracts_status",
-                    "distribution.milestone_status",
+                    "distribution.milestone_status"
                 ],
                 value_distribution: [
                     "distribution.tender_value",
                     "distribution.awards_value",
-                    "distribution.contracts_value",
+                    "distribution.contracts_value"
                 ],
                 other_distribution: [
                     "distribution.value_currency",
@@ -56,20 +56,20 @@ export default {
                     "distribution.buyer",
                     "distribution.document_document_type",
                     "distribution.milestone_type",
-                    "distribution.related_process_relation",
+                    "distribution.related_process_relation"
                 ],
                 repetition: [
                     "distribution.tender_value_repetition",
                     "distribution.awards_value_repetition",
                     "distribution.contracts_value_repetition",
-                    "distribution.buyer_repetition",
+                    "distribution.buyer_repetition"
                 ],
                 other: [
                     "misc.url_availability",
                     "consistent.related_process_title",
                     "reference.related_process_identifier"
                 ]
-            },
+            }
         };
     },
     props: ["section", "insufficientShown"],
@@ -82,18 +82,18 @@ export default {
             return false;
         },
         datasetLevelStats() {
-            if ( !(this.section in this.sections) ) {
+            if (!(this.section in this.sections)) {
                 return [];
             } else if (this.insufficientShown) {
-                return this.sections[this.section].map(item => 
+                return this.sections[this.section].map(item =>
                     this.$store.getters.datasetLevelCheckByName(item)
                 );
             } else {
-                return this.sections[this.section].map(item => 
-                    this.$store.getters.datasetLevelCheckByName(item)
-                ).filter(item =>
-                    !(item.result == null)
-                );
+                return this.sections[this.section]
+                    .map(item =>
+                        this.$store.getters.datasetLevelCheckByName(item)
+                    )
+                    .filter(item => !(item.result == null));
             }
         }
     }
