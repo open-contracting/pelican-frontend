@@ -96,7 +96,7 @@
                             <div class="row">
                                 <div
                                     class="col col-12 text-center ocid_count"
-                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;from&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
+                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;{{ $t("datasetLevel.from") }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
                             </div>
                         </div>
                     </div>
