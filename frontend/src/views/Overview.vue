@@ -40,16 +40,17 @@
                             <div class="td col col-8">
                                 <template v-for="(e, i) in collection.extensions">
                                     <a
-                                        v-if="e.documentationUrl"
+                                        v-if="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != ''"
                                         :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
                                         :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
                                         target="_blank"
                                     >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                    <template v-else>
-                                        <template v-if="e.name">{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
-                                        <template v-else>{{ $t('overview.extensionsUnsupported') }}</template>
-                                    </template>
-
+                                    <a
+                                        v-else
+                                        v-on:click="extensionPreview(e.name.hasOwnProperty('en') ? e.name['en'] : e.name)"
+                                        :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                        target="_blank"
+                                    >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
                                     <template v-if="i + 1 < collection.extensions.length">, </template>
                                 </template>
                             </div>
@@ -283,6 +284,15 @@ export default {
         },
         formatNumber(number) {
             return this.$options.filters.formatNumber(number);
+        },
+        extensionPreview(extensionName) {
+            this.$router.push({
+                name: "extensionPreview",
+                params: {
+                    extensionName: extensionName,
+                    datasetId: this.$store.getters.datasetId
+                }
+            });
         }
     }
 };

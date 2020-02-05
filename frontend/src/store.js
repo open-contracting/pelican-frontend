@@ -142,6 +142,11 @@ export default new Vuex.Store({
 
             return false;
         },
+        extensionDataByName: state => extensionName => {
+            return state.dataset.meta.collection_metadata.extensions.find(item =>
+                item.name.hasOwnProperty('en') ? item.name['en'] ==  extensionName : item.name == extensionName    
+            )
+        }
     },
     mutations: {
         setInsufficientShown(state, newInsufficientShown) {
