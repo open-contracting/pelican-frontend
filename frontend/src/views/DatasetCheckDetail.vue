@@ -1,6 +1,6 @@
 <template>
     <dashboard-detail>
-        <template v-if="check != null" v-slot:content>
+        <template v-if="loaded" v-slot:content>
             <div class="row">
                 <div class="col col-10">
                     <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
@@ -165,83 +165,7 @@ export default {
         BarChartSingleValue
     },
     created() {
-        this.check = this.$store.getters.datasetLevelCheckByName(
-            this.$route.params.check
-        );
-
-        if (this.check != null) {
-            this.previewMetadata = this.check.meta;
-
-            if (this.checkType == "donut") {
-                this.examples = [];
-                for (var key in this.shares) {
-                    if (this.shares[key][1].examples.length > 0) {
-                        this.examples.push([
-                            this.shares[key][0],
-                            this.shares[key][1].examples
-                        ]);
-                    }
-                }
-            }
-
-            if (this.checkType == "bar") {
-                this.examples = [];
-                for (var barKey in this.check.meta.examples) {
-                    if (this.check.meta.examples[barKey].length > 0) {
-                        this.examples.push([
-                            this.$t("datasetLevel.label_" + barKey),
-                            this.check.meta.examples[barKey]
-                        ]);
-                    }
-                }
-            }
-
-            if (this.checkType == "top3") {
-                this.examples = [];
-                var mostFrequent = this.check.meta.most_frequent;
-                for (var topKey in mostFrequent) {
-                    if (mostFrequent[topKey].examples.length > 0) {
-                        this.examples.push([
-                            mostFrequent[topKey].value_str,
-                            mostFrequent[topKey].examples
-                        ]);
-                    }
-                }
-            }
-
-            if (this.checkType == "numeric") {
-                this.examples = [];
-                var failed = this.check.meta.failed_examples;
-                var passed = this.check.meta.passed_examples;
-
-                if (failed.length > 0) {
-                    this.examples.push([
-                        this.$t("datasetLevel.numeric.failedExamples"),
-                        failed
-                    ]);
-                }
-
-                if (passed.length > 0) {
-                    this.examples.push([
-                        this.$t("datasetLevel.numeric.passedExamples"),
-                        passed
-                    ]);
-                }
-            }
-
-            if (
-                this.checkType == "biggest_share" ||
-                this.checkType == "single_value_share"
-            ) {
-                this.examples = [];
-                if (this.check.meta.examples.length > 0) {
-                    this.examples.push([
-                        this.$t("datasetLevel.examples"),
-                        this.check.meta.examples
-                    ]);
-                }
-            }
-        }
+        this.loadCheck();
     },
     methods: {
         preview: function(itemId) {
@@ -250,6 +174,85 @@ export default {
                 this.loadingPreviewData = false;
             });
             this.previewDataItemId = itemId;
+        },
+        loadCheck: function() {
+            this.check = this.$store.getters.datasetLevelCheckByName(
+                this.$route.params.check
+            );
+
+            if (this.check != null) {
+                this.previewMetadata = this.check.meta;
+
+                if (this.checkType == "donut") {
+                    this.examples = [];
+                    for (var key in this.shares) {
+                        if (this.shares[key][1].examples.length > 0) {
+                            this.examples.push([
+                                this.shares[key][0],
+                                this.shares[key][1].examples
+                            ]);
+                        }
+                    }
+                }
+
+                if (this.checkType == "bar") {
+                    this.examples = [];
+                    for (var barKey in this.check.meta.examples) {
+                        if (this.check.meta.examples[barKey].length > 0) {
+                            this.examples.push([
+                                this.$t("datasetLevel.label_" + barKey),
+                                this.check.meta.examples[barKey]
+                            ]);
+                        }
+                    }
+                }
+
+                if (this.checkType == "top3") {
+                    this.examples = [];
+                    var mostFrequent = this.check.meta.most_frequent;
+                    for (var topKey in mostFrequent) {
+                        if (mostFrequent[topKey].examples.length > 0) {
+                            this.examples.push([
+                                mostFrequent[topKey].value_str,
+                                mostFrequent[topKey].examples
+                            ]);
+                        }
+                    }
+                }
+
+                if (this.checkType == "numeric") {
+                    this.examples = [];
+                    var failed = this.check.meta.failed_examples;
+                    var passed = this.check.meta.passed_examples;
+
+                    if (failed.length > 0) {
+                        this.examples.push([
+                            this.$t("datasetLevel.numeric.failedExamples"),
+                            failed
+                        ]);
+                    }
+
+                    if (passed.length > 0) {
+                        this.examples.push([
+                            this.$t("datasetLevel.numeric.passedExamples"),
+                            passed
+                        ]);
+                    }
+                }
+
+                if (
+                    this.checkType == "biggest_share" ||
+                    this.checkType == "single_value_share"
+                ) {
+                    this.examples = [];
+                    if (this.check.meta.examples.length > 0) {
+                        this.examples.push([
+                            this.$t("datasetLevel.examples"),
+                            this.check.meta.examples
+                        ]);
+                    }
+                }
+            }
         }
     },
     computed: {
@@ -263,6 +266,11 @@ export default {
             }
 
             return null;
+        },
+        loaded() {
+            this.loadCheck();
+
+            return this.check != null;
         }
     }
 };
