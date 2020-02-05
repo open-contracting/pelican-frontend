@@ -215,6 +215,11 @@ export const messages = {
             failed: "failed",
             failedExamples: "Failed examples",
             passedExamples: "Passed examples"
+        },
+        top3: {
+            value: "Value",
+            share: "Share",
+            count: "Occurrences"
         }
     },
     resourceLevel: {

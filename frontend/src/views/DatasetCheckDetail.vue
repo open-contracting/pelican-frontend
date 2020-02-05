@@ -43,9 +43,9 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>{{ $t("top3.value") }}</th>
-                                <th class="text-center">{{ $t("top3.share") }}</th>
-                                <th class="text-center">{{ $t("top3.count") }}</th>
+                                <th>{{ $t("datasetLevel.top3.value") }}</th>
+                                <th class="text-center">{{ $t("datasetLevel.top3.share") }}</th>
+                                <th class="text-center">{{ $t("datasetLevel.top3.count") }}</th>
                             </tr>
                         </thead>
                         <tbody>
