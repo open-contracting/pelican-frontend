@@ -360,27 +360,27 @@ export const messages = {
             categoryName: "Reference",
             buyer_in_parties: {
                 name: "Buyer organization reference",
-                description: "<code>buyer.id</code> is present and matches the <code>id</code> of a party."
+                description: "<code>buyer.id</code> is present and matches the <code>id</code> of exactly one party."
             },
             payee_in_parties: {
                 name: "Payee organization reference",
-                description: "Every <code>contracts[].implementation.transactions[].payee.id</code> is present and matches the <code>id</code> of a party."
+                description: "Every <code>contracts[].implementation.transactions[].payee.id</code> is present and matches the <code>id</code> of exactly one party."
             },
             payer_in_parties: {
                 name: "Payer organization reference",
-                description: "Every <code>contracts[].implementation.transactions[].payer.id</code> is present and matches the <code>id</code> of a party."
+                description: "Every <code>contracts[].implementation.transactions[].payer.id</code> is present and matches the <code>id</code> of exactly one party."
             },
             procuring_entity_in_parties: {
                 name: "Procuring entity organization reference",
-                description: "<code>tender.procuringEntity.id</code> is present and matches the <code>id</code> of a party."
+                description: "<code>tender.procuringEntity.id</code> is present and matches the <code>id</code> of exactly one party."
             },
             supplier_in_parties: {
                 name: "Supplier organization references",
-                description: "Each <code>awards[].suppliers[].id</code> is present and matches the <code>id</code> of a party."
+                description: "Each <code>awards[].suppliers[].id</code> is present and matches the <code>id</code> of exactly one party."
             },
             tenderer_in_parties: {
                 name: "Tenderer organization references",
-                description: "Each <code>tender.tenderers[].id</code> is present and matches the <code>id</code> of a party."
+                description: "Each <code>tender.tenderers[].id</code> is present and matches the <code>id</code> of exactly one party."
             },
             contract_in_awards: {
                 name: "Award reference",
