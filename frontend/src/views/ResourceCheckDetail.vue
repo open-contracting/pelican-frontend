@@ -20,7 +20,7 @@
             </h5>
             <CheckDetailResultBox :check="check" individualPass individualNonPass />
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="check.examples_filled" :previewDisabled="loadingPreviewData"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" v-on:download="download" :loaded="check.examples_filled" :previewDisabled="loadingPreviewData"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -77,11 +77,17 @@ export default {
     methods: {
         preview: function(itemId) {
             this.loadingPreviewData = true;
-
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 1000) {
+                    this.previewDataItemId = itemId;
+                } else {
+                    this.$alert(this.$t("preview.cannot_display"), null, 'error');
+                    this.previewDataItemId = null;
+                }
+
                 this.loadingPreviewData = false;
             });
-            this.previewDataItemId = itemId;
+
 
             var allExamples = [];
             allExamples = allExamples.concat(this.check.failed_examples);
@@ -94,6 +100,19 @@ export default {
             if (result) {
                 this.previewMetaData = result.result;
             }
+        },
+        download: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId).then(() => {
+                var result = this.$store.getters.dataItemById(itemId);
+                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
+                var fileLink = document.createElement('a');
+            
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
+                document.body.appendChild(fileLink);
+            
+                fileLink.click();
+            })
         }
     },
     computed: {

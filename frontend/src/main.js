@@ -7,6 +7,7 @@ import store from "./store";
 import BootstrapVue from "bootstrap-vue";
 import VueI18n from "vue-i18n";
 import VueGoogleCharts from "vue-google-charts";
+import VueSimpleAlert from "vue-simple-alert";
 import { messages as en } from "./messages/en.js";
 import { messages as cs } from "./messages/cs.js";
 
@@ -24,6 +25,7 @@ Vue.use(VueGoogleCharts);
 Vue.use(Fragment.Plugin);
 Vue.use(BootstrapVue);
 Vue.use(VueI18n);
+Vue.use(VueSimpleAlert);
 const i18n = new VueI18n({
     locale: "en", // set locale
     messages: {

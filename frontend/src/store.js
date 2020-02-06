@@ -80,6 +80,16 @@ export default new Vuex.Store({
 
             return null;
         },
+        dataItemJSONLines: state => itemId => {
+            if (state.dataItems) {
+                var dataItem = state.dataItems.find(item => item.id === itemId);
+                if (dataItem != null) {
+                    return JSON.stringify(dataItem["data"], null, 2).split("\n").length;
+                }
+            }
+
+            return null;
+        },
         fieldLevelStats: state => {
             return state.fieldLevelStats;
         },
@@ -351,25 +361,30 @@ export default new Vuex.Store({
             });
         },
         loadDataItem({ commit, state }, itemId) {
-            var dataItem = null;
-            if (state.dataItems) {
-                dataItem = state.dataItems.find(item => item.id === itemId);
-            }
-            if (dataItem == null) {
-                var url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.dataItem +
-                    "/" +
-                    itemId;
-                axios
-                    .get(url)
-                    .then(function(response) {
-                        commit("addDataItem", response["data"]);
-                    })
-                    .catch(function(error) {
-                        throw new Error(error);
-                    });
-            }
+            return new Promise(resolve => {
+                var dataItem = null;
+                if (state.dataItems) {
+                    dataItem = state.dataItems.find(item => item.id === itemId);
+                }
+                if (dataItem == null) {
+                    var url =
+                        CONFIG.apiBaseUrl +
+                        CONFIG.apiEndpoints.dataItem +
+                        "/" +
+                        itemId;
+                    axios
+                        .get(url)
+                        .then(function(response) {
+                            commit("addDataItem", response["data"]);
+                            resolve();
+                        })
+                        .catch(function(error) {
+                            throw new Error(error);
+                        });
+                } else {
+                    resolve();
+                }
+            });
         },
         loadFieldLevelStats({ commit, state }) {
             return new Promise(resolve => {

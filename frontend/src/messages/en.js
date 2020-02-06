@@ -41,11 +41,14 @@ export const messages = {
     },
     preview: {
         metadata: "Metadata",
-        ocds_data: "Data Preview"
+        ocds_data: "Data Preview",
+        cannot_display: "Data item cannot be previewed."
     },
     examples: {
         failed: "Sample releases with failed rules",
         passed: "Sample releases with passed rules",
+        downloads: "Download",
+        download_json: "JSON",
         actions: "Actions",
         preview: "Preview",
         previewOld: "Preview old",

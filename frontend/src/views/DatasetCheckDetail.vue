@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="true" :previewDisabled="loadingPreviewData"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" v-on:download="download" :loaded="true" :previewDisabled="loadingPreviewData"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -171,9 +171,27 @@ export default {
         preview: function(itemId) {
             this.loadingPreviewData = true;
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 5000) {
+                    this.previewDataItemId = itemId;
+                } else {
+                    this.previewDataItemId = null;
+                }
+
                 this.loadingPreviewData = false;
             });
-            this.previewDataItemId = itemId;
+        },
+        download: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId).then(() => {
+                var result = this.$store.getters.dataItemById(itemId);
+                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
+                var fileLink = document.createElement('a');
+            
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
+                document.body.appendChild(fileLink);
+            
+                fileLink.click();
+            })
         },
         loadCheck: function() {
             this.check = this.$store.getters.datasetLevelCheckByName(
