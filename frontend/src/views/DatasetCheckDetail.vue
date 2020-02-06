@@ -171,9 +171,10 @@ export default {
         preview: function(itemId) {
             this.loadingPreviewData = true;
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 5000) {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
+                    this.$alert(this.$t("preview.cannot_display"), null, 'error');
                     this.previewDataItemId = null;
                 }
 
