@@ -1,6 +1,6 @@
 <template>
     <span v-if="loaded">
-        <h4>{{ $t("datasetLevel.sections." + section) }}</h4>
+        <h4 v-if="datasetLevelStats.length > 0">{{ $t("datasetLevel.sections." + section) }}</h4>
         <div class="row">
             <div class="card-deck col-12">
                 <template v-for="(check, index) in datasetLevelStats">
