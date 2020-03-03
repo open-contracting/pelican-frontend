@@ -29,6 +29,7 @@ class DatasetResource(ModelResource):
     class Meta:
         queryset = Dataset.objects.all()
         resource_name = 'dataset'
+        limit = 1000
 
 
 class ReportResource(ModelResource):
