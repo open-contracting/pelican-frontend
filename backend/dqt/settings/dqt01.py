@@ -1,5 +1,10 @@
 from .base import *
 
+CORS_ORIGIN_WHITELIST = (
+    'dqt.datlab.eu',
+    'localhost'
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

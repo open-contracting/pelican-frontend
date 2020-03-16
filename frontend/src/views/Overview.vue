@@ -43,13 +43,13 @@
                                         <a
                                             v-if="e.hasOwnProperty('documentationUrl') && e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != ''"
                                             :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
-                                            :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                            :key="i"
                                             target="_blank"
                                         >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
                                         <a
                                             v-else
                                             v-on:click="extensionPreview(e.name.hasOwnProperty('en') ? e.name['en'] : e.name)"
-                                            :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                            :key="i"
                                             target="_blank"
                                         >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
                                         <template v-if="i + 1 < collection.extensions.length">, </template>
