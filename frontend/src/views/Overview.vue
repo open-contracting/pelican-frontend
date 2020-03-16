@@ -41,7 +41,7 @@
                                 <template v-for="(e, i) in collection.extensions">
                                     <span v-if="e.hasOwnProperty('name')" :key="i">
                                         <a
-                                            v-if="e.hasOwnProperty('documentationUrl') && e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != ''"
+                                            v-if="e.hasOwnProperty('documentationUrl') && (e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != '')"
                                             :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
                                             :key="i"
                                             target="_blank"
