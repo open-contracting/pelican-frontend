@@ -37,21 +37,23 @@
                         </div>
                         <div class="tr row">
                             <div class="td col col-4 d-flex align-items-center">{{ $t('overview.extensions')}}</div>
-                            <div class="td col col-8">
+                            <div v-if="collection.extensions" class="td col col-8">
                                 <template v-for="(e, i) in collection.extensions">
-                                    <a
-                                        v-if="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != ''"
-                                        :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
-                                        :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
-                                        target="_blank"
-                                    >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                    <a
-                                        v-else
-                                        v-on:click="extensionPreview(e.name.hasOwnProperty('en') ? e.name['en'] : e.name)"
-                                        :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
-                                        target="_blank"
-                                    >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                    <template v-if="i + 1 < collection.extensions.length">, </template>
+                                    <span v-if="e.hasOwnProperty('name')" :key="i">
+                                        <a
+                                            v-if="e.hasOwnProperty('documentationUrl') && e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != ''"
+                                            :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
+                                            :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                        <a
+                                            v-else
+                                            v-on:click="extensionPreview(e.name.hasOwnProperty('en') ? e.name['en'] : e.name)"
+                                            :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                        <template v-if="i + 1 < collection.extensions.length">, </template>
+                                    </span>
                                 </template>
                             </div>
                         </div>
