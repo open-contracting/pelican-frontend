@@ -415,18 +415,10 @@ export default new Vuex.Store({
                             data.push(
                                 Object.assign({}, item, {
                                     path: key,
-                                    coverageOkShare: Math.round(
-                                        okShare(item.coverage)
-                                    ),
-                                    coverageFailedShare: Math.round(
-                                        failedShare(item.coverage)
-                                    ),
-                                    qualityOkShare: Math.round(
-                                        okShare(item.quality)
-                                    ),
-                                    qualityFailedShare: Math.round(
-                                        failedShare(item.quality)
-                                    )
+                                    coverageOkShare: okShare(item.coverage),
+                                    coverageFailedShare: failedShare(item.coverage),
+                                    qualityOkShare: okShare(item.quality),
+                                    qualityFailedShare: failedShare(item.quality)
                                 })
                             );
                             resolve();

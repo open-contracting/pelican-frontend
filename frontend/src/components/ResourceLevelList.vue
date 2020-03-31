@@ -13,7 +13,7 @@
             <div
                 class="td col-8 col-lg-7 text-right text-lg-left info_message"
                 scope="col"
-            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore }}%</div>
+            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore | formatPercentage }}</div>
         </div>
         <span class="checks" v-if="showChecks">
             <ResourceLevelRow v-for="(value, name, index) in resourceLevelStats" :check="value" :name="value.name" v-bind:key="name" v-bind:index="index"></ResourceLevelRow>
@@ -102,13 +102,12 @@ export default {
                 sum =
                     sum +
                     check.passed_count /
-                        ((check.passed_count +
+                        (check.passed_count +
                             check.failed_count +
-                            check.undefined_count) /
-                            100);
+                            check.undefined_count);
             }
 
-            return Math.round(sum / this.resourceLevelStats.length);
+            return sum / this.resourceLevelStats.length;
         }
     },
     mounted() {

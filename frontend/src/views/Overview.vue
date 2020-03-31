@@ -160,7 +160,7 @@
                             <div class="td col col-4 text-right numeric">{{ prices.price_category_positive[c].contracts | formatNumber }}</div>
                             <div class="td col col-4">
                                 <div class="row align-items-center share_progressbar no-gutters">
-                                    <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
+                                    <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatPercentage }}</div>
                                     <div class="col col-9 value progress_holder d-flex align-items-center">
                                         <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
                                     </div>

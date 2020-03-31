@@ -7,7 +7,7 @@
         <div class="td col col-4">
             <div class="row h-100 no-gutters align-items-center">
                 <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
-                    <span class="field_check_result_value">{{ check.coverageOkShare | formatNumber }}%</span>
+                    <span class="field_check_result_value">{{ check.coverageOkShare | formatPercentage }}</span>
                 </div>
                 <div
                     class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
@@ -24,7 +24,7 @@
             <div class="td col col-4">
                 <div class="row h-100 no-gutters align-items-center">
                     <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
-                        <span class="field_check_result_value">{{ check.qualityOkShare | formatNumber }}%</span>
+                        <span class="field_check_result_value">{{ check.qualityOkShare | formatPercentage }}</span>
                     </div>
                     <div
                         class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"

@@ -4,13 +4,13 @@
             <span>{{ $t("resourceLevel." + name + ".name") }}</span>
         </div>
         <div class="td col-1 col-lg-1 text-right">
-            <span v-if=" okPercentage> 0" class="value_ok">{{ okPercentage }}%</span>
+            <span class="value_ok">{{ okPercentage | formatPercentage }}</span>
         </div>
         <div class="td col-1 col-lg-1 text-right">
-            <span v-if=" failedPercentage> 0" class="value_failed">{{ failedPercentage }}%</span>
+            <span class="value_failed">{{ failedPercentage | formatPercentage }}</span>
         </div>
         <div class="td col-1 col-lg-1 text-right">
-            <span v-if=" naPercentage> 0" class="value_na">{{ naPercentage }}%</span>
+            <span class="value_na">{{ naPercentage | formatPercentage }}</span>
         </div>
         <div class="td col-4 d-none d-lg-block progress_column">
             <ProgressBar :ok="okPercentage" :failed="failedPercentage" />
