@@ -2,7 +2,8 @@
     <div
         class="card mb-4 dataset_result_box result_box"
         v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }"
-        v-on:click="detail(check.name)"
+        v-on:click="detail()"
+        @contextmenu.prevent="check.result != undefined ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments}) : null"
     >
         <div class="card-body">
             <div class="row no-gutters">
@@ -99,7 +100,15 @@ import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     data: function() {
-        return {};
+        return {
+            detailRouterArguments: {
+                name: "datasetCheckDetail",
+                params: {
+                    check: this.check.name,
+                    datasetId: this.$store.getters.datasetId
+                }
+            }
+        };
     },
     components: { DonutChart, BarChart, BarChartSingleValue, Tooltip },
     props: ["check"],
@@ -108,15 +117,9 @@ export default {
         onePercent: function() {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
         },
-        detail: function(name) {
+        detail: function() {
             if (this.check.result != undefined) {
-                this.$router.push({
-                    name: "datasetCheckDetail",
-                    params: {
-                        check: name,
-                        datasetId: this.$store.getters.datasetId
-                    }
-                });
+                this.$router.push(this.detailRouterArguments);
             }
         }
     }

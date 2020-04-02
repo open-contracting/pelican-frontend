@@ -28,8 +28,8 @@
         </b-row>
 
         <div class="field_result_box">
-            <FieldCheckTable v-if="layout == 'table'" v-on:field-check-detail="detail" ref="field-check-table" />
-            <FieldCheckTree v-else-if="layout == 'tree'" v-on:field-check-detail="detail" ref="field-check-tree" />
+            <FieldCheckTable v-if="layout == 'table'" ref="field-check-table" />
+            <FieldCheckTree v-else-if="layout == 'tree'" ref="field-check-tree" />
         </div>
     </dashboard>
 </template>
@@ -55,15 +55,6 @@ export default {
         }
     },
     methods: {
-        detail: function(path) {
-            this.$router.push({
-                name: "fieldCheckDetail",
-                params: {
-                    path: path,
-                    datasetId: this.$store.getters.datasetId
-                }
-            });
-        },
         resetTableSorting: function() {
             this.$refs["field-check-table"].resetSorting();
         }

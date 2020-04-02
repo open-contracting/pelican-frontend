@@ -56,6 +56,7 @@
                     v-bind:key="index"
                     @click="setDataset(item)"
                     :class="['row','tr', 'clickable', 'align-items-center', {disabled: !isDatasetImported(item)}]"
+                    @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'overview', params: {datasetId: item.id}}})"
                 >
                     <div class="td col-4">
                         {{ item.name }}

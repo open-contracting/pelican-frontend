@@ -1,5 +1,10 @@
 <template>
-    <div v-if="check" class="tr row clickable">
+    <div
+        v-if="check"
+        class="tr row clickable"
+        v-on:click="detail()"
+        @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments})"
+    >
         <div class="td col col-4 break_word">
             <slot>{{ check.path }}</slot>
         </div>
@@ -46,11 +51,24 @@ import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
     data: function() {
-        return {};
+        return {
+            detailRouterArguments: {
+                name: "fieldCheckDetail",
+                params: {
+                    path: this.check.path,
+                    datasetId: this.$store.getters.datasetId
+                }
+            }
+        };
     },
     name: "field-check-table-row",
     props: ["check"],
-    components: { ProgressBar }
+    components: { ProgressBar },
+    methods: {
+        detail: function() {
+            this.$router.push(this.detailRouterArguments);
+        }
+    }
 };
 </script>
 
