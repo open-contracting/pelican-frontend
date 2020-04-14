@@ -159,8 +159,8 @@ export const messages = {
             },
             contracts_status: {
                 name: "Contract status distribution",
-                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
+                description: "Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             milestone_status: {
                 name: "Milestone status distribution",
