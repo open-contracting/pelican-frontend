@@ -313,7 +313,7 @@ export const messages = {
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
-                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",
