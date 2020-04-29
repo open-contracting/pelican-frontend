@@ -24,13 +24,13 @@ class Dataset(Model):
         for item in self.progress.all():
             return item.size
 
-    def get_filtered_children(self):
+    def get_filtered_children_ids(self):
         return [
             item.dataset_filtered.id
             for item in self.dataset_filter_parent.all()
         ]
 
-    def get_filtered_parent(self):
+    def get_filtered_parent_id(self):
         items = self.dataset_filter_child.all()
         return items[0].dataset_original.id if items else None
 

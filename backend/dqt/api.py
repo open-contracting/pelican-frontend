@@ -25,8 +25,8 @@ class DatasetResource(ModelResource):
     state = CharField(attribute='get_state', readonly=True)
     phase = CharField(attribute='get_phase', readonly=True)
     size = IntegerField(attribute='get_size', readonly=True)
-    filtered_children = ListField(attribute='get_filtered_children', readonly=True)
-    filtered_parent = IntegerField(attribute='get_filtered_parent', readonly=True)
+    filtered_children_ids = ListField(attribute='get_filtered_children_ids', readonly=True)
+    filtered_parent_id = IntegerField(attribute='get_filtered_parent_id', readonly=True)
 
     class Meta:
         queryset = Dataset.objects.all()

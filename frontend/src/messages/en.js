@@ -25,7 +25,9 @@ export const messages = {
         phase: "Status",
         selectDataset: "Show",
         search: "Search report by name",
-        timeVariance: "Time-based checks"
+        timeVariance: "Time-based checks",
+        filter: "filter",
+        actions: "actions"
     },
     insufficientData: {
         title: "Insufficient data",

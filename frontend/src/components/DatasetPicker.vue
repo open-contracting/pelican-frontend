@@ -25,8 +25,17 @@
                         :on-desc="() => sortBy('size', false)"
                     />
                 </div>
-                <div class="th col-1 align-self-center clickable" @click="sortBy('size')">{{ $t('kingfisherId') }}</div>
-                <div class="th col-2 align-self-center clickable" @click="sortBy('phase')">
+                <div class="th col-1 align-self-center clickable" @click="sortBy('collection_id')">
+                    <SortButtons
+                        :label="$t('kingfisherId')"
+                        :active="sortedBy == 'collection_id'"
+                        :asc="isAscendingSorted"
+                        :on-asc="() => sortBy('collection_id')"
+                        :on-desc="() => sortBy('collection_id', false)"
+                    />
+                </div>
+                <!-- <div class="th col-1 align-self-center clickable" @click="sortBy('collection_id')">{{ $t('kingfisherId') }}</div> -->
+                <div class="th col-1 align-self-center clickable" @click="sortBy('phase')">
                     <SortButtons
                         :label="$t('dataset.phase')"
                         :active="sortedBy == 'phase'"
@@ -47,65 +56,17 @@
                         <span class="modified">{{ $t("modified") }}</span>
                     </SortButtons>
                 </div>
-                <div class="td col align-self-center text-left">{{ $t('dataset.timeVariance')}}</div>
+                <div class="th col align-self-center text-left">{{ $t('dataset.timeVariance') }}</div>
+                <div class="th col align-self-center text-left">{{ $t('dataset.actions') }}</div>
             </div>
 
             <template v-for="(item, index) in datasets">
-                <div
+                <DatasetPickerRow
                     v-if="isSearched(item.name)"
                     v-bind:key="index"
-                    @click="setDataset(item)"
-                    :class="['row','tr', 'clickable', 'align-items-center', {disabled: !isDatasetImported(item)}]"
-                    @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'overview', params: {datasetId: item.id}}})"
-                >
-                    <div class="td col-4">
-                        {{ item.name }}
-                        <span class="dataset_id">(Id {{ item.id }})</span>
-                    </div>
-                    <div class="td col-1 numeric text-right">{{ item.size | formatNumber }}</div>
-                    <div v-if="item.meta.kingfisher_metadata" class="td col-1 numeric text-right">{{ item.meta.kingfisher_metadata.collection_id }}</div>
-                    <div class="td col-2 phase_cell align-items-center align-middle">
-                        <template v-if="item.phase == 'CHECKED' && item.state == 'OK'">
-                            <span class="small_icon">
-                                <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
-                            </span>
-                            {{ item.phase }}
-                        </template>
-                        <template v-else-if="item.state == 'FAILED'">
-                            <span class="small_icon">
-                                <font-awesome-icon :icon="['far', 'times-circle']" class="text-danger" />
-                            </span>
-                            {{ item.phase }}
-                        </template>
-                        <template v-else>
-                            <b-row class="progress_label no-gutters">
-                                <b-col v-for="p in phases" :key="p">
-                                    <template v-if="p == item.phase">{{ p }}</template>
-                                </b-col>
-                            </b-row>
-
-                            <ProgressBar :value="getDatasetProgress(item)" />
-                        </template>
-                    </div>
-                    <div class="td col numeric">
-                        <span class="created">{{ item.created }}</span>
-                        <br />
-                        <span class="modified">{{ item.modified }}</span>
-                    </div>
-                    <div class="td col">
-                        <b-link
-                            v-if="item.ancestor_id"
-                            class="time_varinace break_word"
-                            @click.stop="setDataset(item, {name: 'time'})"
-                            :title="getDatasetName(item.ancestor_id)"
-                        >
-                            <span class="small_icon">
-                                <font-awesome-icon icon="history" />
-                            </span>
-                            {{ getDatasetName(item.ancestor_id) }}
-                        </b-link>
-                    </div>
-                </div>
+                    :dataset="item"
+                    :depth=0
+                />
             </template>
         </div>
     </span>
@@ -118,11 +79,11 @@
 const axios = require("axios");
 import { CONFIG } from "@/config.js";
 import Loader from "@/components/Loader.vue";
-import ProgressBar from "@/components/ProgressBar.vue";
 import SortButtons from "@/components/SortButtons.vue";
 import stateMixin from "@/plugins/stateMixins.js";
 import sortMixins from "@/plugins/sortMixins.js";
 import SearchInput from "@/components/SearchInput.vue";
+import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 
 export default {
     mixins: [stateMixin, sortMixins],
@@ -135,9 +96,9 @@ export default {
     },
     components: {
         Loader,
-        ProgressBar,
         SortButtons,
-        SearchInput
+        SearchInput,
+        DatasetPickerRow
     },
     computed: {
         search: function() {
@@ -174,33 +135,6 @@ export default {
                 name.toLowerCase().includes(this.search.toLowerCase())
             );
         },
-        setDataset: function(dataset, route = { name: "overview" }) {
-            if (!this.isDatasetImported(dataset)) {
-                return;
-            }
-
-            this.loading = true;
-            this.afterUpdateRoute = route;
-            this.afterUpdateRoute.params = { datasetId: dataset.id };
-            if (this.$store.getters.datasetId != dataset.id) {
-                this.$store.dispatch("updateDataset", dataset);
-            } else {
-                this.$router.push(this.afterUpdateRoute);
-            }
-        },
-        getDatasetName: function(id) {
-            if (this.datasets) {
-                var ds = this.datasets.find(n => n.id == id);
-                if (ds) {
-                    return ds.name;
-                }
-            }
-
-            return null;
-        },
-        getDatasetProgress: function(dataset) {
-            return (this.phases.indexOf(dataset.phase) + 1) * 20;
-        },
         sortBy: function(by, asc = true) {
             if (!this.datasets) {
                 return;
@@ -213,6 +147,11 @@ export default {
                 comp = (a, b) => a.name.localeCompare(b.name);
             } else if (by == "size") {
                 comp = (a, b) => this.compareNumbers(a.size, b.size);
+            } else if (by == "collection_id") {
+                comp = (a, b) => this.compareNumbers(
+                    a.meta.kingfisher_metadata.collection_id,
+                    b.meta.kingfisher_metadata.collection_id
+                );
             } else if (by == "phase") {
                 comp = (a, b) => {
                     if (a.phase == b.phase) {
@@ -237,17 +176,25 @@ export default {
 
             this.sort(this.datasets, comp, asc);
             this.$store.commit("setDatasetSorting", { by: by, asc: asc });
-        },
-        isDatasetImported: function(dataset) {
-            return dataset.phase == "CHECKED" && dataset.state == "OK";
         }
     },
     mounted() {
         var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
+        var buildDatasetsTree = function(datasets, filtered_parent_id) {
+            var result = [];
+            datasets.forEach(function (item) {
+                if (item.filtered_parent_id == filtered_parent_id) {
+                    item.filtered_children = buildDatasetsTree(datasets, item.id);
+                    result.push(item);
+                }
+            });
+            
+            return result;
+        };
         axios
             .get(url)
             .then(response => {
-                this.datasets = response["data"]["objects"];
+                this.datasets = buildDatasetsTree(response["data"]["objects"], null);
                 this.sortBy(this.sortedBy, this.isAscendingSorted);
             })
             .catch(function(error) {
