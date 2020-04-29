@@ -1,5 +1,5 @@
 # myapp/api.py
-from tastypie.fields import DictField, ToOneField, ListField, CharField, IntegerField
+from tastypie.fields import DictField, ToOneField, ListField, CharField, IntegerField, ListField
 from tastypie.resources import ModelResource
 from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
                      ProgressMonitorDataset, ResourceLevelCheck, Report, TimeVarianceLevelCheck)
@@ -25,6 +25,8 @@ class DatasetResource(ModelResource):
     state = CharField(attribute='get_state', readonly=True)
     phase = CharField(attribute='get_phase', readonly=True)
     size = IntegerField(attribute='get_size', readonly=True)
+    filtered_children = ListField(attribute='get_filtered_children', readonly=True)
+    filtered_parent = IntegerField(attribute='get_filtered_parent', readonly=True)
 
     class Meta:
         queryset = Dataset.objects.all()

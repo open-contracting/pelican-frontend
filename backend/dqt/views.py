@@ -5,12 +5,23 @@ import intervals as I
 import simplejson as json
 
 from django.db.models import Count, Max, Min, Sum
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.core import serializers
 from django.db import connections
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck
-from .tools import ReservoirSampler
+from .tools.rabbit import publish
+
+
+@csrf_exempt
+def create_dataset_filter(request):
+    if request.method == 'GET':
+        return HttpResponseBadRequest(reason='Only post method is accepted.')
+
+    publish(request.body, '_dataset_filter_extractor_init')
+
+    return HttpResponse('done')
 
 
 def dataset_stats(request, dataset_id):
