@@ -64,8 +64,8 @@
                     dataset.ancestor_id
                 </b-link>
             </div>
-            <div class="td col">
-                <a href="#">{{ $t("dataset.filter") }}</a>    
+            <div v-if="depth == 0" class="td col">
+                <a v-on:click.stop.prevent="$modal.show('datasetFilterModal', { datasetId: dataset.id });" href="#">{{ $t("dataset.filter") }}</a>    
                 <!-- <a v-on:click.stop.prevent="download(item.item_id)" href="#">{{ $t("examples.download_json") }}</a>     -->
             </div>
         </div>

@@ -69,6 +69,7 @@
                 />
             </template>
         </div>
+        <DatasetFilterModal/>
     </span>
     <span v-else>
         <Loader></Loader>
@@ -84,6 +85,7 @@ import stateMixin from "@/plugins/stateMixins.js";
 import sortMixins from "@/plugins/sortMixins.js";
 import SearchInput from "@/components/SearchInput.vue";
 import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
+import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
 
 export default {
     mixins: [stateMixin, sortMixins],
@@ -98,7 +100,8 @@ export default {
         Loader,
         SortButtons,
         SearchInput,
-        DatasetPickerRow
+        DatasetPickerRow,
+        DatasetFilterModal
     },
     computed: {
         search: function() {
@@ -179,7 +182,6 @@ export default {
         }
     },
     mounted() {
-        var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
         var buildDatasetsTree = function(datasets, filtered_parent_id) {
             var result = [];
             datasets.forEach(function (item) {
@@ -191,6 +193,7 @@ export default {
             
             return result;
         };
+        var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
         axios
             .get(url)
             .then(response => {

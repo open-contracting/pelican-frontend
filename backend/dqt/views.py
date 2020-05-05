@@ -10,7 +10,7 @@ from django.core import serializers
 from django.db import connections
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck
+from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
 from .tools.rabbit import publish
 
 
@@ -44,6 +44,15 @@ def dataset_level_stats(request, dataset_id):
             "meta": check.meta,
         }
     return JsonResponse(result)
+
+
+# json_path requires shape: field1.field2.field3 ...
+def dataset_distinct_values(request, dataset_id, json_path):
+    json_path = 'data__' + '__'.join(json_path.split('.'))
+    data_items_query = DataItem.objects.filter(dataset_id=dataset_id)
+    values = list(data_items_query.values_list(json_path, flat=True).distinct())
+
+    return JsonResponse([v for v in values if v is not None], safe=False)
 
 
 def field_level_stats(request, dataset_id):
