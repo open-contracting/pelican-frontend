@@ -2,6 +2,9 @@
 @import "breakpoints";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/src/index.scss";
+@import "~vue-multiselect/dist/vue-multiselect.min.css";
+@import "~vue-date-pick/dist/vueDatePick.css";
+
 
 body {
     background-color: #f0f2fb;

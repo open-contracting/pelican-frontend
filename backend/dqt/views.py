@@ -8,6 +8,7 @@ from django.db.models import Count, Max, Min, Sum
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.core import serializers
 from django.db import connections
+from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
@@ -47,10 +48,14 @@ def dataset_level_stats(request, dataset_id):
 
 
 # json_path requires shape: field1.field2.field3 ...
-def dataset_distinct_values(request, dataset_id, json_path):
+def dataset_distinct_values(request, dataset_id, json_path, sub_string=''):
     json_path = 'data__' + '__'.join(json_path.split('.'))
-    data_items_query = DataItem.objects.filter(dataset_id=dataset_id)
-    values = list(data_items_query.values_list(json_path, flat=True).distinct())
+    kwargs = {
+        'dataset_id': dataset_id,
+        json_path + '__icontains': sub_string
+    }
+    data_items_query = DataItem.objects.filter(**kwargs).values(json_path).annotate(count=Count(json_path)).order_by('-count')
+    values = list(data_items_query.values_list(json_path, flat=True).distinct()[:200])
 
     return JsonResponse([v for v in values if v is not None], safe=False)
 

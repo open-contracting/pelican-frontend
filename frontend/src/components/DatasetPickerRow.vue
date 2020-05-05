@@ -65,7 +65,7 @@
                 </b-link>
             </div>
             <div v-if="depth == 0" class="td col">
-                <a v-on:click.stop.prevent="$modal.show('datasetFilterModal', { datasetId: dataset.id });" href="#">{{ $t("dataset.filter") }}</a>    
+                <a v-on:click.stop.prevent="$modal.show('datasetFilterModal', { dataset: dataset });" href="#">{{ $t("dataset.filter") }}</a>    
                 <!-- <a v-on:click.stop.prevent="download(item.item_id)" href="#">{{ $t("examples.download_json") }}</a>     -->
             </div>
         </div>

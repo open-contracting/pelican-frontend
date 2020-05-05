@@ -13,8 +13,8 @@ import VModal from 'vue-js-modal';
 import Multiselect from 'vue-multiselect'
 import { messages as en } from "./messages/en.js";
 import { messages as cs } from "./messages/cs.js";
-
 import Fragment from "vue-fragment";
+import DatePick from "vue-date-pick";
 
 if (window.navigator && navigator.serviceWorker) {
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
@@ -32,6 +32,7 @@ Vue.use(VueSimpleAlert);
 Vue.use(Clipboard);
 Vue.use(VModal);
 Vue.use(Multiselect);
+Vue.component('date-pick', DatePick);
 Vue.component('multiselect', Multiselect);
 const i18n = new VueI18n({
     locale: "en", // set locale

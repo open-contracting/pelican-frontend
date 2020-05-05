@@ -23,6 +23,7 @@
     "v-clipboard": "^2.2.2",
     "vue": "^2.6.11",
     "vue-context": "^5.1.0",
+    "vue-date-pick": "^1.4.1",
     "vue-fragment": "^1.5.1",
     "vue-google-charts": "^0.3.2",
     "vue-i18n": "^8.16.0",

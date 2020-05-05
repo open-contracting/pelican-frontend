@@ -9,7 +9,8 @@ var config = {
         dataItem: "api/data_item",
         fieldStats: "api/field_level_stats",
         fieldDetail: "api/field_level_detail",
-        datasetDistinctValues: "api/dataset_distinct_values"
+        datasetDistinctValues: "api/dataset_distinct_values",
+        createDatasetFilter: "api/create_dataset_filter"
     }
 };
 
