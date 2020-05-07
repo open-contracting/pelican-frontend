@@ -3,9 +3,7 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/src/index.scss";
 @import "~vue-multiselect/dist/vue-multiselect.min.css";
-@import "~vue-date-pick/dist/vueDatePick.css";
-
-
+@import "vue-date-pick-mod.scss";
 body {
     background-color: #f0f2fb;
     font-size: 14px;
@@ -185,13 +183,13 @@ code {
     border: dotted 1px $ok_color;
 }
 
-
 .tooltip_text code {
     color: #e7ec90;
     background-color: gray;
     padding: 3px;
     border: dotted 1px #e7ec90;
 }
+
 
 /**
 $grid-breakpoints: (xxxs: 0,
@@ -216,4 +214,11 @@ $grid-breakpoints: (xxxs: 0,
     .card-deck .card {
         max-width: 30%;
     }
+}
+
+label {
+    font-family: $font-family-sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: right;
 }

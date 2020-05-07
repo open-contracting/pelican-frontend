@@ -1,8 +1,10 @@
 <template>
     <multiselect
         v-model="selected"
-        placeholder="Enter buyer names"
         open-direction="bottom"
+        label="value"
+        track-by="value"
+        :show-labels="false"
         :options="options"
         :multiple="true"
         :searchable="true"
@@ -11,26 +13,31 @@
         :clear-on-select="false"
         :close-on-select="false"
         :options-limit="300"
-        :limit="3"
+        :limit="10"
         :limit-text="limitText"
-        :max-height="600"
+        :max-height="300"
         :show-no-results="false"
         :hide-selected="true"
         @search-change="asyncFind"
     >
+        <template slot="option" slot-scope="props">
+            <div class="option__desc"><span class="option__title">{{ props.option.value }}</span><span class="option__small">{{ props.option.count }}</span></div>
+        </template>
         <template
             slot="tag"
             slot-scope="{ option, remove }"
         >
-            <span class="custom__tag">
-                <span>{{ option }}</span>
-                <span class="custom__remove" @click="remove(option)">❌</span>
-            </span>
+            <div class="custom__tag">
+                <div>
+                    <span>{{ option.value }} {{ option.count }}</span>
+                    <span class="custom__remove" @click="remove(option)">❌</span>
+                </div>
+            </div>
         </template>
         <template slot="clear" slot-scope="props">
             <div class="multiselect__clear" v-if="selected.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
         </template>
-        <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+        <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
     </multiselect>
 </template>
 
@@ -47,7 +54,7 @@ export default {
             isLoading: false,
         };
     },
-    props: ["datasetId", "jsonPath"],
+    props: ["datasetId", "jsonPath", "updateSelected"],
     methods: {
         beforeOpen (event) {
             this.datasetId = event.params.datasetId;
@@ -77,9 +84,14 @@ export default {
             this.selected = [];
         },
         limitText (count) {
-            return `and ${count} more`
-        }
+            return count + this.$t("datasetValuesMultiselect.limitText")
+        },
     },
+    watch: {
+        selected (value) {
+            this.updateSelected(value.map(el => el.value));
+        }
+    }
     
 };
 </script>

@@ -65,8 +65,13 @@
                 </b-link>
             </div>
             <div v-if="depth == 0" class="td col">
-                <a v-on:click.stop.prevent="$modal.show('datasetFilterModal', { dataset: dataset });" href="#">{{ $t("dataset.filter") }}</a>    
-                <!-- <a v-on:click.stop.prevent="download(item.item_id)" href="#">{{ $t("examples.download_json") }}</a>     -->
+                <a
+                    v-if="isDatasetImported(dataset)"
+                    v-on:click.stop.prevent="$modal.show('datasetFilterModal', { dataset: dataset });"
+                    href="#"
+                >
+                    {{ $t("dataset.filter") }}
+                </a>
             </div>
         </div>
         <template v-for="(item, index) in dataset.filtered_children">

@@ -3,6 +3,7 @@ import time
 import random
 import intervals as I
 import simplejson as json
+from psycopg2 import sql
 
 from django.db.models import Count, Max, Min, Sum
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
@@ -23,6 +24,65 @@ def create_dataset_filter(request):
     publish(request.body, '_dataset_filter_extractor_init')
 
     return HttpResponse('done')
+
+
+@csrf_exempt
+def dataset_filter_items(request):
+    if request.method == 'GET':
+        return HttpResponseBadRequest(reason='Only post method is accepted.')
+
+    body_unicode = request.body.decode('utf-8')
+    input_message = json.loads(body_unicode)
+
+    # checking input_message correctness
+    if (
+        "dataset_id_original" not in input_message or not isinstance(input_message['dataset_id_original'], int)
+        or "filter_message" not in input_message or not isinstance(input_message['filter_message'], dict)
+    ):
+        return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
+
+    dataset_id_original = input_message["dataset_id_original"]
+    filter_message = input_message["filter_message"]
+
+    # building query in a safely manner
+    try:
+        query = sql.SQL("SELECT count(*) FROM data_item WHERE dataset_id = ") + sql.Literal(dataset_id_original)
+        if 'release_date_from' in filter_message:
+            expr = sql.SQL("data->>'date' >= ") + sql.Literal(filter_message['release_date_from'])
+            query += sql.SQL(' and ') + expr
+        if 'release_date_to' in filter_message:
+            expr = sql.SQL("data->>'date' <= ") + sql.Literal(filter_message['release_date_to'])
+            query += sql.SQL(" and ") + expr
+        if 'buyer' in filter_message:
+            expr = sql.SQL(", ").join([
+                sql.Literal(buyer)
+                for buyer in filter_message['buyer']
+            ])
+            expr = sql.SQL("data->'buyer'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
+            query += sql.SQL(" and ") + expr
+        if 'buyer_regex' in filter_message:
+            expr = sql.SQL("data->'buyer'->>'name' ~ ") + sql.Literal(filter_message['buyer_regex'])
+            query += sql.SQL(" and ") + expr
+        if 'procuring_entity' in filter_message:
+            expr = sql.SQL(", ").join([
+                sql.Literal(procuring_entity)
+                for procuring_entity in filter_message['procuring_entity']
+            ])
+            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
+            query += sql.SQL(" and ") + expr
+        if 'procuring_entity_regex' in filter_message:
+            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' ~ ") \
+                + sql.Literal(filter_message['procuring_entity_regex'])
+            query += sql.SQL(" and ") + expr
+        query += sql.SQL(';')
+
+        with connections["data"].cursor() as cursor:
+            cursor.execute(query)
+            items = cursor.fetchall()[0][0]
+    except:
+        return HttpResponseBadRequest(reason='The dataset could not be filtered in this way.')
+
+    return JsonResponse({'items': items})
 
 
 def dataset_stats(request, dataset_id):
@@ -55,9 +115,9 @@ def dataset_distinct_values(request, dataset_id, json_path, sub_string=''):
         json_path + '__icontains': sub_string
     }
     data_items_query = DataItem.objects.filter(**kwargs).values(json_path).annotate(count=Count(json_path)).order_by('-count')
-    values = list(data_items_query.values_list(json_path, flat=True).distinct()[:200])
+    query_set = data_items_query.values_list(json_path, 'count').distinct()[:200]
+    return JsonResponse([{'value': el[0], 'count': el[1]} for el in query_set], safe=False)
 
-    return JsonResponse([v for v in values if v is not None], safe=False)
 
 
 def field_level_stats(request, dataset_id):

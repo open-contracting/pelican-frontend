@@ -29,6 +29,19 @@ export const messages = {
         filter: "filter",
         actions: "actions"
     },
+    datasetFilter: {
+        submit: "submit",
+        releaseDateFrom: "release date from",
+        releaseDateTo: "release date to",
+        buyerName: "buyer name",
+        procuringEntityName: "procuring entity name",
+        buyerNameRegex: "buyer name regex",
+        procuringEntityNameRegex: "procuring entity name regex",
+    },
+    datasetValuesMultiselect: {
+        noResult: "No values found. Consider changing the search query.",
+        limitText: " more selected"
+    },
     insufficientData: {
         title: "Insufficient data",
         description: "Data was insufficient to calculate the check."
@@ -233,8 +246,7 @@ export const messages = {
         }
     },
     resourceLevel: {
-        description:
-            "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID</code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p></li></ul>",
+        description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID</code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p></li></ul>",
         subheadline: "All Compiled Release-Level Checks",
         ok: "Passed",
         failed: "Failed",
