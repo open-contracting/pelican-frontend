@@ -125,8 +125,8 @@ export default {
             
             this.filteredItemsTimeout = setTimeout(() => this.datasetFilterItems(), this.filteredItemsTimeoutLimit);
         }, {
-            immediate: true, // run immediately
-            deep: true // detects changes inside objects. not needed here, but maybe in other cases
+            immediate: true,
+            deep: true
         }); 
     },
     components: { DatasetValuesMultiselect, Loader, },
@@ -147,6 +147,7 @@ export default {
             this.releaseDateTo = '';
             this.buyerNameRegex = '';
             this.procuringEntityNameRegex = '';
+            this.datasetFilterItems();
         },
         createDatasetFilter () {
             this.isSubmitting = true;
@@ -167,8 +168,10 @@ export default {
                 });
         },
         datasetFilterItems () {
+            var message = this.datasetFilterMessage();
+            if (message == null) { return; }
             axios
-                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, this.datasetFilterMessage())
+                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, message)
                 .then(response => {
                     if (response.status == 200) {
                         this.items = response['data']['items'];
@@ -241,20 +244,12 @@ export default {
     padding-right: 0px;
     font-size: 13px;
     font-family: $font-family-mono;
-    // color: #495057;
-	// background-color: #fff;
-	// background-clip: padding-box;
-	// border: 1px solid #ced4da;
-	// border-radius: 0.25rem;
-	// -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-	// transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
 }
 
 .modal_input {
     font-weight: 400;
     line-height: 1.5;
     color: #212529;
-    // text-align: left;
 }
 
 .submit_button {
