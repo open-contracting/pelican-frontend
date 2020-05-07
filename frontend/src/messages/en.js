@@ -31,6 +31,8 @@ export const messages = {
     },
     datasetFilter: {
         submit: "submit",
+        submitResultOk: "Ok",
+        submitResultFailed: "Failed",
         releaseDateFrom: "release date from",
         releaseDateTo: "release date to",
         buyerName: "buyer name",
