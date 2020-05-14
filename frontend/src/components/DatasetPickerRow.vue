@@ -5,21 +5,16 @@
             :class="['row','tr', 'clickable', 'align-items-center', {disabled: !isDatasetImported(dataset)}]"
             @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'overview', params: {datasetId: dataset.id}}})"
         >
-            <div
-                v-if="depth != 0"
-                :class="'td col-' + depth"
-            />
-            <div :class="'td col-' + (4 - depth)">
-                <span v-if="dataset.filtered_children.length != 0" v-on:click.stop="showFilteredChildren = !showFilteredChildren">
-                    <div v-if="!showFilteredChildren" class="switcher text-center">
-                        <font-awesome-icon icon="chevron-right" />
-                    </div>
-                    <div v-if="showFilteredChildren" class="switcher text-center">
-                        <font-awesome-icon icon="chevron-down" />
-                    </div>
+            <div class="td col-4">
+                <span v-if="depth > 0">
+                    &nbsp;&nbsp;
+                    <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 {{ dataset.name }}
-                <span class="dataset_id">(Id {{ dataset.id }})</span>
+                <span class="dataset_id">(Id {{ dataset.id }})</span>&nbsp;
+                <a v-if="isDatasetImported(dataset) && depth == 0" v-on:click.stop.prevent="$emit('dataset-filter', dataset)" href="#">
+                    <font-awesome-icon :icon="['fas', 'filter']" />
+                </a>
             </div>
             <div class="td col-1 numeric text-right">{{ dataset.size | formatNumber }}</div>
             <div v-if="dataset.meta.kingfisher_metadata" class="td col-1 numeric text-right">{{ dataset.meta.kingfisher_metadata.collection_id }}</div>
@@ -61,26 +56,12 @@
                     <span class="small_icon">
                         <font-awesome-icon icon="history" />
                     </span>
-                    dataset.ancestor_id
+                    {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
                 </b-link>
-            </div>
-            <div v-if="depth == 0" class="td col">
-                <a
-                    v-if="isDatasetImported(dataset)"
-                    v-on:click.stop.prevent="$modal.show('datasetFilterModal', { dataset: dataset });"
-                    href="#"
-                >
-                    {{ $t("dataset.filter") }}
-                </a>
             </div>
         </div>
         <template v-for="(item, index) in dataset.filtered_children">
-            <DatasetPickerRow
-                v-if="showFilteredChildren"
-                v-bind:key="index"
-                :dataset="item"
-                :depth="depth + 1"
-            />
+            <DatasetPickerRow v-bind:key="index" :dataset="item" :depth="depth + 1" />
         </template>
     </div>
 </template>
@@ -91,16 +72,16 @@ import stateMixin from "@/plugins/stateMixins.js";
 import sortMixins from "@/plugins/sortMixins.js";
 
 export default {
-    name: 'DatasetPickerRow',
+    name: "DatasetPickerRow",
     mixins: [stateMixin, sortMixins],
     data: function() {
         return {
             loading: false,
             afterUpdateRoute: { name: "overview" },
-            showFilteredChildren: false,
+            showFilteredChildren: false
         };
     },
-    components: {ProgressBar,},
+    components: { ProgressBar },
     props: ["dataset", "depth"],
     computed: {
         phases: function() {
@@ -111,7 +92,7 @@ export default {
                 "TIME_VARIANCE",
                 "CHECKED"
             ];
-        },
+        }
     },
     methods: {
         setDataset: function(dataset, route = { name: "overview" }) {

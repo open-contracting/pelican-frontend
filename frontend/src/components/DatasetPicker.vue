@@ -57,19 +57,15 @@
                     </SortButtons>
                 </div>
                 <div class="th col align-self-center text-left">{{ $t('dataset.timeVariance') }}</div>
-                <div class="th col align-self-center text-left">{{ $t('dataset.actions') }}</div>
             </div>
 
             <template v-for="(item, index) in datasets">
-                <DatasetPickerRow
-                    v-if="isSearched(item.name)"
-                    v-bind:key="index"
-                    :dataset="item"
-                    :depth=0
-                />
+                <DatasetPickerRow v-if="isSearched(item.name)" v-on:dataset-filter="showFilter($event)" v-bind:key="index" :dataset="item" :depth="0" />
             </template>
         </div>
-        <DatasetFilterModal/>
+        <b-modal id="filter-modal" size="lg" ref="filter-modal" hide-footer :title="$t('datasetFilter.headline')" static lazy>
+            <DatasetFilterModal :dataset="filteredDataset" />
+        </b-modal>
     </span>
     <span v-else>
         <Loader></Loader>
@@ -93,7 +89,8 @@ export default {
         return {
             datasets: [],
             loading: false,
-            afterUpdateRoute: { name: "overview" }
+            afterUpdateRoute: { name: "overview" },
+            filteredDataset: null
         };
     },
     components: {
@@ -132,6 +129,10 @@ export default {
         }
     },
     methods: {
+        showFilter: function(dataset) {
+            this.filteredDataset = dataset;
+            this.$bvModal.show("filter-modal");
+        },
         isSearched: function(name) {
             return (
                 !this.search ||
@@ -151,10 +152,11 @@ export default {
             } else if (by == "size") {
                 comp = (a, b) => this.compareNumbers(a.size, b.size);
             } else if (by == "collection_id") {
-                comp = (a, b) => this.compareNumbers(
-                    a.meta.kingfisher_metadata.collection_id,
-                    b.meta.kingfisher_metadata.collection_id
-                );
+                comp = (a, b) =>
+                    this.compareNumbers(
+                        a.meta.kingfisher_metadata.collection_id,
+                        b.meta.kingfisher_metadata.collection_id
+                    );
             } else if (by == "phase") {
                 comp = (a, b) => {
                     if (a.phase == b.phase) {
@@ -184,20 +186,39 @@ export default {
     mounted() {
         var buildDatasetsTree = function(datasets, filtered_parent_id) {
             var result = [];
-            datasets.forEach(function (item) {
+            datasets.forEach(function(item) {
                 if (item.filtered_parent_id == filtered_parent_id) {
-                    item.filtered_children = buildDatasetsTree(datasets, item.id);
+                    item.filtered_children = buildDatasetsTree(
+                        datasets,
+                        item.id
+                    );
                     result.push(item);
                 }
             });
-            
+
             return result;
         };
         var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
         axios
             .get(url)
             .then(response => {
-                this.datasets = buildDatasetsTree(response["data"]["objects"], null);
+                this.datasets = buildDatasetsTree(
+                    response["data"]["objects"],
+                    null
+                );
+
+                var self = this;
+                this.datasets.forEach(function(item) {
+                    if (item.ancestor_id != null) {
+                        var ancestor = self.datasets.find(
+                            element =>
+                                String(element.ancestor_id) == item.ancestor_id
+                        );
+                        item.ancestor_name = ancestor.name;
+                    } else {
+                        item.ancestor_name = null;
+                    }
+                });
                 this.sortBy(this.sortedBy, this.isAscendingSorted);
             })
             .catch(function(error) {

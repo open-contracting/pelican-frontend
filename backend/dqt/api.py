@@ -27,6 +27,8 @@ class DatasetResource(ModelResource):
     size = IntegerField(attribute='get_size', readonly=True)
     filtered_children_ids = ListField(attribute='get_filtered_children_ids', readonly=True)
     filtered_parent_id = IntegerField(attribute='get_filtered_parent_id', readonly=True)
+    filtered_parent_name = CharField(attribute='get_filtered_parent_name', readonly=True)
+    filter_message = DictField(attribute='get_filter_message', readonly=True)
 
     class Meta:
         queryset = Dataset.objects.all()

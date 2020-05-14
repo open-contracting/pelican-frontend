@@ -1,6 +1,58 @@
 <template>
     <dashboard v-if="dataset">
         <h2>{{ $t("sections.overview") }}</h2>
+
+        <div class="row" v-if="dataset.filter_message">
+            <div class="col col-12 col-xl-6 filtered">
+                <h4>
+                    {{ $t('overview.filtered.title') }}
+                    <Tooltip :text="$t('overview.filtered.info')"></Tooltip>
+                </h4>
+                <div class="result_box">
+                    <div v-if="data_quality" class="table_hl">
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('overview.filtered.original')}}</div>
+                            <div class="td col col-6">
+                                {{ dataset.filtered_parent_name }}
+                                <span class="dataset_id">(Id {{ dataset.filtered_parent_id }})</span>&nbsp;
+                            </div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.releaseDateFrom')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.release_date_from }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.releaseDateTo')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.release_date_to }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.buyerNameRegex')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.buyer_regex }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.procuringEntityNameRegex')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.procuring_entity_regex }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.buyerName')}}</div>
+                            <div class="td col col-6">{{ filtered_buyer.join(", ") }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.procuringEntityName')}}</div>
+                            <div class="td col col-6">{{ filtered_procuring_entity.join(", ") }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--"release_date_from": '2019-12-02',
+#         "release_date_to": '2020-02-02',
+#         "buyer": ["ministry_of_finance", "state"],
+#         "buyer_regex": "Development$",
+#         "procuring_entity": ["a", "b"],
+        #         "procuring_entity_regex": "(a|b)casdf+"-->
+
         <div class="row">
             <div class="col-12 col-xl-6">
                 <h4>{{ $t('overview.collection_metadata') }}</h4>
@@ -52,7 +104,7 @@
                                             :key="i"
                                             target="_blank"
                                         >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                        <template v-if="i + 1 < collection.extensions.length">, </template>
+                                        <template v-if="i + 1 < collection.extensions.length">,</template>
                                     </span>
                                 </template>
                             </div>
@@ -248,6 +300,20 @@ export default {
                 });
             }
             return hist;
+        },
+        filtered_procuring_entity: function() {
+            if (this.dataset.filter_message.procuring_entity) {
+                return this.dataset.filter_message.procuring_entity;
+            }
+
+            return [];
+        },
+        filtered_buyer: function() {
+            if (this.dataset.filter_message.buyer) {
+                return this.dataset.filter_message.buyer;
+            }
+
+            return [];
         }
     },
     methods: {

@@ -25,3 +25,11 @@ DATABASES = {
         'PORT': '22002',
     },
 }
+
+RABBIT = {
+    "host": "localhost",
+    "port": "22000",
+    "username": "rabbit",
+    "password": "rabbit",
+    "exchange_name": "dqt_development",
+}

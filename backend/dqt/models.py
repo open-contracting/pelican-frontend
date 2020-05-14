@@ -34,6 +34,14 @@ class Dataset(Model):
         items = self.dataset_filter_child.all()
         return items[0].dataset_original.id if items else None
 
+    def get_filtered_parent_name(self):
+        items = self.dataset_filter_child.all()
+        return items[0].dataset_original.name if items else None
+
+    def get_filter_message(self):
+        items = self.dataset_filter_child.all()
+        return items[0].filter_message if items else None
+
     class Meta:
         app_label = "data"
         managed = False

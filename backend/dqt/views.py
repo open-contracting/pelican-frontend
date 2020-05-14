@@ -61,7 +61,7 @@ def dataset_filter_items(request):
             expr = sql.SQL("data->'buyer'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
             query += sql.SQL(" and ") + expr
         if 'buyer_regex' in filter_message:
-            expr = sql.SQL("data->'buyer'->>'name' ~ ") + sql.Literal(filter_message['buyer_regex'])
+            expr = sql.SQL("data->'buyer'->>'name' LIKE ") + sql.Literal(filter_message['buyer_regex'])
             query += sql.SQL(" and ") + expr
         if 'procuring_entity' in filter_message:
             expr = sql.SQL(", ").join([
@@ -71,7 +71,7 @@ def dataset_filter_items(request):
             expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
             query += sql.SQL(" and ") + expr
         if 'procuring_entity_regex' in filter_message:
-            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' ~ ") \
+            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' LIKE ") \
                 + sql.Literal(filter_message['procuring_entity_regex'])
             query += sql.SQL(" and ") + expr
         query += sql.SQL(';')
@@ -114,10 +114,10 @@ def dataset_distinct_values(request, dataset_id, json_path, sub_string=''):
         'dataset_id': dataset_id,
         json_path + '__icontains': sub_string
     }
-    data_items_query = DataItem.objects.filter(**kwargs).values(json_path).annotate(count=Count(json_path)).order_by('-count')
+    data_items_query = DataItem.objects.filter(
+        **kwargs).values(json_path).annotate(count=Count(json_path)).order_by('-count')
     query_set = data_items_query.values_list(json_path, 'count').distinct()[:200]
     return JsonResponse([{'value': el[0], 'count': el[1]} for el in query_set], safe=False)
-
 
 
 def field_level_stats(request, dataset_id):

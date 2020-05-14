@@ -17,7 +17,7 @@ var config = {
 
 if (process.env.VUE_APP_SERVER == "kuba_dev01") {
     Object.assign(config, {
-        apiBaseUrl: "https://dqt.datlab.eu/"
+        apiBaseUrl: "http://localhost:22004/"
     });
 }
 

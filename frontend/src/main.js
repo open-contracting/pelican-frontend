@@ -9,7 +9,6 @@ import VueI18n from "vue-i18n";
 import VueGoogleCharts from "vue-google-charts";
 import VueSimpleAlert from "vue-simple-alert";
 import Clipboard from 'v-clipboard';
-import VModal from 'vue-js-modal';
 import Multiselect from 'vue-multiselect'
 import { messages as en } from "./messages/en.js";
 import { messages as cs } from "./messages/cs.js";
@@ -30,7 +29,6 @@ Vue.use(BootstrapVue);
 Vue.use(VueI18n);
 Vue.use(VueSimpleAlert);
 Vue.use(Clipboard);
-Vue.use(VModal);
 Vue.use(Multiselect);
 Vue.component('date-pick', DatePick);
 Vue.component('multiselect', Multiselect);
