@@ -99,12 +99,17 @@
                                             target="_blank"
                                         >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
                                         <a
-                                            v-else
-                                            v-on:click="extensionPreview(e.name.hasOwnProperty('en') ? e.name['en'] : e.name)"
+                                            v-else-if="e.hasOwnProperty('repositoryUrl')"
+                                            :href="e.repositoryUrl"
                                             :key="i"
                                             target="_blank"
                                         >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                        <template v-if="i + 1 < collection.extensions.length">,</template>
+                                        <a
+                                            v-else
+                                            :key="i"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                        <template v-if="i + 1 < collection.extensions.length">, </template>
                                     </span>
                                 </template>
                             </div>
