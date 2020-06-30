@@ -67,7 +67,7 @@ export const messages = {
     preview: {
         metadata: "Metadata",
         ocds_data: "Data Preview",
-        cannot_display: "Data item cannot be previewed.",
+        cannot_display: "The JSON data cannot be previewed, because its large size (more than 3,000 lines) can cause some browsers to crash. You can download the JSON file, instead.",
     },
     examples: {
         failed: "Sample releases with failed rules",
