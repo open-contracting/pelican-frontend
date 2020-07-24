@@ -7,7 +7,7 @@ from .api import (DatasetResource, DataItemResource, DatasetLevelCheckResource,
                   ResourceLevelCheckResource, ReportResource, TimeVarianceLevelCheckResource)
 from .views import dataset_stats, dataset_level_stats, field_level_stats, resource_level_stats, \
     field_level_detail, resource_level_detail, time_variance_level_stats, create_dataset_filter, \
-    dataset_distinct_values, dataset_filter_items
+    dataset_distinct_values, dataset_filter_items, generate_report
 
 dataset_resource = DatasetResource()
 data_item_resource = DataItemResource()
@@ -31,6 +31,7 @@ urlpatterns = [
     path('api/dataset_filter_items', dataset_filter_items, name='dataset_filter_items'),
     path('api/dataset_distinct_values/<dataset_id>/<json_path>', dataset_distinct_values, name='dataset_distinct_values'),
     path('api/dataset_distinct_values/<dataset_id>/<json_path>/<sub_string>', dataset_distinct_values, name='dataset_distinct_values'),
+    path('api/generate_report/<dataset_id>/', generate_report, name='generate_report'),
     url(r'^api/', include(dataset_resource.urls)),
     url(r'^api/', include(data_item_resource.urls)),
     url(r'^api/', include(progress_monitor_dataset_resource.urls)),

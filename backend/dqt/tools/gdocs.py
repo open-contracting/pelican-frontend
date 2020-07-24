@@ -14,6 +14,26 @@ from zipfile import ZipFile
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/documents']
 
+DEFAULT_STYLES = (
+    "Standard",
+    "Heading",
+    "Text_20_body",
+    "List",
+    "Caption",
+    "Index",
+    "normal",
+    "Heading_20_1",
+    "Heading_20_2",
+    "Heading_20_3",
+    "Heading_20_4",
+    "Heading_20_5",
+    "Heading_20_6",
+    "Title",
+    "Subtitle",
+    "Header",
+    "Graphics",
+)
+
 creds = None
 service = None
 drive_service = None
@@ -21,8 +41,8 @@ drive_service = None
 
 def init():
     """Init (authentication etc.) of all necessary services,"""
-    if os.path.exists('./gdocs/token.pickle'):
-        with open('./gdocs/token.pickle', 'rb') as token:
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
             global creds
             creds = pickle.load(token)
 
@@ -45,10 +65,10 @@ def create_or_refresh_token():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "./gdocs/credentials.json", "https: // www.googleapis.com/auth/documents")
+                "credentials.json", "https: // www.googleapis.com/auth/documents")
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('./gdocs/token.pickle', 'wb') as token:
+        with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
 
@@ -82,7 +102,7 @@ def upload(folder_id, template_id, file_name, content):
     file = drive_service.files().create(body=file_metadata,
                                         media_body=media).execute()
 
-    print("File ID: {}".format(file.get('id')))
+    return file.get('id')
 
 
 def copy_zip(source, target):
@@ -132,18 +152,19 @@ def merge_templates(main_template, sub_template, location):
     for location_node in main_template.xpath('.//*[contains(text(),"' + location + '")]'):
         parent = location_node.getparent()
 
-        previous = parent
+        previous = location_node
         for child in sub_template_content:
             if not "sequence-decls" in child.tag:
                 # lets rename all paragraph styles to standard
                 for attrib in child.attrib:
-                    if "style-name" in attrib:
+                    if "style-name" in attrib and child.get(attrib) == "P1":
                         child.set(attrib, "Standard")
 
                 for node in child:
                     for attrib in node.attrib:
                         if attrib.endswith("style-name"):
-                            node.set(attrib, prefix + node.get(attrib))
+                            if node.get(attrib) not in DEFAULT_STYLES:
+                                node.set(attrib, prefix + node.get(attrib))
 
                 previous.addnext(child)
                 previous = child
@@ -168,6 +189,18 @@ def merge_template_styles(main_template, sub_template, prefix):
                     sub_style.set(attrib, prefix + sub_style.get(attrib))
 
             main_style_node.append(sub_style)
+
+    return main_template
+
+
+def set_tag_value(main_template, value, location):
+    for node in main_template.xpath('.//*[contains(text(),"' + location + '")]'):
+        if node.text and location in node.text:
+            node.text = node.text.replace(location, str(value))
+        else:
+            for subnode in node:
+                if location in subnode.tail:
+                    subnode.tail = subnode.tail.replace(location, str(value))
 
     return main_template
 
@@ -202,3 +235,71 @@ def get_tags(template):
             tags.append(tag)
 
     return tags
+
+
+def get_template_id(tag):
+    template_id = None
+    for param in tag["params"]:
+        if param["name"] == "id":
+            template_id = param["value"]
+
+    return template_id
+
+
+def process_template(template, data):
+    tags = get_tags(template)
+    for tag in tags:
+        if tag["name"] == "template":
+            template_id = get_template_id(tag)
+
+            if not template_id:
+                raise ValueError("Missing template id in {}".format(tag["full"]))
+
+            sub_template = get_template(template_id)
+
+            sub_template = process_template(sub_template, {})
+
+            template = merge_templates(template, sub_template, tag["full"])
+
+        if tag["name"] == "summary":
+            template = set_tag_value(template, "This is a very long summary", tag["full"])
+
+        if tag["name"] == "resource":
+            template_id = get_template_id(tag)
+
+            if not template_id:
+                template_id = "1ZgKP1TWU8AbnOFhjEqlBO--lR71dAlNMyiGDUh8MZ-8"
+
+            sub_template = get_template(template_id)
+
+            data = {
+                "checkedCount": 1324,
+                "passedCount": 324324,
+                "failedCount": 124324,
+                "notAvailableCount": 546,
+                "name": "dsfasdfsd",
+                "description": "dsafsaf fladsjnflent refds mkjg ioerj ngkljdf snvjkdf noiwerng jkwe;mrg wjn gkl;wng jfdnv klfdskgnjwk fgnoasijv"
+            }
+
+            sub_template = process_template(sub_template, data)
+            template = merge_templates(template, sub_template, tag["full"])
+
+        if tag["name"] == "checkedCount":
+            template = set_tag_value(template, data["checkedCount"], tag["full"])
+
+        if tag["name"] == "passedCount":
+            template = set_tag_value(template, data["passedCount"], tag["full"])
+
+        if tag["name"] == "failedCount":
+            template = set_tag_value(template, data["failedCount"], tag["full"])
+
+        if tag["name"] == "notAvailableCount":
+            template = set_tag_value(template, data["notAvailableCount"], tag["full"])
+
+        if tag["name"] == "name":
+            template = set_tag_value(template, data["name"], tag["full"])
+
+        if tag["name"] == "description":
+            template = set_tag_value(template, data["description"], tag["full"])
+
+    return template

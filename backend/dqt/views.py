@@ -5,12 +5,25 @@ import intervals as I
 import simplejson as json
 from psycopg2 import sql
 
+from datetime import datetime
 from django.db.models import Count, Max, Min, Sum
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.core import serializers
 from django.db import connections
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
+from .tools.gdocs import init
+from .tools.gdocs import get_tags
+from .tools.gdocs import download
+from .tools.gdocs import upload
+from .tools.gdocs import copy_zip
+from .tools.gdocs import get_template
+from .tools.gdocs import get_main_template
+from .tools.gdocs import merge_templates
+from .tools.gdocs import get_tags
+from .tools.gdocs import set_tag_value
+from .tools.gdocs import get_template_id
+from .tools.gdocs import process_template
 
 from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
 from .tools.rabbit import publish
@@ -274,3 +287,18 @@ def time_variance_level_stats(request, dataset_id):
             "meta": check.meta
         }
     return JsonResponse(result)
+
+TEMPLATE_DOCUMENT_ID = '1paW4y4jxkWOi12qq1IVWlhKe9-WbosJATkp_BDRGTiA'
+
+FOLDER_ID = "1yLTCRV3yoBM5Goc93SaO4irxnd0iapnK"
+
+def generate_report(request, dataset_id):
+    init()
+
+    main_template = get_main_template(TEMPLATE_DOCUMENT_ID)
+
+    main_template = process_template(main_template, None)
+
+    file_id = upload(FOLDER_ID, TEMPLATE_DOCUMENT_ID, "Paraguay {}".format(datetime.now()), main_template)
+
+    return HttpResponse(file_id)
