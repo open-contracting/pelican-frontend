@@ -27,8 +27,15 @@
             <div class="form-group row section_row">
                 <label class="col-3 col-form-label">{{ $t("datasetReport.documentId") }}</label>
                 <div class="col-9">
-                    <input class="document_id_input" v-model="documentId" />
-                    <small class="form-text text-muted">{{ $t("datasetFilter.documentIdTooltip") }}</small>
+                    <input class="base_input" v-model="documentId" />
+                    <small class="form-text text-muted">{{ $t("datasetReport.documentIdTooltip") }}</small>
+                </div>
+            </div>
+            <div class="form-group row section_row">
+                <label class="col-3 col-form-label">{{ $t("datasetReport.folderId") }}</label>
+                <div class="col-9">
+                    <input class="base_input" v-model="folderId" />
+                    <small class="form-text text-muted">{{ $t("datasetReport.folderIdTooltip") }}</small>
                 </div>
             </div>
             <div class="text-center">
@@ -36,7 +43,7 @@
                     type="button"
                     class="btn btn-primary submit_button"
                     @click="createDatasetReport"
-                    :disabled="dataset == null || !documentId"
+                    :disabled="dataset == null || !documentId || !folderId"
                 >
                     {{ $t("datasetReport.submit") }}
                 </button>
@@ -56,6 +63,7 @@ export default {
         return {
             isSubmitting: false,
             documentId: "",
+            folderId: "",
             submitResult: null,
             documentLink: null
         };
@@ -70,7 +78,8 @@ export default {
                     CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport,
                     {
                         "dataset_id": parseInt(this.dataset.id),
-                        "document_id": this.documentId
+                        "document_id": this.documentId,
+                        "folder_id": this.folderId
                     }
                 )
                 .then((response) => {
@@ -90,6 +99,7 @@ export default {
         reset() {
             this.isSubmitting = false;
             this.documentId = "";
+            this.folderId = "";
             this.submitResult = null;
         }
     }
@@ -120,7 +130,7 @@ export default {
     padding-bottom: 30px;
 }
 
-.document_id_input {
+.base_input {
     width: 100%;
     height: 100%;
     padding-right: 0px;

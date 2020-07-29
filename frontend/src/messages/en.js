@@ -54,7 +54,9 @@ export const messages = {
         link: "Link: ",
         statusFailed: "Report creation failed.",
         documentId: "Document id",
-        documentIdTooltip: "Please enter id of document containing report tags.",
+        documentIdTooltip: "Id of document containing report tags",
+        folderId: "Folder id",
+        folderIdTooltip: "Id of folder for final report upload",
         submit: "Submit"
 
     },

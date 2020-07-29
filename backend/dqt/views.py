@@ -303,12 +303,13 @@ def generate_report(request):
     # checking input_message correctness
     if (
         "dataset_id" not in input_message or not isinstance(input_message["dataset_id"], int) or
-        "document_id" not in input_message
+        "document_id" not in input_message or "folder_id" not in input_message
     ):
         return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
 
     dataset_id = input_message["dataset_id"]
     document_id = input_message["document_id"]
+    folder_id = input_message["folder_id"]
 
     init()
 
