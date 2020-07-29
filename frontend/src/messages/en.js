@@ -48,6 +48,16 @@ export const messages = {
         procuringEntityNameRegexTooltip: "Standard SQL ILIKE pattern",
         statusOk: "Calculation will start in a moment.",
     },
+    datasetReport: {
+        headline: "Dataset report",
+        statusOk: "Report has been successfully created.",
+        link: "Link: ",
+        statusFailed: "Report creation failed.",
+        documentId: "Document id",
+        documentIdTooltip: "Please enter id of document containing report tags.",
+        submit: "Submit"
+
+    },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",
         limitText: " more selected",

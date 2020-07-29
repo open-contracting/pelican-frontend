@@ -60,11 +60,21 @@
             </div>
 
             <template v-for="(item, index) in datasets">
-                <DatasetPickerRow v-if="isSearched(item.name)" v-on:dataset-filter="showFilter($event)" v-bind:key="index" :dataset="item" :depth="0" />
+                <DatasetPickerRow
+                    v-if="isSearched(item.name)"
+                    v-on:dataset-filter="showFilter($event)"
+                    v-on:dataset-report="showReport($event)"
+                    v-bind:key="index"
+                    :dataset="item"
+                    :depth="0"
+                />
             </template>
         </div>
         <b-modal id="filter-modal" size="lg" ref="filter-modal" hide-footer :title="$t('datasetFilter.headline')" static lazy>
             <DatasetFilterModal :dataset="filteredDataset" />
+        </b-modal>
+        <b-modal id="report-modal" size="lg" ref="report-modal" hide-footer :title="$t('datasetReport.headline')" static lazy>
+            <DatasetReportModal :dataset="reportDataset" />
         </b-modal>
     </span>
     <span v-else>
@@ -82,6 +92,7 @@ import sortMixins from "@/plugins/sortMixins.js";
 import SearchInput from "@/components/SearchInput.vue";
 import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
+import DatasetReportModal from "@/components/DatasetReportModal.vue";
 
 export default {
     mixins: [stateMixin, sortMixins],
@@ -90,7 +101,8 @@ export default {
             datasets: [],
             loading: false,
             afterUpdateRoute: { name: "overview" },
-            filteredDataset: null
+            filteredDataset: null,
+            reportDataset: null
         };
     },
     components: {
@@ -98,7 +110,8 @@ export default {
         SortButtons,
         SearchInput,
         DatasetPickerRow,
-        DatasetFilterModal
+        DatasetFilterModal,
+        DatasetReportModal
     },
     computed: {
         search: function() {
@@ -132,6 +145,11 @@ export default {
         showFilter: function(dataset) {
             this.filteredDataset = dataset;
             this.$bvModal.show("filter-modal");
+        },
+        showReport: function(dataset) {
+            this.reportDataset = dataset;
+            this.$bvModal.show("report-modal");
+            
         },
         isSearched: function(name) {
             return (

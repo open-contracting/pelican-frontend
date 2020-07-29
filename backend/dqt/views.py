@@ -292,13 +292,32 @@ TEMPLATE_DOCUMENT_ID = '1paW4y4jxkWOi12qq1IVWlhKe9-WbosJATkp_BDRGTiA'
 
 FOLDER_ID = "1yLTCRV3yoBM5Goc93SaO4irxnd0iapnK"
 
-def generate_report(request, dataset_id):
+@csrf_exempt
+def generate_report(request):
+    if request.method == 'GET':
+        return HttpResponseBadRequest(reason='Only post method is accepted.')
+
+    body_unicode = request.body.decode('utf-8')
+    input_message = json.loads(body_unicode)
+
+    # checking input_message correctness
+    if (
+        "dataset_id" not in input_message or not isinstance(input_message["dataset_id"], int) or
+        "document_id" not in input_message
+    ):
+        return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
+
+    dataset_id = input_message["dataset_id"]
+    document_id = input_message["document_id"]
+
     init()
 
+    # main_template = get_main_template(document_id)
     main_template = get_main_template(TEMPLATE_DOCUMENT_ID)
 
     main_template = process_template(main_template, None)
 
+    # file_id = upload(FOLDER_ID, document_id, "Paraguay {}".format(datetime.now()), main_template)
     file_id = upload(FOLDER_ID, TEMPLATE_DOCUMENT_ID, "Paraguay {}".format(datetime.now()), main_template)
 
     return HttpResponse(file_id)

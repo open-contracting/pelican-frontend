@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/dataset_filter_items', dataset_filter_items, name='dataset_filter_items'),
     path('api/dataset_distinct_values/<dataset_id>/<json_path>', dataset_distinct_values, name='dataset_distinct_values'),
     path('api/dataset_distinct_values/<dataset_id>/<json_path>/<sub_string>', dataset_distinct_values, name='dataset_distinct_values'),
-    path('api/generate_report/<dataset_id>/', generate_report, name='generate_report'),
+    path('api/generate_report', generate_report, name='generate_report'),
     url(r'^api/', include(dataset_resource.urls)),
     url(r'^api/', include(data_item_resource.urls)),
     url(r'^api/', include(progress_monitor_dataset_resource.urls)),

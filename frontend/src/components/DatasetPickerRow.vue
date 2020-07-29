@@ -11,9 +11,14 @@
                     <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 {{ dataset.name }}
-                <span class="dataset_id">(Id {{ dataset.id }})</span>&nbsp;
+                <span class="dataset_id">(Id {{ dataset.id }})</span>
+                <span v-if="depth == 0">&nbsp;</span>
                 <a v-if="isDatasetImported(dataset) && depth == 0" v-on:click.stop.prevent="$emit('dataset-filter', dataset)" href="#">
                     <font-awesome-icon :icon="['fas', 'filter']" />
+                </a>
+                &nbsp;
+                <a v-if="isDatasetImported(dataset)" v-on:click.stop.prevent="$emit('dataset-report', dataset)" href="#">
+                    <font-awesome-icon :icon="['fas', 'file']" />
                 </a>
             </div>
             <div class="td col-1 numeric text-right">{{ dataset.size | formatNumber }}</div>
