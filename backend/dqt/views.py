@@ -307,18 +307,14 @@ def generate_report(request):
     ):
         return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
 
-    dataset_id = input_message["dataset_id"]
-    document_id = input_message["document_id"]
-    folder_id = input_message["folder_id"]
-
     init()
 
-    # main_template = get_main_template(document_id)
-    main_template = get_main_template(TEMPLATE_DOCUMENT_ID)
+    main_template = get_main_template(input_message["document_id"])
+    # main_template = get_main_template(TEMPLATE_DOCUMENT_ID)
 
-    main_template = process_template(main_template, None)
+    main_template = process_template(main_template, {}, input_message.copy())
 
-    # file_id = upload(FOLDER_ID, document_id, "Paraguay {}".format(datetime.now()), main_template)
-    file_id = upload(FOLDER_ID, TEMPLATE_DOCUMENT_ID, "Paraguay {}".format(datetime.now()), main_template)
+    file_id = upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
+    # file_id = upload(FOLDER_ID, TEMPLATE_DOCUMENT_ID, "Paraguay {}".format(datetime.now()), main_template)
 
     return HttpResponse(file_id)
