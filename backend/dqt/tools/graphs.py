@@ -3,12 +3,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 from matplotlib import font_manager
-import os
 
 font_dirs = ['dqt/tools/fonts', ]
 font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
 font_list = font_manager.createFontList(font_files)
-print(font_list)
 font_manager.fontManager.ttflist.extend(font_list)
 
 COLOR = {
