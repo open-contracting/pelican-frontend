@@ -7,20 +7,32 @@
                     <span>
                         {{ $t("datasetReport.statusOk") }}
                     </span>
-                    <a class="variant-success" v-on:click.stop.prevent="reset" href="#">
-                        <font-awesome-icon :icon="['fas', 'times']" />
-                    </a>    
+                    <span>
+                        <a class="variant-success" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
+                        </a>
+                        &nbsp;
+                        <a class="variant-success" v-on:click.stop.prevent="reset" href="#">
+                            <font-awesome-icon :icon="['fas', 'times']" />
+                        </a> 
+                    </span>
                 </b-alert>
                 <span>
                     {{ $t("datasetReport.link") }}
-                    <a :href="documentLink">{{ documentLink }}</a>  
+                    <a :href="documentLink" target="_blank">{{ documentLink }}</a>  
                 </span>
             </span>
             <b-alert class="submit-result" v-if="submitResult == false" variant="danger" show>
                 <span>{{ $t("datasetReport.statusFailed") }}</span>
-                <a class="variant-danger" v-on:click.stop.prevent="reset" href="#">
-                    <font-awesome-icon :icon="['fas', 'times']" />
-                </a>
+                <span>
+                    <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
+                        <font-awesome-icon :icon="['fas', 'redo-alt']" />
+                    </a>
+                    &nbsp;
+                    <a class="variant-danger" v-on:click.stop.prevent="reset" href="#">
+                        <font-awesome-icon :icon="['fas', 'times']" />
+                    </a>
+                </span>
             </b-alert>
         </span>
         <form v-if="!isSubmitting && submitResult == null" class="modal_box align-items-center">
@@ -73,13 +85,16 @@ export default {
         createDatasetReport() {
             if (this.dataset == null) { return; }
             this.isSubmitting = true;
+            var documentIdMatch = this.documentId.match(/\/d\/([^/]+)/);
+            var folderIdMatch = this.documentId.match(/\/folders\/([^/]+)/);
+
             axios
                 .post(
                     CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport,
                     {
                         "dataset_id": parseInt(this.dataset.id),
-                        "document_id": this.documentId,
-                        "folder_id": this.folderId
+                        "document_id": documentIdMatch != null ? documentIdMatch[1] : this.documentId,
+                        "folder_id": folderIdMatch != null ? folderIdMatch[1] : this.folderId
                     }
                 )
                 .then((response) => {
@@ -101,6 +116,10 @@ export default {
             this.documentId = "";
             this.folderId = "";
             this.submitResult = null;
+        },
+        retry() {
+            this.submitResult = null;
+            this.createDatasetReport();
         }
     }
 };
