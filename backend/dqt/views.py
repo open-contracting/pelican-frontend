@@ -12,18 +12,9 @@ from django.core import serializers
 from django.db import connections
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
-from .tools.gdocs import init
-from .tools.gdocs import get_tags
-from .tools.gdocs import download
-from .tools.gdocs import upload
-from .tools.gdocs import copy_zip
-from .tools.gdocs import get_template
-from .tools.gdocs import get_main_template
-from .tools.gdocs import merge_templates
-from .tools.gdocs import get_tags
-from .tools.gdocs import set_tag_value
-from .tools.gdocs import get_template_id
+from .tools.gdocs import Gdocs
 from .tools.gdocs import process_template
+
 
 from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
 from .tools.rabbit import publish
@@ -307,14 +298,10 @@ def generate_report(request):
     ):
         return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
 
-    init()
-
-    main_template = get_main_template(input_message["document_id"])
-    # main_template = get_main_template(TEMPLATE_DOCUMENT_ID)
-
-    main_template = process_template(main_template, {}, input_message.copy())
-
-    file_id = upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
-    # file_id = upload(FOLDER_ID, TEMPLATE_DOCUMENT_ID, "Paraguay {}".format(datetime.now()), main_template)
+    gdocs = Gdocs()
+    main_template = gdocs.get_main_template(input_message["document_id"])
+    main_template = process_template(main_template, {}, gdocs, input_message['dataset_id'])
+    file_id = gdocs.upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
+    gdocs.destroy_tempdir()
 
     return HttpResponse(file_id)

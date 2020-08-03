@@ -1,9 +1,11 @@
 from __future__ import print_function
 import pickle
-import os.path
+import os
 import re
+import shutil
 import lxml.etree as etree
 import shortuuid
+import tempfile
 
 from django.db import connections
 from googleapiclient.discovery import build
@@ -12,8 +14,132 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload
 from zipfile import ZipFile
 
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/documents']
+
+class Gdocs:
+    # If modifying these scopes, delete the file token.pickle.
+    SCOPES = ['https://www.googleapis.com/auth/documents']
+
+    creds = None
+    service = None
+    drive_service = None
+    dirpath = None
+    template_ids = set()
+
+    """Init (authentication etc.) of all necessary services,"""
+    def __init__(self):
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                self.creds = pickle.load(token)
+                self.create_or_refresh_token()
+                self.service = build('docs', 'v1', credentials=self.creds)
+                self.drive_service = build('drive', 'v3', credentials=self.creds)
+        else:
+            raise RuntimeError("Unable to find token file")
+
+        self.create_tempdir()
+
+    def create_tempdir(self):
+        self.dirpath = tempfile.mkdtemp()
+
+    def destroy_tempdir(self):
+        shutil.rmtree(self.dirpath)
+
+    """Creates or refresh of auth token"""
+    def create_or_refresh_token(self):
+        if not self.creds or not self.creds.valid:
+            if self.creds and self.creds.expired and self.creds.refresh_token:
+                self.creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    "credentials.json",
+                    "https: // www.googleapis.com/auth/documents"
+                )
+                self.creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            # TODO: resolve race condition
+            # with open('token.pickle', 'wb') as token:
+            #     pickle.dump(self.creds, token)
+
+    """Downloads document with source_id to dirpath location"""
+    def download(self, source_id):
+        drive_response = self.drive_service.files().export(
+            fileId=source_id,
+            mimeType="application/vnd.oasis.opendocument.text"
+        ).execute()
+
+        with open(os.path.join(self.dirpath, source_id), 'wb') as f:
+            f.write(drive_response)
+
+        return drive_response
+
+    """Uploads document"""
+    def upload(self, folder_id, template_id, file_name, content):
+        path = os.path.join(self.dirpath, template_id + '_out')
+        with ZipFile(path, mode="a") as out_zip:
+            out_zip.writestr('content.xml', etree.tostring(content))
+
+        file_metadata = {
+            'name': file_name,
+            'mimeType': 'application/vnd.google-apps.document',
+            "parents": [folder_id]
+        }
+
+        media = MediaFileUpload(
+            path,
+            mimetype='application/vnd.oasis.opendocument.text',
+            resumable=True
+        )
+
+        file = self.drive_service.files().create(
+            body=file_metadata,
+            media_body=media
+        ).execute()
+
+        return file.get('id')
+
+    """Copies zipfile in dirpath location"""
+    def copy_zip(self, source_name, target_name):
+        with ZipFile(os.path.join(self.dirpath, source_name), 'r') as zipread:
+            with ZipFile(os.path.join(self.dirpath, target_name), 'w') as zipwrite:
+                for item in zipread.infolist():
+                    if item.filename not in ("content.xml"):
+                        data = zipread.read(item.filename)
+                        zipwrite.writestr(item, data)
+
+    def get_main_template(self, template_id):
+        self.download(template_id)
+        self.copy_zip(template_id, template_id + "_out")
+        self.template_ids.add(template_id)
+
+        with ZipFile(os.path.join(self.dirpath, template_id)) as myzip:
+            with myzip.open('content.xml') as content:
+                return etree.parse(content).getroot()
+
+    def get_template(self, template_id):
+        if template_id not in self.template_ids:
+            self.download(template_id)
+            self.template_ids.add(template_id)
+
+        with ZipFile(os.path.join(self.dirpath, template_id)) as myzip:
+            with myzip.open('content.xml') as content:
+                return etree.parse(content).getroot()
+
+
+def get_template_content(template):
+    for node in template.xpath(
+        '//office:text',
+        namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
+    ):
+        return node
+
+
+def get_template_styles(template):
+    for node in template.xpath(
+        '//office:automatic-styles',
+        namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
+    ):
+        return node
+
 
 DEFAULT_STYLES = (
     "Standard",
@@ -34,141 +160,6 @@ DEFAULT_STYLES = (
     "Header",
     "Graphics",
 )
-
-ELEMENTAL_TAGS = (
-    "checkedCount",
-    "passedCount",
-    "failedCount",
-    "notAvailableCount",
-    "name",
-    "description",
-    "passedExamples",
-    "failedExamples",
-    "undefinedExamples",
-    "coverageCheckedCount",
-    "coveragePassedCount",
-    "coverageFailedCount",
-    "qualityCheckedCount",
-    "qualityPassedCount",
-    "qualityFailedCount",
-    "coveragePassedExamples",
-    "coverageFailedExamples",
-    "qualityPassedExamples",
-    "qualityFailedExamples",
-)
-
-creds = None
-service = None
-drive_service = None
-
-
-def init():
-    """Init (authentication etc.) of all necessary services,"""
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            global creds
-            creds = pickle.load(token)
-
-            create_or_refresh_token()
-
-            global service
-            service = build('docs', 'v1', credentials=creds)
-
-            global drive_service
-            drive_service = build('drive', 'v3', credentials=creds)
-    else:
-        raise RuntimeError("Unable to find token file")
-
-
-def create_or_refresh_token():
-    """Creates or refresh of auth token"""
-    global creds
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                "credentials.json", "https: // www.googleapis.com/auth/documents")
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-
-
-def download(source_id, path):
-    """Downloads document with source_id"""
-    drive_response = drive_service.files().export(
-        fileId=source_id, mimeType="application/vnd.oasis.opendocument.text").execute()
-
-    f = open(path, "wb")
-    f.write(drive_response)
-    f.close()
-
-    return drive_response
-
-
-def upload(folder_id, template_id, file_name, content):
-    path = "/tmp/{}_out".format(template_id)
-    with ZipFile(path, mode="a") as out_zip:
-        out_zip.writestr('content.xml', etree.tostring(content))
-
-    file_metadata = {
-        'name': file_name,
-        'mimeType': 'application/vnd.google-apps.document',
-        "parents": [folder_id]
-    }
-
-    media = MediaFileUpload(path,
-                            mimetype='application/vnd.oasis.opendocument.text',
-                            resumable=True)
-
-    file = drive_service.files().create(body=file_metadata,
-                                        media_body=media).execute()
-
-    return file.get('id')
-
-
-def copy_zip(source, target):
-    with ZipFile(source, 'r') as zipread:
-        with ZipFile(target, 'w') as zipwrite:
-            for item in zipread.infolist():
-                if item.filename not in ("content.xml"):
-                    data = zipread.read(item.filename)
-                    zipwrite.writestr(item, data)
-
-
-def get_main_template(template_id):
-    path = "/tmp/{}".format(template_id)
-    download(template_id, path)
-
-    copy_zip(path, path + "_out")
-
-    with ZipFile(path) as myzip:
-        with myzip.open('content.xml') as content:
-            return etree.parse(content).getroot()
-
-
-def get_template(template_id):
-    path = "/tmp/{}".format(template_id)
-    download(template_id, path)
-
-    with ZipFile(path) as myzip:
-        with myzip.open('content.xml') as content:
-            return etree.parse(content).getroot()
-
-
-def get_template_content(template):
-    for node in template.xpath('//office:text',
-                               namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}):
-        return node
-
-
-def get_template_styles(template):
-    for node in template.xpath('//office:automatic-styles',
-                               namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}):
-        return node
-
-
 def merge_templates(main_template, sub_template, location):
     prefix = shortuuid.uuid()
     sub_template_content = get_template_content(sub_template)
@@ -203,8 +194,9 @@ def merge_template_styles(main_template, sub_template, prefix):
     sub_template_styles = get_template_styles(sub_template)
 
     for main_style_node in main_template.xpath(
-            '//office:automatic-styles', namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}):
-
+        '//office:automatic-styles',
+        namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
+    ):
         for sub_style in sub_template_styles:
             # lets rename all paragraph styles to standard
             for attrib in sub_style.attrib:
@@ -277,23 +269,31 @@ def get_tag_param(tag, param_name):
         return None
 
 
-def process_template(template, data, metadata):
+ELEMENTAL_TAGS = (
+    "checkedCount",
+    "passedCount",
+    "failedCount",
+    "notAvailableCount",
+    "name",
+    "description",
+    "passedExamples",
+    "failedExamples",
+    "undefinedExamples",
+    "coverageCheckedCount",
+    "coveragePassedCount",
+    "coverageFailedCount",
+    "qualityCheckedCount",
+    "qualityPassedCount",
+    "qualityFailedCount",
+    "coveragePassedExamples",
+    "coverageFailedExamples",
+    "qualityPassedExamples",
+    "qualityFailedExamples",
+)
+def process_template(template, data, gdocs, dataset_id):
     tags = get_tags(template)
 
     for tag in tags:
-        print(tag)
-        if tag["name"] == "template":
-            template_id = get_tag_param(tag, 'template')
-
-            if not template_id:
-                raise ValueError("Missing template id in {}".format(tag["full"]))
-
-            sub_template = get_template(template_id)
-
-            sub_template = process_template(sub_template, {}, metadata)
-
-            template = merge_templates(template, sub_template, tag["full"])
-
         if tag["name"] == "summary":
             template = set_tag_value(template, "This is a very long summary", tag["full"])
 
@@ -303,7 +303,7 @@ def process_template(template, data, metadata):
             if not template_id:
                 template_id = "1Is3yi1p3XRI1x98rTZcfQiKb7WAAC4P1nXb-VCCyVTk"
 
-            sub_template = get_template(template_id)
+            sub_template = gdocs.get_template(template_id)
             check_name = get_tag_param(tag, 'check')
             # TODO: the param check is necessary
 
@@ -315,7 +315,7 @@ def process_template(template, data, metadata):
                     where dataset_id = %s and
                         type = 'field_level_check' and
                         data ? %s;
-                    """, [check_name, metadata["dataset_id"], check_name]
+                    """, [check_name, dataset_id, check_name]
                 )
                 rows = cursor.fetchall()
 
@@ -330,7 +330,7 @@ def process_template(template, data, metadata):
                     select data
                     from field_level_check_examples
                     where dataset_id = %s and path = %s;
-                    """, [metadata["dataset_id"], check_name]
+                    """, [dataset_id, check_name]
                 )
                 result_examples = cursor.fetchall()[0][0]
 
@@ -355,7 +355,7 @@ def process_template(template, data, metadata):
                     "qualityFailedExamples": ', '.join(example['meta']['ocid'] for example in result['quality']['failed_examples']),
                 }
 
-            sub_template = process_template(sub_template, data, metadata)
+            sub_template = process_template(sub_template, data, gdocs, dataset_id)
             template = merge_templates(template, sub_template, tag["full"])
 
 
@@ -365,7 +365,7 @@ def process_template(template, data, metadata):
             if not template_id:
                 template_id = "1ZgKP1TWU8AbnOFhjEqlBO--lR71dAlNMyiGDUh8MZ-8"
 
-            sub_template = get_template(template_id)
+            sub_template = gdocs.get_template(template_id)
             check_name = get_tag_param(tag, 'check')
             # TODO: the param check is necessary
 
@@ -377,7 +377,7 @@ def process_template(template, data, metadata):
                     where dataset_id = %s and
                         type = 'resource_level_check' and
                         data ? %s;
-                    """, [check_name, metadata['dataset_id'], check_name]
+                    """, [check_name, dataset_id, check_name]
                 )
                 rows = cursor.fetchall()
 
@@ -393,7 +393,7 @@ def process_template(template, data, metadata):
                     from resource_level_check_examples
                     where dataset_id = %s and
                         check_name = %s;
-                    """, [metadata['dataset_id'], check_name]
+                    """, [dataset_id, check_name]
                 )
                 result_examples = cursor.fetchall()[0][0]
                 result = {**result_report, **result_examples}
@@ -411,8 +411,7 @@ def process_template(template, data, metadata):
                     "undefinedExamples": ', '.join(example['meta']['ocid'] for example in result['undefined_examples']),
                 }
 
-
-            sub_template = process_template(sub_template, data, metadata)
+            sub_template = process_template(sub_template, data, gdocs, dataset_id)
             template = merge_templates(template, sub_template, tag["full"])
 
         # elemental tags
