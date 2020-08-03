@@ -19,12 +19,6 @@ class Gdocs:
     # If modifying these scopes, delete the file token.pickle.
     SCOPES = ['https://www.googleapis.com/auth/documents']
 
-    creds = None
-    service = None
-    drive_service = None
-    dirpath = None
-    template_ids = set()
-
     """Init (authentication etc.) of all necessary services,"""
     def __init__(self):
         if os.path.exists('token.pickle'):
@@ -36,6 +30,7 @@ class Gdocs:
         else:
             raise RuntimeError("Unable to find token file")
 
+        self.template_ids = set()
         self.create_tempdir()
 
     def create_tempdir(self):
