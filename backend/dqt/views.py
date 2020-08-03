@@ -298,8 +298,8 @@ def generate_report(request):
     ):
         return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
 
-    gdocs = Gdocs()
-    main_template = gdocs.get_main_template(input_message["document_id"])
+    gdocs = Gdocs(input_message["document_id"])
+    main_template = gdocs.get_main_template()
     main_template = process_template(main_template, {}, gdocs, input_message['dataset_id'])
     file_id = gdocs.upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
     gdocs.destroy_tempdir()

@@ -2,6 +2,7 @@ from __future__ import print_function
 import pickle
 import os
 import re
+from dqt.tools import graphs
 import shutil
 import lxml.etree as etree
 import shortuuid
@@ -20,7 +21,7 @@ class Gdocs:
     SCOPES = ['https://www.googleapis.com/auth/documents']
 
     """Init (authentication etc.) of all necessary services,"""
-    def __init__(self):
+    def __init__(self, main_template_id):
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 self.creds = pickle.load(token)
@@ -30,14 +31,46 @@ class Gdocs:
         else:
             raise RuntimeError("Unable to find token file")
 
-        self.template_ids = set()
         self.create_tempdir()
+        
+        self.main_template_id = main_template_id
+        self.template_ids = set(self.main_template_id)
+        self.main_template_id = main_template_id
+        self.download(self.main_template_id)
+        self.copy_zip(self.main_template_id, self.main_template_id + "_out")
 
     def create_tempdir(self):
         self.dirpath = tempfile.mkdtemp()
 
     def destroy_tempdir(self):
         shutil.rmtree(self.dirpath)
+
+    def add_image_file(self, buffer, name):
+        path = os.path.join(self.dirpath, self.main_template_id + '_out')
+        with ZipFile(path, mode='a') as zip_file:
+            image_file_path = os.path.join('Pictures/', name)
+            zip_file.writestr(image_file_path, buffer.getbuffer())
+    
+        # Updating manifest
+        with ZipFile(path) as zip_file:
+            with zip_file.open('META-INF/manifest.xml') as content:
+                root = etree.parse(content).getroot()
+
+        self.remove_file_from_zip(path, 'META-INF/manifest.xml')
+
+        namespace = '{urn:oasis:names:tc:opendocument:xmlns:manifest:1.0}'
+        root.append(etree.Element(
+            namespace + 'file-entry',
+            attrib={
+                (namespace + 'full-path'):os.path.join('Pictures/', name),
+                (namespace + 'media-type'):'image/png'
+            }
+        ))
+
+        with ZipFile(path, mode='a') as zip_file:
+            zip_file.writestr('META-INF/manifest.xml', etree.tostring(root))
+
+        return image_file_path
 
     """Creates or refresh of auth token"""
     def create_or_refresh_token(self):
@@ -101,14 +134,18 @@ class Gdocs:
                         data = zipread.read(item.filename)
                         zipwrite.writestr(item, data)
 
-    def get_main_template(self, template_id):
-        self.download(template_id)
-        self.copy_zip(template_id, template_id + "_out")
-        self.template_ids.add(template_id)
+    def remove_file_from_zip(self, zip_file_path, file_path):
+        with ZipFile(zip_file_path, 'r') as zipread:
+            with ZipFile(zip_file_path + '_copy', 'w') as zipwrite:
+                for item in zipread.infolist():
+                    if item.filename != file_path:
+                        data = zipread.read(item.filename)
+                        zipwrite.writestr(item, data)
 
-        with ZipFile(os.path.join(self.dirpath, template_id)) as myzip:
-            with myzip.open('content.xml') as content:
-                return etree.parse(content).getroot()
+        shutil.move(zip_file_path + '_copy', zip_file_path)
+
+    def get_main_template(self):
+        return self.get_template(self.main_template_id)
 
     def get_template(self, template_id):
         if template_id not in self.template_ids:
@@ -154,6 +191,7 @@ DEFAULT_STYLES = (
     "Subtitle",
     "Header",
     "Graphics",
+    "fr1"
 )
 def merge_templates(main_template, sub_template, location):
     prefix = shortuuid.uuid()
@@ -211,6 +249,16 @@ def set_tag_value(main_template, value, location):
             for subnode in node:
                 if location in subnode.tail:
                     subnode.tail = subnode.tail.replace(location, str(value))
+
+    return main_template
+
+
+def set_element(main_template, element, location):
+    nodes = main_template.xpath('.//*[contains(text(),"' + location + '")]')
+    while nodes:
+        node = nodes[0]
+        node.getparent().replace(node, element)
+        nodes = main_template.xpath('.//*[contains(text(),"' + location + '")]')
 
     return main_template
 
@@ -412,5 +460,50 @@ def process_template(template, data, gdocs, dataset_id):
         # elemental tags
         if tag["name"] in ELEMENTAL_TAGS:
             template = set_tag_value(template, data[tag["name"]], tag["full"])
+
+        if 'Image' in tag["name"]:
+            if tag["name"] == "resultBoxImage":
+                buffer = graphs.resource_result_box(data['passedCount'], data['failedCount'], data['notAvailableCount'])
+                image_file_path = gdocs.add_image_file(buffer, 'resultBoxImage_%s.png' % data['name'])
+                buffer.close()
+            elif tag["name"] == "coverageResultBoxImage":
+                buffer = graphs.field_result_box(data['coveragePassedCount'], data['coverageFailedCount'])
+                image_file_path = gdocs.add_image_file(buffer, 'coverageResultBoxImage_%s.png' % data['name'])
+                buffer.close()
+            elif tag["name"] == "qualityResultBoxImage":
+                buffer = graphs.field_result_box(data['qualityPassedCount'], data['qualityFailedCount'])
+                image_file_path = gdocs.add_image_file(buffer, 'qualityResultBoxImage_%s.png' % data['name'])
+                buffer.close()
+            
+            image_element = etree.Element(
+                '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}frame',
+                attrib={
+                    '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}style-name': 'fr1',
+                    '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name': image_file_path,
+                    '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}anchor-type': 'as-char',
+                    '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}svg-width': '5.9425in',
+                    '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}svg-height': '2.1043in',
+                    '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}z-index': '0',
+                }
+            )
+            image_element.append(etree.Element(
+                '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}image',
+                attrib={
+                    '{http://www.w3.org/1999/xlink}href': image_file_path,
+                    '{http://www.w3.org/1999/xlink}type': 'simple',
+                    '{http://www.w3.org/1999/xlink}show': 'embed',
+                    '{http://www.w3.org/1999/xlink}actuate': 'onLoad',
+                    '{urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0}mime-type': 'image/png',
+                }
+
+            ))
+            wrapper_element = etree.Element(
+                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
+                attrib={
+                    '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
+                }
+            )
+            wrapper_element.append(image_element)
+            template = set_element(template, wrapper_element, tag["full"])
 
     return template
