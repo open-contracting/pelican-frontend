@@ -29,7 +29,7 @@ def resource_result_box(passed_count, failed_count, not_available_count):
     ax.barh(
         y=[0, 1, 2],
         width=data,
-        height=0.7,
+        height=0.6,
         color=[COLOR['not_available'], COLOR['failed'], COLOR['ok']]
     )
     ax.set_yticks([0, 1, 2])
@@ -81,7 +81,7 @@ def resource_result_box(passed_count, failed_count, not_available_count):
             font_color = COLOR['dark_grey']
 
         plt.text(
-            bbox.xmin + 0.5,
+            bbox.xmin + 0.01 * sum(data),
             bbox.ymin + bbox.height / 2,
             percentage_str,
             color=font_color,
@@ -92,7 +92,7 @@ def resource_result_box(passed_count, failed_count, not_available_count):
         )
 
         plt.text(
-            max(bbox.xmin + 0.08 * sum(data), bbox.xmax) + 0.5,
+            max(bbox.xmin + 0.08 * sum(data), bbox.xmax + 0.01 * sum(data)),
             bbox.ymin + bbox.height / 2,
             value_str,
             color=COLOR['grey'],
@@ -102,7 +102,7 @@ def resource_result_box(passed_count, failed_count, not_available_count):
         )
 
     buffer = BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', bbox_inches='tight')
     buffer.seek(0)
     return buffer
 
@@ -117,14 +117,14 @@ def field_result_box(passed_count, failed_count):
     ax.barh(
         y=[0, 1],
         width=data,
-        height=0.7,
+        height=0.6,
         color=[COLOR['failed'], COLOR['ok']]
     )
-    ax.set_yticks([0, 1, 2])
+    ax.set_yticks([0, 1])
     ax.set_yticklabels(
-        ['Not available', 'Failed', 'Passed'],
+        ['Failed', 'Passed'],
         fontfamily='GT Eesti Pro Display',
-        color=COLOR['dark_grey']
+        color=COLOR['dark_grey'],
     )
     ax.tick_params(axis='both', which='both',length=0)
     ax.get_xaxis().set_ticks([])
@@ -165,9 +165,8 @@ def field_result_box(passed_count, failed_count):
         else:
             font_color = COLOR['dark_grey']
 
-
         plt.text(
-            bbox.xmin + 0.5,
+            bbox.xmin + 0.01 * sum(data),
             bbox.ymin + bbox.height / 2,
             percentage_str,
             color=font_color,
@@ -178,7 +177,7 @@ def field_result_box(passed_count, failed_count):
         )
 
         plt.text(
-            max(bbox.xmin + 0.08 * sum(data), bbox.xmax) + 0.5,
+            max(bbox.xmin + 0.08 * sum(data), bbox.xmax + 0.01 * sum(data)),
             bbox.ymin + bbox.height / 2,
             value_str,
             color=COLOR['grey'],
@@ -188,7 +187,7 @@ def field_result_box(passed_count, failed_count):
         )
 
     buffer = BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', bbox_inches='tight')
     buffer.seek(0)
     return buffer
 

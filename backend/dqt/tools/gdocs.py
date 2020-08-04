@@ -478,11 +478,13 @@ def process_template(template, data, gdocs, dataset_id):
             image_element = etree.Element(
                 '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}frame',
                 attrib={
-                    '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}style-name': 'fr1',
+                    # '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}style-name': 'fr1',
                     '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name': image_file_path,
                     '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}anchor-type': 'as-char',
-                    '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}svg-width': '5.9425in',
-                    '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}svg-height': '2.1043in',
+                    '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}width': '6.0cm',
+                    '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}height': '2.0cm',
+                    '{urn:oasis:names:tc:opendocument:xmlns:style:1.0}rel-width': '100%',
+                    '{urn:oasis:names:tc:opendocument:xmlns:style:1.0}rel-height': 'scale',
                     '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}z-index': '0',
                 }
             )
