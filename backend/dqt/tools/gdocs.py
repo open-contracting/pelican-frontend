@@ -2,9 +2,8 @@ from __future__ import print_function
 import pickle
 import os
 import re
-from dqt.tools import graphs
+import copy
 import shutil
-import lxml.etree as etree
 import shortuuid
 import tempfile
 
@@ -14,6 +13,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.http import MediaFileUpload
 from zipfile import ZipFile
+from lxml import etree
+from dqt.tools import graphs
 
 
 class Gdocs:
@@ -257,7 +258,12 @@ def set_element(main_template, element, location):
     nodes = main_template.xpath('.//*[contains(text(),"' + location + '")]')
     while nodes:
         node = nodes[0]
-        node.getparent().replace(node, element)
+        parent = node.getparent()
+        for index, child in enumerate(parent):
+            if child == node:
+                parent.remove(child)
+                parent.insert(index, copy.deepcopy(element))
+        
         nodes = main_template.xpath('.//*[contains(text(),"' + location + '")]')
 
     return main_template
