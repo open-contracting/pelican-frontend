@@ -14,7 +14,7 @@ from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
 from .tools.gdocs import Gdocs
 from .tools.gdocs import process_template
-
+from .tools.tags.template_tags.base import BaseTemplateTag
 
 from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
 from .tools.rabbit import publish
@@ -303,5 +303,13 @@ def generate_report(request):
     main_template = process_template(main_template, {}, gdocs, input_message['dataset_id'])
     file_id = gdocs.upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
     gdocs.destroy_tempdir()
+
+    # gdocs = Gdocs(input_message["document_id"])
+    # base = BaseTemplateTag(gdocs, input_message['dataset_id'])
+    # base.set_param('template', input_message['document_id'])
+    # main_template = base.validate_and_process()
+    
+    # file_id = gdocs.upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
+    # gdocs.destroy_tempdir()
 
     return HttpResponse(file_id)

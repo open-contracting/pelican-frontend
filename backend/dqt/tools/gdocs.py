@@ -515,3 +515,4 @@ def process_template(template, data, gdocs, dataset_id):
             template = set_element(template, wrapper_element, tag["full"])
 
     return template
+
