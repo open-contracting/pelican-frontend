@@ -191,18 +191,21 @@ class TemplateTag:
         ):
             for sub_style in sub_template_styles:
                 # lets rename all paragraph styles to standard
-                for attrib in sub_style.attrib:
-                    if attrib.endswith("name") and sub_style.get(attrib) not in TemplateTag.DEFAULT_STYLES:
-                        sub_style.set(attrib, prefix + sub_style.get(attrib))
+                for attrib_name in list(sub_style.attrib.keys()):
+                    if re.match(r'\{[^}]*\}(name|parent-style-name)', attrib_name) and \
+                            sub_style.get(attrib_name) not in TemplateTag.DEFAULT_STYLES:
+                        sub_style.set(attrib_name, prefix + sub_style.get(attrib_name))
+                    elif re.match(r'\{[^}]*\}master-page-name', attrib_name):
+                        sub_style.attrib.pop(attrib_name)
 
                 main_style_node.append(sub_style)
 
     def merge_template_fonts(self, sub_tempalte):
         included_fonts = set()
         for child in self.get_template_fonts(self.template):
-            for attrib in child.attrib:
-                if attrib.endswith('name'):
-                    included_fonts.add(child.get(attrib))
+            for attrib_name in child.attrib:
+                if attrib_name.endswith('name'):
+                    included_fonts.add(child.get(attrib_name))
 
         sub_template_fonts = self.get_template_fonts(sub_tempalte)
         for main_font_node in self.template.xpath(
@@ -210,8 +213,9 @@ class TemplateTag:
             namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
         ):
             for sub_font in sub_template_fonts:
-                for attrib in sub_font.attrib:
-                    if attrib.endswith("name") and sub_font.get(attrib) not in included_fonts:
+                for attrib_name in sub_font.attrib:
+                    if re.match(r'\{[^}]*\}name', attrib_name) and \
+                            sub_font.get(attrib_name) not in included_fonts:
                         main_font_node.append(sub_font)
                         break
 
@@ -219,9 +223,10 @@ class TemplateTag:
         prefix = shortuuid.uuid()
         sub_template_content = self.get_template_content(sub_template)
         for child in sub_template_content.iter():
-            for attrib in child.attrib:
-                if attrib.endswith("style-name") and child.get(attrib) not in TemplateTag.DEFAULT_STYLES:
-                    child.set(attrib, prefix + child.get(attrib))
+            for attrib_name in child.attrib:
+                if re.match(r'\{[^}]*\}style-name', attrib_name) and \
+                        child.get(attrib_name) not in TemplateTag.DEFAULT_STYLES:
+                    child.set(attrib_name, prefix + child.get(attrib_name))
 
         for location_node in self.template.xpath('.//*[contains(text(),"' + location + '")]'):
             parent = location_node.getparent()

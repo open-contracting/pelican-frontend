@@ -12,15 +12,25 @@ class ResultBoxImageLeafTag(LeafTag):
             gdocs,
             dataset_id
         )
+
+        self.set_param_validation('level', lambda v: v in ('coverage', 'quality'), required=True)
+        # self.set_param_validation('check', lambda v: v in FieldTemplateTag.CHECKS)
         
         self.set_required_data_field('name')
-        self.set_required_data_field('passedCount')
-        self.set_required_data_field('failedCount')
-        self.set_required_data_field('notAvailableCount')
+        self.set_required_data_field('coveragePassedCount')
+        self.set_required_data_field('coverageFailedCount')
+        self.set_required_data_field('qualityPassedCount')
+        self.set_required_data_field('qualityFailedCount')
 
     def process_tag(self, data):
-        buffer = graphs.resource_result_box(data['passedCount'], data['failedCount'], data['notAvailableCount'])
-        image_file_path = self.gdocs.add_image_file(buffer, 'resultBoxImage_%s.png' % data['name'])
+        buffer = graphs.field_result_box(
+            data['%sPassedCount' % self.get_param('level')],
+            data['%sFailedCount' % self.get_param('level')],
+        )
+        image_file_path = self.gdocs.add_image_file(
+            buffer,
+            'resultBoxImage_%s_%s.png' % (self.get_param('level'), data['name'])
+        )
         buffer.close()
 
         image_element = etree.Element(
@@ -45,7 +55,6 @@ class ResultBoxImageLeafTag(LeafTag):
                 '{http://www.w3.org/1999/xlink}actuate': 'onLoad',
                 '{urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0}mime-type': 'image/png',
             }
-
         ))
         wrapper_element = etree.Element(
             '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',

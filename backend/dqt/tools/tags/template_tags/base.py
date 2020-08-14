@@ -15,7 +15,7 @@ class BaseTemplateTag(TemplateTag):
         )
 
         self.set_sub_tag('resource', ResourceTemplateTag)
-        # self.set_sub_tag('field', FieldTemplateTag)
+        self.set_sub_tag('field', FieldTemplateTag)
         # self.set_sub_tag('dataset', DatasetTemplateTag)
         # self.set_sub_tag('overview', OverviewTemplateTag)
 
