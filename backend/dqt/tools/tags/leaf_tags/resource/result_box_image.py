@@ -47,11 +47,4 @@ class ResultBoxImageLeafTag(LeafTag):
             }
 
         ))
-        wrapper_element = etree.Element(
-            '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
-            attrib={
-                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
-            }
-        )
-        wrapper_element.append(image_element)
-        return wrapper_element
+        return image_element

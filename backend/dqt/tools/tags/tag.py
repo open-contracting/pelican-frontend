@@ -90,7 +90,7 @@ class TemplateTag:
         "Subtitle",
         "Header",
         "Graphics",
-        "fr1"
+        # "fr1"
     )
 
     def __init__(self, prepare_data, base_template_id, gdocs, dataset_id):
@@ -156,11 +156,9 @@ class TemplateTag:
         while nodes:
             node = nodes[0]
             parent = node.getparent()
-            for index, child in enumerate(parent):
-                if child == node:
-                    parent.remove(child)
-                    parent.insert(index, copy.deepcopy(element))
-            
+            node.addnext(copy.deepcopy(element))
+            parent.remove(node)
+
             nodes = self.template.xpath('.//*[contains(text(),"' + location + '")]')
 
     def get_template_content(self, template):
@@ -177,6 +175,13 @@ class TemplateTag:
         ):
             return node
 
+    def get_template_fonts(self, template):
+        for node in template.xpath(
+            '//office:font-face-decls',
+            namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
+        ):
+            return node
+
     def merge_template_styles(self, sub_template, prefix):
         sub_template_styles = self.get_template_styles(sub_template)
 
@@ -187,38 +192,53 @@ class TemplateTag:
             for sub_style in sub_template_styles:
                 # lets rename all paragraph styles to standard
                 for attrib in sub_style.attrib:
-                    if attrib.endswith("name"):
+                    if attrib.endswith("name") and sub_style.get(attrib) not in TemplateTag.DEFAULT_STYLES:
                         sub_style.set(attrib, prefix + sub_style.get(attrib))
 
                 main_style_node.append(sub_style)
 
+    def merge_template_fonts(self, sub_tempalte):
+        included_fonts = set()
+        for child in self.get_template_fonts(self.template):
+            for attrib in child.attrib:
+                if attrib.endswith('name'):
+                    included_fonts.add(child.get(attrib))
+
+        sub_template_fonts = self.get_template_fonts(sub_tempalte)
+        for main_font_node in self.template.xpath(
+            '//office:font-face-decls',
+            namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
+        ):
+            for sub_font in sub_template_fonts:
+                for attrib in sub_font.attrib:
+                    if attrib.endswith("name") and sub_font.get(attrib) not in included_fonts:
+                        main_font_node.append(sub_font)
+                        break
+
     def merge_template(self, sub_template, location):
         prefix = shortuuid.uuid()
         sub_template_content = self.get_template_content(sub_template)
+        for child in sub_template_content.iter():
+            for attrib in child.attrib:
+                if attrib.endswith("style-name") and child.get(attrib) not in TemplateTag.DEFAULT_STYLES:
+                    child.set(attrib, prefix + child.get(attrib))
+
         for location_node in self.template.xpath('.//*[contains(text(),"' + location + '")]'):
             parent = location_node.getparent()
 
             previous = location_node
             for child in sub_template_content:
-                if not "sequence-decls" in child.tag:
-                    # lets rename all paragraph styles to standard
-                    for attrib in child.attrib:
-                        if "style-name" in attrib and child.get(attrib) == "P1":
-                            child.set(attrib, "Standard")
+                if "sequence-decls" in child.tag:
+                    continue
 
-                    for node in child:
-                        for attrib in node.attrib:
-                            if attrib.endswith("style-name"):
-                                if node.get(attrib) not in TemplateTag.DEFAULT_STYLES:
-                                    node.set(attrib, prefix + node.get(attrib))
-
-                    previous.addnext(child)
-                    previous = child
+                previous.addnext(child)
+                previous = child
 
             # remove the template node
             parent.remove(location_node)
 
         self.merge_template_styles(sub_template, prefix)
+        self.merge_template_fonts(sub_template)
 
     def get_tags_mapping(self):
         tags_mapping = {}
