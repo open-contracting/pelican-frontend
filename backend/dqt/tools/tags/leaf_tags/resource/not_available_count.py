@@ -1,7 +1,7 @@
 
 from dqt.tools.tags.tag import LeafTag
 
-class NameLeafTag(LeafTag):
+class NotAvailableCountLeafTag(LeafTag):
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -11,9 +11,8 @@ class NameLeafTag(LeafTag):
             dataset_id
         )
         
-        self.set_required_data_field('name')
+        self.set_required_data_field('notAvailableCount')
 
     def process_tag(self, data):
-        return data['name']
-
+        return data['notAvailableCount']
 

@@ -46,10 +46,10 @@ class Gdocs:
     def destroy_tempdir(self):
         shutil.rmtree(self.dirpath)
 
-    def add_image_file(self, buffer, name):
+    def add_image_file(self, buffer, name='image.png'):
         path = os.path.join(self.dirpath, self.main_template_id + '_out')
         with ZipFile(path, mode='a') as zip_file:
-            image_file_path = os.path.join('Pictures/', name)
+            image_file_path = os.path.join('Pictures/', shortuuid.uuid() + '_' + name)
             zip_file.writestr(image_file_path, buffer.getbuffer())
     
         # Updating manifest
@@ -63,8 +63,8 @@ class Gdocs:
         root.append(etree.Element(
             namespace + 'file-entry',
             attrib={
-                (namespace + 'full-path'):os.path.join('Pictures/', name),
-                (namespace + 'media-type'):'image/png'
+                (namespace + 'full-path'): image_file_path,
+                (namespace + 'media-type'): 'image/png'
             }
         ))
 
@@ -503,7 +503,6 @@ def process_template(template, data, gdocs, dataset_id):
                     '{http://www.w3.org/1999/xlink}actuate': 'onLoad',
                     '{urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0}mime-type': 'image/png',
                 }
-
             ))
             wrapper_element = etree.Element(
                 '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',

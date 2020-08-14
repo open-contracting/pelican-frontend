@@ -2,6 +2,16 @@
 from django.db import connections
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.name import NameLeafTag
+from dqt.tools.tags.leaf_tags.description import DescriptionLeafTag
+from dqt.tools.tags.leaf_tags.resource.checked_count import CheckedCountLeafTag
+from dqt.tools.tags.leaf_tags.resource.passed_count import PassedCountLeafTag
+from dqt.tools.tags.leaf_tags.resource.failed_count import FailedCountLeafTag
+from dqt.tools.tags.leaf_tags.resource.not_available_count import NotAvailableCountLeafTag
+from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.resource.passed_examples import PassedExamplesLeafTag
+from dqt.tools.tags.leaf_tags.resource.failed_examples import FailedExamplesLeafTag
+from dqt.tools.tags.leaf_tags.resource.not_available_examples import NotAvailableExamplesLeafTag
+
 
 class ResourceTemplateTag(TemplateTag):
     CHECKS = set([
@@ -55,6 +65,15 @@ class ResourceTemplateTag(TemplateTag):
         self.set_param_validation('check', lambda v: v in ResourceTemplateTag.CHECKS, required=True)
 
         self.set_sub_tag('name', NameLeafTag)
+        self.set_sub_tag('description', DescriptionLeafTag)
+        self.set_sub_tag('checkedCount', CheckedCountLeafTag)
+        self.set_sub_tag('passedCount', PassedCountLeafTag)
+        self.set_sub_tag('failedCount', FailedCountLeafTag)
+        self.set_sub_tag('notAvailableCount', NotAvailableCountLeafTag)
+        self.set_sub_tag('resultBoxImage', ResultBoxImageLeafTag)
+        self.set_sub_tag('passedExamples', PassedExamplesLeafTag)
+        self.set_sub_tag('failedExamples', FailedExamplesLeafTag)
+        self.set_sub_tag('notAvailableExamples', NotAvailableExamplesLeafTag)
     
     def prepare_data(self):
         check_name = self.get_param('check')
@@ -98,5 +117,5 @@ class ResourceTemplateTag(TemplateTag):
                 "notAvailableCount": result['undefined_count'],
                 "passedExamples": [example['meta']['ocid'] for example in result['passed_examples']],
                 "failedExamples": [example['meta']['ocid'] for example in result['failed_examples']],
-                "undefinedExamples": [example['meta']['ocid'] for example in result['undefined_examples']],
+                "notAvailableExamples": [example['meta']['ocid'] for example in result['undefined_examples']],
             }

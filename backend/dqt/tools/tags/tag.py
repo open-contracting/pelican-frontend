@@ -19,6 +19,8 @@ class LeafTag:
         self.params_mapping = {}
         self.required_params = set()
 
+        self.required_data_fields = set()
+
     def set_param_validation(self, name, validation, required=False):
         if name in self.param_validations_mapping:
             raise AttributeError('%s param already exists' % name)
@@ -27,6 +29,12 @@ class LeafTag:
             self.required_params.add(name)
 
         self.param_validations_mapping[name] = validation
+
+    def set_required_data_field(self, name):
+        if name in self.required_data_fields:
+            raise AttributeError('%s data field already exists' % name)
+
+        self.required_data_fields.add(name)
 
     def set_param(self, name, value):
         if name not in self.param_validations_mapping:
@@ -51,6 +59,14 @@ class LeafTag:
         ]
         if missing_params:
             raise AttributeError('Required params %s were not set' % list(missing_params))
+
+        missing_data_fields = [
+            name
+            for name in self.required_data_fields
+            if name not in data
+        ]
+        if missing_data_fields:
+            raise AttributeError('Required data fields %s were not set' % list(missing_data_fields))
 
         return self.process_tag(data)
 
