@@ -21,9 +21,13 @@ export default new Vuex.Store({
         datasetSearch: null,
         datasetSorting: null,
 
-        resourceCheckExpandedNodes: []
+        resourceCheckExpandedNodes: [],
+        insufficientShown: true
     },
     getters: {
+        insufficientShown: state => {
+            return state.insufficientShown;
+        },
         dataset: state => {
             return state.dataset;
         },
@@ -71,6 +75,16 @@ export default new Vuex.Store({
                 var dataItem = state.dataItems.find(item => item.id === itemId);
                 if (dataItem != null) {
                     return dataItem;
+                }
+            }
+
+            return null;
+        },
+        dataItemJSONLines: state => itemId => {
+            if (state.dataItems) {
+                var dataItem = state.dataItems.find(item => item.id === itemId);
+                if (dataItem != null) {
+                    return JSON.stringify(dataItem["data"], null, 2).split("\n").length;
                 }
             }
 
@@ -138,8 +152,16 @@ export default new Vuex.Store({
 
             return false;
         },
+        extensionDataByName: state => extensionName => {
+            return state.dataset.meta.collection_metadata.extensions.find(item =>
+                item.name.hasOwnProperty('en') ? item.name['en'] ==  extensionName : item.name == extensionName    
+            )
+        }
     },
     mutations: {
+        setInsufficientShown(state, newInsufficientShown) {
+            state.insufficientShown = newInsufficientShown;
+        },
         setDataset(state, newDataset) {
             state.dataset = newDataset;
         },
@@ -339,25 +361,30 @@ export default new Vuex.Store({
             });
         },
         loadDataItem({ commit, state }, itemId) {
-            var dataItem = null;
-            if (state.dataItems) {
-                dataItem = state.dataItems.find(item => item.id === itemId);
-            }
-            if (dataItem == null) {
-                var url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.dataItem +
-                    "/" +
-                    itemId;
-                axios
-                    .get(url)
-                    .then(function(response) {
-                        commit("addDataItem", response["data"]);
-                    })
-                    .catch(function(error) {
-                        throw new Error(error);
-                    });
-            }
+            return new Promise(resolve => {
+                var dataItem = null;
+                if (state.dataItems) {
+                    dataItem = state.dataItems.find(item => item.id === itemId);
+                }
+                if (dataItem == null) {
+                    var url =
+                        CONFIG.apiBaseUrl +
+                        CONFIG.apiEndpoints.dataItem +
+                        "/" +
+                        itemId;
+                    axios
+                        .get(url)
+                        .then(function(response) {
+                            commit("addDataItem", response["data"]);
+                            resolve();
+                        })
+                        .catch(function(error) {
+                            throw new Error(error);
+                        });
+                } else {
+                    resolve();
+                }
+            });
         },
         loadFieldLevelStats({ commit, state }) {
             return new Promise(resolve => {
@@ -388,18 +415,10 @@ export default new Vuex.Store({
                             data.push(
                                 Object.assign({}, item, {
                                     path: key,
-                                    coverageOkShare: Math.round(
-                                        okShare(item.coverage)
-                                    ),
-                                    coverageFailedShare: Math.round(
-                                        failedShare(item.coverage)
-                                    ),
-                                    qualityOkShare: Math.round(
-                                        okShare(item.quality)
-                                    ),
-                                    qualityFailedShare: Math.round(
-                                        failedShare(item.quality)
-                                    )
+                                    coverageOkShare: okShare(item.coverage),
+                                    coverageFailedShare: failedShare(item.coverage),
+                                    qualityOkShare: okShare(item.quality),
+                                    qualityFailedShare: failedShare(item.quality)
                                 })
                             );
                             resolve();

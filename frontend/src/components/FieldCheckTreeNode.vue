@@ -1,6 +1,6 @@
 <template>
     <fragment>
-        <FieldCheckTableRow :key="path" :check="check" v-bind:class="{ hidden: (hide || !isSearched(data)) }" @click.native="emitDetailEvent(path)">
+        <FieldCheckTableRow :key="path" :check="check" v-bind:class="{ hidden: (hide || !isSearched(data)) }">
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
                 <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
@@ -16,7 +16,7 @@
 
         <template v-if="hasChildren">
             <template v-for="n in children">
-                <tree-node :key="n._path" :data="n" :depth="depth + 1" v-on:field-check-detail="emitDetailEvent" :hide="!expanded" />
+                <tree-node :key="n._path" :data="n" :depth="depth + 1" :hide="!expanded" />
             </template>
         </template>
     </fragment>
@@ -78,9 +78,6 @@ export default {
         }
     },
     methods: {
-        emitDetailEvent: function(path) {
-            this.$emit("field-check-detail", path);
-        },
         isSearched: function(node) {
             if (this.search) {
                 if (this.isPathSearched(node._check.path)) {

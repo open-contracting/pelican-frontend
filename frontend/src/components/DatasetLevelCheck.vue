@@ -2,7 +2,8 @@
     <div
         class="card mb-4 dataset_result_box result_box"
         v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }"
-        v-on:click="detail(check.name)"
+        v-on:click="detail()"
+        @contextmenu.prevent="check.result != undefined ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments}) : null"
     >
         <div class="card-body">
             <div class="row no-gutters">
@@ -27,10 +28,13 @@
             <div class="row no-gutters justify-content-end">
                 <div class="col col-12">
                     <div class="chart_envelope text-center" v-if="check.result == undefined">
-                        <img class="undefined_image" src="/img/unsufficient_data.png" />
+                        <img class="undefined_image" src="/img/insufficient_data.png" />
                         <br />
-                        <div class="undefined_title">{{ $t("unsufficientData.title") }}</div>
-                        <p v-html="$t('unsufficientData.description')"></p>
+                        <div class="undefined_title">
+                            {{ $t("insufficientData.title") }}
+                            <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')"></Tooltip>
+                        </div>
+                        <p v-html="$t('insufficientData.description')"></p>
                     </div>
                     <div v-else>
                         <div v-if="checkType == 'donut'">
@@ -55,7 +59,7 @@
                                 <table id="top3_table" class="table table-sm">
                                     <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                         <td>{{ item.value_str }}</td>
-                                        <td class="text-right numeric">{{ Math.round(item.share * 100) / 100 | formatNumber2D}}%</td>
+                                        <td class="text-right numeric">{{ item.share | formatPercentage2D}}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -66,7 +70,7 @@
                                 <div
                                     class="col col-12 text-center total_share"
                                     v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 }}%</div>
+                                >{{ check.meta.ocid_share * 100 | formatPercentage2D }}</div>
                             </div>
                             <div class="row">
                                 <div
@@ -92,27 +96,30 @@ import DonutChart from "@/components/DonutChart.vue";
 import BarChart from "@/components/BarChart.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import datasetMixin from "@/plugins/datasetMixins.js";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     data: function() {
-        return {};
+        return {
+            detailRouterArguments: {
+                name: "datasetCheckDetail",
+                params: {
+                    check: this.check.name,
+                    datasetId: this.$store.getters.datasetId
+                }
+            }
+        };
     },
-    components: { DonutChart, BarChart, BarChartSingleValue },
+    components: { DonutChart, BarChart, BarChartSingleValue, Tooltip },
     props: ["check"],
     mixins: [datasetMixin],
     methods: {
         onePercent: function() {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
         },
-        detail: function(name) {
+        detail: function() {
             if (this.check.result != undefined) {
-                this.$router.push({
-                    name: "datasetCheckDetail",
-                    params: {
-                        check: name,
-                        datasetId: this.$store.getters.datasetId
-                    }
-                });
+                this.$router.push(this.detailRouterArguments);
             }
         }
     }
@@ -121,6 +128,7 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
 
 .chart_envelope {
     margin-bottom: 10px;

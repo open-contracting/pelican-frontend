@@ -1,6 +1,6 @@
 <template>
     <dashboard-detail>
-        <template v-if="check != null" v-slot:content>
+        <template v-if="loaded" v-slot:content>
             <div class="row">
                 <div class="col col-10">
                     <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
@@ -29,7 +29,7 @@
                                 <td class="text-right">
                                     <InlineBar
                                         :count="share[1]['count']"
-                                        :percentage="Math.round(share[1]['share'] * 10000) / 100"
+                                        :percentage="share[1]['share'] * 100"
                                         :state="'reg'"
                                         showCount="true"
                                     />
@@ -43,15 +43,15 @@
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>{{ $t("top3.value") }}</th>
-                                <th class="text-center">{{ $t("top3.share") }}</th>
-                                <th class="text-center">{{ $t("top3.count") }}</th>
+                                <th>{{ $t("datasetLevel.top3.value") }}</th>
+                                <th class="text-center">{{ $t("datasetLevel.top3.share") }}</th>
+                                <th class="text-center">{{ $t("datasetLevel.top3.count") }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                 <td>{{ item.value_str }}</td>
-                                <td class="text-right numeric">{{ Math.round(item.share * 100) / 100 | formatNumber2D }}%</td>
+                                <td class="text-right numeric">{{ item.share | formatPercentage2D }}</td>
                                 <td class="text-right numeric">{{ item.count | formatNumber }}</td>
                             </tr>
                         </tbody>
@@ -91,12 +91,12 @@
                                 <div
                                     class="col col-12 text-center total_share"
                                     v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ Math.round(check.meta.ocid_share * 10000) / 100 | formatNumber }}%</div>
+                                >{{ check.meta.ocid_share * 100 | formatPercentage }}</div>
                             </div>
                             <div class="row">
                                 <div
                                     class="col col-12 text-center ocid_count"
-                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;from&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
+                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;{{ $t("datasetLevel.from") }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview" :loaded="true"></ExampleBoxes>
+            <ExampleBoxes :examples="examples" v-on:preview="preview" v-on:download="download" :loaded="true" :previewDisabled="loadingPreviewData"></ExampleBoxes>
         </template>
 
         <template v-slot:preview>
@@ -117,7 +117,17 @@
             <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewMetadata"></vue-json-pretty>
 
             <div class="divider">&nbsp;</div>
-            <span v-if="previewData">
+            
+            <span v-if="loadingPreviewData">
+                <div class="result_box loader text-center">
+                    <div class="spinner">
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                    </div>
+                    {{ $t("loader.data") }}
+                </div>
+            </span>
+
+            <span v-else-if="previewData">
                 <h5>{{ $t("preview.ocds_data") }}</h5>
                 <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
             </span>
@@ -142,7 +152,8 @@ export default {
             check: null,
             previewDataItemId: null,
             previewMetadata: null,
-            examples: null
+            examples: null,
+            loadingPreviewData: false
         };
     },
     components: {
@@ -154,88 +165,113 @@ export default {
         BarChartSingleValue
     },
     created() {
-        this.check = this.$store.getters.datasetLevelCheckByName(
-            this.$route.params.check
-        );
-
-        if (this.check != null) {
-            this.previewMetadata = this.check.meta;
-
-            if (this.checkType == "donut") {
-                this.examples = [];
-                for (var key in this.shares) {
-                    if (this.shares[key][1].examples.length > 0) {
-                        this.examples.push([
-                            this.shares[key][0],
-                            this.shares[key][1].examples
-                        ]);
-                    }
-                }
-            }
-
-            if (this.checkType == "bar") {
-                this.examples = [];
-                for (var barKey in this.check.meta.examples) {
-                    if (this.check.meta.examples[barKey].length > 0) {
-                        this.examples.push([
-                            this.$t("datasetLevel.label_" + barKey),
-                            this.check.meta.examples[barKey]
-                        ]);
-                    }
-                }
-            }
-
-            if (this.checkType == "top3") {
-                this.examples = [];
-                var mostFrequent = this.check.meta.most_frequent;
-                for (var topKey in mostFrequent) {
-                    if (mostFrequent[topKey].examples.length > 0) {
-                        this.examples.push([
-                            mostFrequent[topKey].value_str,
-                            mostFrequent[topKey].examples
-                        ]);
-                    }
-                }
-            }
-
-            if (this.checkType == "numeric") {
-                this.examples = [];
-                var failed = this.check.meta.failed_examples;
-                var passed = this.check.meta.passed_examples;
-
-                if (failed.length > 0) {
-                    this.examples.push([
-                        this.$t("datasetLevel.numeric.failedExamples"),
-                        failed
-                    ]);
-                }
-
-                if (passed.length > 0) {
-                    this.examples.push([
-                        this.$t("datasetLevel.numeric.passedExamples"),
-                        passed
-                    ]);
-                }
-            }
-
-            if (
-                this.checkType == "biggest_share" ||
-                this.checkType == "single_value_share"
-            ) {
-                this.examples = [];
-                if (this.check.meta.examples.length > 0) {
-                    this.examples.push([
-                        this.$t("datasetLevel.examples"),
-                        this.check.meta.examples
-                    ]);
-                }
-            }
-        }
+        this.loadCheck();
     },
     methods: {
         preview: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId);
-            this.previewDataItemId = itemId;
+            this.loadingPreviewData = true;
+            this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
+                    this.previewDataItemId = itemId;
+                } else {
+                    this.$alert(this.$t("preview.cannot_display"), null, 'error');
+                    this.previewDataItemId = null;
+                }
+
+                this.loadingPreviewData = false;
+            });
+        },
+        download: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId).then(() => {
+                var result = this.$store.getters.dataItemById(itemId);
+                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
+                var fileLink = document.createElement('a');
+            
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
+                document.body.appendChild(fileLink);
+            
+                fileLink.click();
+            })
+        },
+        loadCheck: function() {
+            this.check = this.$store.getters.datasetLevelCheckByName(
+                this.$route.params.check
+            );
+
+            if (this.check != null) {
+                this.previewMetadata = this.check.meta;
+
+                if (this.checkType == "donut") {
+                    this.examples = [];
+                    for (var key in this.shares) {
+                        if (this.shares[key][1].examples.length > 0) {
+                            this.examples.push([
+                                this.shares[key][0],
+                                this.shares[key][1].examples
+                            ]);
+                        }
+                    }
+                }
+
+                if (this.checkType == "bar") {
+                    this.examples = [];
+                    for (var barKey in this.check.meta.examples) {
+                        if (this.check.meta.examples[barKey].length > 0) {
+                            this.examples.push([
+                                this.$t("datasetLevel.label_" + barKey),
+                                this.check.meta.examples[barKey]
+                            ]);
+                        }
+                    }
+                }
+
+                if (this.checkType == "top3") {
+                    this.examples = [];
+                    var mostFrequent = this.check.meta.most_frequent;
+                    for (var topKey in mostFrequent) {
+                        if (mostFrequent[topKey].examples.length > 0) {
+                            this.examples.push([
+                                mostFrequent[topKey].value_str,
+                                mostFrequent[topKey].examples
+                            ]);
+                        }
+                    }
+                }
+
+                if (this.checkType == "numeric") {
+                    this.examples = [];
+                    var failed = this.check.meta.failed_examples;
+                    var passed = this.check.meta.passed_examples;
+
+                    if (failed.length > 0) {
+                        this.examples.push([
+                            this.$t("datasetLevel.numeric.failedExamples"),
+                            failed
+                        ]);
+                    }
+
+                    if (passed.length > 0) {
+                        this.examples.push([
+                            this.$t("datasetLevel.numeric.passedExamples"),
+                            passed
+                        ]);
+                    }
+                }
+
+                if (
+                    this.checkType == "biggest_share" ||
+                    this.checkType == "single_value_share"
+                ) {
+                    this.examples = [];
+                    if (this.check.meta.examples.length > 0) {
+                        this.examples.push([
+                            this.$t("datasetLevel.examples"),
+                            this.check.meta.examples
+                        ]);
+                    }
+                }
+            }
         }
     },
     computed: {
@@ -249,6 +285,11 @@ export default {
             }
 
             return null;
+        },
+        loaded() {
+            this.loadCheck();
+
+            return this.check != null;
         }
     }
 };

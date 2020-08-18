@@ -31,7 +31,7 @@
         </div>
 
         <template v-for="n in tableData">
-            <FieldCheckTableRow v-if="isSearched(n)" :key="n.path" :check="n" @click.native="$emit('field-check-detail', n.path)">
+            <FieldCheckTableRow v-if="isSearched(n)" :key="n.path" :check="n">
                 <span v-html="highlightSearch(n.path)" />
                 <template v-if="hasHidden(n)">
                     <div>
@@ -48,7 +48,6 @@
                     :check="h"
                     :key="h.path"
                     :class="['hidden_row', {'hidden': isHidden(n)}]"
-                    @click.native="$emit('field-check-detail', h.path)"
                 >
                     <span v-html="highlightSearch(h.path)" />
                 </FieldCheckTableRow>

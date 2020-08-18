@@ -3,14 +3,89 @@ import time
 import random
 import intervals as I
 import simplejson as json
+from psycopg2 import sql
 
+from datetime import datetime
 from django.db.models import Count, Max, Min, Sum
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.core import serializers
 from django.db import connections
+from django.db.models import Count
+from django.views.decorators.csrf import csrf_exempt
+from .tools.gdocs import Gdocs
+from .tools.tags.template_tags.base import BaseTemplateTag
 
-from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck
-from .tools import ReservoirSampler
+from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
+from .tools.rabbit import publish
+
+
+@csrf_exempt
+def create_dataset_filter(request):
+    if request.method == 'GET':
+        return HttpResponseBadRequest(reason='Only post method is accepted.')
+
+    publish(request.body, '_dataset_filter_extractor_init')
+
+    return HttpResponse('done')
+
+
+@csrf_exempt
+def dataset_filter_items(request):
+    if request.method == 'GET':
+        return HttpResponseBadRequest(reason='Only post method is accepted.')
+
+    body_unicode = request.body.decode('utf-8')
+    input_message = json.loads(body_unicode)
+
+    # checking input_message correctness
+    if (
+        "dataset_id_original" not in input_message or not isinstance(input_message['dataset_id_original'], int)
+        or "filter_message" not in input_message or not isinstance(input_message['filter_message'], dict)
+    ):
+        return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
+
+    dataset_id_original = input_message["dataset_id_original"]
+    filter_message = input_message["filter_message"]
+
+    # building query in a safely manner
+    try:
+        query = sql.SQL("SELECT count(*) FROM data_item WHERE dataset_id = ") + sql.Literal(dataset_id_original)
+        if 'release_date_from' in filter_message:
+            expr = sql.SQL("data->>'date' >= ") + sql.Literal(filter_message['release_date_from'])
+            query += sql.SQL(' and ') + expr
+        if 'release_date_to' in filter_message:
+            expr = sql.SQL("data->>'date' <= ") + sql.Literal(filter_message['release_date_to'])
+            query += sql.SQL(" and ") + expr
+        if 'buyer' in filter_message:
+            expr = sql.SQL(", ").join([
+                sql.Literal(buyer)
+                for buyer in filter_message['buyer']
+            ])
+            expr = sql.SQL("data->'buyer'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
+            query += sql.SQL(" and ") + expr
+        if 'buyer_regex' in filter_message:
+            expr = sql.SQL("data->'buyer'->>'name' LIKE ") + sql.Literal(filter_message['buyer_regex'])
+            query += sql.SQL(" and ") + expr
+        if 'procuring_entity' in filter_message:
+            expr = sql.SQL(", ").join([
+                sql.Literal(procuring_entity)
+                for procuring_entity in filter_message['procuring_entity']
+            ])
+            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
+            query += sql.SQL(" and ") + expr
+        if 'procuring_entity_regex' in filter_message:
+            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' LIKE ") \
+                + sql.Literal(filter_message['procuring_entity_regex'])
+            query += sql.SQL(" and ") + expr
+        query += sql.SQL(';')
+
+        with connections["data"].cursor() as cursor:
+            cursor.execute(query)
+            items = cursor.fetchall()[0][0]
+    except:
+        return HttpResponseBadRequest(reason='The dataset could not be filtered in this way.')
+
+    return JsonResponse({'items': items})
 
 
 def dataset_stats(request, dataset_id):
@@ -33,6 +108,19 @@ def dataset_level_stats(request, dataset_id):
             "meta": check.meta,
         }
     return JsonResponse(result)
+
+
+# json_path requires shape: field1.field2.field3 ...
+def dataset_distinct_values(request, dataset_id, json_path, sub_string=''):
+    json_path = 'data__' + '__'.join(json_path.split('.'))
+    kwargs = {
+        'dataset_id': dataset_id,
+        json_path + '__icontains': sub_string
+    }
+    data_items_query = DataItem.objects.filter(
+        **kwargs).values(json_path).annotate(count=Count(json_path)).order_by('-count')
+    query_set = data_items_query.values_list(json_path, 'count').distinct()[:200]
+    return JsonResponse([{'value': el[0], 'count': el[1]} for el in query_set], safe=False)
 
 
 def field_level_stats(request, dataset_id):
@@ -189,3 +277,32 @@ def time_variance_level_stats(request, dataset_id):
             "meta": check.meta
         }
     return JsonResponse(result)
+
+TEMPLATE_DOCUMENT_ID = '1paW4y4jxkWOi12qq1IVWlhKe9-WbosJATkp_BDRGTiA'
+
+FOLDER_ID = "1yLTCRV3yoBM5Goc93SaO4irxnd0iapnK"
+
+@csrf_exempt
+def generate_report(request):
+    if request.method == 'GET':
+        return HttpResponseBadRequest(reason='Only post method is accepted.')
+
+    body_unicode = request.body.decode('utf-8')
+    input_message = json.loads(body_unicode)
+
+    # checking input_message correctness
+    if (
+        "dataset_id" not in input_message or not isinstance(input_message["dataset_id"], int) or
+        "document_id" not in input_message or "folder_id" not in input_message
+    ):
+        return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
+
+    gdocs = Gdocs(input_message["document_id"])
+    base = BaseTemplateTag(gdocs, input_message['dataset_id'])
+    base.set_param('template', input_message['document_id'])
+    main_template = base.validate_and_process()
+    
+    file_id = gdocs.upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
+    gdocs.destroy_tempdir()
+
+    return HttpResponse(file_id)

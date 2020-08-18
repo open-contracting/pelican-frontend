@@ -32,18 +32,33 @@
             <ExampleBoxes
                 :examples="failedCoverageExamples.concat(failedQualityExamples).concat(passedExamples)"
                 v-on:preview="preview"
+                v-on:download="download"
                 :loaded="check.examples_filled"
+                :previewDisabled="loadingPreviewData"
             />
         </template>
 
         <template v-slot:preview>
-            <h5>{{ $t("preview.metadata") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="true" :data="previewMetaData"></vue-json-pretty>
+            <span v-if="previewMetaData">
+                <h5>{{ $t("preview.metadata") }}</h5>
+                <vue-json-pretty :highlightMouseoverNode="true" :data="previewMetaData"></vue-json-pretty>
+            </span>
 
             <div class="divider">&nbsp;</div>
 
-            <h5>{{ $t("preview.ocds_data") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
+            <span v-if="loadingPreviewData">
+                <div class="result_box loader text-center">
+                    <div class="spinner">
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                    </div>
+                    {{ $t("loader.data") }}
+                </div>
+            </span>
+
+            <span v-else-if="previewData">
+                <h5>{{ $t("preview.ocds_data") }}</h5>
+                <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
+            </span>
         </template>
     </dashboard-detail>
 </template>
@@ -60,7 +75,8 @@ export default {
     data: function() {
         return {
             previewMetaData: null,
-            previewDataItemId: null
+            previewDataItemId: null,
+            loadingPreviewData: false
         };
     },
     components: {
@@ -72,8 +88,17 @@ export default {
     },
     methods: {
         preview: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId);
-            this.previewDataItemId = itemId;
+            this.loadingPreviewData = true;
+            this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
+                    this.previewDataItemId = itemId;
+                } else {
+                    this.$alert(this.$t("preview.cannot_display"), null, 'error');
+                    this.previewDataItemId = null;
+                }
+
+                this.loadingPreviewData = false;
+            });
 
             var result = this.allExamples.find(function(element) {
                 return element.meta.item_id == itemId;
@@ -82,7 +107,20 @@ export default {
             if (result) {
                 this.previewMetaData = result.result;
             }
-        }
+        },
+        download: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId).then(() => {
+                var result = this.$store.getters.dataItemById(itemId);
+                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
+                var fileLink = document.createElement('a');
+            
+                fileLink.href = fileURL;
+                fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
+                document.body.appendChild(fileLink);
+            
+                fileLink.click();
+            })
+        },
     },
     computed: {
         allExamples() {

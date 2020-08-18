@@ -6,7 +6,7 @@
                     <span class="check_name">{{ item[0] }}</span>
                 </td>
                 <td class="text-right">
-                    <InlineBar :count="item[1]" :showCount="true" :percentage="Math.round(item[2] * 10000) / 100" :state="'reg'" />
+                    <InlineBar :count="item[1]" :showCount="true" :percentage="item[2] * 100" :state="'reg'" />
                 </td>
             </tr>
         </tbody>
