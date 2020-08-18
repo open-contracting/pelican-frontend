@@ -9,35 +9,25 @@ export default {
     },
     computed: {
         okPercentage() {
-            return Math.round(this.check.passed_count / this.onePercent());
+            return 100 * this.check.passed_count / this.check.total_count;
         },
         failedPercentage() {
-            return Math.round(this.check.failed_count / this.onePercent());
+            return 100 * this.check.failed_count / this.check.total_count;
         },
         naPercentage() {
-            return Math.round(this.check.undefined_count / this.onePercent());
+            return 100 * this.check.undefined_count / this.check.total_count;
         },
         passPercentage() {
-            return Math.round(
-                this.check.passed_count / (this.applicationCount() / 100)
-            );
+            return 100 * this.check.passed_count / this.applicationCount();
         },
         nonpassPercentage() {
-            return Math.round(
-                this.check.failed_count / (this.applicationCount() / 100)
-            );
+            return 100 * this.check.failed_count / this.applicationCount();
         },
         individualPassPercentage() {
-            return Math.round(
-                this.check.individual_passed_count /
-                    (this.check.individual_application_count / 100)
-            );
+            return 100 * this.check.individual_passed_count / this.check.individual_application_count;
         },
         individualFailedPercentage() {
-            return Math.round(
-                this.check.individual_failed_count /
-                    (this.check.individual_application_count / 100)
-            );
+            return 100 * this.check.individual_failed_count / this.check.individual_application_count;
         }
     }
 };

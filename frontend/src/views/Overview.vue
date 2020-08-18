@@ -1,6 +1,58 @@
 <template>
     <dashboard v-if="dataset">
         <h2>{{ $t("sections.overview") }}</h2>
+
+        <div class="row" v-if="dataset.filter_message">
+            <div class="col col-12 col-xl-6 filtered">
+                <h4>
+                    {{ $t('overview.filtered.title') }}
+                    <Tooltip :text="$t('overview.filtered.info')"></Tooltip>
+                </h4>
+                <div class="result_box">
+                    <div v-if="data_quality" class="table_hl">
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('overview.filtered.original')}}</div>
+                            <div class="td col col-6">
+                                {{ dataset.filtered_parent_name }}
+                                <span class="dataset_id">(Id {{ dataset.filtered_parent_id }})</span>&nbsp;
+                            </div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.releaseDateFrom')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.release_date_from }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.releaseDateTo')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.release_date_to }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.buyerNameRegex')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.buyer_regex }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.procuringEntityNameRegex')}}</div>
+                            <div class="td col col-6">{{ dataset.filter_message.procuring_entity_regex }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.buyerName')}}</div>
+                            <div class="td col col-6">{{ filtered_buyer.join(", ") }}</div>
+                        </div>
+                        <div class="tr row">
+                            <div class="td col col-6">{{ $t('datasetFilter.procuringEntityName')}}</div>
+                            <div class="td col col-6">{{ filtered_procuring_entity.join(", ") }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--"release_date_from": '2019-12-02',
+#         "release_date_to": '2020-02-02',
+#         "buyer": ["ministry_of_finance", "state"],
+#         "buyer_regex": "Development$",
+#         "procuring_entity": ["a", "b"],
+        #         "procuring_entity_regex": "(a|b)casdf+"-->
+
         <div class="row">
             <div class="col-12 col-xl-6">
                 <h4>{{ $t('overview.collection_metadata') }}</h4>
@@ -37,20 +89,28 @@
                         </div>
                         <div class="tr row">
                             <div class="td col col-4 d-flex align-items-center">{{ $t('overview.extensions')}}</div>
-                            <div class="td col col-8 d-flex align-items-center break_word">
+                            <div v-if="collection.extensions" class="td col col-8">
                                 <template v-for="(e, i) in collection.extensions">
-                                    <a
-                                        v-if="e.documentationUrl"
-                                        :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
-                                        :key="e.name.hasOwnProperty('en') ? e.name['en'] : e.name"
-                                        target="_blank"
-                                    >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                    <template v-else>
-                                        <template v-if="e.name">{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</template>
-                                        <template v-else>{{ $t('overview.extensionsUnsupported') }}</template>
-                                    </template>
-
-                                    <template v-if="i + 1 < collection.extensions.length">,</template>
+                                    <span v-if="e.hasOwnProperty('name')" :key="i">
+                                        <a
+                                            v-if="e.hasOwnProperty('documentationUrl') && (e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != '')"
+                                            :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
+                                            :key="i"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                        <a
+                                            v-else-if="e.hasOwnProperty('repositoryUrl')"
+                                            :href="e.repositoryUrl"
+                                            :key="i"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                        <a
+                                            v-else
+                                            :key="i"
+                                            target="_blank"
+                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                        <template v-if="i + 1 < collection.extensions.length">, </template>
+                                    </span>
                                 </template>
                             </div>
                         </div>
@@ -157,7 +217,7 @@
                             <div class="td col col-4 text-right numeric">{{ prices.price_category_positive[c].contracts | formatNumber }}</div>
                             <div class="td col col-4">
                                 <div class="row align-items-center share_progressbar no-gutters">
-                                    <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatNumber }}%</div>
+                                    <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatPercentage }}</div>
                                     <div class="col col-9 value progress_holder d-flex align-items-center">
                                         <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
                                     </div>
@@ -245,6 +305,20 @@ export default {
                 });
             }
             return hist;
+        },
+        filtered_procuring_entity: function() {
+            if (this.dataset.filter_message.procuring_entity) {
+                return this.dataset.filter_message.procuring_entity;
+            }
+
+            return [];
+        },
+        filtered_buyer: function() {
+            if (this.dataset.filter_message.buyer) {
+                return this.dataset.filter_message.buyer;
+            }
+
+            return [];
         }
     },
     methods: {
@@ -283,6 +357,15 @@ export default {
         },
         formatNumber(number) {
             return this.$options.filters.formatNumber(number);
+        },
+        extensionPreview(extensionName) {
+            this.$router.push({
+                name: "extensionPreview",
+                params: {
+                    extensionName: extensionName,
+                    datasetId: this.$store.getters.datasetId
+                }
+            });
         }
     }
 };

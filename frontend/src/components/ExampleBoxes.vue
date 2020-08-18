@@ -14,20 +14,27 @@
                 <table class="table table-sm">
                     <thead>
                         <tr class="d-flex">
-                            <th class="col-10" scope="col">{{ $t("examples.ocid") }}</th>
+                            <th class="col-8" scope="col">{{ $t("examples.ocid") }}</th>
                             <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
+                            <th class="col-2 text-center" scope="col">{{ $t("examples.downloads") }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in section[1].slice(0, 5)" class="d-flex" v-bind:key="index">
-                            <td class="col-10 text-left numeric">
+                            <td class="col-8 text-left numeric">
                                 <span class="check_name">{{ item.ocid }}</span>
                             </td>
                             <td class="col-2 clickable">
                                 <span v-if="index != selectedKey || selectedSection != section[0]">
-                                    <a v-on:click.stop.prevent="preview(index, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                    <a v-if="!previewDisabled" v-on:click.stop.prevent="preview(index, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                    <a v-else disabled href="#">{{ $t("examples.preview") }}</a>
                                 </span>
                                 <span class="badge badge-primary" v-if="index == selectedKey && selectedSection == section[0]">active</span>
+                            </td>
+                            <td class="col-2 text-center clickable">
+                                <span>
+                                    <a v-on:click.stop.prevent="download(item.item_id)" href="#">{{ $t("examples.download_json") }}</a>    
+                                </span>
                             </td>
                         </tr>
                         <tr v-if="!visibleSections(section[0]) && section[1].length > 5">
@@ -40,14 +47,20 @@
                         </tr>
                         <span v-if="visibleSections(section[0])">
                             <tr v-for="(item, index) in section[1].slice(5, )" class="d-flex" v-bind:key="index">
-                                <td class="col-10 text-left numeric">
+                                <td class="col-8 text-left numeric">
                                     <span class="check_name">{{ item.ocid }}</span>
                                 </td>
                                 <td class="col-2 clickable">
                                     <span v-if="index + 5 != selectedKey || selectedSection != section[0]">
-                                        <a v-on:click.stop.prevent="preview(index + 5, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                        <a v-if="!previewDisabled" v-on:click.stop.prevent="preview(index + 5, section[0], item.item_id)" href="#">{{ $t("examples.preview") }}</a>
+                                        <a v-else disabled href="#">{{ $t("examples.preview") }}</a>
                                     </span>
                                     <span class="badge badge-primary" v-if="index + 5 == selectedKey && selectedSection == section[0]">active</span>
+                                </td>
+                                <td class="col-2 text-center clickable">
+                                    <span>
+                                        <a v-on:click.stop.prevent="download(item.item_id)" href="#">{{ $t("examples.download_json") }}</a>    
+                                    </span>
                                 </td>
                             </tr>
                         </span>
@@ -77,13 +90,17 @@ export default {
     },
     props: {
         examples: Array,
-        loaded: Boolean
+        loaded: Boolean,
+        previewDisabled: Boolean
     },
     methods: {
         preview: function(key, section, id) {
             this.selectedKey = key;
             this.selectedSection = section;
             this.$emit("preview", id);
+        },
+        download: function(id) {
+            this.$emit("download", id);
         },
         showMore: function(section) {
             this.openSections.push(section);
@@ -102,6 +119,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "src/scss/main";
 @import "src/scss/variables";
 
 .moreLess {
@@ -117,5 +135,9 @@ export default {
 .spinner {
     margin-bottom: 20px;
     font-size: 40px;
+}
+
+.disabled {
+    cursor: not-allowed;
 }
 </style>

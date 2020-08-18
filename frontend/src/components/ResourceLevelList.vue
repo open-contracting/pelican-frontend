@@ -13,7 +13,7 @@
             <div
                 class="td col-8 col-lg-7 text-right text-lg-left info_message"
                 scope="col"
-            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore }}%</div>
+            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore | formatPercentage }}</div>
         </div>
         <span class="checks" v-if="showChecks">
             <ResourceLevelRow v-for="(value, name, index) in resourceLevelStats" :check="value" :name="value.name" v-bind:key="name" v-bind:index="index"></ResourceLevelRow>
@@ -97,20 +97,25 @@ export default {
         },
         avgScore() {
             var sum = 0;
-            for (var item in this.resourceLevelStats) {
-                var check = this.resourceLevelStats[item];
-                sum =
-                    sum +
-                    check.passed_count /
-                        ((check.passed_count +
-                            check.failed_count +
-                            check.undefined_count) /
-                            100);
-            }
+            for (var i = 0; i < this.resourceLevelStats.length; i++) {
+                sum += this.resourceLevelStats[i].passed_count / this.resourceLevelStats[i].total_count;
+            } 
 
-            return Math.round(sum / this.resourceLevelStats.length);
+            return 100 * sum / this.resourceLevelStats.length;
         }
-    }
+    },
+    mounted() {
+        this.showChecks = this.$store.getters.isResourceCheckExpanded(this.section);
+    },
+    watch: {
+        showChecks: function (newShowChecks) {
+            if (newShowChecks) {
+                this.$store.commit("addResourceCheckExpandedNode", this.section);
+            } else {
+                this.$store.commit("removeResourceCheckExpandedNode", this.section);
+            }
+        }
+    },
 };
 </script>
 

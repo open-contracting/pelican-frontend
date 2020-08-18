@@ -2,7 +2,8 @@
 @import "breakpoints";
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/src/index.scss";
-
+@import "~vue-multiselect/dist/vue-multiselect.min.css";
+@import "vue-date-pick-mod.scss";
 body {
     background-color: #f0f2fb;
     font-size: 14px;
@@ -126,7 +127,7 @@ h5 {
     padding: 12px;
     font-family: $font-family-bold;
     text-transform: lowercase;
-    color: #9b9b9b;
+    color: #656565;
 }
 
 .form-control::-webkit-input-placeholder,
@@ -182,10 +183,42 @@ code {
     border: dotted 1px $ok_color;
 }
 
-
 .tooltip_text code {
     color: #e7ec90;
     background-color: gray;
     padding: 3px;
     border: dotted 1px #e7ec90;
+}
+
+
+/**
+$grid-breakpoints: (xxxs: 0,
+    xxs: 320px,
+    xs: 568px,
+    sm: 667px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1440px,
+    xxxl: 1600px,
+    xxxxl: 2000px);
+    **/
+
+@media (min-width: 768px) {
+    .card-deck .card {
+        max-width: 45%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-deck .card {
+        max-width: 30%;
+    }
+}
+
+label {
+    font-family: $font-family-sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: right;
 }
