@@ -196,8 +196,8 @@ export const messages = {
             },
             contracts_status: {
                 name: "Contract status distribution",
-                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>",
+                description: "Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
             },
             milestone_status: {
                 name: "Milestone status distribution",
@@ -349,7 +349,7 @@ export const messages = {
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
-                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate<code> and <code>maxExtentDate<code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>",
+                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",
