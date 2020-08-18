@@ -127,7 +127,7 @@ export const messages = {
             tender_status: {
                 name: "Tender status distribution",
                 description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>",
+                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             contracts_value_repetition: {
                 name: "Contracts value repetition",
@@ -172,58 +172,58 @@ export const messages = {
             main_procurement_category: {
                 name: "Main procurement category distribution",
                 description: "Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.</p><p>The test is skipped if the field is never present.</p>",
+                description_long: "<p>Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             tender_procurement_method: {
                 name: "Procurement method distribution",
                 description: "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>",
+                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             tender_award_criteria: {
                 name: "Award criteria distribution",
                 description: "Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed.",
-                description_long: "Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed.",
+                description_long: "<p>Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed.</p><p>The codelist is open.</p>",
             },
             tender_submission_method: {
                 name: "Submission method distribution",
                 description: "Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed.",
-                description_long: "Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed.",
+                description_long: "<p>Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed.</p><p>The codelist is open.</p>",
             },
             awards_status: {
                 name: "Award status distribution",
                 description: "Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>",
+                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             contracts_status: {
                 name: "Contract status distribution",
                 description: "Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present.</p>"
+                description_long: "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             milestone_status: {
                 name: "Milestone status distribution",
                 description: "Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never present.</p>",
+                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             milestone_type: {
                 name: "Milestone type distribution",
                 description: "Visualizes the distribution of milestone <code>type</code> values. No test is performed.",
-                description_long: "Visualizes the distribution of milestone <code>type</code> values. No test is performed. The milestone fields are: <ul><li><code>planning.milestones.type</code></li><li><code>tender.milestones.type</code></li><li><code>awards.milestones.type</code></li><li><code>contracts.implementation.milestones.type</code></li></ul>",
+                description_long: "<p>Visualizes the distribution of milestone <code>type</code> values. No test is performed. The milestone fields are:</p><ul><li><code>planning.milestones.type</code></li><li><code>tender.milestones.type</code></li><li><code>awards.milestones.type</code></li><li><code>contracts.implementation.milestones.type</code></li></ul><p>The codelist is open.</p>",
             },
             value_currency: {
                 name: "Currency distribution",
                 description: "Visualizes the distribution of <code>currency</code> values. No test is performed.",
-                description_long: "Visualizes the distribution of <code>currency</code> values. No test is performed. The fields are: <ul><li><code>planning.budget.value.currency</code></li><li><code>tender.value.currency</code></li><li><code>tender.minValue.currency</code></li><li><code>awards.value.currency</code></li><li><code>contracts.value.currency</code></li><li><code>contracts.implementation.transactions.value.currency</code></li></ul>",
+                description_long: "<p>Visualizes the distribution of <code>currency</code> values. No test is performed. The fields are:</p><ul><li><code>planning.budget.value.currency</code></li><li><code>tender.value.currency</code></li><li><code>tender.minValue.currency</code></li><li><code>awards.value.currency</code></li><li><code>contracts.value.currency</code></li><li><code>contracts.implementation.transactions.value.currency</code></li></ul><p>The codelist is closed.</p>",
             },
             related_process_relation: {
                 name: "Related process relation distribution",
                 description: "Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed.",
-                description_long: "Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed.",
+                description_long: "<p>Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed.</p><p>The codelist is open.</p>",
             },
             document_document_type: {
                 name: "Document type distribution",
                 description: "Visualizes the distribution of document <code>documentType</code> values. No test is performed.",
-                description_long: "Visualizes the distribution of document <code>documentType</code> values. No test is performed. The document fields are: <ul><li><code>planning.documents.documentType</code></li><li><code>tender.documents.documentType</code></li><li><code>awards.documents.documentType</code></li><li><code>contracts.documents.documentType</code></li><li><code>contracts.implementation.documents.documentType</code></li></ul>",
-            },
+                description_long: "<p>Visualizes the distribution of document <code>documentType</code> values. No test is performed. The document fields are:</p><ul><li><code>planning.documents.documentType</code></li><li><code>tender.documents.documentType</code></li><li><code>awards.documents.documentType</code></li><li><code>contracts.documents.documentType</code></li><li><code>contracts.implementation.documents.documentType</code></li></ul><p>The codelist is open.</p>",
+            }
         },
         unique: {
             ok: "All values are unique.",
@@ -349,7 +349,7 @@ export const messages = {
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
-                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+                description: "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>",
             },
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",
@@ -526,7 +526,7 @@ export const messages = {
             },
             identifier_scheme: {
                 count_header: "Identifier scheme is recognized",
-                count_header_tooltip: "The value is a string and is an org-id.guide code.",
+                count_header_tooltip: "The value is a string and is an org-id.guide code. (The codelist is open.)"
             },
             telephone: {
                 count_header: "Phone number is possible",
@@ -538,11 +538,11 @@ export const messages = {
             },
             document_type: {
                 count_header: "Document type is coherent",
-                count_header_tooltip: "The document type is appropriate to the field path. Specifically, the value is a documentType code, and the code's 'Section' corresponds to the field's path.",
+                count_header_tooltip: "The document type is appropriate to the field path. Specifically, the value is a documentType code, and the code's 'Section' corresponds to the field's path. (The codelist is open.)"
             },
             document_format_codelist: {
                 count_header: "Document format is recognized",
-                count_header_tooltip: "The value is a string and is either an IANA Media Type or the 'offline/print' code.",
+                count_header_tooltip: "The value is a string and is either an IANA Media Type or the 'offline/print' code. (The codelist is open.)"
             },
             number_checks: {
                 count_header: "Number is non-negative",
@@ -550,9 +550,9 @@ export const messages = {
             },
             language: {
                 count_header: "Language code is recognized",
-                count_header_tooltip: "The value is a string and is a two-letter, lowercase, ISO 639-1 code.",
-            },
-        },
+                count_header_tooltip: "The value is a string and is a two-letter, lowercase, ISO 639-1 code. (The codelist is open.)"
+            }
+        }
     },
     timeLevel: {
         description: "<p>These checks focus on changes within a dataset over time. Each check has two steps:</p><ul><li><b>Find pairs:</b> The compiled releases in the older collection are filtered according to check-specific criteria, and then each is attempted to be paired with a compiled release with the same OCID in the newer collection. If no pair is found, this test fails. <i>Example</i>: The buyer should be invariant across time. If an older release sets the <code>buyer</code> field (thereby satisfying the check's criterion), then it is attempted to be paired with a newer release.</li><li><b>Check pairs:</b> Once a pair is found, the check is run. <i>Example</i>: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.</li></ul>",
