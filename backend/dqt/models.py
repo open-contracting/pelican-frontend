@@ -24,10 +24,48 @@ class Dataset(Model):
         for item in self.progress.all():
             return item.size
 
+    def get_filtered_children_ids(self):
+        return [
+            item.dataset_filtered.id
+            for item in self.dataset_filter_parent.all()
+        ]
+
+    def get_filtered_parent_id(self):
+        items = self.dataset_filter_child.all()
+        return items[0].dataset_original.id if items else None
+
+    def get_filtered_parent_name(self):
+        items = self.dataset_filter_child.all()
+        return items[0].dataset_original.name if items else None
+
+    def get_filter_message(self):
+        items = self.dataset_filter_child.all()
+        return items[0].filter_message if items else None
+
     class Meta:
         app_label = "data"
         managed = False
         db_table = "dataset"
+
+
+class DatasetFilter(Model):
+    id = BigAutoField(primary_key=True)
+    dataset_original = ForeignKey(
+        "Dataset", related_name='dataset_filter_parent', db_column="dataset_id_original",
+        to_field="id", on_delete=CASCADE
+    )
+    dataset_filtered = ForeignKey(
+        "Dataset", related_name='dataset_filter_child', db_column="dataset_id_filtered",
+        to_field="id", on_delete=CASCADE
+    )
+    filter_message = JSONField()
+    created = DateTimeField(blank=True, null=True)
+    modified = DateTimeField(blank=True, null=True)
+
+    class Meta:
+        app_label = "data"
+        managed = False
+        db_table = 'dataset_filter'
 
 
 class Report(Model):

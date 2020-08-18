@@ -97,17 +97,11 @@ export default {
         },
         avgScore() {
             var sum = 0;
-            for (var item in this.resourceLevelStats) {
-                var check = this.resourceLevelStats[item];
-                sum =
-                    sum +
-                    check.passed_count /
-                        (check.passed_count +
-                            check.failed_count +
-                            check.undefined_count);
-            }
+            for (var i = 0; i < this.resourceLevelStats.length; i++) {
+                sum += this.resourceLevelStats[i].passed_count / this.resourceLevelStats[i].total_count;
+            } 
 
-            return sum / this.resourceLevelStats.length;
+            return 100 * sum / this.resourceLevelStats.length;
         }
     },
     mounted() {
