@@ -472,6 +472,7 @@ export const messages = {
         },
         publisher: "Publisher name",
         datalicense: "License",
+        publicationPolicy: "Publication policy",
         extensions: "Extensions",
         extensionsUnsupported: "Unsupported format",
         publishedFrom: "Published from",

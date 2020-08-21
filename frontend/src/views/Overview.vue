@@ -88,6 +88,12 @@
                             </div>
                         </div>
                         <div class="tr row">
+                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publicationPolicy')}}</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">
+                                <a v-if="collection.publication_policy" :href="collection.publication_policy" target="_blank">{{ collection.publication_policy }}</a>
+                            </div>
+                        </div>
+                        <div class="tr row">
                             <div class="td col col-4 d-flex align-items-center">{{ $t('overview.extensions')}}</div>
                             <div v-if="collection.extensions" class="td col col-8">
                                 <template v-for="(e, i) in collection.extensions">
