@@ -302,7 +302,12 @@ def generate_report(request):
     base.set_param('template', input_message['document_id'])
     main_template = base.validate_and_process()
     
-    file_id = gdocs.upload(FOLDER_ID, input_message["document_id"], "Paraguay {}".format(datetime.now()), main_template)
+    file_id = gdocs.upload(
+        FOLDER_ID,
+        input_message["document_id"],
+        "Pelican export {} {}".format(input_message["dataset_id"], datetime.now()),
+        main_template
+    )
     gdocs.destroy_tempdir()
 
     return HttpResponse(file_id)
