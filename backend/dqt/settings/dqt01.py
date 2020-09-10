@@ -1,8 +1,8 @@
 from .base import *
 
 CORS_ORIGIN_WHITELIST = (
-    'dqt.datlab.eu',
-    'localhost:22005'
+    'https://dqt.datlab.eu',
+    'https://localhost:22005'
 )
 
 DATABASES = {
