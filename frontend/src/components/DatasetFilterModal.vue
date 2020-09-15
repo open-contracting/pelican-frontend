@@ -4,8 +4,8 @@
         <b-alert v-if="isSubmitting && submitResult != null" variant="success" show>{{ $t("datasetFilter.statusOk") }}</b-alert>
         <form v-if="!isSubmitting" class="modal_box align-items-center">
             <div class="form-group row">
-                <label class="col-3 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
-                <div class="col-9 modal_input">
+                <label class="col-4 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
+                <div class="col-8 modal_input">
                     <div class="row">
                         <div class="col">
                             <b-form-datepicker
@@ -29,14 +29,14 @@
                 </div>
             </div>
             <div class="form-group row section_row">
-                <label class="col-3 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
-                <div class="col-9">
+                <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
+                <div class="col-8">
                     <DatasetValuesMultiselect :updateSelected="updateBuyerName" :datasetId="dataset != null ? dataset.id : null" jsonPath="buyer.name" />
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-3 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
-                <div class="col-9">
+                <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
+                <div class="col-8">
                     <DatasetValuesMultiselect
                         :updateSelected="updateProcuringEntityName"
                         :datasetId="dataset != null ? dataset.id : null"
@@ -45,15 +45,15 @@
                 </div>
             </div>
             <div class="form-group row section_row">
-                <label class="col-3 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
-                <div class="col-9">
+                <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
+                <div class="col-8">
                     <input class="regex_input" v-model="buyerNameRegex" />
                     <small class="form-text text-muted">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
                 </div>
             </div>
             <div class="form-group row procuring_row">
-                <label class="col-3 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
-                <div class="col-9">
+                <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
+                <div class="col-8">
                     <input class="regex_input" v-model="procuringEntityNameRegex" />
                     <small class="form-text text-muted">{{ $t("datasetFilter.procuringEntityNameRegexTooltip") }}</small>
                 </div>
