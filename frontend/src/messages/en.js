@@ -42,9 +42,9 @@ export const messages = {
         releaseDateTo: "Release date to",
         buyerName: "Buyer name",
         procuringEntityName: "Procuring entity name",
-        buyerNameRegex: "Buyer name",
+        buyerNameRegex: "Buyer name pattern",
         buyerNameRegexTooltip: "Standard SQL ILIKE pattern",
-        procuringEntityNameRegex: "Procuring entity name",
+        procuringEntityNameRegex: "Procuring entity name pattern",
         procuringEntityNameRegexTooltip: "Standard SQL ILIKE pattern",
         statusOk: "Calculation will start in a moment.",
     },
@@ -67,6 +67,10 @@ export const messages = {
     insufficientData: {
         title: "Insufficient data",
         description: "Data was insufficient to calculate the check.",
+    },
+    incompatibleCheckVersion: {
+        title: "Incompatible check version",
+        description: "The check must be recomputed before visualization."
     },
     sections: {
         home: "Home",
@@ -126,8 +130,8 @@ export const messages = {
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
-                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
+                description: "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 0.1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             contracts_value_repetition: {
                 name: "Contracts value repetition",
@@ -176,8 +180,8 @@ export const messages = {
             },
             tender_procurement_method: {
                 name: "Procurement method distribution",
-                description: "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
+                description: "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 0.1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             tender_award_criteria: {
                 name: "Award criteria distribution",
@@ -191,18 +195,18 @@ export const messages = {
             },
             awards_status: {
                 name: "Award status distribution",
-                description: "Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
+                description: "Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 0.1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             contracts_status: {
                 name: "Contract status distribution",
-                description: "Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
+                description: "Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 0.1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             milestone_status: {
                 name: "Milestone status distribution",
-                description: "Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases.",
-                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never present. The codelist is closed.</p>",
+                description: "Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 0.1% and 99% of cases.",
+                description_long: "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 0.1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             milestone_type: {
                 name: "Milestone type distribution",
@@ -228,9 +232,10 @@ export const messages = {
         unique: {
             ok: "All values are unique.",
             failed: "Not all values are unique.",
-            id: {
-                name: "id",
-                description: "Please ignore until further notice.",
+            tender_id: {
+                name: "",
+                description: "",
+                description_long: ""
             },
         },
         misc: {
