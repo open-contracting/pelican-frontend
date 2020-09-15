@@ -76,7 +76,7 @@ export default {
                 },
                 "reference.related_process_identifier": {
                     "checkType": "numeric",
-                    "version": 1
+                    "version": 2
                 },
                 "distribution.tender_value_repetition": {
                     "checkType": "top3",
