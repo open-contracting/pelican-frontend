@@ -1,72 +1,117 @@
 export default {
+    data: function() {
+        return {
+            checkTypeVersionControl: {
+                "distribution.main_procurement_category": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.tender_status": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.tender_procurement_method": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.tender_award_criteria": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.tender_submission_method": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.awards_status": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.contracts_status": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.milestone_status": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.milestone_type": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.document_document_type": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.value_currency": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.related_process_relation": {
+                    "checkType": "donut",
+                    "version": 1
+                },
+                "distribution.tender_value": {
+                    "checkType": "bar",
+                    "version": 1
+                },
+                "distribution.contracts_value": {
+                    "checkType": "bar",
+                    "version": 1
+                },
+                "distribution.awards_value": {
+                    "checkType": "bar",
+                    "version": 1
+                },
+                "misc.url_availability": {
+                    "checkType": "numeric",
+                    "version": 1
+                },
+                "unique.tender_id": {
+                    "checkType": "numeric",
+                    "version": 2
+                },
+                "consistent.related_process_title": {
+                    "checkType": "numeric",
+                    "version": 1
+                },
+                "reference.related_process_identifier": {
+                    "checkType": "numeric",
+                    "version": 1
+                },
+                "distribution.tender_value_repetition": {
+                    "checkType": "top3",
+                    "version": 1
+                },
+                "distribution.contracts_value_repetition": {
+                    "checkType": "top3",
+                    "version": 1
+                },
+                "distribution.awards_value_repetition": {
+                    "checkType": "top3",
+                    "version": 1
+                },
+                "distribution.buyer_repetition": {
+                    "checkType": "biggest_share",
+                    "version": 1
+                },
+                "distribution.buyer": {
+                    "checkType": "single_value_share",
+                    "version": 1
+                }
+            }
+        };
+    },
     computed: {
         checkType() {
-            var donut = [
-                "distribution.main_procurement_category",
-                "distribution.tender_status",
-                "distribution.tender_procurement_method",
-                "distribution.tender_award_criteria",
-                "distribution.tender_submission_method",
-                "distribution.awards_status",
-                "distribution.contracts_status",
-                "distribution.milestone_status",
-                "distribution.milestone_type",
-                "distribution.document_document_type",
-                "distribution.value_currency",
-                "distribution.related_process_relation"
-            ];
-            if (donut.includes(this.check.name)) {
-                return "donut";
+            if (!(this.check.name in this.checkTypeVersionControl)) {
+                throw "unknown check: " + this.check.name;
             }
 
-            var bar = [
-                "distribution.tender_value",
-                "distribution.contracts_value",
-                "distribution.awards_value",
-            ];
-            if (bar.includes(this.check.name)) {
-                return "bar";
+            if (this.check.meta.version != this.checkTypeVersionControl[this.check.name].version) {
+                return null;
             }
 
-            var numeric = ["misc.url_availability"];
-            if (numeric.includes(this.check.name)) {
-                return "numeric";
-            }
-
-            var top3 = [
-                "distribution.tender_value_repetition",
-                "distribution.contracts_value_repetition",
-                "distribution.awards_value_repetition"
-            ];
-            if (top3.includes(this.check.name)) {
-                return "top3";
-            }
-
-            var unique = [
-                "unique.id",
-                "consistent.related_process_title",
-                "reference.related_process_identifier"
-            ];
-            if (unique.includes(this.check.name)) {
-                return "unique";
-            }
-
-            var biggest_share = [
-                "distribution.buyer_repetition"
-            ];
-            if (biggest_share.includes(this.check.name)) {
-                return "biggest_share";
-            }
-
-            var single_value_share = [
-                "distribution.buyer"
-            ];
-            if (single_value_share.includes(this.check.name)) {
-                return "single_value_share";
-            }
-
-            throw "unknow check type - " + this.check.name;
-
+            return this.checkTypeVersionControl[this.check.name].checkType;
         },
         shares() {
             if (this.checkType == "donut") {
@@ -77,12 +122,12 @@ export default {
         },
     },
     methods: {
-        orderedShares: function (shares) {
-            var items = Object.keys(shares).map(function (key) {
+        orderedShares: function(shares) {
+            var items = Object.keys(shares).map(function(key) {
                 return [key, shares[key]];
             });
 
-            items.sort(function (first, second) {
+            items.sort(function(first, second) {
                 return second[1]["count"] - first[1]["count"];
             });
 

@@ -67,7 +67,8 @@ export default {
                 other: [
                     "misc.url_availability",
                     "consistent.related_process_title",
-                    "reference.related_process_identifier"
+                    "reference.related_process_identifier",
+                    "unique.tender_id"
                 ]
             }
         };

@@ -68,6 +68,10 @@ export const messages = {
         title: "Insufficient data",
         description: "Data was insufficient to calculate the check.",
     },
+    incompatibleCheckVersion: {
+        title: "Incompatible check version",
+        description: "The check must be recomputed before visualization."
+    },
     sections: {
         home: "Home",
         overview: "Overview",
@@ -228,9 +232,10 @@ export const messages = {
         unique: {
             ok: "All values are unique.",
             failed: "Not all values are unique.",
-            id: {
-                name: "id",
-                description: "Please ignore until further notice.",
+            tender_id: {
+                name: "",
+                description: "",
+                description_long: ""
             },
         },
         misc: {

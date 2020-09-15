@@ -1,9 +1,9 @@
 <template>
     <div
         class="card mb-4 dataset_result_box result_box"
-        v-bind:class="{ clickable: check.result != undefined, undef: check.result == undefined }"
+        v-bind:class="{ clickable: ((check.result != undefined) && (checkType != null)), undef: ((check.result == undefined) || (checkType == null)) }"
         v-on:click="detail()"
-        @contextmenu.prevent="check.result != undefined ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments}) : null"
+        @contextmenu.prevent="((check.result != undefined) && (checkType != null)) ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments}) : null"
     >
         <div class="card-body">
             <div class="row no-gutters">
@@ -11,7 +11,7 @@
                     <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
                 </div>
 
-                <div class="col col-2 col-sm-2 col-lg-2 text-right">
+                <div v-if="((check.result != undefined) && (checkType != null))" class="col col-2 col-sm-2 col-lg-2 text-right">
                     <span v-if="check.result == true" class="badge badge-pill ok_status">{{ $t("passed") }}</span>
                     <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
                 </div>
@@ -27,7 +27,7 @@
         <div class="card-body">
             <div class="row no-gutters justify-content-end">
                 <div class="col col-12">
-                    <div class="chart_envelope text-center" v-if="check.result == undefined">
+                    <div v-if="check.result == undefined" class="chart_envelope text-center">
                         <img class="undefined_image" src="/img/insufficient_data.png" />
                         <br />
                         <div class="undefined_title">
@@ -35,6 +35,15 @@
                             <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')"></Tooltip>
                         </div>
                         <p v-html="$t('insufficientData.description')"></p>
+                    </div>
+                    <div v-else-if="checkType == null" class="chart_envelope text-center">
+                        <img class="undefined_image" src="/img/insufficient_data.png" />
+                        <br />
+                        <div class="undefined_title">
+                            {{ $t("incompatibleCheckVersion.title") }}
+                            <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')"></Tooltip>
+                        </div>
+                        <p v-html="$t('incompatibleCheckVersion.description')"></p>
                     </div>
                     <div v-else>
                         <div v-if="checkType == 'donut'">
@@ -54,7 +63,7 @@
                             <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed }}</span>
                         </div>
 
-                        <div class="top3" v-if="checkType == 'top3'">
+                        <div v-if="checkType == 'top3'" class="top3">
                             <div class="chart_envelope">
                                 <table id="top3_table" class="table table-sm">
                                     <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
@@ -65,7 +74,7 @@
                             </div>
                         </div>
 
-                        <div class="biggest_share" v-if="checkType == 'biggest_share'">
+                        <div v-if="checkType == 'biggest_share'" class="biggest_share">
                             <div class="row">
                                 <div
                                     class="col col-12 text-center total_share"
@@ -79,7 +88,7 @@
                             </div>
                         </div>
 
-                        <div class="single_value_share" v-if="checkType == 'single_value_share'">
+                        <div v-if="checkType == 'single_value_share'" class="single_value_share">
                             <div class="chart_envelope">
                                 <BarChartSingleValue :check="check"></BarChartSingleValue>
                             </div>
@@ -118,7 +127,7 @@ export default {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
         },
         detail: function() {
-            if (this.check.result != undefined) {
+            if ((this.check.result != undefined) && (this.checkType != null)) {
                 this.$router.push(this.detailRouterArguments);
             }
         }
