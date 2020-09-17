@@ -1,0 +1,46 @@
+
+import random
+from dqt.tools.tags.tag import LeafTag
+
+class ExamplesLeafTag(LeafTag):
+    RANGES = set([
+        '0-1',
+        '1-5',
+        '5-20',
+        '20-50',
+        '50-100',
+    ])
+
+    def __init__(self, gdocs, dataset_id):
+        super().__init__(
+            self.process_tag,
+            str,
+            gdocs,
+            dataset_id
+        )
+        
+        self.set_param_validation('range', lambda v: v in ExamplesLeafTag.RANGES)
+        self.set_param_validation('max', lambda v: v.isdigit())
+
+        self.set_required_data_field('examples')
+        
+    def process_tag(self, data):
+        if self.get_param('range') is not None:
+            range_examples = data['examples'][self.get_param('range')]
+        else:
+            range_examples = [
+                example
+                for examples in data['examples'].values()
+                for example in examples
+            ]
+
+        max_count = self.get_param('max')
+        if max_count is not None:
+            return ', '.join(
+                random.sample(
+                    range_examples,
+                    k=min(int(max_count), len(range_examples))
+                )
+            )
+        else:
+            return ', '.join(range_examples)

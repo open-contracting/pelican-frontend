@@ -3,14 +3,14 @@ from django.db import connections
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.name import NameLeafTag
 from dqt.tools.tags.leaf_tags.description import DescriptionLeafTag
-from dqt.tools.tags.leaf_tags.resource.checked_count import CheckedCountLeafTag
-from dqt.tools.tags.leaf_tags.resource.passed_count import PassedCountLeafTag
-from dqt.tools.tags.leaf_tags.resource.failed_count import FailedCountLeafTag
+from dqt.tools.tags.leaf_tags.checked_count import CheckedCountLeafTag
+from dqt.tools.tags.leaf_tags.passed_count import PassedCountLeafTag
+from dqt.tools.tags.leaf_tags.failed_count import FailedCountLeafTag
+from dqt.tools.tags.leaf_tags.passed_examples import PassedExamplesLeafTag
+from dqt.tools.tags.leaf_tags.failed_examples import FailedExamplesLeafTag
 from dqt.tools.tags.leaf_tags.resource.not_available_count import NotAvailableCountLeafTag
-from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag
-from dqt.tools.tags.leaf_tags.resource.passed_examples import PassedExamplesLeafTag
-from dqt.tools.tags.leaf_tags.resource.failed_examples import FailedExamplesLeafTag
 from dqt.tools.tags.leaf_tags.resource.not_available_examples import NotAvailableExamplesLeafTag
+from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag
 
 
 class ResourceTemplateTag(TemplateTag):

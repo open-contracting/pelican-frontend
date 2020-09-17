@@ -104,7 +104,8 @@ class TemplateTag:
         self.required_params = set()
         self.sub_tags_mapping = {}
 
-        self.set_param_validation('template', lambda _: True)
+        # TODO: check if template exists
+        self.set_param_validation('template', lambda _: True, required=(base_template_id is None))
 
     def set_param_validation(self, name, validation, required=False):
         if name in self.param_validations_mapping:
@@ -288,9 +289,9 @@ class TemplateTag:
             self.set_param('template', self.base_template_id)
         template_id = self.get_param('template')
         self.template = self.gdocs.get_template(template_id)
-        tags_mapping = self.get_tags_mapping()
         data = self.prepare_data()
 
+        tags_mapping = self.get_tags_mapping()
         for tag_full, tag in tags_mapping.items():
             if isinstance(tag, LeafTag):
                 # TODO: catch errors
