@@ -7,7 +7,8 @@
         >
             <div class="td col-4">
                 <span v-if="depth > 0">
-                    &nbsp;&nbsp;
+                    <span v-for="d in depth" v-bind:key="d" >&nbsp;&nbsp;</span>
+                    
                     <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 {{ dataset.name }}
@@ -27,6 +28,12 @@
                 <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
                     <span class="small_icon">
                         <font-awesome-icon :icon="['far', 'check-circle']" class="text-success" />
+                    </span>
+                    {{ dataset.phase }}
+                </template>
+                <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
+                    <span class="small_icon">
+                        <font-awesome-icon :icon="['fas', 'ban']" class="text-danger" />
                     </span>
                     {{ dataset.phase }}
                 </template>
@@ -66,7 +73,13 @@
             </div>
         </div>
         <template v-for="(item, index) in dataset.filtered_children">
-            <DatasetPickerRow v-bind:key="index" :dataset="item" :depth="depth + 1" />
+            <DatasetPickerRow
+                v-on:dataset-filter="$emit('dataset-filter', $event)"
+                v-on:dataset-report="$emit('dataset-report', $event)"
+                v-bind:key="index"
+                :dataset="item"
+                :depth="depth + 1"
+            />
         </template>
     </div>
 </template>
