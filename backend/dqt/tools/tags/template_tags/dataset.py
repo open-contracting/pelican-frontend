@@ -2,8 +2,8 @@
 from django.db import connections
 from dqt.models import DatasetLevelCheck
 from dqt.tools.tags.tag import TemplateTag
-from dqt.tools.tags.leaf_tags.name import NameLeafTag
-from dqt.tools.tags.leaf_tags.description import DescriptionLeafTag
+from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
+from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.dataset.result import ResultLeafTag
 from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
 from dqt.tools.tags.leaf_tags.dataset.donut.share import ShareLeafTag as donut_ShareLeafTag
@@ -17,11 +17,6 @@ from dqt.tools.tags.leaf_tags.dataset.top3.share import ShareLeafTag as top3_Sha
 from dqt.tools.tags.leaf_tags.dataset.top3.count import CountLeafTag as top3_CountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.top3.examples import ExamplesLeafTag as top3_ExamplesLeafTag
 from dqt.tools.tags.leaf_tags.dataset.top3.amount import AmountLeafTag as top3_AmountLeafTag
-from dqt.tools.tags.leaf_tags.checked_count import CheckedCountLeafTag
-from dqt.tools.tags.leaf_tags.passed_count import PassedCountLeafTag
-from dqt.tools.tags.leaf_tags.failed_count import FailedCountLeafTag
-from dqt.tools.tags.leaf_tags.passed_examples import PassedExamplesLeafTag
-from dqt.tools.tags.leaf_tags.failed_examples import FailedExamplesLeafTag
 
 class DatasetTemplateTag(TemplateTag):
     CHECK_TYPE_VERSION_CONTROL = {
@@ -134,8 +129,8 @@ class DatasetTemplateTag(TemplateTag):
         # TODO: check if check was calculated and version compatability
         self.set_param_validation('check', lambda v: v in DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL, required=True)
 
-        self.set_sub_tag('name', NameLeafTag)
-        self.set_sub_tag('description', DescriptionLeafTag)
+        self.set_sub_tag('name', generate_key_leaf_tag('name'))
+        self.set_sub_tag('description', generate_key_leaf_tag('description'))
         self.set_sub_tag('result', ResultLeafTag)
         self.set_sub_tag('value', ValueLeafTag)
     
@@ -227,11 +222,12 @@ class DatasetTemplateTag(TemplateTag):
                 for index, el in enumerate(check.meta['most_frequent'])
             }
         elif check_type == 'numeric':
-            self.set_sub_tag('checkedCount', CheckedCountLeafTag)
-            self.set_sub_tag('passedCount', PassedCountLeafTag)
-            self.set_sub_tag('failedCount', FailedCountLeafTag)
-            self.set_sub_tag('passedExamples', PassedExamplesLeafTag)
-            self.set_sub_tag('failedExamples', FailedExamplesLeafTag)
+            self.set_sub_tag('checkedCount', generate_key_leaf_tag('checkedCount'))
+            self.set_sub_tag('passedCount', generate_key_leaf_tag('passedCount'))
+            self.set_sub_tag('failedCount', generate_key_leaf_tag('failedCount'))
+
+            self.set_sub_tag('passedExamples', generate_examples_leaf_tag('passedExamples'))
+            self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
             # self.set_sub_tag('resultBoxImage')
 
             data['checkedCount'] = check.meta['total_processed']
@@ -245,5 +241,21 @@ class DatasetTemplateTag(TemplateTag):
                 example['ocid']
                 for example in check.meta['failed_examples']
             ]
+        elif check_type == 'biggest_share':
+            self.set_sub_tag('buyerIdentifierId', generate_key_leaf_tag('buyerIdentifierId'))
+            self.set_sub_tag('buyerIdentifierScheme', generate_key_leaf_tag('buyerIdentifierScheme'))
+            self.set_sub_tag('ocidCount', generate_key_leaf_tag('ocidCount'))
+            self.set_sub_tag('ocidShare', generate_key_leaf_tag('ocidShare'))
+            self.set_sub_tag('totalOcidCount', generate_key_leaf_tag('totalOcidCount'))
+
+            self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
+            # self.set_sub_tag('resultBoxImage')
+
+            # TODO: prepare data
+            
+
+        elif check_type == 'single_value_share':
+            # TODO
+            pass
 
         return data

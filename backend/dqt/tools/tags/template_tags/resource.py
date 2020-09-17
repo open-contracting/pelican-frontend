@@ -1,15 +1,8 @@
 
 from django.db import connections
 from dqt.tools.tags.tag import TemplateTag
-from dqt.tools.tags.leaf_tags.name import NameLeafTag
-from dqt.tools.tags.leaf_tags.description import DescriptionLeafTag
-from dqt.tools.tags.leaf_tags.checked_count import CheckedCountLeafTag
-from dqt.tools.tags.leaf_tags.passed_count import PassedCountLeafTag
-from dqt.tools.tags.leaf_tags.failed_count import FailedCountLeafTag
-from dqt.tools.tags.leaf_tags.passed_examples import PassedExamplesLeafTag
-from dqt.tools.tags.leaf_tags.failed_examples import FailedExamplesLeafTag
-from dqt.tools.tags.leaf_tags.resource.not_available_count import NotAvailableCountLeafTag
-from dqt.tools.tags.leaf_tags.resource.not_available_examples import NotAvailableExamplesLeafTag
+from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
+from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag
 
 
@@ -64,16 +57,17 @@ class ResourceTemplateTag(TemplateTag):
         # TODO: check if check was calculated
         self.set_param_validation('check', lambda v: v in ResourceTemplateTag.CHECKS, required=True)
 
-        self.set_sub_tag('name', NameLeafTag)
-        self.set_sub_tag('description', DescriptionLeafTag)
-        self.set_sub_tag('checkedCount', CheckedCountLeafTag)
-        self.set_sub_tag('passedCount', PassedCountLeafTag)
-        self.set_sub_tag('failedCount', FailedCountLeafTag)
-        self.set_sub_tag('notAvailableCount', NotAvailableCountLeafTag)
-        self.set_sub_tag('resultBoxImage', ResultBoxImageLeafTag)
-        self.set_sub_tag('passedExamples', PassedExamplesLeafTag)
-        self.set_sub_tag('failedExamples', FailedExamplesLeafTag)
-        self.set_sub_tag('notAvailableExamples', NotAvailableExamplesLeafTag)
+        self.set_sub_tag('name', generate_key_leaf_tag['name'])
+        self.set_sub_tag('description', generate_key_leaf_tag['description'])
+        self.set_sub_tag('checkedCount', generate_key_leaf_tag['checkedCount'])
+        self.set_sub_tag('passedCount', generate_key_leaf_tag['passedCount'])
+        self.set_sub_tag('failedCount', generate_key_leaf_tag['failedCount'])
+        self.set_sub_tag('notAvailableCount', generate_key_leaf_tag['notAvailableCount'])
+
+        self.set_sub_tag('resultBoxImage', generate_examples_leaf_tag['resultBoxImage'])
+        self.set_sub_tag('passedExamples', generate_examples_leaf_tag['passedExamples'])
+        self.set_sub_tag('failedExamples', generate_examples_leaf_tag['failedExamples'])
+        self.set_sub_tag('notAvailableExamples', generate_examples_leaf_tag['notAvailableExamples'])
     
     def prepare_data(self):
         check_name = self.get_param('check')

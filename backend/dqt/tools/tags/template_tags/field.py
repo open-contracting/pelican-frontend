@@ -1,8 +1,7 @@
 
 from django.db import connections
 from dqt.tools.tags.tag import TemplateTag
-from dqt.tools.tags.leaf_tags.name import NameLeafTag
-from dqt.tools.tags.leaf_tags.description import DescriptionLeafTag
+from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
 from dqt.tools.tags.leaf_tags.field.passed_count import PassedCountLeafTag
 from dqt.tools.tags.leaf_tags.field.failed_count import FailedCountLeafTag
@@ -603,8 +602,9 @@ class FieldTemplateTag(TemplateTag):
         # TODO: checks for given path were calculated
         self.set_param_validation('path', lambda v: v in FieldTemplateTag.PATHS, required=True)
 
-        self.set_sub_tag('name', NameLeafTag)
-        self.set_sub_tag('description', DescriptionLeafTag)
+        self.set_sub_tag('name', generate_key_leaf_tag('name'))
+        self.set_sub_tag('description', generate_key_leaf_tag('description'))
+
         self.set_sub_tag('checkedCount', CheckedCountLeafTag)
         self.set_sub_tag('passedCount', PassedCountLeafTag)
         self.set_sub_tag('failedCount', FailedCountLeafTag)

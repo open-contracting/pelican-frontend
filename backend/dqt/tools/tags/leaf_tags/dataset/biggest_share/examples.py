@@ -2,7 +2,7 @@
 import random
 from dqt.tools.tags.tag import LeafTag
 
-class FailedExamplesLeafTag(LeafTag):
+class ExamplesLeafTag(LeafTag):
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -14,16 +14,16 @@ class FailedExamplesLeafTag(LeafTag):
         
         self.set_param_validation('max', lambda v: v.isdigit())
 
-        self.set_required_data_field('failedExamples')
+        self.set_required_data_field('examples')
 
     def process_tag(self, data):
         max_count = self.get_param('max')
         if max_count is not None:
             return ', '.join(
                 random.sample(
-                    data['failedExamples'],
-                    k=min(int(max_count), len(data['failedExamples']))
+                    data['examples'],
+                    k=min(int(max_count), len(data['examples']))
                 )
             )
         else:
-            return ', '.join(data['failedExamples'])
+            return ', '.join(data['examples'])
