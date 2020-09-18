@@ -2,7 +2,7 @@
 from dqt.tools.tags.tag import LeafTag
 
 class SumLeafTag(LeafTag):
-    RANGES = set([
+    PERCENTAGE_RANGES = set([
         '0-1',
         '1-5',
         '5-20',
@@ -18,12 +18,12 @@ class SumLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('range', lambda v: v in SumLeafTag.RANGES)
+        self.set_param_validation('percentageRange', lambda v: v in SumLeafTag.PERCENTAGE_RANGES)
         
         self.set_required_data_field('sums')
 
     def process_tag(self, data):
-        if self.get_param('range') is None:
+        if self.get_param('percentageRange') is None:
             return str(sum(data['sums'].values()))
 
-        return str(data['sums'][self.get_param('range')])
+        return str(data['sums'][self.get_param('percentageRange')])

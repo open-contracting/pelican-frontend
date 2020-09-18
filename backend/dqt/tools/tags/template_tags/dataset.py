@@ -17,6 +17,10 @@ from dqt.tools.tags.leaf_tags.dataset.top3.share import ShareLeafTag as top3_Sha
 from dqt.tools.tags.leaf_tags.dataset.top3.count import CountLeafTag as top3_CountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.top3.examples import ExamplesLeafTag as top3_ExamplesLeafTag
 from dqt.tools.tags.leaf_tags.dataset.top3.amount import AmountLeafTag as top3_AmountLeafTag
+from dqt.tools.tags.leaf_tags.dataset.single_value_share.ocid_count import \
+    OcidCountLeafTag as single_value_share_OcidCountLeafTag
+from dqt.tools.tags.leaf_tags.dataset.single_value_share.buyer_count import \
+    BuyerCountLeafTag as single_value_share_BuyerCountLeafTag
 
 class DatasetTemplateTag(TemplateTag):
     CHECK_TYPE_VERSION_CONTROL = {
@@ -251,11 +255,30 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
             # self.set_sub_tag('resultBoxImage')
 
-            # TODO: prepare data
-            
+            data['buyerIdentifierId'] = check.meta['specifics']['buyer.identifier.id']
+            data['buyerIdentifierScheme'] = check.meta['specifics']['buyer.identifier.scheme']
+            data['ocidCount'] = check.meta['ocid_count']
+            data['ocidShare'] = check.meta['ocid_share']
+            data['totalOcidCount'] = check.meta['total_ocid_count']
+            data['examples'] = [example['ocid'] for example in check.meta['examples']]
 
         elif check_type == 'single_value_share':
-            # TODO
-            pass
+            self.set_sub_tag('ocidCount', single_value_share_OcidCountLeafTag)
+            self.set_sub_tag('buyerCount', single_value_share_BuyerCountLeafTag)
+            self.set_sub_tag('totalOcidCount', generate_key_leaf_tag('totalOcidCount'))
+            self.set_sub_tag('totalBuyerCount', generate_key_leaf_tag('totalBuyerCount'))
+            self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
+
+            data['ocidCounts'] = {
+                key.replace('_', '-'): value['total_ocid_count']
+                for key, value in check.meta['counts'].items()
+            }
+            data['buyerCounts'] = {
+                key.replace('_', '-'): value['total_buyer_count']
+                for key, value in check.meta['counts'].items()
+            }
+            data['totalOcidCount'] = check.meta['total_ocid_count']
+            data['totalBuyerCount'] = check.meta['total_buyer_count']
+            data['examples'] = [example['ocid'] for example in check.meta['examples']]
 
         return data

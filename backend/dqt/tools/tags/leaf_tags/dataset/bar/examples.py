@@ -3,7 +3,7 @@ import random
 from dqt.tools.tags.tag import LeafTag
 
 class ExamplesLeafTag(LeafTag):
-    RANGES = set([
+    PERCENTAGE_RANGES = set([
         '0-1',
         '1-5',
         '5-20',
@@ -19,16 +19,16 @@ class ExamplesLeafTag(LeafTag):
             dataset_id
         )
         
-        self.set_param_validation('range', lambda v: v in ExamplesLeafTag.RANGES)
+        self.set_param_validation('percentageRange', lambda v: v in ExamplesLeafTag.PERCENTAGE_RANGES)
         self.set_param_validation('max', lambda v: v.isdigit())
 
         self.set_required_data_field('examples')
         
     def process_tag(self, data):
-        if self.get_param('range') is not None:
-            range_examples = data['examples'][self.get_param('range')]
+        if self.get_param('percentageRange') is not None:
+            percentage_range_examples = data['examples'][self.get_param('percentageRange')]
         else:
-            range_examples = [
+            percentage_range_examples = [
                 example
                 for examples in data['examples'].values()
                 for example in examples
@@ -38,9 +38,9 @@ class ExamplesLeafTag(LeafTag):
         if max_count is not None:
             return ', '.join(
                 random.sample(
-                    range_examples,
-                    k=min(int(max_count), len(range_examples))
+                    percentage_range_examples,
+                    k=min(int(max_count), len(percentage_range_examples))
                 )
             )
         else:
-            return ', '.join(range_examples)
+            return ', '.join(percentage_range_examples)

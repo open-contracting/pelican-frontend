@@ -91,7 +91,7 @@
                                 <div
                                     class="col col-12 text-center total_share"
                                     v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ check.meta.ocid_share * 100 | formatPercentage }}</div>
+                                >{{ check.meta.ocid_share * 100 | formatPercentage2D }}</div>
                             </div>
                             <div class="row">
                                 <div

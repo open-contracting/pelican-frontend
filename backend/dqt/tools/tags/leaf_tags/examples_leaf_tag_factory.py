@@ -1,4 +1,5 @@
 
+import random
 from dqt.tools.tags.tag import LeafTag
 
 def generate_examples_leaf_tag(key):
@@ -26,3 +27,5 @@ def generate_examples_leaf_tag(key):
                 )
             else:
                 return ', '.join(data[key])
+
+    return ExamplesLeafTag

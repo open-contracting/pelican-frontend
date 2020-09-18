@@ -233,10 +233,10 @@ export const messages = {
             ok: "All values are unique.",
             failed: "Not all values are unique.",
             tender_id: {
-                name: "",
-                description: "",
-                description_long: ""
-            },
+                name: "Unique tender identification",
+                description: "<code>tender.id</code> is unique within the whole dataset",
+                description_long: "For each compiled release verifies that its <code>tender.id</code> is unique within the dataset. Such releases that do not have <code>tender.id</code> set are excluded from this calculation"
+            }
         },
         misc: {
             url_availability: {
