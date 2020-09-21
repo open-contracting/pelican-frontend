@@ -4,7 +4,12 @@ from dqt.tools.tags.tag import LeafTag
 from dqt.tools import graphs
 
 
-class ResultBoxImageLeafTag(LeafTag):
+class CountsResultBoxImageLeafTag(LeafTag):
+    TYPES = set([
+        'bar',
+        # 'pie',
+    ])
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(
             self.process_tag,
@@ -13,18 +18,18 @@ class ResultBoxImageLeafTag(LeafTag):
             dataset_id
         )
 
+        self.set_param_validation('type', lambda v: v in CountsResultBoxImageLeafTag.TYPES)
+
         self.set_required_data_field('name')
-        self.set_required_data_field('passedCount')
-        self.set_required_data_field('failedCount')
-        self.set_required_data_field('notAvailableCount')
+        self.set_required_data_field('counts')
 
     def process_tag(self, data):
-        buffer, aspect_ratio = graphs.resource_result_box(
-            data['passedCount'],
-            data['failedCount'],
-            data['notAvailableCount'],
-            return_aspect_ratio=True
-        )
+        if self.get_param('type') is None or self.get_param('type') == 'bar':
+            buffer, aspect_ratio = graphs.bar_result_box(data['counts'], return_aspect_ratio=True)
+        elif self.get_param('type') == 'pie':
+            # TODO
+            raise NotImplemented()
+
         image_file_path = self.gdocs.add_image_file(buffer, 'resultBoxImage_%s.png' % data['name'])
         buffer.close()
 

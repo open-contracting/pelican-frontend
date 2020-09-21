@@ -4,6 +4,7 @@ from dqt.models import DatasetLevelCheck
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
+from dqt.tools.tags.leaf_tags.dataset.counts_result_box_image import CountsResultBoxImageLeafTag
 from dqt.tools.tags.leaf_tags.dataset.result import ResultLeafTag
 from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
 from dqt.tools.tags.leaf_tags.dataset.donut.share import ShareLeafTag as donut_ShareLeafTag
@@ -21,6 +22,7 @@ from dqt.tools.tags.leaf_tags.dataset.single_value_share.ocid_count import \
     OcidCountLeafTag as single_value_share_OcidCountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.single_value_share.buyer_count import \
     BuyerCountLeafTag as single_value_share_BuyerCountLeafTag
+
 
 class DatasetTemplateTag(TemplateTag):
     CHECK_TYPE_VERSION_CONTROL = {
@@ -156,7 +158,7 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('share', donut_ShareLeafTag)
             self.set_sub_tag('count', donut_CountLeafTag)
             self.set_sub_tag('examples', donut_ExamplesLeafTag)
-            # self.set_sub_tag('resultBoxImage')
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
             data['shares'] = {
                 key: value['share']
@@ -178,7 +180,7 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('count', bar_CountLeafTag)
             self.set_sub_tag('examples', bar_ExamplesLeafTag)
             self.set_sub_tag('sum', bar_SumLeafTag)
-            # self.set_sub_tag('resultBoxImage')
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
             data['shares'] = {
                 key.replace('_', '-'): value
@@ -204,7 +206,7 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('count', top3_CountLeafTag)
             self.set_sub_tag('examples', top3_ExamplesLeafTag)
             self.set_sub_tag('amount', top3_AmountLeafTag)
-            # self.set_sub_tag('resultBoxImage')
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
             data['shares'] = {
                 str(index + 1): el['share']
@@ -232,7 +234,7 @@ class DatasetTemplateTag(TemplateTag):
 
             self.set_sub_tag('passedExamples', generate_examples_leaf_tag('passedExamples'))
             self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
-            # self.set_sub_tag('resultBoxImage')
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
             data['checkedCount'] = check.meta['total_processed']
             data['passedCount'] = check.meta['total_passed']
@@ -245,6 +247,11 @@ class DatasetTemplateTag(TemplateTag):
                 example['ocid']
                 for example in check.meta['failed_examples']
             ]
+            data['counts'] = {
+                'checked': check.meta['total_processed'],
+                'passed': check.meta['total_passed'],
+                'failed': check.meta['total_failed'],
+            }
         elif check_type == 'biggest_share':
             self.set_sub_tag('buyerIdentifierId', generate_key_leaf_tag('buyerIdentifierId'))
             self.set_sub_tag('buyerIdentifierScheme', generate_key_leaf_tag('buyerIdentifierScheme'))

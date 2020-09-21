@@ -57,18 +57,18 @@ class ResourceTemplateTag(TemplateTag):
         # TODO: check if check was calculated
         self.set_param_validation('check', lambda v: v in ResourceTemplateTag.CHECKS, required=True)
 
-        self.set_sub_tag('name', generate_key_leaf_tag['name'])
-        self.set_sub_tag('description', generate_key_leaf_tag['description'])
-        self.set_sub_tag('checkedCount', generate_key_leaf_tag['checkedCount'])
-        self.set_sub_tag('passedCount', generate_key_leaf_tag['passedCount'])
-        self.set_sub_tag('failedCount', generate_key_leaf_tag['failedCount'])
-        self.set_sub_tag('notAvailableCount', generate_key_leaf_tag['notAvailableCount'])
+        self.set_sub_tag('name', generate_key_leaf_tag('name'))
+        self.set_sub_tag('description', generate_key_leaf_tag('description'))
+        self.set_sub_tag('checkedCount', generate_key_leaf_tag('checkedCount'))
+        self.set_sub_tag('passedCount', generate_key_leaf_tag('passedCount'))
+        self.set_sub_tag('failedCount', generate_key_leaf_tag('failedCount'))
+        self.set_sub_tag('notAvailableCount', generate_key_leaf_tag('notAvailableCount'))
 
-        self.set_sub_tag('resultBoxImage', generate_examples_leaf_tag['resultBoxImage'])
-        self.set_sub_tag('passedExamples', generate_examples_leaf_tag['passedExamples'])
-        self.set_sub_tag('failedExamples', generate_examples_leaf_tag['failedExamples'])
-        self.set_sub_tag('notAvailableExamples', generate_examples_leaf_tag['notAvailableExamples'])
-    
+        self.set_sub_tag('resultBoxImage', ResultBoxImageLeafTag)
+        self.set_sub_tag('passedExamples', generate_examples_leaf_tag('passedExamples'))
+        self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
+        self.set_sub_tag('notAvailableExamples', generate_examples_leaf_tag('notAvailableExamples'))
+
     def prepare_data(self):
         check_name = self.get_param('check')
         with connections["data"].cursor() as cursor:

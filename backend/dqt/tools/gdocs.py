@@ -33,7 +33,7 @@ class Gdocs:
             raise RuntimeError("Unable to find token file")
 
         self.create_tempdir()
-        
+
         self.main_template_id = main_template_id
         self.template_ids = set(self.main_template_id)
         self.main_template_id = main_template_id
@@ -51,7 +51,7 @@ class Gdocs:
         with ZipFile(path, mode='a') as zip_file:
             image_file_path = os.path.join('Pictures/', shortuuid.uuid() + '_' + name)
             zip_file.writestr(image_file_path, buffer.getbuffer())
-    
+
         # Updating manifest
         with ZipFile(path) as zip_file:
             with zip_file.open('META-INF/manifest.xml') as content:

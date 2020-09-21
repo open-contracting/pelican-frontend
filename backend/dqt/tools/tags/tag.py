@@ -157,9 +157,20 @@ class TemplateTag:
         while nodes:
             node = nodes[0]
             parent = node.getparent()
-            node.addnext(copy.deepcopy(element))
-            parent.remove(node)
 
+            if parent.tag == '{urn:oasis:names:tc:opendocument:xmlns:office:1.0}text':
+                wrapper_element = etree.Element(
+                    '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
+                    attrib={
+                        '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
+                    }
+                )
+                wrapper_element.append(element)
+                node.addnext(copy.deepcopy(wrapper_element))
+            else:
+                node.addnext(copy.deepcopy(element))
+            
+            parent.remove(node)
             nodes = self.template.xpath('.//*[contains(text(),"' + location + '")]')
 
     def get_template_content(self, template):

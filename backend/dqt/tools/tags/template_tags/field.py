@@ -9,6 +9,7 @@ from dqt.tools.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTa
 from dqt.tools.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
 from dqt.tools.tags.leaf_tags.field.failed_examples import FailedExamplesLeafTag
 
+
 class FieldTemplateTag(TemplateTag):
     CHECKS = set([
         'date_time',
@@ -611,7 +612,7 @@ class FieldTemplateTag(TemplateTag):
         self.set_sub_tag('resultBoxImage', ResultBoxImageLeafTag)
         self.set_sub_tag('passedExamples', PassedExamplesLeafTag)
         self.set_sub_tag('failedExamples', FailedExamplesLeafTag)
-    
+
     def prepare_data(self):
         path = self.get_param('path')
         # TODO: the param check is necessary

@@ -3,8 +3,8 @@ from lxml import etree
 from dqt.tools.tags.tag import LeafTag
 from dqt.tools import graphs
 
-class ResultBoxImageLeafTag(LeafTag):
 
+class ResultBoxImageLeafTag(LeafTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(
             self.process_tag,
@@ -15,7 +15,6 @@ class ResultBoxImageLeafTag(LeafTag):
 
         self.set_param_validation('level', lambda v: v in ('coverage', 'quality'), required=True)
         # self.set_param_validation('check', lambda v: v in FieldTemplateTag.CHECKS)
-        
         self.set_required_data_field('name')
         self.set_required_data_field('coveragePassedCount')
         self.set_required_data_field('coverageFailedCount')
@@ -23,9 +22,10 @@ class ResultBoxImageLeafTag(LeafTag):
         self.set_required_data_field('qualityFailedCount')
 
     def process_tag(self, data):
-        buffer = graphs.field_result_box(
+        buffer, aspect_ratio = graphs.field_result_box(
             data['%sPassedCount' % self.get_param('level')],
             data['%sFailedCount' % self.get_param('level')],
+            return_aspect_ratio=True
         )
         image_file_path = self.gdocs.add_image_file(
             buffer,
@@ -40,7 +40,7 @@ class ResultBoxImageLeafTag(LeafTag):
                 '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name': image_file_path,
                 '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}anchor-type': 'as-char',
                 '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}width': '6.0cm',
-                '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}height': '2.0cm',
+                '{urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0}height': '%fcm' % (6 * aspect_ratio),
                 '{urn:oasis:names:tc:opendocument:xmlns:style:1.0}rel-width': '100%',
                 '{urn:oasis:names:tc:opendocument:xmlns:style:1.0}rel-height': 'scale',
                 '{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}z-index': '0',
@@ -56,11 +56,4 @@ class ResultBoxImageLeafTag(LeafTag):
                 '{urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0}mime-type': 'image/png',
             }
         ))
-        wrapper_element = etree.Element(
-            '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
-            attrib={
-                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'P1'
-            }
-        )
-        wrapper_element.append(image_element)
-        return wrapper_element
+        return image_element
