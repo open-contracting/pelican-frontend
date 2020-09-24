@@ -1,7 +1,12 @@
 <template>
     <dashboard-detail>
         <template v-if="check" v-slot:content>
-            <h2 v-if="check">{{ $t("resourceLevel." + check.name + ".name") }}</h2>
+            <h2 v-if="check">
+                <span class="category_name">
+                    {{ $t("resourceLevel." + check.name.split('.')[0] + ".categoryName") }}: 
+                </span>
+                {{ $t("resourceLevel." + check.name + ".name") }}
+            </h2>
             <p class="description" v-html="$t('resourceLevel.' + check.name + '.description')"></p>
 
             <h5>
@@ -20,7 +25,12 @@
             </h5>
             <CheckDetailResultBox :check="check" individualPass individualNonPass />
 
-            <ExampleBoxes :examples="examples" v-on:preview="preview" v-on:download="download" :loaded="check.examples_filled" :previewDisabled="loadingPreviewData"></ExampleBoxes>
+            <ExampleBoxes
+                :examples="examples"
+                v-on:preview="preview"
+                :loaded="check.examples_filled"
+                :previewDisabled="loadingPreviewData"
+            />
         </template>
 
         <template v-slot:preview>
@@ -41,7 +51,7 @@
             </span>
 
             <span v-else-if="previewData">
-                <h5>{{ $t("preview.ocds_data") }}</h5>
+                <h5>{{ $t("preview.ocdsData") }}</h5>
                 <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
             </span>
 
@@ -81,7 +91,7 @@ export default {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
-                    this.$alert(this.$t("preview.cannot_display"), null, 'error');
+                    this.$alert(this.$t("preview.cannotDisplay"), null, 'error');
                     this.previewDataItemId = null;
                 }
 
@@ -100,19 +110,6 @@ export default {
             if (result) {
                 this.previewMetaData = result.result;
             }
-        },
-        download: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId).then(() => {
-                var result = this.$store.getters.dataItemById(itemId);
-                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
-                var fileLink = document.createElement('a');
-            
-                fileLink.href = fileURL;
-                fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
-                document.body.appendChild(fileLink);
-            
-                fileLink.click();
-            })
         }
     },
     computed: {
@@ -180,4 +177,9 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
+.category_name {
+    color: $headings-light-color;
+}
+
 </style>

@@ -82,21 +82,32 @@ export const messages = {
     },
     preview: {
         metadata: "Metadata",
-        ocds_data: "Data Preview",
-        cannot_display: "The JSON data cannot be previewed, because its large size (more than 3,000 lines) can cause some browsers to crash. You can download the JSON file, instead.",
+        ocdsData: "Data Preview",
+        cannotDisplay: "The JSON data cannot be previewed, because its large size (more than 3,000 lines) can cause some browsers to crash. You can download the JSON file directly, instead.",
     },
     examples: {
         failed: "Sample releases with failed rules",
         passed: "Sample releases with passed rules",
         downloads: "Download",
         download_json: "JSON",
-        actions: "Actions",
-        preview: "Preview",
+        actions: "actions",
         previewOld: "Preview old",
         previewNew: "Preview new",
         ocid: "ocid",
         showMore: "Show more examples",
         showLess: "Show fewer examples",
+        preview: {
+            tooltip: "Preview"
+        },
+        download: {
+            success: "The JSON data is being downloaded.",
+            tooltip: "Download"
+        },
+        copyToClipboard: {
+            success: "The JSON data has been successfully copied to clipboard.",
+            failure: "The JSON data cannot be copied to clipboard, because its large size (more than 3,000 lines) is not suitable for clipboards. You can download the JSON file directly, instead.",
+            tooltip: "Copy to clipboard"
+        }
     },
     navigationContextMenu: {
         openNewTab: "Open in New Tab",
@@ -283,6 +294,9 @@ export const messages = {
         count_header_tooltip: "Each compiled release is checked, and either it passes, it fails or the check is inapplicable.",
         application_count_header: "Individual tests performed:",
         application_count_header_tooltip: "One 'check' can be made up of many 'tests'; for example, when checking whether start dates aren't after end dates, each pair of start dates and end dates is <i>tested</i>. This shows the proportion of tests that passed or failed, instead of the proportion of compiled releases that passed or failed.",
+        averageScore: {
+            tooltip: "PLACEHOLDER"
+        },
         coherent: {
             categoryName: "Coherence",
             period: {
@@ -501,6 +515,7 @@ export const messages = {
         },
         search: "Search field by name",
         hidden: " {n} hidden",
+        checkedFields: "Checks are not performed on fields in extensions or on additional fields."
     },
     fieldDetail: {
         checked: "checked",

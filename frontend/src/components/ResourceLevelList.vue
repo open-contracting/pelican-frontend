@@ -10,10 +10,10 @@
                 </div>
                 {{ $t("resourceLevel." + section + ".categoryName") }}
             </div>
-            <div
-                class="td col-8 col-lg-7 text-right text-lg-left info_message"
-                scope="col"
-            >{{ resourceLevelStats.length }} checks in total with avg score {{ avgScore | formatPercentage }}</div>
+            <div class="td col-8 col-lg-7 text-right text-lg-left info_message" scope="col" >
+                {{ resourceLevelStats.length }} checks in total with avg score {{ avgScore | formatPercentage }}
+                <Tooltip :text="$t('resourceLevel.averageScore.tooltip')"></Tooltip>
+            </div>
         </div>
         <span class="checks" v-if="showChecks">
             <ResourceLevelRow v-for="(value, name, index) in resourceLevelStats" :check="value" :name="value.name" v-bind:key="name" v-bind:index="index"></ResourceLevelRow>
@@ -23,6 +23,7 @@
 
 <script>
 import ResourceLevelRow from "@/components/ResourceLevelRow";
+import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     data: function() {
@@ -31,7 +32,10 @@ export default {
         };
     },
     props: ["section"],
-    components: { ResourceLevelRow },
+    components: {
+        ResourceLevelRow,
+        Tooltip
+    },
     computed: {
         resourceLevelStats() {
             var result = this.$store.getters.resourceLevelStatsBySection(

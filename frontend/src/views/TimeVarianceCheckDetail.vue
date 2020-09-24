@@ -137,7 +137,7 @@
 
             <div class="divider">&nbsp;</div>
             <span v-if="previewData">
-                <h5>{{ $t("preview.ocds_data") }}</h5>
+                <h5>{{ $t("preview.ocdsData") }}</h5>
                 <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
             </span>
         </template>

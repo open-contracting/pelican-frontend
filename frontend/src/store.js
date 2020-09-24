@@ -84,7 +84,17 @@ export default new Vuex.Store({
             if (state.dataItems) {
                 var dataItem = state.dataItems.find(item => item.id === itemId);
                 if (dataItem != null) {
-                    return JSON.stringify(dataItem["data"], null, 2).split("\n").length;
+                    return JSON.stringify(dataItem["data"], null, 4).split("\n").length;
+                }
+            }
+
+            return null;
+        },
+        dataItemJSON: state => itemId => {
+            if (state.dataItems) {
+                var dataItem = state.dataItems.find(item => item.id === itemId);
+                if (dataItem != null) {
+                    return JSON.stringify(dataItem["data"], null, 4);
                 }
             }
 
@@ -120,14 +130,14 @@ export default new Vuex.Store({
             return null;
         },
         fieldCheckSortedBy: state => {
-            return state.fieldCheckSorting != null
-                ? state.fieldCheckSorting.by
-                : null;
+            return state.fieldCheckSorting != null ?
+                state.fieldCheckSorting.by :
+                null;
         },
         fieldCheckSortedAscending: state => {
-            return state.fieldCheckSorting != null
-                ? state.fieldCheckSorting.asc
-                : null;
+            return state.fieldCheckSorting != null ?
+                state.fieldCheckSorting.asc :
+                null;
         },
         fieldCheckSearch: state => {
             return state.fieldCheckSearch;
@@ -136,14 +146,14 @@ export default new Vuex.Store({
             return state.datasetSearch;
         },
         datasetSortedBy: state => {
-            return state.datasetSorting != null
-                ? state.datasetSorting.by
-                : null;
+            return state.datasetSorting != null ?
+                state.datasetSorting.by :
+                null;
         },
         datasetSortedAscending: state => {
-            return state.datasetSorting != null
-                ? state.datasetSorting.asc
-                : null;
+            return state.datasetSorting != null ?
+                state.datasetSorting.asc :
+                null;
         },
         isResourceCheckExpanded: state => section => {
             if (state.resourceCheckExpandedNodes != null) {
@@ -154,7 +164,7 @@ export default new Vuex.Store({
         },
         extensionDataByName: state => extensionName => {
             return state.dataset.meta.collection_metadata.extensions.find(item =>
-                item.name.hasOwnProperty('en') ? item.name['en'] ==  extensionName : item.name == extensionName    
+                item.name.hasOwnProperty('en') ? item.name['en'] == extensionName : item.name == extensionName
             )
         }
     },

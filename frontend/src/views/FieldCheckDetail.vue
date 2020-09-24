@@ -32,7 +32,6 @@
             <ExampleBoxes
                 :examples="failedCoverageExamples.concat(failedQualityExamples).concat(passedExamples)"
                 v-on:preview="preview"
-                v-on:download="download"
                 :loaded="check.examples_filled"
                 :previewDisabled="loadingPreviewData"
             />
@@ -56,7 +55,7 @@
             </span>
 
             <span v-else-if="previewData">
-                <h5>{{ $t("preview.ocds_data") }}</h5>
+                <h5>{{ $t("preview.ocdsData") }}</h5>
                 <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
             </span>
         </template>
@@ -93,7 +92,7 @@ export default {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
-                    this.$alert(this.$t("preview.cannot_display"), null, 'error');
+                    this.$alert(this.$t("preview.cannotDisplay"), null, 'error');
                     this.previewDataItemId = null;
                 }
 
@@ -107,19 +106,6 @@ export default {
             if (result) {
                 this.previewMetaData = result.result;
             }
-        },
-        download: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId).then(() => {
-                var result = this.$store.getters.dataItemById(itemId);
-                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
-                var fileLink = document.createElement('a');
-            
-                fileLink.href = fileURL;
-                fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
-                document.body.appendChild(fileLink);
-            
-                fileLink.click();
-            })
         },
     },
     computed: {

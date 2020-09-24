@@ -3,6 +3,17 @@
         <h2>{{ $t("field.title") }}</h2>
         <div class="description" v-html=" $t('field.description')"></div>
 
+        <div class="checked_fields_box">
+            <span>
+                <span class="checked_fields_icon">
+                    <font-awesome-icon :icon="['fas', 'hand-point-right']" :style="{ color: '#FDC926' }" />
+                </span>
+                <span class="checked_fields_text">
+                    {{ $t('field.checkedFields')}}
+                </span>
+            </span>
+        </div>
+        
         <h4>{{ $t('field.all') }}</h4>
 
         <b-row class="action_bar">
@@ -25,6 +36,7 @@
                     </button>
                 </b-button-group>
             </b-col>
+
         </b-row>
 
         <div class="field_result_box">
@@ -64,6 +76,31 @@ export default {
 
 <style lang="scss">
 @import "src/scss/_variables";
+
+.checked_fields_box {
+    text-align: center;
+}
+
+.checked_fields_box .checked_fields_icon {
+    background-color: white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 0;
+    padding: 10px;
+    padding-right: 3px;
+}
+
+.checked_fields_box .checked_fields_text  {
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 0;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    padding-right: 10px;
+    vertical-align: -2px;
+    color: $text-color;
+}
 
 .field_result_box {
     background-color: white;
