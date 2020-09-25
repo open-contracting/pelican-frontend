@@ -3,6 +3,7 @@
 </template>
 
 <script>
+const chroma = require("chroma-js");
 import { GChart } from "vue-google-charts";
 import datasetMixin from "@/plugins/datasetMixins.js";
 
@@ -19,23 +20,8 @@ export default {
                 fontName: "GTEestiProDisplay-Regular",
                 chartArea: { left: 10, top: 20, width: "100%", height: "85%" },
                 pieHole: 0.4,
-                colors: [
-                    "#555CB3",
-                    "#6169CC",
-                    "#6C75E1",
-                    "#7B82E3",
-                    "#8A91E7",
-                    "#989EE9",
-                    "#A7ACED",
-                    "#B7BBF0",
-                    "#C4C7F3",
-                    "#D3D5F6",
-                    "#E3E5F9",
-                    "#F1F2FC",
-                    "#313566",
-                    "#3D4280",
-                    "#494F99"
-                ]
+                sliceVisibilityThreshold: (0.5 / 360),
+                colors: []
             }
         };
     },
@@ -44,9 +30,20 @@ export default {
     mounted() {
         this.chartData.push(["Category", "Share"]);
 
+        var totalCount = 0;
         var shares = this.orderedShares(this.check.meta.shares);
         for (var key in shares) {
             this.chartData.push([shares[key][0], shares[key][1].count]);
+            totalCount += shares[key][1].count;
+        }
+        
+        this.chartOptions.colors = this.generateGradient(
+            this.chartData.slice(1).filter(v => (v[1] / totalCount) >= this.chartOptions.sliceVisibilityThreshold).length + 1
+        );
+    },
+    methods: {
+        generateGradient: function(colorCount) {
+            return chroma.scale(["#2B2E5A", "#EFF0FC"]).mode('lab').colors(colorCount);
         }
     }
 };

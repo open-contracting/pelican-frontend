@@ -180,6 +180,7 @@ export default {
 
 .category_name {
     color: $headings-light-color;
+    font-family: $font-family-thin;
 }
 
 </style>

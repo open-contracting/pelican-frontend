@@ -17,6 +17,8 @@
     "axios": "^0.19.2",
     "bootstrap-vue": "^2.15.0",
     "chart.js": "^2.9.3",
+    "chroma": "0.0.1",
+    "chroma-js": "^2.1.0",
     "core-js": "^2.6.11",
     "numeral": "^2.0.6",
     "register-service-worker": "^1.7.1",

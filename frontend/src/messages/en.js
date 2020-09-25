@@ -295,7 +295,7 @@ export const messages = {
         application_count_header: "Individual tests performed:",
         application_count_header_tooltip: "One 'check' can be made up of many 'tests'; for example, when checking whether start dates aren't after end dates, each pair of start dates and end dates is <i>tested</i>. This shows the proportion of tests that passed or failed, instead of the proportion of compiled releases that passed or failed.",
         averageScore: {
-            tooltip: "PLACEHOLDER"
+            tooltip: "The score is computed as an arithmetic average of passed scores of checks in each category."
         },
         coherent: {
             categoryName: "Coherence",
