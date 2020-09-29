@@ -6,6 +6,11 @@
             </b-input-group-text>
         </template>
         <b-form-input v-model="search" :placeholder="placeholder" />
+        <template v-slot:append>
+            <b-button v-if="search" :disabled="!search" v-on:click="search = null">
+                <font-awesome-icon :icon="['fas', 'times']"/>
+            </b-button>
+        </template>
     </b-input-group>
 </template>
 
@@ -29,7 +34,7 @@ export default {
             if (this.submitTimeout) {
                 clearTimeout(this.submitTimeout)
             }
-              
+
             this.submitTimeout = setTimeout(() => this.onUpdate(value), this.submitTimeLimit)
         }
     },
@@ -50,6 +55,7 @@ export default {
     input {
         background-color: transparent;
         border-left: none;
+        padding-top: 10px;
     }
 }
 </style>
