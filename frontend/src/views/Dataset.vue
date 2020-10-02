@@ -61,4 +61,14 @@ export default {
 <style lang="scss">
 @import "src/scss/main";
 
+.collection_header {
+    margin-bottom: 5px;
+
+    h4 {
+        position: absolute;
+        bottom: 0px;
+        margin-bottom: 5px;
+    }
+}
+
 </style>

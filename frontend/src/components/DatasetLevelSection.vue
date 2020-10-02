@@ -1,27 +1,14 @@
 <template>
     <span v-if="loaded">
         <h4 v-if="datasetLevelStats.length > 0">{{ $t("datasetLevel.sections." + section) }}</h4>
-        <div class="row">
-            <div class="card-deck col-12">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
+            <!-- <div class="card-deck col-12"> -->
                 <template v-for="(check, index) in datasetLevelStats">
-                    <DatasetLevelCheck :check="check" v-bind:key="index"></DatasetLevelCheck>
-
-                    <div class="w-100 d-none d-sm-block d-md-none" v-bind:key="'sm' + index">
-                        <!-- wrap every 1-->
-                    </div>
-
-                    <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-md-block d-lg-none" v-bind:key="'md' + index">
-                        <!-- wrap every 2-->
-                    </div>
-                    <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-lg-block d-xl-none" v-bind:key="'lg' + index">
-                        <!-- wrap every 2-->
-                    </div>
-
-                    <div v-if="(index + 1) % 3 == 0" class="w-100 d-none d-xl-block" v-bind:key="'xl' + index">
-                        <!-- wrap every 3-->
+                    <div class="col mb-4" v-bind:key="section + index">
+                        <DatasetLevelCheck :check="check" v-bind:key="section + index"></DatasetLevelCheck>
                     </div>
                 </template>
-            </div>
+            <!-- </div> -->
         </div>
     </span>
     <span v-else>

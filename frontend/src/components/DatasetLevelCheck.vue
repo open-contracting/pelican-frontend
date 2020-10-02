@@ -1,6 +1,6 @@
 <template>
     <div
-        class="card mb-4 dataset_result_box result_box"
+        class="card mb-4 h-100 dataset_result_box result_box"
         v-bind:class="{ clickable: ((check.result != undefined) && (checkType != null)), undef: ((check.result == undefined) || (checkType == null)) }"
         v-on:click="detail()"
         @contextmenu.prevent="((check.result != undefined) && (checkType != null)) ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments}) : null"
@@ -176,7 +176,6 @@ export default {
 }
 
 .dataset_result_box {
-    display: inline-block;
     background-color: white;
     padding: 5px;
     border-radius: 10px;
