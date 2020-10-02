@@ -10,7 +10,7 @@
         </div>
 
         <div class="td col col-4">
-            <div class="row h-100 no-gutters align-items-center">
+            <div v-if="showStats" class="row h-100 no-gutters align-items-center">
                 <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
                     <span class="field_check_result_value">{{ check.coverageOkShare | formatPercentage }}</span>
                 </div>
@@ -27,7 +27,7 @@
 
         <template v-if="check.quality.total_count">
             <div class="td col col-4">
-                <div class="row h-100 no-gutters align-items-center">
+                <div v-if="showStats" class="row h-100 no-gutters align-items-center">
                     <div class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end">
                         <span class="field_check_result_value">{{ check.qualityOkShare | formatPercentage }}</span>
                     </div>
@@ -62,7 +62,13 @@ export default {
         };
     },
     name: "field-check-table-row",
-    props: ["check"],
+    props: {
+        check: Object,
+        showStats: {
+            type: Boolean,
+            default: true,
+        }
+    },
     components: { ProgressBar },
     methods: {
         detail: function() {

@@ -7,7 +7,7 @@
                     <DatasetLevelCheck :check="check" v-bind:key="index"></DatasetLevelCheck>
 
                     <div class="w-100 d-none d-sm-block d-md-none" v-bind:key="'sm' + index">
-                        <!-- wrap every 2-->
+                        <!-- wrap every 1-->
                     </div>
 
                     <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-md-block d-lg-none" v-bind:key="'md' + index">
@@ -18,7 +18,7 @@
                     </div>
 
                     <div v-if="(index + 1) % 3 == 0" class="w-100 d-none d-xl-block" v-bind:key="'xl' + index">
-                        <!-- wrap every 2-->
+                        <!-- wrap every 3-->
                     </div>
                 </template>
             </div>
@@ -73,7 +73,7 @@ export default {
             }
         };
     },
-    props: ["section", "insufficientShown"],
+    props: ["section", "filter"],
     components: { DatasetLevelCheck },
     computed: {
         loaded() {
@@ -85,16 +85,12 @@ export default {
         datasetLevelStats() {
             if (!(this.section in this.sections)) {
                 return [];
-            } else if (this.insufficientShown) {
-                return this.sections[this.section].map(item =>
-                    this.$store.getters.datasetLevelCheckByName(item)
-                );
             } else {
                 return this.sections[this.section]
                     .map(item =>
                         this.$store.getters.datasetLevelCheckByName(item)
                     )
-                    .filter(item => !(item.result == null));
+                    .filter(this.filter);
             }
         }
     }

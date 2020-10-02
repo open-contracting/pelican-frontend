@@ -94,8 +94,6 @@ export default {
     mixins: [stateMixin, sortMixins],
     data: function() {
         return {
-            loading: false,
-            afterUpdateRoute: { name: "overview" },
             showFilteredChildren: false
         };
     },
@@ -117,14 +115,12 @@ export default {
             if (!this.isDatasetImported(dataset)) {
                 return;
             }
-
-            this.loading = true;
-            this.afterUpdateRoute = route;
-            this.afterUpdateRoute.params = { datasetId: dataset.id };
-            if (this.$store.getters.datasetId != dataset.id) {
-                this.$store.dispatch("updateDataset", dataset);
+            route.params = { datasetId: dataset.id };
+            if (this.$store.getters.datasetId == dataset.id) {
+                this.$router.push(route);
             } else {
-                this.$router.push(this.afterUpdateRoute);
+                this.$store.dispatch("updateDataset", dataset);
+                this.$router.push(route);
             }
         },
         getDatasetProgress: function(dataset) {
@@ -132,13 +128,6 @@ export default {
         },
         isDatasetImported: function(dataset) {
             return dataset.phase == "CHECKED" && dataset.state == "OK";
-        }
-    },
-    watch: {
-        atLeastOneLoaded: function(newValue) {
-            if (newValue) {
-                this.$router.push(this.afterUpdateRoute);
-            }
         }
     }
 };

@@ -6,19 +6,16 @@
             <b-col class="text-left">
                 <h4>{{ $t("datasetLevel.subheadline") }}</h4>
             </b-col>
-            <b-col class="text-right insufficient_switch" @click="insufficientShown = !insufficientShown">
-                <span v-if="insufficientShown">
-                    <font-awesome-icon icon="eye-slash"/>
-                    {{ $t("datasetLevel.insufficientShown") }}
-                </span>
-                <span v-else>
-                    <font-awesome-icon icon="eye"/>
-                    {{ $t("datasetLevel.insufficientHidden") }}
-                </span>
+            <b-col class="text-right">
+                <FilterDropdown
+                    v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+                    :filterNames="filterNames"
+                    :startIndex="filterIndex"
+                />
             </b-col>
         </b-row>
         <template v-for="(section, index) in sections">
-            <DatasetLevelSection :section="section" :insufficientShown="insufficientShown" v-bind:key="index"></DatasetLevelSection>
+            <DatasetLevelSection :section="section" :filter="filters[filterIndex]" v-bind:key="index"></DatasetLevelSection>
         </template>
     </dashboard>
 </template>
@@ -27,22 +24,35 @@
 // import Loader from "@/components/Loader.vue";
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue"
+import FilterDropdown from "@/components/FilterDropdown.vue";
 
 export default {
     name: "dataset",
-    components: { Dashboard, DatasetLevelSection },
+    components: { Dashboard, DatasetLevelSection, FilterDropdown },
     data: function() {
         return {
             sections: ["status_distribution", "value_distribution", "other_distribution", "repetition", "other"],
-            insufficientShown: true
+            filterIndex: 0,
+            filterNames: [
+                this.$t("datasetLevel.filterDropdown.all"),
+                this.$t("datasetLevel.filterDropdown.failedOnly"),
+                this.$t("datasetLevel.filterDropdown.passedOnly"),
+                this.$t("datasetLevel.filterDropdown.calculatedOnly"),
+            ],
+            filters: [
+                () => true,
+                item => item.result == false,
+                item => item.result == true,
+                item => item.result != null,
+            ]
         };
     },
-    mounted() {
-        this.insufficientShown = this.$store.getters.insufficientShown;
+    created() {
+        this.filterIndex = this.$store.getters.datasetLevelFilterIndex;
     },
     watch: {
-        insufficientShown: function (newInsufficientShown) {
-            this.$store.commit("setInsufficientShown", newInsufficientShown);
+        filterIndex: function (newFilterIndex) {
+            this.$store.commit("setDatasetLevelFilterIndex", newFilterIndex);
         }
     },
 };
@@ -50,19 +60,5 @@ export default {
 
 <style lang="scss">
 @import "src/scss/main";
-
-.insufficient_switch :hover {
-    text-decoration: underline;
-}
-
-.insufficient_switch {
-    color: $primary;
-    text-align: right;
-    cursor: pointer;
-    padding-top: 20px;
-    margin-right: 30px;
-}
-
-
 
 </style>

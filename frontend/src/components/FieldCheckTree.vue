@@ -30,11 +30,15 @@ export default {
     data: function() {
         return {};
     },
+    props: ["filter"],
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
     watch: {
         search: function() {
             this.$store.dispatch("setExpandedNodesForSearch");
+        },
+        filter: function() {
+            this.$store.commit("setFieldLevelFilter", this.filter);
         }
     },
     mounted: function() {
@@ -65,7 +69,7 @@ export default {
 
             return root;
         }
-    }
+    },
 };
 </script>
 

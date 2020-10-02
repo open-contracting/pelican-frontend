@@ -282,6 +282,12 @@ export const messages = {
             share: "Share",
             count: "Occurrences",
         },
+        filterDropdown: {
+            all: "All",
+            failedOnly: "Failed only",
+            passedOnly: "Passed only",
+            calculatedOnly: "Calculated only",
+        },
     },
     resourceLevel: {
         description: "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID</code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p></li></ul>",
@@ -450,6 +456,12 @@ export const messages = {
                 description: "<p>Each <code>contracts[].awardID</code> is present and matches the <code>awardID</code> of exactly one award.</p><p>The test is skipped if there are no awards.</p>",
             },
         },
+        filterDropdown: {
+            all: "All",
+            failedOnly: "Failed only",
+            passedOnly: "Passed only",
+            calculatedOnly: "Calculated only",
+        },
     },
     overview: {
         collection_metadata: "Collection Metadata",
@@ -515,7 +527,13 @@ export const messages = {
         },
         search: "Search field by name",
         hidden: " {n} hidden",
-        checkedFields: "Checks are not performed on fields in extensions or on additional fields."
+        checkedFields: "Checks are not performed on fields in extensions or on additional fields.",
+        filterDropdown: {
+            all: "All",
+            coverageFailedOnly: "Coverage failed only",
+            qualityFailedOnly: "Quality failed only",
+            passedOnly: "Passed only",
+        },
     },
     fieldDetail: {
         checked: "checked",
@@ -606,6 +624,11 @@ export const messages = {
             name: "Tender title stability",
             description: "The tender title should be invariant across time.",
             descriptionLong: "<p>The tender title should be invariant across time.</p><p>If an older compiled release sets the <code>tender.title</code> field, then it is attempted to be paired with a newer compiled release. If the lowercased, whitespace-normalized values of the two <code>tender.title</code> fields in the two compiled releases are equal, the test passes.</p>",
+        },
+        filterDropdown: {
+            all: "All",
+            failedOnly: "Failed only",
+            passedOnly: "Passed only",
         },
     },
 };

@@ -1,6 +1,6 @@
 <template>
     <fragment>
-        <FieldCheckTableRow :key="path" :check="check" v-bind:class="{ hidden: (hide || !isSearched(data)) }">
+        <FieldCheckTableRow :key="path" :check="check" :showStats="filter(data._check)" v-bind:class="{ hidden: (hide || !isSearched(data)) }">
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
                 <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
@@ -10,7 +10,7 @@
                     </template>
                 </div>
                 <div v-else class="switcher"></div>
-                <div class="name flex-fill" :title="path" v-html="highlightSearch(name)"></div>
+                <div class="name flex-fill" :title="path" v-html="highlightSearchLast(path)"></div>
             </div>
         </FieldCheckTableRow>
 
@@ -73,23 +73,19 @@ export default {
         check: function() {
             return this.data._check;
         },
-        name: function() {
-            return this.path.substring(this.path.lastIndexOf(".") + 1);
+        filter: function() {
+            return this.$store.getters.fieldLevelFilter;
         }
     },
     methods: {
         isSearched: function(node) {
-            if (this.search) {
-                if (this.isPathSearched(node._check.path)) {
-                    return true;
-                } else {
-                    return Object.values(this.getChildren(node)).some(n =>
-                        this.isSearched(n)
-                    );
-                }
+            if (this.isPathSearched(node._check.path) && this.filter(node._check)) {
+                return true;
+            } else {
+                return Object.values(this.getChildren(node)).some(n =>
+                    this.isSearched(n)
+                );
             }
-
-            return true;
         },
         getChildren: function(node) {
             var result = Object.assign({}, node);

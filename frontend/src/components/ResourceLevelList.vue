@@ -1,5 +1,5 @@
 <template>
-    <span v-if="resourceLevelStats.length > 0">
+    <span>
         <div class="tr row clickable" v-on:click="showChecks = !showChecks">
             <div class="td col-4 col-lg-5 category" scope="col">
                 <div class="switcher text-center" v-if="!showChecks">
@@ -31,7 +31,7 @@ export default {
             showChecks: false
         };
     },
-    props: ["section"],
+    props: ["section", "filter"],
     components: {
         ResourceLevelRow,
         Tooltip
@@ -97,7 +97,8 @@ export default {
                 }
 
                 return order.indexOf(nameA) - order.indexOf(nameB);
-            });
+            })
+            .filter(this.filter);
         },
         avgScore() {
             var sum = 0;

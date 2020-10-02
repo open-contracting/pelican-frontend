@@ -100,7 +100,6 @@ export default {
         return {
             datasets: [],
             loading: false,
-            afterUpdateRoute: { name: "overview" },
             filteredDataset: null,
             reportDataset: null
         };
@@ -242,13 +241,6 @@ export default {
             .catch(function(error) {
                 throw new Error(error);
             });
-    },
-    watch: {
-        atLeastOneLoaded: function(newValue) {
-            if (newValue) {
-                this.$router.push(this.afterUpdateRoute);
-            }
-        }
     }
 };
 </script>

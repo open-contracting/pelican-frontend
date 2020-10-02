@@ -278,9 +278,6 @@ def time_variance_level_stats(request, dataset_id):
         }
     return JsonResponse(result)
 
-TEMPLATE_DOCUMENT_ID = '1paW4y4jxkWOi12qq1IVWlhKe9-WbosJATkp_BDRGTiA'
-
-FOLDER_ID = "1yLTCRV3yoBM5Goc93SaO4irxnd0iapnK"
 
 @csrf_exempt
 def generate_report(request):
@@ -303,7 +300,7 @@ def generate_report(request):
     main_template = base.validate_and_process()
     
     file_id = gdocs.upload(
-        FOLDER_ID,
+        input_message["folder_id"],
         input_message["document_id"],
         "Pelican export {} {}".format(input_message["dataset_id"], datetime.now()),
         main_template

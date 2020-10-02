@@ -9,14 +9,14 @@
                     <font-awesome-icon :icon="['fas', 'hand-point-right']" :style="{ color: '#FDC926' }" />
                 </span>
                 <span class="checked_fields_text">
-                    {{ $t('field.checkedFields')}}
+                    {{ $t('field.checkedFields') }}
                 </span>
             </span>
         </div>
         
-        <h4>{{ $t('field.all') }}</h4>
+        <h4 class="sub_headline">{{ $t('field.all') }}</h4>
 
-        <b-row class="action_bar">
+        <b-row class="action_bar" align-v="center">
             <b-col class="text-left">
                 <SearchInput :placeholder="$t('field.search')" :preset="search" :on-update="(search) => $store.commit('setFieldCheckSearch', search)" />
             </b-col>
@@ -35,13 +35,17 @@
                         <font-awesome-icon icon="align-right" />
                     </button>
                 </b-button-group>
+                <FilterDropdown
+                    v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+                    :filterNames="filterNames"
+                    :startIndex="filterIndex"
+                />
             </b-col>
-
         </b-row>
 
         <div class="field_result_box">
-            <FieldCheckTable v-if="layout == 'table'" ref="field-check-table" />
-            <FieldCheckTree v-else-if="layout == 'tree'" ref="field-check-tree" />
+            <FieldCheckTable v-if="layout == 'table'" :filter="filters[filterIndex]" ref="field-check-table" />
+            <FieldCheckTree v-else-if="layout == 'tree'" :filter="filters[filterIndex]" ref="field-check-tree" />
         </div>
     </dashboard>
 </template>
@@ -51,13 +55,37 @@ import Dashboard from "@/views/layouts/Dashboard.vue";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import FilterDropdown from "@/components/FilterDropdown.vue";
 
 export default {
     name: "field",
     data: function() {
-        return {};
+        return {
+            filterIndex: 0,
+            filterNames: [
+                this.$t("field.filterDropdown.all"),
+                this.$t("field.filterDropdown.coverageFailedOnly"),
+                this.$t("field.filterDropdown.qualityFailedOnly"),
+                this.$t("field.filterDropdown.passedOnly"),
+            ],
+            filters: [
+                () => true,
+                item => item.coverage.failed_count > 0,
+                item => item.quality.failed_count > 0,
+                item => item.coverage.failed_count == 0 && item.quality.failed_count == 0 && item.coverage.passed_count > 0,
+            ]
+        };
     },
-    components: { Dashboard, FieldCheckTable, FieldCheckTree, SearchInput },
+    components: {
+        Dashboard,
+        FieldCheckTable,
+        FieldCheckTree,
+        SearchInput,
+        FilterDropdown,
+    },
+    created() {
+        this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
+    },
     computed: {
         layout: function() {
             return this.$store.getters.fieldCheckLayout;
@@ -70,15 +98,26 @@ export default {
         resetTableSorting: function() {
             this.$refs["field-check-table"].resetSorting();
         }
+    },
+    watch: {
+        filterIndex: function (newFilterIndex) {
+            this.$store.commit("setFieldLevelFilterIndex", newFilterIndex);
+        }
     }
 };
 </script>
 
 <style lang="scss">
 @import "src/scss/_variables";
+@import "src/scss/main";
+
+.sub_headline {
+    margin-bottom: 0px;
+}
 
 .checked_fields_box {
     text-align: center;
+    margin-bottom: 50px;
 }
 
 .checked_fields_box .checked_fields_icon {
@@ -113,14 +152,9 @@ export default {
 mark {
     background-color: $primary !important;
 }
-</style>
-
-<style scoped lang="scss">
-@import "src/scss/main";
 
 .action_bar {
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 
     .btn-group {
         margin-left: 15px;

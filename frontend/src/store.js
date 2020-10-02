@@ -22,11 +22,27 @@ export default new Vuex.Store({
         datasetSorting: null,
 
         resourceCheckExpandedNodes: [],
-        insufficientShown: true
+        fieldLevelFilterIndex: 0,
+        fieldLevelFilter: () => true,
+        resourceLevelFilterIndex: 0,
+        datasetLevelFilterIndex: 0,
+        timeLevelFilterIndex: 0,
     },
     getters: {
-        insufficientShown: state => {
-            return state.insufficientShown;
+        fieldLevelFilterIndex: state => {
+            return state.fieldLevelFilterIndex;
+        },
+        fieldLevelFilter: state => {
+            return state.fieldLevelFilter;
+        },
+        resourceLevelFilterIndex: state => {
+            return state.resourceLevelFilterIndex;
+        },
+        datasetLevelFilterIndex: state => {
+            return state.datasetLevelFilterIndex;
+        },
+        timeLevelFilterIndex: state => {
+            return state.timeLevelFilterIndex;
         },
         dataset: state => {
             return state.dataset;
@@ -169,8 +185,20 @@ export default new Vuex.Store({
         }
     },
     mutations: {
-        setInsufficientShown(state, newInsufficientShown) {
-            state.insufficientShown = newInsufficientShown;
+        setFieldLevelFilterIndex(state, newFieldLevelFilterIndex) {
+            state.fieldLevelFilterIndex = newFieldLevelFilterIndex;
+        },
+        setFieldLevelFilter(state, newFieldLevelFilter) {
+            state.fieldLevelFilter = newFieldLevelFilter;
+        },
+        setResourceLevelFilterIndex(state, newResourceLevelFilterIndex) {
+            state.resourceLevelFilterIndex = newResourceLevelFilterIndex;
+        },
+        setDatasetLevelFilterIndex(state, newDatasetLevelFilterIndex) {
+            state.datasetLevelFilterIndex = newDatasetLevelFilterIndex;
+        },
+        setTimeLevelFilterIndex(state, newTimeLevelFilterIndex) {
+            state.timeLevelFilterIndex = newTimeLevelFilterIndex;
         },
         setDataset(state, newDataset) {
             state.dataset = newDataset;

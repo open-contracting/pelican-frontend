@@ -3,6 +3,11 @@
         <h2>{{ $t("sections.time") }}</h2>
         <div class="description" v-html=" $t('timeLevel.description')"></div>
         <h4>{{ $t("timeLevel.subheadline") }}</h4>
+        <FilterDropdown
+            v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+            :filterNames="filterNames"
+            :startIndex="filterIndex"
+        />
         <div class="row">
             <div class="card-deck col-12">
                 <template v-for="(check, index) in timeVarianceLevelStats">
@@ -31,13 +36,32 @@
 <script>
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck";
+import FilterDropdown from "@/components/FilterDropdown.vue";
 
 export default {
     name: "timeLevel",
-    components: { Dashboard, TimeVarianceLevelCheck },
+    data: function() {
+        return {
+            filterIndex: 0,
+            filterNames: [
+                this.$t("timeLevel.filterDropdown.all"),
+                this.$t("timeLevel.filterDropdown.failedOnly"),
+                this.$t("timeLevel.filterDropdown.passedOnly"),
+            ],
+            filters: [
+                () => true,
+                item => item.coverage_result == false,
+                item => item.coverage_result == true,
+            ]
+        }
+    },
+    components: { Dashboard, TimeVarianceLevelCheck, FilterDropdown },
+    created() {
+        this.filterIndex = this.$store.getters.timeLevelFilterIndex;
+    },
     computed: {
         timeVarianceLevelStats() {
-            return this.$store.getters.timeVarianceLevelStats;
+            return this.$store.getters.timeVarianceLevelStats.filter(this.filters[this.filterIndex]);
         }
     },
     methods: {
@@ -49,6 +73,11 @@ export default {
                     datasetId: this.$store.getters.datasetId
                 }
             });
+        }
+    },
+    watch: {
+        filterIndex: function (newFilterIndex) {
+            this.$store.commit("setTimeLevelFilterIndex", newFilterIndex);
         }
     }
 };

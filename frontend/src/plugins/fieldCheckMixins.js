@@ -8,13 +8,13 @@ export default {
         },
         searchRaw: function() {
             return this.$store.getters.fieldCheckSearch
-        }
+        },
     },
     methods: {
         _sort: function(checks, comparator, sortedBy, asc = true) {
             if (checks != null) {
-                this.sort(checks, comparator, asc)                
-                this.$emit('field-check-table-sort', {by: sortedBy, asc: asc})
+                this.sort(checks, comparator, asc)
+                this.$emit('field-check-table-sort', { by: sortedBy, asc: asc })
             }
         },
         sortBy: function(checks, by, asc) {
@@ -28,7 +28,7 @@ export default {
                 this.sortByProcessingOrder(checks, asc)
             }
         },
-        sortByPath: function(checks, asc = true) {        
+        sortByPath: function(checks, asc = true) {
             this._sort(checks, (a, b) => a.path.localeCompare(b.path), "path", asc)
         },
         sortByCoverage: function(checks, asc = true) {
@@ -44,7 +44,7 @@ export default {
                 return comparison
             }, "coverage", asc)
         },
-        sortByQuality: function(checks, asc = true) {            
+        sortByQuality: function(checks, asc = true) {
             this._sort(checks, (a, b) => {
                 if (a.quality.total_count == 0) {
                     if (b.quality.total_count == 0) {
@@ -63,28 +63,44 @@ export default {
                 if (comparison == 0) {
                     comparison = a.path.localeCompare(b.path)
                 }
-                
+
                 return comparison
             }, "quality", asc)
         },
         sortByProcessingOrder: function(checks, asc = true) {
             this._sort(checks, (a, b) => this.compareNumbers(a.processing_order, b.processing_order), "processingOrder", asc)
-        },        
-        highlightSearch: function(str) {
+        },
+        highlightSearch: function(path) {
             if (!this.search) {
-                return str
+                return path
             }
+
             // escape regex special characters
             var search_esc = this.search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-            return str.replace(new RegExp("(" + search_esc + ")", "ig"), '<mark>$1</mark>')
+            return path.replace(new RegExp("(" + search_esc + ")", "ig"), '<mark>$1</mark>')
+        },
+        highlightSearchLast: function(path) {
+            var name = path.substring(path.lastIndexOf(".") + 1);
+
+            if (!this.search || !this.isPathSearched(path)) {
+                return name
+            }
+
+            var search_last = this.search.replace(/^[.]+|[.]+$/g, "");
+            if (search_last.includes(".")) {
+                search_last = search_last.split(".").slice(-1)[0];
+            }
+            // escape regex special characters
+            var search_esc = search_last.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+            return name.replace(new RegExp("(" + search_esc + ")", "ig"), '<mark>$1</mark>')
         },
         isPathSearched: function(path) {
             if (this.search && path) {
-                var path_lc = path.toLowerCase()                
-                return path_lc.includes(this.search)                
+                var path_lc = path.toLowerCase()
+                return path_lc.includes(this.search)
             }
 
-            return false
-        }
+            return true
+        },
     }
 };

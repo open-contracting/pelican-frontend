@@ -67,6 +67,7 @@ export default {
             showHidden: {}
         };
     },
+    props: ["filter"],
     components: { FieldCheckTableRow, SortButtons },
     mixins: [fieldCheckMixins],
     computed: {
@@ -78,20 +79,12 @@ export default {
                 return [];
             }
             var data = [];
-            var lastWithHidden = null;
 
             this.sortBy(this.stats, "path");
 
             this.stats.forEach(n => {
-                if (n.coverage.total_count) {
+                if (n.coverage.total_count && this.filter(n)) {
                     data.push(n);
-
-                    if (!n.coverage.passed_count) {
-                        lastWithHidden = n;
-                        lastWithHidden["_hidden"] = [];
-                    }
-                } else {
-                    lastWithHidden["_hidden"].push(n);
                 }
             });
 
@@ -132,7 +125,7 @@ export default {
             this.sortByProcessingOrder(this.tableData);
         },
         isSearched: function(check) {
-            return !this.search || (check && this.isPathSearched(check.path));
+            return check && this.isPathSearched(check.path);
         }
     }
 };

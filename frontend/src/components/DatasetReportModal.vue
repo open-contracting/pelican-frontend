@@ -86,7 +86,7 @@ export default {
             if (this.dataset == null) { return; }
             this.isSubmitting = true;
             var documentIdMatch = this.documentId.match(/\/d\/([^/]+)/);
-            var folderIdMatch = this.documentId.match(/\/folders\/([^/]+)/);
+            var folderIdMatch = this.folderId.match(/\/folders\/([^/]+)/);
 
             axios
                 .post(
