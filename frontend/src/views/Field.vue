@@ -1,17 +1,15 @@
 <template>
     <dashboard>
         <h2>{{ $t("field.title") }}</h2>
-        <div class="description" v-html=" $t('field.description')"></div>
+        <div id="field_description" class="description" v-html=" $t('field.description')"></div>
 
         <div class="checked_fields_box">
-            <span>
-                <span class="checked_fields_icon">
-                    <font-awesome-icon :icon="['fas', 'hand-point-right']" :style="{ color: '#FDC926' }" />
-                </span>
-                <span class="checked_fields_text">
-                    {{ $t('field.checkedFields') }}
-                </span>
-            </span>
+            <div class="checked_fields_icon">
+                <font-awesome-icon :icon="['fas', 'hand-point-right']" :style="{ color: '#FDC926' }" />
+            </div>
+            <div class="checked_fields_text">
+                {{ $t('field.checkedFields') }}
+            </div>
         </div>
         
         <h4 class="sub_headline">{{ $t('field.all') }}</h4>
@@ -115,9 +113,13 @@ export default {
     margin-bottom: 0px;
 }
 
+#field_description {
+    margin-bottom: 30px;
+}
+
 .checked_fields_box {
-    text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+    width: 100%;
 }
 
 .checked_fields_box .checked_fields_icon {
@@ -125,8 +127,9 @@ export default {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border: 0;
-    padding: 10px;
-    padding-right: 3px;
+    padding: 15px;
+    padding-right: 5px;
+    float: left;
 }
 
 .checked_fields_box .checked_fields_text  {
@@ -134,11 +137,12 @@ export default {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border: 0;
-    padding-top: 12px;
-    padding-bottom: 8px;
-    padding-right: 10px;
-    vertical-align: -2px;
+    padding-top: 16px;
+    padding-bottom: 14px;
+    padding-right: 15px;
+    vertical-align: -1px;
     color: $text-color;
+    overflow: auto;
 }
 
 .field_result_box {

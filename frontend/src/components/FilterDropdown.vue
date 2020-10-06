@@ -53,6 +53,11 @@ export default {
     margin: 0.5rem;
     margin-left: 15px;
     margin-right: 0px;
+
+    .dropdown-menu {
+        padding: 0px;
+        border-radius: 4px;
+    }
     
     .btn-primary {
         border: none;
@@ -63,7 +68,7 @@ export default {
     .btn-primary:first-of-type {
         pointer-events: none;
         padding-left: 0px;
-        padding-right: 5px;
+        padding-right: 7px;
         padding-top: 7px;
         padding-bottom: 5px;
     }
@@ -71,26 +76,30 @@ export default {
     .dropdown-toggle {
         padding-top: 9px;
         padding-bottom: 3px;
-
-        &:hover, &:active, &:focus {
-            color: white;
-            background-color: $primary;
-        }
     }
 
-    .dropdown-toggle[aria-expanded="true"] {
-        color: white;
-        background-color: $primary;
+    .dropdown-toggle, .dropdown-item {
+        border-radius: 4px;
+        border: 1px solid transparent;
     }
 
-    .dropdown-item {
-        &:hover, &:active, &:focus {
-            color: white;
-            background-color: $primary;
-            border: none;
-        }
+    .dropdown-toggle:hover,
+    .dropdown-toggle:active,
+    .dropdown-toggle[aria-expanded="true"],
+    .dropdown-item:hover {
+        color: $primary;
+        background-color: transparent;
+        border-color: $primary;
     }
+
+    .dropdown-toggle:focus,
+    .dropdown-item:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
 }
+
 
 #show_prefix {
     color: $headings-light-color;

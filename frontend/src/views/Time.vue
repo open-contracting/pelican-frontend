@@ -2,33 +2,24 @@
     <dashboard>
         <h2>{{ $t("sections.time") }}</h2>
         <div class="description" v-html=" $t('timeLevel.description')"></div>
-        <h4>{{ $t("timeLevel.subheadline") }}</h4>
-        <FilterDropdown
-            v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
-            :filterNames="filterNames"
-            :startIndex="filterIndex"
-        />
-        <div class="row">
-            <div class="card-deck col-12">
-                <template v-for="(check, index) in timeVarianceLevelStats">
-                    <TimeVarianceLevelCheck v-bind:key="index" :check="check"></TimeVarianceLevelCheck>
-
-                    <div class="w-100 d-none d-sm-block d-md-none" v-bind:key="'sm' + index">
-                        <!-- wrap every 2-->
-                    </div>
-
-                    <div v-if="(index + 1) % 2 == 0" class="w-100 d-none d-md-block d-lg-none" v-bind:key="'md' + index">
-                        <!-- wrap every 2-->
-                    </div>
-                    <div v-if="(index + 1) % 3 == 0" class="w-100 d-none d-lg-block d-xl-none" v-bind:key="'lg' + index">
-                        <!-- wrap every 2-->
-                    </div>
-
-                    <div v-if="(index + 1) % 3 == 0" class="w-100 d-none d-xl-block" v-bind:key="'xl' + index">
-                        <!-- wrap every 2-->
-                    </div>
-                </template>
-            </div>
+        <b-row class="collection_header" align-h="between">
+            <b-col class="text-left">
+                <h4>{{ $t("timeLevel.subheadline") }}</h4>
+            </b-col>
+            <b-col class="text-right">
+                <FilterDropdown
+                    v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+                    :filterNames="filterNames"
+                    :startIndex="filterIndex"
+                />
+            </b-col>
+        </b-row>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
+            <template v-for="(check, index) in timeVarianceLevelStats">
+                <div class="col mb-4" v-bind:key="index">
+                    <TimeVarianceLevelCheck :check="check"></TimeVarianceLevelCheck>
+                </div>
+            </template>
         </div>
     </dashboard>
 </template>
@@ -50,8 +41,8 @@ export default {
             ],
             filters: [
                 () => true,
-                item => item.coverage_result == false,
-                item => item.coverage_result == true,
+                item => item.coverage_result != true || item.check_result != true,
+                item => item.coverage_result == true || item.check_result == true,
             ]
         }
     },
@@ -82,3 +73,18 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+@import "src/scss/main";
+
+.collection_header {
+    margin-bottom: 5px;
+
+    h4 {
+        position: absolute;
+        bottom: 0px;
+        margin-bottom: 5px;
+    }
+}
+
+</style>

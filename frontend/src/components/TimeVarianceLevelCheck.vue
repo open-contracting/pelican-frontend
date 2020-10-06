@@ -1,6 +1,6 @@
 <template>
     <div
-        class="card col-md-6 col-lg-4 mb-4 time_variance_result_box result_box"
+        class="card mb-4 h-100 time_variance_result_box result_box"
         v-on:click="detail(check.name)"
         v-bind:class="{ clickable: check.coverage_result != undefined, undef: check.coverage_result == undefined }"
     >
@@ -37,10 +37,14 @@
                         </div>
                         <div class="row">
                             <div class="col col-6 text-center">
-                                <span class="result_percentage" v-bind:class="{ color_failed: !check.coverage_result }">{{ check.coverage_value }}</span> %
+                                <span class="result_percentage" v-bind:class="{ color_failed: !check.coverage_result }">
+                                    {{ coveragePercentage | formatPercentage }}
+                                </span>
                             </div>
                             <div class="col col-6 text-center">
-                                <span class="result_percentage" v-bind:class="{ color_failed: !check.check_result }">{{ check.check_value }}</span> %
+                                <span class="result_percentage" v-bind:class="{ color_failed: !check.check_result }">
+                                    {{ checkPercentage | formatPercentage }}
+                                </span>
                             </div>
                         </div>
                     </template>
@@ -59,7 +63,10 @@
 </template>
 
 <script>
+import timeMixins from "@/plugins/timeMixins.js";
+
 export default {
+    mixins: [timeMixins],
     data: function() {
         return {};
     },
@@ -115,12 +122,9 @@ export default {
 }
 
 .time_variance_result_box {
-    display: inline-block;
     background-color: white;
     padding: 5px;
     border-radius: 10px;
-    margin-bottom: 25px;
-    min-height: 340px;
 }
 
 .time_variance_result_box h5 {
@@ -137,6 +141,6 @@ export default {
 }
 
 .result_percentage {
-    font-size: 50px;
+    font-size: 40px;
 }
 </style>

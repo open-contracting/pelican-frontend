@@ -18,7 +18,7 @@
                                 <span class="check_name">{{ $t("timeLevel.coverage.ok") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.coverage_count" :percentage="check.coverage_value" :state="'ok'" :showCount="true" />
+                                <InlineBar :count="check.meta.coverage_count" :percentage="coveragePercentage" :state="'ok'" :showCount="true" />
                             </td>
                         </tr>
                         <tr class="d-flex">
@@ -28,7 +28,7 @@
                             <td class="col-8">
                                 <InlineBar
                                     :count="check.meta.total_count - check.meta.coverage_count"
-                                    :percentage="100 - check.coverage_value"
+                                    :percentage="100.0 - coveragePercentage"
                                     :state="'failed'"
                                     :showCount="true"
                                 />
@@ -52,7 +52,7 @@
                                 <span class="check_name">{{ $t("timeLevel.check.ok") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.ok_count" :percentage="check.check_value" :state="'ok'" :showCount="true" />
+                                <InlineBar :count="check.meta.ok_count" :percentage="checkPercentage" :state="'ok'" :showCount="true" />
                             </td>
                         </tr>
                         <tr class="d-flex">
@@ -60,7 +60,7 @@
                                 <span class="check_name">{{ $t("timeLevel.check.failed") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.failed_count" :percentage="100 - check.check_value" :state="'failed'" :showCount="true" />
+                                <InlineBar :count="check.meta.failed_count" :percentage="100.0 - checkPercentage" :state="'failed'" :showCount="true" />
                             </td>
                         </tr>
                     </tbody>
@@ -149,9 +149,11 @@ import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import timeMixins from "@/plugins/timeMixins.js";
 
 export default {
     name: "timeVarianceCheckDetail",
+    mixins: [timeMixins],
     data: function() {
         return {
             check: null,
