@@ -11,7 +11,13 @@
                 {{ $t("resourceLevel." + section + ".categoryName") }}
             </div>
             <div class="td col-8 col-lg-7 text-right text-lg-left info_message" scope="col" >
-                {{ resourceLevelStats.length }} checks in total with avg score {{ avgScore | formatPercentage }}
+                {{ resourceLevelStats.length }} {{ $t("resourceLevel.averageScore.description") }}:
+                <span v-if="avgScore != null">
+                    {{ avgScore | formatPercentage }}
+                </span>
+                <span v-else>
+                    {{ $t("resourceLevel.averageScore.undefined") }}
+                </span>
                 <Tooltip :text="$t('resourceLevel.averageScore.tooltip')"></Tooltip>
             </div>
         </div>
@@ -101,12 +107,18 @@ export default {
             .filter(this.filter);
         },
         avgScore() {
-            var sum = 0;
+            var passedCount = 0;
+            var failedCount = 0;
             for (var i = 0; i < this.resourceLevelStats.length; i++) {
-                sum += this.resourceLevelStats[i].passed_count / this.resourceLevelStats[i].total_count;
-            } 
+                passedCount += this.resourceLevelStats[i].passed_count
+                failedCount += this.resourceLevelStats[i].failed_count;
+            }
 
-            return 100 * sum / this.resourceLevelStats.length;
+            if (passedCount + failedCount == 0) {
+                return null;
+            }
+
+            return 100.0 * passedCount / (passedCount + failedCount);
         }
     },
     mounted() {
