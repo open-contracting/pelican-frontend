@@ -3,8 +3,8 @@
         <FieldCheckTableRow :key="path" :check="check" :showStats="filter(data._check)" v-bind:class="{ hidden: (hide || !isSearched(data)) }">
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
-                <div v-if="hasChildren" class="switcher text-center" @click.stop="expanded = !expanded">
-                    <template v-if="hasChildren">
+                <div v-if="isExpandable" class="switcher text-center" @click.stop="expanded = !expanded">
+                    <template v-if="isExpandable">
                         <font-awesome-icon v-if="!expanded" icon="chevron-right" />
                         <font-awesome-icon v-else icon="chevron-down" />
                     </template>
@@ -49,6 +49,9 @@ export default {
         children: function() {
             return this.getChildren(this.data);
         },
+        isExpandable: function() {
+            return this.hasChildren && this.isSearchedSubTree(this.data);
+        },
         hasChildren: function() {
             return Object.keys(this.children).length > 0;
         },
@@ -79,13 +82,13 @@ export default {
     },
     methods: {
         isSearched: function(node) {
-            if (this.isPathSearched(node._check.path) && this.filter(node._check)) {
-                return true;
-            } else {
-                return Object.values(this.getChildren(node)).some(n =>
-                    this.isSearched(n)
-                );
-            }
+            return this.isSearchedNode(node) || this.isSearchedSubTree(node);
+        },
+        isSearchedSubTree: function(node) {
+            return Object.values(this.getChildren(node)).some(n => this.isSearched(n));
+        },
+        isSearchedNode: function(node) {
+            return this.isPathSearched(node._check.path) && this.filter(node._check);
         },
         getChildren: function(node) {
             var result = Object.assign({}, node);
