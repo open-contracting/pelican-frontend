@@ -110,7 +110,7 @@
             </div>
 
             <ExampleBoxes
-                :examples="examples"
+                :exampleSections="exampleSections"
                 v-on:preview="preview"
                 :loaded="true"
                 :previewDisabled="loadingPreviewData"
@@ -157,7 +157,7 @@ export default {
             check: null,
             previewDataItemId: null,
             previewMetadata: null,
-            examples: null,
+            exampleSections: null,
             loadingPreviewData: false
         };
     },
@@ -195,59 +195,59 @@ export default {
                 this.previewMetadata = this.check.meta;
 
                 if (this.checkType == "donut") {
-                    this.examples = [];
+                    this.exampleSections = [];
                     for (var key in this.shares) {
                         if (this.shares[key][1].examples.length > 0) {
-                            this.examples.push([
-                                this.shares[key][0],
-                                this.shares[key][1].examples
-                            ]);
+                            this.exampleSections.push({
+                                header: this.shares[key][0],
+                                examples: this.shares[key][1].examples
+                            });
                         }
                     }
                 }
 
                 if (this.checkType == "bar") {
-                    this.examples = [];
+                    this.exampleSections = [];
                     for (var barKey in this.check.meta.examples) {
                         if (this.check.meta.examples[barKey].length > 0) {
-                            this.examples.push([
-                                this.$t("datasetLevel.label_" + barKey),
-                                this.check.meta.examples[barKey]
-                            ]);
+                            this.exampleSections.push({
+                                header: this.$t("datasetLevel.label_" + barKey),
+                                examples: this.check.meta.examples[barKey]
+                            });
                         }
                     }
                 }
 
                 if (this.checkType == "top3") {
-                    this.examples = [];
+                    this.exampleSections = [];
                     var mostFrequent = this.check.meta.most_frequent;
                     for (var topKey in mostFrequent) {
                         if (mostFrequent[topKey].examples.length > 0) {
-                            this.examples.push([
-                                mostFrequent[topKey].value_str,
-                                mostFrequent[topKey].examples
-                            ]);
+                            this.exampleSections.push({
+                                header: mostFrequent[topKey].value_str,
+                                examples: mostFrequent[topKey].examples
+                            });
                         }
                     }
                 }
 
                 if (this.checkType == "numeric") {
-                    this.examples = [];
+                    this.exampleSections = [];
                     var failed = this.check.meta.failed_examples;
                     var passed = this.check.meta.passed_examples;
 
                     if (failed.length > 0) {
-                        this.examples.push([
-                            this.$t("datasetLevel.numeric.failedExamples"),
-                            failed
-                        ]);
+                        this.exampleSections.push({
+                            header: this.$t("datasetLevel.numeric.failedExamples"),
+                            examples: failed
+                        });
                     }
 
                     if (passed.length > 0) {
-                        this.examples.push([
-                            this.$t("datasetLevel.numeric.passedExamples"),
-                            passed
-                        ]);
+                        this.exampleSections.push({
+                            header: this.$t("datasetLevel.numeric.passedExamples"),
+                            examples: passed
+                        });
                     }
                 }
 
@@ -255,12 +255,12 @@ export default {
                     this.checkType == "biggest_share" ||
                     this.checkType == "single_value_share"
                 ) {
-                    this.examples = [];
+                    this.exampleSections = [];
                     if (this.check.meta.examples.length > 0) {
-                        this.examples.push([
-                            this.$t("datasetLevel.examples"),
-                            this.check.meta.examples
-                        ]);
+                        this.exampleSections.push({
+                            header: this.$t("datasetLevel.examples"),
+                            examples: this.check.meta.examples
+                        });
                     }
                 }
             }

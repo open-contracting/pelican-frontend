@@ -16,6 +16,7 @@
 
 <script>
 import DatasetLevelCheck from "@/components/DatasetLevelCheck.vue";
+import Loader from "@/components/Loader.vue";
 
 export default {
     data: function() {
@@ -59,7 +60,7 @@ export default {
         };
     },
     props: ["section", "filter"],
-    components: { DatasetLevelCheck },
+    components: { DatasetLevelCheck, Loader },
     computed: {
         loaded() {
             if (this.$store.getters.datasetLevelStats != null) {

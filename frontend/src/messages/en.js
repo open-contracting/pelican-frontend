@@ -84,6 +84,7 @@ export const messages = {
         metadata: "Metadata",
         ocdsData: "Data Preview",
         cannotDisplay: "The JSON data cannot be previewed, because its large size (more than 3,000 lines) can cause some browsers to crash. You can download the JSON file directly, instead.",
+        nonExisting: "The item was not found in the database. The original dataset might have been deleted."
     },
     examples: {
         failed: "Sample releases with failed rules",
@@ -107,7 +108,9 @@ export const messages = {
             success: "The JSON data has been successfully copied to clipboard.",
             failure: "The JSON data cannot be copied to clipboard, because its large size (more than 3,000 lines) is not suitable for clipboards. You can download the JSON file directly, instead.",
             tooltip: "Copy to clipboard"
-        }
+        },
+        old: "old",
+        new: "new",
     },
     navigationContextMenu: {
         openNewTab: "Open in New Tab",
@@ -540,6 +543,7 @@ export const messages = {
         path: "Field path",
         coverage: {
             label: "Coverage",
+            failureSamplesPrefix: "Coverage failure samples",
             exists: {
                 count_header: "Field is set",
                 count_header_tooltip: "There is one test per <i>possible</i> occurrence of the field. <i>Example</i>: If the parent <code>tender</code> field is set in 10 compiled releases, then the child <code>tender.id</code> field is reported out of 10. If there are 100 entries across all <code>awards</code> arrays in all compiled releases, then the <code>awards.id</code> field is reported out of 100.",
@@ -551,6 +555,7 @@ export const messages = {
         },
         quality: {
             label: "Quality",
+            failureSamplesPrefix: "Quality failure samples",
             ocid_prefix_check: {
                 count_header: "OCID prefix is registered",
                 count_header_tooltip: "The value is a string and starts with a registered OCID prefix.",

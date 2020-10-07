@@ -26,7 +26,7 @@
             <CheckDetailResultBox :check="check" individualPass individualNonPass />
 
             <ExampleBoxes
-                :examples="examples"
+                :exampleSections="exampleSections"
                 v-on:preview="preview"
                 :loaded="check.examples_filled"
                 :previewDisabled="loadingPreviewData"
@@ -123,42 +123,36 @@ export default {
                 return null;
             }
         },
-        examples() {
-            var examples = [];
+        exampleSections() {
+            var exampleSections = [];
             if (this.check != [] && this.check.name != undefined) {
                 var failed = this.check.failed_examples;
                 var passed = this.check.passed_examples;
                 var undefined = this.check.undefined_examples;
 
                 if (failed.length > 0) {
-                    examples.push([
-                        this.$t("core.failedExamples"),
-                        failed.map(function(val) {
-                            return val.meta;
-                        })
-                    ]);
+                    exampleSections.push({
+                        header: this.$t("core.failedExamples"),
+                        examples: failed.map(val => val.meta)
+                    });
                 }
 
                 if (passed.length > 0) {
-                    examples.push([
-                        this.$t("core.passedExamples"),
-                        passed.map(function(val) {
-                            return val.meta;
-                        })
-                    ]);
+                    exampleSections.push({
+                        header: this.$t("core.passedExamples"),
+                        examples: passed.map(val => val.meta)
+                    });
                 }
 
                 if (undefined.length > 0) {
-                    examples.push([
-                        this.$t("core.undefinedExamples"),
-                        undefined.map(function(val) {
-                            return val.meta;
-                        })
-                    ]);
+                    exampleSections.push({
+                        header: this.$t("core.undefinedExamples"),
+                        examples: undefined.map(val => val.meta)
+                    });
                 }
             }
 
-            return examples;
+            return exampleSections;
         },
         previewData() {
             var result = this.$store.getters.dataItemById(

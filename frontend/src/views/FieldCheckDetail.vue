@@ -5,11 +5,15 @@
 
             <template v-for="(c, k) in check.coverage.checks">
                 <h5 :key="k">
-                    &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checked") }}:
+                    <span class="category_name">
+                        {{ $t("fieldDetail.coverage.label") }}:
+                    </span>
+                     &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo;
+                     {{ $t("fieldDetail.checked") }}:
                     &nbsp;
-                    <span
-                        class="bold"
-                    >{{ c.passed_count + c.failed_count | formatNumber }}</span>
+                    <span class="bold">
+                        {{ c.passed_count + c.failed_count | formatNumber }}
+                    </span>
                     &nbsp;
                     <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')"></Tooltip>
                 </h5>
@@ -18,11 +22,15 @@
 
             <template v-for="(c, k) in check.quality.checks">
                 <h5 :key="k">
-                    &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; {{ $t("fieldDetail.checked") }}:
+                    <span class="category_name">
+                        {{ $t("fieldDetail.quality.label") }}:
+                    </span>
+                     &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo;
+                     {{ $t("fieldDetail.checked") }}:
                     &nbsp;
-                    <span
-                        class="bold"
-                    >{{ c.passed_count + c.failed_count | formatNumber }}</span>
+                    <span class="bold">
+                        {{ c.passed_count + c.failed_count | formatNumber }}
+                    </span>
                     &nbsp;
                     <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')"></Tooltip>
                 </h5>
@@ -30,7 +38,7 @@
             </template>
 
             <ExampleBoxes
-                :examples="failedCoverageExamples.concat(failedQualityExamples).concat(passedExamples)"
+                :exampleSections="exampleSections"
                 v-on:preview="preview"
                 :loaded="check.examples_filled"
                 :previewDisabled="loadingPreviewData"
@@ -116,20 +124,16 @@ export default {
 
             var allExamples = [];
             if (this.check.coverage) {
-                allExamples = allExamples.concat(
-                    this.check.coverage.failed_examples
-                );
-                allExamples = allExamples.concat(
-                    this.check.coverage.passed_examples
-                );
+                Object.values(this.check.coverage.checks).forEach(value => {
+                    allExamples = allExamples.concat(value.failed_examples);
+                });
+                allExamples = allExamples.concat(this.check.coverage.passed_examples);
             }
             if (this.check.quality) {
-                allExamples = allExamples.concat(
-                    this.check.quality.failed_examples
-                );
-                allExamples = allExamples.concat(
-                    this.check.quality.passed_examples
-                );
+                Object.values(this.check.quality.checks).forEach(value => {
+                    allExamples = allExamples.concat(value.failed_examples);
+                });
+                allExamples = allExamples.concat(this.check.quality.passed_examples);
             }
 
             return allExamples;
@@ -139,67 +143,46 @@ export default {
                 this.$route.params.path
             );
         },
-        failedCoverageExamples() {
-            var examples = [];
+        exampleSections() {
+            var exampleSections = [];
             if (this.check != [] && this.check.path != undefined) {
-                var failed = this.check.coverage.failed_examples;
-
-                if (failed != undefined && failed.length > 0) {
-                    examples.push([
-                        this.$t("fieldDetail.coverage.label") +
-                            " - " +
-                            this.$t("core.failedExamples"),
-                        failed.map(function(val) {
-                            return val.meta;
+                Object.keys(this.check.coverage.checks).forEach(key => {
+                    var failed = this.check.coverage.checks[key].failed_examples;
+                    if (failed != undefined && failed.length > 0) {
+                        exampleSections.push({
+                            prefix: this.$t("fieldDetail.coverage.failureSamplesPrefix"),
+                            header: this.$t("fieldDetail.coverage." + key + ".count_header"),
+                            examples: failed.map(val => val.meta)
                         })
-                    ]);
+                    }
+                });
+
+                Object.keys(this.check.quality.checks).forEach(key => {
+                    var failed = this.check.quality.checks[key].failed_examples;
+                    if (failed != undefined && failed.length > 0) {
+                        exampleSections.push({
+                            prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
+                            header: this.$t("fieldDetail.quality." + key + ".count_header"),
+                            examples: failed.map(val => val.meta)
+                        })
+                    }
+                });
+
+                var passedSection = {
+                    header: this.$t("core.passedExamples"),
+                    examples: []
+                };
+                if (this.check.quality.passed_examples != undefined && this.check.quality.passed_examples.length > 0) {
+                    passedSection.examples = this.check.quality.passed_examples.map(val => val.meta);
+                } else if (this.check.coverage.passed_examples != undefined && this.check.coverage.passed_examples.length > 0) {
+                    passedSection.examples = this.check.coverage.passed_examples.map(val => val.meta);
+                }
+                if (passedSection.examples.length > 0) {
+                    exampleSections.push(passedSection);
                 }
             }
 
-            return examples;
-        },
-        failedQualityExamples() {
-            var examples = [];
-            if (this.check != [] && this.check.path != undefined) {
-                var failed = this.check.quality.failed_examples;
-
-                if (failed != undefined && failed.length > 0) {
-                    examples.push([
-                        this.$t("fieldDetail.quality.label") +
-                            " - " +
-                            this.$t("core.failedExamples"),
-                        failed.map(function(val) {
-                            return val.meta;
-                        })
-                    ]);
-                }
-            }
-
-            return examples;
-        },
-        passedExamples() {
-            var examples = [];
-            if (this.check != [] && this.check.path != undefined) {
-                var passed = [];
-                if (this.check.coverage.passed_examples != undefined) {
-                    passed = passed.concat(this.check.coverage.passed_examples);
-                }
-
-                if (this.check.quality.passed_examples != undefined) {
-                    passed = passed.concat(this.check.quality.passed_examples);
-                }
-
-                if (passed != undefined && passed.length > 0) {
-                    examples.push([
-                        this.$t("core.passedExamples"),
-                        passed.map(function(val) {
-                            return val.meta;
-                        })
-                    ]);
-                }
-            }
-
-            return examples;
+            return exampleSections;
         },
         previewData() {
             var result = this.$store.getters.dataItemById(
@@ -218,6 +201,11 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
+
+.category_name {
+    color: $headings-light-color;
+    font-family: $font-family-thin;
+}
 
 .label {
     padding-top: 6px;

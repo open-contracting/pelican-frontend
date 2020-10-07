@@ -399,7 +399,7 @@ export default new Vuex.Store({
             });
         },
         loadDataItem({ commit, state }, itemId) {
-            return new Promise(resolve => {
+            return new Promise((resolve, reject) => {
                 var dataItem = null;
                 if (state.dataItems) {
                     dataItem = state.dataItems.find(item => item.id === itemId);
@@ -417,7 +417,7 @@ export default new Vuex.Store({
                             resolve();
                         })
                         .catch(function(error) {
-                            throw new Error(error);
+                            reject(error);
                         });
                 } else {
                     resolve();

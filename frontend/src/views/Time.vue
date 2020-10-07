@@ -14,13 +14,14 @@
                 />
             </b-col>
         </b-row>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
+        <div v-if="loaded" class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
             <template v-for="(check, index) in timeVarianceLevelStats">
                 <div class="col mb-4" v-bind:key="index">
                     <TimeVarianceLevelCheck :check="check"></TimeVarianceLevelCheck>
                 </div>
             </template>
         </div>
+        <Loader v-else />
     </dashboard>
 </template>
 
@@ -28,6 +29,7 @@
 import Dashboard from "@/views/layouts/Dashboard.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck";
 import FilterDropdown from "@/components/FilterDropdown.vue";
+import Loader from "@/components/Loader.vue";
 
 export default {
     name: "timeLevel",
@@ -46,11 +48,17 @@ export default {
             ]
         }
     },
-    components: { Dashboard, TimeVarianceLevelCheck, FilterDropdown },
+    components: { Dashboard, TimeVarianceLevelCheck, FilterDropdown, Loader },
     created() {
         this.filterIndex = this.$store.getters.timeLevelFilterIndex;
     },
     computed: {
+        loaded() {
+            if (this.$store.getters.datasetLevelStats != null) {
+                return true;
+            }
+            return false;
+        },
         timeVarianceLevelStats() {
             return this.$store.getters.timeVarianceLevelStats.filter(this.filters[this.filterIndex]);
         }

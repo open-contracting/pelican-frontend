@@ -1,6 +1,6 @@
 <template>
     <dashboard-detail>
-        <template v-if="check != null" v-slot:content>
+        <template v-if="loaded" v-slot:content>
             <h2>{{ $t("timeLevel." + check.name + ".name") }}</h2>
             <p v-html=" $t('timeLevel.' + check.name + '.descriptionLong')"></p>
 
@@ -71,28 +71,118 @@
                 <table class="table table-sm">
                     <thead>
                         <tr class="d-flex">
-                            <th class="col-10" scope="col">{{ $t("ocid") }}</th>
-                            <th class="col-2 text-left" scope="col">{{ $t("examples.actions") }}</th>
+                            <th class="col-9" scope="col">{{ $t("examples.ocid") }}</th>
+                            <th class="col-1 text-left" scope="col">{{ $t("examples.actions") }}</th>
+                            <th class="col-1 text-center" scope="col"></th>
+                            <th class="col-1 text-center" scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in check.meta.examples.slice(0, 5)" class="d-flex" v-bind:key="index">
-                            <td class="col-9 text-left numeric d-flex align-items-center">
-                                <span class="check_name">{{ item.ocid }}</span>
-                            </td>
-                            <td class="col-3 text-right numeric">
-                                <span v-if="(index + 'new') != selectedKey">
-                                    <a v-on:click.stop.prevent="preview(index + 'new', item.item_id)" href="#">{{ $t("examples.previewOld") }}</a>
-                                </span>
-                                <span v-else class="badge badge-primary">active</span>
-                                <br />
-                                <span v-if="(index + 'old') != selectedKey">
-                                    <a v-on:click.stop.prevent="preview(index + 'old', item.new_item_id)" href="#">{{ $t("examples.previewNew") }}</a>
-                                </span>
-                                <span v-else class="badge badge-primary">active</span>
-                            </td>
-                        </tr>
-                        <tr v-if="!showMore">
+                        <template v-for="(item, index) in check.meta.examples.slice(0, 5)">
+                            <tr class="d-flex new_row" v-bind:key="'new_' + index">
+                                <td class="col-9 text-left numeric d-flex align-items-center">
+                                    <span class="check_name">{{ item.new_item_ocid }}</span>
+                                    &nbsp;
+                                    <span class="example_version">[{{ $t("examples.new") }}]</span>
+                                </td>
+                                <td class="col-1 clickable">
+                                    <span v-if="('new_' + index) != selectedKey">
+                                        <font-awesome-icon
+                                            v-if="!loadingPreviewData"
+                                            v-on:click.stop.prevent="preview('new_' + index, item.new_item_id)"
+                                            :id="'preview_new_' + index"
+                                            class="examples_icon"
+                                            :icon="['far', 'eye']"
+                                        />
+                                        <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                        <b-tooltip :target="'preview_new_' + index" triggers="hover">
+                                            <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                        </b-tooltip>
+                                    </span>
+                                    <span v-if="('new_' + index) == selectedKey">
+                                        <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                    </span>
+                                </td>
+                                <td class="col-1 clickable">
+                                    <span>
+                                        <font-awesome-icon
+                                            v-on:click.stop.prevent="download(item.new_item_id)"
+                                            :id="'download_new_' + index"
+                                            class="examples_icon"
+                                            :icon="['fas', 'cloud-download-alt']"
+                                        />    
+                                        <b-tooltip :target="'download_new_' + index" triggers="hover">
+                                            <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                        </b-tooltip>
+                                    </span>
+                                </td>
+                                <td class="col-1 clickable">
+                                    <span>
+                                        <font-awesome-icon
+                                            v-on:click.stop.prevent="copyToClipboard(item.new_item_id)"
+                                            :id="'clipboard_new_' + index"
+                                            class="examples_icon"
+                                            :icon="['fas', 'clipboard']"
+                                        />
+                                        <b-tooltip :target="'clipboard_new_' + index" triggers="hover">
+                                            <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                        </b-tooltip>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr class="d-flex old_row" v-bind:key="'old_' + index">
+                                <td class="col-9 text-left numeric d-flex align-items-center">
+                                    <span class="check_name">{{ item.ocid }}</span>
+                                    &nbsp;
+                                    <span class="example_version">[{{ $t("examples.old") }}]</span>
+                                </td>
+                                <td class="col-1 clickable">
+                                    <span v-if="('old_' + index) != selectedKey">
+                                        <font-awesome-icon
+                                            v-if="!loadingPreviewData"
+                                            v-on:click.stop.prevent="preview('old_' + index, item.item_id)"
+                                            :id="'preview_old_' + index"
+                                            class="examples_icon"
+                                            :icon="['far', 'eye']"
+                                        />
+                                        <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                        <b-tooltip :target="'preview_old_' + index" triggers="hover">
+                                            <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                        </b-tooltip>
+                                    </span>
+                                    <span v-if="('old_' + index) == selectedKey">
+                                        <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                    </span>
+                                </td>
+                                <td class="col-1 clickable">
+                                    <span>
+                                        <font-awesome-icon
+                                            v-on:click.stop.prevent="download(item.item_id)"
+                                            :id="'download_old_' + index"
+                                            class="examples_icon"
+                                            :icon="['fas', 'cloud-download-alt']"
+                                        />    
+                                        <b-tooltip :target="'download_old_' + index" triggers="hover">
+                                            <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                        </b-tooltip>
+                                    </span>
+                                </td>
+                                <td class="col-1 clickable">
+                                    <span>
+                                        <font-awesome-icon
+                                            v-on:click.stop.prevent="copyToClipboard(item.item_id)"
+                                            :id="'clipboard_old_' + index"
+                                            class="examples_icon"
+                                            :icon="['fas', 'clipboard']"
+                                        />
+                                        <b-tooltip :target="'clipboard_old_' + index" triggers="hover">
+                                            <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                        </b-tooltip>
+                                    </span>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr v-if=" !showMore && check.meta.examples.length > 5">
                             <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore = true">
                                 <a>
                                     <font-awesome-icon icon="chevron-down" />
@@ -101,22 +191,110 @@
                             </td>
                         </tr>
                         <span v-if="showMore">
-                            <tr v-for="(item, index) in check.meta.examples.slice(0, 5)" class="d-flex" v-bind:key="index">
-                                <td class="col-9 text-left numeric d-flex align-items-center">
-                                    <span class="check_name">{{ item.ocid }}</span>
-                                </td>
-                                <td class="col-3 text-right numeric">
-                                    <span v-if="(index + 5 + 'new') != selectedKey">
-                                        <a v-on:click.stop.prevent="preview(index + 5 + 'new', item.item_id)" href="#">{{ $t("examples.previewOld") }}</a>
-                                    </span>
-                                    <span v-else class="badge badge-primary">active</span>
-                                    <br />
-                                    <span v-if="(index + 5 + 'old') != selectedKey">
-                                        <a v-on:click.stop.prevent="preview(index + 5 + 'old', item.new_item_id)" href="#">{{ $t("examples.previewNew") }}</a>
-                                    </span>
-                                    <span v-else class="badge badge-primary">active</span>
-                                </td>
-                            </tr>
+                            <template v-for="(item, index) in check.meta.examples.slice(5, )">
+                                <tr class="d-flex new_row" v-bind:key="'new_' + (index + 5)">
+                                    <td class="col-9 text-left numeric d-flex align-items-center">
+                                        <span class="check_name">{{ item.new_item_ocid }}</span>
+                                        &nbsp;
+                                        <span class="example_version">[{{ $t("examples.new") }}]</span>
+                                    </td>
+                                    <td class="col-1 clickable">
+                                        <span v-if="('new_' + (index + 5)) != selectedKey">
+                                            <font-awesome-icon
+                                                v-if="!loadingPreviewData"
+                                                v-on:click.stop.prevent="preview('new_' + (index + 5), item.new_item_id)"
+                                                :id="'preview_new_' + (index + 5)"
+                                                class="examples_icon"
+                                                :icon="['far', 'eye']"
+                                            />
+                                            <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                            <b-tooltip :target="'preview_new_' + (index + 5)" triggers="hover">
+                                                <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                            </b-tooltip>
+                                        </span>
+                                        <span v-if="('new_' + (index + 5)) == selectedKey">
+                                            <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                        </span>
+                                    </td>
+                                    <td class="col-1 clickable">
+                                        <span>
+                                            <font-awesome-icon
+                                                v-on:click.stop.prevent="download(item.new_item_id)"
+                                                :id="'download_new_' + (index + 5)"
+                                                class="examples_icon"
+                                                :icon="['fas', 'cloud-download-alt']"
+                                            />    
+                                            <b-tooltip :target="'download_new_' + (index + 5)" triggers="hover">
+                                                <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                            </b-tooltip>
+                                        </span>
+                                    </td>
+                                    <td class="col-1 clickable">
+                                        <span>
+                                            <font-awesome-icon
+                                                v-on:click.stop.prevent="copyToClipboard(item.new_item_id)"
+                                                :id="'clipboard_new_' + (index + 5)"
+                                                class="examples_icon"
+                                                :icon="['fas', 'clipboard']"
+                                            />
+                                            <b-tooltip :target="'clipboard_new_' + (index + 5)" triggers="hover">
+                                                <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                            </b-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="d-flex old_row" v-bind:key="'old_' + (index + 5)">
+                                    <td class="col-9 text-left numeric d-flex align-items-center">
+                                        <span class="check_name">{{ item.ocid }}</span>
+                                        &nbsp;
+                                        <span class="example_version">[{{ $t("examples.old") }}]</span>
+                                    </td>
+                                    <td class="col-1 clickable">
+                                        <span v-if="('old_' + (index + 5)) != selectedKey">
+                                            <font-awesome-icon
+                                                v-if="!loadingPreviewData"
+                                                v-on:click.stop.prevent="preview('old_' + (index + 5), item.item_id)"
+                                                :id="'preview_old_' + (index + 5)"
+                                                class="examples_icon"
+                                                :icon="['far', 'eye']"
+                                            />
+                                            <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                            <b-tooltip :target="'preview_old_' + (index + 5)" triggers="hover">
+                                                <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                            </b-tooltip>
+                                        </span>
+                                        <span v-if="('old_' + (index + 5)) == selectedKey">
+                                            <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                        </span>
+                                    </td>
+                                    <td class="col-1 clickable">
+                                        <span>
+                                            <font-awesome-icon
+                                                v-on:click.stop.prevent="download(item.item_id)"
+                                                :id="'download_old_' + (index + 5)"
+                                                class="examples_icon"
+                                                :icon="['fas', 'cloud-download-alt']"
+                                            />    
+                                            <b-tooltip :target="'download_old_' + (index + 5)" triggers="hover">
+                                                <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                            </b-tooltip>
+                                        </span>
+                                    </td>
+                                    <td class="col-1 clickable">
+                                        <span>
+                                            <font-awesome-icon
+                                                v-on:click.stop.prevent="copyToClipboard(item.item_id)"
+                                                :id="'clipboard_old_' + (index + 5)"
+                                                class="examples_icon"
+                                                :icon="['fas', 'clipboard']"
+                                            />
+                                            <b-tooltip :target="'clipboard_old_' + (index + 5)" triggers="hover">
+                                                <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                            </b-tooltip>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </template>
                         </span>
                         <tr v-if="showMore">
                             <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore = false">
@@ -136,7 +314,17 @@
             <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewMetadata"></vue-json-pretty>
 
             <div class="divider">&nbsp;</div>
-            <span v-if="previewData">
+
+            <span v-if="loadingPreviewData">
+                <div class="result_box loader text-center">
+                    <div class="spinner">
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                    </div>
+                    {{ $t("loader.data") }}
+                </div>
+            </span>
+
+            <span v-else-if="previewData">
                 <h5>{{ $t("preview.ocdsData") }}</h5>
                 <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
             </span>
@@ -159,9 +347,10 @@ export default {
             check: null,
             previewDataItemId: null,
             previewMetadata: null,
+            loadingPreviewData: false,
             examples: null,
             showMore: false,
-            selectedKey: null
+            selectedKey: null,
         };
     },
     components: {
@@ -171,21 +360,74 @@ export default {
         Tooltip
     },
     created() {
-        this.check = this.$store.getters.timeVarianceLevelCheckByName(
-            this.$route.params.check
-        );
-
-        if (this.check != null) {
-            this.previewMetadata = Object.assign({}, this.check.meta);
-            delete this.previewMetadata.examples;
-        }
+        this.loadCheck();
     },
     methods: {
+        loadCheck: function() {
+            this.check = this.$store.getters.timeVarianceLevelCheckByName(
+                this.$route.params.check
+            );
+
+            if (this.check != null) {
+                this.previewMetadata = Object.assign({}, this.check.meta);
+                delete this.previewMetadata.examples;
+            }
+        },
         preview: function(selectedKey, itemId) {
-            this.selectedKey = selectedKey;
-            this.$store.dispatch("loadDataItem", itemId);
-            this.previewDataItemId = itemId;
-        }
+            this.loadingPreviewData = true;
+            this.$store.dispatch("loadDataItem", itemId)
+                .then(() => {
+                    if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
+                        this.previewDataItemId = itemId;
+                        this.selectedKey = selectedKey;
+                    } else {
+                        this.$alert(this.$t("preview.cannotDisplay"), null, 'error');
+                        this.previewDataItemId = null;
+                        this.selectedKey = null;
+                    }
+                })
+                .catch(() => {
+                    this.$alert(this.$t("preview.nonExisting"), null, 'error');
+                    this.previewDataItemId = null;
+                    this.selectedKey = null;
+                })
+                .finally(() => {
+                    this.loadingPreviewData = false;
+                })
+        },
+        download: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId)
+                .then(() => {
+                    var result = this.$store.getters.dataItemById(itemId);
+                    var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
+                    var fileLink = document.createElement('a');
+
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
+                    document.body.appendChild(fileLink);
+
+                    fileLink.click();
+
+                    this.$alert(this.$t("examples.download.success"), null, 'success');
+                })
+                .catch(() => {
+                    this.$alert(this.$t("preview.nonExisting"), null, 'error');
+                })
+        },
+        copyToClipboard: function(itemId) {
+            this.$store.dispatch("loadDataItem", itemId)
+                .then(() => {
+                    if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
+                        this.$clipboard(this.$store.getters.dataItemJSON(itemId));
+                        this.$alert(this.$t("examples.copyToClipboard.success"), null, 'success');
+                    } else {
+                        this.$alert(this.$t("examples.copyToClipboard.failure"), null, 'error');
+                    }
+                })
+                .catch(() => {
+                    this.$alert(this.$t("preview.nonExisting"), null, 'error');
+                })
+        },
     },
     computed: {
         previewData() {
@@ -204,11 +446,29 @@ export default {
         },
         checkState() {
             return this.check.check_result ? "ok" : "failed";
+        },
+        loaded() {
+            this.loadCheck();
+
+            return this.check != null;
         }
     }
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import "src/scss/variables";
+
+.examples_icon {
+    color: $primary;
+}
+
+.old_row > td {
+    border: none;
+}
+
+.example_version {
+    color: $headings_light_color;
+}
+
 </style>
