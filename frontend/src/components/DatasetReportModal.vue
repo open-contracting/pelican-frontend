@@ -11,29 +11,24 @@
                         <a class="variant-success" v-on:click.stop.prevent="retry" href="#">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" />
                         </a>
-                        &nbsp;
-                        <a class="variant-success" v-on:click.stop.prevent="reset" href="#">
-                            <font-awesome-icon :icon="['fas', 'times']" />
-                        </a> 
                     </span>
                 </b-alert>
-                <span>
-                    {{ $t("datasetReport.link") }}
-                    <a :href="documentLink" target="_blank">{{ documentLink }}</a>  
+                <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
+                <a :href="documentLink" target="_blank">{{ documentLink }}</a>
+            </span>
+            <span v-if="submitResult == false">
+                <b-alert class="submit-result" variant="danger" show>
+                    <span>{{ $t("datasetReport.statusFailed") }}</span>
+                    <span>
+                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
+                        </a>
+                    </span>
+                </b-alert>
+                <span v-if="errorMessage != null">
+                    <span class="info_prefix">{{ $t("datasetReport.errorReason") }}:&nbsp;</span>{{ errorMessage }}
                 </span>
             </span>
-            <b-alert class="submit-result" v-if="submitResult == false" variant="danger" show>
-                <span>{{ $t("datasetReport.statusFailed") }}</span>
-                <span>
-                    <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                        <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                    </a>
-                    &nbsp;
-                    <a class="variant-danger" v-on:click.stop.prevent="reset" href="#">
-                        <font-awesome-icon :icon="['fas', 'times']" />
-                    </a>
-                </span>
-            </b-alert>
         </span>
         <form v-if="!isSubmitting && submitResult == null" class="modal_box align-items-center">
             <div class="form-group row section_row">
@@ -77,13 +72,15 @@ export default {
             documentId: "",
             folderId: "",
             submitResult: null,
-            documentLink: null
+            documentLink: null,
+            errorMessage: null
         };
     },
     components: { Loader },
     methods: {
         createDatasetReport() {
             if (this.dataset == null) { return; }
+            this.errorMessage = null;
             this.isSubmitting = true;
             var documentIdMatch = this.documentId.match(/\/d\/([^/]+)/);
             var folderIdMatch = this.folderId.match(/\/folders\/([^/]+)/);
@@ -100,14 +97,17 @@ export default {
                 .then((response) => {
                     if (response.status == 200) {
                         this.submitResult = true;
-                        this.documentLink = "https://docs.google.com/document/d/" + response["data"];
+                        this.documentLink = "https://docs.google.com/document/d/" + response.data;
                     } else {
                         this.submitResult = false;
+                        this.errorMessage = response.statusText;
                     }
-                    this.isSubmitting = false;
                 })
-                .catch(() => {
+                .catch((error) => {
                     this.submitResult = false;
+                    this.errorMessage = error.response.statusText;
+                })
+                .finally(() => {
                     this.isSubmitting = false;
                 });
         },
@@ -201,4 +201,9 @@ export default {
 .multiselect__tag-icon:hover {
     background: $gray-800;
 }
+
+.info_prefix {
+    color: $headings-light-color;
+}
+
 </style>

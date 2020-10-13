@@ -1,5 +1,6 @@
 
 import time
+import json
 import random
 import intervals as I
 import simplejson as json
@@ -12,6 +13,7 @@ from django.core import serializers
 from django.db import connections
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
+from .tools.errors import GoogleDriveError
 from .tools.gdocs import Gdocs
 from .tools.tags.template_tags.base import BaseTemplateTag
 
@@ -294,17 +296,20 @@ def generate_report(request):
     ):
         return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
 
-    gdocs = Gdocs(input_message["document_id"])
-    base = BaseTemplateTag(gdocs, input_message['dataset_id'])
-    base.set_param('template', input_message['document_id'])
-    main_template = base.validate_and_process()
-    
-    file_id = gdocs.upload(
-        input_message["folder_id"],
-        input_message["document_id"],
-        "Pelican export {} {}".format(input_message["dataset_id"], datetime.now()),
-        main_template
-    )
+    try:
+        gdocs = Gdocs(input_message["document_id"])
+        base = BaseTemplateTag(gdocs, input_message['dataset_id'])
+        base.set_param('template', input_message['document_id'])
+        main_template = base.validate_and_process()
+            
+        file_id = gdocs.upload(
+            input_message["folder_id"],
+            "Pelican export {} {}".format(input_message["dataset_id"], datetime.now()),
+            main_template
+        )
+    except GoogleDriveError as er:
+        return HttpResponseBadRequest(reason=er)
+        
     gdocs.destroy_tempdir()
 
     return HttpResponse(file_id)

@@ -51,7 +51,8 @@ export const messages = {
     datasetReport: {
         headline: "Dataset report",
         statusOk: "Report has been successfully created.",
-        link: "Link: ",
+        link: "Link",
+        errorReason: "Reason",
         statusFailed: "Report creation failed.",
         documentId: "Document id",
         documentIdTooltip: "Id or url of document containing some report tags",

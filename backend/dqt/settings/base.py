@@ -129,3 +129,5 @@ LOGGING = {
         },
     }
 }
+
+CACHE_BACKEND = 'file:///tmp/dqv_backend_cache'
