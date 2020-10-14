@@ -308,9 +308,13 @@ def generate_report(request):
         base.set_param('template', input_message['document_id'])
         main_template = base.validate_and_process()
             
+        report_name = 'Report %s %s' % (input_message['dataset_id'], datetime.now())
+        if 'report_name' in input_message and isinstance(input_message['report_name'], str):
+            report_name = input_message['report_name']
+
         file_id = gdocs.upload(
             input_message["folder_id"],
-            "Pelican export {} {}".format(input_message["dataset_id"], datetime.now()),
+            report_name,
             main_template
         )
     except GoogleDriveError as er:

@@ -75,10 +75,7 @@
                         lazy-formatter
                         :formatter="fileIdFormatter"
                     />
-                    <small class="form-text text-muted">
-                        {{ $t("datasetReport.documentIdTooltip") }}
-                        <!-- <font-awesome-icon :icon="['fab', 'google-drive']" /> -->
-                    </small>
+                    <small v-html="$t('datasetReport.documentIdTooltip')" class="form-text text-muted"></small>
                 </div>
             </div>
             <div class="form-group row section_row">
@@ -93,10 +90,7 @@
                         lazy-formatter
                         :formatter="fileIdFormatter"
                     />
-                    <small class="form-text text-muted">
-                        {{ $t("datasetReport.folderIdTooltip") }}
-                        <!-- <font-awesome-icon :icon="['fab', 'google-drive']" /> -->
-                    </small>
+                    <small v-html="$t('datasetReport.folderIdTooltip')" class="form-text text-muted"></small>
                 </div>
             </div>
             <div class="form-group row section_row">
@@ -109,10 +103,7 @@
                         class="base_input"
                         v-model="reportName"
                     />
-                    <small class="form-text text-muted">
-                        {{ $t("datasetReport.reportNameTooltip") }}
-                        <!-- <font-awesome-icon :icon="['fab', 'google-drive']" /> -->
-                    </small>
+                    <small v-html="$t('datasetReport.reportNameTooltip')" class="form-text text-muted"></small>
                 </div>
             </div>
             <div class="text-center">
@@ -155,14 +146,19 @@ export default {
             this.errorMessage = null;
             this.isSubmitting = true;
 
+            var data = {
+                dataset_id: parseInt(this.dataset.id),
+                document_id: this.documentId,
+                folder_id: this.folderId
+            }
+            if (this.reportName.trim() != "") {
+                data.report_name = this.reportName.trim();
+            }
+
             axios
                 .post(
                     CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport,
-                    {
-                        "dataset_id": parseInt(this.dataset.id),
-                        "document_id": this.documentId,
-                        "folder_id": this.folderId
-                    }
+                    data
                 )
                 .then((response) => {
                     if (response.status == 200) {
