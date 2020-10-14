@@ -334,7 +334,6 @@ def generate_report(request):
             'data': [er.as_dict()], # Can accommodate multiple TagErrors in the future
         })
     finally:
-        # TODO: temp
-        # gdocs.destroy_tempdir()
+        gdocs.destroy_tempdir()
         
     return response
