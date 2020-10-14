@@ -66,15 +66,53 @@
             <div class="form-group row section_row">
                 <label class="col-3 col-form-label">{{ $t("datasetReport.documentId") }}</label>
                 <div class="col-9">
-                    <input class="base_input" v-model="documentId" />
-                    <small class="form-text text-muted">{{ $t("datasetReport.documentIdTooltip") }}</small>
+                    <b-form-input
+                        id="documentIdInput"
+                        spellcheck="false"
+                        autocomplete="off"
+                        class="base_input"
+                        v-model="documentId"
+                        lazy-formatter
+                        :formatter="fileIdFormatter"
+                    />
+                    <small class="form-text text-muted">
+                        {{ $t("datasetReport.documentIdTooltip") }}
+                        <!-- <font-awesome-icon :icon="['fab', 'google-drive']" /> -->
+                    </small>
                 </div>
             </div>
             <div class="form-group row section_row">
                 <label class="col-3 col-form-label">{{ $t("datasetReport.folderId") }}</label>
                 <div class="col-9">
-                    <input class="base_input" v-model="folderId" />
-                    <small class="form-text text-muted">{{ $t("datasetReport.folderIdTooltip") }}</small>
+                    <b-form-input
+                        id="folderIdInput"
+                        spellcheck="false"
+                        autocomplete="off"
+                        class="base_input"
+                        v-model="folderId"
+                        lazy-formatter
+                        :formatter="fileIdFormatter"
+                    />
+                    <small class="form-text text-muted">
+                        {{ $t("datasetReport.folderIdTooltip") }}
+                        <!-- <font-awesome-icon :icon="['fab', 'google-drive']" /> -->
+                    </small>
+                </div>
+            </div>
+            <div class="form-group row section_row">
+                <label class="col-3 col-form-label">{{ $t("datasetReport.reportName") }}</label>
+                <div class="col-9">
+                    <b-form-input
+                        id="reportNameInput"
+                        spellcheck="false"
+                        autocomplete="off"
+                        class="base_input"
+                        v-model="reportName"
+                    />
+                    <small class="form-text text-muted">
+                        {{ $t("datasetReport.reportNameTooltip") }}
+                        <!-- <font-awesome-icon :icon="['fab', 'google-drive']" /> -->
+                    </small>
                 </div>
             </div>
             <div class="text-center">
@@ -103,9 +141,11 @@ export default {
             isSubmitting: false,
             documentId: "",
             folderId: "",
+            reportName: "",
             submitStatus: null,
+            submitData: null,
             documentLink: null,
-            errorMessage: null
+            errorMessage: null,
         };
     },
     components: { Loader },
@@ -114,16 +154,14 @@ export default {
             if (this.dataset == null) { return; }
             this.errorMessage = null;
             this.isSubmitting = true;
-            var documentIdMatch = this.documentId.match(/\/d\/([^/]+)/);
-            var folderIdMatch = this.folderId.match(/\/folders\/([^/]+)/);
 
             axios
                 .post(
                     CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport,
                     {
                         "dataset_id": parseInt(this.dataset.id),
-                        "document_id": documentIdMatch != null ? documentIdMatch[1] : this.documentId,
-                        "folder_id": folderIdMatch != null ? folderIdMatch[1] : this.folderId
+                        "document_id": this.documentId,
+                        "folder_id": this.folderId
                     }
                 )
                 .then((response) => {
@@ -147,11 +185,22 @@ export default {
             this.isSubmitting = false;
             this.documentId = "";
             this.folderId = "";
+            this.reportName = "";
             this.submitStatus = null;
+            this.submitData = null;
+            this.documentLink = null;
+            this.errorMessage = null;
         },
         retry() {
             this.submitStatus = null;
             this.createDatasetReport();
+        },
+        fileIdFormatter(value) {
+            var valueMatch = value.match(/\/d\/([^/]+)/);
+            if (valueMatch == null) {
+                valueMatch = value.match(/\/folders\/([^/]+)/);
+            }
+            return valueMatch != null ? valueMatch[1] : value;
         }
     }
 };
@@ -181,12 +230,14 @@ export default {
     padding-bottom: 30px;
 }
 
-.base_input {
+.base_input,
+.base_input:-internal-autofill-selected {
     width: 100%;
     height: 100%;
     padding-right: 0px;
     font-size: 13px;
     font-family: $font-family-mono;
+    background-color: transparent;
 }
 
 .modal_input {

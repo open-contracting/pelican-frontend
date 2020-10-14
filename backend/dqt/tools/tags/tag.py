@@ -285,9 +285,9 @@ class TemplateTag:
                 tag_class = self.get_sub_tag(tag_expression.get_name())
                 if tag_class is None:
                     raise TagError(
-                        reason='The tag \'%s\' cannot be used in this context.' % tag_name,
+                        reason='The tag \'%s\' cannot be used in this context.' % tag_expression.get_name(),
                         full_tag=full_tag,
-                        template_id=self.base_template_id
+                        template_id=self.get_param('template')
                     )
 
                 try:
@@ -295,7 +295,7 @@ class TemplateTag:
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
-                        er.set_template_id(self.base_template_id)
+                        er.set_template_id(self.get_param('template'))
                 
                 for param_name, param_value in tag_expression.get_params():
                     try:
@@ -303,7 +303,7 @@ class TemplateTag:
                     except TagError as er:
                         if not er.is_set():
                             er.set_full_tag(full_tag)
-                            er.set_template_id(self.base_template_id)
+                            er.set_template_id(self.get_param('template'))
                         raise er
 
                 tags_mapping[full_tag] = tag
@@ -338,7 +338,7 @@ class TemplateTag:
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
-                        er.set_template_id(self.base_template_id)
+                        er.set_template_id(self.get_param('template'))
                     raise er
 
                 if tag.value_type == etree.Element:
@@ -351,7 +351,7 @@ class TemplateTag:
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
-                        er.set_template_id(self.base_template_id)
+                        er.set_template_id(self.get_param('template'))
                     raise er
 
                 self.merge_template(result, full_tag)
