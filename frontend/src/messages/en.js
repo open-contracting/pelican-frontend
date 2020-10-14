@@ -50,16 +50,20 @@ export const messages = {
     },
     datasetReport: {
         headline: "Dataset report",
-        statusOk: "Report has been successfully created.",
+        status: {
+            ok: "Report has been successfully created.",
+            templateError: "Template syntax is invalid.",
+            reportError: "Report creation has failed.",
+            serverError: "An unexpected error has occurred. Please contact the support so it can be resolved.",
+        },
         link: "Link",
-        errorReason: "Reason",
-        statusFailed: "Report creation failed.",
+        reason: "Reason",
         documentId: "Document id",
         documentIdTooltip: "Id or url of document containing some report tags",
         folderId: "Folder id",
         folderIdTooltip: "Id or url of folder for the final report",
-        submit: "Submit"
-
+        submit: "Submit",
+        errorReport: "Error report",
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",

@@ -1,5 +1,6 @@
 
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class ShareLeafTag(LeafTag):
     RANKS = set(['1', '2', '3', '4', '5'])
@@ -12,8 +13,16 @@ class ShareLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('rank', lambda v: v in ShareLeafTag.RANKS)
-        self.set_param_validation('decimals', lambda v: v.isdigit())
+        self.set_param_validation(
+            'rank',
+            lambda v: v in ShareLeafTag.RANKS,
+            description='The value must be one of the following: %s.' % terms_enumeration(ShareLeafTag.RANKS)
+        )
+        self.set_param_validation(
+            'decimals',
+            lambda v: v.isdigit(),
+            description='The value must be a non-negative integer.'
+        )
 
         self.set_required_data_field('shares')
 

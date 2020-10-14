@@ -1,6 +1,7 @@
 
 from django.db import connections
 from dqt.models import DatasetLevelCheck
+from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
@@ -133,7 +134,12 @@ class DatasetTemplateTag(TemplateTag):
         )
 
         # TODO: check if check was calculated and version compatability
-        self.set_param_validation('check', lambda v: v in DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL, required=True)
+        self.set_param_validation(
+            'check',
+            lambda v: v in DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL,
+            description='The value must be one of the following: %s.' % terms_enumeration(DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL),
+            required=True
+        )
 
         self.set_sub_tag('name', generate_key_leaf_tag('name'))
         self.set_sub_tag('description', generate_key_leaf_tag('description'))

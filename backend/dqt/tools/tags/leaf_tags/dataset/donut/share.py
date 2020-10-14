@@ -12,7 +12,11 @@ class ShareLeafTag(LeafTag):
         )
 
         self.set_param_validation('value', lambda v: isinstance(v, str))
-        self.set_param_validation('decimals', lambda v: v.isdigit())
+        self.set_param_validation(
+            'decimals',
+            lambda v: v.isdigit(),
+            description='The value must be a non-negative integer.'
+        )
 
         self.set_required_data_field('shares')
 

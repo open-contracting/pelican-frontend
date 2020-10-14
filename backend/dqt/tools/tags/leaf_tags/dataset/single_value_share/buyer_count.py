@@ -1,5 +1,6 @@
 
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class BuyerCountLeafTag(LeafTag):
     COUNT_RANGES = set([
@@ -18,7 +19,11 @@ class BuyerCountLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('countRange', lambda v: v in BuyerCountLeafTag.COUNT_RANGES)
+        self.set_param_validation(
+            'countRange',
+            lambda v: v in BuyerCountLeafTag.COUNT_RANGES,
+            description='The value must be one of the following: %s.' % terms_enumeration(BuyerCountLeafTag.COUNT_RANGES)
+        )
         
         self.set_required_data_field('buyerCounts')
 

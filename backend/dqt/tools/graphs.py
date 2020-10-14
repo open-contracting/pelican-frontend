@@ -119,6 +119,7 @@ def resource_result_box(passed_count, failed_count, not_available_count, return_
     buffer = BytesIO()
     plt.savefig(buffer, dpi=500, format='png', bbox_inches='tight')
     buffer.seek(0)
+    plt.close(fig)
 
     if return_aspect_ratio:
         return buffer, aspect_ratio
@@ -217,6 +218,7 @@ def field_result_box(passed_count, failed_count, return_aspect_ratio=False):
     buffer = BytesIO()
     plt.savefig(buffer, dpi=500, format='png', bbox_inches='tight')
     buffer.seek(0)
+    plt.close(fig)
 
     if return_aspect_ratio:
         return buffer, aspect_ratio
@@ -321,6 +323,7 @@ def bar_result_box(counts_mapping, return_aspect_ratio=False):
     buffer = BytesIO()
     plt.savefig(buffer, dpi=500, format='png', bbox_inches='tight')
     buffer.seek(0)
+    plt.close(fig)
 
     if return_aspect_ratio:
         return buffer, aspect_ratio

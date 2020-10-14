@@ -1,5 +1,6 @@
 
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class AmountLeafTag(LeafTag):
     RANKS = set(['1', '2', '3', '4', '5'])
@@ -12,7 +13,12 @@ class AmountLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('rank', lambda v: v in AmountLeafTag.RANKS, required=True)
+        self.set_param_validation(
+            'rank',
+            lambda v: v in AmountLeafTag.RANKS, 
+            description='The value must be one of the following: %s.' % terms_enumeration(AmountLeafTag.RANKS),
+            required=True
+        )
         
         self.set_required_data_field('amounts')
 

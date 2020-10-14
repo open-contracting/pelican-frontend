@@ -13,7 +13,7 @@ from django.core import serializers
 from django.db import connections
 from django.db.models import Count
 from django.views.decorators.csrf import csrf_exempt
-from .tools.errors import GoogleDriveError
+from .tools.errors import GoogleDriveError, TagError
 from .tools.gdocs import Gdocs
 from .tools.tags.template_tags.base import BaseTemplateTag
 
@@ -284,7 +284,10 @@ def time_variance_level_stats(request, dataset_id):
 @csrf_exempt
 def generate_report(request):
     if request.method == 'GET':
-        return HttpResponseBadRequest(reason='Only post method is accepted.')
+        return JsonResponse({
+            'status': 'report_error',
+            'data': {'reason': 'Only post method is accepted.'}
+        })
 
     body_unicode = request.body.decode('utf-8')
     input_message = json.loads(body_unicode)
@@ -294,7 +297,10 @@ def generate_report(request):
         "dataset_id" not in input_message or not isinstance(input_message["dataset_id"], int) or
         "document_id" not in input_message or "folder_id" not in input_message
     ):
-        return HttpResponseBadRequest(reason='Input message is malformed, will be dropped.')
+        return JsonResponse({
+            'status': 'report_error',
+            'data': {'reason': 'Input message is malformed, will be dropped.'}
+        })
 
     try:
         gdocs = Gdocs(input_message["document_id"])
@@ -308,8 +314,19 @@ def generate_report(request):
             main_template
         )
     except GoogleDriveError as er:
-        return HttpResponseBadRequest(reason=er)
+        return JsonResponse({
+            'status': 'report_error',
+            'data': {'reason': str(er)}
+        })
+    except TagError as er:
+        return JsonResponse({
+            'status': 'template_error',
+            'data': [er.as_dict()], # Can accommodate multiple TagErrors in the future
+        })
         
     gdocs.destroy_tempdir()
 
-    return HttpResponse(file_id)
+    return JsonResponse({
+        'status': 'ok',
+        'data': {'file_id': file_id}
+    })

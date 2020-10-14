@@ -1,5 +1,6 @@
 
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class SumLeafTag(LeafTag):
     PERCENTAGE_RANGES = set([
@@ -18,7 +19,11 @@ class SumLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('percentageRange', lambda v: v in SumLeafTag.PERCENTAGE_RANGES)
+        self.set_param_validation(
+            'percentageRange',
+            lambda v: v in SumLeafTag.PERCENTAGE_RANGES,
+            description='The value must be one of the following: %s.' % terms_enumeration(SumLeafTag.PERCENTAGE_RANGES)
+        )
         
         self.set_required_data_field('sums')
 

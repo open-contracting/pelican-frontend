@@ -2,6 +2,7 @@
 from lxml import etree
 from dqt.tools.tags.tag import LeafTag
 from dqt.tools import graphs
+from dqt.tools.misc import terms_enumeration
 
 
 class CountsResultBoxImageLeafTag(LeafTag):
@@ -18,7 +19,11 @@ class CountsResultBoxImageLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('type', lambda v: v in CountsResultBoxImageLeafTag.TYPES)
+        self.set_param_validation(
+            'type',
+            lambda v: v in CountsResultBoxImageLeafTag.TYPES,
+            description='The value must be one of the following: %s.' % terms_enumeration(CountsResultBoxImageLeafTag.TYPES)
+        )
 
         self.set_required_data_field('name')
         self.set_required_data_field('counts')

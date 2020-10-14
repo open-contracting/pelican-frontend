@@ -1,11 +1,11 @@
 <template>
     <span class="just_holder">
         <Loader v-if="isSubmitting"></Loader>
-        <span v-if="submitResult != null">
-            <span v-if="submitResult == true">
+        <span v-if="submitStatus != null">
+            <span v-if="submitStatus == 'ok'">
                 <b-alert class="submit-result" variant="success" show>
                     <span>
-                        {{ $t("datasetReport.statusOk") }}
+                        {{ $t("datasetReport.status.ok") }}
                     </span>
                     <span>
                         <a class="variant-success" v-on:click.stop.prevent="retry" href="#">
@@ -14,23 +14,55 @@
                     </span>
                 </b-alert>
                 <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
-                <a :href="documentLink" target="_blank">{{ documentLink }}</a>
+                <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
+                    {{ 'https://docs.google.com/document/d/' + submitData.file_id }}
+                </a>
             </span>
-            <span v-if="submitResult == false">
+            <!-- TODO -->
+            <span v-if="submitStatus == 'template_error'">
                 <b-alert class="submit-result" variant="danger" show>
-                    <span>{{ $t("datasetReport.statusFailed") }}</span>
+                    <span>{{ $t("datasetReport.status.templateError") }}</span>
                     <span>
                         <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" />
                         </a>
                     </span>
                 </b-alert>
-                <span v-if="errorMessage != null">
-                    <span class="info_prefix">{{ $t("datasetReport.errorReason") }}:&nbsp;</span>{{ errorMessage }}
-                </span>
+                <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
+                <div v-for="(error, index) in submitData" v-bind:key="index">
+                    <div>reason: {{ error.reason }}</div>
+                    <div>full_tag: {{ error.full_tag }}</div>
+                    <div>
+                        <span>link: </span>
+                        <a :href="'https://docs.google.com/document/d/' + error.template_id" target="_blank">
+                            {{ 'https://docs.google.com/document/d/' + error.template_id }}
+                        </a>    
+                    </div>
+                </div>
+            </span>
+            <span v-if="submitStatus == 'report_error'">
+                <b-alert class="submit-result" variant="danger" show>
+                    <span>{{ $t("datasetReport.status.reportError") }}</span>
+                    <span>
+                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
+                        </a>
+                    </span>
+                </b-alert>
+                <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
+            </span>
+            <span v-if="submitStatus == 'server_error'">
+                <b-alert class="submit-result" variant="danger" show>
+                    <span>{{ $t("datasetReport.status.serverError") }}</span>
+                    <span>
+                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
+                        </a>
+                    </span>
+                </b-alert>
             </span>
         </span>
-        <form v-if="!isSubmitting && submitResult == null" class="modal_box align-items-center">
+        <form v-if="!isSubmitting && submitStatus == null" class="modal_box align-items-center">
             <div class="form-group row section_row">
                 <label class="col-3 col-form-label">{{ $t("datasetReport.documentId") }}</label>
                 <div class="col-9">
@@ -71,7 +103,7 @@ export default {
             isSubmitting: false,
             documentId: "",
             folderId: "",
-            submitResult: null,
+            submitStatus: null,
             documentLink: null,
             errorMessage: null
         };
@@ -96,15 +128,15 @@ export default {
                 )
                 .then((response) => {
                     if (response.status == 200) {
-                        this.submitResult = true;
-                        this.documentLink = "https://docs.google.com/document/d/" + response.data;
+                        this.submitStatus = response.data.status;
+                        this.submitData = response.data.data;
                     } else {
-                        this.submitResult = false;
+                        this.submitStatus = 'server_error';
                         this.errorMessage = response.statusText;
                     }
                 })
                 .catch((error) => {
-                    this.submitResult = false;
+                    this.submitStatus = 'server_error';
                     this.errorMessage = error.response.statusText;
                 })
                 .finally(() => {
@@ -115,10 +147,10 @@ export default {
             this.isSubmitting = false;
             this.documentId = "";
             this.folderId = "";
-            this.submitResult = null;
+            this.submitStatus = null;
         },
         retry() {
-            this.submitResult = null;
+            this.submitStatus = null;
             this.createDatasetReport();
         }
     }

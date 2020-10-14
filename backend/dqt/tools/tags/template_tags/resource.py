@@ -1,5 +1,6 @@
 
 from django.db import connections
+from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
@@ -55,7 +56,12 @@ class ResourceTemplateTag(TemplateTag):
         )
 
         # TODO: check if check was calculated
-        self.set_param_validation('check', lambda v: v in ResourceTemplateTag.CHECKS, required=True)
+        self.set_param_validation(
+            'check',
+            lambda v: v in ResourceTemplateTag.CHECKS,
+            description='The value must be one of the following: %s.' % terms_enumeration(ResourceTemplateTag.CHECKS),
+            required=True
+        )
 
         self.set_sub_tag('name', generate_key_leaf_tag('name'))
         self.set_sub_tag('description', generate_key_leaf_tag('description'))

@@ -1,6 +1,7 @@
 
 import random
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class ExamplesLeafTag(LeafTag):
     RANKS = set(['1', '2', '3', '4', '5'])
@@ -14,8 +15,16 @@ class ExamplesLeafTag(LeafTag):
             dataset_id
         )
         
-        self.set_param_validation('rank', lambda v: v in ExamplesLeafTag.RANKS)
-        self.set_param_validation('max', lambda v: v.isdigit())
+        self.set_param_validation(
+            'rank',
+            lambda v: v in ExamplesLeafTag.RANKS,
+            description='The value must be one of the following: %s.' % terms_enumeration(ExamplesLeafTag.RANKS)
+        )
+        self.set_param_validation(
+            'max',
+            lambda v: v.isdigit(),
+            description='The value must be a positive integer.'
+        )
 
         self.set_required_data_field('examples')
         

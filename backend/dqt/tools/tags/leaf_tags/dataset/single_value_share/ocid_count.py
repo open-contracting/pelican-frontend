@@ -1,5 +1,6 @@
 
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class OcidCountLeafTag(LeafTag):
     COUNT_RANGES = set([
@@ -18,7 +19,11 @@ class OcidCountLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('countRange', lambda v: v in OcidCountLeafTag.COUNT_RANGES)
+        self.set_param_validation(
+            'countRange',
+            lambda v: v in OcidCountLeafTag.COUNT_RANGES,
+            description='The value must be one of the following: %s.' % terms_enumeration(OcidCountLeafTag.COUNT_RANGES)
+        )
         
         self.set_required_data_field('ocidCounts')
 

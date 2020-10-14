@@ -1,5 +1,6 @@
 
 from django.db import connections
+from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
@@ -601,7 +602,12 @@ class FieldTemplateTag(TemplateTag):
         )
 
         # TODO: checks for given path were calculated
-        self.set_param_validation('path', lambda v: v in FieldTemplateTag.PATHS, required=True)
+        self.set_param_validation(
+            'path',
+            lambda v: v in FieldTemplateTag.PATHS,
+            description='The value must be one of the following: %s.' % terms_enumeration(FieldTemplateTag.PATHS),
+            required=True
+        )
 
         self.set_sub_tag('name', generate_key_leaf_tag('name'))
         self.set_sub_tag('description', generate_key_leaf_tag('description'))

@@ -1,8 +1,10 @@
 
 import random
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class FailedExamplesLeafTag(LeafTag):
+    LEVELS = ('coverage', 'quality')
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -12,8 +14,18 @@ class FailedExamplesLeafTag(LeafTag):
             dataset_id
         )
         
-        self.set_param_validation('level', lambda v: v in ('coverage', 'quality'), required=True)
-        self.set_param_validation('max', lambda v: v.isdigit())
+        self.set_param_validation(
+            'level',
+            lambda v: v in FailedExamplesLeafTag.LEVELS,
+            description='The value must be one of the following: %s.' % terms_enumeration(FailedExamplesLeafTag.LEVELS),
+            required=True
+        )
+        self.set_param_validation(
+            'max',
+            lambda v: v.isdigit(),
+            description='The value must be a positive integer.'
+        )
+
         # self.set_param_validation('check', lambda v: v in FieldTemplateTag.CHECKS)
 
         self.set_required_data_field('coverageFailedExamples')

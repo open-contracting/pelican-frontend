@@ -12,7 +12,11 @@ def generate_examples_leaf_tag(key):
                 dataset_id
             )
             
-            self.set_param_validation('max', lambda v: v.isdigit())
+            self.set_param_validation(
+                'max',
+                lambda v: v.isdigit(),
+                description='The value must be a positive integer.'
+            )
 
             self.set_required_data_field(key)
 

@@ -1,5 +1,6 @@
 
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
 
 class ShareLeafTag(LeafTag):
     PERCENTAGE_RANGES = set([
@@ -18,8 +19,17 @@ class ShareLeafTag(LeafTag):
             dataset_id
         )
 
-        self.set_param_validation('percentageRange', lambda v: v in ShareLeafTag.PERCENTAGE_RANGES)
-        self.set_param_validation('decimals', lambda v: v.isdigit())
+        self.set_param_validation(
+            'percentageRange',
+            lambda v: v in ShareLeafTag.PERCENTAGE_RANGES,
+            description='The value must be one of the following: %s.' % terms_enumeration(ShareLeafTag.PERCENTAGE_RANGES)
+        )
+
+        self.set_param_validation(
+            'decimals',
+            lambda v: v.isdigit(),
+            description='The value must be a non-negative integer.'
+        )
 
         self.set_required_data_field('shares')
 

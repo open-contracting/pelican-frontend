@@ -36,7 +36,6 @@ class Gdocs:
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 self.creds = pickle.load(token)
-                self.create_or_refresh_token()
                 self.service = build('docs', 'v1', credentials=self.creds)
                 self.drive_service = build('drive', 'v3', credentials=self.creds)
         else:
@@ -87,22 +86,6 @@ class Gdocs:
 
         return image_file_path
 
-    """Creates or refresh of auth token"""
-    def create_or_refresh_token(self):
-        if not self.creds or not self.creds.valid:
-            if self.creds and self.creds.expired and self.creds.refresh_token:
-                self.creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    "credentials.json",
-                    "https: // www.googleapis.com/auth/documents"
-                )
-                self.creds = flow.run_local_server(port=0)
-            # Save the credentials for the next run
-            # TODO: resolve race condition
-            # with open('token.pickle', 'wb') as token:
-            #     pickle.dump(self.creds, token)
-
     """Uploads document"""
     def upload(self, folder_id, file_name, content):
         with ZipFile(self.main_template_path, mode="a") as out_zip:
@@ -128,7 +111,7 @@ class Gdocs:
         except ResumableUploadError as er:
             self.destroy_tempdir()
             raise GoogleDriveError(
-                'The final report could not be uploaded to folder with id \'%s\'. Please review the permission settings.' % folder_id
+                'The final report could not be uploaded to folder with id \'%s\'. Possible reasons are a non-existing folder or insufficient permission settings.' % folder_id
             )
 
         return file.get('id')
@@ -181,13 +164,18 @@ class GoogleDriveCache:
     def get_file_path(self, file_id):
         self.refresh()
 
-        drive_response = self.drive_service.files().get(
-            fileId=file_id,
-            fields='modifiedTime'
-        ).execute()
+        try:
+            drive_response = self.drive_service.files().get(
+                fileId=file_id,
+                fields='modifiedTime'
+            ).execute()
+        except HttpError as er:
+            raise GoogleDriveError(
+                'File with id \'%s\' could not be accessed. Possible reasons are a non-existing file or insufficient permission settings.' % file_id
+            )
+
         last_modified_rfc3339 = drive_response['modifiedTime']
         last_modified = from_rfc3339(drive_response['modifiedTime'])
-        print('NEW: %s, OLD: %s' % (last_modified, self.files[file_id]['last_modified']))
         if (file_id in self.files and last_modified > self.files[file_id]['last_modified']) or \
                 (file_id not in self.files):
             try:
@@ -197,7 +185,7 @@ class GoogleDriveCache:
                 ).execute()
             except HttpError as er:
                 raise GoogleDriveError(
-                    'File with id \'%s\' could not be downloaded. Please review the permission settings.' % source_id
+                    'File with id \'%s\' could not be downloaded. Possible reasons are a non-existing folder or insufficient permission settings.' % file_id
                 )
 
             return default_storage.save(
@@ -206,8 +194,3 @@ class GoogleDriveCache:
             )
 
         return self.files[file_id]['path']
-
-
-
-
-
