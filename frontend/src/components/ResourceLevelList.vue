@@ -2,11 +2,11 @@
     <span>
         <div class="tr row clickable" v-on:click="showChecks = !showChecks">
             <div class="td col-4 col-lg-5 category" scope="col">
-                <div class="switcher text-center" v-if="!showChecks">
-                    <font-awesome-icon icon="chevron-right" />
-                </div>
-                <div class="switcher text-center" v-if="showChecks">
-                    <font-awesome-icon icon="chevron-down" />
+                <div class="switcher text-center">
+                    <span v-if="resourceLevelStats.length > 0">
+                        <font-awesome-icon v-if="!showChecks" icon="chevron-right" />
+                        <font-awesome-icon v-if="showChecks" icon="chevron-down" />
+                    </span>
                 </div>
                 {{ $t("resourceLevel." + section + ".categoryName") }}
             </div>

@@ -302,6 +302,7 @@ def generate_report(request):
             'data': {'reason': 'Input message is malformed, will be dropped.'}
         })
 
+    response = None
     try:
         gdocs = Gdocs(input_message["document_id"])
         base = BaseTemplateTag(gdocs, input_message['dataset_id'])
@@ -317,20 +318,23 @@ def generate_report(request):
             report_name,
             main_template
         )
+
+        response = JsonResponse({
+            'status': 'ok',
+            'data': {'file_id': file_id}
+        })
     except GoogleDriveError as er:
-        return JsonResponse({
+        response = JsonResponse({
             'status': 'report_error',
             'data': {'reason': str(er)}
         })
     except TagError as er:
-        return JsonResponse({
+        response = JsonResponse({
             'status': 'template_error',
             'data': [er.as_dict()], # Can accommodate multiple TagErrors in the future
         })
+    finally:
+        # TODO: temp
+        # gdocs.destroy_tempdir()
         
-    gdocs.destroy_tempdir()
-
-    return JsonResponse({
-        'status': 'ok',
-        'data': {'file_id': file_id}
-    })
+    return response

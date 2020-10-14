@@ -109,7 +109,6 @@ class Gdocs:
                 media_body=media
             ).execute()
         except ResumableUploadError as er:
-            self.destroy_tempdir()
             raise GoogleDriveError(
                 'The final report could not be uploaded to folder with id \'%s\'. Possible reasons are a non-existing folder or insufficient permission settings.' % folder_id
             )
