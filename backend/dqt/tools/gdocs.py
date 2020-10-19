@@ -36,7 +36,6 @@ class Gdocs:
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 self.creds = pickle.load(token)
-                self.service = build('docs', 'v1', credentials=self.creds)
                 self.drive_service = build('drive', 'v3', credentials=self.creds)
         else:
             raise RuntimeError("Unable to find token file")
@@ -149,14 +148,13 @@ class GoogleDriveCache:
     def refresh(self):
         self.files = dict()
         _, filenames = default_storage.listdir(GoogleDriveCache.ROOT)
-        # print(filenames)
         for filename in filenames:
-            rfc3339, file_id = re.search(r'^([^_]+)_(.+)$', filename).groups()
-            last_modified = from_rfc3339(rfc3339)
-            if (file_id in self.files and last_modified > self.files[file_id]['last_modified']) or \
+            version, file_id = re.search(r'^([^_]+)_(.+)$', filename).groups()
+            version = int(version)
+            if (file_id in self.files and version > self.files[file_id]['version']) or \
                     (file_id not in self.files):
                 self.files[file_id] = {
-                    'last_modified': last_modified,
+                    'version': version,
                     'path': os.path.join(GoogleDriveCache.ROOT, filename)
                 }
 
@@ -166,16 +164,21 @@ class GoogleDriveCache:
         try:
             drive_response = self.drive_service.files().get(
                 fileId=file_id,
-                fields='modifiedTime'
+                fields='version'
             ).execute()
         except HttpError as er:
             raise GoogleDriveError(
                 'File with id \'%s\' could not be accessed. Possible reasons are a non-existing file or insufficient permission settings.' % file_id
             )
 
-        last_modified_rfc3339 = drive_response['modifiedTime']
-        last_modified = from_rfc3339(drive_response['modifiedTime'])
-        if (file_id in self.files and last_modified > self.files[file_id]['last_modified']) or \
+        version = int(drive_response['version'])
+
+        try:
+            print(version, self.files[file_id]['version'])
+        except:
+            print(version, 'non-existing')
+
+        if (file_id in self.files and version > self.files[file_id]['version']) or \
                 (file_id not in self.files):
             try:
                 drive_response = self.drive_service.files().export(
@@ -188,7 +191,7 @@ class GoogleDriveCache:
                 )
 
             return default_storage.save(
-                os.path.join(GoogleDriveCache.ROOT, last_modified_rfc3339 + '_' + file_id),
+                os.path.join(GoogleDriveCache.ROOT, str(version) + '_' + file_id),
                 ContentFile(drive_response)
             )
 

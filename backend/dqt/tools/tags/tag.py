@@ -277,11 +277,19 @@ class TemplateTag:
     def get_tags_mapping(self):
         tags_mapping = {}
 
-        for node in self.template.xpath('.//text()'):
-            full_tags = re.findall("{%.*%}", node)
+        xpath_term = './/*[namespace-uri()="urn:oasis:names:tc:opendocument:xmlns:text:1.0" and normalize-space(text())]/text()'
+        for node in self.template.xpath(xpath_term):
+            full_tags = re.findall(r'{%[^%}]+%}|{%[^%}]+$', node)
 
             for full_tag in full_tags:
-                tag_expression = TagExpression(full_tag)
+                try:
+                    tag_expression = TagExpression(full_tag)
+                except TagError as er:
+                    if not er.is_set():
+                        er.set_full_tag(full_tag)
+                        er.set_template_id(self.get_param('template'))
+                    raise er
+
                 tag_class = self.get_sub_tag(tag_expression.get_name())
                 if tag_class is None:
                     raise TagError(
@@ -296,6 +304,7 @@ class TemplateTag:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
                         er.set_template_id(self.get_param('template'))
+                    raise er
                 
                 for param_name, param_value in tag_expression.get_params():
                     try:
@@ -359,6 +368,8 @@ class TemplateTag:
         return self.template
 
 class TagExpression:
+
+    # full_tag must start with {%
     def __init__(self, full_tag):
         self.full_tag = full_tag
         self.name = None
@@ -366,6 +377,13 @@ class TagExpression:
         self.process()
         
     def process(self):
+        if self.full_tag[-2:] != '%}':
+            raise TagError(reason='The tag is incomplete. Please use the format for the tags: \
+                {% <tag> <name>:|<value| <name>:|<value>| ... %}. \
+                For a successful detection the whole tag must have the same formatting set. \
+                Also, please check if the tag is spans one line only and each term is separated by one whitespace exactly.'
+            )
+
         content = self.full_tag[2:-2].strip()
         terms = content.split()
         if not terms:
@@ -379,7 +397,7 @@ class TagExpression:
         for expr in param_expressions:
             result = re.search(r'^(\w+):\|([^|]+)\|$', expr)
             if not result:
-                raise TagError(reason='The parameter expression \'%s\' is incorrect. Please use the following format <name>:|<value>|.' % expr)
+                raise TagError(reason='The parameter expression \'%s\' is incorrect. Please use the following format: <name>:|<value>|.' % expr)
             
             param_name, param_value = result.groups()
             if not param_name.isalpha():
