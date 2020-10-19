@@ -6,6 +6,7 @@ from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.dataset.counts_result_box_image import CountsResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.dataset.passed_result_box_image import PassedResultBoxImageLeafTag
 from dqt.tools.tags.leaf_tags.dataset.result import ResultLeafTag
 from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
 from dqt.tools.tags.leaf_tags.dataset.donut.share import ShareLeafTag as donut_ShareLeafTag
@@ -26,102 +27,126 @@ from dqt.tools.tags.leaf_tags.dataset.single_value_share.buyer_count import \
 
 
 class DatasetTemplateTag(TemplateTag):
-    CHECK_TYPE_VERSION_CONTROL = {
-        'distribution.main_procurement_category': {
-            'check_type': 'donut',
-            'version': 1
+    CHECK_MAPPING = {
+        "distribution.main_procurement_category": {
+            "name": "Main procurement category distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.tender_status': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.tender_status": {
+            "name": "Tender status distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.tender_procurement_method': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.tender_procurement_method": {
+            "name": "Procurement method distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.tender_award_criteria': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.tender_award_criteria": {
+            "name": "Award criteria distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.tender_submission_method': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.tender_submission_method": {
+            "name": "Submission method distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.awards_status': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.awards_status": {
+            "name": "Award status distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.contracts_status': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.contracts_status": {
+            "name": "Contract status distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.milestone_status': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.milestone_status": {
+            "name": "Milestone status distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.milestone_type': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.milestone_type": {
+            "name": "Milestone type distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.document_document_type': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.document_document_type": {
+            "name": "Document type distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.value_currency': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.value_currency": {
+            "name": "Currency distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.related_process_relation': {
-            'check_type': 'donut',
-            'version': 1
+        "distribution.related_process_relation": {
+            "name": "Related process relation distribution",
+            "check_type": "donut",
+            "version": 1
         },
-        'distribution.tender_value': {
-            'check_type': 'bar',
-            'version': 1
+        "distribution.tender_value": {
+            "name": "Tender value distribution",
+            "check_type": "bar",
+            "version": 1
         },
-        'distribution.contracts_value': {
-            'check_type': 'bar',
-            'version': 1
+        "distribution.contracts_value": {
+            "name": "Contracts value distribution",
+            "check_type": "bar",
+            "version": 1
         },
-        'distribution.awards_value': {
-            'check_type': 'bar',
-            'version': 1
+        "distribution.awards_value": {
+            "name": "Awards value distribution",
+            "check_type": "bar",
+            "version": 1
         },
-        'misc.url_availability': {
-            'check_type': 'numeric',
-            'version': 1
+        "misc.url_availability": {
+            "name": "URL availability",
+            "check_type": "numeric",
+            "version": 1
         },
-        'unique.tender_id': {
-            'check_type': 'numeric',
-            'version': 2
+        "unique.tender_id": {
+            "name": "Unique tender identification",
+            "check_type": "numeric",
+            "version": 2
         },
-        'consistent.related_process_title': {
-            'check_type': 'numeric',
-            'version': 1
+        "consistent.related_process_title": {
+            "name": "Tender's title is consistent",
+            "check_type": "numeric",
+            "version": 1
         },
-        'reference.related_process_identifier': {
-            'check_type': 'numeric',
-            'version': 2
+        "reference.related_process_identifier": {
+            "name": "Related process reference",
+            "check_type": "numeric",
+            "version": 2
         },
-        'distribution.tender_value_repetition': {
-            'check_type': 'top3',
-            'version': 1
+        "distribution.tender_value_repetition": {
+            "name": "Tender value repetition",
+            "check_type": "top3",
+            "version": 1
         },
-        'distribution.contracts_value_repetition': {
-            'check_type': 'top3',
-            'version': 1
+        "distribution.contracts_value_repetition": {
+            "name": "Contracts value repetition",
+            "check_type": "top3",
+            "version": 1
         },
-        'distribution.awards_value_repetition': {
-            'check_type': 'top3',
-            'version': 1
+        "distribution.awards_value_repetition": {
+            "name": "Awards value repetition",
+            "check_type": "top3",
+            "version": 1
         },
-        'distribution.buyer_repetition': {
-            'check_type': 'biggest_share',
-            'version': 1
+        "distribution.buyer_repetition": {
+            "name": "Buyer repetition",
+            "check_type": "biggest_share",
+            "version": 1
         },
-        'distribution.buyer': {
-            'check_type': 'single_value_share',
-            'version': 1
+        "distribution.buyer": {
+            "name": "Buyer distribution",
+            "check_type": "single_value_share",
+            "version": 1
         }
     }
 
@@ -136,8 +161,8 @@ class DatasetTemplateTag(TemplateTag):
         # TODO: check if check was calculated and version compatability
         self.set_param_validation(
             'check',
-            lambda v: v in DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL,
-            description='The value must be one of the following: %s.' % terms_enumeration(DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL),
+            lambda v: v in DatasetTemplateTag.CHECK_MAPPING,
+            description='The value must be one of the following: %s.' % terms_enumeration(DatasetTemplateTag.CHECK_MAPPING),
             required=True
         )
 
@@ -148,14 +173,14 @@ class DatasetTemplateTag(TemplateTag):
     
     def prepare_data(self):
         check_name = self.get_param('check')
-        check_type = DatasetTemplateTag.CHECK_TYPE_VERSION_CONTROL[check_name]['check_type']
+        check_type = DatasetTemplateTag.CHECK_MAPPING[check_name]['check_type']
 
         data = {}
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
         if check is None:
             # TODO
             pass
-        data['name'] = check_name
+        data['name'] = DatasetTemplateTag.CHECK_MAPPING[check_name]['name']
         data['description'] = 'placeholder'
         data['result'] = check.result
         data['value'] = check.value
@@ -240,7 +265,7 @@ class DatasetTemplateTag(TemplateTag):
 
             self.set_sub_tag('passedExamples', generate_examples_leaf_tag('passedExamples'))
             self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
-            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
+            self.set_sub_tag('resultBoxImage', PassedResultBoxImageLeafTag)
 
             data['checkedCount'] = check.meta['total_processed']
             data['passedCount'] = check.meta['total_passed']
@@ -253,11 +278,6 @@ class DatasetTemplateTag(TemplateTag):
                 example['ocid']
                 for example in check.meta['failed_examples']
             ]
-            data['counts'] = {
-                'checked': check.meta['total_processed'],
-                'passed': check.meta['total_passed'],
-                'failed': check.meta['total_failed'],
-            }
         elif check_type == 'biggest_share':
             self.set_sub_tag('buyerIdentifierId', generate_key_leaf_tag('buyerIdentifierId'))
             self.set_sub_tag('buyerIdentifierScheme', generate_key_leaf_tag('buyerIdentifierScheme'))

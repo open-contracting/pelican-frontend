@@ -127,7 +127,7 @@ def resource_result_box(passed_count, failed_count, not_available_count, return_
         return buffer
 
 
-def field_result_box(passed_count, failed_count, return_aspect_ratio=False):
+def passed_result_box(passed_count, failed_count, return_aspect_ratio=False):
     plt.figure()
     plt.rcdefaults()
     fig, ax = plt.subplots()
