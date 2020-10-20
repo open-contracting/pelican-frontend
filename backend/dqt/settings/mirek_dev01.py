@@ -33,3 +33,5 @@ RABBIT = {
     "password": "rabbit",
     "exchange_name": "dqt_development",
 }
+
+

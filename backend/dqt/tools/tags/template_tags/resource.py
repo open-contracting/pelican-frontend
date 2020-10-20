@@ -1,5 +1,6 @@
 
 from django.db import connections
+from django.utils.translation import gettext as _
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
@@ -8,44 +9,44 @@ from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLea
 
 
 class ResourceTemplateTag(TemplateTag):
-    CHECK_MAPPING = {
-        "coherent.period": "Start dates aren't after end dates",
-        "coherent.procurement_method_vs_number_of_tenderers": "At most one tenderer for sole sourcing",
-        "coherent.tender_status": "No awards or contracts for incomplete tenders",
-        "coherent.awards_status": "No contracts for inactive awards",
-        "coherent.contracts_status": "No transactions for unsigned contracts",
-        "coherent.milestone_status": "No date met for unmet milestones",
-        "coherent.value_realistic": "Monetary values are realistic",
-        "coherent.dates": "Contracting process timeline",
-        "coherent.milestones_dates": "Milestone dates",
-        "coherent.amendments_dates": "Amendment dates",
-        "coherent.documents_dates": "Document dates",
-        "consistent.number_of_tenderers": "Number of tenderers is consistent",
-        "consistent.tender_value": "Planning budget is commensurate with tender value",
-        "consistent.contracts_value": "Contract values are commensurate with award value",
-        "consistent.contracts_implementation_transactions_value": "Transaction values are commensurate with contract value",
-        "consistent.parties_roles": "Parties are referenced",
-        "consistent.period_duration_in_days": "Period's duration is consistent with start and end dates",
-        "consistent.buyer_in_parties_roles": "Buyer's role is set",
-        "consistent.supplier_in_parties_roles": "Supplier's role is set",
-        "consistent.tenderer_in_parties_roles": "Tenderer's role is set",
-        "consistent.procuring_entity_in_parties_roles": "Procuring entity's role is set",
-        "consistent.payer_in_parties_roles": "Payer's role is set",
-        "consistent.payee_in_parties_roles": "Payee's role is set",
-        "consistent.buyer_name_in_parties": "Buyer's name is consistent",
-        "consistent.payee_name_in_parties": "Payee's name is consistent",
-        "consistent.payer_name_in_parties": "Payer's name is consistent",
-        "consistent.procuring_entity_name_in_parties": "Procuring entity's name is consistent",
-        "consistent.supplier_name_in_parties": "Supplier's name is consistent",
-        "consistent.tenderer_name_in_parties": "Tenderer's name is consistent",
-        "reference.buyer_in_parties": "Buyer organization reference",
-        "reference.payee_in_parties": "Payee organization reference",
-        "reference.payer_in_parties": "Payer organization reference",
-        "reference.procuring_entity_in_parties": "Procuring entity organization reference",
-        "reference.supplier_in_parties": "Supplier organization references",
-        "reference.tenderer_in_parties": "Tenderer organization references",
-        "reference.contract_in_awards": "Award reference",
-    }
+    CHECKS = set([
+        "coherent.period",
+        "coherent.procurement_method_vs_number_of_tenderers",
+        "coherent.tender_status",
+        "coherent.awards_status",
+        "coherent.contracts_status",
+        "coherent.milestone_status",
+        "coherent.value_realistic",
+        "coherent.dates",
+        "coherent.milestones_dates",
+        "coherent.amendments_dates",
+        "coherent.documents_dates",
+        "consistent.number_of_tenderers",
+        "consistent.tender_value",
+        "consistent.contracts_value",
+        "consistent.contracts_implementation_transactions_value",
+        "consistent.parties_roles",
+        "consistent.period_duration_in_days",
+        "consistent.buyer_in_parties_roles",
+        "consistent.supplier_in_parties_roles",
+        "consistent.tenderer_in_parties_roles",
+        "consistent.procuring_entity_in_parties_roles",
+        "consistent.payer_in_parties_roles",
+        "consistent.payee_in_parties_roles",
+        "consistent.buyer_name_in_parties",
+        "consistent.payee_name_in_parties",
+        "consistent.payer_name_in_parties",
+        "consistent.procuring_entity_name_in_parties",
+        "consistent.supplier_name_in_parties",
+        "consistent.tenderer_name_in_parties",
+        "reference.buyer_in_parties",
+        "reference.payee_in_parties",
+        "reference.payer_in_parties",
+        "reference.procuring_entity_in_parties",
+        "reference.supplier_in_parties",
+        "reference.tenderer_in_parties",
+        "reference.contract_in_awards",
+    ])
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -58,8 +59,8 @@ class ResourceTemplateTag(TemplateTag):
         # TODO: check if check was calculated
         self.set_param_validation(
             'check',
-            lambda v: v in ResourceTemplateTag.CHECK_MAPPING,
-            description='The value must be one of the following: %s.' % terms_enumeration(ResourceTemplateTag.CHECK_MAPPING),
+            lambda v: v in ResourceTemplateTag.CHECKS,
+            description='The value must be one of the following: %s.' % terms_enumeration(ResourceTemplateTag.CHECKS),
             required=True
         )
 
@@ -109,8 +110,8 @@ class ResourceTemplateTag(TemplateTag):
 
             # TODO: no rows retrieved
             return {
-                "name": ResourceTemplateTag.CHECK_MAPPING[check_name],
-                "description": "placeholder", # TODO: placeholder
+                "name": _(str('resource.' + check_name + '.name')),
+                "description": _(str('resource.' + check_name + '.description')),
                 "checkedCount": result['total_count'],
                 "passedCount": result['passed_count'],
                 "failedCount": result['failed_count'],

@@ -27,13 +27,14 @@ class ShareLeafTag(LeafTag):
         self.set_required_data_field('shares')
 
     def process_tag(self, data):
-        if self.get_param('rank') is None:
-            return '1.0'
+        if self.get_param('rank') is not None:
+            share = 100 * data['shares'][self.get_param('rank')]
+        else:
+            share = 100.0
 
         if self.get_param('decimals') is not None:
-            return str(round(
-                data['shares'][self.get_param('rank')],
-                int(self.get_param('decimals'))
-            ))
+            decimals = int(self.get_param('decimals'))
         else:
-            return str(data['shares'][self.get_param('rank')])
+            decimals = 0
+
+        return ('%.' + str(decimals) + 'f') % share

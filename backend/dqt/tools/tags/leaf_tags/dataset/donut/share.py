@@ -22,15 +22,15 @@ class ShareLeafTag(LeafTag):
 
     def process_tag(self, data):
         if self.get_param('value') is None:
-            return '1.0'
-
-        if self.get_param('value') not in data['shares']:
-            return '0.0'
+            share = 100.0
+        elif self.get_param('value') not in data['shares']:
+            share = 0.0
+        else:
+            share = 100 * data['shares'][self.get_param('value')]
 
         if self.get_param('decimals') is not None:
-            return str(round(
-                data['shares'][self.get_param('value')],
-                int(self.get_param('decimals'))
-            ))
+            decimals = int(self.get_param('decimals'))
         else:
-            return str(data['shares'][self.get_param('value')])
+            decimals = 0
+
+        return ('%.' + str(decimals) + 'f') % share

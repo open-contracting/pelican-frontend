@@ -172,12 +172,6 @@ class GoogleDriveCache:
             )
 
         version = int(drive_response['version'])
-
-        try:
-            print(version, self.files[file_id]['version'])
-        except:
-            print(version, 'non-existing')
-
         if (file_id in self.files and version > self.files[file_id]['version']) or \
                 (file_id not in self.files):
             try:

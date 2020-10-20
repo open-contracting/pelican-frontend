@@ -4,7 +4,7 @@ from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import terms_enumeration
 
 class FailedExamplesLeafTag(LeafTag):
-    LEVELS = ('coverage', 'quality')
+    LEVELS = ('coverage', 'coverageSet', 'coverageEmpty', 'quality')
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -26,9 +26,9 @@ class FailedExamplesLeafTag(LeafTag):
             description='The value must be a positive integer.'
         )
 
-        # self.set_param_validation('check', lambda v: v in FieldTemplateTag.CHECKS)
-
         self.set_required_data_field('coverageFailedExamples')
+        self.set_required_data_field('coverageSetFailedExamples')
+        self.set_required_data_field('coverageEmptyFailedExamples')
         self.set_required_data_field('qualityFailedExamples')
         
     def process_tag(self, data):

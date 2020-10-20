@@ -1,0 +1,596 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-20 13:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tools/tags/leaf_tags/field/description.py:34 tools/translations.py:19
+msgid "field.exists.description"
+msgstr ""
+
+#: tools/tags/leaf_tags/field/description.py:36 tools/translations.py:20
+msgid "field.non_empty.description"
+msgstr ""
+
+#: tools/tags/leaf_tags/field/name.py:34 tools/translations.py:5
+msgid "field.exists.name"
+msgstr "Field is set"
+
+#: tools/tags/leaf_tags/field/name.py:36 tools/translations.py:6
+msgid "field.non_empty.name"
+msgstr "Field isn't null or empty"
+
+#: tools/translations.py:7
+msgid "field.ocid_prefix_check.name"
+msgstr "OCID prefix is registered"
+
+#: tools/translations.py:8
+msgid "field.date_time.name"
+msgstr "Date is realistic"
+
+#: tools/translations.py:9
+msgid "field.email.name"
+msgstr "Email address is valid"
+
+#: tools/translations.py:10
+msgid "field.identifier_scheme.name"
+msgstr "Identifier scheme is recognized"
+
+#: tools/translations.py:11
+msgid "field.telephone.name"
+msgstr "Phone number is possible"
+
+#: tools/translations.py:12
+msgid "field.document_description_length.name"
+msgstr "Has 250 characters or less"
+
+#: tools/translations.py:13
+msgid "field.document_type.name"
+msgstr "Document type is coherent"
+
+#: tools/translations.py:14
+msgid "field.document_format_codelist.name"
+msgstr "Document format is recognized"
+
+#: tools/translations.py:15
+msgid "field.number_checks.name"
+msgstr "Number is non-negative"
+
+#: tools/translations.py:16
+msgid "field.language.name"
+msgstr "Language code is recognized"
+
+#: tools/translations.py:21
+msgid "field.ocid_prefix_check.description"
+msgstr ""
+
+#: tools/translations.py:22
+msgid "field.date_time.description"
+msgstr ""
+
+#: tools/translations.py:23
+msgid "field.email.description"
+msgstr ""
+
+#: tools/translations.py:24
+msgid "field.identifier_scheme.description"
+msgstr ""
+
+#: tools/translations.py:25
+msgid "field.telephone.description"
+msgstr ""
+
+#: tools/translations.py:26
+msgid "field.document_description_length.description"
+msgstr ""
+
+#: tools/translations.py:27
+msgid "field.document_type.description"
+msgstr ""
+
+#: tools/translations.py:28
+msgid "field.document_format_codelist.description"
+msgstr ""
+
+#: tools/translations.py:29
+msgid "field.number_checks.description"
+msgstr ""
+
+#: tools/translations.py:30
+msgid "field.language.description"
+msgstr ""
+
+#: tools/translations.py:33
+msgid "resource.coherent.period.name"
+msgstr "Start dates aren't after end dates"
+
+#: tools/translations.py:34
+msgid "resource.coherent.procurement_method_vs_number_of_tenderers.name"
+msgstr "At most one tenderer for sole sourcing"
+
+#: tools/translations.py:35
+msgid "resource.coherent.tender_status.name"
+msgstr "No awards or contracts for incomplete tenders"
+
+#: tools/translations.py:36
+msgid "resource.coherent.awards_status.name"
+msgstr "No contracts for inactive awards"
+
+#: tools/translations.py:37
+msgid "resource.coherent.contracts_status.name"
+msgstr "No transactions for unsigned contracts"
+
+#: tools/translations.py:38
+msgid "resource.coherent.milestone_status.name"
+msgstr "No date met for unmet milestones"
+
+#: tools/translations.py:39
+msgid "resource.coherent.value_realistic.name"
+msgstr "Monetary values are realistic"
+
+#: tools/translations.py:40
+msgid "resource.coherent.dates.name"
+msgstr "Contracting process timeline"
+
+#: tools/translations.py:41
+msgid "resource.coherent.milestones_dates.name"
+msgstr "Milestone dates"
+
+#: tools/translations.py:42
+msgid "resource.coherent.amendments_dates.name"
+msgstr "Amendment dates"
+
+#: tools/translations.py:43
+msgid "resource.coherent.documents_dates.name"
+msgstr "Document dates"
+
+#: tools/translations.py:44
+msgid "resource.consistent.number_of_tenderers.name"
+msgstr "Number of tenderers is consistent"
+
+#: tools/translations.py:45
+msgid "resource.consistent.tender_value.name"
+msgstr "Planning budget is commensurate with tender value"
+
+#: tools/translations.py:46
+msgid "resource.consistent.contracts_value.name"
+msgstr "Contract values are commensurate with award value"
+
+#: tools/translations.py:47
+msgid "resource.consistent.contracts_implementation_transactions_value.name"
+msgstr "Transaction values are commensurate with contract value"
+
+#: tools/translations.py:48
+msgid "resource.consistent.parties_roles.name"
+msgstr "Parties are referenced"
+
+#: tools/translations.py:49
+msgid "resource.consistent.period_duration_in_days.name"
+msgstr "Period's duration is consistent with start and end dates"
+
+#: tools/translations.py:50
+msgid "resource.consistent.buyer_in_parties_roles.name"
+msgstr "Buyer's role is set"
+
+#: tools/translations.py:51
+msgid "resource.consistent.supplier_in_parties_roles.name"
+msgstr "Supplier's role is set"
+
+#: tools/translations.py:52
+msgid "resource.consistent.tenderer_in_parties_roles.name"
+msgstr "Tenderer's role is set"
+
+#: tools/translations.py:53
+msgid "resource.consistent.procuring_entity_in_parties_roles.name"
+msgstr "Procuring entity's role is set"
+
+#: tools/translations.py:54
+msgid "resource.consistent.payer_in_parties_roles.name"
+msgstr "Payer's role is set"
+
+#: tools/translations.py:55
+msgid "resource.consistent.payee_in_parties_roles.name"
+msgstr "Payee's role is set"
+
+#: tools/translations.py:56
+msgid "resource.consistent.buyer_name_in_parties.name"
+msgstr "Buyer's name is consistent"
+
+#: tools/translations.py:57
+msgid "resource.consistent.payee_name_in_parties.name"
+msgstr "Payee's name is consistent"
+
+#: tools/translations.py:58
+msgid "resource.consistent.payer_name_in_parties.name"
+msgstr "Payer's name is consistent"
+
+#: tools/translations.py:59
+msgid "resource.consistent.procuring_entity_name_in_parties.name"
+msgstr "Procuring entity's name is consistent"
+
+#: tools/translations.py:60
+msgid "resource.consistent.supplier_name_in_parties.name"
+msgstr "Supplier's name is consistent"
+
+#: tools/translations.py:61
+msgid "resource.consistent.tenderer_name_in_parties.name"
+msgstr "Tenderer's name is consistent"
+
+#: tools/translations.py:62
+msgid "resource.reference.buyer_in_parties.name"
+msgstr "Buyer organization reference"
+
+#: tools/translations.py:63
+msgid "resource.reference.payee_in_parties.name"
+msgstr "Payee organization reference"
+
+#: tools/translations.py:64
+msgid "resource.reference.payer_in_parties.name"
+msgstr "Payer organization reference"
+
+#: tools/translations.py:65
+msgid "resource.reference.procuring_entity_in_parties.name"
+msgstr "Procuring entity organization reference"
+
+#: tools/translations.py:66
+msgid "resource.reference.supplier_in_parties.name"
+msgstr "Supplier organization references"
+
+#: tools/translations.py:67
+msgid "resource.reference.tenderer_in_parties.name"
+msgstr "Tenderer organization references"
+
+#: tools/translations.py:68
+msgid "resource.reference.contract_in_awards.name"
+msgstr "Award reference"
+
+#: tools/translations.py:71
+msgid "resource.coherent.period.description"
+msgstr ""
+
+#: tools/translations.py:72
+msgid "resource.coherent.procurement_method_vs_number_of_tenderers.description"
+msgstr ""
+
+#: tools/translations.py:73
+msgid "resource.coherent.tender_status.description"
+msgstr ""
+
+#: tools/translations.py:74
+msgid "resource.coherent.awards_status.description"
+msgstr ""
+
+#: tools/translations.py:75
+msgid "resource.coherent.contracts_status.description"
+msgstr ""
+
+#: tools/translations.py:76
+msgid "resource.coherent.milestone_status.description"
+msgstr ""
+
+#: tools/translations.py:77
+msgid "resource.coherent.value_realistic.description"
+msgstr ""
+
+#: tools/translations.py:78
+msgid "resource.coherent.dates.description"
+msgstr ""
+
+#: tools/translations.py:79
+msgid "resource.coherent.milestones_dates.description"
+msgstr ""
+
+#: tools/translations.py:80
+msgid "resource.coherent.amendments_dates.description"
+msgstr ""
+
+#: tools/translations.py:81
+msgid "resource.coherent.documents_dates.description"
+msgstr ""
+
+#: tools/translations.py:82
+msgid "resource.consistent.number_of_tenderers.description"
+msgstr ""
+
+#: tools/translations.py:83
+msgid "resource.consistent.tender_value.description"
+msgstr ""
+
+#: tools/translations.py:84
+msgid "resource.consistent.contracts_value.description"
+msgstr ""
+
+#: tools/translations.py:85
+msgid ""
+"resource.consistent.contracts_implementation_transactions_value.description"
+msgstr ""
+
+#: tools/translations.py:86
+msgid "resource.consistent.parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:87
+msgid "resource.consistent.period_duration_in_days.description"
+msgstr ""
+
+#: tools/translations.py:88
+msgid "resource.consistent.buyer_in_parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:89
+msgid "resource.consistent.supplier_in_parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:90
+msgid "resource.consistent.tenderer_in_parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:91
+msgid "resource.consistent.procuring_entity_in_parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:92
+msgid "resource.consistent.payer_in_parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:93
+msgid "resource.consistent.payee_in_parties_roles.description"
+msgstr ""
+
+#: tools/translations.py:94
+msgid "resource.consistent.buyer_name_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:95
+msgid "resource.consistent.payee_name_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:96
+msgid "resource.consistent.payer_name_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:97
+msgid "resource.consistent.procuring_entity_name_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:98
+msgid "resource.consistent.supplier_name_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:99
+msgid "resource.consistent.tenderer_name_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:100
+msgid "resource.reference.buyer_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:101
+msgid "resource.reference.payee_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:102
+msgid "resource.reference.payer_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:103
+msgid "resource.reference.procuring_entity_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:104
+msgid "resource.reference.supplier_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:105
+msgid "resource.reference.tenderer_in_parties.description"
+msgstr ""
+
+#: tools/translations.py:106
+msgid "resource.reference.contract_in_awards.description"
+msgstr ""
+
+#: tools/translations.py:109
+msgid "dataset.distribution.main_procurement_category.name"
+msgstr "Main procurement category distribution"
+
+#: tools/translations.py:110
+msgid "dataset.distribution.tender_status.name"
+msgstr "Tender status distribution"
+
+#: tools/translations.py:111
+msgid "dataset.distribution.tender_procurement_method.name"
+msgstr "Procurement method distribution"
+
+#: tools/translations.py:112
+msgid "dataset.distribution.tender_award_criteria.name"
+msgstr "Award criteria distribution"
+
+#: tools/translations.py:113
+msgid "dataset.distribution.tender_submission_method.name"
+msgstr "Submission method distribution"
+
+#: tools/translations.py:114
+msgid "dataset.distribution.awards_status.name"
+msgstr "Award status distribution"
+
+#: tools/translations.py:115
+msgid "dataset.distribution.contracts_status.name"
+msgstr "Contract status distribution"
+
+#: tools/translations.py:116
+msgid "dataset.distribution.milestone_status.name"
+msgstr "Milestone status distribution"
+
+#: tools/translations.py:117
+msgid "dataset.distribution.milestone_type.name"
+msgstr "Milestone type distribution"
+
+#: tools/translations.py:118
+msgid "dataset.distribution.document_document_type.name"
+msgstr "Document type distribution"
+
+#: tools/translations.py:119
+msgid "dataset.distribution.value_currency.name"
+msgstr "Currency distribution"
+
+#: tools/translations.py:120
+msgid "dataset.distribution.related_process_relation.name"
+msgstr "Related process relation distribution"
+
+#: tools/translations.py:121
+msgid "dataset.distribution.tender_value.name"
+msgstr "Tender value distribution"
+
+#: tools/translations.py:122
+msgid "dataset.distribution.contracts_value.name"
+msgstr "Contracts value distribution"
+
+#: tools/translations.py:123
+msgid "dataset.distribution.awards_value.name"
+msgstr "Awards value distribution"
+
+#: tools/translations.py:124
+msgid "dataset.misc.url_availability.name"
+msgstr "URL availability"
+
+#: tools/translations.py:125
+msgid "dataset.unique.tender_id.name"
+msgstr "Unique tender identification"
+
+#: tools/translations.py:126
+msgid "dataset.consistent.related_process_title.name"
+msgstr "Tender's title is consistent"
+
+#: tools/translations.py:127
+msgid "dataset.reference.related_process_identifier.name"
+msgstr "Related process reference"
+
+#: tools/translations.py:128
+msgid "dataset.distribution.tender_value_repetition.name"
+msgstr "Tender value repetition"
+
+#: tools/translations.py:129
+msgid "dataset.distribution.contracts_value_repetition.name"
+msgstr "Contracts value repetition"
+
+#: tools/translations.py:130
+msgid "dataset.distribution.awards_value_repetition.name"
+msgstr "Awards value repetition"
+
+#: tools/translations.py:131
+msgid "dataset.distribution.buyer_repetition.name"
+msgstr "Buyer repetition"
+
+#: tools/translations.py:132
+msgid "dataset.distribution.buyer.name"
+msgstr "Buyer distribution"
+
+#: tools/translations.py:135
+msgid "dataset.distribution.main_procurement_category.description"
+msgstr ""
+
+#: tools/translations.py:136
+msgid "dataset.distribution.tender_status.description"
+msgstr ""
+
+#: tools/translations.py:137
+msgid "dataset.distribution.tender_procurement_method.description"
+msgstr ""
+
+#: tools/translations.py:138
+msgid "dataset.distribution.tender_award_criteria.description"
+msgstr ""
+
+#: tools/translations.py:139
+msgid "dataset.distribution.tender_submission_method.description"
+msgstr ""
+
+#: tools/translations.py:140
+msgid "dataset.distribution.awards_status.description"
+msgstr ""
+
+#: tools/translations.py:141
+msgid "dataset.distribution.contracts_status.description"
+msgstr ""
+
+#: tools/translations.py:142
+msgid "dataset.distribution.milestone_status.description"
+msgstr ""
+
+#: tools/translations.py:143
+msgid "dataset.distribution.milestone_type.description"
+msgstr ""
+
+#: tools/translations.py:144
+msgid "dataset.distribution.document_document_type.description"
+msgstr ""
+
+#: tools/translations.py:145
+msgid "dataset.distribution.value_currency.description"
+msgstr ""
+
+#: tools/translations.py:146
+msgid "dataset.distribution.related_process_relation.description"
+msgstr ""
+
+#: tools/translations.py:147
+msgid "dataset.distribution.tender_value.description"
+msgstr ""
+
+#: tools/translations.py:148
+msgid "dataset.distribution.contracts_value.description"
+msgstr ""
+
+#: tools/translations.py:149
+msgid "dataset.distribution.awards_value.description"
+msgstr ""
+
+#: tools/translations.py:150
+msgid "dataset.misc.url_availability.description"
+msgstr ""
+
+#: tools/translations.py:151
+msgid "dataset.unique.tender_id.description"
+msgstr ""
+
+#: tools/translations.py:152
+msgid "dataset.consistent.related_process_title.description"
+msgstr ""
+
+#: tools/translations.py:153
+msgid "dataset.reference.related_process_identifier.description"
+msgstr ""
+
+#: tools/translations.py:154
+msgid "dataset.distribution.tender_value_repetition.description"
+msgstr ""
+
+#: tools/translations.py:155
+msgid "dataset.distribution.contracts_value_repetition.description"
+msgstr ""
+
+#: tools/translations.py:156
+msgid "dataset.distribution.awards_value_repetition.description"
+msgstr ""
+
+#: tools/translations.py:157
+msgid "dataset.distribution.buyer_repetition.description"
+msgstr ""
+
+#: tools/translations.py:158
+msgid "dataset.distribution.buyer.description"
+msgstr ""

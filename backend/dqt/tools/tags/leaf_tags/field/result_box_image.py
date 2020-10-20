@@ -6,7 +6,7 @@ from dqt.tools.misc import terms_enumeration
 
 
 class ResultBoxImageLeafTag(LeafTag):
-    LEVELS = ('coverage', 'quality')
+    LEVELS = ('coverage', 'coverageSet', 'coverageEmpty', 'quality')
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -23,7 +23,7 @@ class ResultBoxImageLeafTag(LeafTag):
             required=True
         )
         # self.set_param_validation('check', lambda v: v in FieldTemplateTag.CHECKS)
-        self.set_required_data_field('name')
+        self.set_required_data_field('path')
         self.set_required_data_field('coveragePassedCount')
         self.set_required_data_field('coverageFailedCount')
         self.set_required_data_field('qualityPassedCount')
@@ -37,7 +37,7 @@ class ResultBoxImageLeafTag(LeafTag):
         )
         image_file_path = self.gdocs.add_image_file(
             buffer,
-            'resultBoxImage_%s_%s.png' % (self.get_param('level'), data['name'])
+            'resultBoxImage_%s_%s.png' % (self.get_param('level'), data['path'])
         )
         buffer.close()
 

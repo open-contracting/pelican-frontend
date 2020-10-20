@@ -2,6 +2,8 @@
 from django.db import connections
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.tag import TemplateTag
+from dqt.tools.tags.leaf_tags.field.name import NameLeafTag
+from dqt.tools.tags.leaf_tags.field.description import DescriptionLeafTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
 from dqt.tools.tags.leaf_tags.field.passed_count import PassedCountLeafTag
@@ -609,8 +611,9 @@ class FieldTemplateTag(TemplateTag):
             required=True
         )
 
-        self.set_sub_tag('name', generate_key_leaf_tag('name'))
-        self.set_sub_tag('description', generate_key_leaf_tag('description'))
+        self.set_sub_tag('path', generate_key_leaf_tag('path'))
+        self.set_sub_tag('name', NameLeafTag)
+        self.set_sub_tag('description', DescriptionLeafTag)
 
         self.set_sub_tag('checkedCount', CheckedCountLeafTag)
         self.set_sub_tag('passedCount', PassedCountLeafTag)
@@ -653,17 +656,31 @@ class FieldTemplateTag(TemplateTag):
 
             # TODO: no rows retrieved
             return {
+                "path": path,
+                "qualityCheck": list(result['quality']['checks'].keys())[0] if result['quality']['checks'] else None,
+                
                 "coverageCheckedCount": result['coverage']['total_count'],
-                "coveragePassedCount": result['coverage']['passed_count'],
-                "coverageFailedCount": result['coverage']['failed_count'],
+                "coverageSetCheckedCount": result['coverage']['checks']['exists']['total_count'],
+                "coverageEmptyCheckedCount": result['coverage']['checks']['non_empty']['total_count'],
                 "qualityCheckedCount": result['quality']['total_count'],
+                
+                "coveragePassedCount": result['coverage']['passed_count'],
+                "coverageSetPassedCount": result['coverage']['checks']['exists']['passed_count'],
+                "coverageEmptyPassedCount": result['coverage']['checks']['non_empty']['passed_count'],
                 "qualityPassedCount": result['quality']['passed_count'],
+                
+                "coverageFailedCount": result['coverage']['failed_count'],
+                "coverageSetFailedCount": result['coverage']['checks']['exists']['failed_count'],
+                "coverageEmptyFailedCount": result['coverage']['checks']['non_empty']['failed_count'],
                 "qualityFailedCount": result['quality']['failed_count'],
                 
-                "name": path, # TODO: temporary
-                "description": "placeholder", # TODO: placeholder
                 "coveragePassedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['passed_examples']],
-                "coverageFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['failed_examples']],
+                "coverageSetPassedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['exists']['passed_examples']],
+                "coverageEmptyPassedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['non_empty']['passed_examples']],
                 "qualityPassedExamples": [example['meta']['ocid'] for example in result_examples['quality']['passed_examples']],
+                
+                "coverageFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['failed_examples']],
+                "coverageSetFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['exists']['failed_examples']],
+                "coverageEmptyFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['non_empty']['failed_examples']],
                 "qualityFailedExamples": [example['meta']['ocid'] for example in result_examples['quality']['failed_examples']],
             }

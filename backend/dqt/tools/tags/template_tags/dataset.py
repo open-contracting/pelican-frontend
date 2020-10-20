@@ -1,5 +1,7 @@
 
 from django.db import connections
+from django.utils.translation import gettext as _
+
 from dqt.models import DatasetLevelCheck
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.tag import TemplateTag
@@ -29,122 +31,98 @@ from dqt.tools.tags.leaf_tags.dataset.single_value_share.buyer_count import \
 class DatasetTemplateTag(TemplateTag):
     CHECK_MAPPING = {
         "distribution.main_procurement_category": {
-            "name": "Main procurement category distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.tender_status": {
-            "name": "Tender status distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.tender_procurement_method": {
-            "name": "Procurement method distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.tender_award_criteria": {
-            "name": "Award criteria distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.tender_submission_method": {
-            "name": "Submission method distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.awards_status": {
-            "name": "Award status distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.contracts_status": {
-            "name": "Contract status distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.milestone_status": {
-            "name": "Milestone status distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.milestone_type": {
-            "name": "Milestone type distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.document_document_type": {
-            "name": "Document type distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.value_currency": {
-            "name": "Currency distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.related_process_relation": {
-            "name": "Related process relation distribution",
             "check_type": "donut",
             "version": 1
         },
         "distribution.tender_value": {
-            "name": "Tender value distribution",
             "check_type": "bar",
             "version": 1
         },
         "distribution.contracts_value": {
-            "name": "Contracts value distribution",
             "check_type": "bar",
             "version": 1
         },
         "distribution.awards_value": {
-            "name": "Awards value distribution",
             "check_type": "bar",
             "version": 1
         },
         "misc.url_availability": {
-            "name": "URL availability",
             "check_type": "numeric",
             "version": 1
         },
         "unique.tender_id": {
-            "name": "Unique tender identification",
             "check_type": "numeric",
             "version": 2
         },
         "consistent.related_process_title": {
-            "name": "Tender's title is consistent",
             "check_type": "numeric",
             "version": 1
         },
         "reference.related_process_identifier": {
-            "name": "Related process reference",
             "check_type": "numeric",
             "version": 2
         },
         "distribution.tender_value_repetition": {
-            "name": "Tender value repetition",
             "check_type": "top3",
             "version": 1
         },
         "distribution.contracts_value_repetition": {
-            "name": "Contracts value repetition",
             "check_type": "top3",
             "version": 1
         },
         "distribution.awards_value_repetition": {
-            "name": "Awards value repetition",
             "check_type": "top3",
             "version": 1
         },
         "distribution.buyer_repetition": {
-            "name": "Buyer repetition",
             "check_type": "biggest_share",
             "version": 1
         },
         "distribution.buyer": {
-            "name": "Buyer distribution",
             "check_type": "single_value_share",
             "version": 1
         }
@@ -180,8 +158,8 @@ class DatasetTemplateTag(TemplateTag):
         if check is None:
             # TODO
             pass
-        data['name'] = DatasetTemplateTag.CHECK_MAPPING[check_name]['name']
-        data['description'] = 'placeholder'
+        data['name'] = _(str('dataset.' + check_name + '.name'))
+        data['description'] = _(str('dataset.' + check_name + '.description'))
         data['result'] = check.result
         data['value'] = check.value
 
