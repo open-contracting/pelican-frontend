@@ -226,24 +226,28 @@ def passed_result_box(passed_count, failed_count, return_aspect_ratio=False):
         return buffer
 
 
-def bar_result_box(counts_mapping, return_aspect_ratio=False):
+def bar_result_box(counts_pairs, return_aspect_ratio=False):
     # figure initialization
     plt.figure()
     plt.rcdefaults()
     fig, ax = plt.subplots()
-    aspect_ratio = float(len(counts_mapping)) / 15.0
+    aspect_ratio = float(len(counts_pairs)) / 15.0
     fig.set_size_inches(6, 6 * aspect_ratio)
 
     # data preprocessing
     counts_mapping_ordered = OrderedDict({
-        key: counts_mapping[key]
-        for key in reversed(list(counts_mapping.keys()))
+        key: value
+        for key, value in reversed(counts_pairs)
     })
     data = list(counts_mapping_ordered.values())
-    if sum(data) == 0:
+
+    total_count = sum(data)
+    if total_count == 0:
         data_normalized = len(data) * [0.0]
     else:
-        data_normalized = [(value / sum(data)) for value in data]
+        data_normalized = [(value / total_count) for value in data]
+
+    # figure creation
     ax.barh(
         y=list(range(len(counts_mapping_ordered))),
         width=data_normalized,
@@ -280,7 +284,7 @@ def bar_result_box(counts_mapping, return_aspect_ratio=False):
         ax.add_patch(patch)
 
     for index, value in enumerate(data):
-        percentage = 100 * value / max(sum(data), 1)
+        percentage = 100 * value / max(total_count, 1)
         percentage_rounded = round(percentage)
         percentage_str = str(percentage_rounded) + '%'
         if percentage_rounded == 100.0 and percentage_rounded != percentage:

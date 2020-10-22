@@ -26,11 +26,11 @@ class CountsResultBoxImageLeafTag(LeafTag):
         )
 
         self.set_required_data_field('name')
-        self.set_required_data_field('counts')
+        self.set_required_data_field('counts_pairs')
 
     def process_tag(self, data):
         if self.get_param('type') is None or self.get_param('type') == 'bar':
-            buffer, aspect_ratio = graphs.bar_result_box(data['counts'], return_aspect_ratio=True)
+            buffer, aspect_ratio = graphs.bar_result_box(data['counts_pairs'], return_aspect_ratio=True)
         elif self.get_param('type') == 'pie':
             # TODO
             raise NotImplemented()

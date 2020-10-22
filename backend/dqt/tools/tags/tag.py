@@ -5,6 +5,7 @@ import shortuuid
 
 from lxml import etree
 from dqt.tools.errors import TagError
+from dqt.tools.misc import terms_enumeration
 
 
 class LeafTag:
@@ -41,7 +42,13 @@ class LeafTag:
 
     def set_param(self, name, value):
         if name not in self.param_validations_mapping:
-            raise TagError(reason='The parameter \'%s\' is not supported' % name)
+            if self.param_validations_mapping:
+                suffix = 'Only the following parameters can be used for this tag: %s.' \
+                    % terms_enumeration(self.param_validations_mapping)
+            else:
+                suffix = 'This tag does not use any parameters.'
+
+            raise TagError(reason='The parameter \'%s\' is not supported. %s' % (name, suffix))
 
         if not self.param_validations_mapping[name](value):
             raise TagError(reason='The value \'%s\' for parameter \'%s\' failed validation. %s' % (
@@ -133,7 +140,13 @@ class TemplateTag:
 
     def set_param(self, name, value):
         if name not in self.param_validations_mapping:
-            raise TagError(reason='The parameter \'%s\' is not supported.' % name)
+            if self.param_validations_mapping:
+                suffix = 'Only the following parameters can be used for this tag: %s.' \
+                    % terms_enumeration(self.param_validations_mapping)
+            else:
+                suffix = 'This tag does not use any parameters.'
+
+            raise TagError(reason='The parameter \'%s\' is not supported. %s' % (name, suffix))
 
         if not self.param_validations_mapping[name](value):
             raise TagError(reason='The value \'%s\' for the parameter \'%s\' failed its validation. %s' % (

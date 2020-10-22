@@ -177,6 +177,10 @@ class DatasetTemplateTag(TemplateTag):
                 key: value['count']
                 for key, value in check.meta['shares'].items()
             }
+            data['counts_pairs'] = [
+                (key, value['count'])
+                for key, value in check.meta['shares'].items()
+            ]
             data['examples'] = {
                 key: [
                     example['ocid']
@@ -199,6 +203,10 @@ class DatasetTemplateTag(TemplateTag):
                 key.replace('_', '-'): value
                 for key, value in check.meta['counts'].items()
             }
+            data['counts_pairs'] = [
+                (key.replace('_', '-'), value)
+                for key, value in check.meta['counts'].items()
+            ]
             data['examples'] = {
                 key.replace('_', '-'): [
                     example['ocid']
@@ -225,6 +233,10 @@ class DatasetTemplateTag(TemplateTag):
                 str(index + 1): el['count']
                 for index, el in enumerate(check.meta['most_frequent'])
             }
+            data['counts_pairs'] = [
+                (el['value_str'], el['count'])
+                for el in check.meta['most_frequent']
+            ]
             data['examples'] = {
                 str(index + 1): [
                     example['ocid']
