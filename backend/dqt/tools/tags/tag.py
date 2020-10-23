@@ -125,7 +125,6 @@ class TemplateTag:
             'template',
             lambda _: True,
             description='The value must be the id of the template file in Google Drive.',
-            required=(base_template_id is None)
         )
 
     def set_param_validation(self, name, validation, description='The value must be in a valid format.', required=False):

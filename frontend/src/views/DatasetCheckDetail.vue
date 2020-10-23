@@ -51,7 +51,7 @@
                         <tbody>
                             <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                 <td>{{ item.value_str }}</td>
-                                <td class="text-right numeric">{{ item.share | formatPercentage2D }}</td>
+                                <td class="text-right numeric">{{ item.share * 100 | formatPercentage2D }}</td>
                                 <td class="text-right numeric">{{ item.count | formatNumber }}</td>
                             </tr>
                         </tbody>

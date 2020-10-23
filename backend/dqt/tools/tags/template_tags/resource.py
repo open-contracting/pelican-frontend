@@ -51,7 +51,7 @@ class ResourceTemplateTag(TemplateTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(
             self.prepare_data,
-            '1ZgKP1TWU8AbnOFhjEqlBO--lR71dAlNMyiGDUh8MZ-8',
+            '1dX4md9MGOxhngjQ2Q0wY8njNiq5B6F9oFWd1tUN63TM',
             gdocs,
             dataset_id
         )
