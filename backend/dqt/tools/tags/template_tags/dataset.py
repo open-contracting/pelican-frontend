@@ -172,7 +172,7 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('count', top3_CountLeafTag)
             self.set_sub_tag('examples', top3_ExamplesLeafTag)
             self.set_sub_tag('amount', top3_AmountLeafTag)
-            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
+            self.set_sub_tag('resultBoxImage', TableResultBoxImageLeafTag)
 
         elif check_type == 'numeric':
             self.set_sub_tag('checkedCount', generate_key_leaf_tag('checkedCount'))
@@ -273,6 +273,7 @@ class DatasetTemplateTag(TemplateTag):
                 (el['value_str'], el['count'])
                 for el in check.meta['most_frequent']
             ]
+            new_data['total_count'] = check.meta['total_processed']
             new_data['examples'] = {
                 str(index + 1): [
                     example['ocid']

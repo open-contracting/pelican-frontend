@@ -14,6 +14,7 @@ for font_file in font_files:
 COLOR = {
     'dark_grey': '#4a4a4a',
     'grey': '#656565',
+    'light_grey': '#dee2e6',
     'ok': '#b8c62f',
     'failed': '#d03736',
     'not_available': '#ebedf5',
@@ -226,7 +227,7 @@ def passed_result_box(passed_count, failed_count, return_aspect_ratio=False):
         return buffer
 
 
-def bar_result_box(counts_pairs, return_aspect_ratio=False):
+def bar_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
     # figure initialization
     plt.figure()
     plt.rcdefaults()
@@ -241,7 +242,9 @@ def bar_result_box(counts_pairs, return_aspect_ratio=False):
     })
     data = list(counts_mapping_ordered.values())
 
-    total_count = sum(data)
+    if total_count is None:
+        total_count = sum(data)
+
     if total_count == 0:
         data_normalized = len(data) * [0.0]
     else:
@@ -335,31 +338,81 @@ def bar_result_box(counts_pairs, return_aspect_ratio=False):
         return buffer
 
 
-def table_result_box(counts_pairs, return_aspect_ratio=False):
+def table_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
     # figure initialization
     plt.figure()
     plt.rcdefaults()
     fig, ax = plt.subplots()
-    aspect_ratio = float(len(counts_pairs)) / 15.0
+    aspect_ratio = float(len(counts_pairs) + 1) / 15.0
     fig.set_size_inches(6, 6 * aspect_ratio)
 
     # data preprocessing
     counts_mapping_ordered = OrderedDict({
         key: value
-        for key, value in reversed(counts_pairs)
+        for key, value in counts_pairs
     })
-    data = list(counts_mapping_ordered.values())
+    values = list(counts_mapping_ordered.keys())
+    counts = list(counts_mapping_ordered.values())
 
-    total_count = sum(data)
+    if total_count is None:
+        total_count = sum(counts)
+
     if total_count == 0:
-        data_normalized = len(data) * [0.0]
+        shares = len(counts) * [0.0]
     else:
-        data_normalized = [(value / total_count) for value in data]
+        shares = [(count / total_count) for count in counts]
+
+    percentage_strs = []
+    for share in shares:
+        percentage = 100 * share
+        percentage_rounded = round(percentage, 2)
+        if percentage_rounded == 0.0 and percentage != 0.0:
+            percentage_strs.append('>%.2f%%' % percentage_rounded)
+        elif percentage_rounded == 100.0 and percentage != 100.0:
+            percentage_strs.append('<%.2f%%' % percentage_rounded)
+        else:
+            percentage_strs.append('%.2f%%' % percentage_rounded)
 
     # figure creation
-    ax.xaxis.set_visible(False)
-    ax.yaxis.set_visible(False)
-    ax.table(counts_pairs)
+    table = ax.table(
+        cellText=list(zip(values, percentage_strs, counts)),
+        colLabels=['Value', 'Share', 'Occurrences'],
+        cellLoc='left',
+        colLoc='left',
+        edges='B',
+        loc='center'
+    )
+    plt.axis('off')
+    plt.grid('off')
+    for position, cell in table.get_celld().items():
+        row, col = position
+        if row == 0:
+            cell.set_text_props(
+                fontsize=12,
+                fontfamily='GT Eesti Pro Display',
+                fontweight='bold',
+                color=COLOR['dark_grey']
+            )
+        elif col == 0:
+            cell.set_text_props(
+                fontsize=12,
+                fontfamily='GT Eesti Pro Display',
+                fontweight='normal',
+                color=COLOR['dark_grey']
+            )
+        else:
+            cell.set_text_props(
+                fontsize=12,
+                fontfamily='Ubuntu mono',
+                fontweight='normal',
+                color=COLOR['dark_grey']
+            )
+
+        if row == len(counts_pairs):
+            cell.visible_edges = ''
+
+        cell.set_height(cell.get_height() * 1.5)
+        cell.set_edgecolor(COLOR['light_grey'])
 
     buffer = BytesIO()
     plt.savefig(buffer, dpi=500, format='png', bbox_inches='tight')
@@ -370,4 +423,3 @@ def table_result_box(counts_pairs, return_aspect_ratio=False):
         return buffer, aspect_ratio
     else:
         return buffer
-    
