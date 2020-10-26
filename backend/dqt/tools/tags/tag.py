@@ -13,6 +13,7 @@ class Tag:
         self.gdocs = gdocs
         self.dataset_id = dataset_id
 
+        self.params_finalized = False
         self.param_validations_mapping = {}
         self.param_validations_description_mapping = {}
         self.params_mapping = {}
@@ -37,6 +38,9 @@ class Tag:
         self.required_data_fields.add(name)
 
     def set_param(self, name, value):
+        if self.params_finalized:
+            raise ValueError('The parameters for this tag have been already finalized. New parameter values cannot be set.')
+
         if name not in self.param_validations_mapping:
             if self.param_validations_mapping:
                 suffix = 'Only the following parameters can be used for this tag: %s.' \
@@ -59,7 +63,13 @@ class Tag:
         else:
             return None
 
+    def finalize_params(self):
+        self.params_finalized = True
+
     def validate(self, data):
+        if not self.params_finalized:
+            raise ValueError('The parameters for this tag have not been finalized yet. Validation cannot be executed.')
+
         missing_params = [
             name
             for name in self.required_params
@@ -127,7 +137,14 @@ class TemplateTag(Tag):
             'template',
             lambda _: True,
             description='The value must be the id of the template file in Google Drive.',
+            required=True
         )
+
+    def finalize_params(self):
+        if self.get_param('template') is None:
+            self.set_param('template', self.base_template_id)
+
+        super().finalize_params()
 
     def set_sub_tag(self, name, tag):
         if name in self.sub_tags_mapping:
@@ -167,7 +184,7 @@ class TemplateTag(Tag):
                 node.addnext(copy.deepcopy(wrapper_element))
             else:
                 node.addnext(copy.deepcopy(element))
-            
+
             parent.remove(node)
             nodes = self.template.xpath('.//*[contains(text(),"' + location + '")]')
 
@@ -287,7 +304,7 @@ class TemplateTag(Tag):
                             er.set_full_tag(full_tag)
                             er.set_template_id(self.get_param('template'))
                         raise er
-                    
+
                     for param_name, param_value in tag_expression.get_tag_params(0):
                         try:
                             tag.set_param(param_name, param_value)
@@ -296,6 +313,7 @@ class TemplateTag(Tag):
                                 er.set_full_tag(full_tag)
                                 er.set_template_id(self.get_param('template'))
                             raise er
+                    tag.finalize_params()
                 else:
                     try:
                         tag_chaining = TagChaining(self, tag_expression)
@@ -313,11 +331,7 @@ class TemplateTag(Tag):
     def validate_and_process(self, data):
         self.validate(data)
 
-        if self.get_param('template') is None:
-            self.set_param('template', self.base_template_id)
-
-        template_id = self.get_param('template')
-        self.template = self.gdocs.get_template(template_id)
+        self.template = self.gdocs.get_template(self.get_param('template'))
         new_data = self.prepare_data(data)
 
         tags_mapping = self.get_tags_mapping()
@@ -348,8 +362,8 @@ class TemplateTag(Tag):
 
         return self.template
 
-class TagExpression:
 
+class TagExpression:
     # full_tag must start with {%
     def __init__(self, full_tag):
         self.full_tag = full_tag
@@ -374,14 +388,14 @@ class TagExpression:
             tag_name = terms[0]
             if not tag_name:
                 raise TagError(reason='The tag name \'%s\' is incorrect. All characters must be alphabetic.' % tag_name)
-            
+
             tag_param_mapping = {}
             param_expressions = terms[1:]
             for expr in param_expressions:
                 result = re.search(r'^(\w+):\|([^|]+)\|$', expr)
                 if not result:
                     raise TagError(reason='The parameter expression \'%s\' is incorrect. Please use the following format: <name>:|<value>|.' % expr)
-                
+
                 param_name, param_value = result.groups()
                 if not param_name.isalpha():
                     raise TagError(reason='The parameter name \'%s\' is incorrect. All characters must be alphabetic.' % param_name)
@@ -408,7 +422,6 @@ class TagExpression:
 
 
 class TagChaining:
-
     def __init__(self, source_tag, tag_expression):
         self.source_tag = source_tag
         self.tag_expression = tag_expression
@@ -437,6 +450,7 @@ class TagChaining:
             current_tag = current_tag_class(self.source_tag.gdocs, self.source_tag.dataset_id)
             for param_name, param_value in current_tag_params:
                 current_tag.set_param(param_name, param_value)
+            current_tag.finalize_params()
 
             self.chained_tags.append(current_tag)
             previous_tag = current_tag
@@ -463,7 +477,7 @@ class TagChaining:
 
                 def validate_and_process(self, data):
                     for tag in chained_tags[:-1]:
-                        tag.validate()
+                        tag.validate(data)
                         data = tag.prepare_data(data)
 
                     return last_tag.validate_and_process(data)

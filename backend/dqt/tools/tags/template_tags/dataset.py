@@ -150,6 +150,58 @@ class DatasetTemplateTag(TemplateTag):
         self.set_sub_tag('result', ResultLeafTag)
         self.set_sub_tag('value', ValueLeafTag)
 
+    def finalize_params(self):
+        check_name = self.get_param('check')
+        check_type = DatasetTemplateTag.CHECK_MAPPING[check_name]['check_type']
+
+        if check_type == 'donut':
+            self.set_sub_tag('share', donut_ShareLeafTag)
+            self.set_sub_tag('count', donut_CountLeafTag)
+            self.set_sub_tag('examples', donut_ExamplesLeafTag)
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
+
+        elif check_type == 'bar':
+            self.set_sub_tag('share', bar_ShareLeafTag)
+            self.set_sub_tag('count', bar_CountLeafTag)
+            self.set_sub_tag('examples', bar_ExamplesLeafTag)
+            self.set_sub_tag('sum', bar_SumLeafTag)
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
+
+        elif check_type == 'top3':
+            self.set_sub_tag('share', top3_ShareLeafTag)
+            self.set_sub_tag('count', top3_CountLeafTag)
+            self.set_sub_tag('examples', top3_ExamplesLeafTag)
+            self.set_sub_tag('amount', top3_AmountLeafTag)
+            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
+
+        elif check_type == 'numeric':
+            self.set_sub_tag('checkedCount', generate_key_leaf_tag('checkedCount'))
+            self.set_sub_tag('passedCount', generate_key_leaf_tag('passedCount'))
+            self.set_sub_tag('failedCount', generate_key_leaf_tag('failedCount'))
+
+            self.set_sub_tag('passedExamples', generate_examples_leaf_tag('passedExamples'))
+            self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
+            self.set_sub_tag('resultBoxImage', PassedResultBoxImageLeafTag)
+
+        elif check_type == 'biggest_share':
+            self.set_sub_tag('buyerIdentifierId', generate_key_leaf_tag('buyerIdentifierId'))
+            self.set_sub_tag('buyerIdentifierScheme', generate_key_leaf_tag('buyerIdentifierScheme'))
+            self.set_sub_tag('ocidCount', generate_key_leaf_tag('ocidCount'))
+            self.set_sub_tag('ocidShare', generate_key_leaf_tag('ocidShare'))
+            self.set_sub_tag('totalOcidCount', generate_key_leaf_tag('totalOcidCount'))
+
+            self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
+            # self.set_sub_tag('resultBoxImage')
+
+        elif check_type == 'single_value_share':
+            self.set_sub_tag('ocidCount', single_value_share_OcidCountLeafTag)
+            self.set_sub_tag('buyerCount', single_value_share_BuyerCountLeafTag)
+            self.set_sub_tag('totalOcidCount', generate_key_leaf_tag('totalOcidCount'))
+            self.set_sub_tag('totalBuyerCount', generate_key_leaf_tag('totalBuyerCount'))
+            self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
+
+        super().finalize_params()
+
     def prepare_data(self, data):
         check_name = self.get_param('check')
         check_type = DatasetTemplateTag.CHECK_MAPPING[check_name]['check_type']
@@ -165,11 +217,6 @@ class DatasetTemplateTag(TemplateTag):
         new_data['value'] = check.value
 
         if check_type == 'donut':
-            self.set_sub_tag('share', donut_ShareLeafTag)
-            self.set_sub_tag('count', donut_CountLeafTag)
-            self.set_sub_tag('examples', donut_ExamplesLeafTag)
-            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
-
             new_data['shares'] = {
                 key: value['share']
                 for key, value in check.meta['shares'].items()
@@ -190,12 +237,6 @@ class DatasetTemplateTag(TemplateTag):
                 for key, value in check.meta['shares'].items()
             }
         elif check_type == 'bar':
-            self.set_sub_tag('share', bar_ShareLeafTag)
-            self.set_sub_tag('count', bar_CountLeafTag)
-            self.set_sub_tag('examples', bar_ExamplesLeafTag)
-            self.set_sub_tag('sum', bar_SumLeafTag)
-            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
-
             new_data['shares'] = {
                 key.replace('_', '-'): value
                 for key, value in check.meta['shares'].items()
@@ -220,12 +261,6 @@ class DatasetTemplateTag(TemplateTag):
                 for key, value in check.meta['sums'].items()
             }
         elif check_type == 'top3':
-            self.set_sub_tag('share', top3_ShareLeafTag)
-            self.set_sub_tag('count', top3_CountLeafTag)
-            self.set_sub_tag('examples', top3_ExamplesLeafTag)
-            self.set_sub_tag('amount', top3_AmountLeafTag)
-            self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
-
             new_data['shares'] = {
                 str(index + 1): el['share']
                 for index, el in enumerate(check.meta['most_frequent'])
@@ -250,14 +285,6 @@ class DatasetTemplateTag(TemplateTag):
                 for index, el in enumerate(check.meta['most_frequent'])
             }
         elif check_type == 'numeric':
-            self.set_sub_tag('checkedCount', generate_key_leaf_tag('checkedCount'))
-            self.set_sub_tag('passedCount', generate_key_leaf_tag('passedCount'))
-            self.set_sub_tag('failedCount', generate_key_leaf_tag('failedCount'))
-
-            self.set_sub_tag('passedExamples', generate_examples_leaf_tag('passedExamples'))
-            self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
-            self.set_sub_tag('resultBoxImage', PassedResultBoxImageLeafTag)
-
             new_data['checkedCount'] = check.meta['total_processed']
             new_data['passedCount'] = check.meta['total_passed']
             new_data['failedCount'] = check.meta['total_failed']
@@ -270,15 +297,6 @@ class DatasetTemplateTag(TemplateTag):
                 for example in check.meta['failed_examples']
             ]
         elif check_type == 'biggest_share':
-            self.set_sub_tag('buyerIdentifierId', generate_key_leaf_tag('buyerIdentifierId'))
-            self.set_sub_tag('buyerIdentifierScheme', generate_key_leaf_tag('buyerIdentifierScheme'))
-            self.set_sub_tag('ocidCount', generate_key_leaf_tag('ocidCount'))
-            self.set_sub_tag('ocidShare', generate_key_leaf_tag('ocidShare'))
-            self.set_sub_tag('totalOcidCount', generate_key_leaf_tag('totalOcidCount'))
-
-            self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
-            # self.set_sub_tag('resultBoxImage')
-
             new_data['buyerIdentifierId'] = check.meta['specifics']['buyer.identifier.id']
             new_data['buyerIdentifierScheme'] = check.meta['specifics']['buyer.identifier.scheme']
             new_data['ocidCount'] = check.meta['ocid_count']
@@ -287,12 +305,6 @@ class DatasetTemplateTag(TemplateTag):
             new_data['examples'] = [example['ocid'] for example in check.meta['examples']]
 
         elif check_type == 'single_value_share':
-            self.set_sub_tag('ocidCount', single_value_share_OcidCountLeafTag)
-            self.set_sub_tag('buyerCount', single_value_share_BuyerCountLeafTag)
-            self.set_sub_tag('totalOcidCount', generate_key_leaf_tag('totalOcidCount'))
-            self.set_sub_tag('totalBuyerCount', generate_key_leaf_tag('totalBuyerCount'))
-            self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
-
             new_data['ocidCounts'] = {
                 key.replace('_', '-'): value['total_ocid_count']
                 for key, value in check.meta['counts'].items()
@@ -304,5 +316,4 @@ class DatasetTemplateTag(TemplateTag):
             new_data['totalOcidCount'] = check.meta['total_ocid_count']
             new_data['totalBuyerCount'] = check.meta['total_buyer_count']
             new_data['examples'] = [example['ocid'] for example in check.meta['examples']]
-
         return new_data
