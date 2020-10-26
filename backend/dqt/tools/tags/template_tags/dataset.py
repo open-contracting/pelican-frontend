@@ -149,7 +149,7 @@ class DatasetTemplateTag(TemplateTag):
         self.set_sub_tag('result', ResultLeafTag)
         self.set_sub_tag('value', ValueLeafTag)
     
-    def prepare_data(self):
+    def prepare_data(self, _):
         check_name = self.get_param('check')
         check_type = DatasetTemplateTag.CHECK_MAPPING[check_name]['check_type']
 

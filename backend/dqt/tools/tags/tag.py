@@ -8,12 +8,8 @@ from dqt.tools.errors import TagError
 from dqt.tools.misc import terms_enumeration
 
 
-class LeafTag:
-    def __init__(self, process_tag, value_type, gdocs, dataset_id):
-        self.process_tag = process_tag
-        if not (value_type == etree.Element or value_type == str):
-            raise ValueError('Incorrect value type entered.')
-        self.value_type = value_type
+class Tag:
+    def __init__(self, gdocs, dataset_id):
         self.gdocs = gdocs
         self.dataset_id = dataset_id
 
@@ -63,7 +59,7 @@ class LeafTag:
         else:
             return None
 
-    def validate_and_process(self, data):
+    def validate(self, data):
         missing_params = [
             name
             for name in self.required_params
@@ -84,10 +80,21 @@ class LeafTag:
         if missing_data_fields:
             raise AttributeError('The required data fields %s were not set' % list(missing_data_fields))
 
+
+class LeafTag(Tag):
+    def __init__(self, process_tag, value_type, gdocs, dataset_id):
+        super().__init__(gdocs, dataset_id)
+        self.process_tag = process_tag
+        if not (value_type == etree.Element or value_type == str):
+            raise ValueError('Incorrect value type entered.')
+        self.value_type = value_type
+
+    def validate_and_process(self, data):
+        self.validate(data)
         return self.process_tag(data)
 
 
-class TemplateTag:
+class TemplateTag(Tag):
     DEFAULT_STYLES = (
         "Standard",
         "Heading",
@@ -110,15 +117,10 @@ class TemplateTag:
     )
 
     def __init__(self, prepare_data, base_template_id, gdocs, dataset_id):
+        super().__init__(gdocs, dataset_id)
         self.prepare_data = prepare_data
         self.base_template_id = base_template_id
-        self.gdocs = gdocs
-        self.dataset_id = dataset_id
         self.template = None
-        self.param_validations_mapping = {}
-        self.param_validations_description_mapping = {}
-        self.params_mapping = {}
-        self.required_params = set()
         self.sub_tags_mapping = {}
 
         self.set_param_validation(
@@ -126,39 +128,6 @@ class TemplateTag:
             lambda _: True,
             description='The value must be the id of the template file in Google Drive.',
         )
-
-    def set_param_validation(self, name, validation, description='The value must be in a valid format.', required=False):
-        if name in self.param_validations_mapping:
-            raise AttributeError('The parameter \'%s\' already exists.' % name)
-
-        if required:
-            self.required_params.add(name)
-
-        self.param_validations_mapping[name] = validation
-        self.param_validations_description_mapping[name] = description
-
-    def set_param(self, name, value):
-        if name not in self.param_validations_mapping:
-            if self.param_validations_mapping:
-                suffix = 'Only the following parameters can be used for this tag: %s.' \
-                    % terms_enumeration(self.param_validations_mapping)
-            else:
-                suffix = 'This tag does not use any parameters.'
-
-            raise TagError(reason='The parameter \'%s\' is not supported. %s' % (name, suffix))
-
-        if not self.param_validations_mapping[name](value):
-            raise TagError(reason='The value \'%s\' for the parameter \'%s\' failed its validation. %s' % (
-                value, name, self.param_validations_description_mapping[name]
-            ))
-
-        self.params_mapping[name] = value
-
-    def get_param(self, name):
-        if name in self.params_mapping:
-            return self.params_mapping[name]
-        else:
-            return None
 
     def set_sub_tag(self, name, tag):
         if name in self.sub_tags_mapping:
@@ -302,25 +271,35 @@ class TemplateTag:
                         er.set_template_id(self.get_param('template'))
                     raise er
 
-                tag_class = self.get_sub_tag(tag_expression.get_name())
-                if tag_class is None:
-                    raise TagError(
-                        reason='The tag \'%s\' cannot be used in this context.' % tag_expression.get_name(),
-                        full_tag=full_tag,
-                        template_id=self.get_param('template')
-                    )
+                if not tag_expression.has_tag_chaining():
+                    tag_class = self.get_sub_tag(tag_expression.get_tag_name(0))
+                    if tag_class is None:
+                        raise TagError(
+                            reason='The tag \'%s\' cannot be used in this context.' % tag_expression.get_tag_name(0),
+                            full_tag=full_tag,
+                            template_id=self.get_param('template')
+                        )
 
-                try:
-                    tag = tag_class(self.gdocs, self.dataset_id)
-                except TagError as er:
-                    if not er.is_set():
-                        er.set_full_tag(full_tag)
-                        er.set_template_id(self.get_param('template'))
-                    raise er
-                
-                for param_name, param_value in tag_expression.get_params():
                     try:
-                        tag.set_param(param_name, param_value)
+                        tag = tag_class(self.gdocs, self.dataset_id)
+                    except TagError as er:
+                        if not er.is_set():
+                            er.set_full_tag(full_tag)
+                            er.set_template_id(self.get_param('template'))
+                        raise er
+                    
+                    for param_name, param_value in tag_expression.get_tag_params(0):
+                        try:
+                            tag.set_param(param_name, param_value)
+                        except TagError as er:
+                            if not er.is_set():
+                                er.set_full_tag(full_tag)
+                                er.set_template_id(self.get_param('template'))
+                            raise er
+                else:
+                    try:
+                        tag_chaining = TagChaining(self, tag_expression)
+                        tag = tag_chaining.generate_tag_class()(self.gdocs, self.dataset_id)
                     except TagError as er:
                         if not er.is_set():
                             er.set_full_tag(full_tag)
@@ -331,31 +310,21 @@ class TemplateTag:
 
         return tags_mapping
 
-    def validate_and_process(self):
-        missing_params = [
-            name
-            for name in self.required_params
-            if name not in self.params_mapping
-        ]
-        if missing_params:
-            if len(missing_params) == 1:
-                raise TagError(reason='The required parameter \'%s\' was not set.' % missing_params[0])
-            else:
-                missing_params_str = ', '.join('\'%s\'' % param for param in missing_params)
-                raise TagError(reason='The required parameters %s were not set.' % missing_params_str)
+    def validate_and_process(self, data):
+        self.validate(data)
 
         if self.get_param('template') is None:
             self.set_param('template', self.base_template_id)
 
         template_id = self.get_param('template')
         self.template = self.gdocs.get_template(template_id)
-        data = self.prepare_data()
+        new_data = self.prepare_data(data)
 
         tags_mapping = self.get_tags_mapping()
         for full_tag, tag in tags_mapping.items():
             if isinstance(tag, LeafTag):
                 try:
-                    result = tag.validate_and_process(data)
+                    result = tag.validate_and_process(new_data)
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
@@ -368,7 +337,7 @@ class TemplateTag:
                     self.set_text(result, full_tag)
             elif isinstance(tag, TemplateTag):
                 try:
-                    result = tag.validate_and_process()
+                    result = tag.validate_and_process(new_data)
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
@@ -384,10 +353,10 @@ class TagExpression:
     # full_tag must start with {%
     def __init__(self, full_tag):
         self.full_tag = full_tag
-        self.name = None
-        self.params_mapping = {}
+        self.tag_names = []
+        self.tag_param_mappings = []
         self.process()
-        
+
     def process(self):
         if self.full_tag[-2:] != '%}':
             raise TagError(reason='The tag is incomplete. Please use the format for the tags: \
@@ -397,31 +366,110 @@ class TagExpression:
             )
 
         content = self.full_tag[2:-2].strip()
-        terms = content.split()
-        if not terms:
-            raise TagError(reason='Tag with missing name.')
+        for tag in content.split('->'):
+            terms = [term.strip() for term in tag.split()]
+            if not terms:
+                raise TagError(reason='Tag with missing name.')
 
-        self.name = terms[0]
-        if not self.name.isalpha():
-            raise TagError(reason='The tag name \'%s\' is incorrect. All characters must be alphabetic.' % self.name)
-        
-        param_expressions = terms[1:]
-        for expr in param_expressions:
-            result = re.search(r'^(\w+):\|([^|]+)\|$', expr)
-            if not result:
-                raise TagError(reason='The parameter expression \'%s\' is incorrect. Please use the following format: <name>:|<value>|.' % expr)
+            tag_name = terms[0]
+            if not tag_name:
+                raise TagError(reason='The tag name \'%s\' is incorrect. All characters must be alphabetic.' % tag_name)
             
-            param_name, param_value = result.groups()
-            if not param_name.isalpha():
-                raise TagError(reason='The parameter name \'%s\' is incorrect. All characters must be alphabetic.' % param_name)
+            tag_param_mapping = {}
+            param_expressions = terms[1:]
+            for expr in param_expressions:
+                result = re.search(r'^(\w+):\|([^|]+)\|$', expr)
+                if not result:
+                    raise TagError(reason='The parameter expression \'%s\' is incorrect. Please use the following format: <name>:|<value>|.' % expr)
+                
+                param_name, param_value = result.groups()
+                if not param_name.isalpha():
+                    raise TagError(reason='The parameter name \'%s\' is incorrect. All characters must be alphabetic.' % param_name)
 
-            if param_name in self.params_mapping:
-                raise TagError(reason='The parameter name \'%s\' is used multiple times.' % param_name)
+                if param_name in tag_param_mapping:
+                    raise TagError(reason='The parameter name \'%s\' is used multiple times.' % param_name)
 
-            self.params_mapping[param_name] = param_value
+                tag_param_mapping[param_name] = param_value
 
-    def get_name(self):
-        return self.name
+            self.tag_names.append(tag_name)
+            self.tag_param_mappings.append(tag_param_mapping)
 
-    def get_params(self):
-        return list(self.params_mapping.items())
+    def get_tag_name(self, index):
+        return self.tag_names[index]
+
+    def get_tag_params(self, index):
+        return list(self.tag_param_mappings[index].items())
+
+    def get_tag_count(self):
+        return len(self.tag_names)
+
+    def has_tag_chaining(self):
+        return len(self.tag_names) > 1
+
+
+class TagChaining:
+
+    def __init__(self, source_tag, tag_expression):
+        self.source_tag = source_tag
+        self.tag_expression = tag_expression
+        self.chained_tags = []
+
+        self.create_chained_tags()
+
+    def create_chained_tags(self):
+        tag_count = self.tag_expression.get_tag_count()
+        previous_tag = self.source_tag
+        for current_tag_index in range(tag_count):
+            current_tag_name = self.tag_expression.get_tag_name(current_tag_index)
+            current_tag_params = self.tag_expression.get_tag_params(current_tag_index)
+
+            current_tag_class = previous_tag.get_sub_tag(current_tag_name)
+            if current_tag_class is None:
+                raise TagError(
+                    reason='Wrong tag chaining. The tag \'%s\' cannot be used in this context.' % current_tag_name,
+                )
+
+            if current_tag_index < (tag_count - 1) and not issubclass(current_tag_class, TemplateTag):
+                raise TagError(
+                    reason='Wrong tag chaining. The tag \'%s\' is not a template tag and thus cannot be followed by another tag.' % current_tag_name
+                )
+
+            current_tag = current_tag_class(self.source_tag.gdocs, self.source_tag.dataset_id)
+            for param_name, param_value in current_tag_params:
+                current_tag.set_param(param_name, param_value)
+
+            self.chained_tags.append(current_tag)
+            previous_tag = current_tag
+
+
+    def generate_tag_class(self):
+        chained_tags = self.chained_tags
+        last_tag = self.chained_tags[-1]
+        if isinstance(last_tag, LeafTag):
+            class GeneratedTag(LeafTag):
+                def __init__(self, gdocs, dataset_id):
+                    self.value_type = last_tag.value_type
+
+                def validate_and_process(self, data):
+                    for tag in chained_tags[:-1]:
+                        tag.validate(data)
+                        data = tag.prepare_data(data)
+
+                    return last_tag.validate_and_process(data)
+
+        elif isinstance(last_tag, TemplateTag):
+            class GeneratedTag(TemplateTag):
+                def __init__(self, gdocs, dataset_id):
+                    pass
+
+                def validate_and_process(self, data):
+                    for tag in chained_tags[:-1]:
+                        tag.validate()
+                        data = tag.prepare_data(data)
+
+                    return last_tag.validate_and_process(data)
+
+        else:
+            raise NotImplemented('Tag generation for instance of \'%s\' is not supported.' % type(last_tag).__name__)
+
+        return GeneratedTag

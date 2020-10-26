@@ -622,7 +622,7 @@ class FieldTemplateTag(TemplateTag):
         self.set_sub_tag('passedExamples', PassedExamplesLeafTag)
         self.set_sub_tag('failedExamples', FailedExamplesLeafTag)
 
-    def prepare_data(self):
+    def prepare_data(self, _):
         path = self.get_param('path')
         # TODO: the param check is necessary
 

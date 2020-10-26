@@ -76,7 +76,7 @@ class ResourceTemplateTag(TemplateTag):
         self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
         self.set_sub_tag('notAvailableExamples', generate_examples_leaf_tag('notAvailableExamples'))
 
-    def prepare_data(self):
+    def prepare_data(self, _):
         check_name = self.get_param('check')
         with connections["data"].cursor() as cursor:
             cursor.execute(

@@ -307,7 +307,7 @@ def generate_report(request):
         gdocs = Gdocs(input_message["document_id"])
         base = BaseTemplateTag(gdocs, input_message['dataset_id'])
         base.set_param('template', input_message['document_id'])
-        main_template = base.validate_and_process()
+        main_template = base.validate_and_process({})
             
         report_name = 'Report %s %s' % (input_message['dataset_id'], datetime.now())
         if 'report_name' in input_message and isinstance(input_message['report_name'], str):
