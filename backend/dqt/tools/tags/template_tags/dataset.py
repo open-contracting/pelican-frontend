@@ -9,6 +9,7 @@ from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.dataset.counts_result_box_image import CountsResultBoxImageLeafTag
 from dqt.tools.tags.leaf_tags.dataset.passed_result_box_image import PassedResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.dataset.table_result_box_image import TableResultBoxImageLeafTag
 from dqt.tools.tags.leaf_tags.dataset.result import ResultLeafTag
 from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
 from dqt.tools.tags.leaf_tags.dataset.donut.share import ShareLeafTag as donut_ShareLeafTag
@@ -148,20 +149,20 @@ class DatasetTemplateTag(TemplateTag):
         self.set_sub_tag('description', generate_key_leaf_tag('description'))
         self.set_sub_tag('result', ResultLeafTag)
         self.set_sub_tag('value', ValueLeafTag)
-    
-    def prepare_data(self, _):
+
+    def prepare_data(self, data):
         check_name = self.get_param('check')
         check_type = DatasetTemplateTag.CHECK_MAPPING[check_name]['check_type']
 
-        data = {}
+        new_data = {}
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
         if check is None:
             # TODO
             pass
-        data['name'] = _(str('dataset.' + check_name + '.name'))
-        data['description'] = _(str('dataset.' + check_name + '.description'))
-        data['result'] = check.result
-        data['value'] = check.value
+        new_data['name'] = _(str('dataset.' + check_name + '.name'))
+        new_data['description'] = _(str('dataset.' + check_name + '.description'))
+        new_data['result'] = check.result
+        new_data['value'] = check.value
 
         if check_type == 'donut':
             self.set_sub_tag('share', donut_ShareLeafTag)
@@ -169,19 +170,19 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('examples', donut_ExamplesLeafTag)
             self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
-            data['shares'] = {
+            new_data['shares'] = {
                 key: value['share']
                 for key, value in check.meta['shares'].items()
             }
-            data['counts'] = {
+            new_data['counts'] = {
                 key: value['count']
                 for key, value in check.meta['shares'].items()
             }
-            data['counts_pairs'] = [
+            new_data['counts_pairs'] = [
                 (key, value['count'])
                 for key, value in check.meta['shares'].items()
             ]
-            data['examples'] = {
+            new_data['examples'] = {
                 key: [
                     example['ocid']
                     for example in value['examples']
@@ -195,26 +196,26 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('sum', bar_SumLeafTag)
             self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
-            data['shares'] = {
+            new_data['shares'] = {
                 key.replace('_', '-'): value
                 for key, value in check.meta['shares'].items()
             }
-            data['counts'] = {
+            new_data['counts'] = {
                 key.replace('_', '-'): value
                 for key, value in check.meta['counts'].items()
             }
-            data['counts_pairs'] = [
+            new_data['counts_pairs'] = [
                 (key.replace('_', '-'), value)
                 for key, value in check.meta['counts'].items()
             ]
-            data['examples'] = {
+            new_data['examples'] = {
                 key.replace('_', '-'): [
                     example['ocid']
                     for example in examples
                 ]
                 for key, examples in check.meta['examples'].items()
             }
-            data['sums'] = {
+            new_data['sums'] = {
                 key.replace('_', '-'): value
                 for key, value in check.meta['sums'].items()
             }
@@ -225,26 +226,26 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('amount', top3_AmountLeafTag)
             self.set_sub_tag('resultBoxImage', CountsResultBoxImageLeafTag)
 
-            data['shares'] = {
+            new_data['shares'] = {
                 str(index + 1): el['share']
                 for index, el in enumerate(check.meta['most_frequent'])
             }
-            data['counts'] = {
+            new_data['counts'] = {
                 str(index + 1): el['count']
                 for index, el in enumerate(check.meta['most_frequent'])
             }
-            data['counts_pairs'] = [
+            new_data['counts_pairs'] = [
                 (el['value_str'], el['count'])
                 for el in check.meta['most_frequent']
             ]
-            data['examples'] = {
+            new_data['examples'] = {
                 str(index + 1): [
                     example['ocid']
                     for example in el['examples']
                 ]
                 for index, el in enumerate(check.meta['most_frequent'])
             }
-            data['amounts'] = {
+            new_data['amounts'] = {
                 str(index + 1): el['value_str']
                 for index, el in enumerate(check.meta['most_frequent'])
             }
@@ -257,14 +258,14 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('failedExamples', generate_examples_leaf_tag('failedExamples'))
             self.set_sub_tag('resultBoxImage', PassedResultBoxImageLeafTag)
 
-            data['checkedCount'] = check.meta['total_processed']
-            data['passedCount'] = check.meta['total_passed']
-            data['failedCount'] = check.meta['total_failed']
-            data['passedExamples'] = [
+            new_data['checkedCount'] = check.meta['total_processed']
+            new_data['passedCount'] = check.meta['total_passed']
+            new_data['failedCount'] = check.meta['total_failed']
+            new_data['passedExamples'] = [
                 example['ocid']
                 for example in check.meta['passed_examples']
             ]
-            data['failedExamples'] = [
+            new_data['failedExamples'] = [
                 example['ocid']
                 for example in check.meta['failed_examples']
             ]
@@ -278,12 +279,12 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
             # self.set_sub_tag('resultBoxImage')
 
-            data['buyerIdentifierId'] = check.meta['specifics']['buyer.identifier.id']
-            data['buyerIdentifierScheme'] = check.meta['specifics']['buyer.identifier.scheme']
-            data['ocidCount'] = check.meta['ocid_count']
-            data['ocidShare'] = check.meta['ocid_share']
-            data['totalOcidCount'] = check.meta['total_ocid_count']
-            data['examples'] = [example['ocid'] for example in check.meta['examples']]
+            new_data['buyerIdentifierId'] = check.meta['specifics']['buyer.identifier.id']
+            new_data['buyerIdentifierScheme'] = check.meta['specifics']['buyer.identifier.scheme']
+            new_data['ocidCount'] = check.meta['ocid_count']
+            new_data['ocidShare'] = check.meta['ocid_share']
+            new_data['totalOcidCount'] = check.meta['total_ocid_count']
+            new_data['examples'] = [example['ocid'] for example in check.meta['examples']]
 
         elif check_type == 'single_value_share':
             self.set_sub_tag('ocidCount', single_value_share_OcidCountLeafTag)
@@ -292,16 +293,16 @@ class DatasetTemplateTag(TemplateTag):
             self.set_sub_tag('totalBuyerCount', generate_key_leaf_tag('totalBuyerCount'))
             self.set_sub_tag('examples', generate_examples_leaf_tag('examples'))
 
-            data['ocidCounts'] = {
+            new_data['ocidCounts'] = {
                 key.replace('_', '-'): value['total_ocid_count']
                 for key, value in check.meta['counts'].items()
             }
-            data['buyerCounts'] = {
+            new_data['buyerCounts'] = {
                 key.replace('_', '-'): value['total_buyer_count']
                 for key, value in check.meta['counts'].items()
             }
-            data['totalOcidCount'] = check.meta['total_ocid_count']
-            data['totalBuyerCount'] = check.meta['total_buyer_count']
-            data['examples'] = [example['ocid'] for example in check.meta['examples']]
+            new_data['totalOcidCount'] = check.meta['total_ocid_count']
+            new_data['totalBuyerCount'] = check.meta['total_buyer_count']
+            new_data['examples'] = [example['ocid'] for example in check.meta['examples']]
 
-        return data
+        return new_data

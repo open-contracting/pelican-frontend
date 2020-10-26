@@ -8,8 +8,8 @@ from io import BytesIO
 
 font_dirs = ['dqt/tools/fonts', ]
 font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
-font_list = font_manager.createFontList(font_files)
-font_manager.fontManager.ttflist.extend(font_list)
+for font_file in font_files:
+    font_manager.fontManager.addfont(font_file)
 
 COLOR = {
     'dark_grey': '#4a4a4a',
@@ -333,3 +333,41 @@ def bar_result_box(counts_pairs, return_aspect_ratio=False):
         return buffer, aspect_ratio
     else:
         return buffer
+
+
+def table_result_box(counts_pairs, return_aspect_ratio=False):
+    # figure initialization
+    plt.figure()
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    aspect_ratio = float(len(counts_pairs)) / 15.0
+    fig.set_size_inches(6, 6 * aspect_ratio)
+
+    # data preprocessing
+    counts_mapping_ordered = OrderedDict({
+        key: value
+        for key, value in reversed(counts_pairs)
+    })
+    data = list(counts_mapping_ordered.values())
+
+    total_count = sum(data)
+    if total_count == 0:
+        data_normalized = len(data) * [0.0]
+    else:
+        data_normalized = [(value / total_count) for value in data]
+
+    # figure creation
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    ax.table(counts_pairs)
+
+    buffer = BytesIO()
+    plt.savefig(buffer, dpi=500, format='png', bbox_inches='tight')
+    buffer.seek(0)
+    plt.close(fig)
+
+    if return_aspect_ratio:
+        return buffer, aspect_ratio
+    else:
+        return buffer
+    

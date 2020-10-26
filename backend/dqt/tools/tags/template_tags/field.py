@@ -622,7 +622,7 @@ class FieldTemplateTag(TemplateTag):
         self.set_sub_tag('passedExamples', PassedExamplesLeafTag)
         self.set_sub_tag('failedExamples', FailedExamplesLeafTag)
 
-    def prepare_data(self, _):
+    def prepare_data(self, data):
         path = self.get_param('path')
         # TODO: the param check is necessary
 
@@ -658,27 +658,27 @@ class FieldTemplateTag(TemplateTag):
             return {
                 "path": path,
                 "qualityCheck": list(result['quality']['checks'].keys())[0] if result['quality']['checks'] else None,
-                
+
                 "coverageCheckedCount": result['coverage']['total_count'],
                 "coverageSetCheckedCount": result['coverage']['checks']['exists']['total_count'],
                 "coverageEmptyCheckedCount": result['coverage']['checks']['non_empty']['total_count'],
                 "qualityCheckedCount": result['quality']['total_count'],
-                
+
                 "coveragePassedCount": result['coverage']['passed_count'],
                 "coverageSetPassedCount": result['coverage']['checks']['exists']['passed_count'],
                 "coverageEmptyPassedCount": result['coverage']['checks']['non_empty']['passed_count'],
                 "qualityPassedCount": result['quality']['passed_count'],
-                
+
                 "coverageFailedCount": result['coverage']['failed_count'],
                 "coverageSetFailedCount": result['coverage']['checks']['exists']['failed_count'],
                 "coverageEmptyFailedCount": result['coverage']['checks']['non_empty']['failed_count'],
                 "qualityFailedCount": result['quality']['failed_count'],
-                
+
                 "coveragePassedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['passed_examples']],
                 "coverageSetPassedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['exists']['passed_examples']],
                 "coverageEmptyPassedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['non_empty']['passed_examples']],
                 "qualityPassedExamples": [example['meta']['ocid'] for example in result_examples['quality']['passed_examples']],
-                
+
                 "coverageFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['failed_examples']],
                 "coverageSetFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['exists']['failed_examples']],
                 "coverageEmptyFailedExamples": [example['meta']['ocid'] for example in result_examples['coverage']['checks']['non_empty']['failed_examples']],

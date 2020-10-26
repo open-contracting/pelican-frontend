@@ -441,7 +441,6 @@ class TagChaining:
             self.chained_tags.append(current_tag)
             previous_tag = current_tag
 
-
     def generate_tag_class(self):
         chained_tags = self.chained_tags
         last_tag = self.chained_tags[-1]
