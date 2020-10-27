@@ -105,6 +105,8 @@ class LeafTag(Tag):
 
 
 class TemplateTag(Tag):
+    TAG_EXPRESSION_XPATH = './/text()[contains(., "{%")]'
+    FULL_TAG_LOCATION_XPATH = './/*[.//text()[contains(., "{full_tag}")] and not(./*//text()[contains(., "{full_tag}")])]'
     DEFAULT_STYLES = (
         "Standard",
         "Heading",
@@ -158,35 +160,43 @@ class TemplateTag(Tag):
         else:
             return None
 
-    def set_text(self, value, location):
-        for node in self.template.xpath('.//*[contains(text(),"' + location + '")]'):
-            if node.text and location in node.text:
-                node.text = node.text.replace(location, str(value))
-            else:
-                for subnode in node:
-                    if location in subnode.tail:
-                        subnode.tail = subnode.tail.replace(location, str(value))
+    def set_text(self, value, full_tag):
+        nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
+        for node in nodes:
+            if node.text:
+                node.text = node.text.replace(full_tag, str(value))
+            for child in node:
+                if child.text:
+                    child.text = child.text.replace(full_tag, str(value)) # probably unnecessary
+                if child.tail:
+                    child.tail = child.tail.replace(full_tag, str(value))
 
-    def set_element(self, element, location):
-        nodes = self.template.xpath('.//*[contains(text(),"' + location + '")]')
-        while nodes:
-            node = nodes[0]
-            parent = node.getparent()
+    def set_element(self, element, full_tag):
+        wrapper_element = etree.Element(
+            '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
+            attrib={
+                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
+            }
+        )
+        wrapper_element.append(copy.deepcopy(element))
 
-            if parent.tag == '{urn:oasis:names:tc:opendocument:xmlns:office:1.0}text':
-                wrapper_element = etree.Element(
-                    '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
-                    attrib={
-                        '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
-                    }
-                )
-                wrapper_element.append(element)
-                node.addnext(copy.deepcopy(wrapper_element))
-            else:
-                node.addnext(copy.deepcopy(element))
+        nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
+        for node in nodes: 
+            if node.text:
+                node.text = node.text.replace(full_tag, '')
+            for child in node:
+                if child.text:
+                    child.text = child.text.replace(full_tag, '') # probably unnecessary
+                if child.tail:
+                    child.tail = child.tail.replace(full_tag, '')
 
-            parent.remove(node)
-            nodes = self.template.xpath('.//*[contains(text(),"' + location + '")]')
+            if node.tag != '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p':
+                parent = node.getparent()
+                while parent.tag != '{urn:oasis:names:tc:opendocument:xmlns:office:1.0}text':
+                    node = parent
+                    parent = node.getparent()
+            
+            node.addnext(copy.deepcopy(wrapper_element))
 
     def get_template_content(self, template):
         for node in template.xpath(
@@ -275,56 +285,57 @@ class TemplateTag(Tag):
     def get_tags_mapping(self):
         tags_mapping = {}
 
-        xpath_term = './/*[namespace-uri()="urn:oasis:names:tc:opendocument:xmlns:text:1.0" and normalize-space(text())]/text()'
-        for node in self.template.xpath(xpath_term):
-            full_tags = re.findall(r'{%[^%}]+%}|{%[^%}]+$', node)
+        full_tags = set()
+        texts = self.template.xpath(TemplateTag.TAG_EXPRESSION_XPATH)
+        for text in texts:
+            full_tags.update(re.findall(r'{%[^%}]+%}|{%[^%}]+$', text))
+        
+        for full_tag in full_tags:
+            try:
+                tag_expression = TagExpression(full_tag)
+            except TagError as er:
+                if not er.is_set():
+                    er.set_full_tag(full_tag)
+                    er.set_template_id(self.get_param('template'))
+                raise er
 
-            for full_tag in full_tags:
+            if not tag_expression.has_tag_chaining():
+                tag_class = self.get_sub_tag(tag_expression.get_tag_name(0))
+                if tag_class is None:
+                    raise TagError(
+                        reason='The tag \'%s\' cannot be used in this context.' % tag_expression.get_tag_name(0),
+                        full_tag=full_tag,
+                        template_id=self.get_param('template')
+                    )
+
                 try:
-                    tag_expression = TagExpression(full_tag)
+                    tag = tag_class(self.gdocs, self.dataset_id)
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
                         er.set_template_id(self.get_param('template'))
                     raise er
 
-                if not tag_expression.has_tag_chaining():
-                    tag_class = self.get_sub_tag(tag_expression.get_tag_name(0))
-                    if tag_class is None:
-                        raise TagError(
-                            reason='The tag \'%s\' cannot be used in this context.' % tag_expression.get_tag_name(0),
-                            full_tag=full_tag,
-                            template_id=self.get_param('template')
-                        )
-
+                for param_name, param_value in tag_expression.get_tag_params(0):
                     try:
-                        tag = tag_class(self.gdocs, self.dataset_id)
+                        tag.set_param(param_name, param_value)
                     except TagError as er:
                         if not er.is_set():
                             er.set_full_tag(full_tag)
                             er.set_template_id(self.get_param('template'))
                         raise er
+                tag.finalize_params()
+            else:
+                try:
+                    tag_chaining = TagChaining(self, tag_expression)
+                    tag = tag_chaining.generate_tag_class()(self.gdocs, self.dataset_id)
+                except TagError as er:
+                    if not er.is_set():
+                        er.set_full_tag(full_tag)
+                        er.set_template_id(self.get_param('template'))
+                    raise er
 
-                    for param_name, param_value in tag_expression.get_tag_params(0):
-                        try:
-                            tag.set_param(param_name, param_value)
-                        except TagError as er:
-                            if not er.is_set():
-                                er.set_full_tag(full_tag)
-                                er.set_template_id(self.get_param('template'))
-                            raise er
-                    tag.finalize_params()
-                else:
-                    try:
-                        tag_chaining = TagChaining(self, tag_expression)
-                        tag = tag_chaining.generate_tag_class()(self.gdocs, self.dataset_id)
-                    except TagError as er:
-                        if not er.is_set():
-                            er.set_full_tag(full_tag)
-                            er.set_template_id(self.get_param('template'))
-                        raise er
-
-                tags_mapping[full_tag] = tag
+            tags_mapping[full_tag] = tag
 
         return tags_mapping
 
