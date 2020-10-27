@@ -199,25 +199,22 @@ class TemplateTag(Tag):
             node.addnext(copy.deepcopy(wrapper_element))
 
     def get_template_content(self, template):
-        for node in template.xpath(
+        return template.xpath(
             '//office:text',
             namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
-        ):
-            return node
+        )[0]
 
     def get_template_styles(self, template):
-        for node in template.xpath(
+        return template.xpath(
             '//office:automatic-styles',
             namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
-        ):
-            return node
+        )[0]
 
     def get_template_fonts(self, template):
-        for node in template.xpath(
+        return template.xpath(
             '//office:font-face-decls',
             namespaces={'office': 'urn:oasis:names:tc:opendocument:xmlns:office:1.0'}
-        ):
-            return node
+        )[0]
 
     def merge_template_styles(self, sub_template, prefix):
         sub_template_styles = self.get_template_styles(sub_template)
@@ -256,7 +253,7 @@ class TemplateTag(Tag):
                         main_font_node.append(sub_font)
                         break
 
-    def merge_template(self, sub_template, location):
+    def merge_template(self, sub_template, full_tag):
         prefix = shortuuid.uuid()
         sub_template_content = self.get_template_content(sub_template)
         for child in sub_template_content.iter():
@@ -265,19 +262,28 @@ class TemplateTag(Tag):
                         child.get(attrib_name) not in TemplateTag.DEFAULT_STYLES:
                     child.set(attrib_name, prefix + child.get(attrib_name))
 
-        for location_node in self.template.xpath('.//*[contains(text(),"' + location + '")]'):
-            parent = location_node.getparent()
+        nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
+        for node in nodes:
+            if node.text:
+                node.text = node.text.replace(full_tag, '')
+            for child in node:
+                if child.text:
+                    child.text = child.text.replace(full_tag, '') # probably unnecessary
+                if child.tail:
+                    child.tail = child.tail.replace(full_tag, '')
 
-            previous = location_node
-            for child in sub_template_content:
+            parent = node.getparent()
+            while parent.tag != '{urn:oasis:names:tc:opendocument:xmlns:office:1.0}text':
+                node = parent
+                parent = node.getparent()
+
+            previous = node
+            for child in copy.deepcopy(sub_template_content):
                 if "sequence-decls" in child.tag:
                     continue
 
                 previous.addnext(child)
                 previous = child
-
-            # remove the template node
-            parent.remove(location_node)
 
         self.merge_template_styles(sub_template, prefix)
         self.merge_template_fonts(sub_template)
@@ -289,7 +295,7 @@ class TemplateTag(Tag):
         texts = self.template.xpath(TemplateTag.TAG_EXPRESSION_XPATH)
         for text in texts:
             full_tags.update(re.findall(r'{%[^%}]+%}|{%[^%}]+$', text))
-        
+
         for full_tag in full_tags:
             try:
                 tag_expression = TagExpression(full_tag)
