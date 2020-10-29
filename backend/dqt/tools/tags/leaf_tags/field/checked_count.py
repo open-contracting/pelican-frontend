@@ -8,7 +8,6 @@ class CheckedCountLeafTag(LeafTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(
             self.process_tag,
-            str,
             gdocs,
             dataset_id
         )
@@ -26,4 +25,4 @@ class CheckedCountLeafTag(LeafTag):
         self.set_required_data_field('qualityCheckedCount')
 
     def process_tag(self, data):
-        return data['%sCheckedCount' % self.get_param('level')]
+        return str(data['%sCheckedCount' % self.get_param('level')])

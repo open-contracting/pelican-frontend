@@ -6,7 +6,6 @@ def generate_key_leaf_tag(key):
         def __init__(self, gdocs, dataset_id):
             super().__init__(
                 self.process_tag,
-                str,
                 gdocs,
                 dataset_id
             )
@@ -14,6 +13,6 @@ def generate_key_leaf_tag(key):
             self.set_required_data_field(key)
 
         def process_tag(self, data):
-            return data[key]
+            return str(data[key])
 
     return KeyLeafTag

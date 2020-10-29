@@ -8,7 +8,6 @@ class ResultBoxImageLeafTag(LeafTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(
             self.process_tag,
-            etree.Element,
             gdocs,
             dataset_id
         )

@@ -92,12 +92,9 @@ class Tag:
 
 
 class LeafTag(Tag):
-    def __init__(self, process_tag, value_type, gdocs, dataset_id):
+    def __init__(self, process_tag, gdocs, dataset_id):
         super().__init__(gdocs, dataset_id)
         self.process_tag = process_tag
-        if not (value_type == etree.Element or value_type == str):
-            raise ValueError('Incorrect value type entered.')
-        self.value_type = value_type
 
     def validate_and_process(self, data):
         self.validate(data)
@@ -364,11 +361,14 @@ class TemplateTag(Tag):
                         er.set_full_tag(full_tag)
                         er.set_template_id(self.get_param('template'))
                     raise er
-
-                if tag.value_type == etree.Element:
+                
+                if isinstance(result, etree._Element):
                     self.set_element(result, full_tag)
-                elif tag.value_type == str:
+                elif isinstance(result, str):
                     self.set_text(result, full_tag)
+                else:
+                    raise ValueError('LeafTag\'s process_tag method must return of the following types: \'etree.Element\', \'str\'.')
+
             elif isinstance(tag, TemplateTag):
                 try:
                     result = tag.validate_and_process(new_data)
@@ -481,7 +481,7 @@ class TagChaining:
         if isinstance(last_tag, LeafTag):
             class GeneratedTag(LeafTag):
                 def __init__(self, gdocs, dataset_id):
-                    self.value_type = last_tag.value_type
+                    pass
 
                 def validate_and_process(self, data):
                     for tag in chained_tags[:-1]:
