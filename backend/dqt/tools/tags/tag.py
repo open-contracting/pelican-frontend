@@ -171,14 +171,17 @@ class TemplateTag(Tag):
                 if child.tail:
                     child.tail = child.tail.replace(full_tag, str(value))
 
-    def set_element(self, element, full_tag):
-        wrapper_element = etree.Element(
-            '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
-            attrib={
-                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
-            }
-        )
-        wrapper_element.append(copy.deepcopy(element))
+    def set_element(self, element, full_tag, wrap=True):
+        if wrap:
+            wrapper_element = etree.Element(
+                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
+                attrib={
+                    '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
+                }
+            )
+            wrapper_element.append(copy.deepcopy(element))
+        else:
+            wrapper_element = copy.deepcopy(element)
 
         nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
         for node in nodes: 
@@ -309,7 +312,7 @@ class TemplateTag(Tag):
                 tag_class = self.get_sub_tag(tag_expression.get_tag_name(0))
                 if tag_class is None:
                     raise TagError(
-                        reason='The tag \'%s\' cannot be used in this context.' % tag_expression.get_tag_name(0),
+                        reason='The tag \'%s\' cannot be used in this context. Also, please make sure the check was computed.' % tag_expression.get_tag_name(0),
                         full_tag=full_tag,
                         template_id=self.get_param('template')
                     )
@@ -456,7 +459,7 @@ class TagChaining:
             current_tag_class = previous_tag.get_sub_tag(current_tag_name)
             if current_tag_class is None:
                 raise TagError(
-                    reason='Wrong tag chaining. The tag \'%s\' cannot be used in this context.' % current_tag_name,
+                    reason='Wrong tag chaining. The tag \'%s\' cannot be used in this context. Also, please make sure the check was computed.' % current_tag_name,
                 )
 
             if current_tag_index < (tag_count - 1) and not issubclass(current_tag_class, TemplateTag):

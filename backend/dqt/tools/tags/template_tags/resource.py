@@ -56,7 +56,6 @@ class ResourceTemplateTag(TemplateTag):
             dataset_id
         )
 
-        # TODO: check if check was calculated
         self.set_param_validation(
             'check',
             lambda v: v in ResourceTemplateTag.CHECKS,
@@ -89,11 +88,6 @@ class ResourceTemplateTag(TemplateTag):
                 """, [check_name, self.dataset_id, check_name]
             )
             rows = cursor.fetchall()
-
-            # TODO
-            # if not rows:
-            #     continue
-
             result_report = rows[0][0]
 
             # getting examples
@@ -108,7 +102,6 @@ class ResourceTemplateTag(TemplateTag):
             result_examples = cursor.fetchall()[0][0]
             result = {**result_report, **result_examples}
 
-            # TODO: no rows retrieved
             return {
                 "name": _(str('resource.' + check_name + '.name')),
                 "description": _(str('resource.' + check_name + '.description')),

@@ -603,7 +603,6 @@ class FieldTemplateTag(TemplateTag):
             dataset_id
         )
 
-        # TODO: checks for given path were calculated
         self.set_param_validation(
             'path',
             lambda v: v in FieldTemplateTag.PATHS,
@@ -624,7 +623,6 @@ class FieldTemplateTag(TemplateTag):
 
     def prepare_data(self, data):
         path = self.get_param('path')
-        # TODO: the param check is necessary
 
         with connections["data"].cursor() as cursor:
             cursor.execute(
@@ -637,11 +635,6 @@ class FieldTemplateTag(TemplateTag):
                 """, [path, self.dataset_id, path]
             )
             rows = cursor.fetchall()
-
-            # TODO
-            # if not rows:
-            #     continue
-
             result = rows[0][0]
 
             # getting examples
@@ -654,7 +647,6 @@ class FieldTemplateTag(TemplateTag):
             )
             result_examples = cursor.fetchall()[0][0]
 
-            # TODO: no rows retrieved
             return {
                 "path": path,
                 "qualityCheck": list(result['quality']['checks'].keys())[0] if result['quality']['checks'] else None,
