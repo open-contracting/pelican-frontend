@@ -7,7 +7,7 @@ from lxml import etree
 from dqt.tools.errors import TagError
 from dqt.tools.misc import terms_enumeration
 
-
+# General tag class representing all kinds of tags, that can occur (TemplateTag, LeafTag, ...)
 class Tag:
     def __init__(self, gdocs, dataset_id):
         self.gdocs = gdocs
@@ -21,7 +21,11 @@ class Tag:
 
         self.required_data_fields = set()
 
+    # adds new param with its validation function
     def set_param_validation(self, name, validation, description='The value must be in a valid format.', required=False):
+        if self.params_finalized:
+            raise ValueError('The parameters for this tag have been already finalized. New parameter validations cannot be set.')
+
         if name in self.param_validations_mapping:
             raise AttributeError('The parameter \'%s\' already exists.' % name)
 
@@ -31,12 +35,14 @@ class Tag:
         self.param_validations_mapping[name] = validation
         self.param_validations_description_mapping[name] = description
 
+    # adds new field requirement that is must be passed to the tag for its correct function
     def set_required_data_field(self, name):
         if name in self.required_data_fields:
             raise AttributeError('%s data field already exists' % name)
 
         self.required_data_fields.add(name)
 
+    # sets parameter value; raises an exception when the params have already been finalized
     def set_param(self, name, value):
         if self.params_finalized:
             raise ValueError('The parameters for this tag have been already finalized. New parameter values cannot be set.')
@@ -57,15 +63,18 @@ class Tag:
 
         self.params_mapping[name] = value
 
+    # retrieves respective parameter if set, otherwise None
     def get_param(self, name):
         if name in self.params_mapping:
             return self.params_mapping[name]
         else:
             return None
 
+    # after param finalization new params cannot added nor set
     def finalize_params(self):
         self.params_finalized = True
 
+    # validates tag params, its values; can be performed only when params have been finalized
     def validate(self, data):
         if not self.params_finalized:
             raise ValueError('The parameters for this tag have not been finalized yet. Validation cannot be executed.')
@@ -90,7 +99,8 @@ class Tag:
         if missing_data_fields:
             raise AttributeError('The required data fields %s were not set' % list(missing_data_fields))
 
-
+# LeafTag can only be at the end of the whole tree of tags
+# LeafTag accepts data from its parent tag and returns either a string value or an etree._Element
 class LeafTag(Tag):
     def __init__(self, process_tag, gdocs, dataset_id):
         super().__init__(gdocs, dataset_id)
@@ -100,7 +110,8 @@ class LeafTag(Tag):
         self.validate(data)
         return self.process_tag(data)
 
-
+# TemplateTag signifies a context in which other tags can occur
+# It seeks its child tags in a google doc file that is retrieved using the template id
 class TemplateTag(Tag):
     TAG_EXPRESSION_XPATH = './/text()[contains(., "{%")]'
     FULL_TAG_LOCATION_XPATH = './/*[.//text()[contains(., "{full_tag}")] and not(./*//text()[contains(., "{full_tag}")])]'
@@ -127,8 +138,8 @@ class TemplateTag(Tag):
 
     def __init__(self, prepare_data, base_template_id, gdocs, dataset_id):
         super().__init__(gdocs, dataset_id)
-        self.prepare_data = prepare_data
-        self.base_template_id = base_template_id
+        self.prepare_data = prepare_data # the main method that is called in validate_and_process
+        self.base_template_id = base_template_id # in case no template id is specified explicitly
         self.template = None
         self.sub_tags_mapping = {}
 
@@ -139,24 +150,28 @@ class TemplateTag(Tag):
             required=True
         )
 
+    # overrides original finalize_params method
     def finalize_params(self):
         if self.get_param('template') is None:
             self.set_param('template', self.base_template_id)
 
         super().finalize_params()
 
+    # adds new sub tag
     def set_sub_tag(self, name, tag):
         if name in self.sub_tags_mapping:
             raise AttributeError('The sub-tag \'%s\'%s already exists' % name)
 
         self.sub_tags_mapping[name] = tag
 
+    # retrieves respective tag if set, otherwise None
     def get_sub_tag(self, name):
         if name in self.sub_tags_mapping:
             return self.sub_tags_mapping[name]
         else:
             return None
 
+    # replaces all occurrences of full_tag with string value in the template
     def set_text(self, value, full_tag):
         nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
         for node in nodes:
@@ -168,6 +183,8 @@ class TemplateTag(Tag):
                 if child.tail:
                     child.tail = child.tail.replace(full_tag, str(value))
 
+    # replaces all occurrences of full_tag with etree._Element value in the template
+    # some elements need a specific wrapper to be displayed correctly
     def set_element(self, element, full_tag, wrap=True):
         if wrap:
             wrapper_element = etree.Element(
@@ -288,6 +305,7 @@ class TemplateTag(Tag):
         self.merge_template_styles(sub_template, prefix)
         self.merge_template_fonts(sub_template)
 
+    # searches for tags in the template and sets their params
     def get_tags_mapping(self):
         tags_mapping = {}
 
@@ -345,6 +363,7 @@ class TemplateTag(Tag):
 
         return tags_mapping
 
+    # recursive method that calls sub tags' validate_and_process methods and incorporates the result in the template
     def validate_and_process(self, data):
         self.validate(data)
 
@@ -382,7 +401,7 @@ class TemplateTag(Tag):
 
         return self.template
 
-
+# TagExpression represents the literal tag as it occurs in the template
 class TagExpression:
     # full_tag must start with {%
     def __init__(self, full_tag):
@@ -391,6 +410,8 @@ class TagExpression:
         self.tag_param_mappings = []
         self.process()
 
+    # processes the tag
+    # in the case of incompletness or incorrect composition TagError is raised
     def process(self):
         if self.full_tag[-2:] != '%}':
             raise TagError(reason='The tag is incomplete. Please use the format for the tags: \
@@ -440,7 +461,7 @@ class TagExpression:
     def has_tag_chaining(self):
         return len(self.tag_names) > 1
 
-
+# processes tag expression with tag chaining, i.e. {% <tag> -> <sub tag> %}
 class TagChaining:
     def __init__(self, source_tag, tag_expression):
         self.source_tag = source_tag
