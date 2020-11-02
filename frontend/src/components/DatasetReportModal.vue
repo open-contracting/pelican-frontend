@@ -31,7 +31,7 @@
                 <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
                 <div v-for="(error, index) in submitData" v-bind:key="index">
                     <div>reason: {{ error.reason }}</div>
-                    <div>full_tag: {{ error.full_tag }}</div>
+                    <div>full tag: {{ error.full_tag }}</div>
                     <div>
                         <span>link: </span>
                         <a :href="'https://docs.google.com/document/d/' + error.template_id" target="_blank">

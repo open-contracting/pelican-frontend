@@ -7,7 +7,7 @@ from dqt.tools.misc import terms_enumeration
 def generate_timestamp_leaf_tag(key, datetime_format):
     class TimestampLeafTag(LeafTag):
         MODES = set([
-            'both',
+            'datetime',
             'date',
             'time',
         ])
@@ -33,12 +33,18 @@ def generate_timestamp_leaf_tag(key, datetime_format):
         def process_tag(self, data):
             d = datetime.datetime.strptime(data[key], datetime_format)
 
+            mode = None
+            if self.get_param('mode') is not None:
+                mode = self.get_param('mode')
+            else:
+                mode = 'datetime'
+
             d_str = None
-            if self.get_param('mode') == 'both' or self.get_param('mode') is None:
+            if mode == 'datetime':
                 d_str = d.strftime(TimestampLeafTag.BOTH_DATETIME_FORMAT)
-            elif self.get_param('mode') == 'date':
+            elif mode == 'date':
                 d_str = d.strftime(TimestampLeafTag.DATE_DATETIME_FORMAT)
-            elif self.get_param('mode') == 'time':
+            elif mode == 'time':
                 d_str = d.strftime(TimestampLeafTag.TIME_DATETIME_FORMAT)    
 
             return d_str
