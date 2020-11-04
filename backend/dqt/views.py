@@ -303,6 +303,8 @@ def generate_report(request):
         })
 
     response = None
+    gdocs = None
+    
     try:
         gdocs = Gdocs(input_message["document_id"])
         base = BaseTemplateTag(gdocs, input_message['dataset_id'])
@@ -335,6 +337,7 @@ def generate_report(request):
             'data': [er.as_dict()], # Can accommodate multiple TagErrors in the future
         })
     finally:
-        gdocs.destroy_tempdir()
+        if gdocs != None:
+            gdocs.destroy_tempdir()
         
     return response
