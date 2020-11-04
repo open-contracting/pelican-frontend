@@ -136,6 +136,7 @@ class Gdocs:
 
 class GoogleDriveCache:
     ROOT = 'google_drive_cache'
+    NO_OF_ATTEMPTS = 5
 
     def __init__(self, drive_service):
         if not default_storage.exists(GoogleDriveCache.ROOT):
@@ -161,32 +162,44 @@ class GoogleDriveCache:
     def get_file_path(self, file_id):
         self.refresh()
 
-        try:
-            drive_response = self.drive_service.files().get(
-                fileId=file_id,
-                fields='version'
-            ).execute()
-        except HttpError as er:
-            raise GoogleDriveError(
-                'File with id \'%s\' could not be accessed. Possible reasons are a non-existing file or insufficient permission settings.' % file_id
-            )
+        drive_response = None
+        for i in range(GoogleDriveCache.NO_OF_ATTEMPTS):
+            try:
+                drive_response = self.drive_service.files().get(
+                    fileId=file_id,
+                    fields='version'
+                ).execute()
+
+                break
+            except HttpError as er:
+                if i > (GoogleDriveCache.NO_OF_ATTEMPTS - 2):
+                    raise GoogleDriveError(
+                        'File with id \'%s\' could not be accessed. Possible reasons are a non-existing file or insufficient permission settings.' % file_id
+                    )
 
         version = int(drive_response['version'])
+        
         if (file_id in self.files and version > self.files[file_id]['version']) or \
                 (file_id not in self.files):
-            try:
-                drive_response = self.drive_service.files().export(
-                    fileId=file_id,
-                    mimeType="application/vnd.oasis.opendocument.text"
-                ).execute()
-            except HttpError as er:
-                raise GoogleDriveError(
-                    'File with id \'%s\' could not be downloaded. Possible reasons are a non-existing folder or insufficient permission settings.' % file_id
-                )
+            
+            drive_response = None
+            for i in range(GoogleDriveCache.NO_OF_ATTEMPTS):
+                try:
+                    drive_response = self.drive_service.files().export(
+                        fileId=file_id,
+                        mimeType="application/vnd.oasis.opendocument.text"
+                    ).execute()
+
+                    break
+                except HttpError as er:
+                    if i > (GoogleDriveCache.NO_OF_ATTEMPTS - 2):
+                        raise GoogleDriveError(
+                            'File with id \'%s\' could not be downloaded. Possible reasons are a non-existing folder or insufficient permission settings.' % file_id
+                        )
 
             return default_storage.save(
                 os.path.join(GoogleDriveCache.ROOT, str(version) + '_' + file_id),
                 ContentFile(drive_response)
             )
-
-        return self.files[file_id]['path']
+        else: 
+            return self.files[file_id]['path']
