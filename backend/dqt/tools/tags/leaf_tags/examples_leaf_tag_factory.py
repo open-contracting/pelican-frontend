@@ -20,7 +20,6 @@ def generate_examples_leaf_tag(key):
                 lambda v: v.isdigit(),
                 description='The value must be a positive integer.'
             )
-
             self.set_param_validation(
                 'mode',
                 lambda v: v in ExamplesLeafTag.MODES,
