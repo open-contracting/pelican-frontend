@@ -5,6 +5,7 @@ from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.timestamp_leaf_tag_factory import generate_timestamp_leaf_tag
 from dqt.tools.tags.leaf_tags.overview.lifecycle_object_count import LifecycleObjectCountLeafTag
 from dqt.tools.tags.leaf_tags.overview.release_date_count import ReleaseDateCountLeafTag
+from dqt.tools.tags.leaf_tags.overview.lifecycle_image import LifecycleImageLeafTag
 
 class OverviewTemplateTag(TemplateTag):
     def __init__(self, gdocs, dataset_id):
@@ -31,6 +32,8 @@ class OverviewTemplateTag(TemplateTag):
 
         self.set_sub_tag('lifecycleObjectCount', LifecycleObjectCountLeafTag)
         self.set_sub_tag('releaseDateCount', ReleaseDateCountLeafTag)
+
+        self.set_sub_tag('lifecycleImage', LifecycleImageLeafTag)
         
     
     def prepare_data(self, data):

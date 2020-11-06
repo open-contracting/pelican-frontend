@@ -1,4 +1,5 @@
 
+from PIL import Image, ImageDraw, ImageFont
 import seaborn as sns
 import matplotlib.pyplot as plt
 from collections import OrderedDict
@@ -12,6 +13,7 @@ for font_file in font_files:
     font_manager.fontManager.addfont(font_file)
 
 COLOR = {
+    'light_black': '#212529',
     'dark_grey': '#4a4a4a',
     'grey': '#656565',
     'light_grey': '#dee2e6',
@@ -423,3 +425,55 @@ def table_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
         return buffer, aspect_ratio
     else:
         return buffer
+
+
+def lifecycle_image(planning_count, tender_count, award_count, contract_count, implementation_count, return_aspect_ratio=False):
+    image = Image.open('dqt/tools/images/lifecycle.png')
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.truetype('dqt/tools/fonts/GT Eesti Pro Display Regular.ttf', 45)
+    
+    draw.text(
+        xy=(154, 283),
+        text=str(planning_count),
+        fill=COLOR['light_black'],
+        font=font,
+        anchor='ma',
+    )
+    draw.text(
+        xy=(415, 283),
+        text=str(tender_count),
+        fill=COLOR['light_black'],
+        font=font,
+        anchor='ma',
+    )
+    draw.text(
+        xy=(676, 283),
+        text=str(award_count),
+        fill=COLOR['light_black'],
+        font=font,
+        anchor='ma',
+    )
+    draw.text(
+        xy=(937, 283),
+        text=str(contract_count),
+        fill=COLOR['light_black'],
+        font=font,
+        anchor='ma',
+    )
+    draw.text(
+        xy=(1198, 283),
+        text=str(implementation_count),
+        fill=COLOR['light_black'],
+        font=font,
+        anchor='ma',
+    )
+
+    buffer = BytesIO()
+    image.save(buffer, format='png')
+    buffer.seek(0)
+
+    if return_aspect_ratio:
+        return buffer, (float(image.height) / float(image.width))
+    else:
+        return buffer
+    
