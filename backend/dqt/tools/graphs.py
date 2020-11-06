@@ -1,4 +1,5 @@
 
+import math
 from PIL import Image, ImageDraw, ImageFont
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -477,3 +478,68 @@ def lifecycle_image(planning_count, tender_count, award_count, contract_count, i
     else:
         return buffer
     
+
+def histogram_result_box(counts_pairs, return_aspect_ratio=False):
+    # figure initialization
+    plt.figure()
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+    aspect_ratio = 0.5
+    fig.set_size_inches(6, 6 * aspect_ratio)
+
+    # data preprocessing
+    values = [value for value, count in counts_pairs]
+    counts = [count for value, count in counts_pairs]
+
+    # figure creation
+    ax.bar(
+        x=list(range(len(counts_pairs))),
+        height=counts,
+        color=len(counts_pairs) * [COLOR['blue']],
+    )
+
+    ax.set_xticks(list(set([
+        0,
+        len(counts_pairs) // 2,
+        len(counts_pairs) - 1,
+    ])))
+    if len(counts_pairs) == 1:
+        xticklabels = [values[0]]
+    elif len(counts_pairs) == 2:
+        xticklabels = [values[0], values[-1]]
+    else:
+        xticklabels = [values[0], values[len(counts_pairs) // 2], values[-1]]
+    ax.set_xticklabels(
+        xticklabels,
+        fontfamily='GT Eesti Pro Display',
+        color=COLOR['light_black'],  
+    )
+
+    max_count = max(counts)
+    log_10 = int(math.log10(max_count))
+    max_ytick = math.ceil(max_count / (10 ** log_10)) * (10 ** log_10)
+    ax.set_ylim(top=max_ytick)
+
+    yticklabels = [0, max_ytick]
+    ax.set_yticks(yticklabels)
+    ax.set_yticklabels(
+        yticklabels,
+        fontfamily='GT Eesti Pro Display',
+        color=COLOR['light_black'],  
+    )
+    
+    ax.tick_params(axis='both', which='both', length=0)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['bottom'].set_visible(False)
+    ax.spines['left'].set_visible(False)
+
+    buffer = BytesIO()
+    plt.savefig(buffer, dpi=500, format='png', bbox_inches='tight')
+    buffer.seek(0)
+    plt.close(fig)
+
+    if return_aspect_ratio:
+        return buffer, aspect_ratio
+    else:
+        return buffer
