@@ -1,8 +1,11 @@
 
 import random
 from dqt.tools.tags.tag import LeafTag
+from dqt.tools.misc import terms_enumeration
+from dqt.tools.elements import multiple_line_elements
 
 class ExamplesLeafTag(LeafTag):
+    MODES = ('oneLine', 'multipleLines')
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -16,6 +19,11 @@ class ExamplesLeafTag(LeafTag):
             'max',
             lambda v: v.isdigit(),
             description='The value must be a positive integer.'
+        )
+        self.set_param_validation(
+            'mode',
+            lambda v: v in ExamplesLeafTag.MODES,
+            description='The value must be one of the following: %s.' % terms_enumeration(ExamplesLeafTag.MODES),
         )
 
         self.set_required_data_field('examples')
@@ -33,12 +41,16 @@ class ExamplesLeafTag(LeafTag):
             value_examples = []
 
         max_count = self.get_param('max')
-        if max_count is not None:
-            return ', '.join(
-                random.sample(
-                    value_examples,
-                    k=min(int(max_count), len(value_examples))
-                )
-            )
-        else:
-            return ', '.join(value_examples)
+        if max_count is None:
+            max_count = len(value_examples)
+
+        examples = random.sample(value_examples, k=int(max_count))
+
+        mode = self.get_param('mode')
+        if mode is None:
+            mode = 'oneLine'
+
+        if mode == 'oneLine':
+            return ', '.join(examples)
+        elif mode == 'multipleLines':
+            return multiple_line_elements(examples)

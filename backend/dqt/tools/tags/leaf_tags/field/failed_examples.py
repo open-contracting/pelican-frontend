@@ -2,9 +2,11 @@
 import random
 from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import terms_enumeration
+from dqt.tools.elements import multiple_line_elements
 
 class FailedExamplesLeafTag(LeafTag):
     LEVELS = ('coverage', 'coverageSet', 'coverageEmpty', 'quality')
+    MODES = ('oneLine', 'multipleLines')
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(
@@ -24,6 +26,11 @@ class FailedExamplesLeafTag(LeafTag):
             lambda v: v.isdigit(),
             description='The value must be a positive integer.'
         )
+        self.set_param_validation(
+            'mode',
+            lambda v: v in FailedExamplesLeafTag.MODES,
+            description='The value must be one of the following: %s.' % terms_enumeration(FailedExamplesLeafTag.MODES),
+        )
 
         self.set_required_data_field('coverageFailedExamples')
         self.set_required_data_field('coverageSetFailedExamples')
@@ -31,14 +38,19 @@ class FailedExamplesLeafTag(LeafTag):
         self.set_required_data_field('qualityFailedExamples')
         
     def process_tag(self, data):
+        all_examples = data['%sFailedExamples' % self.get_param('level')]
+        
         max_count = self.get_param('max')
-        examples = data['%sFailedExamples' % self.get_param('level')]
-        if max_count is not None:
-            return ', '.join(
-                random.sample(
-                    examples,
-                    k=min(int(max_count), len(examples))
-                )
-            )
-        else:
+        if max_count is None:
+            max_count = len(all_examples)
+
+        examples = random.sample(all_examples, k=int(max_count))
+
+        mode = self.get_param('mode')
+        if mode is None:
+            mode = 'oneLine'
+
+        if mode == 'oneLine':
             return ', '.join(examples)
+        elif mode == 'multipleLines':
+            return multiple_line_elements(examples)

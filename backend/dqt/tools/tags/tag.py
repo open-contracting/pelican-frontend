@@ -184,18 +184,16 @@ class TemplateTag(Tag):
                     child.tail = child.tail.replace(full_tag, str(value))
 
     # replaces all occurrences of full_tag with etree._Element value in the template
-    # some elements need a specific wrapper to be displayed correctly
-    def set_element(self, element, full_tag, wrap=True):
-        if wrap:
-            wrapper_element = etree.Element(
-                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
-                attrib={
-                    '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
-                }
-            )
-            wrapper_element.append(copy.deepcopy(element))
-        else:
-            wrapper_element = copy.deepcopy(element)
+    # automatically wraps an element in <text:p>
+    # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
+    def set_element(self, element, full_tag):
+        wrapper_element = etree.Element(
+            '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p',
+            attrib={
+                '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name': 'Standard'
+            }
+        )
+        wrapper_element.append(copy.deepcopy(element))
 
         nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
         for node in nodes: 
@@ -214,6 +212,32 @@ class TemplateTag(Tag):
                     parent = node.getparent()
             
             node.addnext(copy.deepcopy(wrapper_element))
+
+    # replaces all occurrences of full_tag with etree._Element values in the template
+    # does not wrap each of the new elements in <text:p>
+    # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
+    def set_elements(self, elements, full_tag):
+        nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
+        for node in nodes: 
+            if node.text:
+                node.text = node.text.replace(full_tag, '')
+            for child in node:
+                if child.text:
+                    child.text = child.text.replace(full_tag, '') # probably unnecessary
+                if child.tail:
+                    child.tail = child.tail.replace(full_tag, '')
+
+            if node.tag != '{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p':
+                parent = node.getparent()
+                while parent.tag != '{urn:oasis:names:tc:opendocument:xmlns:office:1.0}text':
+                    node = parent
+                    parent = node.getparent()
+            
+            current_node = node
+            for element in elements:
+                element_copy = copy.deepcopy(element)
+                current_node.addnext(element_copy)
+                current_node = element_copy
 
     def get_template_content(self, template):
         return template.xpath(
@@ -381,12 +405,14 @@ class TemplateTag(Tag):
                         er.set_template_id(self.get_param('template'))
                     raise er
                 
-                if isinstance(result, etree._Element):
+                if isinstance(result, list) and all(isinstance(el, etree._Element) for el in result):
+                    self.set_elements(result, full_tag)
+                elif isinstance(result, etree._Element):
                     self.set_element(result, full_tag)
                 elif isinstance(result, str):
                     self.set_text(result, full_tag)
                 else:
-                    raise ValueError('LeafTag\'s process_tag method must return of the following types: \'etree.Element\', \'str\'.')
+                    raise ValueError('LeafTag\'s process_tag method must return of the following types: list of \'etree.Element\', \'etree.Element\', \'str\'.')
 
             elif isinstance(tag, TemplateTag):
                 try:
