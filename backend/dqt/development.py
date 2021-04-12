@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'dqt.wsgi.application'
 
 DATABASES = {
      'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'OPTIONS': {
                 'options': '-c search_path=django,public'
             },
@@ -91,7 +91,7 @@ DATABASES = {
     },
 
     'data': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'OPTIONS': {
                 'options': '-c search_path=development,public'
             },
