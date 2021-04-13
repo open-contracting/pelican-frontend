@@ -1,7 +1,6 @@
-from django.contrib.postgres.fields import JSONField
 from django.db.models import (CASCADE, BigAutoField, BigIntegerField,
                               BooleanField, CharField, DateTimeField,
-                              ForeignKey, IntegerField, Model)
+                              ForeignKey, IntegerField, JSONField, Model)
 
 
 class Dataset(Model):
