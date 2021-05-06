@@ -37,7 +37,7 @@
                     <div>
                         <span class="hide_button" @click.stop="switchHidden(n)">
                             <font-awesome-icon icon="eye-slash" class="hidden_icon" />
-                            <i>{{ $t('field.hidden', { n: n._hidden.length }) }}</i>
+                            <i>{{ $t("field.hidden", { n: n._hidden.length }) }}</i>
                         </span>
                     </div>
                 </template>
@@ -47,7 +47,7 @@
                     v-if="isSearched(h)"
                     :check="h"
                     :key="h.path"
-                    :class="['hidden_row', {'hidden': isHidden(n)}]"
+                    :class="['hidden_row', { hidden: isHidden(n) }]"
                 >
                     <span v-html="highlightSearch(h.path)" />
                 </FieldCheckTableRow>
@@ -62,7 +62,7 @@ import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
 import SortButtons from "@/components/SortButtons.vue";
 
 export default {
-    data: function() {
+    data: function () {
         return {
             showHidden: {}
         };
@@ -71,10 +71,10 @@ export default {
     components: { FieldCheckTableRow, SortButtons },
     mixins: [fieldCheckMixins],
     computed: {
-        stats: function() {
+        stats: function () {
             return this.$store.getters.fieldLevelStats;
         },
-        tableData: function() {
+        tableData: function () {
             if (!this.stats) {
                 return [];
             }
@@ -90,41 +90,39 @@ export default {
 
             return data;
         },
-        sortedBy: function() {
+        sortedBy: function () {
             var value = this.$store.getters.fieldCheckSortedBy;
             return value == null ? this.defaultSorting.by : value;
         },
-        isAscendingSorted: function() {
+        isAscendingSorted: function () {
             var value = this.$store.getters.fieldCheckSortedAscending;
             return value == null ? this.defaultSorting.asc : value;
         },
-        defaultSorting: function() {
+        defaultSorting: function () {
             return { by: "processingOrder", asc: true };
         }
     },
-    mounted: function() {
-        this.$on("field-check-table-sort", data =>
-            this.$store.commit("setFieldCheckSorting", data)
-        );
+    mounted: function () {
+        this.$on("field-check-table-sort", data => this.$store.commit("setFieldCheckSorting", data));
 
         this.sortBy(this.tableData, this.sortedBy, this.isAscendingSorted);
     },
     methods: {
-        hasHidden: function(check) {
+        hasHidden: function (check) {
             return "_hidden" in check && check._hidden.length > 0;
         },
-        switchHidden: function(check) {
+        switchHidden: function (check) {
             var patch = {};
             patch[check.path] = !this.showHidden[check.path];
             this.showHidden = Object.assign({}, this.showHidden, patch);
         },
-        isHidden: function(check) {
+        isHidden: function (check) {
             return !this.showHidden[check.path];
         },
-        resetSorting: function() {
+        resetSorting: function () {
             this.sortByProcessingOrder(this.tableData);
         },
-        isSearched: function(check) {
+        isSearched: function (check) {
             return check && this.isPathSearched(check.path);
         }
     }

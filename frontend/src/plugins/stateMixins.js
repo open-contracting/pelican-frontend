@@ -28,12 +28,7 @@ export default {
             return false;
         },
         atLeastOneLoaded() {
-            return (
-                this.datasetLoaded ||
-                this.resourceLoaded ||
-                this.fieldLoaded ||
-                this.timeVarianceLoaded
-            );
+            return this.datasetLoaded || this.resourceLoaded || this.fieldLoaded || this.timeVarianceLoaded;
         }
     }
 };

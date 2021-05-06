@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid" id="app">
         <router-view />
-        <NavigationContextMenu/>
+        <NavigationContextMenu />
     </div>
 </template>
 
@@ -10,7 +10,7 @@ import NavigationContextMenu from "@/components/NavigationContextMenu.vue";
 
 export default {
     components: { NavigationContextMenu },
-    data: function() {
+    data: function () {
         return {};
     }
 };

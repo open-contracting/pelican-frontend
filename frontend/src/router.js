@@ -91,19 +91,11 @@ export default new Router({
             component: ResourceCheckDetail,
             beforeEnter: (to, from, next) => {
                 if (store.getters.datasetId != to.params.datasetId) {
-                    store
-                        .dispatch("loadDataset", to.params.datasetId)
-                        .then(() => {
-                            store.dispatch(
-                                "loadResourceLevelCheckDetail",
-                                to.params.check
-                            );
-                        });
+                    store.dispatch("loadDataset", to.params.datasetId).then(() => {
+                        store.dispatch("loadResourceLevelCheckDetail", to.params.check);
+                    });
                 } else {
-                    store.dispatch(
-                        "loadResourceLevelCheckDetail",
-                        to.params.check
-                    );
+                    store.dispatch("loadResourceLevelCheckDetail", to.params.check);
                 }
 
                 next();
@@ -126,14 +118,9 @@ export default new Router({
             component: FieldCheckDetail,
             beforeEnter: (to, from, next) => {
                 if (store.getters.datasetId != to.params.datasetId) {
-                    store
-                        .dispatch("loadDataset", to.params.datasetId)
-                        .then(() => {
-                            store.dispatch(
-                                "loadFieldLevelCheckDetail",
-                                to.params.path
-                            );
-                        });
+                    store.dispatch("loadDataset", to.params.datasetId).then(() => {
+                        store.dispatch("loadFieldLevelCheckDetail", to.params.path);
+                    });
                 } else {
                     store.dispatch("loadFieldLevelCheckDetail", to.params.path);
                 }

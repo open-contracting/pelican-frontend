@@ -13,18 +13,17 @@
             v-bind:key="index"
             v-on:click="clickItem(index)"
         >
-        {{ name }}
+            {{ name }}
         </b-dropdown-item-button>
     </b-dropdown>
 </template>
 
 <script>
-
 export default {
-    data: function() {
+    data: function () {
         return {
             selectedIndex: 0
-        }
+        };
     },
     props: {
         filterNames: Array,
@@ -33,12 +32,12 @@ export default {
             default: 0
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.selectedIndex = this.startIndex;
         this.clickItem(this.startIndex);
     },
     methods: {
-        clickItem: function(index) {
+        clickItem: function (index) {
             this.selectedIndex = index;
             this.$emit("newSelectedIndex", index);
         }
@@ -58,7 +57,7 @@ export default {
         padding: 0px;
         border-radius: 4px;
     }
-    
+
     .btn-primary {
         border: none;
         background-color: transparent;
@@ -78,7 +77,8 @@ export default {
         padding-bottom: 3px;
     }
 
-    .dropdown-toggle, .dropdown-item {
+    .dropdown-toggle,
+    .dropdown-item {
         border-radius: 4px;
         border: 1px solid transparent;
     }
@@ -97,13 +97,10 @@ export default {
         box-shadow: none;
         outline: none;
     }
-
 }
-
 
 #show_prefix {
     color: $headings-light-color;
     font-family: $font-family-thin;
 }
-
 </style>

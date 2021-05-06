@@ -1,0 +1,14 @@
+{
+  "tabWidth": 4,
+  "trailingComma": "none",
+  "printWidth": 119,
+  "arrowParens": "avoid",
+  "overrides": [
+    {
+      "files": ["*.yaml", ".prettierrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}

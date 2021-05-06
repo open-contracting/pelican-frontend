@@ -1,15 +1,15 @@
-export default {    
+export default {
     methods: {
-        sort: function(checks, comparator, asc = true) {
+        sort: function (checks, comparator, asc = true) {
             if (checks != null) {
-                checks.sort(comparator)
+                checks.sort(comparator);
                 if (!asc) {
-                    checks.reverse()
+                    checks.reverse();
                 }
             }
         },
-        compareNumbers: function(a, b) {
-            return a - b
+        compareNumbers: function (a, b) {
+            return a - b;
         }
     }
 };

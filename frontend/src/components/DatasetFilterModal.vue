@@ -1,7 +1,9 @@
 <template>
     <span class="just_holder">
         <Loader v-if="isSubmitting && submitResult == null"></Loader>
-        <b-alert v-if="isSubmitting && submitResult != null" variant="success" show>{{ $t("datasetFilter.statusOk") }}</b-alert>
+        <b-alert v-if="isSubmitting && submitResult != null" variant="success" show>{{
+            $t("datasetFilter.statusOk")
+        }}</b-alert>
         <form v-if="!isSubmitting" class="modal_box align-items-center">
             <div class="form-group row">
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
@@ -31,7 +33,11 @@
             <div class="form-group row section_row">
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
                 <div class="col-8">
-                    <DatasetValuesMultiselect :updateSelected="updateBuyerName" :datasetId="dataset != null ? dataset.id : null" jsonPath="buyer.name" />
+                    <DatasetValuesMultiselect
+                        :updateSelected="updateBuyerName"
+                        :datasetId="dataset != null ? dataset.id : null"
+                        jsonPath="buyer.name"
+                    />
                 </div>
             </div>
             <div class="form-group row">
@@ -55,7 +61,9 @@
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
                 <div class="col-8">
                     <input class="regex_input" v-model="procuringEntityNameRegex" />
-                    <small class="form-text text-muted">{{ $t("datasetFilter.procuringEntityNameRegexTooltip") }}</small>
+                    <small class="form-text text-muted">{{
+                        $t("datasetFilter.procuringEntityNameRegexTooltip")
+                    }}</small>
                 </div>
             </div>
             <div class="text-center">
@@ -67,12 +75,19 @@
                 >
                     {{ $t("datasetFilter.submit") }}
                     <span v-if="gettingCountsToken == null">
-                        <span
-                            v-if="items!= null && items > 0  && (dataset != null && items != dataset.size)"
-                        >({{ items | formatNumber }} from {{ dataset.size | formatNumber }} {{ $t("datasetFilter.items") }})</span>
-                        <span v-if="(dataset != null && items == dataset.size)">({{ $t("datasetFilter.itemsAll") }})</span>
+                        <span v-if="items != null && items > 0 && dataset != null && items != dataset.size"
+                            >({{ items | formatNumber }} from {{ dataset.size | formatNumber }}
+                            {{ $t("datasetFilter.items") }})</span
+                        >
+                        <span v-if="dataset != null && items == dataset.size"
+                            >({{ $t("datasetFilter.itemsAll") }})</span
+                        >
                     </span>
-                    <b-spinner v-if="gettingCountsToken != null" variant="default" style="width: 1.2rem; height: 1.2rem;"></b-spinner>
+                    <b-spinner
+                        v-if="gettingCountsToken != null"
+                        variant="default"
+                        style="width: 1.2rem; height: 1.2rem"
+                    ></b-spinner>
                 </button>
             </div>
         </form>
@@ -88,7 +103,7 @@ import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue"
 
 export default {
     props: ["dataset"],
-    data: function() {
+    data: function () {
         return {
             isSubmitting: false,
             gettingCountsToken: null,
@@ -105,22 +120,17 @@ export default {
         };
     },
     computed: {
-        firstDate: function() {
+        firstDate: function () {
             if (this.dataset.meta.period.length > 0) {
-                return moment(
-                    this.dataset.meta.period[0].date_str,
-                    "MMM-YY"
-                ).toDate();
+                return moment(this.dataset.meta.period[0].date_str, "MMM-YY").toDate();
             } else {
                 return null;
             }
         },
-        lastDate: function() {
+        lastDate: function () {
             if (this.dataset.meta.period.length > 0) {
                 var date = moment(
-                    this.dataset.meta.period[
-                        this.dataset.meta.period.length - 1
-                    ].date_str,
+                    this.dataset.meta.period[this.dataset.meta.period.length - 1].date_str,
                     "MMM-YY"
                 ).toDate();
                 return new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -164,19 +174,12 @@ export default {
         createDatasetFilter() {
             this.isSubmitting = true;
             axios
-                .post(
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetFilter,
-                    this.datasetFilterMessage()
-                )
+                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetFilter, this.datasetFilterMessage())
                 .then(response => {
                     if (response.status == 200) {
-                        this.submitResult = this.$t(
-                            "datasetFilter.submitResultOk"
-                        );
+                        this.submitResult = this.$t("datasetFilter.submitResultOk");
                     } else {
-                        this.submitResult = this.$t(
-                            "datasetFilter.submitResultOk"
-                        );
+                        this.submitResult = this.$t("datasetFilter.submitResultOk");
                     }
 
                     setTimeout(() => {
@@ -184,7 +187,7 @@ export default {
                         this.$router.go();
                     }, 2000);
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     // TODO
                     throw new Error(error);
                 });
@@ -196,20 +199,14 @@ export default {
             }
 
             if (this.gettingCountsToken != null) {
-                this.gettingCountsToken.cancel(
-                    "Operation canceled by the user."
-                );
+                this.gettingCountsToken.cancel("Operation canceled by the user.");
             }
 
             this.gettingCountsToken = axios.CancelToken.source();
             axios
-                .post(
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems,
-                    message,
-                    {
-                        cancelToken: this.gettingCountsToken.token
-                    }
-                )
+                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, message, {
+                    cancelToken: this.gettingCountsToken.token
+                })
                 .then(response => {
                     if (response.status == 200) {
                         this.items = response["data"]["items"];
@@ -219,7 +216,7 @@ export default {
 
                     this.gettingCountsToken = null;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     // TODO
                     throw new Error(error);
                 });

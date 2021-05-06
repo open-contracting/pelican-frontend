@@ -3,7 +3,11 @@
         <div class="picker_table">
             <div class="row">
                 <div class="search_input col col-12 col-md-4">
-                    <SearchInput :placeholder="$t('dataset.search')" :preset="search" :on-update="(search) => $store.commit('setDatasetSearch', search)" />
+                    <SearchInput
+                        :placeholder="$t('dataset.search')"
+                        :preset="search"
+                        :on-update="search => $store.commit('setDatasetSearch', search)"
+                    />
                 </div>
             </div>
             <div class="thr row">
@@ -56,7 +60,7 @@
                         <span class="modified">{{ $t("modified") }}</span>
                     </SortButtons>
                 </div>
-                <div class="th col align-self-center text-left">{{ $t('dataset.timeVariance') }}</div>
+                <div class="th col align-self-center text-left">{{ $t("dataset.timeVariance") }}</div>
             </div>
 
             <template v-for="(item, index) in datasets">
@@ -70,10 +74,26 @@
                 />
             </template>
         </div>
-        <b-modal id="filter-modal" size="lg" ref="filter-modal" hide-footer :title="$t('datasetFilter.headline')" static lazy>
+        <b-modal
+            id="filter-modal"
+            size="lg"
+            ref="filter-modal"
+            hide-footer
+            :title="$t('datasetFilter.headline')"
+            static
+            lazy
+        >
             <DatasetFilterModal :dataset="filteredDataset" />
         </b-modal>
-        <b-modal id="report-modal" size="lg" ref="report-modal" hide-footer :title="$t('datasetReport.headline')" static lazy>
+        <b-modal
+            id="report-modal"
+            size="lg"
+            ref="report-modal"
+            hide-footer
+            :title="$t('datasetReport.headline')"
+            static
+            lazy
+        >
             <DatasetReportModal :dataset="reportDataset" />
         </b-modal>
     </span>
@@ -96,7 +116,7 @@ import DatasetReportModal from "@/components/DatasetReportModal.vue";
 
 export default {
     mixins: [stateMixin, sortMixins],
-    data: function() {
+    data: function () {
         return {
             datasets: [],
             loading: false,
@@ -113,50 +133,40 @@ export default {
         DatasetReportModal
     },
     computed: {
-        search: function() {
+        search: function () {
             return this.$store.getters.datasetSearch;
         },
-        phases: function() {
-            return [
-                "PLANNED",
-                "CONTRACTING_PROCESS",
-                "DATASET",
-                "TIME_VARIANCE",
-                "CHECKED"
-            ];
+        phases: function () {
+            return ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];
         },
-        states: function() {
+        states: function () {
             return ["WAITING", "IN_PROGRESS", "OK", "FAILED"];
         },
-        sortedBy: function() {
+        sortedBy: function () {
             var value = this.$store.getters.datasetSortedBy;
             return value == null ? this.defaultSorting.by : value;
         },
-        isAscendingSorted: function() {
+        isAscendingSorted: function () {
             var value = this.$store.getters.datasetSortedAscending;
             return value == null ? this.defaultSorting.asc : value;
         },
-        defaultSorting: function() {
+        defaultSorting: function () {
             return { by: "created", asc: false };
         }
     },
     methods: {
-        showFilter: function(dataset) {
+        showFilter: function (dataset) {
             this.filteredDataset = dataset;
             this.$bvModal.show("filter-modal");
         },
-        showReport: function(dataset) {
+        showReport: function (dataset) {
             this.reportDataset = dataset;
             this.$bvModal.show("report-modal");
-            
         },
-        isSearched: function(name) {
-            return (
-                !this.search ||
-                name.toLowerCase().includes(this.search.toLowerCase())
-            );
+        isSearched: function (name) {
+            return !this.search || name.toLowerCase().includes(this.search.toLowerCase());
         },
-        sortBy: function(by, asc = true) {
+        sortBy: function (by, asc = true) {
             if (!this.datasets) {
                 return;
             }
@@ -180,16 +190,10 @@ export default {
                         if (a.state == b.state) {
                             return a.id.localeCompare(b.id);
                         } else {
-                            return this.compareNumbers(
-                                this.states.indexOf(a.state),
-                                this.states.indexOf(b.state)
-                            );
+                            return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state));
                         }
                     } else {
-                        return this.compareNumbers(
-                            this.phases.indexOf(a.phase),
-                            this.phases.indexOf(b.phase)
-                        );
+                        return this.compareNumbers(this.phases.indexOf(a.phase), this.phases.indexOf(b.phase));
                     }
                 };
             } else {
@@ -201,14 +205,11 @@ export default {
         }
     },
     mounted() {
-        var buildDatasetsTree = function(datasets, filtered_parent_id) {
+        var buildDatasetsTree = function (datasets, filtered_parent_id) {
             var result = [];
-            datasets.forEach(function(item) {
+            datasets.forEach(function (item) {
                 if (item.filtered_parent_id == filtered_parent_id) {
-                    item.filtered_children = buildDatasetsTree(
-                        datasets,
-                        item.id
-                    );
+                    item.filtered_children = buildDatasetsTree(datasets, item.id);
                     result.push(item);
                 }
             });
@@ -219,18 +220,12 @@ export default {
         axios
             .get(url)
             .then(response => {
-                this.datasets = buildDatasetsTree(
-                    response["data"]["objects"],
-                    null
-                );
+                this.datasets = buildDatasetsTree(response["data"]["objects"], null);
 
                 var self = this;
-                this.datasets.forEach(function(item) {
+                this.datasets.forEach(function (item) {
                     if (item.ancestor_id != null) {
-                        var ancestor = self.datasets.find(
-                            element =>
-                                String(element.ancestor_id) == item.ancestor_id
-                        );
+                        var ancestor = self.datasets.find(element => String(element.ancestor_id) == item.ancestor_id);
                         item.ancestor_name = ancestor.name;
                     } else {
                         item.ancestor_name = null;
@@ -238,7 +233,7 @@ export default {
                 });
                 this.sortBy(this.sortedBy, this.isAscendingSorted);
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 throw new Error(error);
             });
     }

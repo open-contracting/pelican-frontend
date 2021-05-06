@@ -5,40 +5,40 @@
         <div class="row" v-if="dataset.filter_message">
             <div class="col col-12 col-xl-6 filtered">
                 <h4>
-                    {{ $t('overview.filtered.title') }}
+                    {{ $t("overview.filtered.title") }}
                     <Tooltip :text="$t('overview.filtered.info')"></Tooltip>
                 </h4>
                 <div class="result_box">
                     <div v-if="data_quality" class="table_hl">
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('overview.filtered.original')}}</div>
+                            <div class="td col col-6">{{ $t("overview.filtered.original") }}</div>
                             <div class="td col col-6">
                                 {{ dataset.filtered_parent_name }}
                                 <span class="dataset_id">(Id {{ dataset.filtered_parent_id }})</span>&nbsp;
                             </div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('datasetFilter.releaseDateFrom')}}</div>
+                            <div class="td col col-6">{{ $t("datasetFilter.releaseDateFrom") }}</div>
                             <div class="td col col-6">{{ dataset.filter_message.release_date_from }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('datasetFilter.releaseDateTo')}}</div>
+                            <div class="td col col-6">{{ $t("datasetFilter.releaseDateTo") }}</div>
                             <div class="td col col-6">{{ dataset.filter_message.release_date_to }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('datasetFilter.buyerNameRegex')}}</div>
+                            <div class="td col col-6">{{ $t("datasetFilter.buyerNameRegex") }}</div>
                             <div class="td col col-6">{{ dataset.filter_message.buyer_regex }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('datasetFilter.procuringEntityNameRegex')}}</div>
+                            <div class="td col col-6">{{ $t("datasetFilter.procuringEntityNameRegex") }}</div>
                             <div class="td col col-6">{{ dataset.filter_message.procuring_entity_regex }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('datasetFilter.buyerName')}}</div>
+                            <div class="td col col-6">{{ $t("datasetFilter.buyerName") }}</div>
                             <div class="td col col-6">{{ filtered_buyer.join(", ") }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-6">{{ $t('datasetFilter.procuringEntityName')}}</div>
+                            <div class="td col col-6">{{ $t("datasetFilter.procuringEntityName") }}</div>
                             <div class="td col col-6">{{ filtered_procuring_entity.join(", ") }}</div>
                         </div>
                     </div>
@@ -55,23 +55,34 @@
 
         <div class="row">
             <div class="col-12 col-xl-6">
-                <h4>{{ $t('overview.collection_metadata') }}</h4>
+                <h4>{{ $t("overview.collection_metadata") }}</h4>
                 <div class="result_box collection_metadata col col-12">
                     <div class="table_hl" v-if="collection">
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.compiled_releases.value_label') }}</div>
+                            <div class="td col col-4 d-flex align-items-center">
+                                {{ $t("overview.compiled_releases.value_label") }}
+                            </div>
                             <div class="td col col-8 d-flex align-items-center break_word">
-                                <span class="ocid_count bold">{{ compiled_releases.total_unique_ocids | formatNumber }}</span>
+                                <span class="ocid_count bold">{{
+                                    compiled_releases.total_unique_ocids | formatNumber
+                                }}</span>
                             </div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publisher')}}</div>
-                            <div class="td col col-8 d-flex align-items-center break_word">{{ collection.publisher }}</div>
+                            <div class="td col col-4 d-flex align-items-center">{{ $t("overview.publisher") }}</div>
+                            <div class="td col col-8 d-flex align-items-center break_word">
+                                {{ collection.publisher }}
+                            </div>
                         </div>
                         <div class="tr row">
                             <div class="td col col-4 d-flex align-items-center">URL</div>
                             <div class="td col col-8 d-flex align-items-center break_word">
-                                <a v-if="collection.url && collection.url.startsWith('http')" :href="collection.url" target="_blank">{{ collection.url }}</a>
+                                <a
+                                    v-if="collection.url && collection.url.startsWith('http')"
+                                    :href="collection.url"
+                                    target="_blank"
+                                    >{{ collection.url }}</a
+                                >
                                 <template v-else>
                                     <template v-if="collection.url">{{ collection.url }}</template>
                                 </template>
@@ -82,50 +93,70 @@
                             <div class="td col col-8 d-flex align-items-center">{{ collection.ocid_prefix }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.datalicense')}}</div>
+                            <div class="td col col-4 d-flex align-items-center">{{ $t("overview.datalicense") }}</div>
                             <div class="td col col-8 d-flex align-items-center break_word">
-                                <a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{ collection.data_license }}</a>
+                                <a v-if="collection.data_license" :href="collection.data_license" target="_blank">{{
+                                    collection.data_license
+                                }}</a>
                             </div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publicationPolicy')}}</div>
+                            <div class="td col col-4 d-flex align-items-center">
+                                {{ $t("overview.publicationPolicy") }}
+                            </div>
                             <div class="td col col-8 d-flex align-items-center break_word">
-                                <a v-if="collection.publication_policy" :href="collection.publication_policy" target="_blank">{{ collection.publication_policy }}</a>
+                                <a
+                                    v-if="collection.publication_policy"
+                                    :href="collection.publication_policy"
+                                    target="_blank"
+                                    >{{ collection.publication_policy }}</a
+                                >
                             </div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.extensions')}}</div>
+                            <div class="td col col-4 d-flex align-items-center">{{ $t("overview.extensions") }}</div>
                             <div v-if="collection.extensions" class="td col col-8">
                                 <template v-for="(e, i) in collection.extensions">
                                     <span v-if="e.hasOwnProperty('name')" :key="i">
                                         <a
-                                            v-if="e.hasOwnProperty('documentationUrl') && (e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] != '' : e.documentationUrl != '')"
-                                            :href="e.documentationUrl.hasOwnProperty('en') ? e.documentationUrl['en'] : e.documentationUrl"
+                                            v-if="
+                                                e.hasOwnProperty('documentationUrl') &&
+                                                (e.documentationUrl.hasOwnProperty('en')
+                                                    ? e.documentationUrl['en'] != ''
+                                                    : e.documentationUrl != '')
+                                            "
+                                            :href="
+                                                e.documentationUrl.hasOwnProperty('en')
+                                                    ? e.documentationUrl['en']
+                                                    : e.documentationUrl
+                                            "
                                             :key="i"
                                             target="_blank"
-                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                            >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a
+                                        >
                                         <a
                                             v-else-if="e.hasOwnProperty('repositoryUrl')"
                                             :href="e.repositoryUrl"
                                             :key="i"
                                             target="_blank"
-                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
-                                        <a
-                                            v-else
-                                            :key="i"
-                                            target="_blank"
-                                        >{{ e.name.hasOwnProperty('en') ? e.name['en'] : e.name }}</a>
+                                            >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a
+                                        >
+                                        <a v-else :key="i" target="_blank">{{
+                                            e.name.hasOwnProperty("en") ? e.name["en"] : e.name
+                                        }}</a>
                                         <template v-if="i + 1 < collection.extensions.length">, </template>
                                     </span>
                                 </template>
                             </div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publishedFrom')}}</div>
+                            <div class="td col col-4 d-flex align-items-center">
+                                {{ $t("overview.publishedFrom") }}
+                            </div>
                             <div class="td col col-8 d-flex align-items-center">{{ collection.published_from }}</div>
                         </div>
                         <div class="tr row">
-                            <div class="td col col-4 d-flex align-items-center">{{ $t('overview.publishedTo')}}</div>
+                            <div class="td col col-4 d-flex align-items-center">{{ $t("overview.publishedTo") }}</div>
                             <div class="td col col-8 d-flex align-items-center">{{ collection.published_to }}</div>
                         </div>
                     </div>
@@ -134,19 +165,19 @@
             <div class="col-12 col-xl-6">
                 <div class="row">
                     <div class="col-12 col-md-6 col-xl-12">
-                        <h4>{{ $t('overview.kingfisher_metadata') }}</h4>
+                        <h4>{{ $t("overview.kingfisher_metadata") }}</h4>
                         <div class="result_box collection_metadata kingfisher_metadata">
                             <div class="table_hl" v-if="kingfisher">
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.collectionId')}}</div>
+                                    <div class="td col col-6">{{ $t("overview.collectionId") }}</div>
                                     <div class="td col col-6">{{ kingfisher.collection_id }}</div>
                                 </div>
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.kingfisher_processingFrom')}}</div>
+                                    <div class="td col col-6">{{ $t("overview.kingfisher_processingFrom") }}</div>
                                     <div class="td col col-6">{{ kingfisher.processing_start }}</div>
                                 </div>
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.kingfisher_processingTo')}}</div>
+                                    <div class="td col col-6">{{ $t("overview.kingfisher_processingTo") }}</div>
                                     <div class="td col col-6">{{ kingfisher.processing_end }}</div>
                                 </div>
                             </div>
@@ -154,15 +185,15 @@
                     </div>
 
                     <div class="col-12 col-md-6 col-xl-12">
-                        <h4>{{ $t('overview.dqt_metadata') }}</h4>
+                        <h4>{{ $t("overview.dqt_metadata") }}</h4>
                         <div class="result_box collection_metadata kingfisher_metadata dqt_metadata">
                             <div v-if="data_quality" class="table_hl">
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.processingFrom')}}</div>
+                                    <div class="td col col-6">{{ $t("overview.processingFrom") }}</div>
                                     <div class="td col col-6">{{ data_quality.processing_start }}</div>
                                 </div>
                                 <div class="tr row">
-                                    <div class="td col col-6">{{ $t('overview.processingTo')}}</div>
+                                    <div class="td col col-6">{{ $t("overview.processingTo") }}</div>
                                     <div class="td col col-6">{{ data_quality.processing_end }}</div>
                                 </div>
                             </div>
@@ -175,7 +206,7 @@
         <div class="row">
             <div class="col col-12 lifecycle">
                 <h4>
-                    {{ $t('overview.lifecycle.title') }}
+                    {{ $t("overview.lifecycle.title") }}
                     <Tooltip :text="$t('overview.lifecycle.info')"></Tooltip>
                 </h4>
                 <div class="result_box">
@@ -201,16 +232,16 @@
         <div class="row">
             <div class="col-12 col-md-6 prices">
                 <h4>
-                    {{ $t('overview.prices.title') }}
+                    {{ $t("overview.prices.title") }}
                     <Tooltip :text="$t('overview.prices.info')"></Tooltip>
                 </h4>
                 <div class="result_box">
-                    <h5>{{ $t('overview.prices.value_label') }}</h5>
+                    <h5>{{ $t("overview.prices.value_label") }}</h5>
                     <p class="total_value">
                         <strong class="bold">$ {{ prices.total_volume_positive | formatNumber }}</strong>
                         in
                         <strong class="bold">{{ prices.contracts_positive | formatNumber }}</strong>
-                        {{ $t('overview.prices.contracts') }}
+                        {{ $t("overview.prices.contracts") }}
                     </p>
                     <div class v-if="prices">
                         <div class="thr row">
@@ -218,14 +249,22 @@
                             <div class="th col col-4 text-right">{{ $t("overview.prices.thead.count") }}</div>
                             <div class="th col col-4 text-center">{{ $t("overview.prices.thead.share") }}</div>
                         </div>
-                        <div class="row tr" v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']" :key="c">
+                        <div
+                            class="row tr"
+                            v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']"
+                            :key="c"
+                        >
                             <div class="td col col-4" v-html="getPriceCategoryLabel(c)" />
-                            <div class="td col col-4 text-right numeric">{{ prices.price_category_positive[c].contracts | formatNumber }}</div>
+                            <div class="td col col-4 text-right numeric">
+                                {{ prices.price_category_positive[c].contracts | formatNumber }}
+                            </div>
                             <div class="td col col-4">
                                 <div class="row align-items-center share_progressbar no-gutters">
-                                    <div class="col col-3 value text-right">{{ (prices.price_category_positive[c].share * 100) | formatPercentage }}</div>
+                                    <div class="col col-3 value text-right">
+                                        {{ (prices.price_category_positive[c].share * 100) | formatPercentage }}
+                                    </div>
                                     <div class="col col-9 value progress_holder d-flex align-items-center">
-                                        <progress-bar :value="(prices.price_category_positive[c].share * 100)" />
+                                        <progress-bar :value="prices.price_category_positive[c].share * 100" />
                                     </div>
                                 </div>
                             </div>
@@ -234,17 +273,17 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 period">
-                <h4>{{ $t('overview.period.title') }}</h4>
+                <h4>{{ $t("overview.period.title") }}</h4>
                 <div class="result_box">
-                    <h5>{{ $t('overview.period.subtitle') }}</h5>
-                    <p>{{ $t('overview.period.description') }}</p>
+                    <h5>{{ $t("overview.period.subtitle") }}</h5>
+                    <p>{{ $t("overview.period.description") }}</p>
                     <div>
                         <GChart
                             type="ColumnChart"
                             :data="period_histogram"
                             :options="{
                                 legend: 'none',
-                                bar: {groupWidth: '95%'},
+                                bar: { groupWidth: '95%' },
                                 colors: ['#6C75E1'],
                                 hAxis: {
                                     baselineColor: 'transparent',
@@ -279,47 +318,47 @@ export default {
     name: "overview",
     components: { Dashboard, ProgressBar, GChart, Tooltip },
     computed: {
-        dataset: function() {
+        dataset: function () {
             return this.$store.getters.dataset;
         },
-        collection: function() {
+        collection: function () {
             return this.getMetaData("collection_metadata");
         },
-        kingfisher: function() {
+        kingfisher: function () {
             return this.getMetaData("kingfisher_metadata");
         },
-        data_quality: function() {
+        data_quality: function () {
             return this.getMetaData("data_quality_tool_metadata");
         },
-        compiled_releases: function() {
+        compiled_releases: function () {
             return this.getMetaData("compiled_releases");
         },
-        lifecycle: function() {
+        lifecycle: function () {
             return this.getMetaData("tender_lifecycle");
         },
-        prices: function() {
+        prices: function () {
             return this.getMetaData("prices");
         },
-        period: function() {
+        period: function () {
             return this.getMetaData("period");
         },
-        period_histogram: function() {
+        period_histogram: function () {
             var hist = [["date", "count"]];
             if (this.period) {
-                this.period.forEach(function(p) {
+                this.period.forEach(function (p) {
                     hist.push([p.date_str, p.count]);
                 });
             }
             return hist;
         },
-        filtered_procuring_entity: function() {
+        filtered_procuring_entity: function () {
             if (this.dataset.filter_message.procuring_entity) {
                 return this.dataset.filter_message.procuring_entity;
             }
 
             return [];
         },
-        filtered_buyer: function() {
+        filtered_buyer: function () {
             if (this.dataset.filter_message.buyer) {
                 return this.dataset.filter_message.buyer;
             }
@@ -328,33 +367,16 @@ export default {
         }
     },
     methods: {
-        getMetaData: function(type) {
-            return this.dataset && this.dataset.meta
-                ? this.dataset.meta[type]
-                : null;
+        getMetaData: function (type) {
+            return this.dataset && this.dataset.meta ? this.dataset.meta[type] : null;
         },
         getPriceCategoryLabel(categoryId) {
             if (categoryId == "0_10000") {
-                return (
-                    "$" +
-                    this.formatNumber(0) +
-                    " - $" +
-                    this.formatNumber(10000)
-                );
+                return "$" + this.formatNumber(0) + " - $" + this.formatNumber(10000);
             } else if (categoryId == "10001_100000") {
-                return (
-                    "$" +
-                    this.formatNumber(10001) +
-                    " - $" +
-                    this.formatNumber(100000)
-                );
+                return "$" + this.formatNumber(10001) + " - $" + this.formatNumber(100000);
             } else if (categoryId == "100001_1000000") {
-                return (
-                    "$" +
-                    this.formatNumber(100001) +
-                    " - $" +
-                    this.formatNumber(1000000)
-                );
+                return "$" + this.formatNumber(100001) + " - $" + this.formatNumber(1000000);
             } else if (categoryId == "1000001+") {
                 return "$" + this.formatNumber(1000001) + "+";
             }
@@ -376,7 +398,6 @@ export default {
     }
 };
 </script>
-
 
 <style lang="scss">
 @import "src/scss/main";
@@ -424,4 +445,3 @@ div.col.col-9.value.progress_holder {
     text-align: center;
 }
 </style>
-

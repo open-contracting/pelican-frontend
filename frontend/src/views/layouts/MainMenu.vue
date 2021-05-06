@@ -7,7 +7,9 @@
                     <b-nav-item
                         id="home_link"
                         to="/"
-                        @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: '/'})"
+                        @contextmenu.prevent="
+                            $root.$emit('navigationContextMenu', { event: $event, routerArguments: '/' })
+                        "
                     >
                         <span class="menu_icon_small">
                             <font-awesome-icon icon="cogs" />
@@ -16,8 +18,13 @@
                     </b-nav-item>
 
                     <b-nav-item
-                        :to="{ name: 'overview', params: { datasetId: datasetId}}"
-                        @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'overview', params: {datasetId: datasetId}}})"
+                        :to="{ name: 'overview', params: { datasetId: datasetId } }"
+                        @contextmenu.prevent="
+                            $root.$emit('navigationContextMenu', {
+                                event: $event,
+                                routerArguments: { name: 'overview', params: { datasetId: datasetId } }
+                            })
+                        "
                     >
                         <span class="menu_icon_small">
                             <font-awesome-icon icon="home" />
@@ -26,8 +33,16 @@
                     </b-nav-item>
 
                     <b-nav-item
-                        :to="{ name: 'field', params: { datasetId: datasetId}}" :disabled="!fieldLoaded"
-                        @contextmenu.prevent="fieldLoaded ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'field', params: {datasetId: datasetId}}}) : null"    
+                        :to="{ name: 'field', params: { datasetId: datasetId } }"
+                        :disabled="!fieldLoaded"
+                        @contextmenu.prevent="
+                            fieldLoaded
+                                ? $root.$emit('navigationContextMenu', {
+                                      event: $event,
+                                      routerArguments: { name: 'field', params: { datasetId: datasetId } }
+                                  })
+                                : null
+                        "
                     >
                         <span v-if="fieldLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="sliders-h" />
@@ -39,8 +54,16 @@
                     </b-nav-item>
 
                     <b-nav-item
-                        :to="{ name: 'resource', params: { datasetId: datasetId}}" :disabled="!resourceLoaded"
-                        @contextmenu.prevent="resourceLoaded ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'resource', params: {datasetId: datasetId}}}) : null"    
+                        :to="{ name: 'resource', params: { datasetId: datasetId } }"
+                        :disabled="!resourceLoaded"
+                        @contextmenu.prevent="
+                            resourceLoaded
+                                ? $root.$emit('navigationContextMenu', {
+                                      event: $event,
+                                      routerArguments: { name: 'resource', params: { datasetId: datasetId } }
+                                  })
+                                : null
+                        "
                     >
                         <span v-if="resourceLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="list-alt" />
@@ -52,8 +75,16 @@
                     </b-nav-item>
 
                     <b-nav-item
-                        :to="{ name: 'dataset', params: { datasetId: datasetId}}" :disabled="!datasetLoaded"
-                        @contextmenu.prevent="datasetLoaded ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'dataset', params: {datasetId: datasetId}}}) : null"        
+                        :to="{ name: 'dataset', params: { datasetId: datasetId } }"
+                        :disabled="!datasetLoaded"
+                        @contextmenu.prevent="
+                            datasetLoaded
+                                ? $root.$emit('navigationContextMenu', {
+                                      event: $event,
+                                      routerArguments: { name: 'dataset', params: { datasetId: datasetId } }
+                                  })
+                                : null
+                        "
                     >
                         <span v-if="datasetLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="tasks" />
@@ -65,8 +96,14 @@
                     </b-nav-item>
 
                     <b-nav-item
-                        :to="{ name: 'time', params: { datasetId: datasetId}}" v-if="showTimeVariance"
-                        @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'time', params: {datasetId: datasetId}}})"            
+                        :to="{ name: 'time', params: { datasetId: datasetId } }"
+                        v-if="showTimeVariance"
+                        @contextmenu.prevent="
+                            $root.$emit('navigationContextMenu', {
+                                event: $event,
+                                routerArguments: { name: 'time', params: { datasetId: datasetId } }
+                            })
+                        "
                     >
                         <span v-if="timeVarianceLoaded" class="menu_icon_small">
                             <font-awesome-icon icon="history" />
@@ -87,7 +124,7 @@ import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
     mixins: [stateMixin],
-    data: function() {
+    data: function () {
         return {};
     },
     computed: {
@@ -103,7 +140,6 @@ export default {
     }
 };
 </script>
-
 
 <style lang="scss">
 @import "src/scss/main";

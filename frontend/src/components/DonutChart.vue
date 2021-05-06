@@ -20,7 +20,7 @@ export default {
                 fontName: "GTEestiProDisplay-Regular",
                 chartArea: { left: 10, top: 20, width: "100%", height: "85%" },
                 pieHole: 0.4,
-                sliceVisibilityThreshold: (0.5 / 360),
+                sliceVisibilityThreshold: 0.5 / 360,
                 colors: []
             }
         };
@@ -36,21 +36,22 @@ export default {
             this.chartData.push([shares[key][0], shares[key][1].count]);
             totalCount += shares[key][1].count;
         }
-        
+
         this.chartOptions.colors = this.generateGradient(
-            this.chartData.slice(1).filter(v => (v[1] / totalCount) >= this.chartOptions.sliceVisibilityThreshold).length + 1
+            this.chartData.slice(1).filter(v => v[1] / totalCount >= this.chartOptions.sliceVisibilityThreshold)
+                .length + 1
         );
     },
     methods: {
-        generateGradient: function(colorCount) {
-            return chroma.scale(["#2B2E5A", "#EFF0FC"]).mode('lab').colors(colorCount);
+        generateGradient: function (colorCount) {
+            return chroma.scale(["#2B2E5A", "#EFF0FC"]).mode("lab").colors(colorCount);
         }
     }
 };
 </script>
 
 <style>
-
-svg > g > g:last-child { pointer-events: none }
-
+svg > g > g:last-child {
+    pointer-events: none;
+}
 </style>

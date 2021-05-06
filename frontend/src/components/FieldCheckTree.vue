@@ -3,22 +3,22 @@
         <div class="thr row">
             <div class="th col col-4">
                 <div class="d-flex align-items-center">
-                    <div>{{ $t('field.table.head.object') }}</div>
+                    <div>{{ $t("field.table.head.object") }}</div>
                 </div>
             </div>
             <div class="th col col-4 justify-content-center d-flex" @click="sortByCoverage()">
                 <div class="d-flex align-items-center">
-                    <span>{{ $t('field.table.head.coverage') }}</span>
+                    <span>{{ $t("field.table.head.coverage") }}</span>
                 </div>
             </div>
             <div class="th col col-4 justify-content-center d-flex" @click="sortByQuality()">
                 <div class="d-flex align-items-center">
-                    <span>{{ $t('field.table.head.quality') }}</span>
+                    <span>{{ $t("field.table.head.quality") }}</span>
                 </div>
             </div>
         </div>
 
-        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n"/>
+        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" />
     </div>
 </template>
 
@@ -27,37 +27,37 @@ import FieldCheckTreeNode from "@/components/FieldCheckTreeNode.vue";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
-    data: function() {
+    data: function () {
         return {};
     },
     props: ["filter"],
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
     watch: {
-        search: function() {
+        search: function () {
             this.$store.dispatch("setExpandedNodesForSearch");
         },
-        filter: function() {
+        filter: function () {
             this.$store.commit("setFieldLevelFilter", this.filter);
         }
     },
-    mounted: function() {
+    mounted: function () {
         if (this.search) {
             this.$store.dispatch("setExpandedNodesForSearch");
         }
     },
     computed: {
-        stats: function() {
+        stats: function () {
             return this.$store.getters.fieldLevelStats;
         },
-        tree: function() {
+        tree: function () {
             var root = {};
 
             this.sortByProcessingOrder(this.stats);
 
-            this.stats.forEach(function(n) {
+            this.stats.forEach(function (n) {
                 var node = root;
-                n.path.split(".").forEach(function(p) {
+                n.path.split(".").forEach(function (p) {
                     if (!node.hasOwnProperty(p)) {
                         node[p] = {};
                     }
@@ -69,7 +69,7 @@ export default {
 
             return root;
         }
-    },
+    }
 };
 </script>
 
