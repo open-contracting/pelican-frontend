@@ -1,6 +1,7 @@
 
 from dqt.tools.tags.tag import LeafTag
 
+
 def generate_key_leaf_tag(key):
     class KeyLeafTag(LeafTag):
         def __init__(self, gdocs, dataset_id):

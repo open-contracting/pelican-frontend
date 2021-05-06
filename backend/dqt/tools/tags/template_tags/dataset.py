@@ -1,32 +1,33 @@
 
 from django.db import connections
 from django.utils.translation import gettext as _
-
 from dqt.models import DatasetLevelCheck
 from dqt.tools.misc import terms_enumeration
-from dqt.tools.tags.tag import TemplateTag
-from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
-from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
-from dqt.tools.tags.leaf_tags.dataset.counts_result_box_image import CountsResultBoxImageLeafTag
-from dqt.tools.tags.leaf_tags.dataset.passed_result_box_image import PassedResultBoxImageLeafTag
-from dqt.tools.tags.leaf_tags.dataset.table_result_box_image import TableResultBoxImageLeafTag
-from dqt.tools.tags.leaf_tags.dataset.result import ResultLeafTag
-from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
-from dqt.tools.tags.leaf_tags.dataset.donut.share import ShareLeafTag as donut_ShareLeafTag
-from dqt.tools.tags.leaf_tags.dataset.donut.count import CountLeafTag as donut_CountLeafTag
-from dqt.tools.tags.leaf_tags.dataset.donut.examples import ExamplesLeafTag as donut_ExamplesLeafTag
-from dqt.tools.tags.leaf_tags.dataset.bar.share import ShareLeafTag as bar_ShareLeafTag
 from dqt.tools.tags.leaf_tags.dataset.bar.count import CountLeafTag as bar_CountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.bar.examples import ExamplesLeafTag as bar_ExamplesLeafTag
+from dqt.tools.tags.leaf_tags.dataset.bar.share import ShareLeafTag as bar_ShareLeafTag
 from dqt.tools.tags.leaf_tags.dataset.bar.sum import SumLeafTag as bar_SumLeafTag
-from dqt.tools.tags.leaf_tags.dataset.top3.share import ShareLeafTag as top3_ShareLeafTag
+from dqt.tools.tags.leaf_tags.dataset.counts_result_box_image import CountsResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.dataset.donut.count import CountLeafTag as donut_CountLeafTag
+from dqt.tools.tags.leaf_tags.dataset.donut.examples import ExamplesLeafTag as donut_ExamplesLeafTag
+from dqt.tools.tags.leaf_tags.dataset.donut.share import ShareLeafTag as donut_ShareLeafTag
+from dqt.tools.tags.leaf_tags.dataset.passed_result_box_image import PassedResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.dataset.result import ResultLeafTag
+from dqt.tools.tags.leaf_tags.dataset.single_value_share.buyer_count import (
+    BuyerCountLeafTag as single_value_share_BuyerCountLeafTag,
+)
+from dqt.tools.tags.leaf_tags.dataset.single_value_share.ocid_count import (
+    OcidCountLeafTag as single_value_share_OcidCountLeafTag,
+)
+from dqt.tools.tags.leaf_tags.dataset.table_result_box_image import TableResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.dataset.top3.amount import AmountLeafTag as top3_AmountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.top3.count import CountLeafTag as top3_CountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.top3.examples import ExamplesLeafTag as top3_ExamplesLeafTag
-from dqt.tools.tags.leaf_tags.dataset.top3.amount import AmountLeafTag as top3_AmountLeafTag
-from dqt.tools.tags.leaf_tags.dataset.single_value_share.ocid_count import \
-    OcidCountLeafTag as single_value_share_OcidCountLeafTag
-from dqt.tools.tags.leaf_tags.dataset.single_value_share.buyer_count import \
-    BuyerCountLeafTag as single_value_share_BuyerCountLeafTag
+from dqt.tools.tags.leaf_tags.dataset.top3.share import ShareLeafTag as top3_ShareLeafTag
+from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
+from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
+from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
+from dqt.tools.tags.tag import TemplateTag
 
 
 class DatasetTemplateTag(TemplateTag):

@@ -1,9 +1,11 @@
 
 from dqt.tools.tags.tag import TemplateTag
-from .resource import ResourceTemplateTag
-from .field import FieldTemplateTag
+
 from .dataset import DatasetTemplateTag
+from .field import FieldTemplateTag
 from .overview import OverviewTemplateTag
+from .resource import ResourceTemplateTag
+
 
 class BaseTemplateTag(TemplateTag):
     def __init__(self, gdocs, dataset_id):

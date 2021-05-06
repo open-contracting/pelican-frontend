@@ -1,6 +1,8 @@
 
 import pytest
+
 from ..tools import ReservoirSampler
+
 
 def test_reservoir_sampler():
     with pytest.raises(ValueError):

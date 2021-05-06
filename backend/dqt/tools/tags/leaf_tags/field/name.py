@@ -1,9 +1,8 @@
 
 from django.utils.translation import gettext as _
-
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools.errors import TagError
 from dqt.tools.misc import terms_enumeration
+from dqt.tools.tags.tag import LeafTag
 
 
 class NameLeafTag(LeafTag):

@@ -1,11 +1,12 @@
 
-import re
 import copy
-import shortuuid
+import re
 
-from lxml import etree
+import shortuuid
 from dqt.tools.errors import TagError
 from dqt.tools.misc import terms_enumeration
+from lxml import etree
+
 
 # General tag class representing all kinds of tags, that can occur (TemplateTag, LeafTag, ...)
 class Tag:

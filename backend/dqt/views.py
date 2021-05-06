@@ -1,24 +1,23 @@
 
-import time
 import json
 import random
+import time
+from datetime import datetime
+
 import intervals as I
 import simplejson as json
-from psycopg2 import sql
-
-from datetime import datetime
-from django.db.models import Count, Max, Min, Sum
-from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.core import serializers
 from django.db import connections
-from django.db.models import Count
+from django.db.models import Count, Max, Min, Sum
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from psycopg2 import sql
+
+from .models import DataItem, Dataset, DatasetLevelCheck, Report, ResourceLevelCheck, TimeVarianceLevelCheck
 from .tools.errors import GoogleDriveError, TagError
 from .tools.gdocs import Gdocs
-from .tools.tags.template_tags.base import BaseTemplateTag
-
-from .models import Dataset, DatasetLevelCheck, ResourceLevelCheck, Report, TimeVarianceLevelCheck, DataItem
 from .tools.rabbit import publish
+from .tools.tags.template_tags.base import BaseTemplateTag
 
 
 @csrf_exempt

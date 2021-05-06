@@ -1,6 +1,7 @@
 
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import terms_enumeration
+from dqt.tools.tags.tag import LeafTag
+
 
 class FailedCountLeafTag(LeafTag):
     LEVELS = ('coverage', 'coverageSet', 'coverageEmpty', 'quality')

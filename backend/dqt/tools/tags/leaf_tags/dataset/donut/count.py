@@ -1,6 +1,7 @@
 
 from dqt.tools.tags.tag import LeafTag
 
+
 class CountLeafTag(LeafTag):
 
     def __init__(self, gdocs, dataset_id):

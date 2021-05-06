@@ -1,8 +1,8 @@
 
-from lxml import etree
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools import graphs
 from dqt.tools.elements import image_element
+from dqt.tools.tags.tag import LeafTag
+from lxml import etree
 
 
 class TableResultBoxImageLeafTag(LeafTag):

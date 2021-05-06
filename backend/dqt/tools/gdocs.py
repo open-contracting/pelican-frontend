@@ -1,28 +1,29 @@
 from __future__ import print_function
-import pickle
-import os
-import re
-import copy
-import json
-import shutil
-import datetime
-import shortuuid
-import tempfile
 
-from django.db import connections
-from django.core.cache import cache
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from google.api_core.datetime_helpers import from_rfc3339
-from googleapiclient.http import MediaFileUpload
-from googleapiclient.errors import ResumableUploadError, HttpError
+import copy
+import datetime
+import json
+import os
+import pickle
+import re
+import shutil
+import tempfile
 from zipfile import ZipFile
-from lxml import etree
+
+import shortuuid
+from django.core.cache import cache
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.db import connections
 from dqt.tools import graphs
 from dqt.tools.errors import GoogleDriveError
+from google.api_core.datetime_helpers import from_rfc3339
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError, ResumableUploadError
+from googleapiclient.http import MediaFileUpload
+from lxml import etree
 
 
 class Gdocs:

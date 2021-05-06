@@ -1,12 +1,13 @@
 
 import math
-from PIL import Image, ImageDraw, ImageFont
-import seaborn as sns
-import matplotlib.pyplot as plt
 from collections import OrderedDict
-from matplotlib.patches import FancyBboxPatch, BoxStyle
-from matplotlib import font_manager
 from io import BytesIO
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib import font_manager
+from matplotlib.patches import BoxStyle, FancyBboxPatch
+from PIL import Image, ImageDraw, ImageFont
 
 font_dirs = ['dqt/tools/fonts', ]
 font_files = font_manager.findSystemFonts(fontpaths=font_dirs)

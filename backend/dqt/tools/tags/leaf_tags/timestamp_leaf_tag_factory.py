@@ -1,8 +1,9 @@
 
 import datetime
 
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import terms_enumeration
+from dqt.tools.tags.tag import LeafTag
+
 
 def generate_timestamp_leaf_tag(key, datetime_format):
     class TimestampLeafTag(LeafTag):

@@ -1,12 +1,13 @@
 
 from dqt.models import Dataset
-from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
-from dqt.tools.tags.leaf_tags.timestamp_leaf_tag_factory import generate_timestamp_leaf_tag
+from dqt.tools.tags.leaf_tags.overview.lifecycle_image import LifecycleImageLeafTag
 from dqt.tools.tags.leaf_tags.overview.lifecycle_object_count import LifecycleObjectCountLeafTag
 from dqt.tools.tags.leaf_tags.overview.release_date_count import ReleaseDateCountLeafTag
-from dqt.tools.tags.leaf_tags.overview.lifecycle_image import LifecycleImageLeafTag
 from dqt.tools.tags.leaf_tags.overview.release_date_distribution_image import ReleaseDateDistributionImageLeafTag
+from dqt.tools.tags.leaf_tags.timestamp_leaf_tag_factory import generate_timestamp_leaf_tag
+from dqt.tools.tags.tag import TemplateTag
+
 
 class OverviewTemplateTag(TemplateTag):
     def __init__(self, gdocs, dataset_id):

@@ -1,6 +1,7 @@
 
 from dqt.tools.tags.tag import LeafTag
 
+
 class ShareLeafTag(LeafTag):
 
     def __init__(self, gdocs, dataset_id):

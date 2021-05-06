@@ -2,12 +2,29 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 
-from .api import (DatasetResource, DataItemResource, DatasetLevelCheckResource,
-                  FieldLevelCheckResource, ProgressMonitorDatasetResource,
-                  ResourceLevelCheckResource, ReportResource, TimeVarianceLevelCheckResource)
-from .views import dataset_stats, dataset_level_stats, field_level_stats, resource_level_stats, \
-    field_level_detail, resource_level_detail, time_variance_level_stats, create_dataset_filter, \
-    dataset_distinct_values, dataset_filter_items, generate_report
+from .api import (
+    DataItemResource,
+    DatasetLevelCheckResource,
+    DatasetResource,
+    FieldLevelCheckResource,
+    ProgressMonitorDatasetResource,
+    ReportResource,
+    ResourceLevelCheckResource,
+    TimeVarianceLevelCheckResource,
+)
+from .views import (
+    create_dataset_filter,
+    dataset_distinct_values,
+    dataset_filter_items,
+    dataset_level_stats,
+    dataset_stats,
+    field_level_detail,
+    field_level_stats,
+    generate_report,
+    resource_level_detail,
+    resource_level_stats,
+    time_variance_level_stats,
+)
 
 dataset_resource = DatasetResource()
 data_item_resource = DataItemResource()

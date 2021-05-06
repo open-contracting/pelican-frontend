@@ -1,6 +1,7 @@
 
 from lxml import etree
 
+
 # returns one element
 def image_element(image_file_path, aspect_ratio):
     image_element = etree.Element(

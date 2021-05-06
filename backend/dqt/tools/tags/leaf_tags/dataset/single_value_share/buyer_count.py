@@ -1,6 +1,7 @@
 
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import terms_enumeration
+from dqt.tools.tags.tag import LeafTag
+
 
 class BuyerCountLeafTag(LeafTag):
     COUNT_RANGES = set([

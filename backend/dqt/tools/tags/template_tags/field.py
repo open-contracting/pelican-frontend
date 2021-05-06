@@ -1,16 +1,16 @@
 
 from django.db import connections
 from dqt.tools.misc import terms_enumeration
-from dqt.tools.tags.tag import TemplateTag
-from dqt.tools.tags.leaf_tags.field.name import NameLeafTag
-from dqt.tools.tags.leaf_tags.field.description import DescriptionLeafTag
-from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
-from dqt.tools.tags.leaf_tags.field.passed_count import PassedCountLeafTag
+from dqt.tools.tags.leaf_tags.field.description import DescriptionLeafTag
 from dqt.tools.tags.leaf_tags.field.failed_count import FailedCountLeafTag
-from dqt.tools.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
-from dqt.tools.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
 from dqt.tools.tags.leaf_tags.field.failed_examples import FailedExamplesLeafTag
+from dqt.tools.tags.leaf_tags.field.name import NameLeafTag
+from dqt.tools.tags.leaf_tags.field.passed_count import PassedCountLeafTag
+from dqt.tools.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
+from dqt.tools.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
+from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
+from dqt.tools.tags.tag import TemplateTag
 
 
 class FieldTemplateTag(TemplateTag):

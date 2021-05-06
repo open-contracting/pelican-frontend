@@ -1,8 +1,10 @@
 
 import random
-from dqt.tools.tags.tag import LeafTag
-from dqt.tools.misc import terms_enumeration
+
 from dqt.tools.elements import multiple_line_elements
+from dqt.tools.misc import terms_enumeration
+from dqt.tools.tags.tag import LeafTag
+
 
 class PassedExamplesLeafTag(LeafTag):
     LEVELS = ('coverage', 'coverageSet', 'coverageEmpty', 'quality')

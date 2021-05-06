@@ -1,8 +1,8 @@
 
 import datetime
 
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import parse_month_year
+from dqt.tools.tags.tag import LeafTag
 
 
 class ReleaseDateCountLeafTag(LeafTag):

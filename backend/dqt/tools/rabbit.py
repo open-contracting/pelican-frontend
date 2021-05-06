@@ -2,7 +2,6 @@
 import pika
 from django.conf import settings
 
-
 global connected
 connected = False
 

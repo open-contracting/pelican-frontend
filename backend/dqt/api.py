@@ -1,8 +1,17 @@
 # myapp/api.py
-from tastypie.fields import DictField, ToOneField, ListField, CharField, IntegerField, ListField
+from tastypie.fields import CharField, DictField, IntegerField, ListField, ToOneField
 from tastypie.resources import ModelResource
-from .models import (Dataset, DataItem, DatasetLevelCheck, FieldLevelCheck,
-                     ProgressMonitorDataset, ResourceLevelCheck, Report, TimeVarianceLevelCheck)
+
+from .models import (
+    DataItem,
+    Dataset,
+    DatasetLevelCheck,
+    FieldLevelCheck,
+    ProgressMonitorDataset,
+    Report,
+    ResourceLevelCheck,
+    TimeVarianceLevelCheck,
+)
 
 
 class DataItemResource(ModelResource):

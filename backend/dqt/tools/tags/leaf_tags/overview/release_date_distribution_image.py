@@ -1,11 +1,11 @@
 
 import datetime
 
-from lxml import etree
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools import graphs
-from dqt.tools.misc import parse_month_year
 from dqt.tools.elements import image_element
+from dqt.tools.misc import parse_month_year
+from dqt.tools.tags.tag import LeafTag
+from lxml import etree
 
 
 class ReleaseDateDistributionImageLeafTag(LeafTag):

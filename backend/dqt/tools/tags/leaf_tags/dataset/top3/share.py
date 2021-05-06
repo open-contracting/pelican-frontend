@@ -1,6 +1,7 @@
 
-from dqt.tools.tags.tag import LeafTag
 from dqt.tools.misc import terms_enumeration
+from dqt.tools.tags.tag import LeafTag
+
 
 class ShareLeafTag(LeafTag):
     RANKS = set(['1', '2', '3', '4', '5'])
