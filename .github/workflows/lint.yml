@@ -1,4 +1,4 @@
-name: Lint
+name: Lint Python
 on: [push, pull_request]
 env:
   BASEDIR: https://raw.githubusercontent.com/open-contracting/standard-maintenance-scripts/main

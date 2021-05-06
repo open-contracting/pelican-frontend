@@ -1,4 +1,4 @@
-name: ESLint
+name: Lint JS
 on: [push, pull_request]
 jobs:
   build:
