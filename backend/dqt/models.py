@@ -33,10 +33,7 @@ class Dataset(Model):
             return item.size
 
     def get_filtered_children_ids(self):
-        return [
-            item.dataset_filtered.id
-            for item in self.dataset_filter_parent.all()
-        ]
+        return [item.dataset_filtered.id for item in self.dataset_filter_parent.all()]
 
     def get_filtered_parent_id(self):
         items = self.dataset_filter_child.all()
@@ -59,12 +56,18 @@ class Dataset(Model):
 class DatasetFilter(Model):
     id = BigAutoField(primary_key=True)
     dataset_original = ForeignKey(
-        "Dataset", related_name='dataset_filter_parent', db_column="dataset_id_original",
-        to_field="id", on_delete=CASCADE
+        "Dataset",
+        related_name="dataset_filter_parent",
+        db_column="dataset_id_original",
+        to_field="id",
+        on_delete=CASCADE,
     )
     dataset_filtered = ForeignKey(
-        "Dataset", related_name='dataset_filter_child', db_column="dataset_id_filtered",
-        to_field="id", on_delete=CASCADE
+        "Dataset",
+        related_name="dataset_filter_child",
+        db_column="dataset_id_filtered",
+        to_field="id",
+        on_delete=CASCADE,
     )
     filter_message = JSONField()
     created = DateTimeField(blank=True, null=True)
@@ -73,7 +76,7 @@ class DatasetFilter(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'dataset_filter'
+        db_table = "dataset_filter"
 
 
 class Report(Model):
@@ -100,7 +103,7 @@ class DataItem(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'data_item'
+        db_table = "data_item"
 
 
 class DatasetLevelCheck(Model):
@@ -117,7 +120,7 @@ class DatasetLevelCheck(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'dataset_level_check'
+        db_table = "dataset_level_check"
 
 
 class FieldLevelCheck(Model):
@@ -133,7 +136,7 @@ class FieldLevelCheck(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'field_level_check'
+        db_table = "field_level_check"
 
 
 class TimeVarianceLevelCheck(Model):
@@ -153,12 +156,12 @@ class TimeVarianceLevelCheck(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'time_variance_level_check'
+        db_table = "time_variance_level_check"
 
 
 class ProgressMonitorDataset(Model):
     id = BigAutoField(primary_key=True)
-    dataset = ForeignKey("Dataset", related_name='progress', db_column="dataset_id", to_field="id", on_delete=CASCADE)
+    dataset = ForeignKey("Dataset", related_name="progress", db_column="dataset_id", to_field="id", on_delete=CASCADE)
     state = CharField(max_length=255, blank=True, null=True)
     phase = CharField(max_length=255, blank=True, null=True)
     size = IntegerField(blank=True, null=True)
@@ -169,7 +172,7 @@ class ProgressMonitorDataset(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'progress_monitor_dataset'
+        db_table = "progress_monitor_dataset"
 
 
 class ProgressMonitorItem(Model):
@@ -184,8 +187,8 @@ class ProgressMonitorItem(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'progress_monitor_item'
-        unique_together = (('dataset_id', 'item_id'),)
+        db_table = "progress_monitor_item"
+        unique_together = (("dataset_id", "item_id"),)
 
 
 class ResourceLevelCheck(Model):
@@ -201,4 +204,4 @@ class ResourceLevelCheck(Model):
     class Meta:
         app_label = "data"
         managed = False
-        db_table = 'resource_level_check'
+        db_table = "resource_level_check"
