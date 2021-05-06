@@ -30,7 +30,7 @@ class CountsResultBoxImageLeafTag(LeafTag):
             buffer, aspect_ratio = graphs.bar_result_box(data["counts_pairs"], return_aspect_ratio=True)
         elif self.get_param("type") == "pie":
             # TODO
-            raise NotImplemented()
+            raise NotImplementedError
 
         image_file_path = self.gdocs.add_image_file(buffer, "resultBoxImage_%s.png" % data["name"])
         buffer.close()

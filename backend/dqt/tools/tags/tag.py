@@ -565,6 +565,6 @@ class TagChaining:
                     return last_tag.validate_and_process(data)
 
         else:
-            raise NotImplemented("Tag generation for instance of '%s' is not supported." % type(last_tag).__name__)
+            raise NotImplementedError("Tag generation for instance of '%s' is not supported." % type(last_tag).__name__)
 
         return GeneratedTag
