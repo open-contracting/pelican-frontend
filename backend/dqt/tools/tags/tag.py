@@ -31,7 +31,7 @@ class Tag:
             )
 
         if name in self.param_validations_mapping:
-            raise AttributeError("The parameter '%s' already exists." % name)
+            raise AttributeError(f"The parameter '{name}' already exists.")
 
         if required:
             self.required_params.add(name)
@@ -42,7 +42,7 @@ class Tag:
     # adds new field requirement that is must be passed to the tag for its correct function
     def set_required_data_field(self, name):
         if name in self.required_data_fields:
-            raise AttributeError("%s data field already exists" % name)
+            raise AttributeError(f"{name} data field already exists")
 
         self.required_data_fields.add(name)
 
@@ -55,18 +55,17 @@ class Tag:
 
         if name not in self.param_validations_mapping:
             if self.param_validations_mapping:
-                suffix = "Only the following parameters can be used for this tag: %s." % terms_enumeration(
-                    self.param_validations_mapping
-                )
+                parameters = terms_enumeration(self.param_validations_mapping)
+                suffix = f"Only the following parameters can be used for this tag: {parameters}."
             else:
                 suffix = "This tag does not use any parameters."
 
-            raise TagError(reason="The parameter '%s' is not supported. %s" % (name, suffix))
+            raise TagError(reason=f"The parameter '{name}' is not supported. {suffix}")
 
         if not self.param_validations_mapping[name](value):
             raise TagError(
-                reason="The value '%s' for parameter '%s' failed validation. %s"
-                % (value, name, self.param_validations_description_mapping[name])
+                reason=f"The value '{value}' for parameter '{name}' failed validation. "
+                f"{self.param_validations_description_mapping[name]}"
             )
 
         self.params_mapping[name] = value
@@ -90,14 +89,14 @@ class Tag:
         missing_params = [name for name in self.required_params if name not in self.params_mapping]
         if missing_params:
             if len(missing_params) == 1:
-                raise TagError(reason="The required parameter '%s' was not set." % missing_params[0])
+                raise TagError(reason=f"The required parameter '{missing_params[0]}' was not set.")
             else:
-                missing_params_str = ", ".join("'%s'" % param for param in missing_params)
-                raise TagError(reason="The required parameters %s were not set." % missing_params_str)
+                missing_params_str = ", ".join(f"'{param}'" for param in missing_params)
+                raise TagError(reason=f"The required parameters {missing_params_str} were not set.")
 
         missing_data_fields = [name for name in self.required_data_fields if name not in data]
         if missing_data_fields:
-            raise AttributeError("The required data fields %s were not set" % list(missing_data_fields))
+            raise AttributeError(f"The required data fields {list(missing_data_fields)} were not set")
 
 
 # LeafTag can only be at the end of the whole tree of tags
@@ -351,8 +350,8 @@ class TemplateTag(Tag):
                 tag_class = self.get_sub_tag(tag_expression.get_tag_name(0))
                 if tag_class is None:
                     raise TagError(
-                        reason="The tag '%s' cannot be used in this context. Also, please make sure the check was computed."
-                        % tag_expression.get_tag_name(0),
+                        reason=f"The tag '{tag_expression.get_tag_name(0)}' cannot be used in this context. "
+                        "Also, please make sure the check was computed.",
                         full_tag=full_tag,
                         template_id=self.get_param("template"),
                     )
@@ -414,7 +413,8 @@ class TemplateTag(Tag):
                     self.set_text(result, full_tag)
                 else:
                     raise ValueError(
-                        "LeafTag's process_tag method must return of the following types: list of 'etree.Element', 'etree.Element', 'str'."
+                        "LeafTag's process_tag method must return of the following types: "
+                        "list of 'etree.Element', 'etree.Element', 'str'."
                     )
 
             elif isinstance(tag, TemplateTag):
@@ -445,10 +445,10 @@ class TagExpression:
     def process(self):
         if self.full_tag[-2:] != "%}":
             raise TagError(
-                reason="The tag is incomplete. Please use the format for the tags: \
-                {% <tag> <name>:|<value| <name>:|<value>| ... %}. \
-                For a successful detection the whole tag must have the same formatting set. \
-                Also, please check if the tag is spans one line only and each term is separated by one whitespace exactly."
+                reason="The tag is incomplete. Please use the format for the tags: "
+                "{% <tag> <name>:|<value| <name>:|<value>| ... %}. "
+                "For a successful detection the whole tag must have the same formatting set. "
+                "Also, please check that the tag is on one line only and each term is separated by one space only."
             )
 
         content = self.full_tag[2:-2].strip()
@@ -459,7 +459,7 @@ class TagExpression:
 
             tag_name = terms[0]
             if not tag_name:
-                raise TagError(reason="The tag name '%s' is incorrect. All characters must be alphabetic." % tag_name)
+                raise TagError(reason=f"The tag name '{tag_name}' is incorrect. All characters must be alphabetic.")
 
             tag_param_mapping = {}
             param_expressions = terms[1:]
@@ -467,18 +467,18 @@ class TagExpression:
                 result = re.search(r"^(\w+):\|([^|]+)\|$", expr)
                 if not result:
                     raise TagError(
-                        reason="The parameter expression '%s' is incorrect. Please use the following format: <name>:|<value>|."
-                        % expr
+                        reason=f"The parameter expression '{expr}' is incorrect."
+                        "Please use the following format: <name>:|<value>|."
                     )
 
                 param_name, param_value = result.groups()
                 if not param_name.isalpha():
                     raise TagError(
-                        reason="The parameter name '%s' is incorrect. All characters must be alphabetic." % param_name
+                        reason=f"The parameter name '{param_name}' is incorrect. All characters must be alphabetic."
                     )
 
                 if param_name in tag_param_mapping:
-                    raise TagError(reason="The parameter name '%s' is used multiple times." % param_name)
+                    raise TagError(reason=f"The parameter name '{param_name}' is used multiple times.")
 
                 tag_param_mapping[param_name] = param_value
 
@@ -517,14 +517,15 @@ class TagChaining:
             current_tag_class = previous_tag.get_sub_tag(current_tag_name)
             if current_tag_class is None:
                 raise TagError(
-                    reason="Wrong tag chaining. The tag '%s' cannot be used in this context. Also, please make sure the check was computed."
-                    % current_tag_name,
+                    reason="Wrong tag chaining. "
+                    f"The tag '{current_tag_name}' cannot be used in this context. "
+                    "Also, please make sure the check was computed."
                 )
 
             if current_tag_index < (tag_count - 1) and not issubclass(current_tag_class, TemplateTag):
                 raise TagError(
-                    reason="Wrong tag chaining. The tag '%s' is not a template tag and thus cannot be followed by another tag."
-                    % current_tag_name
+                    reason="Wrong tag chaining. "
+                    f"The tag '{current_tag_name}' is not a template tag and thus cannot be followed by another tag."
                 )
 
             current_tag = current_tag_class(self.source_tag.gdocs, self.source_tag.dataset_id)
@@ -565,6 +566,6 @@ class TagChaining:
                     return last_tag.validate_and_process(data)
 
         else:
-            raise NotImplementedError("Tag generation for instance of '%s' is not supported." % type(last_tag).__name__)
+            raise NotImplementedError(f"Tag generation for instance of '{type(last_tag).__name__}' is not supported.")
 
         return GeneratedTag
