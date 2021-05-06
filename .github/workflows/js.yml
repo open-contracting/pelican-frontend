@@ -9,6 +9,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - run: npm install frontend
-      - run: npx eslint frontend
+      - working-directory: ./frontend
+        run: |
+          npm install
+          npx eslint .
       - run: npx prettier --check .
