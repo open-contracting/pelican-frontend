@@ -44,7 +44,7 @@ django-cors-headers==3.0.2
     # via -r requirements.txt
 django-tastypie==0.14.2
     # via -r requirements.txt
-django==2.2.3
+django==2.2.22
     # via
     #   -r requirements.txt
     #   django-cors-headers
@@ -72,7 +72,7 @@ googleapis-common-protos==1.52.0
     # via
     #   -r requirements.txt
     #   google-api-core
-httplib2==0.18.1
+httplib2==0.19.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
@@ -103,7 +103,7 @@ kiwisolver==1.2.0
     # via
     #   -r requirements.txt
     #   matplotlib
-lxml==4.5.1
+lxml==4.6.3
     # via -r requirements.txt
 matplotlib==3.3.0
     # via -r requirements.txt
@@ -125,7 +125,7 @@ pep517==0.10.0
     # via pip-tools
 pika==1.1.0
     # via -r requirements.txt
-pillow==8.0.1
+pillow==8.2.0
     # via
     #   -r requirements.txt
     #   matplotlib
@@ -160,6 +160,7 @@ pyflakes==2.3.1
 pyparsing==2.4.7
     # via
     #   -r requirements.txt
+    #   httplib2
     #   matplotlib
     #   packaging
 pytest-cov==2.11.1
@@ -190,7 +191,7 @@ requests==2.24.0
     # via
     #   -r requirements.txt
     #   google-api-core
-rsa==3.4.2
+rsa==4.7.2
     # via
     #   -r requirements.txt
     #   google-auth

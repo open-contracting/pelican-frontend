@@ -16,7 +16,7 @@ django-cors-headers==3.0.2
     # via -r requirements.in
 django-tastypie==0.14.2
     # via -r requirements.in
-django==2.2.3
+django==2.2.22
     # via
     #   -r requirements.in
     #   django-cors-headers
@@ -33,7 +33,7 @@ google-auth==1.18.0
     #   google-auth-httplib2
 googleapis-common-protos==1.52.0
     # via google-api-core
-httplib2==0.18.1
+httplib2==0.19.1
     # via
     #   google-api-python-client
     #   google-auth-httplib2
@@ -41,7 +41,7 @@ idna==2.9
     # via requests
 kiwisolver==1.2.0
     # via matplotlib
-lxml==4.5.1
+lxml==4.6.3
     # via -r requirements.in
 matplotlib==3.3.0
     # via -r requirements.in
@@ -49,7 +49,7 @@ numpy==1.19.1
     # via matplotlib
 pika==1.1.0
     # via -r requirements.in
-pillow==8.0.1
+pillow==8.2.0
     # via
     #   -r requirements.in
     #   matplotlib
@@ -66,7 +66,9 @@ pyasn1==0.4.8
     #   pyasn1-modules
     #   rsa
 pyparsing==2.4.7
-    # via matplotlib
+    # via
+    #   httplib2
+    #   matplotlib
 python-dateutil==2.8.0
     # via
     #   django-tastypie
@@ -79,7 +81,7 @@ pytz==2019.1
     #   google-api-core
 requests==2.24.0
     # via google-api-core
-rsa==3.4.2
+rsa==4.7.2
     # via google-auth
 shortuuid==1.0.1
     # via -r requirements.in
