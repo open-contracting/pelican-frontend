@@ -1,4 +1,3 @@
-import json
 import time
 from datetime import datetime
 
@@ -78,7 +77,7 @@ def dataset_filter_items(request):
         with connections["data"].cursor() as cursor:
             cursor.execute(query)
             items = cursor.fetchall()[0][0]
-    except:
+    except Exception:
         return HttpResponseBadRequest(reason="The dataset could not be filtered in this way.")
 
     return JsonResponse({"items": items})
@@ -309,7 +308,7 @@ def generate_report(request):
             }
         )
     finally:
-        if gdocs != None:
+        if gdocs is not None:
             gdocs.destroy_tempdir()
 
     return response
