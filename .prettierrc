@@ -1,13 +1,20 @@
 {
   "tabWidth": 4,
-  "trailingComma": "none",
   "printWidth": 119,
+  "trailingComma": "none",
   "arrowParens": "avoid",
   "overrides": [
     {
-      "files": ["*.yaml", ".prettierrc"],
+      "files": ["*.json", "*.yaml", "*.yml", ".prettierrc"],
       "options": {
         "tabWidth": 2
+      }
+    },
+    {
+      "files": "*.html",
+      "options": {
+        "tabWidth": 2,
+        "printWidth": 150
       }
     }
   ]
