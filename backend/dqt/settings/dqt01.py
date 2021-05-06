@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa: F401
 
 CORS_ORIGIN_WHITELIST = ("https://dqt.datlab.eu", "https://localhost:22005")
 

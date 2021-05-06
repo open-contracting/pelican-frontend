@@ -3,7 +3,6 @@ from collections import OrderedDict
 from io import BytesIO
 
 import matplotlib.pyplot as plt
-import seaborn as sns
 from matplotlib import font_manager
 from matplotlib.patches import BoxStyle, FancyBboxPatch
 from PIL import Image, ImageDraw, ImageFont

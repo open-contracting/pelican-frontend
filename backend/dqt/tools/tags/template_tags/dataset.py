@@ -1,4 +1,3 @@
-from django.db import connections
 from django.utils.translation import gettext as _
 from dqt.models import DatasetLevelCheck
 from dqt.tools.misc import terms_enumeration

@@ -1,5 +1,5 @@
 # myapp/api.py
-from tastypie.fields import CharField, DictField, IntegerField, ListField, ToOneField
+from tastypie.fields import CharField, DictField, IntegerField, ListField
 from tastypie.resources import ModelResource
 
 from .models import (
