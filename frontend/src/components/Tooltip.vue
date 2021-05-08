@@ -11,12 +11,12 @@
 
 <script>
 export default {
-    data: function() {
+    data: function () {
         return {};
     },
     props: ["text"],
     computed: {
-        tooltipId: function() {
+        tooltipId: function () {
             var id = "id-" + Math.floor(Math.random() * 10000000000);
 
             return id;

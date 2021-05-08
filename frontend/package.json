@@ -1,80 +1,90 @@
 {
-    "name": "frontend",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "test:unit": "vue-cli-service test:unit"
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.29",
+    "@fortawesome/free-brands-svg-icons": "^5.13.1",
+    "@fortawesome/free-regular-svg-icons": "^5.13.1",
+    "@fortawesome/free-solid-svg-icons": "^5.13.1",
+    "@fortawesome/vue-fontawesome": "^0.1.10",
+    "axios": "^0.19.2",
+    "bootstrap-vue": "^2.17.3",
+    "chart.js": "^2.9.3",
+    "chroma": "0.0.1",
+    "chroma-js": "^2.1.0",
+    "core-js": "^2.6.11",
+    "numeral": "^2.0.6",
+    "register-service-worker": "^1.7.1",
+    "v-clipboard": "^2.2.3",
+    "vue": "^2.6.11",
+    "vue-context": "^5.2.0",
+    "vue-date-pick": "^1.4.1",
+    "vue-fragment": "^1.5.1",
+    "vue-google-charts": "^0.3.3",
+    "vue-i18n": "^8.18.2",
+    "vue-js-modal": "^2.0.0-rc.3",
+    "vue-json-pretty": "^1.6.3",
+    "vue-multiselect": "^2.1.6",
+    "vue-router": "^3.3.4",
+    "vue-simple-alert": "^1.1.1",
+    "vue-simple-context-menu": "^3.1.10",
+    "vuex": "^3.5.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^3.12.1",
+    "@vue/cli-plugin-pwa": "^3.12.1",
+    "@vue/cli-plugin-unit-mocha": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-eslint": "^10.1.0",
+    "chai": "^4.1.2",
+    "css-loader": "^3.5.3",
+    "eslint": "^5.16.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^7.3.1",
+    "vue-cli-plugin-fontawesome": "^0.2.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
     },
-    "dependencies": {
-        "@fortawesome/fontawesome-svg-core": "^1.2.29",
-        "@fortawesome/free-brands-svg-icons": "^5.13.1",
-        "@fortawesome/free-regular-svg-icons": "^5.13.1",
-        "@fortawesome/free-solid-svg-icons": "^5.13.1",
-        "@fortawesome/vue-fontawesome": "^0.1.10",
-        "axios": "^0.19.2",
-        "bootstrap-vue": "^2.17.3",
-        "chart.js": "^2.9.3",
-        "chroma": "0.0.1",
-        "chroma-js": "^2.1.0",
-        "core-js": "^2.6.11",
-        "numeral": "^2.0.6",
-        "register-service-worker": "^1.7.1",
-        "v-clipboard": "^2.2.3",
-        "vue": "^2.6.11",
-        "vue-context": "^5.2.0",
-        "vue-date-pick": "^1.4.1",
-        "vue-fragment": "^1.5.1",
-        "vue-google-charts": "^0.3.3",
-        "vue-i18n": "^8.18.2",
-        "vue-js-modal": "^2.0.0-rc.3",
-        "vue-json-pretty": "^1.6.3",
-        "vue-multiselect": "^2.1.6",
-        "vue-router": "^3.3.4",
-        "vue-simple-alert": "^1.1.1",
-        "vue-simple-context-menu": "^3.1.10",
-        "vuex": "^3.5.1"
+    "extends": [
+      "eslint:recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:vue/recommended"
+    ],
+    "rules": {
+      "import/no-named-as-default": 0,
+      "import/no-unresolved": 0,
+      "vue/no-v-html": 0,
+      "vue/require-default-prop": 0,
+      "vue/require-prop-types": 0
     },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^3.12.1",
-        "@vue/cli-plugin-eslint": "^3.12.1",
-        "@vue/cli-plugin-pwa": "^3.12.1",
-        "@vue/cli-plugin-unit-mocha": "^3.12.1",
-        "@vue/cli-service": "^3.12.1",
-        "@vue/test-utils": "1.0.0-beta.29",
-        "babel-eslint": "^10.1.0",
-        "chai": "^4.1.2",
-        "css-loader": "^3.5.3",
-        "eslint": "^5.16.0",
-        "eslint-plugin-vue": "^5.0.0",
-        "node-sass": "^4.14.1",
-        "sass-loader": "^7.3.1",
-        "vue-cli-plugin-fontawesome": "^0.2.0",
-        "vue-template-compiler": "^2.6.11"
-    },
-    "eslintConfig": {
-        "root": true,
-        "env": {
-            "node": true
-        },
-        "extends": [
-            "plugin:vue/essential",
-            "eslint:recommended"
-        ],
-        "rules": {},
-        "parserOptions": {
-            "parser": "babel-eslint"
-        }
-    },
-    "postcss": {
-        "plugins": {
-            "autoprefixer": {}
-        }
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions"
-    ]
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }

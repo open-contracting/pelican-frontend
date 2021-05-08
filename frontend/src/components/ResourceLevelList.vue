@@ -10,7 +10,7 @@
                 </div>
                 {{ $t("resourceLevel." + section + ".categoryName") }}
             </div>
-            <div class="td col-8 col-lg-7 text-right text-lg-left info_message" scope="col" >
+            <div class="td col-8 col-lg-7 text-right text-lg-left info_message" scope="col">
                 {{ resourceLevelStats.length }} {{ $t("resourceLevel.averageScore.description") }}:
                 <span v-if="avgScore != null">
                     {{ avgScore | formatPercentage }}
@@ -22,7 +22,13 @@
             </div>
         </div>
         <span class="checks" v-if="showChecks">
-            <ResourceLevelRow v-for="(value, name, index) in resourceLevelStats" :check="value" :name="value.name" v-bind:key="name" v-bind:index="index"></ResourceLevelRow>
+            <ResourceLevelRow
+                v-for="(value, name, index) in resourceLevelStats"
+                :check="value"
+                :name="value.name"
+                v-bind:key="name"
+                v-bind:index="index"
+            ></ResourceLevelRow>
         </span>
     </span>
 </template>
@@ -32,7 +38,7 @@ import ResourceLevelRow from "@/components/ResourceLevelRow";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {
-    data: function() {
+    data: function () {
         return {
             showChecks: false
         };
@@ -44,9 +50,7 @@ export default {
     },
     computed: {
         resourceLevelStats() {
-            var result = this.$store.getters.resourceLevelStatsBySection(
-                this.section
-            );
+            var result = this.$store.getters.resourceLevelStatsBySection(this.section);
 
             var order = [
                 "reference.buyer_in_parties",
@@ -87,30 +91,31 @@ export default {
                 "coherent.procurement_method_vs_number_of_tenderers"
             ];
 
-            return result.sort(function(a, b) {
-                var nameA = a["name"];
-                var nameB = b["name"];
-                if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {
-                    if (nameA < nameB) {
+            return result
+                .sort(function (a, b) {
+                    var nameA = a["name"];
+                    var nameB = b["name"];
+                    if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {
+                        if (nameA < nameB) {
+                            return -1;
+                        }
+
+                        return 1;
+                    } else if (order.indexOf(nameA) < 0) {
+                        return 1;
+                    } else if (order.indexOf(nameB) < 0) {
                         return -1;
                     }
 
-                    return 1;
-                } else if (order.indexOf(nameA) < 0) {
-                    return 1;
-                } else if (order.indexOf(nameB) < 0) {
-                    return -1;
-                }
-
-                return order.indexOf(nameA) - order.indexOf(nameB);
-            })
-            .filter(this.filter);
+                    return order.indexOf(nameA) - order.indexOf(nameB);
+                })
+                .filter(this.filter);
         },
         avgScore() {
             var passedCount = 0;
             var failedCount = 0;
             for (var i = 0; i < this.resourceLevelStats.length; i++) {
-                passedCount += this.resourceLevelStats[i].passed_count
+                passedCount += this.resourceLevelStats[i].passed_count;
                 failedCount += this.resourceLevelStats[i].failed_count;
             }
 
@@ -118,7 +123,7 @@ export default {
                 return null;
             }
 
-            return 100.0 * passedCount / (passedCount + failedCount);
+            return (100.0 * passedCount) / (passedCount + failedCount);
         }
     },
     mounted() {
@@ -132,7 +137,7 @@ export default {
                 this.$store.commit("removeResourceCheckExpandedNode", this.section);
             }
         }
-    },
+    }
 };
 </script>
 

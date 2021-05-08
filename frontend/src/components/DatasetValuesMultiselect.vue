@@ -36,7 +36,11 @@
             </div>
         </template>
         <template slot="clear" slot-scope="props">
-            <div class="multiselect__clear" v-if="selected.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
+            <div
+                class="multiselect__clear"
+                v-if="selected.length"
+                @mousedown.prevent.stop="clearAll(props.search)"
+            ></div>
         </template>
         <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
     </multiselect>
@@ -47,7 +51,7 @@ const axios = require("axios");
 import { CONFIG } from "@/config.js";
 
 export default {
-    data: function() {
+    data: function () {
         return {
             options: [],
             selected: [],
@@ -96,7 +100,7 @@ export default {
                     this.options = response["data"];
                     this.isLoading = false;
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     self.isLoading = false;
                     throw new Error(error);
                 });

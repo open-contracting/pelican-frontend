@@ -1,6 +1,6 @@
 export default {
     methods: {
-        onePercent: function() {
+        onePercent: function () {
             return this.check.total_count / 100;
         },
         applicationCount() {
@@ -9,25 +9,25 @@ export default {
     },
     computed: {
         okPercentage() {
-            return 100 * this.check.passed_count / this.check.total_count;
+            return (100 * this.check.passed_count) / this.check.total_count;
         },
         failedPercentage() {
-            return 100 * this.check.failed_count / this.check.total_count;
+            return (100 * this.check.failed_count) / this.check.total_count;
         },
         naPercentage() {
-            return 100 * this.check.undefined_count / this.check.total_count;
+            return (100 * this.check.undefined_count) / this.check.total_count;
         },
         passPercentage() {
-            return 100 * this.check.passed_count / this.applicationCount();
+            return (100 * this.check.passed_count) / this.applicationCount();
         },
         nonpassPercentage() {
-            return 100 * this.check.failed_count / this.applicationCount();
+            return (100 * this.check.failed_count) / this.applicationCount();
         },
         individualPassPercentage() {
-            return 100 * this.check.individual_passed_count / this.check.individual_application_count;
+            return (100 * this.check.individual_passed_count) / this.check.individual_application_count;
         },
         individualFailedPercentage() {
-            return 100 * this.check.individual_failed_count / this.check.individual_application_count;
+            return (100 * this.check.individual_failed_count) / this.check.individual_application_count;
         }
     }
 };

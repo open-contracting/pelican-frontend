@@ -2,28 +2,43 @@
     <div>
         <div
             @click="setDataset(dataset)"
-            :class="['row','tr', 'clickable', 'align-items-center', {disabled: !isDatasetImported(dataset)}]"
-            @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: {name: 'overview', params: {datasetId: dataset.id}}})"
+            :class="['row', 'tr', 'clickable', 'align-items-center', { disabled: !isDatasetImported(dataset) }]"
+            @contextmenu.prevent="
+                $root.$emit('navigationContextMenu', {
+                    event: $event,
+                    routerArguments: { name: 'overview', params: { datasetId: dataset.id } }
+                })
+            "
         >
             <div class="td col-4">
                 <span v-if="depth > 0">
-                    <span v-for="d in depth" v-bind:key="d" >&nbsp;&nbsp;</span>
-                    
+                    <span v-for="d in depth" v-bind:key="d">&nbsp;&nbsp;</span>
+
                     <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 {{ dataset.name }}
                 <span class="dataset_id">(Id {{ dataset.id }})</span>
                 <span v-if="depth == 0">&nbsp;</span>
-                <a v-if="isDatasetImported(dataset) && depth == 0" v-on:click.stop.prevent="$emit('dataset-filter', dataset)" href="#">
+                <a
+                    v-if="isDatasetImported(dataset) && depth == 0"
+                    v-on:click.stop.prevent="$emit('dataset-filter', dataset)"
+                    href="#"
+                >
                     <font-awesome-icon :icon="['fas', 'filter']" />
                 </a>
                 &nbsp;
-                <a v-if="isDatasetImported(dataset)" v-on:click.stop.prevent="$emit('dataset-report', dataset)" href="#">
+                <a
+                    v-if="isDatasetImported(dataset)"
+                    v-on:click.stop.prevent="$emit('dataset-report', dataset)"
+                    href="#"
+                >
                     <font-awesome-icon :icon="['fas', 'file']" />
                 </a>
             </div>
             <div class="td col-1 numeric text-right">{{ dataset.size | formatNumber }}</div>
-            <div v-if="dataset.meta.kingfisher_metadata" class="td col-1 numeric text-right">{{ dataset.meta.kingfisher_metadata.collection_id }}</div>
+            <div v-if="dataset.meta.kingfisher_metadata" class="td col-1 numeric text-right">
+                {{ dataset.meta.kingfisher_metadata.collection_id }}
+            </div>
             <div class="td col-1 phase_cell align-items-center align-middle">
                 <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
                     <span class="small_icon">
@@ -62,7 +77,7 @@
                 <b-link
                     v-if="dataset.ancestor_id"
                     class="time_varinace break_word"
-                    @click.stop="setDataset(dataset, {name: 'time'})"
+                    @click.stop="setDataset(dataset, { name: 'time' })"
                     :title="dataset.ancestor_id"
                 >
                     <span class="small_icon">
@@ -92,7 +107,7 @@ import sortMixins from "@/plugins/sortMixins.js";
 export default {
     name: "DatasetPickerRow",
     mixins: [stateMixin, sortMixins],
-    data: function() {
+    data: function () {
         return {
             showFilteredChildren: false
         };
@@ -100,18 +115,12 @@ export default {
     components: { ProgressBar },
     props: ["dataset", "depth"],
     computed: {
-        phases: function() {
-            return [
-                "PLANNED",
-                "CONTRACTING_PROCESS",
-                "DATASET",
-                "TIME_VARIANCE",
-                "CHECKED"
-            ];
+        phases: function () {
+            return ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];
         }
     },
     methods: {
-        setDataset: function(dataset, route = { name: "overview" }) {
+        setDataset: function (dataset, route = { name: "overview" }) {
             if (!this.isDatasetImported(dataset)) {
                 return;
             }
@@ -123,10 +132,10 @@ export default {
                 this.$router.push(route);
             }
         },
-        getDatasetProgress: function(dataset) {
+        getDatasetProgress: function (dataset) {
             return (this.phases.indexOf(dataset.phase) + 1) * 20;
         },
-        isDatasetImported: function(dataset) {
+        isDatasetImported: function (dataset) {
             return dataset.phase == "CHECKED" && dataset.state == "OK";
         }
     }

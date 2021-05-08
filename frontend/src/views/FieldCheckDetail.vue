@@ -5,14 +5,11 @@
 
             <template v-for="(c, k) in check.coverage.checks">
                 <h5 :key="k">
-                    <span class="category_name">
-                        {{ $t("fieldDetail.coverage.label") }}:
-                    </span>
-                     &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo;
-                     {{ $t("fieldDetail.checked") }}:
-                    &nbsp;
+                    <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
+                    &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo;
+                    {{ $t("fieldDetail.checked") }}: &nbsp;
                     <span class="bold">
-                        {{ c.passed_count + c.failed_count | formatNumber }}
+                        {{ (c.passed_count + c.failed_count) | formatNumber }}
                     </span>
                     &nbsp;
                     <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')"></Tooltip>
@@ -22,14 +19,11 @@
 
             <template v-for="(c, k) in check.quality.checks">
                 <h5 :key="k">
-                    <span class="category_name">
-                        {{ $t("fieldDetail.quality.label") }}:
-                    </span>
-                     &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo;
-                     {{ $t("fieldDetail.checked") }}:
-                    &nbsp;
+                    <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
+                    &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo;
+                    {{ $t("fieldDetail.checked") }}: &nbsp;
                     <span class="bold">
-                        {{ c.passed_count + c.failed_count | formatNumber }}
+                        {{ (c.passed_count + c.failed_count) | formatNumber }}
                     </span>
                     &nbsp;
                     <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')"></Tooltip>
@@ -56,7 +50,12 @@
             <span v-if="loadingPreviewData">
                 <div class="result_box loader text-center">
                     <div class="spinner">
-                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                        <b-spinner
+                            variant="primary"
+                            style="width: 4rem; height: 4rem"
+                            type="grow"
+                            class="spinner"
+                        ></b-spinner>
                     </div>
                     {{ $t("loader.data") }}
                 </div>
@@ -79,7 +78,7 @@ import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     name: "fieldCheckDetail",
-    data: function() {
+    data: function () {
         return {
             previewMetaData: null,
             previewDataItemId: null,
@@ -94,27 +93,27 @@ export default {
         Tooltip
     },
     methods: {
-        preview: function(itemId) {
+        preview: function (itemId) {
             this.loadingPreviewData = true;
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
-                    this.$alert(this.$t("preview.cannotDisplay"), null, 'error');
+                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
                     this.previewDataItemId = null;
                 }
 
                 this.loadingPreviewData = false;
             });
 
-            var result = this.allExamples.find(function(element) {
+            var result = this.allExamples.find(function (element) {
                 return element.meta.item_id == itemId;
             });
 
             if (result) {
                 this.previewMetaData = result.result;
             }
-        },
+        }
     },
     computed: {
         allExamples() {
@@ -139,9 +138,7 @@ export default {
             return allExamples;
         },
         check() {
-            return this.$store.getters.fieldLevelCheckByPath(
-                this.$route.params.path
-            );
+            return this.$store.getters.fieldLevelCheckByPath(this.$route.params.path);
         },
         exampleSections() {
             var exampleSections = [];
@@ -153,7 +150,7 @@ export default {
                             prefix: this.$t("fieldDetail.coverage.failureSamplesPrefix"),
                             header: this.$t("fieldDetail.coverage." + key + ".count_header"),
                             examples: failed.map(val => val.meta)
-                        })
+                        });
                     }
                 });
 
@@ -164,7 +161,7 @@ export default {
                             prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
                             header: this.$t("fieldDetail.quality." + key + ".count_header"),
                             examples: failed.map(val => val.meta)
-                        })
+                        });
                     }
                 });
 
@@ -174,7 +171,10 @@ export default {
                 };
                 if (this.check.quality.passed_examples != undefined && this.check.quality.passed_examples.length > 0) {
                     passedSection.examples = this.check.quality.passed_examples.map(val => val.meta);
-                } else if (this.check.coverage.passed_examples != undefined && this.check.coverage.passed_examples.length > 0) {
+                } else if (
+                    this.check.coverage.passed_examples != undefined &&
+                    this.check.coverage.passed_examples.length > 0
+                ) {
                     passedSection.examples = this.check.coverage.passed_examples.map(val => val.meta);
                 }
                 if (passedSection.examples.length > 0) {
@@ -185,9 +185,7 @@ export default {
             return exampleSections;
         },
         previewData() {
-            var result = this.$store.getters.dataItemById(
-                this.previewDataItemId
-            );
+            var result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
                 return result["data"];

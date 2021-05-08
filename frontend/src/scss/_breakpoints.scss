@@ -4,7 +4,8 @@
 @import "~bootstrap/scss/variables";
 
 /* set the overriding variables */
-$grid-breakpoints: (xxxs: 0,
+$grid-breakpoints: (
+    xxxs: 0,
     xxs: 320px,
     xs: 568px,
     sm: 667px,
@@ -13,8 +14,10 @@ $grid-breakpoints: (xxxs: 0,
     xl: 1200px,
     xxl: 1440px,
     xxxl: 1600px,
-    xxxxl: 2000px);
-$container-max-widths: (xxxs: 0,
+    xxxxl: 2000px
+);
+$container-max-widths: (
+    xxxs: 0,
     xxs: 320px,
     xs: 568px,
     sm: 667px,
@@ -23,4 +26,5 @@ $container-max-widths: (xxxs: 0,
     xl: 1200px,
     xxl: 1440px,
     xxxl: 1600px,
-    xxxxl: 2000px);
+    xxxxl: 2000px
+);

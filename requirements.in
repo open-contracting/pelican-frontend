@@ -1,0 +1,11 @@
+django
+django-cors-headers
+django-tastypie
+google-api-python-client
+lxml
+matplotlib
+pika
+pillow
+psycopg2-binary
+shortuuid
+simplejson

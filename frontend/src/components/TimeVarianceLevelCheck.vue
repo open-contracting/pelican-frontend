@@ -37,7 +37,10 @@
                         </div>
                         <div class="row">
                             <div class="col col-6 text-center">
-                                <span class="result_percentage" v-bind:class="{ color_failed: !check.coverage_result }">
+                                <span
+                                    class="result_percentage"
+                                    v-bind:class="{ color_failed: !check.coverage_result }"
+                                >
                                     {{ coveragePercentage | formatPercentage }}
                                 </span>
                             </div>
@@ -67,12 +70,12 @@ import timeMixins from "@/plugins/timeMixins.js";
 
 export default {
     mixins: [timeMixins],
-    data: function() {
+    data: function () {
         return {};
     },
     props: ["check"],
     methods: {
-        detail: function(name) {
+        detail: function (name) {
             this.$router.push({
                 name: "timeVarianceCheckDetail",
                 params: { check: name }

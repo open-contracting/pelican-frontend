@@ -26,7 +26,7 @@ export default new Vuex.Store({
         fieldLevelFilter: () => true,
         resourceLevelFilterIndex: 0,
         datasetLevelFilterIndex: 0,
-        timeLevelFilterIndex: 0,
+        timeLevelFilterIndex: 0
     },
     getters: {
         fieldLevelFilterIndex: state => {
@@ -61,27 +61,21 @@ export default new Vuex.Store({
         },
         resourceLevelStatsBySection: state => sectionName => {
             if (state.resourceLevelStats != null) {
-                return state.resourceLevelStats.filter(item =>
-                    item.name.startsWith(sectionName)
-                );
+                return state.resourceLevelStats.filter(item => item.name.startsWith(sectionName));
             }
 
             return [];
         },
         resourceLevelCheckByName: state => checkName => {
             if (state.resourceLevelStats != null) {
-                return state.resourceLevelStats.find(
-                    item => item.name === checkName
-                );
+                return state.resourceLevelStats.find(item => item.name === checkName);
             }
 
             return null;
         },
         datasetLevelCheckByName: state => checkName => {
             if (state.datasetLevelStats) {
-                return state.datasetLevelStats.find(
-                    item => item.name === checkName
-                );
+                return state.datasetLevelStats.find(item => item.name === checkName);
             }
 
             return null;
@@ -126,7 +120,7 @@ export default new Vuex.Store({
 
             return null;
         },
-        fieldCheckLayout: function(state) {
+        fieldCheckLayout: function (state) {
             return state.fieldCheckLayout;
         },
         isFieldCheckExpanded: state => path => {
@@ -138,22 +132,16 @@ export default new Vuex.Store({
         },
         timeVarianceLevelCheckByName: state => checkName => {
             if (state.timeVarianceLevelStats) {
-                return state.timeVarianceLevelStats.find(
-                    item => item.name === checkName
-                );
+                return state.timeVarianceLevelStats.find(item => item.name === checkName);
             }
 
             return null;
         },
         fieldCheckSortedBy: state => {
-            return state.fieldCheckSorting != null ?
-                state.fieldCheckSorting.by :
-                null;
+            return state.fieldCheckSorting != null ? state.fieldCheckSorting.by : null;
         },
         fieldCheckSortedAscending: state => {
-            return state.fieldCheckSorting != null ?
-                state.fieldCheckSorting.asc :
-                null;
+            return state.fieldCheckSorting != null ? state.fieldCheckSorting.asc : null;
         },
         fieldCheckSearch: state => {
             return state.fieldCheckSearch;
@@ -162,14 +150,10 @@ export default new Vuex.Store({
             return state.datasetSearch;
         },
         datasetSortedBy: state => {
-            return state.datasetSorting != null ?
-                state.datasetSorting.by :
-                null;
+            return state.datasetSorting != null ? state.datasetSorting.by : null;
         },
         datasetSortedAscending: state => {
-            return state.datasetSorting != null ?
-                state.datasetSorting.asc :
-                null;
+            return state.datasetSorting != null ? state.datasetSorting.asc : null;
         },
         isResourceCheckExpanded: state => section => {
             if (state.resourceCheckExpandedNodes != null) {
@@ -180,8 +164,8 @@ export default new Vuex.Store({
         },
         extensionDataByName: state => extensionName => {
             return state.dataset.meta.collection_metadata.extensions.find(item =>
-                item.name.hasOwnProperty('en') ? item.name['en'] == extensionName : item.name == extensionName
-            )
+                item.name.hasOwnProperty("en") ? item.name["en"] == extensionName : item.name == extensionName
+            );
         }
     },
     mutations: {
@@ -209,7 +193,7 @@ export default new Vuex.Store({
         setResourceLevelCheckDetail(state, { name, data }) {
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.resourceLevelStats);
-            updatedStats.forEach(function(item, i) {
+            updatedStats.forEach(function (item, i) {
                 if (item.name == name) Object.assign(updatedStats[i], data);
             });
             state.resourceLevelStats = updatedStats;
@@ -227,7 +211,7 @@ export default new Vuex.Store({
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.fieldLevelStats);
 
-            updatedStats.forEach(function(item, i) {
+            updatedStats.forEach(function (item, i) {
                 if (item.path == path) Object.assign(updatedStats[i], data);
             });
 
@@ -245,9 +229,7 @@ export default new Vuex.Store({
             state.fieldCheckExpandedNodes = nodes;
         },
         removeFieldCheckExpandedNode(state, path) {
-            state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter(
-                v => !v.startsWith(path)
-            );
+            state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter(v => !v.startsWith(path));
         },
         setTimeVarianceLevelStats(state, stats) {
             state.timeVarianceLevelStats = stats;
@@ -279,10 +261,8 @@ export default new Vuex.Store({
             }
         },
         removeResourceCheckExpandedNode(state, section) {
-            state.resourceCheckExpandedNodes = state.resourceCheckExpandedNodes.filter(
-                v => !v.startsWith(section)
-            );
-        },
+            state.resourceCheckExpandedNodes = state.resourceCheckExpandedNodes.filter(v => !v.startsWith(section));
+        }
     },
     actions: {
         updateDataset({ dispatch, commit }, newDataset) {
@@ -294,11 +274,7 @@ export default new Vuex.Store({
             dispatch("loadTimeVarianceLevelStats");
         },
         loadDataset({ dispatch, commit }, datasetId) {
-            var url =
-                CONFIG.apiBaseUrl +
-                CONFIG.apiEndpoints.dataset +
-                "/" +
-                datasetId;
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset + "/" + datasetId;
 
             return new Promise(resolve => {
                 axios
@@ -315,7 +291,7 @@ export default new Vuex.Store({
                             resolve();
                         });
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         throw new Error(error);
                     });
             });
@@ -323,14 +299,10 @@ export default new Vuex.Store({
         loadResourceLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setResourceLevelStats", null);
-                var url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.resourceLevelStats +
-                    "/" +
-                    state.dataset.id;
+                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelStats + "/" + state.dataset.id;
                 axios
                     .get(url)
-                    .then(function(response) {
+                    .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
                             response["data"][key]["name"] = key;
@@ -339,7 +311,7 @@ export default new Vuex.Store({
                         commit("setResourceLevelStats", data);
                         resolve();
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         throw new Error(error);
                     });
             });
@@ -359,7 +331,7 @@ export default new Vuex.Store({
                             checkName;
                         axios
                             .get(url)
-                            .then(function(response) {
+                            .then(function (response) {
                                 response["data"]["examples_filled"] = true;
                                 commit("setResourceLevelCheckDetail", {
                                     name: checkName,
@@ -367,7 +339,7 @@ export default new Vuex.Store({
                                 });
                                 resolve();
                             })
-                            .catch(function(error) {
+                            .catch(function (error) {
                                 throw new Error(error);
                             });
                     }
@@ -377,14 +349,10 @@ export default new Vuex.Store({
         loadDatasetLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setDatasetLevelStats", null);
-                var url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.datasetLevelStats +
-                    "/" +
-                    state.dataset.id;
+                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelStats + "/" + state.dataset.id;
                 axios
                     .get(url)
-                    .then(function(response) {
+                    .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
                             response["data"][key]["name"] = key;
@@ -393,7 +361,7 @@ export default new Vuex.Store({
                         commit("setDatasetLevelStats", data);
                         resolve();
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         throw new Error(error);
                     });
             });
@@ -405,18 +373,14 @@ export default new Vuex.Store({
                     dataItem = state.dataItems.find(item => item.id === itemId);
                 }
                 if (dataItem == null) {
-                    var url =
-                        CONFIG.apiBaseUrl +
-                        CONFIG.apiEndpoints.dataItem +
-                        "/" +
-                        itemId;
+                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataItem + "/" + itemId;
                     axios
                         .get(url)
-                        .then(function(response) {
+                        .then(function (response) {
                             commit("addDataItem", response["data"]);
                             resolve();
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             reject(error);
                         });
                 } else {
@@ -428,25 +392,21 @@ export default new Vuex.Store({
             return new Promise(resolve => {
                 commit("setFieldLevelStats", null);
 
-                var url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.fieldStats +
-                    "/" +
-                    state.dataset.id;
+                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
 
-                var okShare = function(item) {
+                var okShare = function (item) {
                     var result = (item.passed_count / item.total_count) * 100;
                     return isNaN(result) ? 0 : result;
                 };
 
-                var failedShare = function(item) {
+                var failedShare = function (item) {
                     var result = (item.failed_count / item.total_count) * 100;
                     return isNaN(result) ? 0 : result;
                 };
 
                 axios
                     .get(url)
-                    .then(function(response) {
+                    .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
                             var item = response["data"][key];
@@ -465,7 +425,7 @@ export default new Vuex.Store({
                         commit("setFieldLevelStats", data);
                         commit("resetFieldCheckSorting");
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         throw new Error(error);
                     });
             });
@@ -473,30 +433,22 @@ export default new Vuex.Store({
         loadFieldLevelCheckDetail({ commit, state, getters }, path) {
             var checkDetail = getters.fieldLevelCheckByPath(path);
 
-            if (
-                checkDetail == null ||
-                (checkDetail != null && !checkDetail.examplesLoaded)
-            ) {
+            if (checkDetail == null || (checkDetail != null && !checkDetail.examplesLoaded)) {
                 if (state.dataset != null && path != null) {
                     var url =
-                        CONFIG.apiBaseUrl +
-                        CONFIG.apiEndpoints.fieldDetail +
-                        "/" +
-                        state.dataset.id +
-                        "/" +
-                        path;
+                        CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldDetail + "/" + state.dataset.id + "/" + path;
 
                     var aaa = path;
                     axios
                         .get(url)
-                        .then(function(response) {
+                        .then(function (response) {
                             response["data"]["examples_filled"] = true;
                             commit("setFieldLevelCheckDetail", {
                                 path: aaa,
                                 data: response["data"]
                             });
                         })
-                        .catch(function(error) {
+                        .catch(function (error) {
                             throw new Error(error);
                         });
                 }
@@ -505,14 +457,10 @@ export default new Vuex.Store({
         loadTimeVarianceLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setTimeVarianceLevelStats", null);
-                var url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.timeVarianceLevelStats +
-                    "/" +
-                    state.dataset.id;
+                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.timeVarianceLevelStats + "/" + state.dataset.id;
                 axios
                     .get(url)
-                    .then(function(response) {
+                    .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
                             response["data"][key]["name"] = key;
@@ -521,7 +469,7 @@ export default new Vuex.Store({
                         commit("setTimeVarianceLevelStats", data);
                         resolve();
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         throw new Error(error);
                     });
             });
@@ -536,7 +484,7 @@ export default new Vuex.Store({
             commit("setFieldCheckLayout", "table");
         },
         setExpandedNodesForSearch({ getters, commit }) {
-            var isPathSearched = function(path) {
+            var isPathSearched = function (path) {
                 if (getters.fieldCheckSearch && path) {
                     var search_lc = getters.fieldCheckSearch.toLowerCase();
                     var path_lc = path.toLowerCase();
@@ -577,10 +525,7 @@ export default new Vuex.Store({
                         }
 
                         return matched.some(m => {
-                            return (
-                                m.startsWith(n + ".") &&
-                                isPathSearched(m.substr(n.length))
-                            );
+                            return m.startsWith(n + ".") && isPathSearched(m.substr(n.length));
                         });
                     });
 

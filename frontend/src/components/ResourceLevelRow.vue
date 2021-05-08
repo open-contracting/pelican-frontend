@@ -2,7 +2,9 @@
     <div
         class="tr row clickable align-items-center"
         v-on:click="detail()"
-        @contextmenu.prevent="$root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments})"
+        @contextmenu.prevent="
+            $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
+        "
     >
         <div class="col-9 col-lg-5 break_word check_name">
             <span>{{ $t("resourceLevel." + name + ".name") }}</span>
@@ -27,7 +29,7 @@ import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
-    data: function() {
+    data: function () {
         return {
             detailRouterArguments: {
                 name: "resourceCheckDetail",
@@ -42,7 +44,7 @@ export default {
     components: { ProgressBar },
     props: ["check", "name"],
     methods: {
-        detail: function() {
+        detail: function () {
             this.$router.push(this.detailRouterArguments);
         }
     }

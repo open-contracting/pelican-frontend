@@ -1,6 +1,11 @@
 <template>
     <fragment>
-        <FieldCheckTableRow :key="path" :check="check" :showStats="filter(data._check)" v-bind:class="{ hidden: (hide || !isSearched(data)) }">
+        <FieldCheckTableRow
+            :key="path"
+            :check="check"
+            :showStats="filter(data._check)"
+            v-bind:class="{ hidden: hide || !isSearched(data) }"
+        >
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
                 <div v-if="isExpandable" class="switcher text-center" @click.stop="expanded = !expanded">
@@ -28,7 +33,7 @@ import { Fragment } from "vue-fragment";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
-    data: function() {
+    data: function () {
         return {};
     },
     props: {
@@ -40,57 +45,54 @@ export default {
     name: "tree-node",
     components: { FieldCheckTableRow, Fragment },
     mixins: [fieldCheckMixins],
-    mounted: function() {
+    mounted: function () {
         if (this.expand) {
             this.expanded = true;
         }
     },
     computed: {
-        children: function() {
+        children: function () {
             return this.getChildren(this.data);
         },
-        isExpandable: function() {
+        isExpandable: function () {
             return this.hasChildren && this.isSearchedSubTree(this.data);
         },
-        hasChildren: function() {
+        hasChildren: function () {
             return Object.keys(this.children).length > 0;
         },
         expanded: {
-            get: function() {
+            get: function () {
                 return this.$store.getters.isFieldCheckExpanded(this.path);
             },
-            set: function(value) {
+            set: function (value) {
                 if (value) {
                     this.$store.commit("addFieldCheckExpandedNode", this.path);
                 } else {
-                    this.$store.commit(
-                        "removeFieldCheckExpandedNode",
-                        this.path
-                    );
+                    this.$store.commit("removeFieldCheckExpandedNode", this.path);
                 }
             }
         },
-        path: function() {
+        path: function () {
             return this.data._check.path;
         },
-        check: function() {
+        check: function () {
             return this.data._check;
         },
-        filter: function() {
+        filter: function () {
             return this.$store.getters.fieldLevelFilter;
         }
     },
     methods: {
-        isSearched: function(node) {
+        isSearched: function (node) {
             return this.isSearchedNode(node) || this.isSearchedSubTree(node);
         },
-        isSearchedSubTree: function(node) {
+        isSearchedSubTree: function (node) {
             return Object.values(this.getChildren(node)).some(n => this.isSearched(n));
         },
-        isSearchedNode: function(node) {
+        isSearchedNode: function (node) {
             return this.isPathSearched(node._check.path) && this.filter(node._check);
         },
-        getChildren: function(node) {
+        getChildren: function (node) {
             var result = Object.assign({}, node);
             delete result._check;
             return result;

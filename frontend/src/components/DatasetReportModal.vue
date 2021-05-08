@@ -15,7 +15,7 @@
                 </b-alert>
                 <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
                 <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
-                    {{ 'https://docs.google.com/document/d/' + submitData.file_id }}
+                    {{ "https://docs.google.com/document/d/" + submitData.file_id }}
                 </a>
             </span>
             <!-- TODO -->
@@ -35,8 +35,8 @@
                     <div>
                         <span>link: </span>
                         <a :href="'https://docs.google.com/document/d/' + error.template_id" target="_blank">
-                            {{ 'https://docs.google.com/document/d/' + error.template_id }}
-                        </a>    
+                            {{ "https://docs.google.com/document/d/" + error.template_id }}
+                        </a>
                     </div>
                 </div>
             </span>
@@ -127,7 +127,7 @@ import Loader from "@/components/Loader.vue";
 
 export default {
     props: ["dataset"],
-    data: function() {
+    data: function () {
         return {
             isSubmitting: false,
             documentId: "",
@@ -136,13 +136,15 @@ export default {
             submitStatus: null,
             submitData: null,
             documentLink: null,
-            errorMessage: null,
+            errorMessage: null
         };
     },
     components: { Loader },
     methods: {
         createDatasetReport() {
-            if (this.dataset == null) { return; }
+            if (this.dataset == null) {
+                return;
+            }
             this.errorMessage = null;
             this.isSubmitting = true;
 
@@ -150,27 +152,24 @@ export default {
                 dataset_id: parseInt(this.dataset.id),
                 document_id: this.documentId,
                 folder_id: this.folderId
-            }
+            };
             if (this.reportName.trim() != "") {
                 data.report_name = this.reportName.trim();
             }
 
             axios
-                .post(
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport,
-                    data
-                )
-                .then((response) => {
+                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport, data)
+                .then(response => {
                     if (response.status == 200) {
                         this.submitStatus = response.data.status;
                         this.submitData = response.data.data;
                     } else {
-                        this.submitStatus = 'server_error';
+                        this.submitStatus = "server_error";
                         this.errorMessage = response.statusText;
                     }
                 })
-                .catch((error) => {
-                    this.submitStatus = 'server_error';
+                .catch(error => {
+                    this.submitStatus = "server_error";
                     this.errorMessage = error.response.statusText;
                 })
                 .finally(() => {
@@ -215,7 +214,7 @@ export default {
 }
 
 .variant-danger {
-    color: #6C010E;
+    color: #6c010e;
 }
 
 .modal_box {
@@ -284,5 +283,4 @@ export default {
 .info_prefix {
     color: $headings-light-color;
 }
-
 </style>

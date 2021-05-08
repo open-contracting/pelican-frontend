@@ -1,24 +1,24 @@
 <template>
     <div class="inline_bar numeric" v-bind:class="state" ref="bar">
         <div class="bar" v-bind:style="{ width: barWidth + 'px' }">
-            <span v-if="barWidth > 30">{{ percentage | formatPercentage}}</span>
+            <span v-if="barWidth > 30">{{ percentage | formatPercentage }}</span>
             <span v-else>&nbsp;</span>
         </div>
         <div v-if="barWidth <= 30" class="count">
-            <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatPercentage}}</span>
+            <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatPercentage }}</span>
             <span v-if="showCount" class="count_holder">
-                <span class="count_holder">({{ count | formatNumber}})</span>
+                <span class="count_holder">({{ count | formatNumber }})</span>
             </span>
         </div>
         <div v-if="barWidth > 30 && showCount" class="count">
-            <span class="count_holder">({{ count | formatNumber}})</span>
+            <span class="count_holder">({{ count | formatNumber }})</span>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    data: function() {
+    data: function () {
         return {
             barWidth: 1
         };
@@ -27,12 +27,9 @@ export default {
     mounted() {
         if (this.percentage > 0) {
             if (this.showCount) {
-                this.barWidth =
-                    ((this.$refs.bar.clientWidth - 100) / 100) *
-                    this.percentage;
+                this.barWidth = ((this.$refs.bar.clientWidth - 100) / 100) * this.percentage;
             } else {
-                this.barWidth =
-                    (this.$refs.bar.clientWidth / 100) * this.percentage;
+                this.barWidth = (this.$refs.bar.clientWidth / 100) * this.percentage;
             }
         }
     }

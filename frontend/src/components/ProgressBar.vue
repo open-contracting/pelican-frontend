@@ -1,7 +1,14 @@
 <template>
     <div class="progress_bar">
         <template v-for="(b, i) in allBars">
-            <div v-if="b.value" :class="['inner', b.class]" :key="i" :style="{width: b.value + '%', 'background-color': b.color}">&nbsp;</div>
+            <div
+                v-if="b.value"
+                :class="['inner', b.class]"
+                :key="i"
+                :style="{ width: b.value + '%', 'background-color': b.color }"
+            >
+                &nbsp;
+            </div>
         </template>
     </div>
 </template>
@@ -11,23 +18,23 @@ export default {
     name: "progress-bar",
     props: ["bars", "value", "ok", "failed"],
     computed: {
-        allBars: function() {
-            var result = []
+        allBars: function () {
+            var result = [];
 
             if (this.value) {
-                result.push({value: this.value})
+                result.push({ value: this.value });
             }
             if (this.ok) {
-                result.push({value: this.ok, class: "ok"})
+                result.push({ value: this.ok, class: "ok" });
             }
             if (this.failed) {
-                result.push({value: this.failed, class: "failed"})
+                result.push({ value: this.failed, class: "failed" });
             }
             if (this.bars) {
-                result.concat(this.bars)
+                result.concat(this.bars);
             }
 
-            return result
+            return result;
         }
     }
 };
