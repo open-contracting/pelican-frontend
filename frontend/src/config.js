@@ -28,6 +28,12 @@ if (process.env.VUE_APP_SERVER == "mirek_dev01") {
     });
 }
 
+if (process.env.NODE_ENV == "amy01") {
+    Object.assign(config, {
+        apiBaseUrl: "https://pelican.datlab.eu/"
+    });
+}
+
 if (process.env.NODE_ENV == "production") {
     Object.assign(config, {
         apiBaseUrl: "https://dqt.datlab.eu/"
