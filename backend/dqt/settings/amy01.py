@@ -1,6 +1,6 @@
 from .base import *  # noqa: F401, F403
 
-CORS_ORIGIN_WHITELIST = ("https://dqt.datlab.eu", "https://localhost:22005")
+CORS_ORIGIN_WHITELIST = ("https://pelican.datlab.eu")
 
 DATABASES = {
     "default": {
