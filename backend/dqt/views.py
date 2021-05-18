@@ -335,8 +335,7 @@ def dataset_start(request):
     publish(json.dumps(message), routing_key)
 
     return JsonResponse(
-        {"status": "ok", "data": {"message": f"Dataset {dataset_name} on Pelican started"}},
-        safe=False
+        {"status": "ok", "data": {"message": f"Dataset {dataset_name} on Pelican started"}}, safe=False
     )
 
 
