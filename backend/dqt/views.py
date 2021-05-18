@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from psycopg2 import sql
 
-from .models import DataItem, Dataset, DatasetLevelCheck, TimeVarianceLevelCheck
+from .models import DataItem, Dataset, DatasetLevelCheck, ProgressMonitorDataset, TimeVarianceLevelCheck
 from .tools.errors import GoogleDriveError, TagError
 from .tools.gdocs import Gdocs
 from .tools.rabbit import publish
@@ -312,3 +312,38 @@ def generate_report(request):
             gdocs.destroy_tempdir()
 
     return response
+
+
+@csrf_exempt
+def dataset_start(request):
+    if request.method == "GET":
+        return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
+
+    routing_key = "_ocds_kingfisher_extractor_init"
+
+    body = json.loads(request.body.decode("utf-8"))
+
+    dataset_name = body.get("name")
+
+    message = {
+        "name": dataset_name,
+        "collection_id": body.get("collection_id"),
+        # "ancestor_id": ancestor_id,
+        # "max_items": max_items,
+    }
+
+    publish(json.dumps(message), routing_key)
+
+    return JsonResponse(
+        {"status": "ok", "data": {"message": f"Dataset {dataset_name} on Pelican started"}},
+        safe=False
+    )
+
+
+@csrf_exempt
+def dataset_progress(request, dataset_id):
+    try:
+        monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
+        return JsonResponse(monitor, safe=False)
+    except ProgressMonitorDataset.DoesNotExist:
+        return JsonResponse({"status": "error", "data": {"reason": "Dataset progress not found"}}, status_code=404)
