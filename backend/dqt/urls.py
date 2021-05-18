@@ -58,7 +58,7 @@ urlpatterns = [
     ),
     path("api/generate_report", generate_report, name="generate_report"),
     path("api/dataset_start", dataset_start, name="dataset_start"),
-    path("api/dataset_progress/<dataset_id>", dataset_progress, name="dataset_progress"),
+    path("api/dataset_status/<dataset_id>", dataset_progress, name="dataset_status"),
     url(r"^api/", include(dataset_resource.urls)),
     url(r"^api/", include(data_item_resource.urls)),
     url(r"^api/", include(progress_monitor_dataset_resource.urls)),
