@@ -345,7 +345,7 @@ def dataset_progress(request, dataset_id):
         monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
         return JsonResponse({"status": "ok", "data": monitor}, safe=False)
     except ProgressMonitorDataset.DoesNotExist:
-        return JsonResponse({"status": "error", "data": {"reason": "Dataset progress not found"}}, status=404)
+        return JsonResponse({"status": "ok", "data": None}, safe=False)
 
 
 @csrf_exempt
