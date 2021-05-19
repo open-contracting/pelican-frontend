@@ -343,6 +343,18 @@ def dataset_start(request):
 def dataset_progress(request, dataset_id):
     try:
         monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
-        return JsonResponse(monitor, safe=False)
+        return JsonResponse({"status": "ok", "data": monitor}, safe=False)
     except ProgressMonitorDataset.DoesNotExist:
         return JsonResponse({"status": "error", "data": {"reason": "Dataset progress not found"}}, status=404)
+
+
+@csrf_exempt
+def dataset_id(request):
+    if request.method == "GET":
+        return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
+
+    body = json.loads(request.body.decode("utf-8"))
+    dataset_name = body.get("name")
+
+    dataset = Dataset.objects.get(name=dataset_name)
+    return JsonResponse({"status": "ok", "data": dataset.id if dataset else None}, safe=False)
