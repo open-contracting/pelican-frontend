@@ -8,7 +8,14 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from psycopg2 import sql
 
-from .models import DataItem, Dataset, DatasetLevelCheck, ProgressMonitorDataset, TimeVarianceLevelCheck
+from .models import (
+    DataItem,
+    Dataset,
+    DatasetLevelCheck,
+    FieldLevelCheck,
+    ProgressMonitorDataset,
+    TimeVarianceLevelCheck,
+)
 from .tools.errors import GoogleDriveError, TagError
 from .tools.gdocs import Gdocs
 from .tools.rabbit import publish
@@ -358,3 +365,61 @@ def dataset_id(request):
 
     dataset = Dataset.objects.get(name=dataset_name)
     return JsonResponse({"status": "ok", "data": dataset.id if dataset else None}, safe=False)
+
+
+@csrf_exempt
+def dataset_availability(request, dataset_id):
+    map = {
+        "parties": ["parties.id"],
+        "planning": ["planning.budget"],
+        "tenders": ["tender.id"],
+        "tenderers": ["tenderers.id"],
+        "tenders_items": ["tender.items.id"],
+        "awards": ["awards.id"],
+        "awards_items": ["awards.items.id"],
+        "awards_suppliers": ["awards.suppliers.id"],
+        "contracts": ["contracts.id"],
+        "contracts_items": ["contracts.items.id"],
+        "contracts_transactions": ["contracts.implementation.transactions.id"],
+        "documents": [
+            "planning.documents.id",
+            "tender.documents.id",
+            "awards.documents.id",
+            "contracts.documents.id",
+            "contracts.implementation.documents.id",
+        ],
+        "milestones": [
+            "planning.milestones.id",
+            "tender.milestones.id",
+            "contracts.milestones.id",
+            "contracts.implementation.milestones.id",
+        ],
+        "amendments": ["tender.amendments.id", "awards.amendments.id", "contract.amendments.id"],
+    }
+
+    with connections["data"].cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
+            FROM {t} flc, jsonb_each(flc.result->'checks') c
+            WHERE dataset_id = %(dataset_id)s
+                AND c.key IN {checks}
+            GROUP BY c.key
+            ORDER BY c.key
+        """.format(
+                t=FieldLevelCheck._meta.db_table, checks=tuple([j for i in map.values() for j in i])
+            ),
+            {"dataset_id": dataset_id},
+        )
+
+        results = cursor.fetchall()
+
+        counts = {}
+        for key, items in map.items():
+            counts[key] = 0
+            for i in items:
+                for r in results:
+                    if r[0] == i:
+                        counts[key] += int(r[1])
+
+    return JsonResponse({"status": "ok", "data": counts}, safe=False)

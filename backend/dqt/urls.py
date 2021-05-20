@@ -14,6 +14,7 @@ from .api import (
 )
 from .views import (
     create_dataset_filter,
+    dataset_availability,
     dataset_distinct_values,
     dataset_filter_items,
     dataset_id,
@@ -61,6 +62,7 @@ urlpatterns = [
     path("api/dataset_start", dataset_start, name="dataset_start"),
     path("api/dataset_status/<dataset_id>", dataset_progress, name="dataset_status"),
     path("api/dataset_id", dataset_id, name="dataset_id"),
+    path("api/dataset_availability/<dataset_id>", dataset_availability, name="dataset_availability"),
     url(r"^api/", include(dataset_resource.urls)),
     url(r"^api/", include(data_item_resource.urls)),
     url(r"^api/", include(progress_monitor_dataset_resource.urls)),
