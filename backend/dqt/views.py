@@ -371,7 +371,7 @@ def dataset_id(request):
 def dataset_availability(request, dataset_id):
     map = {
         "parties": ["parties.id"],
-        "planning": ["planning.budget"],
+        "plannings": ["planning.budget"],
         "tenders": ["tender.id"],
         "tenderers": ["tenderers.id"],
         "tenders_items": ["tender.items.id"],
