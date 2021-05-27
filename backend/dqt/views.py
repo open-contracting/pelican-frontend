@@ -423,3 +423,10 @@ def dataset_availability(request, dataset_id):
                         counts[key] += int(r[1])
 
     return JsonResponse({"status": "ok", "data": counts}, safe=False)
+
+
+@csrf_exempt
+def dataset_metadata(request, dataset_id):
+    meta = Dataset.objects.values("meta__collection_metadata").get(id=dataset_id)
+
+    return JsonResponse({"status": "ok", "data": meta}, safe=False)
