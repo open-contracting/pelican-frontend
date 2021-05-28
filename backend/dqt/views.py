@@ -427,6 +427,6 @@ def dataset_availability(request, dataset_id):
 
 @csrf_exempt
 def dataset_metadata(request, dataset_id):
-    meta = Dataset.objects.values("meta__collection_metadata").get(id=dataset_id)
+    meta = Dataset.objects.values_list("meta__collection_metadata", flat=True).get(id=dataset_id)
 
     return JsonResponse({"status": "ok", "data": meta}, safe=False)
