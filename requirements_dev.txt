@@ -44,7 +44,7 @@ django-cors-headers==3.0.2
     # via -r requirements.txt
 django-tastypie==0.14.2
     # via -r requirements.txt
-django==2.2.22
+django==2.2.24
     # via
     #   -r requirements.txt
     #   django-cors-headers
