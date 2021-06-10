@@ -10,7 +10,7 @@ appdirs==1.4.4
     #   virtualenv
 attrs==20.3.0
     # via pytest
-black==21.5b0
+black==21.5b2
     # via -r requirements_dev.in
 cachetools==4.1.0
     # via
