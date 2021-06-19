@@ -16,27 +16,9 @@ var config = {
     }
 };
 
-if (process.env.VUE_APP_SERVER == "kuba_dev01") {
+if (process.env.VUE_APP_SERVER == "docker") {
     Object.assign(config, {
-        apiBaseUrl: "http://localhost:22004/"
-    });
-}
-
-if (process.env.VUE_APP_SERVER == "mirek_dev01") {
-    Object.assign(config, {
-        apiBaseUrl: "http://localhost:25005/"
-    });
-}
-
-if (process.env.VUE_APP_SERVER == "amy01") {
-    Object.assign(config, {
-        apiBaseUrl: "https://pelican.datlab.eu/"
-    });
-}
-
-if (process.env.VUE_APP_SERVER == "production") {
-    Object.assign(config, {
-        apiBaseUrl: "https://dqt.datlab.eu/"
+        apiBaseUrl: process.env.API_BASE_URL
     });
 }
 

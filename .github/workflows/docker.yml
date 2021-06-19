@@ -18,7 +18,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build container image
+      - name: Build django container image
         uses: docker/build-push-action@v2
         with:
           push: true
@@ -26,3 +26,11 @@ jobs:
           tags: |
             ghcr.io/open-contracting/pelican-frontend-django:latest
             ghcr.io/open-contracting/pelican-frontend-django:${{ env.TAG }}
+      - name: Build vue container image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: frontend
+          tags: |
+            ghcr.io/open-contracting/pelican-frontend-vue:latest
+            ghcr.io/open-contracting/pelican-frontend-vue:${{ env.TAG }}
