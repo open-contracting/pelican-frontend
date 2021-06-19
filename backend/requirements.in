@@ -9,3 +9,4 @@ pillow
 psycopg2-binary
 shortuuid
 simplejson
+gunicorn
