@@ -579,8 +579,7 @@ export const messages = {
                 count: "Contracts count",
                 share: "% of total"
             },
-            info:
-                "All values are converted to USD as of the compiled release's <code>date</code>. This excludes: contract values with missing amounts, missing currencies, non-numeric amounts, negative amounts, and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future. To determine the number of excluded contract values, compare the number of contracts here to the number of objects in the contract stage, above."
+            info: "All values are converted to USD as of the compiled release's <code>date</code>. This excludes: contract values with missing amounts, missing currencies, non-numeric amounts, negative amounts, and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future. To determine the number of excluded contract values, compare the number of contracts here to the number of objects in the contract stage, above."
         },
         period: {
             title: "Release Dates",
@@ -599,8 +598,7 @@ export const messages = {
             award: "Award",
             contract: "Contract",
             implementation: "Implementation",
-            info:
-                "In OCDS, data is organized into objects, for each stage of a contracting process. Each compiled release has: at most one Planning object, at most one Tender object, any number of Award objects, and any number of Contract objects. Each Contract object has at most one Implementation object. As such, the number of Award objects can exceed the number of unique OCIDs, but the number of Tender objects can't."
+            info: "In OCDS, data is organized into objects, for each stage of a contracting process. Each compiled release has: at most one Planning object, at most one Tender object, any number of Award objects, and any number of Contract objects. Each Contract object has at most one Implementation object. As such, the number of Award objects can exceed the number of unique OCIDs, but the number of Tender objects can't."
         },
         publisher: "Publisher name",
         datalicense: "License",
