@@ -2,7 +2,7 @@ import os
 
 from .base import *  # noqa: F401, F403
 
-CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"), )
+CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
 
 DATABASES = {
     "default": {
