@@ -6,6 +6,8 @@ DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes")
 
 CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
 
+SECRET_KEY = os.getenv("SECRET_KEY", "sesdkfhj87y149erwbgh")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
