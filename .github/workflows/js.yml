@@ -13,4 +13,3 @@ jobs:
         run: |
           npm install
           npx eslint .
-      - run: npx prettier --check .

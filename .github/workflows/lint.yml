@@ -18,8 +18,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
+
       - run: pip install -r requirements.txt black
+        working-directory: ./backend
+
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
+
       - run: black --check .
+        working-directory: ./backend
+
       - run: pip install -r requirements_dev.txt
+        working-directory: ./backend
+
       - run: STANDARD_MAINTENANCE_SCRIPTS_IGNORE=dqt pytest /tmp/test_requirements.py
+        working-directory: ./backend
