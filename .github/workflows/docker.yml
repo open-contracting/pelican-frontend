@@ -23,7 +23,6 @@ jobs:
         with:
           push: true
           context: backend
-          file: Dockerfile
           tags: |
             ghcr.io/open-contracting/pelican-frontend-django:latest
             ghcr.io/open-contracting/pelican-frontend-django:${{ env.TAG }}
