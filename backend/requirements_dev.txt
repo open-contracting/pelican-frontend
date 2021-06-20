@@ -91,7 +91,7 @@ kiwisolver==1.2.0
     # via
     #   -r requirements.txt
     #   matplotlib
-lxml==4.6.3
+lxml==4.6.2
     # via -r requirements.txt
 matplotlib==3.3.0
     # via -r requirements.txt
