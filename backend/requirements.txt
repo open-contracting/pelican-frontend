@@ -47,8 +47,10 @@ lxml==4.6.3
     # via -r requirements.in
 matplotlib==3.3.0
     # via -r requirements.in
-numpy==1.19.1
-    # via matplotlib
+numpy==1.20.3
+    # via
+    #   -r requirements.in
+    #   matplotlib
 pika==1.1.0
     # via -r requirements.in
 pillow==8.2.0
