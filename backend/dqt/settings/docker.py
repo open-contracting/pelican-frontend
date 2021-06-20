@@ -2,7 +2,9 @@ import os
 
 from .base import *  # noqa: F401, F403
 
-DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes")
+DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes", "1")
+
+ALLOWED_HOSTS = ['*']
 
 CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
 
