@@ -1,5 +1,5 @@
 var config = {
-    apiBaseUrl: "http://localhost:8000/",
+    apiBaseUrl: "/",
     apiEndpoints: {
         dataset: "api/dataset",
         resourceLevelStats: "api/resource_level_stats",
@@ -16,9 +16,9 @@ var config = {
     }
 };
 
-if (process.env.VUE_APP_SERVER == "docker") {
+if (process.env.VUE_APP_SERVER == "dev") {
     Object.assign(config, {
-        apiBaseUrl: process.env.API_BASE_URL
+        apiBaseUrl: "/some_other_url"
     });
 }
 
