@@ -15,14 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
         with:
-          python-version: 3.6
-      - uses: actions/cache@v1
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-      # Check requirements.txt contains production requirements.
+          python-version: 3.8
       - run: pip install -r requirements.txt
       - run: ./manage.py --help
       - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
@@ -38,6 +31,7 @@ jobs:
         shell: bash
         working-directory: frontend
     steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: "16.x"
