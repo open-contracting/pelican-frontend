@@ -6,6 +6,7 @@ import tempfile
 from zipfile import ZipFile
 
 import shortuuid
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from dqt.tools.errors import GoogleDriveError
@@ -24,8 +25,8 @@ class Gdocs:
 
     def __init__(self, main_template_id):
         # TODO: use default_storage
-        if os.path.exists("token.pickle"):
-            with open("token.pickle", "rb") as token:
+        if os.path.exists(settings.TOKEN_PATH):
+            with open(settings.TOKEN_PATH, "rb") as token:
                 self.creds = pickle.load(token)
                 self.drive_service = build("drive", "v3", credentials=self.creds)
         else:
