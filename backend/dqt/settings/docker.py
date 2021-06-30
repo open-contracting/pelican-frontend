@@ -10,7 +10,7 @@ CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "sesdkfhj87y149erwbgh")
 
-TOKEN_PATH = os.getenv("SECRET_KEY", "sesdkfhj87y149erwbgh")
+TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/token.pickle")
 
 DATABASES = {
     "default": {
