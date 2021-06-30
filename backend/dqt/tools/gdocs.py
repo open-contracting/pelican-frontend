@@ -1,5 +1,5 @@
+import json
 import os
-import pickle
 import re
 import shutil
 import tempfile
@@ -10,6 +10,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from dqt.tools.errors import GoogleDriveError
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError, ResumableUploadError
 from googleapiclient.http import MediaFileUpload
@@ -26,8 +27,8 @@ class Gdocs:
     def __init__(self, main_template_id):
         # TODO: use default_storage
         if os.path.exists(settings.TOKEN_PATH):
-            with open(settings.TOKEN_PATH, "rb") as token:
-                self.creds = pickle.load(token)
+            with open(settings.TOKEN_PATH) as f:
+                self.creds = Credentials.from_authorized_user_info(json.load(f))
                 self.drive_service = build("drive", "v3", credentials=self.creds)
         else:
             raise RuntimeError("Unable to find token file")
