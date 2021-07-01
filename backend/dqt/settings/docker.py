@@ -4,13 +4,13 @@ from .base import *  # noqa: F401, F403
 
 DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes", "1")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "sesdkfhj87y149erwbgh")
 
-TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/token.pickle")
+TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json")
 
 DATABASES = {
     "default": {

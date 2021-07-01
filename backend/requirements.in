@@ -2,6 +2,7 @@ django
 django-cors-headers
 django-tastypie
 google-api-python-client
+google-auth
 lxml
 matplotlib
 pika
