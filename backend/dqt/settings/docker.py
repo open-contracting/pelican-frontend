@@ -1,10 +1,20 @@
 import os
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 from .base import *  # noqa: F401, F403
 
 DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes", "1")
 
 ALLOWED_HOSTS = ["*"]
+
+if os.getenv("SENTRY_DNS", False):
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DNS"),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=os.getenv("SENTRY_SAMPLE_RATE", 1.0),
+    )
 
 CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
 
