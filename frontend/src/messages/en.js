@@ -516,6 +516,61 @@ export const messages = {
                 name: "Tenderer's name is consistent",
                 description:
                     "<p>Each <code>tender.tenderers</code> entry has the same value for its <code>name</code> field as the party it references.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
+            },
+            period_duration_in_days_tender: {
+                name: "The tender duration is consistent",
+                description:
+                    "<p>For each tender period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+            },
+            payee_referenced: {
+                name: "Payees are referenced",
+                description:
+                    "<p>For each payee, there is a referencing object. <i>Example</i>: If there is a party with role 'payee', it is referenced by at least one transaction's <code>payee</code> field.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
+            },
+            payer_referenced: {
+                name: "Payers are referenced",
+                description:
+                    "<p>For each payee, there is a referencing object. <i>Example</i>: If there is a party with role 'payer', it is referenced by at least one transaction's <code>payer</code> field.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
+            },
+            period_duration_in_days_award: {
+                name: "Tenders have consistent award periods",
+                description:
+                    "<p>For each tender's award period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+            },
+            period_duration_in_days_award_contract: {
+                name: "Awards have consistent contract periods",
+                description:
+                    "<p>For each award's contract's period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+            },
+            period_duration_in_days_contract: {
+                name: "Tenders have consistent contract periods",
+                description:
+                    "<p>For each tender's contract period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+            },
+            period_duration_in_days_contracts: {
+                name: "Contracts have consistent periods",
+                description:
+                    "<p>For each contract's period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+            },
+            period_duration_in_days_enquiry: {
+                name: "Tenders have consistent enquiry periods",
+                description:
+                    "<p>For each tender's enquiry period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+            },
+            procuringEntity_referenced: {
+                name: "Procuring entities are referenced",
+                description:
+                    "<p>For each procuring entity, there is a referencing object. <i>Example</i>: If there is a party with role 'procuringEntity', it is referenced by at least one tender's <code>procuringEntity</code> field.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
+            },
+            supplier_referenced: {
+                name: "Suppliers are referenced",
+                description:
+                    "<p>For each supplier, there is a referencing object. <i>Example</i>: If there is a party with role 'procuringEntity', it is referenced by at least one one award's <code>suppliers</code> entry.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
+            },
+            tenderer_referenced: {
+                name: "Tenderers are referenced",
+                description:
+                    "<p>For each tenderer, there is a referencing object. <i>Example</i>: If there is a party with role 'tenderer', it is referenced by at least one one tender's <code>tenderer</code> entry.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
             }
         },
         reference: {
