@@ -347,6 +347,29 @@ def dataset_start(request):
 
 
 @csrf_exempt
+def dataset_wipe(request):
+    if request.method == "GET":
+        return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
+
+    routing_key = "_wiper_init"
+
+    body = json.loads(request.body.decode("utf-8"))
+
+    message = {
+        "dataset_id": body.get("dataset_id"),
+    }
+
+    publish(json.dumps(message), routing_key)
+
+    return JsonResponse(
+        {
+            "status": "ok",
+            "data": {"message": "Dataset id {} on Pelican will be wiped".format(body.get("dataset_id"))}
+        }, safe=False
+    )
+
+
+@csrf_exempt
 def dataset_progress(request, dataset_id):
     try:
         monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
