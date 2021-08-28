@@ -1,5 +1,6 @@
 import os
 
+import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -23,24 +24,10 @@ SECRET_KEY = os.getenv("SECRET_KEY", "sesdkfhj87y149erwbgh")
 TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json")
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {"options": "-c search_path={}".format(os.getenv("DEFAULT_DB_SEARCH_PATH"))},
-        "NAME": os.getenv("DEFAULT_DB_NAME"),
-        "USER": os.getenv("DEFAULT_DB_USER"),
-        "PASSWORD": os.getenv("DEFAULT_DB_PASSWORD"),
-        "HOST": os.getenv("DEFAULT_DB_HOST"),
-        "PORT": os.getenv("DEFAULT_DB_PORT"),
-    },
-    "data": {
-        "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {"options": "-c search_path={}".format(os.getenv("DATA_DB_SEARCH_PATH"))},
-        "NAME": os.getenv("DATA_DB_NAME"),
-        "USER": os.getenv("DATA_DB_USER"),
-        "PASSWORD": os.getenv("DATA_DB_PASSWORD"),
-        "HOST": os.getenv("DATA_DB_HOST"),
-        "PORT": os.getenv("DATA_DB_PORT"),
-    },
+    "default": dj_database_url.config(default="postgresql:///pelican_frontend?application_name=pelican_frontend"),
+    "data": dj_database_url.config(
+        env="PELICAN_BACKEND_DATABASE_URL", default="postgresql:///pelican_backend?application_name=pelican_backend"
+    ),
 }
 
 RABBIT = {
