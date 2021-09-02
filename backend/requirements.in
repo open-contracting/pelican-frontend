@@ -8,7 +8,7 @@ lxml
 matplotlib
 pika
 pillow
-psycopg2-binary
+psycopg2
 shortuuid
 simplejson
 gunicorn
