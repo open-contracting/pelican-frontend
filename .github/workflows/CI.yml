@@ -21,7 +21,7 @@ jobs:
       - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
       - run: pip install -r requirements_dev.txt
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
-      - run: STANDARD_MAINTENANCE_SCRIPTS_IGNORE=gunicorn pytest /tmp/test_requirements.py
+      - run: STANDARD_MAINTENANCE_SCRIPTS_IGNORE=gunicorn,psycopg2 pytest /tmp/test_requirements.py
 
   build_frontend:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
