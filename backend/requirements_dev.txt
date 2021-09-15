@@ -124,7 +124,7 @@ pep517==0.10.0
     # via pip-tools
 pika==1.1.0
     # via -r requirements.txt
-pillow==8.2.0
+pillow==8.3.2
     # via
     #   -r requirements.txt
     #   matplotlib
