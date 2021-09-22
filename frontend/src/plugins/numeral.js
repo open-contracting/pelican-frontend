@@ -26,7 +26,7 @@ Vue.filter("formatPercentageOmitZero", function (value) {
     var rounded = Math.round(value);
 
     if (value == 0.0) {
-        return "";
+        return "0%";
     } else if (rounded == 0.0 && value != 0.0) {
         return ">" + numeral(rounded).format("0") + "%";
     } else if (rounded == 100.0 && value != 100.0) {
