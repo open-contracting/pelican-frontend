@@ -22,11 +22,6 @@
             <span v-if="submitStatus == 'template_error'">
                 <b-alert class="submit-result" variant="danger" show>
                     <span>{{ $t("datasetReport.status.templateError") }}</span>
-                    <span>
-                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
-                    </span>
                 </b-alert>
                 <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
                 <div v-for="(error, index) in submitData" v-bind:key="index">
@@ -39,27 +34,64 @@
                         </a>
                     </div>
                 </div>
+                <b-row class="buttons">
+                    <b-col>
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
             </span>
             <span v-if="submitStatus == 'report_error'">
                 <b-alert class="submit-result" variant="danger" show>
                     <span>{{ $t("datasetReport.status.reportError") }}</span>
-                    <span>
-                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
-                    </span>
                 </b-alert>
+
                 <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
+                <b-row class="buttons">
+                    <b-col>
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
             </span>
             <span v-if="submitStatus == 'server_error'">
                 <b-alert class="submit-result" variant="danger" show>
-                    <span>{{ $t("datasetReport.status.serverError") }}</span>
-                    <span>
-                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
-                    </span>
+                    <b-row>
+                        <b-col class="width">
+                            {{ $t("datasetReport.status.serverError") }}
+                        </b-col>
+                    </b-row>
                 </b-alert>
+                <b-row>
+                    <b-col>
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
             </span>
         </span>
         <form v-if="!isSubmitting && submitStatus == null" class="modal_box align-items-center">
@@ -251,6 +283,25 @@ export default {
     margin-top: 20px;
 }
 
+.icon {
+    margin-right: 0.5em;
+}
+
+.buttons {
+    margin-top: 1em;
+}
+
+.right-align {
+    text-align: right;
+    align-items: flex-end;
+}
+
+.btn-danger {
+    border-radius: 5px;
+    border: 1px solid $na_color;
+    padding: 1em;
+}
+
 .submit_button:hover {
     background-color: $na_color;
     color: white;
@@ -282,5 +333,9 @@ export default {
 
 .info_prefix {
     color: $headings-light-color;
+}
+
+.width {
+    width: 100%;
 }
 </style>

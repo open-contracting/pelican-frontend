@@ -10,6 +10,8 @@ export const messages = {
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
+    tryAgain: "Try again",
+    close: "Close window",
     created: "Created",
     modified: "Modified",
     core: {

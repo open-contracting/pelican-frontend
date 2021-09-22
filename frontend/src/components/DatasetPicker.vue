@@ -94,7 +94,7 @@
             static
             lazy
         >
-            <DatasetReportModal :dataset="reportDataset" />
+            <DatasetReportModal :dataset="reportDataset" @close="hideReportModal"/>
         </b-modal>
     </span>
     <span v-else>
@@ -202,7 +202,11 @@ export default {
 
             this.sort(this.datasets, comp, asc);
             this.$store.commit("setDatasetSorting", { by: by, asc: asc });
+        },
+        hideReportModal: function () {
+            this.$bvModal.hide("report-modal")
         }
+
     },
     mounted() {
         var buildDatasetsTree = function (datasets, filtered_parent_id) {
