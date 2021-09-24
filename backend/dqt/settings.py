@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,12 +23,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "w^pq&p1phz$^1j!aqa#8zm#m@_jhm(9skcx*8rom7x7j1cy1y="
+SECRET_KEY = os.getenv("SECRET_KEY", "w^pq&p1phz$^1j!aqa#8zm#m@_jhm(9skcx*8rom7x7j1cy1y=")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes", "1")
 
 ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -136,3 +142,25 @@ LOGGING = {
 }
 
 CACHE_BACKEND = "file:///tmp/dqv_backend_cache"
+
+
+if os.getenv("SENTRY_DSN", False):
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN"),
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=0,  # The Sentry plan does not include Performance.
+    )
+
+CORS_ORIGIN_WHITELIST = (os.getenv("CORS_ORIGIN_WHITELIST"),)
+
+TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json")
+
+DATABASES = {
+    "default": dj_database_url.config(default="postgresql:///pelican_frontend?application_name=pelican_frontend"),
+    "data": dj_database_url.config(
+        env="PELICAN_BACKEND_DATABASE_URL", default="postgresql:///pelican_backend?application_name=pelican_backend"
+    ),
+}
+
+RABBIT_URL = os.getenv("RABBIT_URL")
+RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME")

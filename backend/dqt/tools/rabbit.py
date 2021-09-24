@@ -1,3 +1,5 @@
+from urllib.parse import parse_qs, urlencode, urlsplit
+
 import pika
 from django.conf import settings
 
@@ -10,29 +12,25 @@ def publish(message, routing_key):
         connect()
 
     channel.basic_publish(
-        exchange=settings.RABBIT["exchange_name"],
-        routing_key=settings.RABBIT["exchange_name"] + routing_key,
+        exchange=settings.RABBIT_EXCHANGE_NAME,
+        routing_key=settings.RABBIT_EXCHANGE_NAME + routing_key,
         body=message,
         properties=pika.BasicProperties(delivery_mode=2),
     )
 
 
 def connect():
-    credentials = pika.PlainCredentials(settings.RABBIT["username"], settings.RABBIT["password"])
+    parsed = urlsplit(settings.RABBIT_URL)
+    query = parse_qs(parsed.query)
+    # NOTE: Heartbeat should not be disabled.
+    # https://github.com/open-contracting/data-registry/issues/140
+    query.update({"blocked_connection_timeout": 1800, "heartbeat": 0})
 
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host=settings.RABBIT["host"],
-            port=settings.RABBIT["port"],
-            credentials=credentials,
-            blocked_connection_timeout=1800,
-            heartbeat=0,
-        )
-    )
+    connection = pika.BlockingConnection(pika.URLParameters(parsed._replace(query=urlencode(query)).geturl()))
 
     global channel
     channel = connection.channel()
-    channel.exchange_declare(exchange=settings.RABBIT["exchange_name"], durable="true", exchange_type="direct")
+    channel.exchange_declare(exchange=settings.RABBIT_EXCHANGE_NAME, durable=True, exchange_type="direct")
 
     global connected
     connected = True
