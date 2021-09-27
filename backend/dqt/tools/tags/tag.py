@@ -188,20 +188,6 @@ class TemplateTag(Tag):
                 if child.tail:
                     child.tail = child.tail.replace(full_tag, str(value))
 
-    # replaces all occurrences of full_tag with string value in the template, formates as error
-    def set_error(self, value, full_tag):
-        nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
-        for node in nodes:           
-            if node.text:
-                node.text = node.text.replace(full_tag, str(value))
-            for child in node:
-                child.set("color", "red")
-                if child.text:
-                    child.text = child.text.replace(full_tag, str(value))  # probably unnecessary
-                if child.tail:
-                    child.tail = child.tail.replace(full_tag, str(value))        
-            node.set("color", "red")                    
-
     # replaces all occurrences of full_tag with etree._Element value in the template
     # automatically wraps an element in <text:p>
     # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
@@ -393,7 +379,7 @@ class TemplateTag(Tag):
                     tag.finalize_params()
                 except CheckNotComputedError as er: 
                     failed_tags.append(er.check)
-                    tags_mapping[full_tag] = generate_error_leaf_tag("Check " + er.check +" was not computed. Please check your dataset.")    
+                    tags_mapping[full_tag] = generate_error_tag(self.gdocs, self.dataset_id, "Check " + er.check +" was not computed. Please check your dataset.")    
                     continue
                        
             else:
@@ -421,21 +407,7 @@ class TemplateTag(Tag):
         tags_mapping,failed_tags = self.get_tags_mapping()
         
         for full_tag, tag in tags_mapping.items():
-            if isinstance(tag, ErrorLeafTag): 
-                try:
-                    result = tag.validate_and_process(new_data)
-                except TagError as er:
-                    if not er.is_set():
-                        er.set_full_tag(full_tag)
-                        er.set_template_id(self.get_param("template"))
-                    raise er
-                if isinstance(result, str):
-                    self.set_error(result, full_tag)
-                else:
-                    raise ValueError(
-                        "ErrorLeafTag's process_tag method must return 'str'."
-                    )
-            elif isinstance(tag, LeafTag):
+            if isinstance(tag, LeafTag):
                 try:
                     result = tag.validate_and_process(new_data)
                 except TagError as er:
@@ -615,17 +587,34 @@ class TagChaining:
         return GeneratedTag
 
 #processes errors as tags
-class ErrorLeafTag(LeafTag):
-        def __init__(self, key):
-            super().__init__(self.process_tag, Null, 0)
+class ErrorTag(TemplateTag):
+        def __init__(self, gdocs, dataset_id, key):
+            #TODO - Reupload template and change signature
+            super().__init__(self.prepare_data, "1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg", gdocs, dataset_id)
+            self.sub_tags_mapping["value"] = self.tag_class
             self.key = key
             self.set_required_data_field(key)
+            self.set_param("template","1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg")
+            super().finalize_params()
+
+        def tag_class(self,_,__):
+            class ErrorLeafTag(LeafTag): 
+                def __init__(self, gdocs, dataset_id, key):
+                    self.val = key
+                    super().__init__(self.process_tag, gdocs, dataset_id)
+
+                def process_tag(self, _):
+                    return (self.val)
+
+            return ErrorLeafTag(self.gdocs, self.dataset_id, self.key)
 
         def process_tag(self, _):
             return str(self.key)
 
-        def validate_and_process(self, data):
-            return str(self.key)
-
-def generate_error_leaf_tag(key):
-    return ErrorLeafTag(key)
+        def validate(self, data):
+            return
+        
+        def prepare_data(self, data):
+            return {"value" : self.key}
+def generate_error_tag(gdocs, dataset, key):
+    return ErrorTag(gdocs, dataset, key)
