@@ -38,8 +38,7 @@ class FailedExamplesLeafTag(LeafTag):
         if max_count is None:
             max_count = len(all_examples)
 
-           
-        ### Choosing examples, if max count bigger than sample size, choosing all the samples instead
+        # Choosing examples, if max count bigger than sample size, choosing all the samples instead
         examples = random.sample(all_examples, k=min(len(all_examples), int(max_count)))
 
         mode = self.get_param("mode")

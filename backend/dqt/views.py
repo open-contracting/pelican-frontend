@@ -307,7 +307,7 @@ def generate_report(request):
 
         response = JsonResponse(
             {
-                "status": "ok", 
+                "status": "ok",
                 "data": {"file_id": file_id},
                 "failed_tags": failed_tags
                 }

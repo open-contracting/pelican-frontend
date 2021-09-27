@@ -1,12 +1,10 @@
 import copy
 import re
-from pyasn1.type.univ import Null
 
 import shortuuid
 from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
 from lxml import etree
-
 
 
 # General tag class representing all kinds of tags, that can occur (TemplateTag, LeafTag, ...)
@@ -377,11 +375,15 @@ class TemplateTag(Tag):
                         raise er
                 try:
                     tag.finalize_params()
-                except CheckNotComputedError as er: 
+                except CheckNotComputedError as er:
                     failed_tags.append(er.check)
-                    tags_mapping[full_tag] = generate_error_tag(self.gdocs, self.dataset_id, "Check " + er.check +" was not computed. Please check your dataset.")    
+                    tags_mapping[full_tag] = generate_error_tag(
+                        self.gdocs,
+                        self.dataset_id,
+                        "Check " + er.check + " was not computed. Please check your dataset."
+                        )
                     continue
-                       
+
             else:
                 try:
                     tag_chaining = TagChaining(self, tag_expression)
@@ -403,9 +405,8 @@ class TemplateTag(Tag):
         self.template = self.gdocs.get_template(self.get_param("template"))
         new_data = self.prepare_data(data)
 
-        
-        tags_mapping,failed_tags = self.get_tags_mapping()
-        
+        tags_mapping, failed_tags = self.get_tags_mapping()
+
         for full_tag, tag in tags_mapping.items():
             if isinstance(tag, LeafTag):
                 try:
@@ -443,7 +444,6 @@ class TemplateTag(Tag):
                     continue
                 self.merge_template(result, full_tag)
 
-            
         return self.template, failed_tags
 
 
@@ -586,35 +586,39 @@ class TagChaining:
 
         return GeneratedTag
 
-#processes errors as tags
+# processes errors as tags
+
+
 class ErrorTag(TemplateTag):
-        def __init__(self, gdocs, dataset_id, key):
-            #TODO - Reupload template and change signature
-            super().__init__(self.prepare_data, "1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg", gdocs, dataset_id)
-            self.sub_tags_mapping["value"] = self.tag_class
-            self.key = key
-            self.set_required_data_field(key)
-            self.set_param("template","1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg")
-            super().finalize_params()
+    def __init__(self, gdocs, dataset_id, key):
+        # TODO - Reupload template and change signature
+        super().__init__(self.prepare_data, "1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg", gdocs, dataset_id)
+        self.sub_tags_mapping["value"] = self.tag_class
+        self.key = key
+        self.set_required_data_field(key)
+        self.set_param("template", "1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg")
+        super().finalize_params()
 
-        def tag_class(self,_,__):
-            class ErrorLeafTag(LeafTag): 
-                def __init__(self, gdocs, dataset_id, key):
-                    self.val = key
-                    super().__init__(self.process_tag, gdocs, dataset_id)
+    def tag_class(self, _, __):
+        class ErrorLeafTag(LeafTag):
+            def __init__(self, gdocs, dataset_id, key):
+                self.val = key
+                super().__init__(self.process_tag, gdocs, dataset_id)
 
-                def process_tag(self, _):
-                    return (self.val)
+            def process_tag(self, _):
+                return (self.val)
 
-            return ErrorLeafTag(self.gdocs, self.dataset_id, self.key)
+        return ErrorLeafTag(self.gdocs, self.dataset_id, self.key)
 
-        def process_tag(self, _):
-            return str(self.key)
+    def process_tag(self, _):
+        return str(self.key)
 
-        def validate(self, data):
-            return
-        
-        def prepare_data(self, data):
-            return {"value" : self.key}
+    def validate(self, data):
+        return
+
+    def prepare_data(self, data):
+        return {"value": self.key}
+
+
 def generate_error_tag(gdocs, dataset, key):
     return ErrorTag(gdocs, dataset, key)

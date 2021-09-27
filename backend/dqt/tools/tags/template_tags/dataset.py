@@ -28,6 +28,7 @@ from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.tag import TemplateTag
 from dqt.tools.errors import CheckNotComputedError
 
+
 class DatasetTemplateTag(TemplateTag):
     CHECK_MAPPING = {
         "distribution.main_procurement_category": {"check_type": "donut", "version": 1},
@@ -124,12 +125,12 @@ class DatasetTemplateTag(TemplateTag):
                 self.set_sub_tag("totalOcidCount", generate_key_leaf_tag("totalOcidCount"))
                 self.set_sub_tag("totalBuyerCount", generate_key_leaf_tag("totalBuyerCount"))
                 self.set_sub_tag("examples", generate_examples_leaf_tag("examples"))
-        else: #check not found
+        else:   # check not found
             raise CheckNotComputedError(
                 reason="Check was not computed",
                 check=check_name
             )
-            
+
         super().finalize_params()
 
     def prepare_data(self, data):
