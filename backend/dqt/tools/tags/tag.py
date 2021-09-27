@@ -1,10 +1,12 @@
 import copy
 import re
+from pyasn1.type.univ import Null
 
 import shortuuid
-from dqt.tools.errors import TagError
+from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
 from lxml import etree
+
 
 
 # General tag class representing all kinds of tags, that can occur (TemplateTag, LeafTag, ...)
@@ -186,6 +188,20 @@ class TemplateTag(Tag):
                 if child.tail:
                     child.tail = child.tail.replace(full_tag, str(value))
 
+    # replaces all occurrences of full_tag with string value in the template, formates as error
+    def set_error(self, value, full_tag):
+        nodes = self.template.xpath(TemplateTag.FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
+        for node in nodes:           
+            if node.text:
+                node.text = node.text.replace(full_tag, str(value))
+            for child in node:
+                child.set("color", "red")
+                if child.text:
+                    child.text = child.text.replace(full_tag, str(value))  # probably unnecessary
+                if child.tail:
+                    child.tail = child.tail.replace(full_tag, str(value))        
+            node.set("color", "red")                    
+
     # replaces all occurrences of full_tag with etree._Element value in the template
     # automatically wraps an element in <text:p>
     # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
@@ -331,6 +347,7 @@ class TemplateTag(Tag):
     # searches for tags in the template and sets their params
     def get_tags_mapping(self):
         tags_mapping = {}
+        failed_tags = []
 
         full_tags = set()
         texts = self.template.xpath(TemplateTag.TAG_EXPRESSION_XPATH)
@@ -372,7 +389,13 @@ class TemplateTag(Tag):
                             er.set_full_tag(full_tag)
                             er.set_template_id(self.get_param("template"))
                         raise er
-                tag.finalize_params()
+                try:
+                    tag.finalize_params()
+                except CheckNotComputedError as er: 
+                    failed_tags.append(er.check)
+                    tags_mapping[full_tag] = generate_error_leaf_tag("Check " + er.check +" was not computed. Please check your dataset.")    
+                    continue
+                       
             else:
                 try:
                     tag_chaining = TagChaining(self, tag_expression)
@@ -385,7 +408,7 @@ class TemplateTag(Tag):
 
             tags_mapping[full_tag] = tag
 
-        return tags_mapping
+        return tags_mapping, failed_tags
 
     # recursive method that calls sub tags' validate_and_process methods and incorporates the result in the template
     def validate_and_process(self, data):
@@ -394,9 +417,25 @@ class TemplateTag(Tag):
         self.template = self.gdocs.get_template(self.get_param("template"))
         new_data = self.prepare_data(data)
 
-        tags_mapping = self.get_tags_mapping()
+        
+        tags_mapping,failed_tags = self.get_tags_mapping()
+        
         for full_tag, tag in tags_mapping.items():
-            if isinstance(tag, LeafTag):
+            if isinstance(tag, ErrorLeafTag): 
+                try:
+                    result = tag.validate_and_process(new_data)
+                except TagError as er:
+                    if not er.is_set():
+                        er.set_full_tag(full_tag)
+                        er.set_template_id(self.get_param("template"))
+                    raise er
+                if isinstance(result, str):
+                    self.set_error(result, full_tag)
+                else:
+                    raise ValueError(
+                        "ErrorLeafTag's process_tag method must return 'str'."
+                    )
+            elif isinstance(tag, LeafTag):
                 try:
                     result = tag.validate_and_process(new_data)
                 except TagError as er:
@@ -419,16 +458,21 @@ class TemplateTag(Tag):
 
             elif isinstance(tag, TemplateTag):
                 try:
-                    result = tag.validate_and_process(new_data)
+                    result, failed = tag.validate_and_process(new_data)
+                    failed_tags = failed_tags + failed
                 except TagError as er:
                     if not er.is_set():
                         er.set_full_tag(full_tag)
                         er.set_template_id(self.get_param("template"))
                     raise er
-
+                except CheckNotComputedError as er:
+                    self.set_text("Element could not be computed", full_tag)
+                    failed_tags.append(er.get_check)
+                    continue
                 self.merge_template(result, full_tag)
 
-        return self.template
+            
+        return self.template, failed_tags
 
 
 # TagExpression represents the literal tag as it occurs in the template
@@ -569,3 +613,19 @@ class TagChaining:
             raise NotImplementedError(f"Tag generation for instance of '{type(last_tag).__name__}' is not supported.")
 
         return GeneratedTag
+
+#processes errors as tags
+class ErrorLeafTag(LeafTag):
+        def __init__(self, key):
+            super().__init__(self.process_tag, Null, 0)
+            self.key = key
+            self.set_required_data_field(key)
+
+        def process_tag(self, _):
+            return str(self.key)
+
+        def validate_and_process(self, data):
+            return str(self.key)
+
+def generate_error_leaf_tag(key):
+    return ErrorLeafTag(key)

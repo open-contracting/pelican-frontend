@@ -27,8 +27,9 @@ def generate_examples_leaf_tag(key):
             max_count = self.get_param("max")
             if max_count is None:
                 max_count = len(data[key])
-
-            examples = random.sample(data[key], k=int(max_count))
+            
+            ### Choosing examples, if max count bigger than sample size, choosing all the samples instead
+            examples = random.sample(data[key], k=min(len(data[key]), int(max_count)))
 
             mode = self.get_param("mode")
             if mode is None:

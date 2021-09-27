@@ -30,3 +30,27 @@ class TagError(Exception):
             "full_tag": self.full_tag,
             "template_id": self.template_id,
         }
+
+#Error used for singaling and handling noncomputed checks while generating report
+class CheckNotComputedError(Exception):
+    def __init__(self, reason, check=None):
+        self.reason = reason
+        self.check = check
+
+    def set_reason(self, reason):
+        self.reason = reason
+
+    def set_check(self, check):
+        self.check = check
+
+    def is_set(self):
+        return None not in (self.reason, self.full_tag, self.template_id)
+
+    def get_check(self):
+        return self.check    
+
+    def as_dict(self):
+        return {
+            "reason": self.reason,
+            "check": self.check,
+        }

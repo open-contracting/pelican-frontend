@@ -296,7 +296,8 @@ def generate_report(request):
         base = BaseTemplateTag(gdocs, input_message["dataset_id"])
         base.set_param("template", input_message["document_id"])
         base.finalize_params()
-        main_template = base.validate_and_process({})
+        failed_tags = []
+        main_template, failed_tags = base.validate_and_process({})
 
         report_name = "Report %s %s" % (input_message["dataset_id"], datetime.now())
         if "report_name" in input_message and isinstance(input_message["report_name"], str):
@@ -304,7 +305,13 @@ def generate_report(request):
 
         file_id = gdocs.upload(input_message["folder_id"], report_name, main_template)
 
-        response = JsonResponse({"status": "ok", "data": {"file_id": file_id}})
+        response = JsonResponse(
+            {
+                "status": "ok", 
+                "data": {"file_id": file_id},
+                "failed_tags": failed_tags
+                }
+            )
     except GoogleDriveError as er:
         response = JsonResponse({"status": "report_error", "data": {"reason": str(er)}})
     except TagError as er:
@@ -312,6 +319,7 @@ def generate_report(request):
             {
                 "status": "template_error",
                 "data": [er.as_dict()],  # Can accommodate multiple TagErrors in the future
+                "failed_tags" : failed_tags
             }
         )
     finally:
