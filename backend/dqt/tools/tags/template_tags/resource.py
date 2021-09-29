@@ -1,11 +1,11 @@
 from django.db import connections
 from django.utils.translation import gettext as _
+from dqt.settings.base import GDOCS_TEMPLATES
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag
 from dqt.tools.tags.tag import TemplateTag
-from dqt.settings.base import GDOCS_TEMPLATES
 
 
 class ResourceTemplateTag(TemplateTag):

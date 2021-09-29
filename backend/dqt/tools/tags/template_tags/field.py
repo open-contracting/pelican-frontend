@@ -1,4 +1,5 @@
 from django.db import connections
+from dqt.settings.base import GDOCS_TEMPLATES
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
 from dqt.tools.tags.leaf_tags.field.description import DescriptionLeafTag
@@ -10,7 +11,6 @@ from dqt.tools.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
 from dqt.tools.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.tag import TemplateTag
-from dqt.settings.base import GDOCS_TEMPLATES
 
 
 class FieldTemplateTag(TemplateTag):

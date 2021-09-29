@@ -2,9 +2,9 @@ import copy
 import re
 
 import shortuuid
+from dqt.settings.base import GDOCS_TEMPLATES
 from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
-from dqt.settings.base import GDOCS_TEMPLATES
 from lxml import etree
 
 
@@ -586,6 +586,7 @@ class TagChaining:
             raise NotImplementedError(f"Tag generation for instance of '{type(last_tag).__name__}' is not supported.")
 
         return GeneratedTag
+
 
 # processes errors as tags
 class ErrorTag(TemplateTag):

@@ -1,5 +1,6 @@
 from django.utils.translation import gettext as _
 from dqt.models import DatasetLevelCheck
+from dqt.settings.base import GDOCS_TEMPLATES
 from dqt.tools.errors import CheckNotComputedError
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.dataset.bar.count import CountLeafTag as bar_CountLeafTag
@@ -27,7 +28,7 @@ from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.tag import TemplateTag
-from dqt.settings.base import GDOCS_TEMPLATES
+
 
 class DatasetTemplateTag(TemplateTag):
     CHECK_MAPPING = {

@@ -1,5 +1,5 @@
-from dqt.tools.tags.tag import TemplateTag
 from dqt.settings.base import GDOCS_TEMPLATES
+from dqt.tools.tags.tag import TemplateTag
 
 from .dataset import DatasetTemplateTag
 from .field import FieldTemplateTag
