@@ -1,5 +1,5 @@
 from django.db import connections
-from dqt.settings.base import GDOCS_TEMPLATES
+from dqt.settings.docker import GDOCS_TEMPLATES
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
 from dqt.tools.tags.leaf_tags.field.description import DescriptionLeafTag

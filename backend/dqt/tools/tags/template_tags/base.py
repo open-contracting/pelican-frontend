@@ -1,4 +1,4 @@
-from dqt.settings.base import GDOCS_TEMPLATES
+from dqt.settings.docker import GDOCS_TEMPLATES
 from dqt.tools.tags.tag import TemplateTag
 
 from .dataset import DatasetTemplateTag

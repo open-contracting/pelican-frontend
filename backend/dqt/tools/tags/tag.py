@@ -2,7 +2,7 @@ import copy
 import re
 
 import shortuuid
-from dqt.settings.base import GDOCS_TEMPLATES
+from dqt.settings.docker import GDOCS_TEMPLATES
 from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
 from lxml import etree
