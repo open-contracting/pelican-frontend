@@ -27,7 +27,7 @@ from dqt.tools.tags.leaf_tags.dataset.value import ValueLeafTag
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.tag import TemplateTag
-
+from dqt.settings.base import GDOCS_TEMPLATES
 
 class DatasetTemplateTag(TemplateTag):
     CHECK_MAPPING = {
@@ -58,7 +58,7 @@ class DatasetTemplateTag(TemplateTag):
     }
 
     def __init__(self, gdocs, dataset_id):
-        super().__init__(self.prepare_data, "1_1FIg3cuUthk6EEWcYnR5S-J3Xx8p1ZVDBh5oZM3eK8", gdocs, dataset_id)
+        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_DATASET_TEMPLATE"], gdocs, dataset_id)
 
         # TODO: check if check was calculated and version compatability
         self.set_param_validation(

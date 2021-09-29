@@ -4,6 +4,7 @@ import re
 import shortuuid
 from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
+from dqt.settings.base import GDOCS_TEMPLATES
 from lxml import etree
 
 
@@ -587,16 +588,14 @@ class TagChaining:
         return GeneratedTag
 
 # processes errors as tags
-
-
 class ErrorTag(TemplateTag):
     def __init__(self, gdocs, dataset_id, key):
         # TODO - Reupload template and change signature
-        super().__init__(self.prepare_data, "1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg", gdocs, dataset_id)
+        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"], gdocs, dataset_id)
         self.sub_tags_mapping["value"] = self.tag_class
         self.key = key
         self.set_required_data_field(key)
-        self.set_param("template", "1F8HE3e0rQZgHWTNOKw7Rn4Yvkb649ecgqta-vgs4drg")
+        self.set_param("template", GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"])
         super().finalize_params()
 
     def tag_class(self, _, __):

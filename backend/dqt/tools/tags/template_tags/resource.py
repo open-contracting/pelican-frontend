@@ -5,6 +5,7 @@ from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag
 from dqt.tools.tags.tag import TemplateTag
+from dqt.settings.base import GDOCS_TEMPLATES
 
 
 class ResourceTemplateTag(TemplateTag):
@@ -50,7 +51,7 @@ class ResourceTemplateTag(TemplateTag):
     )
 
     def __init__(self, gdocs, dataset_id):
-        super().__init__(self.prepare_data, "1dX4md9MGOxhngjQ2Q0wY8njNiq5B6F9oFWd1tUN63TM", gdocs, dataset_id)
+        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_RESOURCE_TEMPLATE"], gdocs, dataset_id)
 
         self.set_param_validation(
             "check",

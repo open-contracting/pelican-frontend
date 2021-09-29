@@ -10,6 +10,7 @@ from dqt.tools.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
 from dqt.tools.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from dqt.tools.tags.tag import TemplateTag
+from dqt.settings.base import GDOCS_TEMPLATES
 
 
 class FieldTemplateTag(TemplateTag):
@@ -599,7 +600,7 @@ class FieldTemplateTag(TemplateTag):
     )
 
     def __init__(self, gdocs, dataset_id):
-        super().__init__(self.prepare_data, "1DCYMTwh_cXt-kpuxEnyKMfTlmdUoc8MwUWgbgWj7fAA", gdocs, dataset_id)
+        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_FIELD_TEMPLATE"], gdocs, dataset_id)
 
         self.set_param_validation(
             "path",
