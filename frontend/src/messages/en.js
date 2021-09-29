@@ -10,9 +10,11 @@ export const messages = {
     passed: "Passed",
     failed: "Failed",
     notAvailable: "Not available",
+    tryAgain: "Try again",
+    close: "Close window",
     created: "Created",
     modified: "Modified",
-    core: {
+    core: {         
         passedExamples: "Sample of successes",
         failedExamples: "Sample of failures",
         undefinedExamples: "Sample of unprocessed data"
@@ -54,7 +56,8 @@ export const messages = {
             ok: "Report has been successfully created.",
             templateError: "Template syntax is invalid.",
             reportError: "Report creation has failed.",
-            serverError: "An unexpected error has occurred. Please contact the support so it can be resolved."
+            serverError: "An unexpected error has occurred. Please contact the support so it can be resolved.",
+            warning: "Some elements were not computed. Please check your template and dataset."
         },
         link: "Link",
         reason: "Reason",
@@ -65,7 +68,9 @@ export const messages = {
         reportName: "Report name",
         reportNameTooltip: "<p>(optional) name of the the final report on Google Drive&#8482;</p>",
         submit: "Submit",
-        errorReport: "Error report"
+        errorReport: "Error report",
+        warningList: "List of checks, which were not computed",
+        warningEnd: "We recommend you to check your dataset and template to generate complete report."
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",

@@ -1,5 +1,6 @@
 from django.utils.translation import gettext as _
 from dqt.models import DatasetLevelCheck
+from dqt.tools.errors import CheckNotComputedError
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.dataset.bar.count import CountLeafTag as bar_CountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.bar.examples import ExamplesLeafTag as bar_ExamplesLeafTag
@@ -124,6 +125,11 @@ class DatasetTemplateTag(TemplateTag):
                 self.set_sub_tag("totalOcidCount", generate_key_leaf_tag("totalOcidCount"))
                 self.set_sub_tag("totalBuyerCount", generate_key_leaf_tag("totalBuyerCount"))
                 self.set_sub_tag("examples", generate_examples_leaf_tag("examples"))
+        else:   # check not found
+            raise CheckNotComputedError(
+                reason="Check was not computed",
+                check=check_name
+            )
 
         super().finalize_params()
 
