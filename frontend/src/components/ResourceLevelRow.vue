@@ -13,7 +13,8 @@
             <span class="value_ok">{{ okPercentage | formatPercentage }}</span>
         </div>
         <div class="td col-1 col-lg-1 text-right">
-            <span class="value_failed">{{ failedPercentage | formatPercentageOmitZero }}</span>
+            <span v-if="failedPercentage" class="value_failed">{{ failedPercentage | formatPercentage }}</span>
+            <span v-else class="value_na opacity">{{ failedPercentage | formatPercentage }}</span>
         </div>
         <div class="td col-1 col-lg-1 text-right">
             <span class="value_na">{{ naPercentage | formatPercentage }}</span>
@@ -60,5 +61,9 @@ export default {
 
 .progress_column {
     padding-left: 40px;
+}
+
+.opacity {
+    opacity: 0.6;
 }
 </style>

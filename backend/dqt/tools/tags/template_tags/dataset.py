@@ -1,5 +1,7 @@
 from django.utils.translation import gettext as _
 from dqt.models import DatasetLevelCheck
+from dqt.settings.docker import GDOCS_TEMPLATES
+from dqt.tools.errors import CheckNotComputedError
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.dataset.bar.count import CountLeafTag as bar_CountLeafTag
 from dqt.tools.tags.leaf_tags.dataset.bar.examples import ExamplesLeafTag as bar_ExamplesLeafTag
@@ -57,7 +59,7 @@ class DatasetTemplateTag(TemplateTag):
     }
 
     def __init__(self, gdocs, dataset_id):
-        super().__init__(self.prepare_data, "1_1FIg3cuUthk6EEWcYnR5S-J3Xx8p1ZVDBh5oZM3eK8", gdocs, dataset_id)
+        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_DATASET_TEMPLATE"], gdocs, dataset_id)
 
         # TODO: check if check was calculated and version compatability
         self.set_param_validation(
@@ -124,6 +126,11 @@ class DatasetTemplateTag(TemplateTag):
                 self.set_sub_tag("totalOcidCount", generate_key_leaf_tag("totalOcidCount"))
                 self.set_sub_tag("totalBuyerCount", generate_key_leaf_tag("totalBuyerCount"))
                 self.set_sub_tag("examples", generate_examples_leaf_tag("examples"))
+        else:   # check not found
+            raise CheckNotComputedError(
+                reason="Check was not computed",
+                check=check_name
+            )
 
         super().finalize_params()
 
