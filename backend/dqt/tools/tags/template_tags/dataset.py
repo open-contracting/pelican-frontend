@@ -200,8 +200,14 @@ class DatasetTemplateTag(TemplateTag):
                 new_data["checkedCount"] = check.meta["total_processed"]
                 new_data["passedCount"] = check.meta["total_passed"]
                 new_data["failedCount"] = check.meta["total_failed"]
-                new_data["passedExamples"] = [example["ocid"] for example in check.meta["passed_examples"]]
-                new_data["failedExamples"] = [example["ocid"] for example in check.meta["failed_examples"]]
+                new_data["passedExamples"] = [example["original_process"]["ocid"]
+                                              if "original_process" in example
+                                              else example["ocid"] for example in check.meta["passed_examples"]
+                                              ]
+                new_data["failedExamples"] = [example["original_process"]["ocid"]
+                                              if "original_process" in example
+                                              else example["ocid"] for example in check.meta["failed_examples"]
+                                              ]
             elif check_type == "biggest_share":
                 new_data["buyerIdentifierId"] = check.meta["specifics"]["buyer.identifier.id"]
                 new_data["buyerIdentifierScheme"] = check.meta["specifics"]["buyer.identifier.scheme"]
