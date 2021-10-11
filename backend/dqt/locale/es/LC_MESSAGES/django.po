@@ -1,0 +1,598 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-11 09:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: dqt/tools/tags/leaf_tags/field/description.py:26
+#: dqt/tools/translations.py:18
+msgid "field.exists.description"
+msgstr ""
+
+#: dqt/tools/tags/leaf_tags/field/description.py:28
+#: dqt/tools/translations.py:19
+msgid "field.non_empty.description"
+msgstr ""
+
+#: dqt/tools/tags/leaf_tags/field/name.py:26 dqt/tools/translations.py:4
+msgid "field.exists.name"
+msgstr ""
+
+#: dqt/tools/tags/leaf_tags/field/name.py:28 dqt/tools/translations.py:5
+msgid "field.non_empty.name"
+msgstr ""
+
+#: dqt/tools/translations.py:6
+msgid "field.ocid_prefix_check.name"
+msgstr ""
+
+#: dqt/tools/translations.py:7
+msgid "field.date_time.name"
+msgstr ""
+
+#: dqt/tools/translations.py:8
+msgid "field.email.name"
+msgstr ""
+
+#: dqt/tools/translations.py:9
+msgid "field.identifier_scheme.name"
+msgstr ""
+
+#: dqt/tools/translations.py:10
+msgid "field.telephone.name"
+msgstr ""
+
+#: dqt/tools/translations.py:11
+msgid "field.document_description_length.name"
+msgstr ""
+
+#: dqt/tools/translations.py:12
+msgid "field.document_type.name"
+msgstr ""
+
+#: dqt/tools/translations.py:13
+msgid "field.document_format_codelist.name"
+msgstr ""
+
+#: dqt/tools/translations.py:14
+msgid "field.number_checks.name"
+msgstr ""
+
+#: dqt/tools/translations.py:15
+msgid "field.language.name"
+msgstr ""
+
+#: dqt/tools/translations.py:20
+msgid "field.ocid_prefix_check.description"
+msgstr ""
+
+#: dqt/tools/translations.py:21
+msgid "field.date_time.description"
+msgstr ""
+
+#: dqt/tools/translations.py:22
+msgid "field.email.description"
+msgstr ""
+
+#: dqt/tools/translations.py:23
+msgid "field.identifier_scheme.description"
+msgstr ""
+
+#: dqt/tools/translations.py:24
+msgid "field.telephone.description"
+msgstr ""
+
+#: dqt/tools/translations.py:25
+msgid "field.document_description_length.description"
+msgstr ""
+
+#: dqt/tools/translations.py:26
+msgid "field.document_type.description"
+msgstr ""
+
+#: dqt/tools/translations.py:27
+msgid "field.document_format_codelist.description"
+msgstr ""
+
+#: dqt/tools/translations.py:28
+msgid "field.number_checks.description"
+msgstr ""
+
+#: dqt/tools/translations.py:29
+msgid "field.language.description"
+msgstr ""
+
+#: dqt/tools/translations.py:32
+msgid "resource.coherent.period.name"
+msgstr ""
+
+#: dqt/tools/translations.py:33
+msgid "resource.coherent.procurement_method_vs_number_of_tenderers.name"
+msgstr ""
+
+#: dqt/tools/translations.py:34
+msgid "resource.coherent.tender_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:35
+msgid "resource.coherent.awards_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:36
+msgid "resource.coherent.contracts_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:37
+msgid "resource.coherent.milestone_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:38
+msgid "resource.coherent.value_realistic.name"
+msgstr ""
+
+#: dqt/tools/translations.py:39
+msgid "resource.coherent.dates.name"
+msgstr ""
+
+#: dqt/tools/translations.py:40
+msgid "resource.coherent.milestones_dates.name"
+msgstr ""
+
+#: dqt/tools/translations.py:41
+msgid "resource.coherent.amendments_dates.name"
+msgstr ""
+
+#: dqt/tools/translations.py:42
+msgid "resource.coherent.documents_dates.name"
+msgstr ""
+
+#: dqt/tools/translations.py:43
+msgid "resource.consistent.number_of_tenderers.name"
+msgstr ""
+
+#: dqt/tools/translations.py:44
+msgid "resource.consistent.tender_value.name"
+msgstr ""
+
+#: dqt/tools/translations.py:45
+msgid "resource.consistent.contracts_value.name"
+msgstr ""
+
+#: dqt/tools/translations.py:46
+msgid "resource.consistent.contracts_implementation_transactions_value.name"
+msgstr ""
+
+#: dqt/tools/translations.py:47
+msgid "resource.consistent.parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:48
+msgid "resource.consistent.period_duration_in_days.name"
+msgstr ""
+
+#: dqt/tools/translations.py:49
+msgid "resource.consistent.buyer_in_parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:50
+msgid "resource.consistent.supplier_in_parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:51
+msgid "resource.consistent.tenderer_in_parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:52
+msgid "resource.consistent.procuring_entity_in_parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:53
+msgid "resource.consistent.payer_in_parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:54
+msgid "resource.consistent.payee_in_parties_roles.name"
+msgstr ""
+
+#: dqt/tools/translations.py:55
+msgid "resource.consistent.buyer_name_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:56
+msgid "resource.consistent.payee_name_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:57
+msgid "resource.consistent.payer_name_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:58
+msgid "resource.consistent.procuring_entity_name_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:59
+msgid "resource.consistent.supplier_name_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:60
+msgid "resource.consistent.tenderer_name_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:61
+msgid "resource.reference.buyer_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:62
+msgid "resource.reference.payee_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:63
+msgid "resource.reference.payer_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:64
+msgid "resource.reference.procuring_entity_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:65
+msgid "resource.reference.supplier_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:66
+msgid "resource.reference.tenderer_in_parties.name"
+msgstr ""
+
+#: dqt/tools/translations.py:67
+msgid "resource.reference.contract_in_awards.name"
+msgstr ""
+
+#: dqt/tools/translations.py:70
+msgid "resource.coherent.period.description"
+msgstr ""
+
+#: dqt/tools/translations.py:71
+msgid "resource.coherent.procurement_method_vs_number_of_tenderers.description"
+msgstr ""
+
+#: dqt/tools/translations.py:72
+msgid "resource.coherent.tender_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:73
+msgid "resource.coherent.awards_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:74
+msgid "resource.coherent.contracts_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:75
+msgid "resource.coherent.milestone_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:76
+msgid "resource.coherent.value_realistic.description"
+msgstr ""
+
+#: dqt/tools/translations.py:77
+msgid "resource.coherent.dates.description"
+msgstr ""
+
+#: dqt/tools/translations.py:78
+msgid "resource.coherent.milestones_dates.description"
+msgstr ""
+
+#: dqt/tools/translations.py:79
+msgid "resource.coherent.amendments_dates.description"
+msgstr ""
+
+#: dqt/tools/translations.py:80
+msgid "resource.coherent.documents_dates.description"
+msgstr ""
+
+#: dqt/tools/translations.py:81
+msgid "resource.consistent.number_of_tenderers.description"
+msgstr ""
+
+#: dqt/tools/translations.py:82
+msgid "resource.consistent.tender_value.description"
+msgstr ""
+
+#: dqt/tools/translations.py:83
+msgid "resource.consistent.contracts_value.description"
+msgstr ""
+
+#: dqt/tools/translations.py:84
+msgid ""
+"resource.consistent.contracts_implementation_transactions_value.description"
+msgstr ""
+
+#: dqt/tools/translations.py:85
+msgid "resource.consistent.parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:86
+msgid "resource.consistent.period_duration_in_days.description"
+msgstr ""
+
+#: dqt/tools/translations.py:87
+msgid "resource.consistent.buyer_in_parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:88
+msgid "resource.consistent.supplier_in_parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:89
+msgid "resource.consistent.tenderer_in_parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:90
+msgid "resource.consistent.procuring_entity_in_parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:91
+msgid "resource.consistent.payer_in_parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:92
+msgid "resource.consistent.payee_in_parties_roles.description"
+msgstr ""
+
+#: dqt/tools/translations.py:93
+msgid "resource.consistent.buyer_name_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:94
+msgid "resource.consistent.payee_name_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:95
+msgid "resource.consistent.payer_name_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:96
+msgid "resource.consistent.procuring_entity_name_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:97
+msgid "resource.consistent.supplier_name_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:98
+msgid "resource.consistent.tenderer_name_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:99
+msgid "resource.reference.buyer_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:100
+msgid "resource.reference.payee_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:101
+msgid "resource.reference.payer_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:102
+msgid "resource.reference.procuring_entity_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:103
+msgid "resource.reference.supplier_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:104
+msgid "resource.reference.tenderer_in_parties.description"
+msgstr ""
+
+#: dqt/tools/translations.py:105
+msgid "resource.reference.contract_in_awards.description"
+msgstr ""
+
+#: dqt/tools/translations.py:108
+msgid "dataset.distribution.main_procurement_category.name"
+msgstr ""
+
+#: dqt/tools/translations.py:109
+msgid "dataset.distribution.tender_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:110
+msgid "dataset.distribution.tender_procurement_method.name"
+msgstr ""
+
+#: dqt/tools/translations.py:111
+msgid "dataset.distribution.tender_award_criteria.name"
+msgstr ""
+
+#: dqt/tools/translations.py:112
+msgid "dataset.distribution.tender_submission_method.name"
+msgstr ""
+
+#: dqt/tools/translations.py:113
+msgid "dataset.distribution.awards_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:114
+msgid "dataset.distribution.contracts_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:115
+msgid "dataset.distribution.milestone_status.name"
+msgstr ""
+
+#: dqt/tools/translations.py:116
+msgid "dataset.distribution.milestone_type.name"
+msgstr ""
+
+#: dqt/tools/translations.py:117
+msgid "dataset.distribution.document_document_type.name"
+msgstr ""
+
+#: dqt/tools/translations.py:118
+msgid "dataset.distribution.value_currency.name"
+msgstr ""
+
+#: dqt/tools/translations.py:119
+msgid "dataset.distribution.related_process_relation.name"
+msgstr ""
+
+#: dqt/tools/translations.py:120
+msgid "dataset.distribution.tender_value.name"
+msgstr ""
+
+#: dqt/tools/translations.py:121
+msgid "dataset.distribution.contracts_value.name"
+msgstr ""
+
+#: dqt/tools/translations.py:122
+msgid "dataset.distribution.awards_value.name"
+msgstr ""
+
+#: dqt/tools/translations.py:123
+msgid "dataset.misc.url_availability.name"
+msgstr ""
+
+#: dqt/tools/translations.py:124
+msgid "dataset.unique.tender_id.name"
+msgstr ""
+
+#: dqt/tools/translations.py:125
+msgid "dataset.consistent.related_process_title.name"
+msgstr ""
+
+#: dqt/tools/translations.py:126
+msgid "dataset.reference.related_process_identifier.name"
+msgstr ""
+
+#: dqt/tools/translations.py:127
+msgid "dataset.distribution.tender_value_repetition.name"
+msgstr ""
+
+#: dqt/tools/translations.py:128
+msgid "dataset.distribution.contracts_value_repetition.name"
+msgstr ""
+
+#: dqt/tools/translations.py:129
+msgid "dataset.distribution.awards_value_repetition.name"
+msgstr ""
+
+#: dqt/tools/translations.py:130
+msgid "dataset.distribution.buyer_repetition.name"
+msgstr ""
+
+#: dqt/tools/translations.py:131
+msgid "dataset.distribution.buyer.name"
+msgstr ""
+
+#: dqt/tools/translations.py:134
+msgid "dataset.distribution.main_procurement_category.description"
+msgstr ""
+
+#: dqt/tools/translations.py:135
+msgid "dataset.distribution.tender_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:136
+msgid "dataset.distribution.tender_procurement_method.description"
+msgstr ""
+
+#: dqt/tools/translations.py:137
+msgid "dataset.distribution.tender_award_criteria.description"
+msgstr ""
+
+#: dqt/tools/translations.py:138
+msgid "dataset.distribution.tender_submission_method.description"
+msgstr ""
+
+#: dqt/tools/translations.py:139
+msgid "dataset.distribution.awards_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:140
+msgid "dataset.distribution.contracts_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:141
+msgid "dataset.distribution.milestone_status.description"
+msgstr ""
+
+#: dqt/tools/translations.py:142
+msgid "dataset.distribution.milestone_type.description"
+msgstr ""
+
+#: dqt/tools/translations.py:143
+msgid "dataset.distribution.document_document_type.description"
+msgstr ""
+
+#: dqt/tools/translations.py:144
+msgid "dataset.distribution.value_currency.description"
+msgstr ""
+
+#: dqt/tools/translations.py:145
+msgid "dataset.distribution.related_process_relation.description"
+msgstr ""
+
+#: dqt/tools/translations.py:146
+msgid "dataset.distribution.tender_value.description"
+msgstr ""
+
+#: dqt/tools/translations.py:147
+msgid "dataset.distribution.contracts_value.description"
+msgstr ""
+
+#: dqt/tools/translations.py:148
+msgid "dataset.distribution.awards_value.description"
+msgstr ""
+
+#: dqt/tools/translations.py:149
+msgid "dataset.misc.url_availability.description"
+msgstr ""
+
+#: dqt/tools/translations.py:150
+msgid "dataset.unique.tender_id.description"
+msgstr ""
+
+#: dqt/tools/translations.py:151
+msgid "dataset.consistent.related_process_title.description"
+msgstr ""
+
+#: dqt/tools/translations.py:152
+msgid "dataset.reference.related_process_identifier.description"
+msgstr ""
+
+#: dqt/tools/translations.py:153
+msgid "dataset.distribution.tender_value_repetition.description"
+msgstr ""
+
+#: dqt/tools/translations.py:154
+msgid "dataset.distribution.contracts_value_repetition.description"
+msgstr ""
+
+#: dqt/tools/translations.py:155
+msgid "dataset.distribution.awards_value_repetition.description"
+msgstr ""
+
+#: dqt/tools/translations.py:156
+msgid "dataset.distribution.buyer_repetition.description"
+msgstr ""
+
+#: dqt/tools/translations.py:157
+msgid "dataset.distribution.buyer.description"
+msgstr ""

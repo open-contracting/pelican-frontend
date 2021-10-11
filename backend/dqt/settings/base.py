@@ -98,6 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 LANGUAGES = [
     ("en", "English"),
+    ("es", "Spanish")
 ]
 
 LANGUAGE_CODE = "en-US"
