@@ -2,7 +2,7 @@
     <dashboard-detail>
         <template v-if="loaded" v-slot:content>
             <h2>{{ $t("timeLevel." + check.name + ".name") }}</h2>
-            <p v-html=" $t('timeLevel.' + check.name + '.descriptionLong')"></p>
+            <p v-html="$t('timeLevel.' + check.name + '.descriptionLong')"></p>
 
             <h5>
                 {{ $t("timeLevel.coverage.header") }}
@@ -18,7 +18,12 @@
                                 <span class="check_name">{{ $t("timeLevel.coverage.ok") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.coverage_count" :percentage="coveragePercentage" :state="'ok'" :showCount="true" />
+                                <InlineBar
+                                    :count="check.meta.coverage_count"
+                                    :percentage="coveragePercentage"
+                                    :state="'ok'"
+                                    :showCount="true"
+                                />
                             </td>
                         </tr>
                         <tr class="d-flex">
@@ -52,7 +57,12 @@
                                 <span class="check_name">{{ $t("timeLevel.check.ok") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.ok_count" :percentage="checkPercentage" :state="'ok'" :showCount="true" />
+                                <InlineBar
+                                    :count="check.meta.ok_count"
+                                    :percentage="checkPercentage"
+                                    :state="'ok'"
+                                    :showCount="true"
+                                />
                             </td>
                         </tr>
                         <tr class="d-flex">
@@ -60,7 +70,12 @@
                                 <span class="check_name">{{ $t("timeLevel.check.failed") }}</span>
                             </td>
                             <td class="col-8">
-                                <InlineBar :count="check.meta.failed_count" :percentage="100.0 - checkPercentage" :state="'failed'" :showCount="true" />
+                                <InlineBar
+                                    :count="check.meta.failed_count"
+                                    :percentage="100.0 - checkPercentage"
+                                    :state="'failed'"
+                                    :showCount="true"
+                                />
                             </td>
                         </tr>
                     </tbody>
@@ -86,7 +101,7 @@
                                     <span class="example_version">[{{ $t("examples.new") }}]</span>
                                 </td>
                                 <td class="col-1 clickable">
-                                    <span v-if="('new_' + index) != selectedKey">
+                                    <span v-if="'new_' + index != selectedKey">
                                         <font-awesome-icon
                                             v-if="!loadingPreviewData"
                                             v-on:click.stop.prevent="preview('new_' + index, item.new_item_id)"
@@ -94,13 +109,13 @@
                                             class="examples_icon"
                                             :icon="['far', 'eye']"
                                         />
-                                        <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                        <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']" />
                                         <b-tooltip :target="'preview_new_' + index" triggers="hover">
                                             <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
                                         </b-tooltip>
                                     </span>
-                                    <span v-if="('new_' + index) == selectedKey">
-                                        <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                    <span v-if="'new_' + index == selectedKey">
+                                        <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']" />
                                     </span>
                                 </td>
                                 <td class="col-1 clickable">
@@ -110,7 +125,7 @@
                                             :id="'download_new_' + index"
                                             class="examples_icon"
                                             :icon="['fas', 'cloud-download-alt']"
-                                        />    
+                                        />
                                         <b-tooltip :target="'download_new_' + index" triggers="hover">
                                             <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
                                         </b-tooltip>
@@ -125,7 +140,10 @@
                                             :icon="['fas', 'clipboard']"
                                         />
                                         <b-tooltip :target="'clipboard_new_' + index" triggers="hover">
-                                            <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                            <span
+                                                class="tooltip_text"
+                                                v-html="$t('examples.copyToClipboard.tooltip')"
+                                            ></span>
                                         </b-tooltip>
                                     </span>
                                 </td>
@@ -137,7 +155,7 @@
                                     <span class="example_version">[{{ $t("examples.old") }}]</span>
                                 </td>
                                 <td class="col-1 clickable">
-                                    <span v-if="('old_' + index) != selectedKey">
+                                    <span v-if="'old_' + index != selectedKey">
                                         <font-awesome-icon
                                             v-if="!loadingPreviewData"
                                             v-on:click.stop.prevent="preview('old_' + index, item.item_id)"
@@ -145,13 +163,13 @@
                                             class="examples_icon"
                                             :icon="['far', 'eye']"
                                         />
-                                        <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                        <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']" />
                                         <b-tooltip :target="'preview_old_' + index" triggers="hover">
                                             <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
                                         </b-tooltip>
                                     </span>
-                                    <span v-if="('old_' + index) == selectedKey">
-                                        <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                    <span v-if="'old_' + index == selectedKey">
+                                        <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']" />
                                     </span>
                                 </td>
                                 <td class="col-1 clickable">
@@ -161,7 +179,7 @@
                                             :id="'download_old_' + index"
                                             class="examples_icon"
                                             :icon="['fas', 'cloud-download-alt']"
-                                        />    
+                                        />
                                         <b-tooltip :target="'download_old_' + index" triggers="hover">
                                             <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
                                         </b-tooltip>
@@ -176,14 +194,21 @@
                                             :icon="['fas', 'clipboard']"
                                         />
                                         <b-tooltip :target="'clipboard_old_' + index" triggers="hover">
-                                            <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                            <span
+                                                class="tooltip_text"
+                                                v-html="$t('examples.copyToClipboard.tooltip')"
+                                            ></span>
                                         </b-tooltip>
                                     </span>
                                 </td>
                             </tr>
                         </template>
-                        <tr v-if=" !showMore && check.meta.examples.length > 5">
-                            <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore = true">
+                        <tr v-if="!showMore && check.meta.examples.length > 5">
+                            <td
+                                colspan="2"
+                                class="text-center bold clickable moreLess"
+                                v-on:click.stop="showMore = true"
+                            >
                                 <a>
                                     <font-awesome-icon icon="chevron-down" />
                                     {{ $t("examples.showMore") }}
@@ -191,7 +216,7 @@
                             </td>
                         </tr>
                         <span v-if="showMore">
-                            <template v-for="(item, index) in check.meta.examples.slice(5, )">
+                            <template v-for="(item, index) in check.meta.examples.slice(5)">
                                 <tr class="d-flex new_row" v-bind:key="'new_' + (index + 5)">
                                     <td class="col-9 text-left numeric d-flex align-items-center">
                                         <span class="check_name">{{ item.new_item_ocid }}</span>
@@ -199,21 +224,26 @@
                                         <span class="example_version">[{{ $t("examples.new") }}]</span>
                                     </td>
                                     <td class="col-1 clickable">
-                                        <span v-if="('new_' + (index + 5)) != selectedKey">
+                                        <span v-if="'new_' + (index + 5) != selectedKey">
                                             <font-awesome-icon
                                                 v-if="!loadingPreviewData"
-                                                v-on:click.stop.prevent="preview('new_' + (index + 5), item.new_item_id)"
+                                                v-on:click.stop.prevent="
+                                                    preview('new_' + (index + 5), item.new_item_id)
+                                                "
                                                 :id="'preview_new_' + (index + 5)"
                                                 class="examples_icon"
                                                 :icon="['far', 'eye']"
                                             />
-                                            <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                            <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']" />
                                             <b-tooltip :target="'preview_new_' + (index + 5)" triggers="hover">
-                                                <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                                <span
+                                                    class="tooltip_text"
+                                                    v-html="$t('examples.preview.tooltip')"
+                                                ></span>
                                             </b-tooltip>
                                         </span>
-                                        <span v-if="('new_' + (index + 5)) == selectedKey">
-                                            <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                        <span v-if="'new_' + (index + 5) == selectedKey">
+                                            <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']" />
                                         </span>
                                     </td>
                                     <td class="col-1 clickable">
@@ -223,9 +253,12 @@
                                                 :id="'download_new_' + (index + 5)"
                                                 class="examples_icon"
                                                 :icon="['fas', 'cloud-download-alt']"
-                                            />    
+                                            />
                                             <b-tooltip :target="'download_new_' + (index + 5)" triggers="hover">
-                                                <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                                <span
+                                                    class="tooltip_text"
+                                                    v-html="$t('examples.download.tooltip')"
+                                                ></span>
                                             </b-tooltip>
                                         </span>
                                     </td>
@@ -238,7 +271,10 @@
                                                 :icon="['fas', 'clipboard']"
                                             />
                                             <b-tooltip :target="'clipboard_new_' + (index + 5)" triggers="hover">
-                                                <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                                <span
+                                                    class="tooltip_text"
+                                                    v-html="$t('examples.copyToClipboard.tooltip')"
+                                                ></span>
                                             </b-tooltip>
                                         </span>
                                     </td>
@@ -250,7 +286,7 @@
                                         <span class="example_version">[{{ $t("examples.old") }}]</span>
                                     </td>
                                     <td class="col-1 clickable">
-                                        <span v-if="('old_' + (index + 5)) != selectedKey">
+                                        <span v-if="'old_' + (index + 5) != selectedKey">
                                             <font-awesome-icon
                                                 v-if="!loadingPreviewData"
                                                 v-on:click.stop.prevent="preview('old_' + (index + 5), item.item_id)"
@@ -258,13 +294,16 @@
                                                 class="examples_icon"
                                                 :icon="['far', 'eye']"
                                             />
-                                            <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']"/>
+                                            <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']" />
                                             <b-tooltip :target="'preview_old_' + (index + 5)" triggers="hover">
-                                                <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                                <span
+                                                    class="tooltip_text"
+                                                    v-html="$t('examples.preview.tooltip')"
+                                                ></span>
                                             </b-tooltip>
                                         </span>
-                                        <span v-if="('old_' + (index + 5)) == selectedKey">
-                                            <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']"/>
+                                        <span v-if="'old_' + (index + 5) == selectedKey">
+                                            <font-awesome-icon class="examples_icon" :icon="['fas', 'eye']" />
                                         </span>
                                     </td>
                                     <td class="col-1 clickable">
@@ -274,9 +313,12 @@
                                                 :id="'download_old_' + (index + 5)"
                                                 class="examples_icon"
                                                 :icon="['fas', 'cloud-download-alt']"
-                                            />    
+                                            />
                                             <b-tooltip :target="'download_old_' + (index + 5)" triggers="hover">
-                                                <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                                <span
+                                                    class="tooltip_text"
+                                                    v-html="$t('examples.download.tooltip')"
+                                                ></span>
                                             </b-tooltip>
                                         </span>
                                     </td>
@@ -289,7 +331,10 @@
                                                 :icon="['fas', 'clipboard']"
                                             />
                                             <b-tooltip :target="'clipboard_old_' + (index + 5)" triggers="hover">
-                                                <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')"></span>
+                                                <span
+                                                    class="tooltip_text"
+                                                    v-html="$t('examples.copyToClipboard.tooltip')"
+                                                ></span>
                                             </b-tooltip>
                                         </span>
                                     </td>
@@ -297,7 +342,11 @@
                             </template>
                         </span>
                         <tr v-if="showMore">
-                            <td colspan="2" class="text-center bold clickable moreLess" v-on:click.stop="showMore = false">
+                            <td
+                                colspan="2"
+                                class="text-center bold clickable moreLess"
+                                v-on:click.stop="showMore = false"
+                            >
                                 <a>
                                     <font-awesome-icon icon="chevron-up" />
                                     {{ $t("examples.showLess") }}
@@ -318,7 +367,12 @@
             <span v-if="loadingPreviewData">
                 <div class="result_box loader text-center">
                     <div class="spinner">
-                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                        <b-spinner
+                            variant="primary"
+                            style="width: 4rem; height: 4rem"
+                            type="grow"
+                            class="spinner"
+                        ></b-spinner>
                     </div>
                     {{ $t("loader.data") }}
                 </div>
@@ -342,7 +396,7 @@ import timeMixins from "@/plugins/timeMixins.js";
 export default {
     name: "timeVarianceCheckDetail",
     mixins: [timeMixins],
-    data: function() {
+    data: function () {
         return {
             check: null,
             previewDataItemId: null,
@@ -350,7 +404,7 @@ export default {
             loadingPreviewData: false,
             examples: null,
             showMore: false,
-            selectedKey: null,
+            selectedKey: null
         };
     },
     components: {
@@ -363,77 +417,76 @@ export default {
         this.loadCheck();
     },
     methods: {
-        loadCheck: function() {
-            this.check = this.$store.getters.timeVarianceLevelCheckByName(
-                this.$route.params.check
-            );
+        loadCheck: function () {
+            this.check = this.$store.getters.timeVarianceLevelCheckByName(this.$route.params.check);
 
             if (this.check != null) {
                 this.previewMetadata = Object.assign({}, this.check.meta);
                 delete this.previewMetadata.examples;
             }
         },
-        preview: function(selectedKey, itemId) {
+        preview: function (selectedKey, itemId) {
             this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId)
+            this.$store
+                .dispatch("loadDataItem", itemId)
                 .then(() => {
                     if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                         this.previewDataItemId = itemId;
                         this.selectedKey = selectedKey;
                     } else {
-                        this.$alert(this.$t("preview.cannotDisplay"), null, 'error');
+                        this.$alert(this.$t("preview.cannotDisplay"), null, "error");
                         this.previewDataItemId = null;
                         this.selectedKey = null;
                     }
                 })
                 .catch(() => {
-                    this.$alert(this.$t("preview.nonExisting"), null, 'error');
+                    this.$alert(this.$t("preview.nonExisting"), null, "error");
                     this.previewDataItemId = null;
                     this.selectedKey = null;
                 })
                 .finally(() => {
                     this.loadingPreviewData = false;
-                })
+                });
         },
-        download: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId)
+        download: function (itemId) {
+            this.$store
+                .dispatch("loadDataItem", itemId)
                 .then(() => {
                     var result = this.$store.getters.dataItemById(itemId);
                     var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
-                    var fileLink = document.createElement('a');
+                    var fileLink = document.createElement("a");
 
                     fileLink.href = fileURL;
-                    fileLink.setAttribute('download', 'data_item_' + itemId + '.json');
+                    fileLink.setAttribute("download", "data_item_" + itemId + ".json");
                     document.body.appendChild(fileLink);
 
                     fileLink.click();
 
-                    this.$alert(this.$t("examples.download.success"), null, 'success');
+                    this.$alert(this.$t("examples.download.success"), null, "success");
                 })
                 .catch(() => {
-                    this.$alert(this.$t("preview.nonExisting"), null, 'error');
-                })
+                    this.$alert(this.$t("preview.nonExisting"), null, "error");
+                });
         },
-        copyToClipboard: function(itemId) {
-            this.$store.dispatch("loadDataItem", itemId)
+        copyToClipboard: function (itemId) {
+            this.$store
+                .dispatch("loadDataItem", itemId)
                 .then(() => {
                     if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                         this.$clipboard(this.$store.getters.dataItemJSON(itemId));
-                        this.$alert(this.$t("examples.copyToClipboard.success"), null, 'success');
+                        this.$alert(this.$t("examples.copyToClipboard.success"), null, "success");
                     } else {
-                        this.$alert(this.$t("examples.copyToClipboard.failure"), null, 'error');
+                        this.$alert(this.$t("examples.copyToClipboard.failure"), null, "error");
                     }
                 })
                 .catch(() => {
-                    this.$alert(this.$t("preview.nonExisting"), null, 'error');
-                })
-        },
+                    this.$alert(this.$t("preview.nonExisting"), null, "error");
+                });
+        }
     },
     computed: {
         previewData() {
-            var result = this.$store.getters.dataItemById(
-                this.previewDataItemId
-            );
+            var result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
                 return result["data"];
@@ -470,5 +523,4 @@ export default {
 .example_version {
     color: $headings_light_color;
 }
-
 </style>

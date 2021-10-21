@@ -11,7 +11,7 @@ import VueJsonPretty from "vue-json-pretty";
 export default {
     name: "extensionPreview",
     components: {
-        VueJsonPretty,
+        VueJsonPretty
     },
     computed: {
         loaded() {
@@ -20,10 +20,8 @@ export default {
             }
             return false;
         },
-        extensionData(){
-           return this.$store.getters.extensionDataByName(
-                this.$route.params.extensionName
-            );    
+        extensionData() {
+            return this.$store.getters.extensionDataByName(this.$route.params.extensionName);
         }
     }
 };

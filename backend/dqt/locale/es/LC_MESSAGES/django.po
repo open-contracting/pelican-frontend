@@ -13,6 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
+
 "POT-Creation-Date: 2020-11-06 22:15+0000\n"
 "PO-Revision-Date: 2020-11-06 22:18+0000\n"
 "Last-Translator: Yohanna Lisnichuk <ylisnichuk@idatosabiertos.org>, 2021\n"

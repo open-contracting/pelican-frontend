@@ -19,12 +19,11 @@
 </template>
 
 <script>
-import VueContext from 'vue-context';
-import 'vue-context/src/sass/vue-context.scss';
-
+import VueContext from "vue-context";
+import "vue-context/src/sass/vue-context.scss";
 
 export default {
-    data: function() {
+    data: function () {
         return {
             routerData: null
         };
@@ -32,13 +31,17 @@ export default {
     name: "navigation-context-menu",
     components: { VueContext },
     methods: {
-        openNewTab: function() {
+        openNewTab: function () {
             window.open(this.routerData.href);
         },
-        openNewWindow: function() {
-            window.open(this.routerData.href, '_blank', 'width=500,height=500,toolbar=yes,scrollbars=yes,resizable=yes');
+        openNewWindow: function () {
+            window.open(
+                this.routerData.href,
+                "_blank",
+                "width=500,height=500,toolbar=yes,scrollbars=yes,resizable=yes"
+            );
         },
-        copyToClipboard: function() {
+        copyToClipboard: function () {
             this.$clipboard(window.location.origin + this.routerData.href);
         }
     },

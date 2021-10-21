@@ -28,7 +28,7 @@ import DatasetHeader from "@/components/DatasetHeader.vue";
 
 export default {
     name: "dashboard",
-    data: function() {
+    data: function () {
         return {};
     },
     components: { MainMenu, DatasetHeader },

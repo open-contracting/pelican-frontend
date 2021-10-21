@@ -1,16 +1,16 @@
-import Vue from 'vue'
+import Vue from "vue";
 
 var numeral = require("numeral");
 
-Vue.filter("formatNumber", function(value) {
+Vue.filter("formatNumber", function (value) {
     return numeral(value).format("0,0");
 });
 
-Vue.filter("formatNumber2D", function(value) {
+Vue.filter("formatNumber2D", function (value) {
     return numeral(value).format("0,0.00");
 });
 
-Vue.filter("formatPercentage", function(value) {
+Vue.filter("formatPercentage", function (value) {
     var rounded = Math.round(value);
 
     if (rounded == 0.0 && value != 0.0) {
@@ -22,7 +22,7 @@ Vue.filter("formatPercentage", function(value) {
     }
 });
 
-Vue.filter("formatPercentageOmitZero", function(value) {
+Vue.filter("formatPercentageOmitZero", function (value) {
     var rounded = Math.round(value);
 
     if (value == 0.0) {
@@ -36,7 +36,7 @@ Vue.filter("formatPercentageOmitZero", function(value) {
     }
 });
 
-Vue.filter("formatPercentage2D", function(value) {
+Vue.filter("formatPercentage2D", function (value) {
     var rounded = Math.round(value * 100) / 100;
 
     if (rounded == 0.0 && value != 0.0) {

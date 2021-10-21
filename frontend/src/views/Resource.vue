@@ -1,7 +1,7 @@
 <template>
     <dashboard>
         <h2>{{ $t("sections.resource") }}</h2>
-        <div class="description" v-html=" $t('resourceLevel.description')"></div>
+        <div class="description" v-html="$t('resourceLevel.description')"></div>
         <span v-if="loaded">
             <b-row class="action_bar">
                 <b-col class="text-left">
@@ -9,7 +9,7 @@
                 </b-col>
                 <b-col class="text-right">
                     <FilterDropdown
-                        v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+                        v-on:newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
                         :filterNames="filterNames"
                         :startIndex="filterIndex"
                     />
@@ -42,7 +42,7 @@ import Dashboard from "@/views/layouts/Dashboard.vue";
 
 export default {
     name: "resource",
-    data: function() {
+    data: function () {
         return {
             sections: ["reference", "consistent", "coherent"],
             filterIndex: 0,
@@ -50,13 +50,13 @@ export default {
                 this.$t("resourceLevel.filterDropdown.all"),
                 this.$t("resourceLevel.filterDropdown.failedOnly"),
                 this.$t("resourceLevel.filterDropdown.passedOnly"),
-                this.$t("resourceLevel.filterDropdown.calculatedOnly"),
+                this.$t("resourceLevel.filterDropdown.calculatedOnly")
             ],
             filters: [
                 () => true,
                 item => item.failed_count > 0,
                 item => item.failed_count == 0 && item.passed_count > 0,
-                item => item.passed_count > 0 || item.failed_count > 0,
+                item => item.passed_count > 0 || item.failed_count > 0
             ]
         };
     },
@@ -86,7 +86,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .action_bar {
     margin-bottom: 5px;
 

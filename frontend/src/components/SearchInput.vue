@@ -2,22 +2,21 @@
     <b-input-group class="search_input">
         <template v-slot:prepend>
             <b-input-group-text>
-                <font-awesome-icon icon="search"/>
+                <font-awesome-icon icon="search" />
             </b-input-group-text>
         </template>
         <b-form-input v-model="search" :placeholder="placeholder" />
         <template v-slot:append>
             <b-button v-if="search" :disabled="!search" v-on:click="search = null">
-                <font-awesome-icon :icon="['fas', 'times']"/>
+                <font-awesome-icon :icon="['fas', 'times']" />
             </b-button>
         </template>
     </b-input-group>
 </template>
 
 <script>
-
 export default {
-    data: function() {
+    data: function () {
         return {
             search: null,
             submitTimeout: null
@@ -27,19 +26,19 @@ export default {
         placeholder: String,
         onUpdate: Function,
         preset: String,
-        submitTimeLimit: {type: Number, default: 400}
+        submitTimeLimit: { type: Number, default: 400 }
     },
     watch: {
-        search: function(value) {
+        search: function (value) {
             if (this.submitTimeout) {
-                clearTimeout(this.submitTimeout)
+                clearTimeout(this.submitTimeout);
             }
 
-            this.submitTimeout = setTimeout(() => this.onUpdate(value), this.submitTimeLimit)
+            this.submitTimeout = setTimeout(() => this.onUpdate(value), this.submitTimeLimit);
         }
     },
-    mounted: function() {
-        this.search = this.preset
+    mounted: function () {
+        this.search = this.preset;
     }
 };
 </script>

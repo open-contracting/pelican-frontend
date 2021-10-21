@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700&display=swap");
 
 @font-face {
     font-family: "GTEestiProDisplay-Regular";
@@ -20,47 +20,31 @@
     src: url("/fonts/GTEestiProDisplay-Medium.otf") format("opentype");
 }
 
-$ok_color: #B9C504;
-$failed_color: #D0021B;
+$ok_color: #b9c504;
+$failed_color: #d0021b;
 $na_color: #656565;
 $na_light_color: #d8d8d8;
-$na_bar_color: #EBEDF5;
-$primary: #6C75E1;
-$success: #B9C504;
-$danger: #D0021B;
+$na_bar_color: #ebedf5;
+$primary: #6c75e1;
+$success: #b9c504;
+$danger: #d0021b;
 
-$menu_gray: #A9ADBC;
+$menu_gray: #a9adbc;
 
-$text-color: #4A4A4A;
-$headings-color: #4A4A4A;
+$text-color: #4a4a4a;
+$headings-color: #4a4a4a;
 $headings_light_color: #656565;
-$headings-font-family: "GTEestiProDisplay-Bold",
-"Helvetica Neue",
-Arial,
-sans-serif !default;
+$headings-font-family: "GTEestiProDisplay-Bold", "Helvetica Neue", Arial, sans-serif !default;
 
 $font-size-base: 1rem;
 $h3-font-size: 1rem;
 
-$font-family-sans-serif: "GTEestiProDisplay-Regular",
-"Helvetica Neue",
-Arial,
-sans-serif !default;
+$font-family-sans-serif: "GTEestiProDisplay-Regular", "Helvetica Neue", Arial, sans-serif !default;
 
-$font-family-mono: "Ubuntu Mono",
-monospace !default;
+$font-family-mono: "Ubuntu Mono", monospace !default;
 
-$font-family-thin: "GTEestiProDisplay-Thin",
-"Helvetica Neue",
-Arial,
-sans-serif !default;
+$font-family-thin: "GTEestiProDisplay-Thin", "Helvetica Neue", Arial, sans-serif !default;
 
-$font-family-bold: "GTEestiProDisplay-Bold",
-"Helvetica Neue",
-Arial,
-sans-serif !default;
+$font-family-bold: "GTEestiProDisplay-Bold", "Helvetica Neue", Arial, sans-serif !default;
 
-$font-family-medium: "GTEestiProDisplay-Medium",
-"Helvetica Neue",
-Arial,
-sans-serif !default;
+$font-family-medium: "GTEestiProDisplay-Medium", "Helvetica Neue", Arial, sans-serif !default;

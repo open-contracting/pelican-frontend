@@ -10,7 +10,7 @@
                     <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
                 </div>
             </div>
-            <p class="description" v-html=" $t('datasetLevel.' + check.name + '.description_long')"></p>
+            <p class="description" v-html="$t('datasetLevel.' + check.name + '.description_long')"></p>
 
             <div class="result_box">
                 <div v-if="checkType == 'bar'">
@@ -51,7 +51,7 @@
                         <tbody>
                             <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                 <td>{{ item.value_str }}</td>
-                                <td class="text-right numeric">{{ item.share * 100 | formatPercentage2D }}</td>
+                                <td class="text-right numeric">{{ (item.share * 100) | formatPercentage2D }}</td>
                                 <td class="text-right numeric">{{ item.count | formatNumber }}</td>
                             </tr>
                         </tbody>
@@ -66,7 +66,9 @@
                         </div>
 
                         <div class="numeric_result color_failed col-4">
-                            <div class="check_numeric_value">{{ check.meta.total_processed - check.meta.total_passed }}</div>
+                            <div class="check_numeric_value">
+                                {{ check.meta.total_processed - check.meta.total_passed }}
+                            </div>
                             {{ $t("datasetLevel.numeric.failed") }}
                         </div>
 
@@ -90,13 +92,20 @@
                             <div class="row">
                                 <div
                                     class="col col-12 text-center total_share"
-                                    v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ check.meta.ocid_share * 100 | formatPercentage2D }}</div>
+                                    v-bind:class="{
+                                        color_failed: check.result == false,
+                                        color_ok: check.result == true
+                                    }"
+                                >
+                                    {{ (check.meta.ocid_share * 100) | formatPercentage2D }}
+                                </div>
                             </div>
                             <div class="row">
-                                <div
-                                    class="col col-12 text-center ocid_count"
-                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;{{ $t("datasetLevel.from") }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
+                                <div class="col col-12 text-center ocid_count">
+                                    {{ check.meta.ocid_count | formatNumber }}&nbsp;{{
+                                        $t("datasetLevel.from")
+                                    }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -122,11 +131,16 @@
             <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewMetadata"></vue-json-pretty>
 
             <div class="divider">&nbsp;</div>
-            
+
             <span v-if="loadingPreviewData">
                 <div class="result_box loader text-center">
                     <div class="spinner">
-                        <b-spinner variant="primary" style="width: 4rem; height: 4rem;" type="grow" class="spinner"></b-spinner>
+                        <b-spinner
+                            variant="primary"
+                            style="width: 4rem; height: 4rem"
+                            type="grow"
+                            class="spinner"
+                        ></b-spinner>
                     </div>
                     {{ $t("loader.data") }}
                 </div>
@@ -152,7 +166,7 @@ import ExampleBoxes from "@/components/ExampleBoxes.vue";
 export default {
     name: "datasetCheckDetail",
     mixins: [datasetMixin],
-    data: function() {
+    data: function () {
         return {
             check: null,
             previewDataItemId: null,
@@ -173,23 +187,21 @@ export default {
         this.loadCheck();
     },
     methods: {
-        preview: function(itemId) {
+        preview: function (itemId) {
             this.loadingPreviewData = true;
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
-                    this.$alert(this.$t("preview.cannotDisplay"), null, 'error');
+                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
                     this.previewDataItemId = null;
                 }
 
                 this.loadingPreviewData = false;
             });
         },
-        loadCheck: function() {
-            this.check = this.$store.getters.datasetLevelCheckByName(
-                this.$route.params.check
-            );
+        loadCheck: function () {
+            this.check = this.$store.getters.datasetLevelCheckByName(this.$route.params.check);
 
             if (this.check != null) {
                 this.previewMetadata = this.check.meta;
@@ -251,10 +263,7 @@ export default {
                     }
                 }
 
-                if (
-                    this.checkType == "biggest_share" ||
-                    this.checkType == "single_value_share"
-                ) {
+                if (this.checkType == "biggest_share" || this.checkType == "single_value_share") {
                     this.exampleSections = [];
                     if (this.check.meta.examples.length > 0) {
                         this.exampleSections.push({
@@ -268,9 +277,7 @@ export default {
     },
     computed: {
         previewData() {
-            var result = this.$store.getters.dataItemById(
-                this.previewDataItemId
-            );
+            var result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
                 return result["data"];

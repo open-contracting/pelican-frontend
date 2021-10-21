@@ -2,31 +2,49 @@
     <span class="just_holder">
         <Loader v-if="isSubmitting"></Loader>
         <span v-if="submitStatus != null">
-            <span v-if="submitStatus == 'ok'">
+            <span v-if="(submitStatus == 'ok') && (!failedTags)">
                 <b-alert class="submit-result" variant="success" show>
                     <span>
                         {{ $t("datasetReport.status.ok") }}
                     </span>
+                </b-alert>
+                <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:&nbsp;</span>
+                <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
+                    {{ "https://docs.google.com/document/d/" + submitData.file_id }}
+                </a>
+                <b-row class="buttons">
+                    <b-col>
+                        <button class="variant-success btn-success" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-success btn-success" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
+            </span>
+            <span v-if="(submitStatus == 'ok') && (failedTags)">
+                <b-alert class="submit-result" variant="warning" show>
                     <span>
-                        <a class="variant-success" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
+                        {{ $t("datasetReport.status.warning") }}
                     </span>
                 </b-alert>
-                <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
-                <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
-                    {{ 'https://docs.google.com/document/d/' + submitData.file_id }}
-                </a>
+
+                <div class="margin_bottom">
+                    <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
+                    <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
+                        {{ "https://docs.google.com/document/d/" + submitData.file_id }}&nbsp;
+                    </a>
+                </div>
             </span>
             <!-- TODO -->
             <span v-if="submitStatus == 'template_error'">
                 <b-alert class="submit-result" variant="danger" show>
                     <span>{{ $t("datasetReport.status.templateError") }}</span>
-                    <span>
-                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
-                    </span>
                 </b-alert>
                 <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
                 <div v-for="(error, index) in submitData" v-bind:key="index">
@@ -35,31 +53,92 @@
                     <div>
                         <span>link: </span>
                         <a :href="'https://docs.google.com/document/d/' + error.template_id" target="_blank">
-                            {{ 'https://docs.google.com/document/d/' + error.template_id }}
-                        </a>    
+                            {{ "https://docs.google.com/document/d/" + error.template_id }}
+                        </a>
                     </div>
                 </div>
+                <b-row class="buttons">
+                    <b-col>
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
             </span>
             <span v-if="submitStatus == 'report_error'">
                 <b-alert class="submit-result" variant="danger" show>
                     <span>{{ $t("datasetReport.status.reportError") }}</span>
-                    <span>
-                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
-                    </span>
                 </b-alert>
+
                 <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
+                <b-row class="buttons">
+                    <b-col>
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
             </span>
             <span v-if="submitStatus == 'server_error'">
                 <b-alert class="submit-result" variant="danger" show>
-                    <span>{{ $t("datasetReport.status.serverError") }}</span>
-                    <span>
-                        <a class="variant-danger" v-on:click.stop.prevent="retry" href="#">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" />
-                        </a>
-                    </span>
+                    <b-row>
+                        <b-col class="width">
+                            {{ $t("datasetReport.status.serverError") }}
+                        </b-col>
+                    </b-row>
                 </b-alert>
+                <b-row>
+                    <b-col>
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
+            </span>
+            <span v-if="failedTags != [] && failedTags != null">
+    
+                <span class="info_prefix">{{ $t("datasetReport.warningList") }}:&nbsp;</span>
+                <ul>
+                    <li v-for="(tag, index) in failedTags" :key="index">
+                        {{ tag }}
+                    </li>
+                </ul>
+                <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}&nbsp;</span>
+                <b-row class="buttons">
+                    <b-col>
+                        <button class="variant-warning btn-warning" v-on:click.stop.prevent="retry" href="#">
+                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
+                            {{ $t("tryAgain") }}
+                        </button>
+                    </b-col>
+                    <b-col class="right-align">
+                        <button class="variant-warning btn-warning" v-on:click.stop.prevent="$emit('close')" href="#">
+                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
+                            {{ $t("close") }}
+                        </button>
+                    </b-col>
+                </b-row>
             </span>
         </span>
         <form v-if="!isSubmitting && submitStatus == null" class="modal_box align-items-center">
@@ -127,7 +206,7 @@ import Loader from "@/components/Loader.vue";
 
 export default {
     props: ["dataset"],
-    data: function() {
+    data: function () {
         return {
             isSubmitting: false,
             documentId: "",
@@ -137,12 +216,15 @@ export default {
             submitData: null,
             documentLink: null,
             errorMessage: null,
+            failedTags: null
         };
     },
     components: { Loader },
     methods: {
         createDatasetReport() {
-            if (this.dataset == null) { return; }
+            if (this.dataset == null) {
+                return;
+            }
             this.errorMessage = null;
             this.isSubmitting = true;
 
@@ -150,27 +232,27 @@ export default {
                 dataset_id: parseInt(this.dataset.id),
                 document_id: this.documentId,
                 folder_id: this.folderId
-            }
+            };
             if (this.reportName.trim() != "") {
                 data.report_name = this.reportName.trim();
             }
 
             axios
-                .post(
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport,
-                    data
-                )
-                .then((response) => {
+                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport, data)
+                .then(response => {
+                    if (response.data.failed_tags.length == 0) this.failedTags = null;
+                    else this.failedTags = response.data.failed_tags;
+
                     if (response.status == 200) {
                         this.submitStatus = response.data.status;
                         this.submitData = response.data.data;
                     } else {
-                        this.submitStatus = 'server_error';
+                        this.submitStatus = "server_error";
                         this.errorMessage = response.statusText;
                     }
                 })
-                .catch((error) => {
-                    this.submitStatus = 'server_error';
+                .catch(error => {
+                    this.submitStatus = "server_error";
                     this.errorMessage = error.response.statusText;
                 })
                 .finally(() => {
@@ -215,7 +297,7 @@ export default {
 }
 
 .variant-danger {
-    color: #6C010E;
+    color: #6c010e;
 }
 
 .modal_box {
@@ -224,6 +306,10 @@ export default {
 
 .modal_headline {
     padding-bottom: 30px;
+}
+
+.margin_bottom {
+    margin-bottom: 1em;
 }
 
 .base_input,
@@ -250,6 +336,27 @@ export default {
     background-color: transparent;
     border: 1px solid $na_color;
     margin-top: 20px;
+}
+
+.icon {
+    margin-right: 0.5em;
+}
+
+.buttons {
+    margin-top: 1em;
+}
+
+.right-align {
+    text-align: right;
+    align-items: flex-end;
+}
+
+.btn-danger,
+.btn-warning,
+.btn-success {
+    border-radius: 5px;
+    border: 1px solid $na_color;
+    padding: 1em;
 }
 
 .submit_button:hover {
@@ -285,4 +392,7 @@ export default {
     color: $headings-light-color;
 }
 
+.width {
+    width: 100%;
+}
 </style>

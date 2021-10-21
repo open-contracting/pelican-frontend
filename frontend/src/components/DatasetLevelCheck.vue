@@ -1,9 +1,16 @@
 <template>
     <div
         class="card mb-4 h-100 dataset_result_box result_box"
-        v-bind:class="{ clickable: ((check.result != undefined) && (checkType != null)), undef: ((check.result == undefined) || (checkType == null)) }"
+        v-bind:class="{
+            clickable: check.result != undefined && checkType != null,
+            undef: check.result == undefined || checkType == null
+        }"
         v-on:click="detail()"
-        @contextmenu.prevent="((check.result != undefined) && (checkType != null)) ? $root.$emit('navigationContextMenu', {event: $event, routerArguments: detailRouterArguments}) : null"
+        @contextmenu.prevent="
+            check.result != undefined && checkType != null
+                ? $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
+                : null
+        "
     >
         <div class="card-body">
             <div class="row no-gutters">
@@ -11,7 +18,10 @@
                     <h5 class="check_headline">{{ $t("datasetLevel." + check.name + ".name") }}</h5>
                 </div>
 
-                <div v-if="((check.result != undefined) && (checkType != null))" class="col col-2 col-sm-2 col-lg-2 text-right">
+                <div
+                    v-if="check.result != undefined && checkType != null"
+                    class="col col-2 col-sm-2 col-lg-2 text-right"
+                >
                     <span v-if="check.result == true" class="badge badge-pill ok_status">{{ $t("passed") }}</span>
                     <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
                 </div>
@@ -68,7 +78,9 @@
                                 <table id="top3_table" class="table table-sm">
                                     <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
                                         <td>{{ item.value_str }}</td>
-                                        <td class="text-right numeric">{{ item.share * 100 | formatPercentage2D}}</td>
+                                        <td class="text-right numeric">
+                                            {{ (item.share * 100) | formatPercentage2D }}
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -78,13 +90,20 @@
                             <div class="row">
                                 <div
                                     class="col col-12 text-center total_share"
-                                    v-bind:class="{ color_failed: check.result == false, color_ok: check.result == true }"
-                                >{{ check.meta.ocid_share * 100 | formatPercentage2D }}</div>
+                                    v-bind:class="{
+                                        color_failed: check.result == false,
+                                        color_ok: check.result == true
+                                    }"
+                                >
+                                    {{ (check.meta.ocid_share * 100) | formatPercentage2D }}
+                                </div>
                             </div>
                             <div class="row">
-                                <div
-                                    class="col col-12 text-center ocid_count"
-                                >{{ check.meta.ocid_count | formatNumber }}&nbsp;{{ $t("datasetLevel.from") }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}</div>
+                                <div class="col col-12 text-center ocid_count">
+                                    {{ check.meta.ocid_count | formatNumber }}&nbsp;{{
+                                        $t("datasetLevel.from")
+                                    }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}
+                                </div>
                             </div>
                         </div>
 
@@ -108,7 +127,7 @@ import datasetMixin from "@/plugins/datasetMixins.js";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {
-    data: function() {
+    data: function () {
         return {
             detailRouterArguments: {
                 name: "datasetCheckDetail",
@@ -123,11 +142,11 @@ export default {
     props: ["check"],
     mixins: [datasetMixin],
     methods: {
-        onePercent: function() {
+        onePercent: function () {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
         },
-        detail: function() {
-            if ((this.check.result != undefined) && (this.checkType != null)) {
+        detail: function () {
+            if (this.check.result != undefined && this.checkType != null) {
                 this.$router.push(this.detailRouterArguments);
             }
         }
@@ -137,7 +156,6 @@ export default {
 
 <style scoped lang="scss">
 @import "src/scss/variables";
-
 
 .chart_envelope {
     margin-bottom: 10px;

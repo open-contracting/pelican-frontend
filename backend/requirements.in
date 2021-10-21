@@ -1,0 +1,15 @@
+dj-database-url
+django
+django-cors-headers
+django-tastypie
+google-api-python-client
+google-auth
+lxml
+matplotlib
+pika
+pillow
+psycopg2
+shortuuid
+simplejson
+gunicorn
+sentry-sdk

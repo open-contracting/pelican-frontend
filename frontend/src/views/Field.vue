@@ -1,22 +1,26 @@
 <template>
     <dashboard>
         <h2>{{ $t("field.title") }}</h2>
-        <div id="field_description" class="description" v-html=" $t('field.description')"></div>
+        <div id="field_description" class="description" v-html="$t('field.description')"></div>
 
         <div class="checked_fields_box">
             <div class="checked_fields_icon">
                 <font-awesome-icon :icon="['fas', 'hand-point-right']" :style="{ color: '#FDC926' }" />
             </div>
             <div class="checked_fields_text">
-                {{ $t('field.checkedFields') }}
+                {{ $t("field.checkedFields") }}
             </div>
         </div>
-        
-        <h4 class="sub_headline">{{ $t('field.all') }}</h4>
+
+        <h4 class="sub_headline">{{ $t("field.all") }}</h4>
 
         <b-row class="action_bar" align-v="center">
             <b-col class="text-left">
-                <SearchInput :placeholder="$t('field.search')" :preset="search" :on-update="(search) => $store.commit('setFieldCheckSearch', search)" />
+                <SearchInput
+                    :placeholder="$t('field.search')"
+                    :preset="search"
+                    :on-update="search => $store.commit('setFieldCheckSearch', search)"
+                />
             </b-col>
             <b-col class="text-right">
                 <b-button-group v-if="layout == 'table'">
@@ -26,15 +30,21 @@
                 </b-button-group>
 
                 <b-button-group>
-                    <button @click="$store.commit('setFieldCheckLayout', 'table')" :class="['btn', {active: layout == 'table'}]">
+                    <button
+                        @click="$store.commit('setFieldCheckLayout', 'table')"
+                        :class="['btn', { active: layout == 'table' }]"
+                    >
                         <font-awesome-icon icon="bars" />
                     </button>
-                    <button @click="$store.commit('setFieldCheckLayout', 'tree')" :class="['btn', {active: layout == 'tree'}]">
+                    <button
+                        @click="$store.commit('setFieldCheckLayout', 'tree')"
+                        :class="['btn', { active: layout == 'tree' }]"
+                    >
                         <font-awesome-icon icon="align-right" />
                     </button>
                 </b-button-group>
                 <FilterDropdown
-                    v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+                    v-on:newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
                     :filterNames="filterNames"
                     :startIndex="filterIndex"
                 />
@@ -57,20 +67,21 @@ import FilterDropdown from "@/components/FilterDropdown.vue";
 
 export default {
     name: "field",
-    data: function() {
+    data: function () {
         return {
             filterIndex: 0,
             filterNames: [
                 this.$t("field.filterDropdown.all"),
                 this.$t("field.filterDropdown.coverageFailedOnly"),
                 this.$t("field.filterDropdown.qualityFailedOnly"),
-                this.$t("field.filterDropdown.passedOnly"),
+                this.$t("field.filterDropdown.passedOnly")
             ],
             filters: [
                 () => true,
                 item => item.coverage.failed_count > 0,
                 item => item.quality.failed_count > 0,
-                item => item.coverage.failed_count == 0 && item.quality.failed_count == 0 && item.coverage.passed_count > 0,
+                item =>
+                    item.coverage.failed_count == 0 && item.quality.failed_count == 0 && item.coverage.passed_count > 0
             ]
         };
     },
@@ -79,21 +90,21 @@ export default {
         FieldCheckTable,
         FieldCheckTree,
         SearchInput,
-        FilterDropdown,
+        FilterDropdown
     },
     created() {
         this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
     },
     computed: {
-        layout: function() {
+        layout: function () {
             return this.$store.getters.fieldCheckLayout;
         },
-        search: function() {
+        search: function () {
             return this.$store.getters.fieldCheckSearch;
         }
     },
     methods: {
-        resetTableSorting: function() {
+        resetTableSorting: function () {
             this.$refs["field-check-table"].resetSorting();
         }
     },
@@ -123,7 +134,7 @@ export default {
 }
 
 .checked_fields_box .checked_fields_icon {
-    background-color: #DDE0F6;
+    background-color: #dde0f6;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border: 0;
@@ -132,8 +143,8 @@ export default {
     float: left;
 }
 
-.checked_fields_box .checked_fields_text  {
-    background-color: #DDE0F6;
+.checked_fields_box .checked_fields_text {
+    background-color: #dde0f6;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border: 0;

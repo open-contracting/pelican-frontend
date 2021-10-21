@@ -5,43 +5,78 @@
                 <tr v-if="ok && 'passed_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("passed") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.passed_count" :percentage="okPercentage" :state="'ok'" :showCount="true" />
+                        <InlineBar
+                            :count="check.passed_count"
+                            :percentage="okPercentage"
+                            :state="'ok'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
                 <tr v-if="failed && 'failed_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("failed") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.failed_count" :percentage="failedPercentage" :state="'failed'" :showCount="true" />
+                        <InlineBar
+                            :count="check.failed_count"
+                            :percentage="failedPercentage"
+                            :state="'failed'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
                 <tr v-if="na && 'undefined_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("notAvailable") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.undefined_count" :percentage="naPercentage" :state="'na'" :showCount="true" />
+                        <InlineBar
+                            :count="check.undefined_count"
+                            :percentage="naPercentage"
+                            :state="'na'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
                 <tr v-if="pass && 'passed_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("passed") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.passed_count" :percentage="passPercentage" :state="'ok'" :showCount="true" />
+                        <InlineBar
+                            :count="check.passed_count"
+                            :percentage="passPercentage"
+                            :state="'ok'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
                 <tr v-if="nonPass && 'failed_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("failed") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.failed_count" :percentage="nonpassPercentage" :state="'failed'" :showCount="true" />
+                        <InlineBar
+                            :count="check.failed_count"
+                            :percentage="nonpassPercentage"
+                            :state="'failed'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
                 <tr v-if="individualPass && 'individual_passed_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("passed") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.individual_passed_count" :percentage="individualPassPercentage" :state="'ok'" :showCount="true" />
+                        <InlineBar
+                            :count="check.individual_passed_count"
+                            :percentage="individualPassPercentage"
+                            :state="'ok'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
                 <tr v-if="individualNonPass && 'individual_failed_count' in check" class="d-flex">
                     <td class="col-3 text-right label">{{ $t("failed") }}</td>
                     <td class="col-9 align-middle">
-                        <InlineBar :count="check.individual_failed_count" :percentage="individualFailedPercentage" :state="'failed'" :showCount="true" />
+                        <InlineBar
+                            :count="check.individual_failed_count"
+                            :percentage="individualFailedPercentage"
+                            :state="'failed'"
+                            :showCount="true"
+                        />
                     </td>
                 </tr>
             </tbody>
@@ -64,7 +99,7 @@ export default {
         individualPass: Boolean,
         individualNonPass: Boolean
     },
-    data: function() {
+    data: function () {
         return {};
     },
     mixins: [ResourceCheckMixins],

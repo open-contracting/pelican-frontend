@@ -150,7 +150,7 @@ input::placeholder,
     font-family: $font-family-bold;
 }
 
-.table_hl>div:nth-child(1) {
+.table_hl > div:nth-child(1) {
     border-top: none;
 }
 
@@ -189,7 +189,6 @@ code {
     padding: 3px;
     border: dotted 1px #e7ec90;
 }
-
 
 /**
 $grid-breakpoints: (xxxs: 0,

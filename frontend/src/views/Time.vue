@@ -1,14 +1,14 @@
 <template>
     <dashboard>
         <h2>{{ $t("sections.time") }}</h2>
-        <div class="description" v-html=" $t('timeLevel.description')"></div>
+        <div class="description" v-html="$t('timeLevel.description')"></div>
         <b-row class="collection_header" align-h="between">
             <b-col class="text-left">
                 <h4>{{ $t("timeLevel.subheadline") }}</h4>
             </b-col>
             <b-col class="text-right">
                 <FilterDropdown
-                    v-on:newSelectedIndex="newSelectedIndex => filterIndex = newSelectedIndex"
+                    v-on:newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
                     :filterNames="filterNames"
                     :startIndex="filterIndex"
                 />
@@ -33,20 +33,20 @@ import Loader from "@/components/Loader.vue";
 
 export default {
     name: "timeLevel",
-    data: function() {
+    data: function () {
         return {
             filterIndex: 0,
             filterNames: [
                 this.$t("timeLevel.filterDropdown.all"),
                 this.$t("timeLevel.filterDropdown.failedOnly"),
-                this.$t("timeLevel.filterDropdown.passedOnly"),
+                this.$t("timeLevel.filterDropdown.passedOnly")
             ],
             filters: [
                 () => true,
                 item => item.coverage_result != true || item.check_result != true,
-                item => item.coverage_result == true && item.check_result == true,
+                item => item.coverage_result == true && item.check_result == true
             ]
-        }
+        };
     },
     components: { Dashboard, TimeVarianceLevelCheck, FilterDropdown, Loader },
     created() {
@@ -64,7 +64,7 @@ export default {
         }
     },
     methods: {
-        detail: function(name) {
+        detail: function (name) {
             this.$router.push({
                 name: "timeVarianceCheckDetail",
                 params: {
@@ -94,5 +94,4 @@ export default {
         margin-bottom: 5px;
     }
 }
-
 </style>

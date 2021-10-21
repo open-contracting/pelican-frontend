@@ -1,5 +1,5 @@
 var config = {
-    apiBaseUrl: "http://localhost:8000/",
+    apiBaseUrl: "/",
     apiEndpoints: {
         dataset: "api/dataset",
         resourceLevelStats: "api/resource_level_stats",
@@ -16,25 +16,9 @@ var config = {
     }
 };
 
-if (process.env.VUE_APP_SERVER == "kuba_dev01") {
+if (process.env.VUE_APP_SERVER == "dev") {
     Object.assign(config, {
-        apiBaseUrl: "http://localhost:22004/"
-    });
-}
-
-if (process.env.VUE_APP_SERVER == "mirek_dev01") {
-    Object.assign(config, {
-        apiBaseUrl: "http://localhost:25005/"
-    });
-}
-
-if (process.env.NODE_ENV == "production") {
-    Object.assign(config, {
-        apiBaseUrl: "https://dqt.datlab.eu/"
-    });
-} else {
-    Object.assign(config, {
-        // development configuration here
+        apiBaseUrl: "/some_other_url"
     });
 }
 
