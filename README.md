@@ -21,6 +21,10 @@ pip install pip-tools
 pip-sync requirements_dev.txt
 ```
 
+### Notes
+
+Pelican backend's database is treated as a [legacy database](https://docs.djangoproject.com/en/3.2/howto/legacy-databases/), with `managed = False` in all model's `Meta` class, and with a `DATABASE_ROUTERS` setting that routes queries to its database.
+
 ## Vue
 
 All commands must be run from the `frontend/` directory.
