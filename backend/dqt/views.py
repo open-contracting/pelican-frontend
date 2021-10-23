@@ -305,13 +305,7 @@ def generate_report(request):
 
         file_id = gdocs.upload(input_message["folder_id"], report_name, main_template)
 
-        response = JsonResponse(
-            {
-                "status": "ok",
-                "data": {"file_id": file_id},
-                "failed_tags": failed_tags
-                }
-            )
+        response = JsonResponse({"status": "ok", "data": {"file_id": file_id}, "failed_tags": failed_tags})
     except GoogleDriveError as er:
         response = JsonResponse({"status": "report_error", "data": {"reason": str(er)}})
     except TagError as er:
@@ -319,7 +313,7 @@ def generate_report(request):
             {
                 "status": "template_error",
                 "data": [er.as_dict()],  # Can accommodate multiple TagErrors in the future
-                "failed_tags" : failed_tags
+                "failed_tags": failed_tags,
             }
         )
     finally:
@@ -370,10 +364,8 @@ def dataset_wipe(request):
     publish(json.dumps(message), routing_key)
 
     return JsonResponse(
-        {
-            "status": "ok",
-            "data": {"message": "Dataset id {} on Pelican will be wiped".format(body.get("dataset_id"))}
-        }, safe=False
+        {"status": "ok", "data": {"message": "Dataset id {} on Pelican will be wiped".format(body.get("dataset_id"))}},
+        safe=False,
     )
 
 
