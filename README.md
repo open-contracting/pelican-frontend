@@ -23,15 +23,32 @@ pip install pip-tools
 pip-sync requirements_dev.txt
 ```
 
+Run database migrations:
+
 ```bash
 python backend/manage.py migrate
 ```
 
-### Pelican backend integration
+### Environment variables
+
+See [OCP's approach to Django settings](https://ocp-software-handbook.readthedocs.io/en/latest/python/django.html#settings). New variables are:
+
+-   `TOKEN_PATH`: The path to a [Google `credentials.json` file](https://developers.google.com/workspace/guides/create-credentials)
+-   `RABBIT_URL`: The [connection string](https://pika.readthedocs.io/en/stable/examples/using_urlparameters.html#using-urlparameters) for RabbitMQ
+-   `RABBIT_EXCHANGE_NAME`: The name of the RabbitMQ exchange. Follow the pattern `pelican_{service}_{environment}` like `pelican_data_registry_production`
+-   `DEFAULT_BASE_TEMPLATE`: The Google Docs ID for the base template
+-   `DEFAULT_FIELD_TEMPLATE`: The Google Docs ID for the field-level template
+-   `DEFAULT_RESOURCE_TEMPLATE`: The Google Docs ID for the resource-level template
+-   `DEFAULT_DATASET_TEMPLATE`: The Google Docs ID for the dataset-level template
+-   `DEFAULT_ERROR_TEMPLATE`: The Google Docs ID for the error template
+
+### Develop
+
+#### Pelican backend integration
 
 Pelican backend's database is treated as a [legacy database](https://docs.djangoproject.com/en/3.2/howto/legacy-databases/), with `managed = False` in all model's `Meta` class, and with a `DATABASE_ROUTERS` setting that routes queries to its database.
 
-To create `backend/dqt/models.py`:
+To update `backend/dqt/models.py` following changes to Pelican backend's database schema:
 
 -   Run `python backend/manage.py inspectdb > backend/dqt/models.py`
 -   Replace comments at top of file
