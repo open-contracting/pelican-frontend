@@ -1,5 +1,7 @@
 # Pelican frontend
 
+Pelican frontend has a Django backend that provides an API to the data in [Pelican backend](https://github.com/open-contracting/pelican-backend), and a Vue frontend that reports results to users.
+
 ## Getting started
 
 Set up the git pre-commit hook:
@@ -32,7 +34,7 @@ Pelican backend's database is treated as a [legacy database](https://docs.django
 To create `backend/dqt/models.py`:
 
 -   Run `python backend/manage.py inspectdb > backend/dqt/models.py`
--   Remove comments at top of file
+-   Replace comments at top of file
 -   Replace `models.DO_NOTHING` with `on_delete=models.CASCADE`
 -   `Dataset`: Add methods
 -   `DatasetFilter.dataset_id_original`: Rename to `dataset_original`, add `related_name="dataset_filter_parent"`
