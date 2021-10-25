@@ -292,7 +292,7 @@ def generate_report(request):
     if input_message['language']:
         # switch to input language
         translation.activate(input_message['language'])
-    else: 
+    else:
         translation.activate('en')
 
     response = None
