@@ -185,6 +185,22 @@
                     <small v-html="$t('datasetReport.reportNameTooltip')" class="form-text text-muted"></small>
                 </div>
             </div>
+            <div class="form-group row section_row">
+                <label class="col-3 col-form-label">{{ $t("datasetReport.reportLanguage") }}</label>
+                <div class="col-4" 
+                    v-for="option in options"
+                    :key="option.value"
+                    >
+                    <b-form-radio
+                        
+                        :value="option.value"
+                        v-model="reportLanguage"
+                    >{{option.text}}</b-form-radio>
+                   
+                </div>
+                <label class="col-3 col-form-label"/> 
+                <small v-html="$t('datasetReport.reportLanguageTooltip')" class="form-text text-muted col-9"></small>
+            </div>
             <div class="text-center">
                 <button
                     type="button"
@@ -216,7 +232,12 @@ export default {
             submitData: null,
             documentLink: null,
             errorMessage: null,
-            failedTags: null
+            failedTags: null,
+            options: [
+                { value: 'en', text: "English"},
+                { value: 'es', text: "Español"}
+            ],
+            reportLanguage: 'en',
         };
     },
     components: { Loader },
@@ -231,7 +252,8 @@ export default {
             var data = {
                 dataset_id: parseInt(this.dataset.id),
                 document_id: this.documentId,
-                folder_id: this.folderId
+                folder_id: this.folderId,
+                language: this.reportLanguage
             };
             if (this.reportName.trim() != "") {
                 data.report_name = this.reportName.trim();

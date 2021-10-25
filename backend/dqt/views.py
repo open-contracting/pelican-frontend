@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from psycopg2 import sql
+from django.utils import translation
 
 from .models import (
     DataItem,
@@ -288,6 +289,12 @@ def generate_report(request):
             {"status": "report_error", "data": {"reason": "Input message is malformed, will be dropped."}}
         )
 
+    if input_message['language']:
+        # switch to input language
+        translation.activate(input_message['language'])
+    else: 
+        translation.activate('en')
+
     response = None
     gdocs = None
 
@@ -326,6 +333,8 @@ def generate_report(request):
         if gdocs is not None:
             gdocs.destroy_tempdir()
 
+    # restores default english translations
+    translation.activate('en')
     return response
 
 
