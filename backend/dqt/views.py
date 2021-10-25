@@ -9,6 +9,7 @@ from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
 from dqt.settings.base import LANGUAGES
 from psycopg2 import sql
+from django.utils import translation
 
 from .models import (
     DataItem,
