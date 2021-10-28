@@ -1,14 +1,18 @@
 # build stage
-FROM node:lts-alpine as build-stage
-WORKDIR /app
+FROM node:14-alpine as build-stage
+# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#node-gyp-alpine
+WORKDIR /workdir
+RUN  apk add --no-cache --virtual .gyp python2 make g++
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build -- --mode docker
 
 # production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-COPY /default.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+FROM nginxinc/nginx-unprivileged:latest as production-stage
+USER root
+COPY --from=build-stage --chown=nginx:nginx /workdir/dist /usr/share/nginx/html
+COPY default.conf /etc/nginx/conf.d/default.conf
+USER nginx
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
