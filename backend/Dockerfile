@@ -1,12 +1,15 @@
 FROM python:3.8.8
 
-WORKDIR /usr/src/app
+WORKDIR /workdir
 RUN apt-get install libxml2-dev libxslt-dev
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+RUN groupadd -r pelican && useradd --no-log-init -r -g pelican pelican
+# for storing the TOKEN_APP
+RUN mkdir -p /data
+RUN chown -R pelican /data
 
-RUN mkdir /data
+USER pelican:pelican 
 
-ENTRYPOINT [ "" ]
+COPY --chown=pelican:pelican . .
