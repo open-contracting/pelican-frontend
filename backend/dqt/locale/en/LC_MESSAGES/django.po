@@ -92,7 +92,7 @@ msgstr "The value is a string and starts with a registered OCID prefix."
 #: tools/translations.py:22
 msgid "field.date_time.description"
 msgstr ""
-"The value is a string, starts in YYYY-MM-DD format, isn't before 1970 and "
+"The value is a string, starts in YYYY-MM-DD format, isn't before 1990 and "
 "isn't after 2050."
 
 #: tools/translations.py:23

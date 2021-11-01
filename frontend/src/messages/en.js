@@ -14,7 +14,7 @@ export const messages = {
     close: "Close window",
     created: "Created",
     modified: "Modified",
-    core: {         
+    core: {
         passedExamples: "Sample of successes",
         failedExamples: "Sample of failures",
         undefinedExamples: "Sample of unprocessed data"
@@ -72,7 +72,7 @@ export const messages = {
         warningList: "List of checks, which were not computed",
         warningEnd: "We recommend you to check your dataset and template to generate complete report.",
         reportLanguage: "Report language",
-        reportLanguageTooltip:"<p>laguage of the the generated messages in the report&#8482;</p>"
+        reportLanguageTooltip: "<p>laguage of the the generated messages in the report&#8482;</p>"
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",
@@ -669,7 +669,7 @@ export const messages = {
             date_time: {
                 count_header: "Date is realistic",
                 count_header_tooltip:
-                    "The value is a string, starts in YYYY-MM-DD format, isn't before 1970 and isn't after 2050."
+                    "The value is a string, starts in YYYY-MM-DD format, isn't before 1990 and isn't after 2050."
             },
             email: {
                 count_header: "Email address is valid",

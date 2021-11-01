@@ -2,7 +2,7 @@ import copy
 import re
 
 import shortuuid
-from dqt.settings.docker import GDOCS_TEMPLATES
+from dqt.settings import GDOCS_TEMPLATES
 from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
 from lxml import etree
@@ -381,8 +381,8 @@ class TemplateTag(Tag):
                     tags_mapping[full_tag] = generate_error_tag(
                         self.gdocs,
                         self.dataset_id,
-                        "Check " + er.check + " was not computed. Please check your dataset."
-                        )
+                        "Check " + er.check + " was not computed. Please check your dataset.",
+                    )
                     continue
 
             else:
@@ -606,7 +606,7 @@ class ErrorTag(TemplateTag):
                 super().__init__(self.process_tag, gdocs, dataset_id)
 
             def process_tag(self, _):
-                return (self.val)
+                return self.val
 
         return ErrorLeafTag(self.gdocs, self.dataset_id, self.key)
 
