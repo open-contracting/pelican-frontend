@@ -70,7 +70,9 @@ export const messages = {
         submit: "Submit",
         errorReport: "Error report",
         warningList: "List of checks, which were not computed",
-        warningEnd: "We recommend you to check your dataset and template to generate complete report."
+        warningEnd: "We recommend you to check your dataset and template to generate complete report.",
+        reportLanguage: "Report language",
+        reportLanguageTooltip: "<p>laguage of the the generated messages in the report&#8482;</p>"
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",

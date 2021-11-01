@@ -143,7 +143,7 @@
         </span>
         <form v-if="!isSubmitting && submitStatus == null" class="modal_box align-items-center">
             <div class="form-group row section_row">
-                <label class="col-3 col-form-label">{{ $t("datasetReport.documentId") }}</label>
+                <label class="col-3 col-form-label"><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label>
                 <div class="col-9">
                     <b-form-input
                         id="documentIdInput"
@@ -158,7 +158,7 @@
                 </div>
             </div>
             <div class="form-group row section_row">
-                <label class="col-3 col-form-label">{{ $t("datasetReport.folderId") }}</label>
+                <label class="col-3 col-form-label"><div class="label-padding">{{ $t("datasetReport.folderId") }}</div></label>
                 <div class="col-9">
                     <b-form-input
                         id="folderIdInput"
@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div class="form-group row section_row">
-                <label class="col-3 col-form-label">{{ $t("datasetReport.reportName") }}</label>
+                <label class="col-3 col-form-label"><div class="label-padding">{{ $t("datasetReport.reportName") }}</div></label>
                 <div class="col-9">
                     <b-form-input
                         id="reportNameInput"
@@ -183,6 +183,32 @@
                         v-model="reportName"
                     />
                     <small v-html="$t('datasetReport.reportNameTooltip')" class="form-text text-muted"></small>
+                </div>
+            </div>
+            <div class="form-group row section_row">
+                <label class="col-3 col-form-label"><div class="label-padding" id="label-padding">{{ $t("datasetReport.reportLanguage") }}</div></label>
+                <div class="col-9 top-margin">
+                    <b-row>
+                        <b-col 
+                        class="col-6"
+                        v-for="option in options"
+                        :key="option.value"
+                        >
+                            <b-form-radio
+                                
+                                :value="option.value"
+                                v-model="reportLanguage"
+                            >
+                            <div class="top-margin">
+                            {{option.text}}</div>
+                            </b-form-radio>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col class="col-12">
+                            <small v-html="$t('datasetReport.reportLanguageTooltip')" class="form-text text-muted"></small>
+                        </b-col>
+                    </b-row>
                 </div>
             </div>
             <div class="text-center">
@@ -216,7 +242,12 @@ export default {
             submitData: null,
             documentLink: null,
             errorMessage: null,
-            failedTags: null
+            failedTags: null,
+            options: [
+                { value: 'en', text: "English"},
+                { value: 'es', text: "Español"}
+            ],
+            reportLanguage: 'en',
         };
     },
     components: { Loader },
@@ -231,7 +262,8 @@ export default {
             var data = {
                 dataset_id: parseInt(this.dataset.id),
                 document_id: this.documentId,
-                folder_id: this.folderId
+                folder_id: this.folderId,
+                language: this.reportLanguage
             };
             if (this.reportName.trim() != "") {
                 data.report_name = this.reportName.trim();
@@ -394,5 +426,13 @@ export default {
 
 .width {
     width: 100%;
+}
+
+.top-margin {
+    padding-top: 0.25rem;
+}
+
+.label-padding {
+    padding-top: 0.25em;
 }
 </style>
