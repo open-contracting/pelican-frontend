@@ -14,7 +14,7 @@ export const messages = {
     close: "Close window",
     created: "Created",
     modified: "Modified",
-    core: {         
+    core: {
         passedExamples: "Sample of successes",
         failedExamples: "Sample of failures",
         undefinedExamples: "Sample of unprocessed data"
@@ -667,7 +667,7 @@ export const messages = {
             date_time: {
                 count_header: "Date is realistic",
                 count_header_tooltip:
-                    "The value is a string, starts in YYYY-MM-DD format, isn't before 1970 and isn't after 2050."
+                    "The value is a string, starts in YYYY-MM-DD format, isn't before 1990 and isn't after 2050."
             },
             email: {
                 count_header: "Email address is valid",
