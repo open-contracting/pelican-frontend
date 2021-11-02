@@ -1,5 +1,5 @@
-from django.conf.urls import include, url
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 
 from .api import (
     DataItemResource,
@@ -65,12 +65,12 @@ urlpatterns = [
     path("api/dataset_availability/<dataset_id>", dataset_availability, name="dataset_availability"),
     path("api/dataset_metadata/<dataset_id>", dataset_metadata, name="dataset_metadata"),
     path("api/dataset_wipe", dataset_wipe, name="dataset_wipe"),
-    url(r"^api/", include(dataset_resource.urls)),
-    url(r"^api/", include(data_item_resource.urls)),
-    url(r"^api/", include(progress_monitor_dataset_resource.urls)),
-    url(r"^api/", include(field_level_check_resource.urls)),
-    url(r"^api/", include(resource_level_check_resource.urls)),
-    url(r"^api/", include(dataset_level_check_resource.urls)),
-    url(r"^api/", include(report_resource.urls)),
-    url(r"^api/", include(time_variance_level_check_resource.urls)),
+    re_path(r"^api/", include(dataset_resource.urls)),
+    re_path(r"^api/", include(data_item_resource.urls)),
+    re_path(r"^api/", include(progress_monitor_dataset_resource.urls)),
+    re_path(r"^api/", include(field_level_check_resource.urls)),
+    re_path(r"^api/", include(resource_level_check_resource.urls)),
+    re_path(r"^api/", include(dataset_level_check_resource.urls)),
+    re_path(r"^api/", include(report_resource.urls)),
+    re_path(r"^api/", include(time_variance_level_check_resource.urls)),
 ]

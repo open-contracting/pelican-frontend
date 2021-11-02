@@ -4,10 +4,16 @@
 #
 #    pip-compile requirements_dev.in
 #
+-e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
+    # via -r requirements.txt
 appdirs==1.4.4
     # via
     #   black
     #   virtualenv
+asgiref==3.4.1
+    # via
+    #   -r requirements.txt
+    #   django
 attrs==20.3.0
     # via pytest
 black==21.5b2
@@ -41,11 +47,9 @@ distlib==0.3.1
     # via virtualenv
 dj-database-url==0.5.0
     # via -r requirements.txt
-django-cors-headers==3.0.2
+django-cors-headers==3.10.0
     # via -r requirements.txt
-django-tastypie==0.14.2
-    # via -r requirements.txt
-django==2.2.24
+django==3.2.8
     # via
     #   -r requirements.txt
     #   django-cors-headers
@@ -224,8 +228,10 @@ toml==0.10.2
     #   pytest
 typed-ast==1.4.3
     # via black
-typing-extensions==3.10.0.0
+typing-extensions==3.10.0.2
     # via
+    #   -r requirements.txt
+    #   asgiref
     #   black
     #   importlib-metadata
 uritemplate==3.0.1

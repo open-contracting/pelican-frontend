@@ -88,6 +88,12 @@ Prepare a production build:
 npm run build
 ```
 
+This automatically sets the `NODE_ENV` environment variable to `"production"`. To [override this default](https://cli.vuejs.org/guide/mode-and-env.html), use:
+
+```bash
+npm run build -- --mode development
+```
+
 ### Test
 
 Run tests:
