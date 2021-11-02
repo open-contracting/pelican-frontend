@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
-from dqt.settings.base import LANGUAGES
+from dqt.settings import LANGUAGES
 from psycopg2 import sql
 
 from .models import (

@@ -15,6 +15,7 @@ from pathlib import Path
 
 import dj_database_url
 import sentry_sdk
+from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import ignore_logger
 
@@ -190,6 +191,11 @@ if production and not local_access:
         SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS"))
         SECURE_HSTS_INCLUDE_SUBDOMAINS = True
         SECURE_HSTS_PRELOAD = True
+
+LANGUAGES = [
+    ("en", _("English")),
+    ("es", _("Spanish")),
+]
 
 DATABASE_ROUTERS = ["dqt.routers.DbRouter"]
 
