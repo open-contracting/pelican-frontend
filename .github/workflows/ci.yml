@@ -40,6 +40,11 @@ jobs:
       - run: pip install -r requirements_dev.txt
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
       - run: STANDARD_MAINTENANCE_SCRIPTS_IGNORE=gunicorn,psycopg2 pytest /tmp/test_requirements.py
+      - run: |
+          curl -sS \
+            https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
+            https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
+            | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -f -
       - name: Run checks and tests
         if: always()
         run: |
@@ -49,6 +54,7 @@ jobs:
         env:
           PYTHONWARNINGS: error,ignore:::tastypie.resources
           DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
+          PELICAN_BACKEND_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
           DJANGO_SETTINGS_MODULE: dqt.settings
 
   build_frontend:
