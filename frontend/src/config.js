@@ -16,10 +16,4 @@ var config = {
     }
 };
 
-if (process.env.VUE_APP_SERVER == "dev") {
-    Object.assign(config, {
-        apiBaseUrl: "/some_other_url"
-    });
-}
-
 export const CONFIG = config;
