@@ -40,7 +40,8 @@ jobs:
       - run: pip install -r requirements_dev.txt
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
       - run: STANDARD_MAINTENANCE_SCRIPTS_IGNORE=gunicorn,psycopg2 pytest /tmp/test_requirements.py
-      - run: |
+      - name: Run Pelican backend migrations
+        run: |
           curl -sS \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
