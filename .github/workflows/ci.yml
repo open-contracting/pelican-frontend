@@ -47,7 +47,7 @@ jobs:
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
         env:
-          PYTHONWARNINGS: error
+          PYTHONWARNINGS: error,ignore:::tastypie.resources
           DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
           DJANGO_SETTINGS_MODULE: dqt.settings
 
