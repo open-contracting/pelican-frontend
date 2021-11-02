@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+-e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
+    # via -r requirements.in
 asgiref==3.4.1
     # via django
 cachetools==4.1.0
@@ -19,8 +21,6 @@ cycler==0.10.0
 dj-database-url==0.5.0
     # via -r requirements.in
 django-cors-headers==3.10.0
-    # via -r requirements.in
-git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
     # via -r requirements.in
 django==3.2.8
     # via

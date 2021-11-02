@@ -2,7 +2,7 @@ dj-database-url
 django
 django-cors-headers
 # 0.14.3 is not compatible with Django 3.2.
-git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
+-e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
 google-api-python-client
 google-auth
 lxml
