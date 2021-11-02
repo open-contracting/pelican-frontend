@@ -14,5 +14,3 @@ USER root
 COPY --from=build-stage --chown=nginx:nginx /workdir/dist /usr/share/nginx/html
 COPY default.conf /etc/nginx/conf.d/default.conf
 USER nginx
-EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
