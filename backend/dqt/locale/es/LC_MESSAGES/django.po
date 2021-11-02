@@ -97,7 +97,7 @@ msgstr "El valor es una cadena y comienza con un prefijo OCID registrado."
 msgid "field.date_time.description"
 msgstr ""
 "El valor es una cadena, comienza en formato AAAA-MM-DD  y no es anterior a "
-"1970 ni posterior a 2050."
+"1990 ni posterior a 2050."
 
 #: tools/translations.py:23
 msgid "field.email.description"

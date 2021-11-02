@@ -1,5 +1,4 @@
 from django.conf.urls import include, url
-from django.contrib import admin
 from django.urls import path
 
 from .api import (
@@ -42,7 +41,6 @@ report_resource = ReportResource()
 time_variance_level_check_resource = TimeVarianceLevelCheckResource()
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("api/dataset_stats/<dataset_id>", dataset_stats, name="dataset_stats"),
     path("api/field_level_stats/<dataset_id>", field_level_stats, name="field_level_stats"),
     path("api/resource_level_stats/<dataset_id>", resource_level_stats, name="resource_level_stats"),

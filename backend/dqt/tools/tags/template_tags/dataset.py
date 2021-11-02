@@ -1,6 +1,6 @@
 from django.utils.translation import gettext as _
 from dqt.models import DatasetLevelCheck
-from dqt.settings.docker import GDOCS_TEMPLATES
+from dqt.settings import GDOCS_TEMPLATES
 from dqt.tools.errors import CheckNotComputedError
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.dataset.bar.count import CountLeafTag as bar_CountLeafTag
@@ -126,11 +126,8 @@ class DatasetTemplateTag(TemplateTag):
                 self.set_sub_tag("totalOcidCount", generate_key_leaf_tag("totalOcidCount"))
                 self.set_sub_tag("totalBuyerCount", generate_key_leaf_tag("totalBuyerCount"))
                 self.set_sub_tag("examples", generate_examples_leaf_tag("examples"))
-        else:   # check not found
-            raise CheckNotComputedError(
-                reason="Check was not computed",
-                check=check_name
-            )
+        else:  # check not found
+            raise CheckNotComputedError(reason="Check was not computed", check=check_name)
 
         super().finalize_params()
 
@@ -200,14 +197,14 @@ class DatasetTemplateTag(TemplateTag):
                 new_data["checkedCount"] = check.meta["total_processed"]
                 new_data["passedCount"] = check.meta["total_passed"]
                 new_data["failedCount"] = check.meta["total_failed"]
-                new_data["passedExamples"] = [example["original_process"]["ocid"]
-                                              if "original_process" in example
-                                              else example["ocid"] for example in check.meta["passed_examples"]
-                                              ]
-                new_data["failedExamples"] = [example["original_process"]["ocid"]
-                                              if "original_process" in example
-                                              else example["ocid"] for example in check.meta["failed_examples"]
-                                              ]
+                new_data["passedExamples"] = [
+                    example["original_process"]["ocid"] if "original_process" in example else example["ocid"]
+                    for example in check.meta["passed_examples"]
+                ]
+                new_data["failedExamples"] = [
+                    example["original_process"]["ocid"] if "original_process" in example else example["ocid"]
+                    for example in check.meta["failed_examples"]
+                ]
             elif check_type == "biggest_share":
                 new_data["buyerIdentifierId"] = check.meta["specifics"]["buyer.identifier.id"]
                 new_data["buyerIdentifierScheme"] = check.meta["specifics"]["buyer.identifier.scheme"]

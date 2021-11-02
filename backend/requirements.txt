@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+asgiref==3.4.1
+    # via django
 cachetools==4.1.0
     # via google-auth
 certifi==2020.6.20
@@ -16,11 +18,11 @@ cycler==0.10.0
     # via matplotlib
 dj-database-url==0.5.0
     # via -r requirements.in
-django-cors-headers==3.0.2
+django-cors-headers==3.10.0
     # via -r requirements.in
-django-tastypie==0.14.2
+django-tastypie==0.14.3
     # via -r requirements.in
-django==2.2.24
+django==3.2.8
     # via
     #   -r requirements.in
     #   django-cors-headers
@@ -106,6 +108,8 @@ six==1.12.0
     #   python-dateutil
 sqlparse==0.3.0
     # via django
+typing-extensions==3.10.0.2
+    # via asgiref
 uritemplate==3.0.1
     # via google-api-python-client
 urllib3==1.26.5
