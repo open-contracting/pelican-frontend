@@ -39,7 +39,9 @@ jobs:
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
       - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
-      - run: pip install -r requirements_dev.txt
+      # Don't install editable projects in the current working directory.
+      # https://pip.pypa.io/en/latest/reference/pip_install/#install-src
+      - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements_dev.txt
       - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
       - run: STANDARD_MAINTENANCE_SCRIPTS_IGNORE=gunicorn,psycopg2 pytest /tmp/test_requirements.py
       - name: Run Pelican backend migrations
