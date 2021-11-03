@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.db import connections
 from django.utils.translation import gettext as _
-from dqt.settings import GDOCS_TEMPLATES
 from dqt.tools.misc import terms_enumeration
 from dqt.tools.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from dqt.tools.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
@@ -51,7 +51,7 @@ class ResourceTemplateTag(TemplateTag):
     )
 
     def __init__(self, gdocs, dataset_id):
-        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_RESOURCE_TEMPLATE"], gdocs, dataset_id)
+        super().__init__(self.prepare_data, settings.GDOCS_TEMPLATES["DEFAULT_RESOURCE_TEMPLATE"], gdocs, dataset_id)
 
         self.set_param_validation(
             "check",

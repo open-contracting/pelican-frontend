@@ -2,12 +2,12 @@ import time
 from datetime import datetime
 
 import simplejson as json
+from django.conf import settings
 from django.db import connections
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
-from dqt.settings import LANGUAGES
 from psycopg2 import sql
 
 from .models import (
@@ -290,7 +290,7 @@ def generate_report(request):
             {"status": "report_error", "data": {"reason": "Input message is malformed, will be dropped."}}
         )
 
-    if "language" in input_message and input_message["language"] in dict(LANGUAGES):
+    if "language" in input_message and input_message["language"] in dict(settings.LANGUAGES):
         # switch to input language
         translation.activate(input_message["language"])
     else:

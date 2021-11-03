@@ -2,7 +2,7 @@ import copy
 import re
 
 import shortuuid
-from dqt.settings import GDOCS_TEMPLATES
+from django.conf import settings
 from dqt.tools.errors import CheckNotComputedError, TagError
 from dqt.tools.misc import terms_enumeration
 from lxml import etree
@@ -592,11 +592,11 @@ class TagChaining:
 class ErrorTag(TemplateTag):
     def __init__(self, gdocs, dataset_id, key):
         # TODO - Reupload template and change signature
-        super().__init__(self.prepare_data, GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"], gdocs, dataset_id)
+        super().__init__(self.prepare_data, settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"], gdocs, dataset_id)
         self.sub_tags_mapping["value"] = self.tag_class
         self.key = key
         self.set_required_data_field(key)
-        self.set_param("template", GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"])
+        self.set_param("template", settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"])
         super().finalize_params()
 
     def tag_class(self, _, __):
