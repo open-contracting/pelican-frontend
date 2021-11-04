@@ -1,7 +1,8 @@
 FROM node:14 as build-stage
 WORKDIR /workdir
 COPY package*.json ./
-RUN npm ci --only=production
+# https://cli.vuejs.org/guide/deployment.html#docker-nginx
+RUN npm install
 COPY . .
 RUN npm run build
 
