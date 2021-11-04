@@ -1,8 +1,5 @@
 name: CI
 on: [push, pull_request]
-env:
-  BASEDIR: https://raw.githubusercontent.com/open-contracting/standard-maintenance-scripts/main
-  OCDS_NOINDENT: 1
 jobs:
   build_backend:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
@@ -33,19 +30,10 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements_dev.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      # Don't install editable projects in the current working directory.
-      # https://pip.pypa.io/en/latest/reference/pip_install/#install-src
-      - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements.txt
+      - run: pip install -r requirements.txt
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
-      - run: curl -s -S --retry 3 $BASEDIR/tests/install.sh | bash -
-      # Don't install editable projects in the current working directory.
-      # https://pip.pypa.io/en/latest/reference/pip_install/#install-src
-      - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements_dev.txt
-      - run: curl -s -S --retry 3 $BASEDIR/tests/script.sh | bash -
-      - env:
-          STANDARD_MAINTENANCE_SCRIPTS_IGNORE: tastypie
-        run: pytest /tmp/test_requirements.py
+      - run: pip install -r requirements_dev.txt
       - name: Run Pelican backend migrations
         run: |
           curl -sS \
@@ -53,7 +41,6 @@ jobs:
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
             | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -f -
       - name: Run checks and tests
-        if: always()
         # Tastypie 0.14.3 has a missing migration.
         run: |
           ./manage.py migrate
