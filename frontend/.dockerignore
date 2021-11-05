@@ -25,3 +25,4 @@ pytest.ini
 
 # Generated files
 **/node_modules
+**/dist
