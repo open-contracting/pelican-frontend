@@ -8,7 +8,7 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
-from psycopg2 import sql
+from psycopg2.sql import SQL, Identifier, Literal
 
 from .models import (
     DataItem,
@@ -56,32 +56,32 @@ def dataset_filter_items(request):
 
     # building query in a safely manner
     try:
-        query = sql.SQL("SELECT count(*) FROM data_item WHERE dataset_id = ") + sql.Literal(dataset_id_original)
+        query = SQL("SELECT count(*) FROM data_item WHERE dataset_id = ") + Literal(dataset_id_original)
         if "release_date_from" in filter_message:
-            expr = sql.SQL("data->>'date' >= ") + sql.Literal(filter_message["release_date_from"])
-            query += sql.SQL(" and ") + expr
+            expr = SQL("data->>'date' >= ") + Literal(filter_message["release_date_from"])
+            query += SQL(" and ") + expr
         if "release_date_to" in filter_message:
-            expr = sql.SQL("data->>'date' <= ") + sql.Literal(filter_message["release_date_to"])
-            query += sql.SQL(" and ") + expr
+            expr = SQL("data->>'date' <= ") + Literal(filter_message["release_date_to"])
+            query += SQL(" and ") + expr
         if "buyer" in filter_message:
-            expr = sql.SQL(", ").join([sql.Literal(buyer) for buyer in filter_message["buyer"]])
-            expr = sql.SQL("data->'buyer'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
-            query += sql.SQL(" and ") + expr
+            expr = SQL(", ").join([Literal(buyer) for buyer in filter_message["buyer"]])
+            expr = SQL("data->'buyer'->>'name' in ") + SQL("(") + expr + SQL(")")
+            query += SQL(" and ") + expr
         if "buyer_regex" in filter_message:
-            expr = sql.SQL("data->'buyer'->>'name' LIKE ") + sql.Literal(filter_message["buyer_regex"])
-            query += sql.SQL(" and ") + expr
+            expr = SQL("data->'buyer'->>'name' LIKE ") + Literal(filter_message["buyer_regex"])
+            query += SQL(" and ") + expr
         if "procuring_entity" in filter_message:
-            expr = sql.SQL(", ").join(
-                [sql.Literal(procuring_entity) for procuring_entity in filter_message["procuring_entity"]]
+            expr = SQL(", ").join(
+                [Literal(procuring_entity) for procuring_entity in filter_message["procuring_entity"]]
             )
-            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' in ") + sql.SQL("(") + expr + sql.SQL(")")
-            query += sql.SQL(" and ") + expr
+            expr = SQL("data->'tender'->'procuringEntity'->>'name' in ") + SQL("(") + expr + SQL(")")
+            query += SQL(" and ") + expr
         if "procuring_entity_regex" in filter_message:
-            expr = sql.SQL("data->'tender'->'procuringEntity'->>'name' LIKE ") + sql.Literal(
+            expr = SQL("data->'tender'->'procuringEntity'->>'name' LIKE ") + Literal(
                 filter_message["procuring_entity_regex"]
             )
-            query += sql.SQL(" and ") + expr
-        query += sql.SQL(";")
+            query += SQL(" and ") + expr
+        query += SQL(";")
 
         with connections["data"].cursor() as cursor:
             cursor.execute(query)
@@ -439,7 +439,7 @@ def dataset_availability(request, dataset_id):
             """
 
         cursor.execute(
-            sql.SQL(statement).format(table=sql.Identifier(FieldLevelCheck._meta.db_table)),
+            SQL(statement).format(table=Identifier(FieldLevelCheck._meta.db_table)),
             {"checks": tuple(j for i in map.values() for j in i), "dataset_id": dataset_id},
         )
 
