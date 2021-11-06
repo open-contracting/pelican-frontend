@@ -137,7 +137,7 @@ def field_level_stats(request, dataset_id):
         rows = cursor.fetchall()
 
         if not rows:
-            return JsonResponse({"error": "no field_level_check report for dataset_id: {}".format(dataset_id)})
+            return JsonResponse({"error": f"no field_level_check report for dataset_id: {dataset_id}"})
 
         return JsonResponse(rows[0][0])
 
@@ -161,9 +161,7 @@ def field_level_detail(request, dataset_id, path):
         rows = cursor.fetchall()
 
         if not rows:
-            return JsonResponse(
-                {"error": "no results for dataset_id: {}, path: '{}' combination".format(dataset_id, path)}
-            )
+            return JsonResponse({"error": f"no results for dataset_id: {dataset_id}, path: '{path}' combination"})
 
         result = rows[0][0]
 
@@ -209,7 +207,7 @@ def resource_level_stats(request, dataset_id):
         rows = cursor.fetchall()
 
         if not rows:
-            return JsonResponse({"error": "no resource_level_check report for dataset_id: {}".format(dataset_id)})
+            return JsonResponse({"error": f"no resource_level_check report for dataset_id: {dataset_id}"})
 
         return JsonResponse(rows[0][0])
 
@@ -234,7 +232,7 @@ def resource_level_detail(request, dataset_id, check_name):
 
         if not rows:
             return JsonResponse(
-                {"error": "no results for dataset_id: {}, check_name: '{}' combination".format(dataset_id, check_name)}
+                {"error": f"no results for dataset_id: {dataset_id}, check_name: '{check_name}' combination"}
             )
 
         result = rows[0][0]
@@ -374,7 +372,7 @@ def dataset_wipe(request):
     publish(json.dumps(message), routing_key)
 
     return JsonResponse(
-        {"status": "ok", "data": {"message": "Dataset id {} on Pelican will be wiped".format(body.get("dataset_id"))}},
+        {"status": "ok", "data": {"message": f"Dataset id {body.get('dataset_id')} on Pelican will be wiped"}},
         safe=False,
     )
 
@@ -431,18 +429,18 @@ def dataset_availability(request, dataset_id):
     }
 
     with connections["data"].cursor() as cursor:
-        cursor.execute(
-            """
+        statement = """
             SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
-            FROM {t} flc, jsonb_each(flc.result->'checks') c
+            FROM {table} flc, jsonb_each(flc.result->'checks') c
             WHERE dataset_id = %(dataset_id)s
-                AND c.key IN {checks}
+                AND c.key IN %(checks)s
             GROUP BY c.key
             ORDER BY c.key
-        """.format(
-                t=FieldLevelCheck._meta.db_table, checks=tuple([j for i in map.values() for j in i])
-            ),
-            {"dataset_id": dataset_id},
+            """
+
+        cursor.execute(
+            sql.SQL(statement).format(table=sql.Identifier(FieldLevelCheck._meta.db_table)),
+            {"checks": tuple(j for i in map.values() for j in i), "dataset_id": dataset_id},
         )
 
         results = cursor.fetchall()
