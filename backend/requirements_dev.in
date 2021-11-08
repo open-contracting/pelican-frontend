@@ -7,3 +7,4 @@ pre-commit
 psycopg2-binary
 pytest
 pytest-cov
+transifex-client
