@@ -1,6 +1,6 @@
 |Build Status| |Coverage Status|
 
-Pelican frontend reports results from `Pelican backend <https://pelican-backend.readthedocs.io/en/latest>`__. It has a Django backend that provides an API to the data in Pelican backend, and a Vue frontend that reports results to users.
+Pelican frontend reports results from `Pelican backend <https://pelican-backend.readthedocs.io/en/latest>`__. It has a Django backend that provides an API to the data in Pelican backend, and a Vue frontend that displays results to users.
 
 (If you are viewing this on GitHub, open the `full documentation <https://pelican-frontend.readthedocs.io/>`__ for additional details.)
 

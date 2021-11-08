@@ -3,6 +3,11 @@ Django backend
 
 All commands must be run from the ``backend/`` directory.
 
+.. toctree::
+   :maxdepth: 2
+
+   reference
+
 Getting started
 ---------------
 
