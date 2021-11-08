@@ -6,7 +6,6 @@ All commands must be run from the ``backend/`` directory.
 .. toctree::
    :maxdepth: 2
 
-   tasks/index
    reference
 
 Getting started
