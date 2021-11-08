@@ -6,17 +6,18 @@
 # Translators:
 # Andres Aguilera <aaguilera@cds.com.py>, 2020
 # Natalia Valdez <nataliavaldez@cds.com.py>, 2020
-# Yohanna Lisnichuk <ylisnichuk@idatosabiertos.org>, 2021
+# Yohanna Lisnichuk <ylisnichuk@open-contracting.org>, 2021
+# James McKinney, 2021
+# James McKinney, 2020
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-
 "POT-Creation-Date: 2020-11-06 22:15+0000\n"
 "PO-Revision-Date: 2020-11-06 22:18+0000\n"
-"Last-Translator: Yohanna Lisnichuk <ylisnichuk@idatosabiertos.org>, 2021\n"
+"Last-Translator: James McKinney, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/open-contracting-partnership-1/teams/114567/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
