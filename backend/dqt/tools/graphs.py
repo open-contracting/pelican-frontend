@@ -1,4 +1,5 @@
 import math
+import os
 from collections import OrderedDict
 from io import BytesIO
 
@@ -8,7 +9,7 @@ from matplotlib.patches import BoxStyle, FancyBboxPatch
 from PIL import Image, ImageDraw, ImageFont
 
 font_dirs = [
-    "dqt/tools/fonts",
+    os.path.join("dqt", "assets", "fonts"),
 ]
 font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
 for font_file in font_files:
@@ -407,9 +408,9 @@ def table_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
 def lifecycle_image(
     planning_count, tender_count, award_count, contract_count, implementation_count, return_aspect_ratio=False
 ):
-    image = Image.open("dqt/tools/images/lifecycle.png")
+    image = Image.open(os.path.join("dqt", "assets", "images", "lifecycle.png"))
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("dqt/tools/fonts/GT Eesti Pro Display Regular.ttf", 45)
+    font = ImageFont.truetype(os.path.join("dqt", "assets", "fonts", "GT Eesti Pro Display Regular.ttf"), 45)
 
     draw.text(
         xy=(154, 283),
