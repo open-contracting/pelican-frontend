@@ -2,9 +2,9 @@
 host = https://www.transifex.com
 
 [pelican-1.django]
-file_filter = locale/<lang>/LC_MESSAGES/django.po
+file_filter = dqt/locale/<lang>/LC_MESSAGES/django.po
 minimum_perc = 0
-source_file = locale/en/LC_MESSAGES/django.po
+source_file = dqt/locale/en/LC_MESSAGES/django.po
 source_lang = en_US
 type = PO
 

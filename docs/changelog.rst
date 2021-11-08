@@ -7,3 +7,4 @@ This changelog only notes major changes, to notify other developers.
 ----------
 
 -  refactor: Split Django project from Django application. :commit:`df4b678`
+-  refactor: Move static assets out of code directory. :commit:`80bbd09`
