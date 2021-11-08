@@ -34,7 +34,6 @@ jobs:
           PYTHONWARNINGS: error,ignore:::tastypie.resources
           DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
           PELICAN_BACKEND_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
-          DJANGO_SETTINGS_MODULE: dqt.settings
         # Tastypie 0.14.3 has a missing migration.
         run: |
           ./manage.py migrate

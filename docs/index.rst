@@ -19,3 +19,4 @@ Set up the git pre-commit hook:
 
    backend/index
    frontend/index
+   changelog
