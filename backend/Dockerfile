@@ -18,3 +18,5 @@ RUN chown -R runner:runner /data
 WORKDIR /workdir
 USER runner:runner
 COPY --chown=runner:runner . .
+
+RUN python manage.py compilemessages
