@@ -30,7 +30,7 @@ def dataset_filter_items(request):
     dataset_id_original = input_message["dataset_id_original"]
     filter_message = input_message["filter_message"]
 
-    # building query in a safely manner
+    # See similar code in dataset_filter.py in pelican-backend.
     try:
         variables = {"dataset_id_original": dataset_id_original}
         parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]

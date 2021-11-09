@@ -26,11 +26,11 @@ class ViewsTests(TransactionTestCase):
         return obj
 
     def test_require_POST(self):
-        for path in ("create_dataset_filter",):
+        for path in ("create_dataset_filter", "dataset_start", "dataset_wipe"):
             with self.subTest(path=path):
                 response = self.client.get(f"/api/{path}")
 
-                self.assertEqual(response.status_code, 400)
+                self.assertEqual(response.status_code, 405)
 
     @patch("processor.views.publish")
     def test_dataset_start(self, publish):
@@ -40,7 +40,7 @@ class ViewsTests(TransactionTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(
-            response.content, {"status": "ok", "data": {"message": "Dataset anything on Pelican started"}}
+            response.content, {"status": "ok", "data": {"message": "Started dataset 'anything' for collection 123"}}
         )
         publish.assert_called_once_with('{"name": "anything", "collection_id": 123}', "ocds_kingfisher_extractor_init")
 
@@ -51,7 +51,7 @@ class ViewsTests(TransactionTestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, b"done")
+        self.assertJSONEqual(response.content, {"status": "ok"})
         publish.assert_called_once_with(
             b'{"dataset_id_original": 123, "filter_message": {}}', "dataset_filter_extractor_init"
         )
@@ -61,15 +61,13 @@ class ViewsTests(TransactionTestCase):
         response = self.client.post("/api/dataset_wipe", {"dataset_id": 123}, "application/json")
 
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content, {"status": "ok", "data": {"message": "Dataset id 123 on Pelican will be wiped"}}
-        )
+        self.assertJSONEqual(response.content, {"status": "ok", "data": {"message": "Wiping dataset 123"}})
         publish.assert_called_once_with('{"dataset_id": 123}', "wiper_init")
 
     def test_dataset_id(self):
         dataset = self.create(Dataset, name="anything")
 
-        response = self.client.post("/api/dataset_id", {"name": "anything"}, "application/json")
+        response = self.client.get("/api/dataset_id?name=anything")
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"status": "ok", "data": dataset.pk})

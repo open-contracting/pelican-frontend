@@ -3,6 +3,11 @@ Changelog
 
 This changelog only notes major changes, to notify other developers.
 
+2021-11-09
+----------
+
+-  refactor: Start rewrite of processor API.
+
 2021-11-08
 ----------
 

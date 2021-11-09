@@ -1,7 +1,8 @@
 import simplejson as json
 from django.db import connections
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from dqt.models import Dataset, FieldLevelCheck, ProgressMonitorDataset
 from psycopg2.sql import SQL, Identifier
 
@@ -9,80 +10,56 @@ from .rabbitmq import publish
 
 
 @csrf_exempt
+@require_POST
 def create_dataset_filter(request):
-    if request.method == "GET":
-        return HttpResponseBadRequest(reason="Only post method is accepted.")
-
     publish(request.body, "dataset_filter_extractor_init")
 
-    return HttpResponse("done")
+    return JsonResponse({"status": "ok"})
 
 
 @csrf_exempt
+@require_POST
 def dataset_start(request):
-    if request.method == "GET":
-        return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
-
-    routing_key = "ocds_kingfisher_extractor_init"
-
     body = json.loads(request.body.decode("utf-8"))
 
-    dataset_name = body.get("name")
-
     message = {
-        "name": dataset_name,
+        "name": body.get("name"),
         "collection_id": body.get("collection_id"),
-        # "ancestor_id": ancestor_id,
-        # "max_items": max_items,
     }
-
-    publish(json.dumps(message), routing_key)
+    publish(json.dumps(message), "ocds_kingfisher_extractor_init")
 
     return JsonResponse(
-        {"status": "ok", "data": {"message": f"Dataset {dataset_name} on Pelican started"}}, safe=False
+        {"status": "ok", "data": {"message": "Started dataset '%(name)s' for collection %(collection_id)s" % message}}
     )
 
 
 @csrf_exempt
+@require_POST
 def dataset_wipe(request):
-    if request.method == "GET":
-        return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
-
-    routing_key = "wiper_init"
-
     body = json.loads(request.body.decode("utf-8"))
 
     message = {
         "dataset_id": body.get("dataset_id"),
     }
+    publish(json.dumps(message), "wiper_init")
 
-    publish(json.dumps(message), routing_key)
-
-    return JsonResponse(
-        {"status": "ok", "data": {"message": f"Dataset id {body.get('dataset_id')} on Pelican will be wiped"}},
-        safe=False,
-    )
+    return JsonResponse({"status": "ok", "data": {"message": "Wiping dataset %(dataset_id)s" % message}})
 
 
 @csrf_exempt
 def dataset_progress(request, dataset_id):
     try:
         monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
-        return JsonResponse({"status": "ok", "data": monitor}, safe=False)
+        return JsonResponse({"status": "ok", "data": monitor})
     except ProgressMonitorDataset.DoesNotExist:
-        return JsonResponse({"status": "ok", "data": None}, safe=False)
+        return JsonResponse({"status": "ok", "data": None})
 
 
 @csrf_exempt
 def dataset_id(request):
-    if request.method == "GET":
-        return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
+    dataset = Dataset.objects.get(name=request.GET.get("name"))
 
-    body = json.loads(request.body.decode("utf-8"))
-    dataset_name = body.get("name")
-
-    dataset = Dataset.objects.get(name=dataset_name)
-    return JsonResponse({"status": "ok", "data": dataset.id if dataset else None}, safe=False)
+    return JsonResponse({"status": "ok", "data": dataset.id if dataset else None})
 
 
 @csrf_exempt
@@ -140,11 +117,11 @@ def dataset_availability(request, dataset_id):
                     if r[0] == i:
                         counts[key] += int(r[1])
 
-    return JsonResponse({"status": "ok", "data": counts}, safe=False)
+    return JsonResponse({"status": "ok", "data": counts})
 
 
 @csrf_exempt
 def dataset_metadata(request, dataset_id):
     meta = Dataset.objects.values_list("meta__collection_metadata", flat=True).get(id=dataset_id)
 
-    return JsonResponse({"status": "ok", "data": meta}, safe=False)
+    return JsonResponse({"status": "ok", "data": meta})
