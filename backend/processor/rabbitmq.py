@@ -13,7 +13,7 @@ def publish(message, routing_key):
 
     channel.basic_publish(
         exchange=settings.RABBIT_EXCHANGE_NAME,
-        routing_key=settings.RABBIT_EXCHANGE_NAME + routing_key,
+        routing_key=f"{settings.RABBIT_EXCHANGE_NAME}_{routing_key}",
         body=message,
         properties=pika.BasicProperties(delivery_mode=2),
     )

@@ -27,7 +27,7 @@ class DataItem(models.Model):
 class Dataset(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    meta = models.JSONField()
+    meta = models.JSONField(blank=True, default={})
     ancestor_id = models.BigIntegerField(blank=True, null=True)
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)

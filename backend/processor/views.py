@@ -13,7 +13,7 @@ def create_dataset_filter(request):
     if request.method == "GET":
         return HttpResponseBadRequest(reason="Only post method is accepted.")
 
-    publish(request.body, "_dataset_filter_extractor_init")
+    publish(request.body, "dataset_filter_extractor_init")
 
     return HttpResponse("done")
 
@@ -23,7 +23,7 @@ def dataset_start(request):
     if request.method == "GET":
         return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
 
-    routing_key = "_ocds_kingfisher_extractor_init"
+    routing_key = "ocds_kingfisher_extractor_init"
 
     body = json.loads(request.body.decode("utf-8"))
 
@@ -48,7 +48,7 @@ def dataset_wipe(request):
     if request.method == "GET":
         return JsonResponse({"status": "error", "data": {"reason": "Only post method is accepted."}})
 
-    routing_key = "_wiper_init"
+    routing_key = "wiper_init"
 
     body = json.loads(request.body.decode("utf-8"))
 

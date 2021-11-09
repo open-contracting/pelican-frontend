@@ -12,6 +12,7 @@ To update ``backend/dqt/models.py`` following changes to Pelican backend's datab
 -  Replace comments at top of file
 -  Replace ``models.DO_NOTHING`` with ``on_delete=models.CASCADE``
 -  ``Dataset``: Add methods
+-  ``Dataset.meta``: Add ``blank=True, default=dict``
 -  ``DatasetFilter.dataset_id_original``: Rename to ``dataset_original``, add ``related_name="dataset_filter_parent"``
 -  ``DatasetFilter.dataset_id_filtered``: Rename to ``dataset_filtered``, add ``related_name="dataset_filter_child"``
 -  ``ProgressMonitorDataset.dataset``: Add ``related_name="progress"``
