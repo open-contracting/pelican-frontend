@@ -30,4 +30,5 @@ jobs:
         run: |
           output=$(find . -name LC_MESSAGES -not -path "*/en_US/*" -exec pocount --incomplete --short "{}" +)
           echo $output
+          git diff
           [ "$output" = "" ]
