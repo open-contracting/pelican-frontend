@@ -46,7 +46,6 @@ def dataset_wipe(request):
     return JsonResponse({"status": "ok", "data": {"message": "Wiping dataset %(dataset_id)s" % message}})
 
 
-@csrf_exempt
 def dataset_progress(request, dataset_id):
     try:
         monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
@@ -55,14 +54,12 @@ def dataset_progress(request, dataset_id):
         return JsonResponse({"status": "ok", "data": None})
 
 
-@csrf_exempt
 def dataset_id(request):
     dataset = Dataset.objects.get(name=request.GET.get("name"))
 
     return JsonResponse({"status": "ok", "data": dataset.id if dataset else None})
 
 
-@csrf_exempt
 def dataset_availability(request, dataset_id):
     map = {
         "parties": ["parties.id"],
@@ -120,7 +117,6 @@ def dataset_availability(request, dataset_id):
     return JsonResponse({"status": "ok", "data": counts})
 
 
-@csrf_exempt
 def dataset_metadata(request, dataset_id):
     meta = Dataset.objects.values_list("meta__collection_metadata", flat=True).get(id=dataset_id)
 
