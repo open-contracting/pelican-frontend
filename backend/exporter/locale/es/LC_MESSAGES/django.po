@@ -2,790 +2,852 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # Andres Aguilera <aaguilera@cds.com.py>, 2020
 # Natalia Valdez <nataliavaldez@cds.com.py>, 2020
 # Yohanna Lisnichuk <ylisnichuk@open-contracting.org>, 2021
 # James McKinney, 2021
 # James McKinney, 2020
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-06 22:15+0000\n"
+"POT-Creation-Date: 2021-11-09 01:59+0000\n"
 "PO-Revision-Date: 2020-11-06 22:18+0000\n"
 "Last-Translator: James McKinney, 2021\n"
-"Language-Team: Spanish (https://www.transifex.com/open-contracting-partnership-1/teams/114567/es/)\n"
+"Language-Team: Spanish (https://www.transifex.com/open-contracting-"
+"partnership-1/teams/114567/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: tools/tags/leaf_tags/field/description.py:33 tools/translations.py:19
+#: exporter/tags/leaf_tags/field/description.py:26 exporter/translations.py:18
 msgid "field.exists.description"
 msgstr ""
 "Hay una prueba por posible aparición del campo. Ejemplo: si el campo padre  "
 "licitación se establece en 10 compiled releases, el campo hijo tender.id se "
-"reporta sobre 10. Si hay 100 entradas en todos los arrays de adjudicación en"
-" todos los compiled releases, entonces se reporta el campo awards.id sobre "
+"reporta sobre 10. Si hay 100 entradas en todos los arrays de adjudicación en "
+"todos los compiled releases, entonces se reporta el campo awards.id sobre "
 "100."
 
-#: tools/tags/leaf_tags/field/description.py:35 tools/translations.py:20
+#: exporter/tags/leaf_tags/field/description.py:28 exporter/translations.py:19
 msgid "field.non_empty.description"
 msgstr ""
-"Hay una prueba por ocurrencia real del campo. La prueba pasa si el valor del"
-" campo no es nulo ni está vacío (es decir, no es una cadena vacía, un array "
+"Hay una prueba por ocurrencia real del campo. La prueba pasa si el valor del "
+"campo no es nulo ni está vacío (es decir, no es una cadena vacía, un array "
 "vacío o un objeto vacío). Vea la comprobación de arriba para obtener más "
 "detalles."
 
-#: tools/tags/leaf_tags/field/name.py:33 tools/translations.py:5
+#: exporter/tags/leaf_tags/field/name.py:26 exporter/translations.py:4
 msgid "field.exists.name"
 msgstr "El campo está establecido"
 
-#: tools/tags/leaf_tags/field/name.py:35 tools/translations.py:6
+#: exporter/tags/leaf_tags/field/name.py:28 exporter/translations.py:5
 msgid "field.non_empty.name"
 msgstr "El campo no es nulo ni está vacío"
 
-#: tools/translations.py:7
+#: exporter/translations.py:6
 msgid "field.ocid_prefix_check.name"
 msgstr "El prefijo OCID está registrado"
 
-#: tools/translations.py:8
+#: exporter/translations.py:7
 msgid "field.date_time.name"
 msgstr "La fecha es realista"
 
-#: tools/translations.py:9
+#: exporter/translations.py:8
 msgid "field.email.name"
 msgstr "La dirección de correo electrónico es válida"
 
-#: tools/translations.py:10
+#: exporter/translations.py:9
 msgid "field.identifier_scheme.name"
 msgstr "El esquema del identificador es reconocido"
 
-#: tools/translations.py:11
+#: exporter/translations.py:10
 msgid "field.telephone.name"
 msgstr "El número de teléfono es posible"
 
-#: tools/translations.py:12
+#: exporter/translations.py:11
 msgid "field.document_description_length.name"
 msgstr "Tiene 250 caracteres o menos"
 
-#: tools/translations.py:13
+#: exporter/translations.py:12
 msgid "field.document_type.name"
 msgstr "El tipo de documento es coherente"
 
-#: tools/translations.py:14
+#: exporter/translations.py:13
 msgid "field.document_format_codelist.name"
 msgstr "El formato del documento es reconocido"
 
-#: tools/translations.py:15
+#: exporter/translations.py:14
 msgid "field.number_checks.name"
 msgstr "El número no es negativo"
 
-#: tools/translations.py:16
+#: exporter/translations.py:15
 msgid "field.language.name"
 msgstr "El código del idioma es reconocido"
 
-#: tools/translations.py:21
+#: exporter/translations.py:20
 msgid "field.ocid_prefix_check.description"
 msgstr "El valor es una cadena y comienza con un prefijo OCID registrado."
 
-#: tools/translations.py:22
+#: exporter/translations.py:21
 msgid "field.date_time.description"
 msgstr ""
 "El valor es una cadena, comienza en formato AAAA-MM-DD  y no es anterior a "
 "1990 ni posterior a 2050."
 
-#: tools/translations.py:23
+#: exporter/translations.py:22
 msgid "field.email.description"
 msgstr "El valor es una dirección válida según RFC 2822."
 
-#: tools/translations.py:24
+#: exporter/translations.py:23
 msgid "field.identifier_scheme.description"
 msgstr ""
 "El valor es una cadena y es un código org-id.guide. (La lista de códigos es "
 "abierta.)"
 
-#: tools/translations.py:25
+#: exporter/translations.py:24
 msgid "field.telephone.description"
 msgstr ""
 "El valor es un número posible según la libreria libphonenumber de Google."
 
-#: tools/translations.py:26
+#: exporter/translations.py:25
 msgid "field.document_description_length.description"
 msgstr "La longitud del valor es menor o igual a 250."
 
-#: tools/translations.py:27
+#: exporter/translations.py:26
 msgid "field.document_type.description"
 msgstr ""
 "El tipo de documento es apropiado para la ruta del campo. Específicamente, "
 "el valor es un código de documentType y la 'Sección' del código corresponde "
 "a la ruta del campo. (La lista de códigos es abierta.)"
 
-#: tools/translations.py:28
+#: exporter/translations.py:27
 msgid "field.document_format_codelist.description"
 msgstr ""
-"El valor es una cadena y o es un tipo de medio IANA o es el código "
-"'offline/print'. (La lista de códigos es abierta.)"
+"El valor es una cadena y o es un tipo de medio IANA o es el código 'offline/"
+"print'. (La lista de códigos es abierta.)"
 
-#: tools/translations.py:29
+#: exporter/translations.py:28
 msgid "field.number_checks.description"
 msgstr ""
 "El valor no es un número complejo, puede ser analizado como un número de "
 "punto flotante y no es negativo."
 
-#: tools/translations.py:30
+#: exporter/translations.py:29
 msgid "field.language.description"
 msgstr ""
 "El valor es una cadena y es un código ISO 639-1 de dos letras minúsculas. "
 "(La lista de códigos es abierta.)"
 
-#: tools/translations.py:33
+#: exporter/translations.py:32
 msgid "resource.coherent.period.name"
 msgstr "Las fechas de inicio no son posteriores a la fechas de fin"
 
-#: tools/translations.py:34
+#: exporter/translations.py:33
 msgid "resource.coherent.procurement_method_vs_number_of_tenderers.name"
 msgstr "Como máximo un licitador para la contratación de una sola fuente"
 
-#: tools/translations.py:35
+#: exporter/translations.py:34
 msgid "resource.coherent.tender_status.name"
 msgstr "Sin adjudicaciones o contratos en licitaciones incompletas"
 
-#: tools/translations.py:36
+#: exporter/translations.py:35
 msgid "resource.coherent.awards_status.name"
 msgstr "Sin contratos en adjudicaciones inactivas"
 
-#: tools/translations.py:37
+#: exporter/translations.py:36
 msgid "resource.coherent.contracts_status.name"
 msgstr "Sin transacciones en contratos no firmados"
 
-#: tools/translations.py:38
+#: exporter/translations.py:37
 msgid "resource.coherent.milestone_status.name"
 msgstr "Sin fecha de cumplimiento en hitos no cumplidos"
 
-#: tools/translations.py:39
+#: exporter/translations.py:38
 msgid "resource.coherent.value_realistic.name"
 msgstr "Los valores monetarios son realistas"
 
-#: tools/translations.py:40
+#: exporter/translations.py:39
 msgid "resource.coherent.dates.name"
 msgstr "Línea de tiempo del proceso de contratación"
 
-#: tools/translations.py:41
+#: exporter/translations.py:40
 msgid "resource.coherent.milestones_dates.name"
 msgstr "Fechas de hito"
 
-#: tools/translations.py:42
+#: exporter/translations.py:41
 msgid "resource.coherent.amendments_dates.name"
 msgstr "Fechas de enmienda"
 
-#: tools/translations.py:43
+#: exporter/translations.py:42
 msgid "resource.coherent.documents_dates.name"
 msgstr "Fechas de documento"
 
-#: tools/translations.py:44
+#: exporter/translations.py:43
 msgid "resource.consistent.number_of_tenderers.name"
 msgstr "El número de oferentes es consistente"
 
-#: tools/translations.py:45
+#: exporter/translations.py:44
 msgid "resource.consistent.tender_value.name"
 msgstr ""
 "El presupuesto de la planificación está acorde con el valor de la licitación"
 
-#: tools/translations.py:46
+#: exporter/translations.py:45
 msgid "resource.consistent.contracts_value.name"
 msgstr "Los valores del contrato están acordes al valor de la adjudicación"
 
-#: tools/translations.py:47
+#: exporter/translations.py:46
 msgid "resource.consistent.contracts_implementation_transactions_value.name"
 msgstr "Los valores de transacción son proporcionales al valor del contrato"
 
-#: tools/translations.py:48
+#: exporter/translations.py:47
 msgid "resource.consistent.parties_roles.name"
 msgstr "Las partes son referenciadas"
 
-#: tools/translations.py:49
+#: exporter/translations.py:48
 msgid "resource.consistent.period_duration_in_days.name"
 msgstr "La duración del periodo es consistente con la fecha de inicio y fin"
 
-#: tools/translations.py:50
+#: exporter/translations.py:49
 msgid "resource.consistent.buyer_in_parties_roles.name"
 msgstr "El rol del comprador está establecido"
 
-#: tools/translations.py:51
+#: exporter/translations.py:50
 msgid "resource.consistent.supplier_in_parties_roles.name"
 msgstr "El rol del proveedor está establecido"
 
-#: tools/translations.py:52
+#: exporter/translations.py:51
 msgid "resource.consistent.tenderer_in_parties_roles.name"
 msgstr "El rol del oferente está establecido"
 
-#: tools/translations.py:53
+#: exporter/translations.py:52
 msgid "resource.consistent.procuring_entity_in_parties_roles.name"
 msgstr "El rol de la entidad contratante está establecido"
 
-#: tools/translations.py:54
+#: exporter/translations.py:53
 msgid "resource.consistent.payer_in_parties_roles.name"
 msgstr "El rol del pagador está establecido"
 
-#: tools/translations.py:55
+#: exporter/translations.py:54
 msgid "resource.consistent.payee_in_parties_roles.name"
 msgstr "El rol del beneficiario está establecido"
 
-#: tools/translations.py:56
+#: exporter/translations.py:55
 msgid "resource.consistent.buyer_name_in_parties.name"
 msgstr "El nombre del comprador es consistente"
 
-#: tools/translations.py:57
+#: exporter/translations.py:56
 msgid "resource.consistent.payee_name_in_parties.name"
 msgstr "El nombre del beneficiario es consistente"
 
-#: tools/translations.py:58
+#: exporter/translations.py:57
 msgid "resource.consistent.payer_name_in_parties.name"
 msgstr "El nombre del pagador es consistente"
 
-#: tools/translations.py:59
+#: exporter/translations.py:58
 msgid "resource.consistent.procuring_entity_name_in_parties.name"
 msgstr "El nombre de la entidad contratante es consistente"
 
-#: tools/translations.py:60
+#: exporter/translations.py:59
 msgid "resource.consistent.supplier_name_in_parties.name"
 msgstr "El nombre del proveedor es consistente"
 
-#: tools/translations.py:61
+#: exporter/translations.py:60
 msgid "resource.consistent.tenderer_name_in_parties.name"
 msgstr "El nombre del oferente es consistente"
 
-#: tools/translations.py:62
+#: exporter/translations.py:61
 msgid "resource.reference.buyer_in_parties.name"
 msgstr "Referencia a la organización del comprador"
 
-#: tools/translations.py:63
+#: exporter/translations.py:62
 msgid "resource.reference.payee_in_parties.name"
 msgstr "Referencia a la organización del beneficiario"
 
-#: tools/translations.py:64
+#: exporter/translations.py:63
 msgid "resource.reference.payer_in_parties.name"
 msgstr "Referencia a la organización del pagador"
 
-#: tools/translations.py:65
+#: exporter/translations.py:64
 msgid "resource.reference.procuring_entity_in_parties.name"
 msgstr "Referencia a la organización de la entidad contratante"
 
-#: tools/translations.py:66
+#: exporter/translations.py:65
 msgid "resource.reference.supplier_in_parties.name"
 msgstr "Referencias a la organización del proveedor"
 
-#: tools/translations.py:67
+#: exporter/translations.py:66
 msgid "resource.reference.tenderer_in_parties.name"
 msgstr "Referencias a la organización del oferente"
 
-#: tools/translations.py:68
+#: exporter/translations.py:67
 msgid "resource.reference.contract_in_awards.name"
 msgstr "Referencia a la adjudicación"
 
-#: tools/translations.py:71
+#: exporter/translations.py:70
 msgid "resource.coherent.period.description"
 msgstr ""
 "Para cada período, startDate es menor o igual que endDate.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos de período, silenciosamente ignora cualquier fecha que no pueda ser analizada."
+"Dado que la prueba opera en todos los objetos de período, silenciosamente "
+"ignora cualquier fecha que no pueda ser analizada."
 
-#: tools/translations.py:72
-msgid ""
-"resource.coherent.procurement_method_vs_number_of_tenderers.description"
+#: exporter/translations.py:71
+msgid "resource.coherent.procurement_method_vs_number_of_tenderers.description"
 msgstr ""
 "Si tender.procurementMethod es 'direct', entonces tender.numberOfTenderers "
 "es como máximo 1."
 
-#: tools/translations.py:73
+#: exporter/translations.py:72
 msgid "resource.coherent.tender_status.description"
 msgstr ""
 "Si tender.status está incompleto ('planning', 'planned', 'active', "
 "'cancelled', 'unsuccessful' or 'withdrawn'), entonces las adjudicaciones y "
 "los contratos están en blanco."
 
-#: tools/translations.py:74
+#: exporter/translations.py:73
 msgid "resource.coherent.awards_status.description"
 msgstr ""
 "Si el estado de una adjudicación es inactivo ('pending', 'cancelled', "
 "'unsuccessful'), entonces ningún awardID de contratos coincide con el id de "
 "la adjudicación."
 
-#: tools/translations.py:75
+#: exporter/translations.py:74
 msgid "resource.coherent.contracts_status.description"
 msgstr ""
 "Si el estado de un contrato no está firmado ('pending' o 'cancelled'), "
 "entonces su implementation.transactions está en blanco."
 
-#: tools/translations.py:76
+#: exporter/translations.py:75
 msgid "resource.coherent.milestone_status.description"
 msgstr ""
 "Si el estado de un hito es unmet ('scheduled' o 'notMet'), entonces su "
 "dateMet está en blanco."
 
-#: tools/translations.py:77
+#: exporter/translations.py:76
 msgid "resource.coherent.value_realistic.description"
 msgstr ""
-"Cada valor monetario está entre -5 mil millones de USD y +5 mil millones de USD.\n"
+"Cada valor monetario está entre -5 mil millones de USD y +5 mil millones de "
+"USD.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos del tipo valor, la prueba ignora cualquier monto faltante o no numérico y cualquier moneda faltante o desconocida. Si es necesaria la conversión de moneda, pero la fecha de publicación no es válida, antes de 1999 o en el futuro, la prueba ignora el valor."
+"Dado que la prueba opera en todos los objetos del tipo valor, la prueba "
+"ignora cualquier monto faltante o no numérico y cualquier moneda faltante o "
+"desconocida. Si es necesaria la conversión de moneda, pero la fecha de "
+"publicación no es válida, antes de 1999 o en el futuro, la prueba ignora el "
+"valor."
 
-#: tools/translations.py:78
+#: exporter/translations.py:77
 msgid "resource.coherent.dates.description"
 msgstr ""
-"Todas las fechas relacionadas a las etapas del proceso de contratación siguen una línea de tiempo coherente.\n"
+"Todas las fechas relacionadas a las etapas del proceso de contratación "
+"siguen una línea de tiempo coherente.\n"
 "\n"
-"- tender.tenderPeriod.endDate <= tender.contractPeriod.startDate: El último día para las presentaciones no es posterior al inicio anticipado del contrato.\n"
-"- tender.tenderPeriod.endDate <= awards[].date:  El último día para las presentaciones no es posterior a la fecha de adjudicación.\n"
-"- tender.tenderPeriod.endDate <= contracts[].dateSigned: El último día para las presentaciones no es posterior a la fecha de firma de contrato.\n"
-"- awards[i].date <= contracts[].dateSigned: La fecha de adjudicación no es posterior a ninguna de las fechas de firma de los contratos relacionados.\n"
-"- contracts[].dateSigned <= contracts[].implementation.transactions[].date: La fecha de la firma de un contrato no es posterior ninguna de las fechas de las transacciones relacionadas.\n"
+"- tender.tenderPeriod.endDate <= tender.contractPeriod.startDate: El último "
+"día para las presentaciones no es posterior al inicio anticipado del "
+"contrato.\n"
+"- tender.tenderPeriod.endDate <= awards[].date:  El último día para las "
+"presentaciones no es posterior a la fecha de adjudicación.\n"
+"- tender.tenderPeriod.endDate <= contracts[].dateSigned: El último día para "
+"las presentaciones no es posterior a la fecha de firma de contrato.\n"
+"- awards[i].date <= contracts[].dateSigned: La fecha de adjudicación no es "
+"posterior a ninguna de las fechas de firma de los contratos relacionados.\n"
+"- contracts[].dateSigned <= contracts[].implementation.transactions[].date: "
+"La fecha de la firma de un contrato no es posterior ninguna de las fechas de "
+"las transacciones relacionadas.\n"
 "\n"
-"También, cada date de adjudicación y cada dateSigned del contrato no es posterior a la fecha del release.\n"
+"También, cada date de adjudicación y cada dateSigned del contrato no es "
+"posterior a la fecha del release.\n"
 "\n"
-"Dado que la prueba opera en múltiples fechas, silenciosamente ignora cualquier fecha que no pueda ser analizada."
+"Dado que la prueba opera en múltiples fechas, silenciosamente ignora "
+"cualquier fecha que no pueda ser analizada."
 
-#: tools/translations.py:79
+#: exporter/translations.py:78
 msgid "resource.coherent.milestones_dates.description"
 msgstr ""
-"Para cada hito, dateModified y dateMet no son posteriores a la fecha del release.\n"
+"Para cada hito, dateModified y dateMet no son posteriores a la fecha del "
+"release.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos hito, ignora silenciosamente cualquier fecha que no pueda ser analizada."
+"Dado que la prueba opera en todos los objetos hito, ignora silenciosamente "
+"cualquier fecha que no pueda ser analizada."
 
-#: tools/translations.py:80
+#: exporter/translations.py:79
 msgid "resource.coherent.amendments_dates.description"
 msgstr ""
-"Para cada enmienda, date no es posterior a la fecha de release, y: date de enmienda de la licitación no es anterior a tenderPeriod; date de enmienda de la adjudicación no es anterior a date de adjudicación; date de enmienda del contrato no es anterior a dateSigned del contrato.\n"
+"Para cada enmienda, date no es posterior a la fecha de release, y: date de "
+"enmienda de la licitación no es anterior a tenderPeriod; date de enmienda de "
+"la adjudicación no es anterior a date de adjudicación; date de enmienda del "
+"contrato no es anterior a dateSigned del contrato.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos enmienda, ignora silenciosamente cualquier fecha que no puede ser analizada."
+"Dado que la prueba opera en todos los objetos enmienda, ignora "
+"silenciosamente cualquier fecha que no puede ser analizada."
 
-#: tools/translations.py:81
+#: exporter/translations.py:80
 msgid "resource.coherent.documents_dates.description"
 msgstr ""
-"Para cada documento, datePublished y dateModified no son posteriores a la fecha de release, y datePublished no es posterior a dateModified.\n"
+"Para cada documento, datePublished y dateModified no son posteriores a la "
+"fecha de release, y datePublished no es posterior a dateModified.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos documento, ignora silenciosamente todas las fechas que no pueden ser analizadas."
+"Dado que la prueba opera en todos los objetos documento, ignora "
+"silenciosamente todas las fechas que no pueden ser analizadas."
 
-#: tools/translations.py:82
+#: exporter/translations.py:81
 msgid "resource.consistent.number_of_tenderers.description"
 msgstr ""
-"El valor del campo numberOfTenderers es igual al número de entradas en en el array de tenderers.\n"
+"El valor del campo numberOfTenderers es igual al número de entradas en en el "
+"array de tenderers.\n"
 "\n"
 "La prueba se omite si el campo tenderers no es un array."
 
-#: tools/translations.py:83
+#: exporter/translations.py:82
 msgid "resource.consistent.tender_value.description"
 msgstr ""
-"planning.budget.amount no es menos que el 50%, o más que el 150%, de tender.value, después de la conversión a USD si es necesario.\n"
+"planning.budget.amount no es menos que el 50%, o más que el 150%, de tender."
+"value, después de la conversión a USD si es necesario.\n"
 "\n"
-"La prueba es omitida si un monto no se encuentra, es cero o no numérico, si la moneda no se encuentra o es desconocida, si los dos montos no son ambos positivos o ambos negativos, si es necesaria la conversión de la moneda y si la fecha de release es inválida, anterior a 1999 o en el futuro."
+"La prueba es omitida si un monto no se encuentra, es cero o no numérico, si "
+"la moneda no se encuentra o es desconocida, si los dos montos no son ambos "
+"positivos o ambos negativos, si es necesaria la conversión de la moneda y si "
+"la fecha de release es inválida, anterior a 1999 o en el futuro."
 
-#: tools/translations.py:84
+#: exporter/translations.py:83
 msgid "resource.consistent.contracts_value.description"
 msgstr ""
-"Para cada adjudicación, la suma de los valores de sus contratos no puede ser menor al 50% o mayor al 150% del valor de la adjudicación, después de la conversión a USD si es necesario.\n"
+"Para cada adjudicación, la suma de los valores de sus contratos no puede ser "
+"menor al 50% o mayor al 150% del valor de la adjudicación, después de la "
+"conversión a USD si es necesario.\n"
 "\n"
-"Dado que la prueba opera en todas las adjudicaciones y valores de contrato, silenciosamente ignora todos los awardID que no coinciden con exactamente un id de una adjudicación, si el monto no se encuentra, es cero o no numérico, si la moneda no se encuentra o es desconocida, si los dos montos no son ambos positivos o ambos negativos, si es necesaria la conversión de la moneda y si la fecha del release es invalida, anterior a 1999 o en el futuro."
+"Dado que la prueba opera en todas las adjudicaciones y valores de contrato, "
+"silenciosamente ignora todos los awardID que no coinciden con exactamente un "
+"id de una adjudicación, si el monto no se encuentra, es cero o no numérico, "
+"si la moneda no se encuentra o es desconocida, si los dos montos no son "
+"ambos positivos o ambos negativos, si es necesaria la conversión de la "
+"moneda y si la fecha del release es invalida, anterior a 1999 o en el futuro."
 
-#: tools/translations.py:85
+#: exporter/translations.py:84
 msgid ""
 "resource.consistent.contracts_implementation_transactions_value.description"
 msgstr ""
-"Para cada contrato, la suma de los valores de las transacciones es menor o igual al valor del contrato, después de la conversión a USD si es necesario.\n"
+"Para cada contrato, la suma de los valores de las transacciones es menor o "
+"igual al valor del contrato, después de la conversión a USD si es "
+"necesario.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos contrato y transacción, silenciosamente ignora cualquier monto no encontrado, no numérico y cualquier moneda no encontrada o desconocida. Si es necesaria la conversión de la moneda, pero la fecha de release es inválida, antes de 1999 o en el futuro, la prueba ignora silenciosamente los contratos y sus transacciones."
+"Dado que la prueba opera en todos los objetos contrato y transacción, "
+"silenciosamente ignora cualquier monto no encontrado, no numérico y "
+"cualquier moneda no encontrada o desconocida. Si es necesaria la conversión "
+"de la moneda, pero la fecha de release es inválida, antes de 1999 o en el "
+"futuro, la prueba ignora silenciosamente los contratos y sus transacciones."
 
-#: tools/translations.py:86
+#: exporter/translations.py:85
 msgid "resource.consistent.parties_roles.description"
 msgstr ""
-"Para cada rol de cada parte involucrada, hay un objeto de referencia. Por ejemplo: Si una parte tiene los roles 'supplier' y 'payee', es referenciada por al menos una entrada en suppliers de una adjudicación y al menos un campo payee de una transacción. Los roles a probarse son:\n"
+"Para cada rol de cada parte involucrada, hay un objeto de referencia. Por "
+"ejemplo: Si una parte tiene los roles 'supplier' y 'payee', es referenciada "
+"por al menos una entrada en suppliers de una adjudicación y al menos un "
+"campo payee de una transacción. Los roles a probarse son:\n"
 "\n"
 "- procuringEntity\n"
 "- tenderer\n"
 "- supplier\n"
 "- payer\n"
 "- payee\n"
-"El rol 'buyer' no se prueba porque pueden haber múltiples compradores en el array de parties, pero hay un solo campo buyer para el comprador primario.\n"
+"El rol 'buyer' no se prueba porque pueden haber múltiples compradores en el "
+"array de parties, pero hay un solo campo buyer para el comprador primario.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos organización, silenciosamente ignora cualquier parte involucrada en la cual no se encuentre el campo id, ya que no puede ser referenciado."
+"Dado que la prueba opera en todos los objetos organización, silenciosamente "
+"ignora cualquier parte involucrada en la cual no se encuentre el campo id, "
+"ya que no puede ser referenciado."
 
-#: tools/translations.py:87
+#: exporter/translations.py:86
 msgid "resource.consistent.period_duration_in_days.description"
 msgstr ""
-"Para cada periodo, durationInDays es igual a la diferencia entre startDate y endDate. Si endDate está en blanco o no se puede analizar, entonces durationInDatys es igual a la diferencia entre startDate and maxExtentDate.\n"
+"Para cada periodo, durationInDays es igual a la diferencia entre startDate y "
+"endDate. Si endDate está en blanco o no se puede analizar, entonces "
+"durationInDatys es igual a la diferencia entre startDate and maxExtentDate.\n"
 "\n"
-"Dado que la prueba opera en todos los objetos periodo, silenciosamente  ignora cualquier fecha que no pueda ser analizada."
+"Dado que la prueba opera en todos los objetos periodo, silenciosamente  "
+"ignora cualquier fecha que no pueda ser analizada."
 
-#: tools/translations.py:88
+#: exporter/translations.py:87
 msgid "resource.consistent.buyer_in_parties_roles.description"
 msgstr ""
 "La parte involucrada referenciada por el campo buyer tiene 'buyer' en su "
 "array de roles."
 
-#: tools/translations.py:89
+#: exporter/translations.py:88
 msgid "resource.consistent.supplier_in_parties_roles.description"
 msgstr ""
 "Cada parte involucrada referenciada en awards[].suppliers tiene 'supplier' "
 "en su array de roles."
 
-#: tools/translations.py:90
+#: exporter/translations.py:89
 msgid "resource.consistent.tenderer_in_parties_roles.description"
 msgstr ""
 "Cada parte involucrada referenciada en tender.tenderers tiene 'tenderer' en "
 "su array de roles."
 
-#: tools/translations.py:91
+#: exporter/translations.py:90
 msgid "resource.consistent.procuring_entity_in_parties_roles.description"
 msgstr ""
 "La parte involucrada referenciada por el campo tender.procuringEntity tiene "
 "el rol 'procuringEntity' en su array de roles."
 
-#: tools/translations.py:92
+#: exporter/translations.py:91
 msgid "resource.consistent.payer_in_parties_roles.description"
 msgstr ""
-"Cada parte involucrada referenciada por un campo "
-"contracts[].implementation.transactions[].payer tiene 'payer' en su array de"
-" roles."
+"Cada parte involucrada referenciada por un campo contracts[].implementation."
+"transactions[].payer tiene 'payer' en su array de roles."
 
-#: tools/translations.py:93
+#: exporter/translations.py:92
 msgid "resource.consistent.payee_in_parties_roles.description"
 msgstr ""
-"Cada parte referenciada por el campo "
-"contracts[].implementation.transactions[].payee tiene 'payee' en su array de"
-" roles."
+"Cada parte referenciada por el campo contracts[].implementation."
+"transactions[].payee tiene 'payee' en su array de roles."
 
-#: tools/translations.py:94
+#: exporter/translations.py:93
 msgid "resource.consistent.buyer_name_in_parties.description"
 msgstr ""
-"El campo buyer tiene en su campo name el mismo valor que la parte a la que referencia.\n"
+"El campo buyer tiene en su campo name el mismo valor que la parte a la que "
+"referencia.\n"
 "\n"
-"La prueba es omitida si el id de referencia no se encuentra o si no coincide exactamente con el id de una parte involucrada."
+"La prueba es omitida si el id de referencia no se encuentra o si no coincide "
+"exactamente con el id de una parte involucrada."
 
-#: tools/translations.py:95
+#: exporter/translations.py:94
 msgid "resource.consistent.payee_name_in_parties.description"
 msgstr ""
-"Cada campo contracts[].implementation.transactions[].payee tiene en el campo name el mismo valor que la parte a la que referencia.\n"
+"Cada campo contracts[].implementation.transactions[].payee tiene en el campo "
+"name el mismo valor que la parte a la que referencia.\n"
 "\n"
-"La prueba se omite si no se encuentran todos los id referenciados o si el id no coincide exactamente con el de una parte involucrada."
+"La prueba se omite si no se encuentran todos los id referenciados o si el id "
+"no coincide exactamente con el de una parte involucrada."
 
-#: tools/translations.py:96
+#: exporter/translations.py:95
 msgid "resource.consistent.payer_name_in_parties.description"
 msgstr ""
-"Cada campo contracts[].implementation.transactions[].payer tiene en el campo name el mismo valor que la parte a la que referencia.\n"
+"Cada campo contracts[].implementation.transactions[].payer tiene en el campo "
+"name el mismo valor que la parte a la que referencia.\n"
 "\n"
-"La prueba se omite si no se encuentran todos los id referenciados o si ninguno coincide exactamente con una parte involucrada."
+"La prueba se omite si no se encuentran todos los id referenciados o si "
+"ninguno coincide exactamente con una parte involucrada."
 
-#: tools/translations.py:97
+#: exporter/translations.py:96
 msgid "resource.consistent.procuring_entity_name_in_parties.description"
 msgstr ""
-"El campo tender.procuringEntity tiene en el campo name el mismo valor que la parte a la que referencia.\n"
+"El campo tender.procuringEntity tiene en el campo name el mismo valor que la "
+"parte a la que referencia.\n"
 "\n"
-"La prueba se omite si el id referenciado no se encuentra o si el id no coincide exactamente con el de una parte involucrada."
+"La prueba se omite si el id referenciado no se encuentra o si el id no "
+"coincide exactamente con el de una parte involucrada."
 
-#: tools/translations.py:98
+#: exporter/translations.py:97
 msgid "resource.consistent.supplier_name_in_parties.description"
 msgstr ""
-"Cada entrada en awards[].suppliers tiene en el campo name el mismo valor que la parte a la que referencia.\n"
+"Cada entrada en awards[].suppliers tiene en el campo name el mismo valor que "
+"la parte a la que referencia.\n"
 "\n"
-"La prueba se omite si no se encuentran todos los id referenciados o si ninguno coincide exactamente con una parte involucrada."
+"La prueba se omite si no se encuentran todos los id referenciados o si "
+"ninguno coincide exactamente con una parte involucrada."
 
-#: tools/translations.py:99
+#: exporter/translations.py:98
 msgid "resource.consistent.tenderer_name_in_parties.description"
 msgstr ""
-"Cada entrada en tender.tenderers tiene en su campo name el mismo valor que la parte a la que referencia.\n"
+"Cada entrada en tender.tenderers tiene en su campo name el mismo valor que "
+"la parte a la que referencia.\n"
 "\n"
-"La prueba se omite si no se encuentran todos los id referenciados o si ninguno coincide exactamente con una parte involucrada."
+"La prueba se omite si no se encuentran todos los id referenciados o si "
+"ninguno coincide exactamente con una parte involucrada."
 
-#: tools/translations.py:100
+#: exporter/translations.py:99
 msgid "resource.reference.buyer_in_parties.description"
 msgstr ""
 "buyer.id está presente y coincide con el id de exactamente una parte "
 "involucrada."
 
-#: tools/translations.py:101
+#: exporter/translations.py:100
 msgid "resource.reference.payee_in_parties.description"
 msgstr ""
 "Cada contracts[].implementation.transactions[].payee.id está presente y "
 "coincide con el id de exactamente una parte involucrada."
 
-#: tools/translations.py:102
+#: exporter/translations.py:101
 msgid "resource.reference.payer_in_parties.description"
 msgstr ""
 "Cada contracts[].implementation.transactions[].payer.id está presente y "
 "coincide con el id de exactamente una parte involucrada."
 
-#: tools/translations.py:103
+#: exporter/translations.py:102
 msgid "resource.reference.procuring_entity_in_parties.description"
 msgstr ""
 "tender.procuringEntity.id está presente y coincide con el id de exactamente "
 "una parte involucrada."
 
-#: tools/translations.py:104
+#: exporter/translations.py:103
 msgid "resource.reference.supplier_in_parties.description"
 msgstr ""
 "Cada awards[].suppliers[].id está presente y coincide con el id de "
 "exactamente una parte involucrada."
 
-#: tools/translations.py:105
+#: exporter/translations.py:104
 msgid "resource.reference.tenderer_in_parties.description"
 msgstr ""
-"Cada tender.tenderers[].id está presente y coincide con el id de exactamente"
-" una parte involucrada."
+"Cada tender.tenderers[].id está presente y coincide con el id de exactamente "
+"una parte involucrada."
 
-#: tools/translations.py:106
+#: exporter/translations.py:105
 msgid "resource.reference.contract_in_awards.description"
 msgstr ""
-"Cada contracts[].awardID está presente y coincide con el awardID de exactamente una adjudicación.\n"
+"Cada contracts[].awardID está presente y coincide con el awardID de "
+"exactamente una adjudicación.\n"
 "\n"
 "Esta prueba se omite si no hay adjudicaciones."
 
-#: tools/translations.py:109
+#: exporter/translations.py:108
 msgid "dataset.distribution.main_procurement_category.name"
 msgstr "Distribución de la categoría principal de contratación"
 
-#: tools/translations.py:110
+#: exporter/translations.py:109
 msgid "dataset.distribution.tender_status.name"
 msgstr "Distribución del estado de licitación"
 
-#: tools/translations.py:111
+#: exporter/translations.py:110
 msgid "dataset.distribution.tender_procurement_method.name"
 msgstr "Distribución del método de contratación"
 
-#: tools/translations.py:112
+#: exporter/translations.py:111
 msgid "dataset.distribution.tender_award_criteria.name"
 msgstr "Distribución del criterio de adjudicación"
 
-#: tools/translations.py:113
+#: exporter/translations.py:112
 msgid "dataset.distribution.tender_submission_method.name"
 msgstr "Distribución del método de presentación"
 
-#: tools/translations.py:114
+#: exporter/translations.py:113
 msgid "dataset.distribution.awards_status.name"
 msgstr "Distribución del estado de adjudicación"
 
-#: tools/translations.py:115
+#: exporter/translations.py:114
 msgid "dataset.distribution.contracts_status.name"
 msgstr "Distribución del estado del contrato"
 
-#: tools/translations.py:116
+#: exporter/translations.py:115
 msgid "dataset.distribution.milestone_status.name"
 msgstr "Distribución del estado del hito"
 
-#: tools/translations.py:117
+#: exporter/translations.py:116
 msgid "dataset.distribution.milestone_type.name"
 msgstr "Distribución del tipo de hito"
 
-#: tools/translations.py:118
+#: exporter/translations.py:117
 msgid "dataset.distribution.document_document_type.name"
 msgstr "Distribución del tipo de documento"
 
-#: tools/translations.py:119
+#: exporter/translations.py:118
 msgid "dataset.distribution.value_currency.name"
 msgstr "Distribución de la moneda"
 
-#: tools/translations.py:120
+#: exporter/translations.py:119
 msgid "dataset.distribution.related_process_relation.name"
 msgstr "Distribución de la relación de los procesos relacionados"
 
-#: tools/translations.py:121
+#: exporter/translations.py:120
 msgid "dataset.distribution.tender_value.name"
 msgstr "Distribución del valor de licitación"
 
-#: tools/translations.py:122
+#: exporter/translations.py:121
 msgid "dataset.distribution.contracts_value.name"
 msgstr "Distribución del valor de los contratos"
 
-#: tools/translations.py:123
+#: exporter/translations.py:122
 msgid "dataset.distribution.awards_value.name"
 msgstr "Distribución del valor de las adjudicaciones"
 
-#: tools/translations.py:124
+#: exporter/translations.py:123
 msgid "dataset.misc.url_availability.name"
 msgstr "Disponibilidad de la URL"
 
-#: tools/translations.py:125
+#: exporter/translations.py:124
 msgid "dataset.unique.tender_id.name"
 msgstr "Identificación única de licitación"
 
-#: tools/translations.py:126
+#: exporter/translations.py:125
 msgid "dataset.consistent.related_process_title.name"
 msgstr "El título de la licitación es consistente"
 
-#: tools/translations.py:127
+#: exporter/translations.py:126
 msgid "dataset.reference.related_process_identifier.name"
 msgstr "Referencia al proceso relacionado"
 
-#: tools/translations.py:128
+#: exporter/translations.py:127
 msgid "dataset.distribution.tender_value_repetition.name"
 msgstr "Repetición del valor de licitación"
 
-#: tools/translations.py:129
+#: exporter/translations.py:128
 msgid "dataset.distribution.contracts_value_repetition.name"
 msgstr "Repetición del valor de los contratos"
 
-#: tools/translations.py:130
+#: exporter/translations.py:129
 msgid "dataset.distribution.awards_value_repetition.name"
 msgstr "Repetición del valor de las adjudicaciones"
 
-#: tools/translations.py:131
+#: exporter/translations.py:130
 msgid "dataset.distribution.buyer_repetition.name"
 msgstr "Repetición de comprador"
 
-#: tools/translations.py:132
+#: exporter/translations.py:131
 msgid "dataset.distribution.buyer.name"
 msgstr "Distribución de comprador"
 
-#: tools/translations.py:135
+#: exporter/translations.py:134
 msgid "dataset.distribution.main_procurement_category.description"
 msgstr ""
 "Visualiza la distribución de los valores de tender.mainProcurementCategory. "
 "Ningún código aparece en más del 95% de los casos."
 
-#: tools/translations.py:136
+#: exporter/translations.py:135
 msgid "dataset.distribution.tender_status.description"
 msgstr ""
 "Visualiza la distribución de los valores de tender.status. Los códigos "
 "'active' y 'complete' aparecen cada uno entre el 0,1% y el 99% de los casos."
 
-#: tools/translations.py:137
+#: exporter/translations.py:136
 msgid "dataset.distribution.tender_procurement_method.description"
 msgstr ""
 "Visualiza la distribución de los valores de tender.procurementMethod. El "
 "código 'open' aparece entre el 0,1% y el 99% de los casos."
 
-#: tools/translations.py:138
+#: exporter/translations.py:137
 msgid "dataset.distribution.tender_award_criteria.description"
 msgstr ""
 "Visualiza la distribución de los valores de tender.awardCriteria. No se "
 "realiza ninguna prueba."
 
-#: tools/translations.py:139
+#: exporter/translations.py:138
 msgid "dataset.distribution.tender_submission_method.description"
 msgstr ""
 "Visualiza la distribución de los valores de tender.submissionMethod. No se "
 "realiza ninguna prueba."
 
-#: tools/translations.py:140
+#: exporter/translations.py:139
 msgid "dataset.distribution.awards_status.description"
 msgstr ""
 "Visualiza la distribución del valor de awards.status. El código 'active' "
 "aparece entre el 0,1% y el 99% de los casos."
 
-#: tools/translations.py:141
+#: exporter/translations.py:140
 msgid "dataset.distribution.contracts_status.description"
 msgstr ""
 "Visualiza la distribución de los valores de contracts.status. Los códigos "
 "'active' y 'terminated' cada uno aparecen entre el 0,1% y el 99% de los "
 "casos."
 
-#: tools/translations.py:142
+#: exporter/translations.py:141
 msgid "dataset.distribution.milestone_status.description"
 msgstr ""
 "Visualiza la distribución de los valores de status de los hitos. El código "
 "'met' aparecen entre el 0,1% y el 99% de los casos."
 
-#: tools/translations.py:143
+#: exporter/translations.py:142
 msgid "dataset.distribution.milestone_type.description"
 msgstr ""
-"Visualiza la distribución de los valores de type de los hitos. No se realiza"
-" ninguna prueba."
+"Visualiza la distribución de los valores de type de los hitos. No se realiza "
+"ninguna prueba."
 
-#: tools/translations.py:144
+#: exporter/translations.py:143
 msgid "dataset.distribution.document_document_type.description"
 msgstr ""
-"Visualiza la distribución de los valores de documentType de documento. No se"
-" realiza ninguna prueba."
+"Visualiza la distribución de los valores de documentType de documento. No se "
+"realiza ninguna prueba."
 
-#: tools/translations.py:145
+#: exporter/translations.py:144
 msgid "dataset.distribution.value_currency.description"
 msgstr ""
 "Visualiza la distribución de los valores de currency. No se realiza ninguna "
 "prueba."
 
-#: tools/translations.py:146
+#: exporter/translations.py:145
 msgid "dataset.distribution.related_process_relation.description"
 msgstr ""
 "Visualiza la distribución de los valores de relatedProcesses.relationship. "
 "No se realiza ninguna prueba."
 
-#: tools/translations.py:147
+#: exporter/translations.py:146
 msgid "dataset.distribution.tender_value.description"
 msgstr ""
 "La suma del 1% superior de valores de licitaciones no excede el 50% de la "
 "suma de todos los valores de licitaciones. El fallo indica valores atípicos "
 "extremos."
 
-#: tools/translations.py:148
+#: exporter/translations.py:147
 msgid "dataset.distribution.contracts_value.description"
 msgstr ""
 "La suma del 1% superior de valores de contratos no excede el 50% de la suma "
 "de todos los valores de contrato. El fallo indica valores atípicos extremos."
 
-#: tools/translations.py:149
+#: exporter/translations.py:148
 msgid "dataset.distribution.awards_value.description"
 msgstr ""
 "La suma del 1% superior de los valores de las adjudicaciones no excede el "
 "50% de la suma de todos los valores de las adjudicaciones. El fallo indica "
 "valores atípicos extremos."
 
-#: tools/translations.py:150
+#: exporter/translations.py:149
 msgid "dataset.misc.url_availability.description"
 msgstr ""
 "Una muestra aleatoria de 100 valores de URL no retornan respuestas con "
 "códigos de error HTTP."
 
-#: tools/translations.py:151
+#: exporter/translations.py:150
 msgid "dataset.unique.tender_id.description"
 msgstr "tender.id es único dentro de todo el conjunto de datos"
 
-#: tools/translations.py:152
+#: exporter/translations.py:151
 msgid "dataset.consistent.related_process_title.description"
 msgstr ""
 "Un objeto de un proceso relacionado tiene el mismo valor en su campo título "
 "que en su campo tender.title en el compiled release al que referencia."
 
-#: tools/translations.py:153
+#: exporter/translations.py:152
 msgid "dataset.reference.related_process_identifier.description"
 msgstr ""
-"Si un proceso relacionado tiene un esquema de 'ocid' y su identificador está"
-" presente, entonces su identificador coincide con el ocid de un compiled "
+"Si un proceso relacionado tiene un esquema de 'ocid' y su identificador está "
+"presente, entonces su identificador coincide con el ocid de un compiled "
 "release."
 
-#: tools/translations.py:154
+#: exporter/translations.py:153
 msgid "dataset.distribution.tender_value_repetition.description"
 msgstr ""
-"Lista los 5 pares más frecuentes de tender.value.amount y "
-"tender.value.currency. Los 3 pares más frecuentes aparecen en un poco menos "
-"que el 10% de los casos."
+"Lista los 5 pares más frecuentes de tender.value.amount y tender.value."
+"currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de "
+"los casos."
 
-#: tools/translations.py:155
+#: exporter/translations.py:154
 msgid "dataset.distribution.contracts_value_repetition.description"
 msgstr ""
-"Lista los 5 pares más frecuentes de contracts.value.amount y "
-"contracts.value.currency. Los 3 pares más frecuentes aparecen en un poco "
-"menos que el 10% de los casos."
+"Lista los 5 pares más frecuentes de contracts.value.amount y contracts.value."
+"currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de "
+"los casos."
 
-#: tools/translations.py:156
+#: exporter/translations.py:155
 msgid "dataset.distribution.awards_value_repetition.description"
 msgstr ""
-"Lista los 5 pares más frecuentes de awards.value.amount y "
-"awards.value.currency. Los 3 pares más frecuentes aparecen en un poco menos "
-"que el 10% de los casos."
+"Lista los 5 pares más frecuentes de awards.value.amount y awards.value."
+"currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de "
+"los casos."
 
-#: tools/translations.py:157
+#: exporter/translations.py:156
 msgid "dataset.distribution.buyer_repetition.description"
 msgstr ""
 "El comprador más común es identificado en el 1% al 50% de los compiled "
 "releases. El fallo indica problemas en el identificador del comprador o "
 "sobre-representación del comprador."
 
-#: tools/translations.py:158
+#: exporter/translations.py:157
 msgid "dataset.distribution.buyer.description"
 msgstr ""
 "Poco más del 50% de todos los compradores son identificados solo en un "
