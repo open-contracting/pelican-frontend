@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "tastypie",
     "corsheaders",
     "dqt",
+    "exporter.apps.ExporterConfig",
 ]
 
 MIDDLEWARE = [
