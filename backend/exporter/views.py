@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .exceptions import GoogleDriveError, TagError
 from .gdocs import Gdocs
-from .tools.tags.template_tags.base import BaseTemplateTag
+from .tags.template_tags.base import BaseTemplateTag
 
 
 @csrf_exempt
