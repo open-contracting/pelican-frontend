@@ -17,7 +17,7 @@ class CreateDatasetSerializer(serializers.Serializer):
     collection_id = serializers.IntegerField(help_text="The collection ID in Kingfisher Process")
 
 
-class FilterObjectSerializer(serializers.Serializer):
+class FilterDatasetSerializer(serializers.Serializer):
     release_date_from = serializers.CharField(required=False, help_text="The minimum release date (YYYY-MM-DD)")
     release_date_to = serializers.CharField(required=False, help_text="The maximum release date (YYYY-MM-DD)")
     buyer = serializers.ListField(required=False, child=serializers.CharField(), help_text="Names of buyers")
@@ -28,13 +28,6 @@ class FilterObjectSerializer(serializers.Serializer):
     procuring_entity_regex = serializers.CharField(
         required=False, help_text="A SQL ILIKE pattern for the procuring entity's name"
     )
-
-
-class FilterDatasetSerializer(serializers.Serializer):
-    dataset_id_original = serializers.IntegerField(help_text="The ID of the dataset to filter")
-    # Django REST Framework's auto-generated documentation does not render nested relationships.
-    # https://www.django-rest-framework.org/api-guide/relations/#nested-relationships
-    filter_message = FilterObjectSerializer()
 
 
 # https://www.django-rest-framework.org/api-guide/schemas/
@@ -75,29 +68,27 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         Publishes a message to RabbitMQ to create a dataset.
         """
-        serializer = self.get_serializer(
-            data={
-                "name": request.data.get("name"),
-                "collection_id": request.data.get("collection_id"),
-            }
-        )
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        publish(json.dumps(serializer.data), "ocds_kingfisher_extractor_init")
+        message = {
+            "name": serializer.data["name"],
+            "collection_id": serializer.data["collection_id"],
+        }
+        publish(json.dumps(message), "ocds_kingfisher_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
-    @action(detail=False, methods=["post"])
-    def filter(self, request):
+    @action(detail=True, methods=["post"])
+    def filter(self, request, pk=None):
         """
         Publishes a message to RabbitMQ to create a filtered dataset.
         """
-        serializer = self.get_serializer(
-            data={
-                "dataset_id_original": request.data.get("dataset_id_original"),
-                "filter_message": request.data.get("filter_message"),
-            }
-        )
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        publish(json.dumps(serializer.data), "dataset_filter_extractor_init")
+        message = {
+            "dataset_id_original": int(pk),
+            "filter_message": serializer.data,
+        }
+        publish(json.dumps(message), "dataset_filter_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     def destroy(self, request, pk=None):

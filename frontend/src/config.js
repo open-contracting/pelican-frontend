@@ -10,7 +10,7 @@ var config = {
         fieldStats: "api/field_level_stats",
         fieldDetail: "api/field_level_detail",
         datasetDistinctValues: "api/dataset_distinct_values",
-        createDatasetFilter: "datasets/filter/",
+        createDatasetFilter: "datasets/{id}/filter/",
         datasetFilterItems: "api/dataset_filter_items",
         createDatasetReport: "api/generate_report"
     }

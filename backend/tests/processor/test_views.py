@@ -27,6 +27,13 @@ class ViewsTests(TransactionTestCase):
         return obj
 
     @patch("controller.views.publish")
+    def test_create_invalid(self, publish):
+        response = self.client.post("/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json")
+
+        self.assertEqual(response.status_code, 400)
+        publish.assert_not_called()
+
+    @patch("controller.views.publish")
     def test_create_no_values(self, publish):
         response = self.client.post("/datasets/", {}, "application/json")
 
@@ -36,28 +43,35 @@ class ViewsTests(TransactionTestCase):
     @patch("controller.views.publish")
     def test_create(self, publish):
         response = self.client.post(
-            "/datasets/", {"name": "anything", "collection_id": 123, "xxx": "xxx"}, "application/json"
+            "/datasets/", {"name": "anything", "collection_id": "123", "xxx": "xxx"}, "application/json"
         )
 
         self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with('{"name": "anything", "collection_id": 123}', "ocds_kingfisher_extractor_init")
 
     @patch("controller.views.publish")
-    def test_filter_no_values(self, publish):
-        response = self.client.post("/datasets/filter/", {}, "application/json")
+    def test_filter_invalid(self, publish):
+        response = self.client.post("/datasets/123/filter/", {"buyer": "xxx"}, "application/json")
 
         self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
     @patch("controller.views.publish")
-    def test_filter(self, publish):
-        response = self.client.post(
-            "/datasets/filter/", {"dataset_id_original": 123, "filter_message": {}}, "application/json"
-        )
+    def test_filter_no_values(self, publish):
+        response = self.client.post("/datasets/123/filter/", {}, "application/json")
 
         self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with(
             '{"dataset_id_original": 123, "filter_message": {}}', "dataset_filter_extractor_init"
+        )
+
+    @patch("controller.views.publish")
+    def test_filter(self, publish):
+        response = self.client.post("/datasets/123/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json")
+
+        self.assertEqual(response.status_code, 202)
+        publish.assert_called_once_with(
+            '{"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}', "dataset_filter_extractor_init"
         )
 
     @patch("controller.views.publish")

@@ -174,7 +174,10 @@ export default {
         createDatasetFilter() {
             this.isSubmitting = true;
             axios
-                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetFilter, this.datasetFilterMessage())
+                .post(
+                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, this.dataset.id),
+                    this.datasetFilterMessage()
+                )
                 .then(response => {
                     if (response.status == 200) {
                         this.submitResult = this.$t("datasetFilter.submitResultOk");
@@ -229,28 +232,25 @@ export default {
                 return null;
             }
 
-            var data = {
-                dataset_id_original: parseInt(this.dataset.id),
-                filter_message: {}
-            };
+            var data = {};
 
             if (this.releaseDateFrom != "") {
-                data.filter_message.release_date_from = this.releaseDateFrom;
+                data.release_date_from = this.releaseDateFrom;
             }
             if (this.releaseDateTo != "") {
-                data.filter_message.release_date_to = this.releaseDateTo;
+                data.release_date_to = this.releaseDateTo;
             }
             if (this.buyerName.length > 0) {
-                data.filter_message.buyer = this.buyerName;
+                data.buyer = this.buyerName;
             }
             if (this.buyerNameRegex.trim() != "") {
-                data.filter_message.buyer_regex = this.buyerNameRegex.trim();
+                data.buyer_regex = this.buyerNameRegex.trim();
             }
             if (this.procuringEntityName.length > 0) {
-                data.filter_message.procuring_entity = this.procuringEntityName;
+                data.procuring_entity = this.procuringEntityName;
             }
             if (this.procuringEntityNameRegex.trim() != "") {
-                data.filter_message.procuring_entity_regex = this.procuringEntityNameRegex.trim();
+                data.procuring_entity_regex = this.procuringEntityNameRegex.trim();
             }
 
             return data;
