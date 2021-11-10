@@ -7,7 +7,7 @@ This changelog only notes major changes, to notify other developers.
 ----------
 
 -  fix: Return ``{}`` if no dataset is found by name, instead of raising ``ObjectDoesNotExist``. :commit:`49f39ac`
--  refactor: Rewrite the API endpoints for managing Pelican backend. :commit:`0481513` :commit:`6ecab3d` :commit:`49f39ac`
+-  refactor: Rewrite the API endpoints for managing datasets in Pelican backend. :commit:`0481513` :commit:`6ecab3d` :commit:`49f39ac`
 
    -  Requests:
 

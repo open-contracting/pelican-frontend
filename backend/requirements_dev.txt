@@ -37,12 +37,6 @@ click==7.1.2
     # via
     #   black
     #   pip-tools
-coreapi==2.3.3
-    # via -r requirements.txt
-coreschema==0.0.4
-    # via
-    #   -r requirements.txt
-    #   coreapi
 coverage==5.5
     # via
     #   coveralls
@@ -113,26 +107,12 @@ iniconfig==1.1.1
     # via pytest
 isort==5.8.0
     # via -r requirements_dev.in
-itypes==1.2.0
-    # via
-    #   -r requirements.txt
-    #   coreapi
-jinja2==3.0.3
-    # via
-    #   -r requirements.txt
-    #   coreschema
 kiwisolver==1.2.0
     # via
     #   -r requirements.txt
     #   matplotlib
 lxml==4.6.3
     # via -r requirements.txt
-markdown==3.3.4
-    # via -r requirements.txt
-markupsafe==2.0.1
-    # via
-    #   -r requirements.txt
-    #   jinja2
 matplotlib==3.3.0
     # via -r requirements.txt
 mccabe==0.6.1
@@ -222,7 +202,6 @@ regex==2021.4.4
 requests==2.25.1
     # via
     #   -r requirements.txt
-    #   coreapi
     #   coveralls
     #   google-api-core
     #   transifex-client
@@ -268,7 +247,6 @@ typing-extensions==3.10.0.2
 uritemplate==3.0.1
     # via
     #   -r requirements.txt
-    #   coreapi
     #   google-api-python-client
 urllib3==1.26.5
     # via

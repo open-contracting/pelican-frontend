@@ -1,4 +1,3 @@
-coreapi
 dj-database-url
 django
 django-cors-headers
@@ -7,15 +6,13 @@ djangorestframework
 -e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
 google-api-python-client
 google-auth
+gunicorn
 lxml
-# djangorestframework doesn't support RST.
-# https://github.com/encode/django-rest-framework/pull/527#issuecomment-964799736
-markdown
 matplotlib
 pika
 pillow
 psycopg2
+sentry-sdk
 shortuuid
 simplejson
-gunicorn
-sentry-sdk
+uritemplate

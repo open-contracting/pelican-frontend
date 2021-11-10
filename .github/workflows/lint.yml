@@ -28,5 +28,6 @@ jobs:
       # https://pip.pypa.io/en/latest/reference/pip_install/#install-src
       - run: pip install --src $GITHUB_WORKSPACE/../src -r requirements_dev.txt
       - env:
-          STANDARD_MAINTENANCE_SCRIPTS_IGNORE: tastypie
+          # https://www.django-rest-framework.org/api-guide/schemas/#generating-an-openapi-schema
+          STANDARD_MAINTENANCE_SCRIPTS_IGNORE: tastypie,uritemplate
         run: pytest /tmp/test_requirements.py

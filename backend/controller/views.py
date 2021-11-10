@@ -5,6 +5,7 @@ from psycopg2.sql import SQL, Identifier
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 
 from dqt.models import Dataset, FieldLevelCheck, ProgressMonitorDataset
 
@@ -16,28 +17,61 @@ class CreateDatasetSerializer(serializers.Serializer):
     collection_id = serializers.IntegerField(help_text="The collection ID in Kingfisher Process")
 
 
+class FilterObjectSerializer(serializers.Serializer):
+    release_date_from = serializers.CharField(required=False, help_text="The minimum release date (YYYY-MM-DD)")
+    release_date_to = serializers.CharField(required=False, help_text="The maximum release date (YYYY-MM-DD)")
+    buyer = serializers.ListField(required=False, child=serializers.CharField(), help_text="Names of buyers")
+    buyer_regex = serializers.CharField(required=False, help_text="A SQL ILIKE pattern for the buyer's name")
+    procuring_entity = serializers.ListField(
+        required=False, child=serializers.CharField(), help_text="Names of procuring entities"
+    )
+    procuring_entity_regex = serializers.CharField(
+        required=False, help_text="A SQL ILIKE pattern for the procuring entity's name"
+    )
+
+
 class FilterDatasetSerializer(serializers.Serializer):
     dataset_id_original = serializers.IntegerField(help_text="The ID of the dataset to filter")
     # Django REST Framework's auto-generated documentation does not render nested relationships.
     # https://www.django-rest-framework.org/api-guide/relations/#nested-relationships
-    filter_message = serializers.JSONField(help_text="The date, buyer and procuring entity filters")
+    filter_message = FilterObjectSerializer()
 
 
-class DeleteDatasetSerializer(serializers.Serializer):
-    dataset_id = serializers.IntegerField()
+class CustomSchema(AutoSchema):
+    def get_responses(self, path, method):
+        responses = super().get_responses(path, method)
+        # POST requests return HTTP 202 with no content.
+        if "201" in responses:
+            responses["202"] = responses.pop("201")
+            del responses["202"]["content"]
+        # GET requests return a JSON object.
+        elif "200" in responses:
+            responses["200"]["content"]["application/json"]["schema"] = {"type": "object"}
+        return responses
 
 
-class DatasetViewSet(viewsets.GenericViewSet):
-    queryset = Dataset.objects.all()
-    serializer_class = CreateDatasetSerializer
+class DatasetViewSet(viewsets.ViewSet):
+    schema = CustomSchema()
     # ViewSet's don't allow typed paths like <int:pk>.
     # https://github.com/encode/django-rest-framework/pull/6789
     # https://github.com/encode/django-rest-framework/issues/6148#issuecomment-725297421
     lookup_value_regex = "[0-9]+"
 
+    def get_queryset(self):
+        return Dataset.objects.all()
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == "create":
+            return CreateDatasetSerializer(*args, **kwargs)
+        elif self.action == "filter":
+            return FilterDatasetSerializer(*args, **kwargs)
+
     def create(self, request):
         """
-        Publishes a message to RabbitMQ to create a dataset with the given `name` and `collection_id`.
+        Publishes a message to RabbitMQ to create a dataset.
         """
         serializer = self.get_serializer(
             data={
@@ -49,11 +83,10 @@ class DatasetViewSet(viewsets.GenericViewSet):
         publish(json.dumps(serializer.data), "ocds_kingfisher_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
-    @action(detail=False, methods=["post"], serializer_class=FilterDatasetSerializer)
+    @action(detail=False, methods=["post"])
     def filter(self, request):
         """
-        Publishes a message to RabbitMQ to create a filtered dataset with the given `dataset_id_original` and
-        `filter_message`.
+        Publishes a message to RabbitMQ to create a filtered dataset.
         """
         serializer = self.get_serializer(
             data={
@@ -69,18 +102,15 @@ class DatasetViewSet(viewsets.GenericViewSet):
         """
         Publishes a message to RabbitMQ to wipe the dataset.
         """
-        # get_serializer_class() and @action(serializer_class=) can't be used together.
-        # https://github.com/encode/django-rest-framework/discussions/8244
-        serializer = DeleteDatasetSerializer(data={"dataset_id": pk})
-        serializer.is_valid(raise_exception=True)
-        publish(json.dumps(serializer.data), "wiper_init")
+        message = {"dataset_id": int(pk)}
+        publish(json.dumps(message), "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     @action(detail=False)
     def find_by_name(self, request):
         """
-        Returns the ID of the dataset with the `name` given in the query string, as an object like `{"id": 123}`,
-        or `{}` if no name matches.
+        Returns the ID of the dataset with the name given in the `name` query string parameter, as an object like
+        `{"id": 123}`, or `{}` if no name matches.
         """
         try:
             dataset = self.get_queryset().get(name=request.query_params.get("name"))
@@ -91,11 +121,11 @@ class DatasetViewSet(viewsets.GenericViewSet):
     @action(detail=True)
     def status(self, request, pk=None):
         """
-        Returns the dataset's status, or `{}` if no status is set.
+        Returns the dataset's status, as an object like `{"phase": "CHECKED", "state": "OK"}`, or `{}` if not set.
         """
         self.get_object()  # trigger 404 if no dataset
         try:
-            monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__pk=pk)
+            monitor = ProgressMonitorDataset.objects.values("phase", "state").get(dataset__pk=pk)
             return Response(monitor)
         except ProgressMonitorDataset.DoesNotExist:
             return Response({})
