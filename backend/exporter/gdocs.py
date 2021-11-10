@@ -9,12 +9,13 @@ import shortuuid
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from exporter.exceptions import GoogleDriveError
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError, ResumableUploadError
 from googleapiclient.http import MediaFileUpload
 from lxml import etree
+
+from exporter.exceptions import GoogleDriveError
 
 
 class Gdocs:

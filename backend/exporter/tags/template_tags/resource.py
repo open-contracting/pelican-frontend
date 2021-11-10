@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import connections
 from django.utils.translation import gettext as _
+
 from exporter.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
 from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from exporter.tags.leaf_tags.resource.result_box_image import ResultBoxImageLeafTag

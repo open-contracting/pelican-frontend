@@ -3,9 +3,10 @@ import re
 
 import shortuuid
 from django.conf import settings
+from lxml import etree
+
 from exporter.exceptions import CheckNotComputedError, TagError
 from exporter.util import terms_enumeration
-from lxml import etree
 
 
 # General tag class representing all kinds of tags, that can occur (TemplateTag, LeafTag, ...)
