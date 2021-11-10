@@ -34,7 +34,7 @@ This changelog only notes major changes, to notify other developers.
 2021-11-01
 ----------
 
--  refactor: Use `template <https://ocp-software-handbook.readthedocs.io/en/latest/python/django.html#settings>`__ for ``settings.py``.
+-  refactor: Use `template <https://ocp-software-handbook.readthedocs.io/en/latest/python/django.html#settings>`__ for ``settings.py``. :commit:`cbacaba`
 
 2021-10-23
 ----------
