@@ -20,6 +20,8 @@ WORKDIR /workdir
 USER runner:runner
 COPY --chown=runner:runner . .
 
+ENV DJANGO_ENV=production
+
 RUN python manage.py compilemessages
 
 EXPOSE 8000
