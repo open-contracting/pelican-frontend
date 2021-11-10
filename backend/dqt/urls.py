@@ -1,4 +1,4 @@
-from django.urls import include, path, re_path
+from django.urls import include, path
 
 from .api import (
     DataItemResource,
@@ -48,12 +48,12 @@ urlpatterns = [
         dataset_distinct_values,
         name="dataset_distinct_values",
     ),
-    re_path(r"^api/", include(dataset_resource.urls)),
-    re_path(r"^api/", include(data_item_resource.urls)),
-    re_path(r"^api/", include(progress_monitor_dataset_resource.urls)),
-    re_path(r"^api/", include(field_level_check_resource.urls)),
-    re_path(r"^api/", include(resource_level_check_resource.urls)),
-    re_path(r"^api/", include(dataset_level_check_resource.urls)),
-    re_path(r"^api/", include(report_resource.urls)),
-    re_path(r"^api/", include(time_variance_level_check_resource.urls)),
+    path("api/", include(dataset_resource.urls)),
+    path("api/", include(data_item_resource.urls)),
+    path("api/", include(progress_monitor_dataset_resource.urls)),
+    path("api/", include(field_level_check_resource.urls)),
+    path("api/", include(resource_level_check_resource.urls)),
+    path("api/", include(dataset_level_check_resource.urls)),
+    path("api/", include(report_resource.urls)),
+    path("api/", include(time_variance_level_check_resource.urls)),
 ]
