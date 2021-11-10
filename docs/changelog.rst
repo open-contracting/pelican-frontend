@@ -23,7 +23,7 @@ This changelog only notes major changes, to notify other developers.
       -  Return HTTP 404 Not Found, instead of raising ``ObjectDoesNotExist``.
       -  Return HTTP 404 Not Found on status action for missing dataset, instead of returning ``{}``.
       -  Return HTTP 405 Method Not Allowed for incorrect HTTP methods, instead of HTTP 200 with a JSON error message.
-      -  Return a JSON object from all endpoints, instead of sometimes null, a number or a string.
+      -  Return a JSON object from all endpoints, instead of sometimes null (``datasets/{id}/status/``), a number (``datasets/find_by_name/``) or a string (``datasets/{id}/filter/``).
 
 2021-11-08
 ----------
