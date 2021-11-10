@@ -37,6 +37,8 @@ class FilterDatasetSerializer(serializers.Serializer):
     filter_message = FilterObjectSerializer()
 
 
+# https://www.django-rest-framework.org/api-guide/schemas/
+# https://www.django-rest-framework.org/coreapi/schemas/
 class CustomSchema(AutoSchema):
     def get_responses(self, path, method):
         responses = super().get_responses(path, method)
