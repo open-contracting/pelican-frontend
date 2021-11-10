@@ -33,6 +33,13 @@ class ViewsTests(TransactionTestCase):
                 self.assertEqual(response.status_code, 405)
 
     @patch("processor.views.publish")
+    def test_create_no_values(self, publish):
+        response = self.client.post("/datasets/", {}, "application/json")
+
+        self.assertEqual(response.status_code, 400)
+        publish.assert_not_called()
+
+    @patch("processor.views.publish")
     def test_create(self, publish):
         response = self.client.post(
             "/datasets/", {"name": "anything", "collection_id": 123, "xxx": "xxx"}, "application/json"
@@ -60,17 +67,29 @@ class ViewsTests(TransactionTestCase):
         self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with('{"dataset_id": 123}', "wiper_init")
 
+    def test_find_by_name_no_name(self):
+        self.create(Dataset, name="anything")
+        response = self.client.get("/datasets/find_by_name/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {})
+
+    def test_find_by_name_no_match(self):
+        self.create(Dataset, name="anything")
+        response = self.client.get("/datasets/find_by_name/?name=other")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {})
+
     def test_find_by_name(self):
         dataset = self.create(Dataset, name="anything")
-
         response = self.client.get("/datasets/find_by_name/?name=anything")
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"id": dataset.pk})
 
-    def test_metadata_no_meta(self):
+    def test_metadata_no_values(self):
         dataset = self.create(Dataset, name="anything")
-
         response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
 
         self.assertEqual(response.status_code, 200)
@@ -78,7 +97,6 @@ class ViewsTests(TransactionTestCase):
 
     def test_metadata(self):
         dataset = self.create(Dataset, name="anything", meta={"collection_metadata": {"ocid_prefix": "ocds-213czf"}})
-
         response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
 
         self.assertEqual(response.status_code, 200)
@@ -112,15 +130,8 @@ class ViewsTests(TransactionTestCase):
             },
         )
 
-    def test_status_no_dataset(self):
-        response = self.client.get("/datasets/123/status/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {})
-
     def test_status_no_progress(self):
         dataset = self.create(Dataset, name="anything")
-
         response = self.client.get(f"/datasets/{dataset.pk}/status/")
 
         self.assertEqual(response.status_code, 200)
@@ -129,7 +140,6 @@ class ViewsTests(TransactionTestCase):
     def test_status_no_values(self):
         dataset = self.create(Dataset, name="anything")
         self.create(ProgressMonitorDataset, dataset=dataset)
-
         response = self.client.get(f"/datasets/{dataset.pk}/status/")
 
         self.assertEqual(response.status_code, 200)
@@ -138,8 +148,19 @@ class ViewsTests(TransactionTestCase):
     def test_status(self):
         dataset = self.create(Dataset, name="anything")
         self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
-
         response = self.client.get(f"/datasets/{dataset.pk}/status/")
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
+
+    def test_status_no_dataset(self):
+        response = self.client.get("/datasets/123/status/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_metadata_no_dataset(self):
+        response = self.client.get("/datasets/123/metadata/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_coverage_no_dataset(self):
+        response = self.client.get("/datasets/123/coverage/")
+        self.assertEqual(response.status_code, 404)
