@@ -1,10 +1,14 @@
 import simplejson as json
 from django.db import connections
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from dqt.models import Dataset, FieldLevelCheck, ProgressMonitorDataset
 from psycopg2.sql import SQL, Identifier
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .rabbitmq import publish
 
@@ -17,107 +21,94 @@ def create_dataset_filter(request):
     return JsonResponse({"status": "ok"})
 
 
-@csrf_exempt
-@require_POST
-def dataset_start(request):
-    body = json.loads(request.body.decode("utf-8"))
+class DatasetViewSet(viewsets.GenericViewSet):
+    queryset = Dataset.objects.all()
+    # ViewSet's don't allow typed paths like <int:pk>.
+    # https://github.com/encode/django-rest-framework/pull/6789
+    # https://github.com/encode/django-rest-framework/issues/6148#issuecomment-725297421
+    lookup_value_regex = "[0-9]+"
 
-    message = {
-        "name": body.get("name"),
-        "collection_id": body.get("collection_id"),
-    }
-    publish(json.dumps(message), "ocds_kingfisher_extractor_init")
+    def create(self, request):
+        message = {"name": request.data.get("name"), "collection_id": request.data.get("collection_id")}
+        publish(json.dumps(message), "ocds_kingfisher_extractor_init")
+        return Response(status=status.HTTP_202_ACCEPTED)
 
-    return JsonResponse(
-        {"status": "ok", "data": {"message": "Started dataset '%(name)s' for collection %(collection_id)s" % message}}
-    )
+    def destroy(self, request, pk=None):
+        message = {"dataset_id": int(pk)}
+        publish(json.dumps(message), "wiper_init")
+        return Response(status=status.HTTP_202_ACCEPTED)
 
+    @action(detail=False)
+    def find_by_name(self, request):
+        dataset = get_object_or_404(self.get_queryset(), name=request.GET.get("name"))
+        return Response({"id": dataset.id})
 
-@csrf_exempt
-@require_POST
-def dataset_wipe(request):
-    body = json.loads(request.body.decode("utf-8"))
+    @action(detail=True)
+    def status(self, request, pk=None):
+        try:
+            monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__pk=pk)
+        except ProgressMonitorDataset.DoesNotExist:
+            monitor = {}
+        return Response(monitor)
 
-    message = {
-        "dataset_id": body.get("dataset_id"),
-    }
-    publish(json.dumps(message), "wiper_init")
+    @action(detail=True)
+    def metadata(self, request, pk=None):
+        meta = self.get_queryset().values_list("meta__collection_metadata", flat=True).get(pk=pk)
+        return Response(meta or {})
 
-    return JsonResponse({"status": "ok", "data": {"message": "Wiping dataset %(dataset_id)s" % message}})
+    @action(detail=True)
+    def coverage(self, request, pk=None):
+        map = {
+            "parties": ["parties.id"],
+            "plannings": ["planning.budget"],
+            "tenders": ["tender.id"],
+            "tenderers": ["tenderers.id"],
+            "tenders_items": ["tender.items.id"],
+            "awards": ["awards.id"],
+            "awards_items": ["awards.items.id"],
+            "awards_suppliers": ["awards.suppliers.id"],
+            "contracts": ["contracts.id"],
+            "contracts_items": ["contracts.items.id"],
+            "contracts_transactions": ["contracts.implementation.transactions.id"],
+            "documents": [
+                "planning.documents.id",
+                "tender.documents.id",
+                "awards.documents.id",
+                "contracts.documents.id",
+                "contracts.implementation.documents.id",
+            ],
+            "milestones": [
+                "planning.milestones.id",
+                "tender.milestones.id",
+                "contracts.milestones.id",
+                "contracts.implementation.milestones.id",
+            ],
+            "amendments": ["tender.amendments.id", "awards.amendments.id", "contract.amendments.id"],
+        }
 
+        with connections["data"].cursor() as cursor:
+            statement = """
+                SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
+                FROM {table} flc, jsonb_each(flc.result->'checks') c
+                WHERE dataset_id = %(dataset_id)s
+                    AND c.key IN %(checks)s
+                GROUP BY c.key
+                ORDER BY c.key
+                """
 
-def dataset_progress(request, dataset_id):
-    try:
-        monitor = ProgressMonitorDataset.objects.values("state", "phase").get(dataset__id=dataset_id)
-        return JsonResponse({"status": "ok", "data": monitor})
-    except ProgressMonitorDataset.DoesNotExist:
-        return JsonResponse({"status": "ok", "data": None})
+            cursor.execute(
+                SQL(statement).format(table=Identifier(FieldLevelCheck._meta.db_table)),
+                {"checks": tuple(j for i in map.values() for j in i), "dataset_id": pk},
+            )
 
+            results = cursor.fetchall()
 
-def dataset_id(request):
-    dataset = Dataset.objects.get(name=request.GET.get("name"))
+            counts = {}
+            for key, items in map.items():
+                counts[key] = 0
+                for i in items:
+                    for r in results:
+                        if r[0] == i:
+                            counts[key] += int(r[1])
 
-    return JsonResponse({"status": "ok", "data": dataset.id if dataset else None})
-
-
-def dataset_availability(request, dataset_id):
-    map = {
-        "parties": ["parties.id"],
-        "plannings": ["planning.budget"],
-        "tenders": ["tender.id"],
-        "tenderers": ["tenderers.id"],
-        "tenders_items": ["tender.items.id"],
-        "awards": ["awards.id"],
-        "awards_items": ["awards.items.id"],
-        "awards_suppliers": ["awards.suppliers.id"],
-        "contracts": ["contracts.id"],
-        "contracts_items": ["contracts.items.id"],
-        "contracts_transactions": ["contracts.implementation.transactions.id"],
-        "documents": [
-            "planning.documents.id",
-            "tender.documents.id",
-            "awards.documents.id",
-            "contracts.documents.id",
-            "contracts.implementation.documents.id",
-        ],
-        "milestones": [
-            "planning.milestones.id",
-            "tender.milestones.id",
-            "contracts.milestones.id",
-            "contracts.implementation.milestones.id",
-        ],
-        "amendments": ["tender.amendments.id", "awards.amendments.id", "contract.amendments.id"],
-    }
-
-    with connections["data"].cursor() as cursor:
-        statement = """
-            SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
-            FROM {table} flc, jsonb_each(flc.result->'checks') c
-            WHERE dataset_id = %(dataset_id)s
-                AND c.key IN %(checks)s
-            GROUP BY c.key
-            ORDER BY c.key
-            """
-
-        cursor.execute(
-            SQL(statement).format(table=Identifier(FieldLevelCheck._meta.db_table)),
-            {"checks": tuple(j for i in map.values() for j in i), "dataset_id": dataset_id},
-        )
-
-        results = cursor.fetchall()
-
-        counts = {}
-        for key, items in map.items():
-            counts[key] = 0
-            for i in items:
-                for r in results:
-                    if r[0] == i:
-                        counts[key] += int(r[1])
-
-    return JsonResponse({"status": "ok", "data": counts})
-
-
-def dataset_metadata(request, dataset_id):
-    meta = Dataset.objects.values_list("meta__collection_metadata", flat=True).get(id=dataset_id)
-
-    return JsonResponse({"status": "ok", "data": meta})
+        return Response(counts)

@@ -51,7 +51,10 @@ django==3.2.8
     # via
     #   -r requirements.txt
     #   django-cors-headers
+    #   djangorestframework
 django-cors-headers==3.10.0
+    # via -r requirements.txt
+djangorestframework==3.12.4
     # via -r requirements.txt
 filelock==3.0.12
     # via virtualenv
@@ -128,7 +131,7 @@ pillow==8.3.2
     # via
     #   -r requirements.txt
     #   matplotlib
-pip-tools==6.1.0
+pip-tools==6.4.0
     # via -r requirements_dev.in
 pluggy==0.13.1
     # via pytest
@@ -246,6 +249,8 @@ urllib3==1.26.5
     #   transifex-client
 virtualenv==20.4.6
     # via pre-commit
+wheel==0.37.0
+    # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

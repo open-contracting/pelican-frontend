@@ -24,7 +24,10 @@ django==3.2.8
     # via
     #   -r requirements.in
     #   django-cors-headers
+    #   djangorestframework
 django-cors-headers==3.10.0
+    # via -r requirements.in
+djangorestframework==3.12.4
     # via -r requirements.in
 google-api-core==1.21.0
     # via google-api-python-client
