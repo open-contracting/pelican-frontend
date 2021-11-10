@@ -8,7 +8,7 @@ Getting started
 
 Set up the git pre-commit hook:
 
-.. code:: bash
+.. code-block:: bash
 
    pip install pre-commit
    pre-commit install

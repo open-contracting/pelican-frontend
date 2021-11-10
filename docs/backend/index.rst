@@ -1,25 +1,10 @@
 Django backend
 ==============
 
-All commands must be run from the ``backend/`` directory.
+This section of the documentation assumes you are in the ``backend/`` directory.
 
 .. toctree::
    :maxdepth: 2
 
-   reference
-
-Getting started
----------------
-
-Install development dependencies:
-
-.. code:: bash
-
-   pip install pip-tools
-   pip-sync requirements_dev.txt
-
-Run database migrations:
-
-.. code:: bash
-
-   ./manage.py migrate
+   reference/index
+   contributing/index
