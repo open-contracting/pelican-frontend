@@ -21,3 +21,6 @@ USER runner:runner
 COPY --chown=runner:runner . .
 
 RUN python manage.py compilemessages
+EXPOSE 8000
+
+CMD exec gunicorn --bind 0.0.0.0:8000 --timeout 120 core.wsgi -c gunicorn_docker.py
