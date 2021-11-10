@@ -7,7 +7,7 @@ This changelog only notes major changes, to notify other developers.
 ----------
 
 -  fix: Return ``{}`` if no dataset is found by name, instead of raising ``ObjectDoesNotExist``. :commit:`49f39ac`
--  refactor: Rewrite the API endpoints for managing datasets in Pelican backend. :commit:`0481513` :commit:`6ecab3d` :commit:`49f39ac`
+-  refactor: Rewrite the API endpoints for managing datasets in Pelican backend. :commit:`0481513` :commit:`6ecab3d` :commit:`49f39ac` :commit:`62ece02` :commit:`289c98a`
 
    -  Requests:
 
@@ -30,3 +30,13 @@ This changelog only notes major changes, to notify other developers.
 
 -  refactor: Split Django applications from Django project. :commit:`df4b678` :commit:`fe94f41` :commit:`f01bcaf`
 -  refactor: Move static assets out of code directory. :commit:`80bbd09`
+
+2021-11-01
+----------
+
+-  refactor: Use `template <https://ocp-software-handbook.readthedocs.io/en/latest/python/django.html#settings>`__ for ``settings.py``.
+
+2021-10-23
+----------
+
+-  chore: Update ``models.py`` to match Pelican backend's database. :commit:`0c7448e`
