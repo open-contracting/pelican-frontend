@@ -9,7 +9,7 @@ This changelog only notes major changes, to notify other developers.
 -  fix: Return ``{}`` if no dataset is found by name, instead of raising ``ObjectDoesNotExist``. :commit:`49f39ac`
 -  refactor: Rewrite the API endpoints for managing datasets in Pelican backend. :commit:`0481513` :commit:`6ecab3d` :commit:`49f39ac` :commit:`62ece02` :commit:`289c98a`
 
-   -  URLs:
+   -  Request:
 
       .. list-table::
          :header-rows: 1
@@ -31,13 +31,7 @@ This changelog only notes major changes, to notify other developers.
          * - ``GET api/dataset_metadata/{id}``
            - ``GET datasets/{id}/metadata/``
 
-   -  Requests:
-
-      -  Use the DELETE method to delete datasets.
-      -  Accept the primary key in the URL path when deleting datasets, instead of in the request body.
-      -  Use the GET method for the safe operation of finding a dataset by name, instead of the POST method.
-
-   -  Responses:
+   -  Status code:
 
       -  Return a HTTP 2xx code, instead of ``"status": "ok"`` in the JSON response.
       -  Return HTTP 202 Accepted for creating and deleting datasets asynchronously.
@@ -45,6 +39,9 @@ This changelog only notes major changes, to notify other developers.
       -  Return HTTP 404 Not Found, instead of raising ``ObjectDoesNotExist``.
       -  Return HTTP 404 Not Found on status action for missing dataset, instead of returning ``{}``.
       -  Return HTTP 405 Method Not Allowed for incorrect HTTP methods, instead of HTTP 200 with a JSON error message.
+
+   -  Response body:
+
       -  Return a JSON object from all endpoints, instead of sometimes null (``datasets/{id}/status/``), a number (``datasets/find_by_name/``) or a string (``datasets/{id}/filter/``).
       -  Return the data as the root object, instead of under a ``"data"`` key.
 
