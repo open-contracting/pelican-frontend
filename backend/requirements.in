@@ -1,3 +1,4 @@
+coreapi
 dj-database-url
 django
 django-cors-headers
@@ -7,6 +8,9 @@ djangorestframework
 google-api-python-client
 google-auth
 lxml
+# djangorestframework doesn't support RST.
+# https://github.com/encode/django-rest-framework/pull/527#issuecomment-964799736
+markdown
 matplotlib
 pika
 pillow

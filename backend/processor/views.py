@@ -11,13 +11,15 @@ from .rabbitmq import publish
 
 
 class CreateDatasetSerializer(serializers.Serializer):
-    name = serializers.CharField()
-    collection_id = serializers.IntegerField()
+    name = serializers.CharField(help_text="The name to assign to the dataset")
+    collection_id = serializers.IntegerField(help_text="The collection ID in Kingfisher Process")
 
 
 class FilterDatasetSerializer(serializers.Serializer):
-    dataset_id_original = serializers.IntegerField()
-    filter_message = serializers.JSONField()
+    dataset_id_original = serializers.IntegerField(help_text="The ID of the dataset to filter")
+    # Django REST Framework's auto-generated documentation does not render nested relationships.
+    # https://www.django-rest-framework.org/api-guide/relations/#nested-relationships
+    filter_message = serializers.JSONField(help_text="The date, buyer and procuring entity filters")
 
 
 class DeleteDatasetSerializer(serializers.Serializer):
@@ -26,21 +28,15 @@ class DeleteDatasetSerializer(serializers.Serializer):
 
 class DatasetViewSet(viewsets.GenericViewSet):
     queryset = Dataset.objects.all()
+    serializer_class = CreateDatasetSerializer
     # ViewSet's don't allow typed paths like <int:pk>.
     # https://github.com/encode/django-rest-framework/pull/6789
     # https://github.com/encode/django-rest-framework/issues/6148#issuecomment-725297421
     lookup_value_regex = "[0-9]+"
 
-    def get_serializer_class(self):
-        if self.request.method == "DELETE":
-            return DeleteDatasetSerializer
-        elif "/filter/" in self.request.path:
-            return FilterDatasetSerializer
-        return CreateDatasetSerializer
-
     def create(self, request):
         """
-        Publishes a message to RabbitMQ to create the dataset with the given ``name`` and ``collection_id``.
+        Publishes a message to RabbitMQ to create a dataset with the given `name` and `collection_id`.
         """
         serializer = self.get_serializer(
             data={
@@ -52,11 +48,11 @@ class DatasetViewSet(viewsets.GenericViewSet):
         publish(json.dumps(serializer.data), "ocds_kingfisher_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
-    @action(detail=False, methods=["post"])
+    @action(detail=False, methods=["post"], serializer_class=FilterDatasetSerializer)
     def filter(self, request):
         """
-        Publishes a message to RabbitMQ to filter the dataset with the given ``dataset_id_original`` and
-        ``dataset_id_original``.
+        Publishes a message to RabbitMQ to create a filtered dataset with the given `dataset_id_original` and
+        `filter_message`.
         """
         serializer = self.get_serializer(
             data={
@@ -72,7 +68,9 @@ class DatasetViewSet(viewsets.GenericViewSet):
         """
         Publishes a message to RabbitMQ to wipe the dataset.
         """
-        serializer = self.get_serializer(data={"dataset_id": pk})
+        # get_serializer_class() and @action(serializer_class=) can't be used together.
+        # https://github.com/encode/django-rest-framework/discussions/8244
+        serializer = DeleteDatasetSerializer(data={"dataset_id": pk})
         serializer.is_valid(raise_exception=True)
         publish(json.dumps(serializer.data), "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
@@ -80,8 +78,8 @@ class DatasetViewSet(viewsets.GenericViewSet):
     @action(detail=False)
     def find_by_name(self, request):
         """
-        Returns the ID of the dataset with the ``name`` given in the query string, as an object like ``{"id": 123}``,
-        or ``{}`` if no name matches.
+        Returns the ID of the dataset with the `name` given in the query string, as an object like `{"id": 123}`,
+        or `{}` if no name matches.
         """
         try:
             dataset = self.get_queryset().get(name=request.query_params.get("name"))
@@ -92,7 +90,7 @@ class DatasetViewSet(viewsets.GenericViewSet):
     @action(detail=True)
     def status(self, request, pk=None):
         """
-        Returns the dataset's status, or ``{}`` if no status is set.
+        Returns the dataset's status, or `{}` if no status is set.
         """
         self.get_object()  # trigger 404 if no dataset
         try:
