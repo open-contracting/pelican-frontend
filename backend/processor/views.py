@@ -1,9 +1,6 @@
 import simplejson as json
 from django.db import connections
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 from dqt.models import Dataset, FieldLevelCheck, ProgressMonitorDataset
 from psycopg2.sql import SQL, Identifier
 from rest_framework import serializers, status, viewsets
@@ -13,17 +10,14 @@ from rest_framework.response import Response
 from .rabbitmq import publish
 
 
-@csrf_exempt
-@require_POST
-def create_dataset_filter(request):
-    publish(request.body, "dataset_filter_extractor_init")
-
-    return JsonResponse({"status": "ok"})
-
-
 class CreateDatasetSerializer(serializers.Serializer):
     name = serializers.CharField()
     collection_id = serializers.IntegerField()
+
+
+class FilterDatasetSerializer(serializers.Serializer):
+    dataset_id_original = serializers.IntegerField()
+    filter_message = serializers.JSONField()
 
 
 class DeleteDatasetSerializer(serializers.Serializer):
@@ -40,6 +34,8 @@ class DatasetViewSet(viewsets.GenericViewSet):
     def get_serializer_class(self):
         if self.request.method == "DELETE":
             return DeleteDatasetSerializer
+        elif "/filter/" in self.request.path:
+            return FilterDatasetSerializer
         return CreateDatasetSerializer
 
     def create(self, request):
@@ -47,10 +43,29 @@ class DatasetViewSet(viewsets.GenericViewSet):
         Publishes a message to RabbitMQ to create the dataset with the given ``name`` and ``collection_id``.
         """
         serializer = self.get_serializer(
-            data={"name": request.data.get("name"), "collection_id": request.data.get("collection_id")}
+            data={
+                "name": request.data.get("name"),
+                "collection_id": request.data.get("collection_id"),
+            }
         )
         serializer.is_valid(raise_exception=True)
         publish(json.dumps(serializer.data), "ocds_kingfisher_extractor_init")
+        return Response(status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=False, methods=["post"])
+    def filter(self, request):
+        """
+        Publishes a message to RabbitMQ to filter the dataset with the given ``dataset_id_original`` and
+        ``dataset_id_original``.
+        """
+        serializer = self.get_serializer(
+            data={
+                "dataset_id_original": request.data.get("dataset_id_original"),
+                "filter_message": request.data.get("filter_message"),
+            }
+        )
+        serializer.is_valid(raise_exception=True)
+        publish(json.dumps(serializer.data), "dataset_filter_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     def destroy(self, request, pk=None):
@@ -69,7 +84,7 @@ class DatasetViewSet(viewsets.GenericViewSet):
         or ``{}`` if no name matches.
         """
         try:
-            dataset = self.get_queryset().get(name=request.GET.get("name"))
+            dataset = self.get_queryset().get(name=request.query_params.get("name"))
             return Response({"id": dataset.pk})
         except Dataset.DoesNotExist:
             return Response({})

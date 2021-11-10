@@ -25,13 +25,6 @@ class ViewsTests(TransactionTestCase):
         obj.save()
         return obj
 
-    def test_require_POST(self):
-        for path in ("api/create_dataset_filter", "datasets/", "datasets/123/"):
-            with self.subTest(path=path):
-                response = self.client.get(f"/{path}")
-
-                self.assertEqual(response.status_code, 405)
-
     @patch("processor.views.publish")
     def test_create_no_values(self, publish):
         response = self.client.post("/datasets/", {}, "application/json")
@@ -49,15 +42,21 @@ class ViewsTests(TransactionTestCase):
         publish.assert_called_once_with('{"name": "anything", "collection_id": 123}', "ocds_kingfisher_extractor_init")
 
     @patch("processor.views.publish")
-    def test_create_dataset_filter(self, publish):
+    def test_filter_no_values(self, publish):
+        response = self.client.post("/datasets/filter/", {}, "application/json")
+
+        self.assertEqual(response.status_code, 400)
+        publish.assert_not_called()
+
+    @patch("processor.views.publish")
+    def test_filter(self, publish):
         response = self.client.post(
-            "/api/create_dataset_filter", {"dataset_id_original": 123, "filter_message": {}}, "application/json"
+            "/datasets/filter/", {"dataset_id_original": 123, "filter_message": {}}, "application/json"
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"status": "ok"})
+        self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with(
-            b'{"dataset_id_original": 123, "filter_message": {}}', "dataset_filter_extractor_init"
+            '{"dataset_id_original": 123, "filter_message": {}}', "dataset_filter_extractor_init"
         )
 
     @patch("processor.views.publish")
