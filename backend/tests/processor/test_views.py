@@ -25,14 +25,14 @@ class ViewsTests(TransactionTestCase):
         obj.save()
         return obj
 
-    @patch("processor.views.publish")
+    @patch("controller.views.publish")
     def test_create_no_values(self, publish):
         response = self.client.post("/datasets/", {}, "application/json")
 
         self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
-    @patch("processor.views.publish")
+    @patch("controller.views.publish")
     def test_create(self, publish):
         response = self.client.post(
             "/datasets/", {"name": "anything", "collection_id": 123, "xxx": "xxx"}, "application/json"
@@ -41,14 +41,14 @@ class ViewsTests(TransactionTestCase):
         self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with('{"name": "anything", "collection_id": 123}', "ocds_kingfisher_extractor_init")
 
-    @patch("processor.views.publish")
+    @patch("controller.views.publish")
     def test_filter_no_values(self, publish):
         response = self.client.post("/datasets/filter/", {}, "application/json")
 
         self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
-    @patch("processor.views.publish")
+    @patch("controller.views.publish")
     def test_filter(self, publish):
         response = self.client.post(
             "/datasets/filter/", {"dataset_id_original": 123, "filter_message": {}}, "application/json"
@@ -59,7 +59,7 @@ class ViewsTests(TransactionTestCase):
             '{"dataset_id_original": 123, "filter_message": {}}', "dataset_filter_extractor_init"
         )
 
-    @patch("processor.views.publish")
+    @patch("controller.views.publish")
     def test_destroy(self, publish):
         response = self.client.delete("/datasets/123/")
 

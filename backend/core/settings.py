@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "tastypie",
     "corsheaders",
     "dqt",
-    "processor.apps.ProcessorConfig",
+    "controller.apps.ControllerConfig",
     "exporter.apps.ExporterConfig",
 ]
 

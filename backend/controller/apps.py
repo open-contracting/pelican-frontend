@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ProcessorConfig(AppConfig):
+class ControllerConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "processor"
+    name = "controller"

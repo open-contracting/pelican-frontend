@@ -39,7 +39,7 @@ jobs:
           ./manage.py migrate
           # ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
-          coverage run --source core,dqt,exporter,processor manage.py test
+          coverage run --source controller,core,dqt,exporter manage.py test
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: coveralls --service=github
