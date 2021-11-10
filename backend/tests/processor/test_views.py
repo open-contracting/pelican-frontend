@@ -88,6 +88,29 @@ class ViewsTests(TransactionTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"id": dataset.pk})
 
+    def test_status_no_progress(self):
+        dataset = self.create(Dataset, name="anything")
+        response = self.client.get(f"/datasets/{dataset.pk}/status/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {})
+
+    def test_status_no_values(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(ProgressMonitorDataset, dataset=dataset)
+        response = self.client.get(f"/datasets/{dataset.pk}/status/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"phase": None, "state": None})
+
+    def test_status(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
+        response = self.client.get(f"/datasets/{dataset.pk}/status/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
+
     def test_metadata_no_values(self):
         dataset = self.create(Dataset, name="anything")
         response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
@@ -129,29 +152,6 @@ class ViewsTests(TransactionTestCase):
                 "tenders_items": 0,
             },
         )
-
-    def test_status_no_progress(self):
-        dataset = self.create(Dataset, name="anything")
-        response = self.client.get(f"/datasets/{dataset.pk}/status/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {})
-
-    def test_status_no_values(self):
-        dataset = self.create(Dataset, name="anything")
-        self.create(ProgressMonitorDataset, dataset=dataset)
-        response = self.client.get(f"/datasets/{dataset.pk}/status/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"phase": None, "state": None})
-
-    def test_status(self):
-        dataset = self.create(Dataset, name="anything")
-        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
-        response = self.client.get(f"/datasets/{dataset.pk}/status/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
 
     def test_status_no_dataset(self):
         response = self.client.get("/datasets/123/status/")
