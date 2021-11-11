@@ -21,7 +21,6 @@
     "chroma-js": "^2.1.0",
     "core-js": "^2.6.11",
     "numeral": "^2.0.6",
-    "register-service-worker": "^1.7.1",
     "v-clipboard": "^2.2.3",
     "vue": "^2.6.11",
     "vue-context": "^5.2.0",
