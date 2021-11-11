@@ -6,7 +6,7 @@ djangorestframework
 -e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
 google-api-python-client
 google-auth
-gunicorn
+gunicorn[setproctitle]
 lxml
 matplotlib
 pika
