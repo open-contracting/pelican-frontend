@@ -240,7 +240,7 @@ TOKEN_PATH = os.getenv("TOKEN_PATH", "credentials.json")
 
 # The connection string for RabbitMQ.
 RABBIT_URL = os.getenv("RABBIT_URL", "amqp://localhost")
-# The name of the RabbitMQ exchange. Follow the pattern `pelican_{service}_{environment}`.
+# The name of the RabbitMQ exchange used by Pelican backend.
 RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
 
 GDOCS_TEMPLATES = {
