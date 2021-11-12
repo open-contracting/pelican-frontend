@@ -236,7 +236,7 @@ FATHOM = {
 
 # The path to a Google `credentials.json` file
 # https://developers.google.com/workspace/guides/create-credentials
-# WARNING: If you change the production default, update `Dockerfile` to match.
+# WARNING: If you change the production default, update `Dockerfile` and `docker-compose.yaml` to match.
 TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else "credentials.json")
 
 # The connection string for RabbitMQ.
