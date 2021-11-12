@@ -236,7 +236,8 @@ FATHOM = {
 
 # The path to a Google `credentials.json` file
 # https://developers.google.com/workspace/guides/create-credentials
-TOKEN_PATH = os.getenv("TOKEN_PATH", "credentials.json")
+# WARNING: If you change the production default, update `Dockerfile` to match.
+TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else "credentials.json")
 
 # The connection string for RabbitMQ.
 RABBIT_URL = os.getenv("RABBIT_URL", "amqp://localhost")
