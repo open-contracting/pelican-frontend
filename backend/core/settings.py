@@ -234,16 +234,17 @@ FATHOM = {
     "id": os.getenv("FATHOM_ANALYTICS_ID"),
 }
 
-# The path to a Google `credentials.json` file
-# https://developers.google.com/workspace/guides/create-credentials
-# WARNING: If you change the production default, update `Dockerfile` and `docker-compose.yaml` to match.
-TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else "credentials.json")
-
 # The connection string for RabbitMQ.
 RABBIT_URL = os.getenv("RABBIT_URL", "amqp://localhost")
 # The name of the RabbitMQ exchange used by Pelican backend.
 RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
 
+# The path to a Google `credentials.json` file, for writing exports to Google Drive.
+# https://developers.google.com/workspace/guides/create-credentials
+# WARNING: If you change the production default, update `Dockerfile` and `docker-compose.yaml` to match.
+TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else "credentials.json")
+
+# The Google Docs IDs for templates, when writing exports to Google Drive.
 GDOCS_TEMPLATES = {
     # The Google Docs ID for the base template.
     "DEFAULT_BASE_TEMPLATE": os.getenv("DEFAULT_BASE_TEMPLATE", "1YMG5KZCPmI6GEcd2XQktrHD8uxEL626g3uuBjLWqQlE"),
