@@ -47,7 +47,7 @@ def generate_report(request):
         failed_tags = []
         main_template, failed_tags = base.validate_and_process({})
 
-        report_name = "Report %s %s" % (input_message["dataset_id"], datetime.now())
+        report_name = f"Report {input_message['dataset_id']} {datetime.now()}"
         if "report_name" in input_message and isinstance(input_message["report_name"], str):
             report_name = input_message["report_name"]
 

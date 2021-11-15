@@ -3,7 +3,7 @@ class GoogleDriveError(Exception):
         self.reason = reason
 
     def __str__(self):
-        return "Google Drive Error: %s" % self.reason
+        return f"Google Drive Error: {self.reason}"
 
 
 class TagError(Exception):

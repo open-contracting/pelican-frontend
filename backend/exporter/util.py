@@ -2,7 +2,7 @@ import datetime
 
 
 def terms_enumeration(it):
-    return ", ".join(("'%s'" % el) for el in it)
+    return ", ".join(f"'{el}'" for el in it)
 
 
 # parses %b-%y and %b-%-y format
