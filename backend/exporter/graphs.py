@@ -45,7 +45,7 @@ def resource_result_box(passed_count, failed_count, not_available_count, return_
     ax.set_xlim(right=1.0)
     ax.set_yticks([0, 1, 2])
     ax.set_yticklabels(
-        ["Not available", "Failed", "Passed"], fontfamily="GT Eesti Pro Display", color=COLOR["dark_grey"]
+        ["Not applicable", "Failed", "Passed"], fontfamily="GT Eesti Pro Display", color=COLOR["dark_grey"]
     )
     ax.tick_params(axis="both", which="both", length=0)
     ax.get_xaxis().set_ticks([])

@@ -9,7 +9,7 @@ export const messages = {
     ocids: "ocids",
     passed: "Passed",
     failed: "Failed",
-    notAvailable: "Not available",
+    notAvailable: "Not applicable",
     tryAgain: "Try again",
     close: "Close window",
     created: "Created",
@@ -372,7 +372,7 @@ export const messages = {
             description: "checks in total with average score",
             undefined: "undefined",
             tooltip:
-                "The score is computed as the percentage of total successful check applications from total applications; excluding not available applications."
+                "The score is computed as the percentage of total successful check applications from total applications (excluding not applicable)."
         },
         coherent: {
             categoryName: "Coherence",
