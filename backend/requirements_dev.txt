@@ -7,14 +7,12 @@
 -e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
     # via -r backend/requirements.txt
 appdirs==1.4.4
-    # via
-    #   black
-    #   virtualenv
+    # via virtualenv
 asgiref==3.4.1
     # via
     #   -r backend/requirements.txt
     #   django
-black==21.5b2
+black==21.12b0
     # via -r backend/requirements_dev.in
 cachetools==4.1.0
     # via
@@ -121,7 +119,7 @@ numpy==1.20.3
     # via
     #   -r backend/requirements.txt
     #   matplotlib
-pathspec==0.8.1
+pathspec==0.9.0
     # via black
 pep517==0.10.0
     # via pip-tools
@@ -133,6 +131,8 @@ pillow==8.3.2
     #   matplotlib
 pip-tools==6.4.0
     # via -r backend/requirements_dev.in
+platformdirs==2.4.0
+    # via black
 pre-commit==2.12.1
     # via -r backend/requirements_dev.in
 protobuf==3.12.2
@@ -180,8 +180,6 @@ pytz==2019.1
     #   google-api-core
 pyyaml==5.4.1
     # via pre-commit
-regex==2021.4.4
-    # via black
 requests==2.25.1
     # via
     #   -r backend/requirements.txt
@@ -223,13 +221,16 @@ text-unidecode==1.3
     # via python-slugify
 toml==0.10.2
     # via
-    #   black
     #   pep517
     #   pre-commit
+tomli==1.2.2
+    # via black
 transifex-client==0.14.3
     # via -r backend/requirements_dev.in
 typing-extensions==3.10.0.2
-    # via gitpython
+    # via
+    #   black
+    #   gitpython
 uritemplate==3.0.1
     # via
     #   -r backend/requirements.txt
