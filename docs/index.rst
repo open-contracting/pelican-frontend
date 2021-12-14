@@ -10,7 +10,7 @@ Set up the git pre-commit hook:
 
 .. code-block:: bash
 
-   pip install pre-commit
+   pip install -r backend/requirements.txt
    pre-commit install
 
 .. toctree::
