@@ -1,5 +1,5 @@
 dj-database-url
-django
+django<4
 django-cors-headers
 djangorestframework
 # 0.14.3 is not compatible with Django 3.2.
