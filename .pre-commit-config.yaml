@@ -25,6 +25,6 @@ repos:
         files: ^backend/requirements(_dev)?\.(in|txt)$
         args: [backend/requirements_dev.in]
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v2.4.1
+    rev: v2.5.1
     hooks:
       - id: prettier
