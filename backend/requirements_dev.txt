@@ -115,7 +115,7 @@ mypy-extensions==0.4.3
     # via black
 nodeenv==1.6.0
     # via pre-commit
-numpy==1.20.3
+numpy==1.22.1
     # via
     #   -r backend/requirements.txt
     #   matplotlib
@@ -125,7 +125,7 @@ pep517==0.10.0
     # via pip-tools
 pika==1.1.0
     # via -r backend/requirements.txt
-pillow==8.3.2
+pillow==9.0.0
     # via
     #   -r backend/requirements.txt
     #   matplotlib
