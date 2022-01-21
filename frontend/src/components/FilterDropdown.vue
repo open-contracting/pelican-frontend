@@ -1,21 +1,21 @@
 <template>
-    <b-dropdown
-        id="filter_dropdown"
-        right
-        split
-        split-button-type="button"
-        :html="'<span id=\'show_prefix\'>Show: </span>' + filterNames[selectedIndex]"
-        variant="primary"
+  <b-dropdown
+    id="filter_dropdown"
+    right
+    split
+    split-button-type="button"
+    :html="'<span id=\'show_prefix\'>Show: </span>' + filterNames[selectedIndex]"
+    variant="primary"
+  >
+    <b-dropdown-item-button
+      v-for="(name, index) in filterNames"
+      :key="index"
+      variant="bg-transparent border-transparent"
+      @click="clickItem(index)"
     >
-        <b-dropdown-item-button
-            v-for="(name, index) in filterNames"
-            :key="index"
-            variant="bg-transparent border-transparent"
-            @click="clickItem(index)"
-        >
-            {{ name }}
-        </b-dropdown-item-button>
-    </b-dropdown>
+      {{ name }}
+    </b-dropdown-item-button>
+  </b-dropdown>
 </template>
 
 <script>

@@ -1,64 +1,92 @@
 <template>
-    <dashboard-detail>
-        <template v-if="check" #content>
-            <h2 v-if="check">
-                <span class="category_name">
-                    {{ $t("resourceLevel." + check.name.split(".")[0] + ".categoryName") }}:
-                </span>
-                {{ $t("resourceLevel." + check.name + ".name") }}
-            </h2>
-            <p class="description" v-html="$t('resourceLevel.' + check.name + '.description')" />
+  <dashboard-detail>
+    <template
+      v-if="check"
+      #content
+    >
+      <h2 v-if="check">
+        <span class="category_name">
+          {{ $t("resourceLevel." + check.name.split(".")[0] + ".categoryName") }}:
+        </span>
+        {{ $t("resourceLevel." + check.name + ".name") }}
+      </h2>
+      <p
+        class="description"
+        v-html="$t('resourceLevel.' + check.name + '.description')"
+      />
 
-            <h5>
-                {{ $t("resourceLevel.count_header") }}
-                <span class="bold">{{
-                    (check.passed_count + check.failed_count + check.undefined_count) | formatNumber
-                }}</span>
+      <h5>
+        {{ $t("resourceLevel.count_header") }}
+        <span class="bold">{{
+          (check.passed_count + check.failed_count + check.undefined_count) | formatNumber
+        }}</span>
                 &nbsp;
-                <Tooltip :text="$t('resourceLevel.count_header_tooltip')" />
-            </h5>
+        <Tooltip :text="$t('resourceLevel.count_header_tooltip')" />
+      </h5>
 
-            <CheckDetailResultBox :check="check" ok failed na />
+      <CheckDetailResultBox
+        :check="check"
+        ok
+        failed
+        na
+      />
 
-            <h5>
-                {{ $t("resourceLevel.application_count_header") }}
-                <span class="bold">{{ check.individual_application_count | formatNumber }}</span
-                >&nbsp;
-                <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')" />
-            </h5>
-            <CheckDetailResultBox :check="check" individual-pass individual-non-pass />
+      <h5>
+        {{ $t("resourceLevel.application_count_header") }}
+        <span class="bold">{{ check.individual_application_count | formatNumber }}</span>&nbsp;
+        <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')" />
+      </h5>
+      <CheckDetailResultBox
+        :check="check"
+        individual-pass
+        individual-non-pass
+      />
 
-            <ExampleBoxes
-                :example-sections="exampleSections"
-                :loaded="check.examples_filled"
-                :preview-disabled="loadingPreviewData"
-                @preview="preview"
+      <ExampleBoxes
+        :example-sections="exampleSections"
+        :loaded="check.examples_filled"
+        :preview-disabled="loadingPreviewData"
+        @preview="preview"
+      />
+    </template>
+
+    <template #preview>
+      <span v-if="previewMetaData">
+        <h5>{{ $t("preview.metadata") }}</h5>
+        <vue-json-pretty
+          :highlight-mouseover-node="true"
+          :data="previewMetaData"
+        />
+      </span>
+
+      <div class="divider">
+&nbsp;
+      </div>
+
+      <span v-if="loadingPreviewData">
+        <div class="result_box loader text-center">
+          <div class="spinner">
+            <b-spinner
+              variant="primary"
+              style="width: 4rem; height: 4rem"
+              type="grow"
+              class="spinner"
             />
-        </template>
+          </div>
+          {{ $t("loader.data") }}
+        </div>
+      </span>
 
-        <template #preview>
-            <span v-if="previewMetaData">
-                <h5>{{ $t("preview.metadata") }}</h5>
-                <vue-json-pretty :highlight-mouseover-node="true" :data="previewMetaData" />
-            </span>
-
-            <div class="divider">&nbsp;</div>
-
-            <span v-if="loadingPreviewData">
-                <div class="result_box loader text-center">
-                    <div class="spinner">
-                        <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
-                    </div>
-                    {{ $t("loader.data") }}
-                </div>
-            </span>
-
-            <span v-else-if="previewData">
-                <h5>{{ $t("preview.ocdsData") }}</h5>
-                <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="previewData" />
-            </span>
-        </template>
-    </dashboard-detail>
+      <span v-else-if="previewData">
+        <h5>{{ $t("preview.ocdsData") }}</h5>
+        <vue-json-pretty
+          :highlight-mouseover-node="true"
+          :deep="2"
+          :data="previewData"
+        />
+      </span>
+    </template>
+  </dashboard-detail>
 </template>
 
 <script>

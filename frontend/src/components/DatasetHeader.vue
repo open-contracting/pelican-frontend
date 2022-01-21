@@ -1,11 +1,11 @@
 <template>
-    <h1 v-if="dataset">
-        <span class="name">{{ dataset.name }}</span>
-        (Id {{ dataset.id }}) | Size
-        {{ dataset.size | formatNumber }}
-        | Created
-        {{ dataset.meta.data_quality_tool_metadata.processing_start }}
-    </h1>
+  <h1 v-if="dataset">
+    <span class="name">{{ dataset.name }}</span>
+    (Id {{ dataset.id }}) | Size
+    {{ dataset.size | formatNumber }}
+    | Created
+    {{ dataset.meta.data_quality_tool_metadata.processing_start }}
+  </h1>
 </template>
 
 <script>

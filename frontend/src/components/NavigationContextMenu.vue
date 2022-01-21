@@ -1,21 +1,30 @@
 <template>
-    <vue-context ref="menu">
-        <li>
-            <a class="clickable" @click="openNewTab">
-                {{ $t("navigationContextMenu.openNewTab") }}
-            </a>
-        </li>
-        <li>
-            <a class="clickable" @click="openNewWindow">
-                {{ $t("navigationContextMenu.openNewWindow") }}
-            </a>
-        </li>
-        <li>
-            <a class="clickable" @click="copyToClipboard">
-                {{ $t("navigationContextMenu.copyToClipboard") }}
-            </a>
-        </li>
-    </vue-context>
+  <vue-context ref="menu">
+    <li>
+      <a
+        class="clickable"
+        @click="openNewTab"
+      >
+        {{ $t("navigationContextMenu.openNewTab") }}
+      </a>
+    </li>
+    <li>
+      <a
+        class="clickable"
+        @click="openNewWindow"
+      >
+        {{ $t("navigationContextMenu.openNewWindow") }}
+      </a>
+    </li>
+    <li>
+      <a
+        class="clickable"
+        @click="copyToClipboard"
+      >
+        {{ $t("navigationContextMenu.copyToClipboard") }}
+      </a>
+    </li>
+  </vue-context>
 </template>
 
 <script>

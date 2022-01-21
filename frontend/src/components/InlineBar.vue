@@ -1,19 +1,38 @@
 <template>
-    <div ref="bar" class="inline_bar numeric" :class="state">
-        <div class="bar" :style="{ width: barWidth + 'px' }">
-            <span v-if="barWidth > 30">{{ percentage | formatPercentage }}</span>
-            <span v-else>&nbsp;</span>
-        </div>
-        <div v-if="barWidth <= 30" class="count">
-            <span v-if="barWidth <= 30" class="small_label">{{ percentage | formatPercentage }}</span>
-            <span v-if="showCount" class="count_holder">
-                <span class="count_holder">({{ count | formatNumber }})</span>
-            </span>
-        </div>
-        <div v-if="barWidth > 30 && showCount" class="count">
-            <span class="count_holder">({{ count | formatNumber }})</span>
-        </div>
+  <div
+    ref="bar"
+    class="inline_bar numeric"
+    :class="state"
+  >
+    <div
+      class="bar"
+      :style="{ width: barWidth + 'px' }"
+    >
+      <span v-if="barWidth > 30">{{ percentage | formatPercentage }}</span>
+      <span v-else>&nbsp;</span>
     </div>
+    <div
+      v-if="barWidth <= 30"
+      class="count"
+    >
+      <span
+        v-if="barWidth <= 30"
+        class="small_label"
+      >{{ percentage | formatPercentage }}</span>
+      <span
+        v-if="showCount"
+        class="count_holder"
+      >
+        <span class="count_holder">({{ count | formatNumber }})</span>
+      </span>
+    </div>
+    <div
+      v-if="barWidth > 30 && showCount"
+      class="count"
+    >
+      <span class="count_holder">({{ count | formatNumber }})</span>
+    </div>
+  </div>
 </template>
 
 <script>

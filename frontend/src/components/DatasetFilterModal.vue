@@ -1,97 +1,110 @@
 <template>
-    <span class="just_holder">
-        <Loader v-if="isSubmitting && submitResult == null" />
-        <b-alert v-if="isSubmitting && submitResult != null" variant="success" show>{{
-            $t("datasetFilter.statusOk")
-        }}</b-alert>
-        <form v-if="!isSubmitting" class="modal_box align-items-center">
-            <div class="form-group row">
-                <label class="col-4 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
-                <div class="col-8 modal_input">
-                    <div class="row">
-                        <div class="col">
-                            <b-form-datepicker
-                                v-model="releaseDateFrom"
-                                :min="firstDate"
-                                :max="lastDate"
-                                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                                class="date_picker"
-                            />
-                        </div>
-                        <div class="col">
-                            <b-form-datepicker
-                                v-model="releaseDateTo"
-                                :min="firstDate"
-                                :max="lastDate"
-                                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                                class="date_picker"
-                            />
-                        </div>
-                    </div>
-                </div>
+  <span class="just_holder">
+    <Loader v-if="isSubmitting && submitResult == null" />
+    <b-alert
+      v-if="isSubmitting && submitResult != null"
+      variant="success"
+      show
+    >{{
+      $t("datasetFilter.statusOk")
+    }}</b-alert>
+    <form
+      v-if="!isSubmitting"
+      class="modal_box align-items-center"
+    >
+      <div class="form-group row">
+        <label class="col-4 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
+        <div class="col-8 modal_input">
+          <div class="row">
+            <div class="col">
+              <b-form-datepicker
+                v-model="releaseDateFrom"
+                :min="firstDate"
+                :max="lastDate"
+                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                class="date_picker"
+              />
             </div>
-            <div class="form-group row section_row">
-                <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
-                <div class="col-8">
-                    <DatasetValuesMultiselect
-                        :update-selected="updateBuyerName"
-                        :dataset-id="dataset != null ? dataset.id : null"
-                        json-path="buyer.name"
-                    />
-                </div>
+            <div class="col">
+              <b-form-datepicker
+                v-model="releaseDateTo"
+                :min="firstDate"
+                :max="lastDate"
+                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                class="date_picker"
+              />
             </div>
-            <div class="form-group row">
-                <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
-                <div class="col-8">
-                    <DatasetValuesMultiselect
-                        :update-selected="updateProcuringEntityName"
-                        :dataset-id="dataset != null ? dataset.id : null"
-                        json-path="tender.procuringEntity.name"
-                    />
-                </div>
-            </div>
-            <div class="form-group row section_row">
-                <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
-                <div class="col-8">
-                    <input v-model="buyerNameRegex" class="regex_input" />
-                    <small class="form-text text-muted">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
-                </div>
-            </div>
-            <div class="form-group row procuring_row">
-                <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
-                <div class="col-8">
-                    <input v-model="procuringEntityNameRegex" class="regex_input" />
-                    <small class="form-text text-muted">{{
-                        $t("datasetFilter.procuringEntityNameRegexTooltip")
-                    }}</small>
-                </div>
-            </div>
-            <div class="text-center">
-                <button
-                    type="button"
-                    class="btn btn-primary submit_button"
-                    :disabled="items == 0 || (dataset != null && items == dataset.size) || gettingCountsToken != null"
-                    @click="createDatasetFilter"
-                >
-                    {{ $t("datasetFilter.submit") }}
-                    <span v-if="gettingCountsToken == null">
-                        <span v-if="items != null && items > 0 && dataset != null && items != dataset.size"
-                            >({{ items | formatNumber }} from {{ dataset.size | formatNumber }}
-                            {{ $t("datasetFilter.items") }})</span
-                        >
-                        <span v-if="dataset != null && items == dataset.size"
-                            >({{ $t("datasetFilter.itemsAll") }})</span
-                        >
-                    </span>
-                    <b-spinner
-                        v-if="gettingCountsToken != null"
-                        variant="default"
-                        style="width: 1.2rem; height: 1.2rem"
-                    />
-                </button>
-            </div>
-        </form>
-    </span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row section_row">
+        <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
+        <div class="col-8">
+          <DatasetValuesMultiselect
+            :update-selected="updateBuyerName"
+            :dataset-id="dataset != null ? dataset.id : null"
+            json-path="buyer.name"
+          />
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
+        <div class="col-8">
+          <DatasetValuesMultiselect
+            :update-selected="updateProcuringEntityName"
+            :dataset-id="dataset != null ? dataset.id : null"
+            json-path="tender.procuringEntity.name"
+          />
+        </div>
+      </div>
+      <div class="form-group row section_row">
+        <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
+        <div class="col-8">
+          <input
+            v-model="buyerNameRegex"
+            class="regex_input"
+          >
+          <small class="form-text text-muted">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
+        </div>
+      </div>
+      <div class="form-group row procuring_row">
+        <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
+        <div class="col-8">
+          <input
+            v-model="procuringEntityNameRegex"
+            class="regex_input"
+          >
+          <small class="form-text text-muted">{{
+            $t("datasetFilter.procuringEntityNameRegexTooltip")
+          }}</small>
+        </div>
+      </div>
+      <div class="text-center">
+        <button
+          type="button"
+          class="btn btn-primary submit_button"
+          :disabled="items == 0 || (dataset != null && items == dataset.size) || gettingCountsToken != null"
+          @click="createDatasetFilter"
+        >
+          {{ $t("datasetFilter.submit") }}
+          <span v-if="gettingCountsToken == null">
+            <span
+              v-if="items != null && items > 0 && dataset != null && items != dataset.size"
+            >({{ items | formatNumber }} from {{ dataset.size | formatNumber }}
+              {{ $t("datasetFilter.items") }})</span>
+            <span
+              v-if="dataset != null && items == dataset.size"
+            >({{ $t("datasetFilter.itemsAll") }})</span>
+          </span>
+          <b-spinner
+            v-if="gettingCountsToken != null"
+            variant="default"
+            style="width: 1.2rem; height: 1.2rem"
+          />
+        </button>
+      </div>
+    </form>
+  </span>
 </template>
 
 <script>

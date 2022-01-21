@@ -1,12 +1,18 @@
 <template>
-    <span>
-        <span :id="tooltipId">
-            <font-awesome-icon icon="info-circle" />
-        </span>
-        <b-tooltip :target="tooltipId" triggers="hover">
-            <span class="tooltip_text" v-html="text" />
-        </b-tooltip>
+  <span>
+    <span :id="tooltipId">
+      <font-awesome-icon icon="info-circle" />
     </span>
+    <b-tooltip
+      :target="tooltipId"
+      triggers="hover"
+    >
+      <span
+        class="tooltip_text"
+        v-html="text"
+      />
+    </b-tooltip>
+  </span>
 </template>
 
 <script>

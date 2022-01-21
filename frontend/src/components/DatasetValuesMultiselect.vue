@@ -1,45 +1,63 @@
 <template>
-    <multiselect
-        v-model="selected"
-        open-direction="bottom"
-        label="value"
-        track-by="value"
-        :show-labels="false"
-        :options="options"
-        :multiple="true"
-        :searchable="true"
-        :loading="isLoading"
-        :internal-search="false"
-        :clear-on-select="false"
-        :close-on-select="false"
-        :options-limit="300"
-        :limit="10"
-        :limit-text="limitText"
-        :max-height="300"
-        :show-no-results="false"
-        :hide-selected="true"
-        @search-change="asyncFind"
+  <multiselect
+    v-model="selected"
+    open-direction="bottom"
+    label="value"
+    track-by="value"
+    :show-labels="false"
+    :options="options"
+    :multiple="true"
+    :searchable="true"
+    :loading="isLoading"
+    :internal-search="false"
+    :clear-on-select="false"
+    :close-on-select="false"
+    :options-limit="300"
+    :limit="10"
+    :limit-text="limitText"
+    :max-height="300"
+    :show-no-results="false"
+    :hide-selected="true"
+    @search-change="asyncFind"
+  >
+    <template
+      slot="option"
+      slot-scope="props"
     >
-        <template slot="option" slot-scope="props">
-            <div class="option__desc">
-                <span class="option__title">{{ props.option.value }}</span>
-                <span class="option__small">&nbsp;({{ props.option.count }} items)</span>
-            </div>
-        </template>
-        <template slot="tag" slot-scope="{ option, remove }">
-            <div class="multiselect__tag">
-                <div>
-                    <span>{{ option.value }}</span>
-                    <span class="multiselect__tag__items__count">&nbsp;({{ option.count }} items)</span>
-                    <i aria-hidden="true" tabindex="1" class="multiselect__tag-icon" @click="remove(option)" />
-                </div>
-            </div>
-        </template>
-        <template slot="clear" slot-scope="props">
-            <div v-if="selected.length" class="multiselect__clear" @mousedown.prevent.stop="clearAll(props.search)" />
-        </template>
-        <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
-    </multiselect>
+      <div class="option__desc">
+        <span class="option__title">{{ props.option.value }}</span>
+        <span class="option__small">&nbsp;({{ props.option.count }} items)</span>
+      </div>
+    </template>
+    <template
+      slot="tag"
+      slot-scope="{ option, remove }"
+    >
+      <div class="multiselect__tag">
+        <div>
+          <span>{{ option.value }}</span>
+          <span class="multiselect__tag__items__count">&nbsp;({{ option.count }} items)</span>
+          <i
+            aria-hidden="true"
+            tabindex="1"
+            class="multiselect__tag-icon"
+            @click="remove(option)"
+          />
+        </div>
+      </div>
+    </template>
+    <template
+      slot="clear"
+      slot-scope="props"
+    >
+      <div
+        v-if="selected.length"
+        class="multiselect__clear"
+        @mousedown.prevent.stop="clearAll(props.search)"
+      />
+    </template>
+    <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
+  </multiselect>
 </template>
 
 <script>

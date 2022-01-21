@@ -1,36 +1,54 @@
 <template>
-    <span>
-        <div class="tr row clickable" @click="showChecks = !showChecks">
-            <div class="td col-4 col-lg-5 category" scope="col">
-                <div class="switcher text-center">
-                    <span v-if="resourceLevelStats.length > 0">
-                        <font-awesome-icon v-if="!showChecks" icon="chevron-right" />
-                        <font-awesome-icon v-if="showChecks" icon="chevron-down" />
-                    </span>
-                </div>
-                {{ $t("resourceLevel." + section + ".categoryName") }}
-            </div>
-            <div class="td col-8 col-lg-7 text-right text-lg-left info_message" scope="col">
-                {{ resourceLevelStats.length }} {{ $t("resourceLevel.averageScore.description") }}:
-                <span v-if="avgScore != null">
-                    {{ avgScore | formatPercentage }}
-                </span>
-                <span v-else>
-                    {{ $t("resourceLevel.averageScore.undefined") }}
-                </span>
-                <Tooltip :text="$t('resourceLevel.averageScore.tooltip')" />
-            </div>
-        </div>
-        <span v-if="showChecks" class="checks">
-            <ResourceLevelRow
-                v-for="(value, name, index) in resourceLevelStats"
-                :key="name"
-                :check="value"
-                :name="value.name"
-                :index="index"
+  <span>
+    <div
+      class="tr row clickable"
+      @click="showChecks = !showChecks"
+    >
+      <div
+        class="td col-4 col-lg-5 category"
+        scope="col"
+      >
+        <div class="switcher text-center">
+          <span v-if="resourceLevelStats.length > 0">
+            <font-awesome-icon
+              v-if="!showChecks"
+              icon="chevron-right"
             />
+            <font-awesome-icon
+              v-if="showChecks"
+              icon="chevron-down"
+            />
+          </span>
+        </div>
+        {{ $t("resourceLevel." + section + ".categoryName") }}
+      </div>
+      <div
+        class="td col-8 col-lg-7 text-right text-lg-left info_message"
+        scope="col"
+      >
+        {{ resourceLevelStats.length }} {{ $t("resourceLevel.averageScore.description") }}:
+        <span v-if="avgScore != null">
+          {{ avgScore | formatPercentage }}
         </span>
+        <span v-else>
+          {{ $t("resourceLevel.averageScore.undefined") }}
+        </span>
+        <Tooltip :text="$t('resourceLevel.averageScore.tooltip')" />
+      </div>
+    </div>
+    <span
+      v-if="showChecks"
+      class="checks"
+    >
+      <ResourceLevelRow
+        v-for="(value, name, index) in resourceLevelStats"
+        :key="name"
+        :check="value"
+        :name="value.name"
+        :index="index"
+      />
     </span>
+  </span>
 </template>
 
 <script>

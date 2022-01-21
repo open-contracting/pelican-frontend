@@ -1,5 +1,9 @@
 <template>
-    <GChart type="PieChart" :data="chartData" :options="chartOptions" />
+  <GChart
+    type="PieChart"
+    :data="chartData"
+    :options="chartOptions"
+  />
 </template>
 
 <script>

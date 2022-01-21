@@ -1,16 +1,24 @@
 <template>
-    <table class="table table-borderless table-sm">
-        <tbody>
-            <tr v-for="item in chartData" :key="item[0]">
-                <td class="text-right label">
-                    <span class="check_name">{{ item[0] }}</span>
-                </td>
-                <td class="text-right">
-                    <InlineBar :count="item[1]" :show-count="true" :percentage="item[2] * 100" :state="'reg'" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="table table-borderless table-sm">
+    <tbody>
+      <tr
+        v-for="item in chartData"
+        :key="item[0]"
+      >
+        <td class="text-right label">
+          <span class="check_name">{{ item[0] }}</span>
+        </td>
+        <td class="text-right">
+          <InlineBar
+            :count="item[1]"
+            :show-count="true"
+            :percentage="item[2] * 100"
+            :state="'reg'"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>

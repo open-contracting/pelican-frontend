@@ -1,67 +1,94 @@
 <template>
-    <dashboard-detail>
-        <template v-if="check" #content>
-            <h2>{{ $t("fieldDetail.path") }}: {{ check.path }}</h2>
+  <dashboard-detail>
+    <template
+      v-if="check"
+      #content
+    >
+      <h2>{{ $t("fieldDetail.path") }}: {{ check.path }}</h2>
 
-            <template v-for="(c, k) in check.coverage.checks">
-                <h5 :key="k">
-                    <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
-                    &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo;
-                    {{ $t("fieldDetail.checked") }}: &nbsp;
-                    <span class="bold">
-                        {{ (c.passed_count + c.failed_count) | formatNumber }}
-                    </span>
+      <template v-for="(c, k) in check.coverage.checks">
+        <h5 :key="k">
+          <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
+          &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo;
+          {{ $t("fieldDetail.checked") }}: &nbsp;
+          <span class="bold">
+            {{ (c.passed_count + c.failed_count) | formatNumber }}
+          </span>
                     &nbsp;
-                    <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
-                </h5>
-                <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
-            </template>
+          <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
+        </h5>
+        <CheckDetailResultBox
+          :key="k + '-box'"
+          :check="c"
+          ok
+          failed
+        />
+      </template>
 
-            <template v-for="(c, k) in check.quality.checks">
-                <h5 :key="k">
-                    <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
-                    &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo;
-                    {{ $t("fieldDetail.checked") }}: &nbsp;
-                    <span class="bold">
-                        {{ (c.passed_count + c.failed_count) | formatNumber }}
-                    </span>
+      <template v-for="(c, k) in check.quality.checks">
+        <h5 :key="k">
+          <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
+          &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo;
+          {{ $t("fieldDetail.checked") }}: &nbsp;
+          <span class="bold">
+            {{ (c.passed_count + c.failed_count) | formatNumber }}
+          </span>
                     &nbsp;
-                    <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />
-                </h5>
-                <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
-            </template>
+          <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />
+        </h5>
+        <CheckDetailResultBox
+          :key="k + '-box'"
+          :check="c"
+          ok
+          failed
+        />
+      </template>
 
-            <ExampleBoxes
-                :example-sections="exampleSections"
-                :loaded="check.examples_filled"
-                :preview-disabled="loadingPreviewData"
-                @preview="preview"
+      <ExampleBoxes
+        :example-sections="exampleSections"
+        :loaded="check.examples_filled"
+        :preview-disabled="loadingPreviewData"
+        @preview="preview"
+      />
+    </template>
+
+    <template #preview>
+      <span v-if="previewMetaData">
+        <h5>{{ $t("preview.metadata") }}</h5>
+        <vue-json-pretty
+          :highlight-mouseover-node="true"
+          :data="previewMetaData"
+        />
+      </span>
+
+      <div class="divider">
+&nbsp;
+      </div>
+
+      <span v-if="loadingPreviewData">
+        <div class="result_box loader text-center">
+          <div class="spinner">
+            <b-spinner
+              variant="primary"
+              style="width: 4rem; height: 4rem"
+              type="grow"
+              class="spinner"
             />
-        </template>
+          </div>
+          {{ $t("loader.data") }}
+        </div>
+      </span>
 
-        <template #preview>
-            <span v-if="previewMetaData">
-                <h5>{{ $t("preview.metadata") }}</h5>
-                <vue-json-pretty :highlight-mouseover-node="true" :data="previewMetaData" />
-            </span>
-
-            <div class="divider">&nbsp;</div>
-
-            <span v-if="loadingPreviewData">
-                <div class="result_box loader text-center">
-                    <div class="spinner">
-                        <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
-                    </div>
-                    {{ $t("loader.data") }}
-                </div>
-            </span>
-
-            <span v-else-if="previewData">
-                <h5>{{ $t("preview.ocdsData") }}</h5>
-                <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="previewData" />
-            </span>
-        </template>
-    </dashboard-detail>
+      <span v-else-if="previewData">
+        <h5>{{ $t("preview.ocdsData") }}</h5>
+        <vue-json-pretty
+          :highlight-mouseover-node="true"
+          :deep="2"
+          :data="previewData"
+        />
+      </span>
+    </template>
+  </dashboard-detail>
 </template>
 
 <script>

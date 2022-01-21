@@ -1,105 +1,123 @@
 <template>
-    <span v-if="!loading">
-        <div class="picker_table">
-            <div class="row">
-                <div class="search_input col col-12 col-md-4">
-                    <SearchInput
-                        :placeholder="$t('dataset.search')"
-                        :preset="search"
-                        :on-update="search => $store.commit('setDatasetSearch', search)"
-                    />
-                </div>
-            </div>
-            <div class="thr row">
-                <div class="th col-4 align-self-center clickable" @click="sortBy('id')">
-                    <SortButtons
-                        :label="$t('dataset.name')"
-                        :active="sortedBy == 'name'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortBy('name')"
-                        :on-desc="() => sortBy('name', false)"
-                    />
-                </div>
-                <div class="th col-1 align-self-center clickable" @click="sortBy('size')">
-                    <SortButtons
-                        :label="$t('dataset.size')"
-                        :active="sortedBy == 'size'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortBy('size')"
-                        :on-desc="() => sortBy('size', false)"
-                    />
-                </div>
-                <div class="th col-1 align-self-center clickable" @click="sortBy('collection_id')">
-                    <SortButtons
-                        :label="$t('kingfisherId')"
-                        :active="sortedBy == 'collection_id'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortBy('collection_id')"
-                        :on-desc="() => sortBy('collection_id', false)"
-                    />
-                </div>
-                <!-- <div class="th col-1 align-self-center clickable" @click="sortBy('collection_id')">{{ $t('kingfisherId') }}</div> -->
-                <div class="th col-1 align-self-center clickable" @click="sortBy('phase')">
-                    <SortButtons
-                        :label="$t('dataset.phase')"
-                        :active="sortedBy == 'phase'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortBy('phase')"
-                        :on-desc="() => sortBy('phase', false)"
-                    />
-                </div>
-                <div class="th col align-self-center clickable" @click="sortBy('created')">
-                    <SortButtons
-                        :active="sortedBy == 'created'"
-                        :asc="isAscendingSorted"
-                        :on-asc="() => sortBy('created')"
-                        :on-desc="() => sortBy('created', false)"
-                    >
-                        <span class="created">{{ $t("created") }}</span>
-                        <br />
-                        <span class="modified">{{ $t("modified") }}</span>
-                    </SortButtons>
-                </div>
-                <div class="th col align-self-center text-left">{{ $t("dataset.timeVariance") }}</div>
-            </div>
-
-            <template v-for="(item, index) in datasets">
-                <DatasetPickerRow
-                    v-if="isSearched(item.name)"
-                    :key="index"
-                    :dataset="item"
-                    :depth="0"
-                    @dataset-filter="showFilter($event)"
-                    @dataset-report="showReport($event)"
-                />
-            </template>
+  <span v-if="!loading">
+    <div class="picker_table">
+      <div class="row">
+        <div class="search_input col col-12 col-md-4">
+          <SearchInput
+            :placeholder="$t('dataset.search')"
+            :preset="search"
+            :on-update="search => $store.commit('setDatasetSearch', search)"
+          />
         </div>
-        <b-modal
-            id="filter-modal"
-            ref="filter-modal"
-            size="lg"
-            hide-footer
-            :title="$t('datasetFilter.headline')"
-            static
-            lazy
+      </div>
+      <div class="thr row">
+        <div
+          class="th col-4 align-self-center clickable"
+          @click="sortBy('id')"
         >
-            <DatasetFilterModal :dataset="filteredDataset" />
-        </b-modal>
-        <b-modal
-            id="report-modal"
-            ref="report-modal"
-            size="lg"
-            hide-footer
-            :title="$t('datasetReport.headline')"
-            static
-            lazy
+          <SortButtons
+            :label="$t('dataset.name')"
+            :active="sortedBy == 'name'"
+            :asc="isAscendingSorted"
+            :on-asc="() => sortBy('name')"
+            :on-desc="() => sortBy('name', false)"
+          />
+        </div>
+        <div
+          class="th col-1 align-self-center clickable"
+          @click="sortBy('size')"
         >
-            <DatasetReportModal :dataset="reportDataset" @close="hideReportModal" />
-        </b-modal>
-    </span>
-    <span v-else>
-        <Loader />
-    </span>
+          <SortButtons
+            :label="$t('dataset.size')"
+            :active="sortedBy == 'size'"
+            :asc="isAscendingSorted"
+            :on-asc="() => sortBy('size')"
+            :on-desc="() => sortBy('size', false)"
+          />
+        </div>
+        <div
+          class="th col-1 align-self-center clickable"
+          @click="sortBy('collection_id')"
+        >
+          <SortButtons
+            :label="$t('kingfisherId')"
+            :active="sortedBy == 'collection_id'"
+            :asc="isAscendingSorted"
+            :on-asc="() => sortBy('collection_id')"
+            :on-desc="() => sortBy('collection_id', false)"
+          />
+        </div>
+        <!-- <div class="th col-1 align-self-center clickable" @click="sortBy('collection_id')">{{ $t('kingfisherId') }}</div> -->
+        <div
+          class="th col-1 align-self-center clickable"
+          @click="sortBy('phase')"
+        >
+          <SortButtons
+            :label="$t('dataset.phase')"
+            :active="sortedBy == 'phase'"
+            :asc="isAscendingSorted"
+            :on-asc="() => sortBy('phase')"
+            :on-desc="() => sortBy('phase', false)"
+          />
+        </div>
+        <div
+          class="th col align-self-center clickable"
+          @click="sortBy('created')"
+        >
+          <SortButtons
+            :active="sortedBy == 'created'"
+            :asc="isAscendingSorted"
+            :on-asc="() => sortBy('created')"
+            :on-desc="() => sortBy('created', false)"
+          >
+            <span class="created">{{ $t("created") }}</span>
+            <br>
+            <span class="modified">{{ $t("modified") }}</span>
+          </SortButtons>
+        </div>
+        <div class="th col align-self-center text-left">{{ $t("dataset.timeVariance") }}</div>
+      </div>
+
+      <template v-for="(item, index) in datasets">
+        <DatasetPickerRow
+          v-if="isSearched(item.name)"
+          :key="index"
+          :dataset="item"
+          :depth="0"
+          @dataset-filter="showFilter($event)"
+          @dataset-report="showReport($event)"
+        />
+      </template>
+    </div>
+    <b-modal
+      id="filter-modal"
+      ref="filter-modal"
+      size="lg"
+      hide-footer
+      :title="$t('datasetFilter.headline')"
+      static
+      lazy
+    >
+      <DatasetFilterModal :dataset="filteredDataset" />
+    </b-modal>
+    <b-modal
+      id="report-modal"
+      ref="report-modal"
+      size="lg"
+      hide-footer
+      :title="$t('datasetReport.headline')"
+      static
+      lazy
+    >
+      <DatasetReportModal
+        :dataset="reportDataset"
+        @close="hideReportModal"
+      />
+    </b-modal>
+  </span>
+  <span v-else>
+    <Loader />
+  </span>
 </template>
 
 <script>

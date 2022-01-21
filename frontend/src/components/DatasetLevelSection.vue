@@ -1,17 +1,23 @@
 <template>
-    <span v-if="loaded">
-        <h4 v-if="datasetLevelStats.length > 0">{{ $t("datasetLevel.sections." + section) }}</h4>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
-            <template v-for="(check, index) in datasetLevelStats">
-                <div :key="section + index" class="col mb-4">
-                    <DatasetLevelCheck :key="section + index" :check="check" />
-                </div>
-            </template>
+  <span v-if="loaded">
+    <h4 v-if="datasetLevelStats.length > 0">{{ $t("datasetLevel.sections." + section) }}</h4>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
+      <template v-for="(check, index) in datasetLevelStats">
+        <div
+          :key="section + index"
+          class="col mb-4"
+        >
+          <DatasetLevelCheck
+            :key="section + index"
+            :check="check"
+          />
         </div>
-    </span>
-    <span v-else>
-        <Loader />
-    </span>
+      </template>
+    </div>
+  </span>
+  <span v-else>
+    <Loader />
+  </span>
 </template>
 
 <script>

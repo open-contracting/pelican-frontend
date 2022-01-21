@@ -1,28 +1,40 @@
 <template>
-    <dashboard>
-        <h2>{{ $t("sections.time") }}</h2>
-        <div class="description" v-html="$t('timeLevel.description')" />
-        <b-row class="collection_header" align-h="between">
-            <b-col class="text-left">
-                <h4>{{ $t("timeLevel.subheadline") }}</h4>
-            </b-col>
-            <b-col class="text-right">
-                <FilterDropdown
-                    :filter-names="filterNames"
-                    :start-index="filterIndex"
-                    @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
-                />
-            </b-col>
-        </b-row>
-        <div v-if="loaded" class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3">
-            <template v-for="(check, index) in timeVarianceLevelStats">
-                <div :key="index" class="col mb-4">
-                    <TimeVarianceLevelCheck :check="check" />
-                </div>
-            </template>
+  <dashboard>
+    <h2>{{ $t("sections.time") }}</h2>
+    <div
+      class="description"
+      v-html="$t('timeLevel.description')"
+    />
+    <b-row
+      class="collection_header"
+      align-h="between"
+    >
+      <b-col class="text-left">
+        <h4>{{ $t("timeLevel.subheadline") }}</h4>
+      </b-col>
+      <b-col class="text-right">
+        <FilterDropdown
+          :filter-names="filterNames"
+          :start-index="filterIndex"
+          @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
+        />
+      </b-col>
+    </b-row>
+    <div
+      v-if="loaded"
+      class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3"
+    >
+      <template v-for="(check, index) in timeVarianceLevelStats">
+        <div
+          :key="index"
+          class="col mb-4"
+        >
+          <TimeVarianceLevelCheck :check="check" />
         </div>
-        <Loader v-else />
-    </dashboard>
+      </template>
+    </div>
+    <Loader v-else />
+  </dashboard>
 </template>
 
 <script>

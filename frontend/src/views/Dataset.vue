@@ -1,23 +1,33 @@
 <template>
-    <dashboard>
-        <h2>{{ $t("sections.dataset") }}</h2>
-        <div class="description" v-html="$t('datasetLevel.description')" />
-        <b-row class="collection_header" align-h="between">
-            <b-col class="text-left">
-                <h4>{{ $t("datasetLevel.subheadline") }}</h4>
-            </b-col>
-            <b-col class="text-right">
-                <FilterDropdown
-                    :filter-names="filterNames"
-                    :start-index="filterIndex"
-                    @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
-                />
-            </b-col>
-        </b-row>
-        <template v-for="(section, index) in sections">
-            <DatasetLevelSection :key="index" :section="section" :filter="filters[filterIndex]" />
-        </template>
-    </dashboard>
+  <dashboard>
+    <h2>{{ $t("sections.dataset") }}</h2>
+    <div
+      class="description"
+      v-html="$t('datasetLevel.description')"
+    />
+    <b-row
+      class="collection_header"
+      align-h="between"
+    >
+      <b-col class="text-left">
+        <h4>{{ $t("datasetLevel.subheadline") }}</h4>
+      </b-col>
+      <b-col class="text-right">
+        <FilterDropdown
+          :filter-names="filterNames"
+          :start-index="filterIndex"
+          @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
+        />
+      </b-col>
+    </b-row>
+    <template v-for="(section, index) in sections">
+      <DatasetLevelSection
+        :key="index"
+        :section="section"
+        :filter="filters[filterIndex]"
+      />
+    </template>
+  </dashboard>
 </template>
 
 <script>

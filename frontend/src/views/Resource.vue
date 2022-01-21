@@ -1,37 +1,61 @@
 <template>
-    <dashboard>
-        <h2>{{ $t("sections.resource") }}</h2>
-        <div class="description" v-html="$t('resourceLevel.description')" />
-        <span v-if="loaded">
-            <b-row class="action_bar">
-                <b-col class="text-left">
-                    <h4>{{ $t("resourceLevel.subheadline") }}</h4>
-                </b-col>
-                <b-col class="text-right">
-                    <FilterDropdown
-                        :filter-names="filterNames"
-                        :start-index="filterIndex"
-                        @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
-                    />
-                </b-col>
-            </b-row>
-            <div class="resource_result_box">
-                <div class="thr row">
-                    <div class="th col-9 col-lg-5" scope="col">{{ $t("resourceLevel.check") }}</div>
-                    <div class="th col-1 text-right" scope="col">{{ $t("resourceLevel.ok") }}</div>
-                    <div class="th col-1 text-right" scope="col">{{ $t("resourceLevel.failed") }}</div>
-                    <div class="th col-1 text-right" scope="col">{{ $t("resourceLevel.na") }}</div>
-                    <div class="th col-4 d-none d-lg-block" scope="col">&nbsp;</div>
-                </div>
-                <span v-for="(name, index) in sections" :key="index">
-                    <ResourceLevelList :section="name" :filter="filters[filterIndex]" />
-                </span>
-            </div>
+  <dashboard>
+    <h2>{{ $t("sections.resource") }}</h2>
+    <div
+      class="description"
+      v-html="$t('resourceLevel.description')"
+    />
+    <span v-if="loaded">
+      <b-row class="action_bar">
+        <b-col class="text-left">
+          <h4>{{ $t("resourceLevel.subheadline") }}</h4>
+        </b-col>
+        <b-col class="text-right">
+          <FilterDropdown
+            :filter-names="filterNames"
+            :start-index="filterIndex"
+            @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
+          />
+        </b-col>
+      </b-row>
+      <div class="resource_result_box">
+        <div class="thr row">
+          <div
+            class="th col-9 col-lg-5"
+            scope="col"
+          >{{ $t("resourceLevel.check") }}</div>
+          <div
+            class="th col-1 text-right"
+            scope="col"
+          >{{ $t("resourceLevel.ok") }}</div>
+          <div
+            class="th col-1 text-right"
+            scope="col"
+          >{{ $t("resourceLevel.failed") }}</div>
+          <div
+            class="th col-1 text-right"
+            scope="col"
+          >{{ $t("resourceLevel.na") }}</div>
+          <div
+            class="th col-4 d-none d-lg-block"
+            scope="col"
+          >&nbsp;</div>
+        </div>
+        <span
+          v-for="(name, index) in sections"
+          :key="index"
+        >
+          <ResourceLevelList
+            :section="name"
+            :filter="filters[filterIndex]"
+          />
         </span>
-        <span v-else>
-            <Loader />
-        </span>
-    </dashboard>
+      </div>
+    </span>
+    <span v-else>
+      <Loader />
+    </span>
+  </dashboard>
 </template>
 
 <script>

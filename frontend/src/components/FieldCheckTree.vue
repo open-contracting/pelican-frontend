@@ -1,25 +1,35 @@
 <template>
-    <div class="table">
-        <div class="thr row">
-            <div class="th col col-4">
-                <div class="d-flex align-items-center">
-                    <div>{{ $t("field.table.head.object") }}</div>
-                </div>
-            </div>
-            <div class="th col col-4 justify-content-center d-flex" @click="sortByCoverage()">
-                <div class="d-flex align-items-center">
-                    <span>{{ $t("field.table.head.coverage") }}</span>
-                </div>
-            </div>
-            <div class="th col col-4 justify-content-center d-flex" @click="sortByQuality()">
-                <div class="d-flex align-items-center">
-                    <span>{{ $t("field.table.head.quality") }}</span>
-                </div>
-            </div>
+  <div class="table">
+    <div class="thr row">
+      <div class="th col col-4">
+        <div class="d-flex align-items-center">
+          <div>{{ $t("field.table.head.object") }}</div>
         </div>
-
-        <FieldCheckTreeNode v-for="n in tree" :key="n._check.path" :data="n" />
+      </div>
+      <div
+        class="th col col-4 justify-content-center d-flex"
+        @click="sortByCoverage()"
+      >
+        <div class="d-flex align-items-center">
+          <span>{{ $t("field.table.head.coverage") }}</span>
+        </div>
+      </div>
+      <div
+        class="th col col-4 justify-content-center d-flex"
+        @click="sortByQuality()"
+      >
+        <div class="d-flex align-items-center">
+          <span>{{ $t("field.table.head.quality") }}</span>
+        </div>
+      </div>
     </div>
+
+    <FieldCheckTreeNode
+      v-for="n in tree"
+      :key="n._check.path"
+      :data="n"
+    />
+  </div>
 </template>
 
 <script>

@@ -1,8 +1,11 @@
 <template>
-    <div id="app" class="container-fluid">
-        <router-view />
-        <NavigationContextMenu />
-    </div>
+  <div
+    id="app"
+    class="container-fluid"
+  >
+    <router-view />
+    <NavigationContextMenu />
+  </div>
 </template>
 
 <script>

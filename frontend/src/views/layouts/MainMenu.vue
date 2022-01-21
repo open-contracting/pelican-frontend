@@ -1,122 +1,175 @@
 <template>
-    <div id="sidebar" class="text-center">
-        <div class="row">
-            <div id="sidebar_envelope" class="text-center">
-                <img id="logo" src="@/assets/ocp_logo.svg" />
-                <b-nav class="main_nav text-left">
-                    <b-nav-item
-                        id="home_link"
-                        to="/"
-                        @contextmenu.prevent="
-                            $root.$emit('navigationContextMenu', { event: $event, routerArguments: '/' })
-                        "
-                    >
-                        <span class="menu_icon_small">
-                            <font-awesome-icon icon="cogs" />
-                        </span>
-                        {{ $t("sections.home").toUpperCase() }}
-                    </b-nav-item>
+  <div
+    id="sidebar"
+    class="text-center"
+  >
+    <div class="row">
+      <div
+        id="sidebar_envelope"
+        class="text-center"
+      >
+        <img
+          id="logo"
+          src="@/assets/ocp_logo.svg"
+        >
+        <b-nav class="main_nav text-left">
+          <b-nav-item
+            id="home_link"
+            to="/"
+            @contextmenu.prevent="
+              $root.$emit('navigationContextMenu', { event: $event, routerArguments: '/' })
+            "
+          >
+            <span class="menu_icon_small">
+              <font-awesome-icon icon="cogs" />
+            </span>
+            {{ $t("sections.home").toUpperCase() }}
+          </b-nav-item>
 
-                    <b-nav-item
-                        :to="{ name: 'overview', params: { datasetId: datasetId } }"
-                        @contextmenu.prevent="
-                            $root.$emit('navigationContextMenu', {
-                                event: $event,
-                                routerArguments: { name: 'overview', params: { datasetId: datasetId } }
-                            })
-                        "
-                    >
-                        <span class="menu_icon_small">
-                            <font-awesome-icon icon="home" />
-                        </span>
-                        {{ $t("sections.overview").toUpperCase() }}
-                    </b-nav-item>
+          <b-nav-item
+            :to="{ name: 'overview', params: { datasetId: datasetId } }"
+            @contextmenu.prevent="
+              $root.$emit('navigationContextMenu', {
+                event: $event,
+                routerArguments: { name: 'overview', params: { datasetId: datasetId } }
+              })
+            "
+          >
+            <span class="menu_icon_small">
+              <font-awesome-icon icon="home" />
+            </span>
+            {{ $t("sections.overview").toUpperCase() }}
+          </b-nav-item>
 
-                    <b-nav-item
-                        :to="{ name: 'field', params: { datasetId: datasetId } }"
-                        :disabled="!fieldLoaded"
-                        @contextmenu.prevent="
-                            fieldLoaded
-                                ? $root.$emit('navigationContextMenu', {
-                                      event: $event,
-                                      routerArguments: { name: 'field', params: { datasetId: datasetId } }
-                                  })
-                                : null
-                        "
-                    >
-                        <span v-if="fieldLoaded" class="menu_icon_small">
-                            <font-awesome-icon icon="sliders-h" />
-                        </span>
-                        <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner" />
-                        </span>
-                        {{ $t("sections.field").toUpperCase() }}
-                    </b-nav-item>
+          <b-nav-item
+            :to="{ name: 'field', params: { datasetId: datasetId } }"
+            :disabled="!fieldLoaded"
+            @contextmenu.prevent="
+              fieldLoaded
+                ? $root.$emit('navigationContextMenu', {
+                  event: $event,
+                  routerArguments: { name: 'field', params: { datasetId: datasetId } }
+                })
+                : null
+            "
+          >
+            <span
+              v-if="fieldLoaded"
+              class="menu_icon_small"
+            >
+              <font-awesome-icon icon="sliders-h" />
+            </span>
+            <span
+              v-else
+              class="menu_icon_spinner"
+            >
+              <b-spinner
+                variant="default"
+                small
+                type="grow"
+                class="spinner"
+              />
+            </span>
+            {{ $t("sections.field").toUpperCase() }}
+          </b-nav-item>
 
-                    <b-nav-item
-                        :to="{ name: 'resource', params: { datasetId: datasetId } }"
-                        :disabled="!resourceLoaded"
-                        @contextmenu.prevent="
-                            resourceLoaded
-                                ? $root.$emit('navigationContextMenu', {
-                                      event: $event,
-                                      routerArguments: { name: 'resource', params: { datasetId: datasetId } }
-                                  })
-                                : null
-                        "
-                    >
-                        <span v-if="resourceLoaded" class="menu_icon_small">
-                            <font-awesome-icon icon="list-alt" />
-                        </span>
-                        <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner" />
-                        </span>
-                        {{ $t("sections.resource").toUpperCase() }}
-                    </b-nav-item>
+          <b-nav-item
+            :to="{ name: 'resource', params: { datasetId: datasetId } }"
+            :disabled="!resourceLoaded"
+            @contextmenu.prevent="
+              resourceLoaded
+                ? $root.$emit('navigationContextMenu', {
+                  event: $event,
+                  routerArguments: { name: 'resource', params: { datasetId: datasetId } }
+                })
+                : null
+            "
+          >
+            <span
+              v-if="resourceLoaded"
+              class="menu_icon_small"
+            >
+              <font-awesome-icon icon="list-alt" />
+            </span>
+            <span
+              v-else
+              class="menu_icon_spinner"
+            >
+              <b-spinner
+                variant="default"
+                small
+                type="grow"
+                class="spinner"
+              />
+            </span>
+            {{ $t("sections.resource").toUpperCase() }}
+          </b-nav-item>
 
-                    <b-nav-item
-                        :to="{ name: 'dataset', params: { datasetId: datasetId } }"
-                        :disabled="!datasetLoaded"
-                        @contextmenu.prevent="
-                            datasetLoaded
-                                ? $root.$emit('navigationContextMenu', {
-                                      event: $event,
-                                      routerArguments: { name: 'dataset', params: { datasetId: datasetId } }
-                                  })
-                                : null
-                        "
-                    >
-                        <span v-if="datasetLoaded" class="menu_icon_small">
-                            <font-awesome-icon icon="tasks" />
-                        </span>
-                        <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner" />
-                        </span>
-                        {{ $t("sections.dataset").toUpperCase() }}
-                    </b-nav-item>
+          <b-nav-item
+            :to="{ name: 'dataset', params: { datasetId: datasetId } }"
+            :disabled="!datasetLoaded"
+            @contextmenu.prevent="
+              datasetLoaded
+                ? $root.$emit('navigationContextMenu', {
+                  event: $event,
+                  routerArguments: { name: 'dataset', params: { datasetId: datasetId } }
+                })
+                : null
+            "
+          >
+            <span
+              v-if="datasetLoaded"
+              class="menu_icon_small"
+            >
+              <font-awesome-icon icon="tasks" />
+            </span>
+            <span
+              v-else
+              class="menu_icon_spinner"
+            >
+              <b-spinner
+                variant="default"
+                small
+                type="grow"
+                class="spinner"
+              />
+            </span>
+            {{ $t("sections.dataset").toUpperCase() }}
+          </b-nav-item>
 
-                    <b-nav-item
-                        v-if="showTimeVariance"
-                        :to="{ name: 'time', params: { datasetId: datasetId } }"
-                        @contextmenu.prevent="
-                            $root.$emit('navigationContextMenu', {
-                                event: $event,
-                                routerArguments: { name: 'time', params: { datasetId: datasetId } }
-                            })
-                        "
-                    >
-                        <span v-if="timeVarianceLoaded" class="menu_icon_small">
-                            <font-awesome-icon icon="history" />
-                        </span>
-                        <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner" />
-                        </span>
-                        {{ $t("sections.time").toUpperCase() }}
-                    </b-nav-item>
-                </b-nav>
-            </div>
-        </div>
+          <b-nav-item
+            v-if="showTimeVariance"
+            :to="{ name: 'time', params: { datasetId: datasetId } }"
+            @contextmenu.prevent="
+              $root.$emit('navigationContextMenu', {
+                event: $event,
+                routerArguments: { name: 'time', params: { datasetId: datasetId } }
+              })
+            "
+          >
+            <span
+              v-if="timeVarianceLoaded"
+              class="menu_icon_small"
+            >
+              <font-awesome-icon icon="history" />
+            </span>
+            <span
+              v-else
+              class="menu_icon_spinner"
+            >
+              <b-spinner
+                variant="default"
+                small
+                type="grow"
+                class="spinner"
+              />
+            </span>
+            {{ $t("sections.time").toUpperCase() }}
+          </b-nav-item>
+        </b-nav>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>

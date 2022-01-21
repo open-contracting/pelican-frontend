@@ -1,30 +1,52 @@
 <template>
-    <fragment>
-        <FieldCheckTableRow
-            :key="path"
-            :check="check"
-            :show-stats="filter(data._check)"
-            :class="{ hidden: hide || !isSearched(data) }"
+  <fragment>
+    <FieldCheckTableRow
+      :key="path"
+      :check="check"
+      :show-stats="filter(data._check)"
+      :class="{ hidden: hide || !isSearched(data) }"
+    >
+      <div class="d-flex flex-row align-items-center">
+        <div :class="'indent-' + depth" />
+        <div
+          v-if="isExpandable"
+          class="switcher text-center"
+          @click.stop="expanded = !expanded"
         >
-            <div class="d-flex flex-row align-items-center">
-                <div :class="'indent-' + depth" />
-                <div v-if="isExpandable" class="switcher text-center" @click.stop="expanded = !expanded">
-                    <template v-if="isExpandable">
-                        <font-awesome-icon v-if="!expanded" icon="chevron-right" />
-                        <font-awesome-icon v-else icon="chevron-down" />
-                    </template>
-                </div>
-                <div v-else class="switcher" />
-                <div class="name flex-fill" :title="path" v-html="highlightSearchLast(path)" />
-            </div>
-        </FieldCheckTableRow>
+          <template v-if="isExpandable">
+            <font-awesome-icon
+              v-if="!expanded"
+              icon="chevron-right"
+            />
+            <font-awesome-icon
+              v-else
+              icon="chevron-down"
+            />
+          </template>
+        </div>
+        <div
+          v-else
+          class="switcher"
+        />
+        <div
+          class="name flex-fill"
+          :title="path"
+          v-html="highlightSearchLast(path)"
+        />
+      </div>
+    </FieldCheckTableRow>
 
-        <template v-if="hasChildren">
-            <template v-for="n in children">
-                <tree-node :key="n._path" :data="n" :depth="depth + 1" :hide="!expanded" />
-            </template>
-        </template>
-    </fragment>
+    <template v-if="hasChildren">
+      <template v-for="n in children">
+        <tree-node
+          :key="n._path"
+          :data="n"
+          :depth="depth + 1"
+          :hide="!expanded"
+        />
+      </template>
+    </template>
+  </fragment>
 </template>
 
 <script>

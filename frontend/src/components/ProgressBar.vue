@@ -1,16 +1,16 @@
 <template>
-    <div class="progress_bar">
-        <template v-for="(b, i) in allBars">
-            <div
-                v-if="b.value"
-                :key="i"
-                :class="['inner', b.class]"
-                :style="{ width: b.value + '%', 'background-color': b.color }"
-            >
+  <div class="progress_bar">
+    <template v-for="(b, i) in allBars">
+      <div
+        v-if="b.value"
+        :key="i"
+        :class="['inner', b.class]"
+        :style="{ width: b.value + '%', 'background-color': b.color }"
+      >
                 &nbsp;
-            </div>
-        </template>
-    </div>
+      </div>
+    </template>
+  </div>
 </template>
 
 <script>

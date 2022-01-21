@@ -1,13 +1,19 @@
 <template>
-    <div class="d-flex align-items-center">
-        <div>
-            <slot>{{ label }}</slot>
-        </div>
-        <div class="sort_buttons">
-            <div :class="['asc', { active: active && asc }]" @click.stop="onAsc()" />
-            <div :class="['desc', { active: active && !asc }]" @click.stop="onDesc()" />
-        </div>
+  <div class="d-flex align-items-center">
+    <div>
+      <slot>{{ label }}</slot>
     </div>
+    <div class="sort_buttons">
+      <div
+        :class="['asc', { active: active && asc }]"
+        @click.stop="onAsc()"
+      />
+      <div
+        :class="['desc', { active: active && !asc }]"
+        @click.stop="onDesc()"
+      />
+    </div>
+  </div>
 </template>
 
 <script>

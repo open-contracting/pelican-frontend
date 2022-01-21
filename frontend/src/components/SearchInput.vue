@@ -1,17 +1,24 @@
 <template>
-    <b-input-group class="search_input">
-        <template #prepend>
-            <b-input-group-text>
-                <font-awesome-icon icon="search" />
-            </b-input-group-text>
-        </template>
-        <b-form-input v-model="search" :placeholder="placeholder" />
-        <template #append>
-            <b-button v-if="search" :disabled="!search" @click="search = null">
-                <font-awesome-icon :icon="['fas', 'times']" />
-            </b-button>
-        </template>
-    </b-input-group>
+  <b-input-group class="search_input">
+    <template #prepend>
+      <b-input-group-text>
+        <font-awesome-icon icon="search" />
+      </b-input-group-text>
+    </template>
+    <b-form-input
+      v-model="search"
+      :placeholder="placeholder"
+    />
+    <template #append>
+      <b-button
+        v-if="search"
+        :disabled="!search"
+        @click="search = null"
+      >
+        <font-awesome-icon :icon="['fas', 'times']" />
+      </b-button>
+    </template>
+  </b-input-group>
 </template>
 
 <script>

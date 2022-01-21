@@ -1,1 +1,3 @@
 dist
+# .vue files are formatted by eslint.
+*.vue

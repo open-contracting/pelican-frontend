@@ -1,8 +1,12 @@
 <template>
-    <div v-if="loaded">
-        <!-- <h5>{{ $t("extension.metadata") }}</h5> -->
-        <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="extensionData" />
-    </div>
+  <div v-if="loaded">
+    <!-- <h5>{{ $t("extension.metadata") }}</h5> -->
+    <vue-json-pretty
+      :highlight-mouseover-node="true"
+      :deep="2"
+      :data="extensionData"
+    />
+  </div>
 </template>
 
 <script>

@@ -1,230 +1,360 @@
 <template>
-    <span class="just_holder">
-        <Loader v-if="isSubmitting" />
-        <span v-if="submitStatus != null">
-            <span v-if="submitStatus == 'ok' && !failedTags">
-                <b-alert class="submit-result" variant="success" show>
-                    <span>
-                        {{ $t("datasetReport.status.ok") }}
-                    </span>
-                </b-alert>
-                <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:&nbsp;</span>
-                <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
-                    {{ "https://docs.google.com/document/d/" + submitData.file_id }}
-                </a>
-                <b-row class="buttons">
-                    <b-col>
-                        <button class="variant-success btn-success" href="#" @click.stop.prevent="retry">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
-                            {{ $t("tryAgain") }}
-                        </button>
-                    </b-col>
-                    <b-col class="right-align">
-                        <button class="variant-success btn-success" href="#" @click.stop.prevent="$emit('close')">
-                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
-                            {{ $t("close") }}
-                        </button>
-                    </b-col>
-                </b-row>
-            </span>
-            <span v-if="submitStatus == 'ok' && failedTags">
-                <b-alert class="submit-result" variant="warning" show>
-                    <span>
-                        {{ $t("datasetReport.status.warning") }}
-                    </span>
-                </b-alert>
+  <span class="just_holder">
+    <Loader v-if="isSubmitting" />
+    <span v-if="submitStatus != null">
+      <span v-if="submitStatus == 'ok' && !failedTags">
+        <b-alert
+          class="submit-result"
+          variant="success"
+          show
+        >
+          <span>
+            {{ $t("datasetReport.status.ok") }}
+          </span>
+        </b-alert>
+        <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:&nbsp;</span>
+        <a
+          :href="'https://docs.google.com/document/d/' + submitData.file_id"
+          target="_blank"
+        >
+          {{ "https://docs.google.com/document/d/" + submitData.file_id }}
+        </a>
+        <b-row class="buttons">
+          <b-col>
+            <button
+              class="variant-success btn-success"
+              href="#"
+              @click.stop.prevent="retry"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'redo-alt']"
+                class="icon"
+              />
+              {{ $t("tryAgain") }}
+            </button>
+          </b-col>
+          <b-col class="right-align">
+            <button
+              class="variant-success btn-success"
+              href="#"
+              @click.stop.prevent="$emit('close')"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'window-close']"
+                class="icon"
+              />
+              {{ $t("close") }}
+            </button>
+          </b-col>
+        </b-row>
+      </span>
+      <span v-if="submitStatus == 'ok' && failedTags">
+        <b-alert
+          class="submit-result"
+          variant="warning"
+          show
+        >
+          <span>
+            {{ $t("datasetReport.status.warning") }}
+          </span>
+        </b-alert>
 
-                <div class="margin_bottom">
-                    <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
-                    <a :href="'https://docs.google.com/document/d/' + submitData.file_id" target="_blank">
-                        {{ "https://docs.google.com/document/d/" + submitData.file_id }}&nbsp;
-                    </a>
-                </div>
-            </span>
-            <!-- TODO -->
-            <span v-if="submitStatus == 'template_error'">
-                <b-alert class="submit-result" variant="danger" show>
-                    <span>{{ $t("datasetReport.status.templateError") }}</span>
-                </b-alert>
-                <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
-                <div v-for="(error, index) in submitData" :key="index">
-                    <div>reason: {{ error.reason }}</div>
-                    <div>full tag: {{ error.full_tag }}</div>
-                    <div>
-                        <span>link: </span>
-                        <a :href="'https://docs.google.com/document/d/' + error.template_id" target="_blank">
-                            {{ "https://docs.google.com/document/d/" + error.template_id }}
-                        </a>
-                    </div>
-                </div>
-                <b-row class="buttons">
-                    <b-col>
-                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="retry">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
-                            {{ $t("tryAgain") }}
-                        </button>
-                    </b-col>
-                    <b-col class="right-align">
-                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="$emit('close')">
-                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
-                            {{ $t("close") }}
-                        </button>
-                    </b-col>
-                </b-row>
-            </span>
-            <span v-if="submitStatus == 'report_error'">
-                <b-alert class="submit-result" variant="danger" show>
-                    <span>{{ $t("datasetReport.status.reportError") }}</span>
-                </b-alert>
+        <div class="margin_bottom">
+          <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
+          <a
+            :href="'https://docs.google.com/document/d/' + submitData.file_id"
+            target="_blank"
+          >
+            {{ "https://docs.google.com/document/d/" + submitData.file_id }}&nbsp;
+          </a>
+        </div>
+      </span>
+      <!-- TODO -->
+      <span v-if="submitStatus == 'template_error'">
+        <b-alert
+          class="submit-result"
+          variant="danger"
+          show
+        >
+          <span>{{ $t("datasetReport.status.templateError") }}</span>
+        </b-alert>
+        <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
+        <div
+          v-for="(error, index) in submitData"
+          :key="index"
+        >
+          <div>reason: {{ error.reason }}</div>
+          <div>full tag: {{ error.full_tag }}</div>
+          <div>
+            <span>link: </span>
+            <a
+              :href="'https://docs.google.com/document/d/' + error.template_id"
+              target="_blank"
+            >
+              {{ "https://docs.google.com/document/d/" + error.template_id }}
+            </a>
+          </div>
+        </div>
+        <b-row class="buttons">
+          <b-col>
+            <button
+              class="variant-danger btn-danger"
+              href="#"
+              @click.stop.prevent="retry"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'redo-alt']"
+                class="icon"
+              />
+              {{ $t("tryAgain") }}
+            </button>
+          </b-col>
+          <b-col class="right-align">
+            <button
+              class="variant-danger btn-danger"
+              href="#"
+              @click.stop.prevent="$emit('close')"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'window-close']"
+                class="icon"
+              />
+              {{ $t("close") }}
+            </button>
+          </b-col>
+        </b-row>
+      </span>
+      <span v-if="submitStatus == 'report_error'">
+        <b-alert
+          class="submit-result"
+          variant="danger"
+          show
+        >
+          <span>{{ $t("datasetReport.status.reportError") }}</span>
+        </b-alert>
 
-                <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
-                <b-row class="buttons">
-                    <b-col>
-                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="retry">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
-                            {{ $t("tryAgain") }}
-                        </button>
-                    </b-col>
-                    <b-col class="right-align">
-                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="$emit('close')">
-                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
-                            {{ $t("close") }}
-                        </button>
-                    </b-col>
-                </b-row>
-            </span>
-            <span v-if="submitStatus == 'server_error'">
-                <b-alert class="submit-result" variant="danger" show>
-                    <b-row>
-                        <b-col class="width">
-                            {{ $t("datasetReport.status.serverError") }}
-                        </b-col>
-                    </b-row>
-                </b-alert>
-                <b-row>
-                    <b-col>
-                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="retry">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
-                            {{ $t("tryAgain") }}
-                        </button>
-                    </b-col>
-                    <b-col class="right-align">
-                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="$emit('close')">
-                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
-                            {{ $t("close") }}
-                        </button>
-                    </b-col>
-                </b-row>
-            </span>
-            <span v-if="failedTags != [] && failedTags != null">
-                <span class="info_prefix">{{ $t("datasetReport.warningList") }}:&nbsp;</span>
-                <ul>
-                    <li v-for="(tag, index) in failedTags" :key="index">
-                        {{ tag }}
-                    </li>
-                </ul>
-                <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}&nbsp;</span>
-                <b-row class="buttons">
-                    <b-col>
-                        <button class="variant-warning btn-warning" href="#" @click.stop.prevent="retry">
-                            <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
-                            {{ $t("tryAgain") }}
-                        </button>
-                    </b-col>
-                    <b-col class="right-align">
-                        <button class="variant-warning btn-warning" href="#" @click.stop.prevent="$emit('close')">
-                            <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
-                            {{ $t("close") }}
-                        </button>
-                    </b-col>
-                </b-row>
-            </span>
-        </span>
-        <form v-if="!isSubmitting && submitStatus == null" class="modal_box align-items-center">
-            <div class="form-group row section_row">
-                <label class="col-3 col-form-label"
-                    ><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label
-                >
-                <div class="col-9">
-                    <b-form-input
-                        id="documentIdInput"
-                        v-model="documentId"
-                        spellcheck="false"
-                        autocomplete="off"
-                        class="base_input"
-                        lazy-formatter
-                        :formatter="fileIdFormatter"
-                    />
-                    <small class="form-text text-muted" v-html="$t('datasetReport.documentIdTooltip')" />
-                </div>
-            </div>
-            <div class="form-group row section_row">
-                <label class="col-3 col-form-label"
-                    ><div class="label-padding">{{ $t("datasetReport.folderId") }}</div></label
-                >
-                <div class="col-9">
-                    <b-form-input
-                        id="folderIdInput"
-                        v-model="folderId"
-                        spellcheck="false"
-                        autocomplete="off"
-                        class="base_input"
-                        lazy-formatter
-                        :formatter="fileIdFormatter"
-                    />
-                    <small class="form-text text-muted" v-html="$t('datasetReport.folderIdTooltip')" />
-                </div>
-            </div>
-            <div class="form-group row section_row">
-                <label class="col-3 col-form-label"
-                    ><div class="label-padding">{{ $t("datasetReport.reportName") }}</div></label
-                >
-                <div class="col-9">
-                    <b-form-input
-                        id="reportNameInput"
-                        v-model="reportName"
-                        spellcheck="false"
-                        autocomplete="off"
-                        class="base_input"
-                    />
-                    <small class="form-text text-muted" v-html="$t('datasetReport.reportNameTooltip')" />
-                </div>
-            </div>
-            <div class="form-group row section_row">
-                <label class="col-3 col-form-label"
-                    ><div id="label-padding" class="label-padding">
-                        {{ $t("datasetReport.reportLanguage") }}
-                    </div></label
-                >
-                <div class="col-9 top-margin">
-                    <b-row>
-                        <b-col v-for="option in options" :key="option.value" class="col-6">
-                            <b-form-radio v-model="reportLanguage" :value="option.value">
-                                <div class="top-margin">
-                                    {{ option.text }}
-                                </div>
-                            </b-form-radio>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col class="col-12">
-                            <small class="form-text text-muted" v-html="$t('datasetReport.reportLanguageTooltip')" />
-                        </b-col>
-                    </b-row>
-                </div>
-            </div>
-            <div class="text-center">
-                <button
-                    type="button"
-                    class="btn btn-primary submit_button"
-                    :disabled="dataset == null || !documentId || !folderId"
-                    @click="createDatasetReport"
-                >
-                    {{ $t("datasetReport.submit") }}
-                </button>
-            </div>
-        </form>
+        <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
+        <b-row class="buttons">
+          <b-col>
+            <button
+              class="variant-danger btn-danger"
+              href="#"
+              @click.stop.prevent="retry"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'redo-alt']"
+                class="icon"
+              />
+              {{ $t("tryAgain") }}
+            </button>
+          </b-col>
+          <b-col class="right-align">
+            <button
+              class="variant-danger btn-danger"
+              href="#"
+              @click.stop.prevent="$emit('close')"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'window-close']"
+                class="icon"
+              />
+              {{ $t("close") }}
+            </button>
+          </b-col>
+        </b-row>
+      </span>
+      <span v-if="submitStatus == 'server_error'">
+        <b-alert
+          class="submit-result"
+          variant="danger"
+          show
+        >
+          <b-row>
+            <b-col class="width">
+              {{ $t("datasetReport.status.serverError") }}
+            </b-col>
+          </b-row>
+        </b-alert>
+        <b-row>
+          <b-col>
+            <button
+              class="variant-danger btn-danger"
+              href="#"
+              @click.stop.prevent="retry"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'redo-alt']"
+                class="icon"
+              />
+              {{ $t("tryAgain") }}
+            </button>
+          </b-col>
+          <b-col class="right-align">
+            <button
+              class="variant-danger btn-danger"
+              href="#"
+              @click.stop.prevent="$emit('close')"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'window-close']"
+                class="icon"
+              />
+              {{ $t("close") }}
+            </button>
+          </b-col>
+        </b-row>
+      </span>
+      <span v-if="failedTags != [] && failedTags != null">
+        <span class="info_prefix">{{ $t("datasetReport.warningList") }}:&nbsp;</span>
+        <ul>
+          <li
+            v-for="(tag, index) in failedTags"
+            :key="index"
+          >
+            {{ tag }}
+          </li>
+        </ul>
+        <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}&nbsp;</span>
+        <b-row class="buttons">
+          <b-col>
+            <button
+              class="variant-warning btn-warning"
+              href="#"
+              @click.stop.prevent="retry"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'redo-alt']"
+                class="icon"
+              />
+              {{ $t("tryAgain") }}
+            </button>
+          </b-col>
+          <b-col class="right-align">
+            <button
+              class="variant-warning btn-warning"
+              href="#"
+              @click.stop.prevent="$emit('close')"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'window-close']"
+                class="icon"
+              />
+              {{ $t("close") }}
+            </button>
+          </b-col>
+        </b-row>
+      </span>
     </span>
+    <form
+      v-if="!isSubmitting && submitStatus == null"
+      class="modal_box align-items-center"
+    >
+      <div class="form-group row section_row">
+        <label
+          class="col-3 col-form-label"
+        ><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label>
+        <div class="col-9">
+          <b-form-input
+            id="documentIdInput"
+            v-model="documentId"
+            spellcheck="false"
+            autocomplete="off"
+            class="base_input"
+            lazy-formatter
+            :formatter="fileIdFormatter"
+          />
+          <small
+            class="form-text text-muted"
+            v-html="$t('datasetReport.documentIdTooltip')"
+          />
+        </div>
+      </div>
+      <div class="form-group row section_row">
+        <label
+          class="col-3 col-form-label"
+        ><div class="label-padding">{{ $t("datasetReport.folderId") }}</div></label>
+        <div class="col-9">
+          <b-form-input
+            id="folderIdInput"
+            v-model="folderId"
+            spellcheck="false"
+            autocomplete="off"
+            class="base_input"
+            lazy-formatter
+            :formatter="fileIdFormatter"
+          />
+          <small
+            class="form-text text-muted"
+            v-html="$t('datasetReport.folderIdTooltip')"
+          />
+        </div>
+      </div>
+      <div class="form-group row section_row">
+        <label
+          class="col-3 col-form-label"
+        ><div class="label-padding">{{ $t("datasetReport.reportName") }}</div></label>
+        <div class="col-9">
+          <b-form-input
+            id="reportNameInput"
+            v-model="reportName"
+            spellcheck="false"
+            autocomplete="off"
+            class="base_input"
+          />
+          <small
+            class="form-text text-muted"
+            v-html="$t('datasetReport.reportNameTooltip')"
+          />
+        </div>
+      </div>
+      <div class="form-group row section_row">
+        <label
+          class="col-3 col-form-label"
+        ><div
+          id="label-padding"
+          class="label-padding"
+        >
+          {{ $t("datasetReport.reportLanguage") }}
+        </div></label>
+        <div class="col-9 top-margin">
+          <b-row>
+            <b-col
+              v-for="option in options"
+              :key="option.value"
+              class="col-6"
+            >
+              <b-form-radio
+                v-model="reportLanguage"
+                :value="option.value"
+              >
+                <div class="top-margin">
+                  {{ option.text }}
+                </div>
+              </b-form-radio>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="col-12">
+              <small
+                class="form-text text-muted"
+                v-html="$t('datasetReport.reportLanguageTooltip')"
+              />
+            </b-col>
+          </b-row>
+        </div>
+      </div>
+      <div class="text-center">
+        <button
+          type="button"
+          class="btn btn-primary submit_button"
+          :disabled="dataset == null || !documentId || !folderId"
+          @click="createDatasetReport"
+        >
+          {{ $t("datasetReport.submit") }}
+        </button>
+      </div>
+    </form>
+  </span>
 </template>
 
 <script>
