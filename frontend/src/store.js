@@ -164,7 +164,7 @@ export default new Vuex.Store({
         },
         extensionDataByName: state => extensionName => {
             return state.dataset.meta.collection_metadata.extensions.find(item =>
-                item.name.hasOwnProperty("en") ? item.name["en"] == extensionName : item.name == extensionName
+                "en" in item.name ? item.name["en"] == extensionName : item.name == extensionName
             );
         }
     },

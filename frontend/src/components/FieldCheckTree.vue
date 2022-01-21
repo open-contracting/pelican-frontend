@@ -58,7 +58,7 @@ export default {
             this.stats.forEach(function (n) {
                 var node = root;
                 n.path.split(".").forEach(function (p) {
-                    if (!node.hasOwnProperty(p)) {
+                    if (!(p in node)) {
                         node[p] = {};
                     }
                     node = node[p];
