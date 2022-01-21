@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid" id="app">
+    <div id="app" class="container-fluid">
         <router-view />
         <NavigationContextMenu />
     </div>

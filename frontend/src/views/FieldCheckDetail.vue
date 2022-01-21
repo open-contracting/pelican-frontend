@@ -1,6 +1,6 @@
 <template>
     <dashboard-detail>
-        <template v-if="check" v-slot:content>
+        <template v-if="check" #content>
             <h2>{{ $t("fieldDetail.path") }}: {{ check.path }}</h2>
 
             <template v-for="(c, k) in check.coverage.checks">
@@ -12,7 +12,7 @@
                         {{ (c.passed_count + c.failed_count) | formatNumber }}
                     </span>
                     &nbsp;
-                    <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')"></Tooltip>
+                    <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
                 </h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
@@ -26,23 +26,23 @@
                         {{ (c.passed_count + c.failed_count) | formatNumber }}
                     </span>
                     &nbsp;
-                    <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')"></Tooltip>
+                    <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />
                 </h5>
                 <CheckDetailResultBox :key="k + '-box'" :check="c" ok failed />
             </template>
 
             <ExampleBoxes
-                :exampleSections="exampleSections"
-                v-on:preview="preview"
+                :example-sections="exampleSections"
                 :loaded="check.examples_filled"
-                :previewDisabled="loadingPreviewData"
+                :preview-disabled="loadingPreviewData"
+                @preview="preview"
             />
         </template>
 
-        <template v-slot:preview>
+        <template #preview>
             <span v-if="previewMetaData">
                 <h5>{{ $t("preview.metadata") }}</h5>
-                <vue-json-pretty :highlightMouseoverNode="true" :data="previewMetaData"></vue-json-pretty>
+                <vue-json-pretty :highlight-mouseover-node="true" :data="previewMetaData" />
             </span>
 
             <div class="divider">&nbsp;</div>
@@ -50,12 +50,7 @@
             <span v-if="loadingPreviewData">
                 <div class="result_box loader text-center">
                     <div class="spinner">
-                        <b-spinner
-                            variant="primary"
-                            style="width: 4rem; height: 4rem"
-                            type="grow"
-                            class="spinner"
-                        ></b-spinner>
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
                     </div>
                     {{ $t("loader.data") }}
                 </div>
@@ -63,7 +58,7 @@
 
             <span v-else-if="previewData">
                 <h5>{{ $t("preview.ocdsData") }}</h5>
-                <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
+                <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="previewData" />
             </span>
         </template>
     </dashboard-detail>
@@ -77,14 +72,7 @@ import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {
-    name: "fieldCheckDetail",
-    data: function () {
-        return {
-            previewMetaData: null,
-            previewDataItemId: null,
-            loadingPreviewData: false
-        };
-    },
+    name: "FieldCheckDetail",
     components: {
         VueJsonPretty,
         DashboardDetail,
@@ -92,28 +80,12 @@ export default {
         CheckDetailResultBox,
         Tooltip
     },
-    methods: {
-        preview: function (itemId) {
-            this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    this.previewDataItemId = itemId;
-                } else {
-                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
-                    this.previewDataItemId = null;
-                }
-
-                this.loadingPreviewData = false;
-            });
-
-            var result = this.allExamples.find(function (element) {
-                return element.meta.item_id == itemId;
-            });
-
-            if (result) {
-                this.previewMetaData = result.result;
-            }
-        }
+    data: function () {
+        return {
+            previewMetaData: null,
+            previewDataItemId: null,
+            loadingPreviewData: false
+        };
     },
     computed: {
         allExamples() {
@@ -192,6 +164,29 @@ export default {
             }
 
             return null;
+        }
+    },
+    methods: {
+        preview: function (itemId) {
+            this.loadingPreviewData = true;
+            this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
+                    this.previewDataItemId = itemId;
+                } else {
+                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
+                    this.previewDataItemId = null;
+                }
+
+                this.loadingPreviewData = false;
+            });
+
+            var result = this.allExamples.find(function (element) {
+                return element.meta.item_id == itemId;
+            });
+
+            if (result) {
+                this.previewMetaData = result.result;
+            }
         }
     }
 };

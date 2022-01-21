@@ -1,6 +1,6 @@
 <template>
     <dashboard-detail>
-        <template v-if="loaded" v-slot:content>
+        <template v-if="loaded" #content>
             <div class="row">
                 <div class="col col-10">
                     <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
@@ -10,19 +10,21 @@
                     <span v-if="check.result == false" class="badge badge-pill failed_status">{{ $t("failed") }}</span>
                 </div>
             </div>
-            <p class="description" v-html="$t('datasetLevel.' + check.name + '.description_long')"></p>
+            <p class="description" v-html="$t('datasetLevel.' + check.name + '.description_long')" />
 
             <div class="result_box">
                 <div v-if="checkType == 'bar'">
-                    <BarChartBig :check="check"></BarChartBig>
+                    <BarChartBig :check="check" />
                 </div>
 
-                <div v-if="checkType == 'unique'">{{ $t("datasetLevel.unique.ok") }}</div>
+                <div v-if="checkType == 'unique'">
+                    {{ $t("datasetLevel.unique.ok") }}
+                </div>
 
                 <div v-if="checkType == 'donut'">
                     <table class="table table-borderless table-sm">
                         <tbody>
-                            <tr v-for="share in shares" v-bind:key="share[0]">
+                            <tr v-for="share in shares" :key="share[0]">
                                 <td class="text-right label">
                                     <span class="check_name">{{ share[0] }}</span>
                                 </td>
@@ -31,7 +33,7 @@
                                         :count="share[1]['count']"
                                         :percentage="share[1]['share'] * 100"
                                         :state="'reg'"
-                                        showCount="true"
+                                        show-count="true"
                                     />
                                 </td>
                             </tr>
@@ -44,15 +46,23 @@
                         <thead>
                             <tr>
                                 <th>{{ $t("datasetLevel.top3.value") }}</th>
-                                <th class="text-center">{{ $t("datasetLevel.top3.share") }}</th>
-                                <th class="text-center">{{ $t("datasetLevel.top3.count") }}</th>
+                                <th class="text-center">
+                                    {{ $t("datasetLevel.top3.share") }}
+                                </th>
+                                <th class="text-center">
+                                    {{ $t("datasetLevel.top3.count") }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in check.meta.most_frequent" v-bind:key="index">
+                            <tr v-for="(item, index) in check.meta.most_frequent" :key="index">
                                 <td>{{ item.value_str }}</td>
-                                <td class="text-right numeric">{{ (item.share * 100) | formatPercentage2D }}</td>
-                                <td class="text-right numeric">{{ item.count | formatNumber }}</td>
+                                <td class="text-right numeric">
+                                    {{ (item.share * 100) | formatPercentage2D }}
+                                </td>
+                                <td class="text-right numeric">
+                                    {{ item.count | formatNumber }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -61,7 +71,9 @@
                 <div v-if="checkType == 'numeric'">
                     <div class="row text-center">
                         <div class="numeric_result color_ok col-4">
-                            <div class="check_numeric_value">{{ check.meta.total_passed }}</div>
+                            <div class="check_numeric_value">
+                                {{ check.meta.total_passed }}
+                            </div>
                             {{ $t("datasetLevel.numeric.passed") }}
                         </div>
 
@@ -73,7 +85,9 @@
                         </div>
 
                         <div class="numeric_result color_na col-4">
-                            <div class="check_numeric_value">{{ check.meta.total_processed }}</div>
+                            <div class="check_numeric_value">
+                                {{ check.meta.total_processed }}
+                            </div>
                             {{ $t("datasetLevel.numeric.processed") }}
                         </div>
                     </div>
@@ -82,7 +96,7 @@
                 <div v-if="checkType == 'biggest_share'" class="biggest_share">
                     <div class="row text-left">
                         <div class="col-7 specifics">
-                            <span v-for="(item, index) in check.meta.specifics" v-bind:key="index">
+                            <span v-for="(item, index) in check.meta.specifics" :key="index">
                                 <h3>{{ index }}</h3>
                                 <p class="specifics_values">{{ item }}</p>
                             </span>
@@ -92,7 +106,7 @@
                             <div class="row">
                                 <div
                                     class="col col-12 text-center total_share"
-                                    v-bind:class="{
+                                    :class="{
                                         color_failed: check.result == false,
                                         color_ok: check.result == true
                                     }"
@@ -113,34 +127,29 @@
 
                 <div v-if="checkType == 'single_value_share'" class="single_value_share">
                     <div class="row text-center">
-                        <BarChartSingleValue :check="check" :showCount="true"></BarChartSingleValue>
+                        <BarChartSingleValue :check="check" :show-count="true" />
                     </div>
                 </div>
             </div>
 
             <ExampleBoxes
-                :exampleSections="exampleSections"
-                v-on:preview="preview"
+                :example-sections="exampleSections"
                 :loaded="true"
-                :previewDisabled="loadingPreviewData"
+                :preview-disabled="loadingPreviewData"
+                @preview="preview"
             />
         </template>
 
-        <template v-slot:preview>
+        <template #preview>
             <h5>{{ $t("preview.metadata") }}</h5>
-            <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewMetadata"></vue-json-pretty>
+            <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="previewMetadata" />
 
             <div class="divider">&nbsp;</div>
 
             <span v-if="loadingPreviewData">
                 <div class="result_box loader text-center">
                     <div class="spinner">
-                        <b-spinner
-                            variant="primary"
-                            style="width: 4rem; height: 4rem"
-                            type="grow"
-                            class="spinner"
-                        ></b-spinner>
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
                     </div>
                     {{ $t("loader.data") }}
                 </div>
@@ -148,7 +157,7 @@
 
             <span v-else-if="previewData">
                 <h5>{{ $t("preview.ocdsData") }}</h5>
-                <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
+                <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="previewData" />
             </span>
         </template>
     </dashboard-detail>
@@ -164,7 +173,15 @@ import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 
 export default {
-    name: "datasetCheckDetail",
+    name: "DatasetCheckDetail",
+    components: {
+        BarChartBig,
+        VueJsonPretty,
+        DashboardDetail,
+        InlineBar,
+        ExampleBoxes,
+        BarChartSingleValue
+    },
     mixins: [datasetMixin],
     data: function () {
         return {
@@ -175,13 +192,21 @@ export default {
             loadingPreviewData: false
         };
     },
-    components: {
-        BarChartBig,
-        VueJsonPretty,
-        DashboardDetail,
-        InlineBar,
-        ExampleBoxes,
-        BarChartSingleValue
+    computed: {
+        previewData() {
+            var result = this.$store.getters.dataItemById(this.previewDataItemId);
+
+            if (result) {
+                return result["data"];
+            }
+
+            return null;
+        },
+        loaded() {
+            this.loadCheck();
+
+            return this.check != null;
+        }
     },
     created() {
         this.loadCheck();
@@ -273,22 +298,6 @@ export default {
                     }
                 }
             }
-        }
-    },
-    computed: {
-        previewData() {
-            var result = this.$store.getters.dataItemById(this.previewDataItemId);
-
-            if (result) {
-                return result["data"];
-            }
-
-            return null;
-        },
-        loaded() {
-            this.loadCheck();
-
-            return this.check != null;
         }
     }
 };

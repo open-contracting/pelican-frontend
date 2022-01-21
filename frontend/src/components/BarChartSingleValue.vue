@@ -1,12 +1,12 @@
 <template>
     <table class="table table-borderless table-sm">
         <tbody>
-            <tr v-for="item in chartData" v-bind:key="item[0]">
+            <tr v-for="item in chartData" :key="item[0]">
                 <td class="text-right label">
                     <span class="check_name">{{ item[0] }}</span>
                 </td>
                 <td class="text-right">
-                    <InlineBar :count="item[1]" :showCount="showCount" :percentage="item[2] * 100" :state="'reg'" />
+                    <InlineBar :count="item[1]" :show-count="showCount" :percentage="item[2] * 100" :state="'reg'" />
                 </td>
             </tr>
         </tbody>
@@ -17,13 +17,13 @@
 import InlineBar from "@/components/InlineBar";
 
 export default {
-    data() {
-        return {};
-    },
     components: {
         InlineBar
     },
     props: ["check", "showCount"],
+    data() {
+        return {};
+    },
     computed: {
         chartData() {
             var chartData = [];

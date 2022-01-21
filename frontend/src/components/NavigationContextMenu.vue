@@ -1,17 +1,17 @@
 <template>
     <vue-context ref="menu">
         <li>
-            <a class="clickable" v-on:click="openNewTab">
+            <a class="clickable" @click="openNewTab">
                 {{ $t("navigationContextMenu.openNewTab") }}
             </a>
         </li>
         <li>
-            <a class="clickable" v-on:click="openNewWindow">
+            <a class="clickable" @click="openNewWindow">
                 {{ $t("navigationContextMenu.openNewWindow") }}
             </a>
         </li>
         <li>
-            <a class="clickable" v-on:click="copyToClipboard">
+            <a class="clickable" @click="copyToClipboard">
                 {{ $t("navigationContextMenu.copyToClipboard") }}
             </a>
         </li>
@@ -23,13 +23,22 @@ import VueContext from "vue-context";
 import "vue-context/src/sass/vue-context.scss";
 
 export default {
+    name: "NavigationContextMenu",
+    components: { VueContext },
     data: function () {
         return {
             routerData: null
         };
     },
-    name: "navigation-context-menu",
-    components: { VueContext },
+    mounted() {
+        this.$root.$on("navigationContextMenu", data => {
+            this.$refs.menu.open(data.event);
+            this.routerData = this.$router.resolve(data.routerArguments);
+        });
+    },
+    beforeDestroy() {
+        this.$root.$off("navigationContextMenu", () => {});
+    },
     methods: {
         openNewTab: function () {
             window.open(this.routerData.href);
@@ -44,15 +53,6 @@ export default {
         copyToClipboard: function () {
             this.$clipboard(window.location.origin + this.routerData.href);
         }
-    },
-    mounted() {
-        this.$root.$on("navigationContextMenu", data => {
-            this.$refs.menu.open(data.event);
-            this.routerData = this.$router.resolve(data.routerArguments);
-        });
-    },
-    beforeDestroy() {
-        this.$root.$off("navigationContextMenu", () => {});
     }
 };
 </script>

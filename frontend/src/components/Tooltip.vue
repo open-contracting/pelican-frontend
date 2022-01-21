@@ -4,17 +4,17 @@
             <font-awesome-icon icon="info-circle" />
         </span>
         <b-tooltip :target="tooltipId" triggers="hover">
-            <span class="tooltip_text" v-html="text"></span>
+            <span class="tooltip_text" v-html="text" />
         </b-tooltip>
     </span>
 </template>
 
 <script>
 export default {
+    props: ["text"],
     data: function () {
         return {};
     },
-    props: ["text"],
     computed: {
         tooltipId: function () {
             var id = "id-" + Math.floor(Math.random() * 10000000000);

@@ -1,7 +1,7 @@
 <template>
     <div
         class="tr row clickable align-items-center"
-        v-on:click="detail()"
+        @click="detail()"
         @contextmenu.prevent="
             $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
         "
@@ -30,6 +30,9 @@ import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
+    components: { ProgressBar },
+    mixins: [resourceCheckMixin],
+    props: ["check", "name"],
     data: function () {
         return {
             detailRouterArguments: {
@@ -41,9 +44,6 @@ export default {
             }
         };
     },
-    mixins: [resourceCheckMixin],
-    components: { ProgressBar },
-    props: ["check", "name"],
     methods: {
         detail: function () {
             this.$router.push(this.detailRouterArguments);

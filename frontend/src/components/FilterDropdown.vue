@@ -1,17 +1,17 @@
 <template>
     <b-dropdown
+        id="filter_dropdown"
         right
         split
         split-button-type="button"
         :html="'<span id=\'show_prefix\'>Show: </span>' + filterNames[selectedIndex]"
         variant="primary"
-        id="filter_dropdown"
     >
         <b-dropdown-item-button
-            variant="bg-transparent border-transparent"
             v-for="(name, index) in filterNames"
-            v-bind:key="index"
-            v-on:click="clickItem(index)"
+            :key="index"
+            variant="bg-transparent border-transparent"
+            @click="clickItem(index)"
         >
             {{ name }}
         </b-dropdown-item-button>
@@ -20,17 +20,17 @@
 
 <script>
 export default {
-    data: function () {
-        return {
-            selectedIndex: 0
-        };
-    },
     props: {
         filterNames: Array,
         startIndex: {
             type: Number,
             default: 0
         }
+    },
+    data: function () {
+        return {
+            selectedIndex: 0
+        };
     },
     mounted: function () {
         this.selectedIndex = this.startIndex;

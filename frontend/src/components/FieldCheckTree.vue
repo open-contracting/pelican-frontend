@@ -27,24 +27,11 @@ import FieldCheckTreeNode from "@/components/FieldCheckTreeNode.vue";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
-    data: function () {
-        return {};
-    },
-    props: ["filter"],
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
-    watch: {
-        search: function () {
-            this.$store.dispatch("setExpandedNodesForSearch");
-        },
-        filter: function () {
-            this.$store.commit("setFieldLevelFilter", this.filter);
-        }
-    },
-    mounted: function () {
-        if (this.search) {
-            this.$store.dispatch("setExpandedNodesForSearch");
-        }
+    props: ["filter"],
+    data: function () {
+        return {};
     },
     computed: {
         stats: function () {
@@ -68,6 +55,19 @@ export default {
             });
 
             return root;
+        }
+    },
+    watch: {
+        search: function () {
+            this.$store.dispatch("setExpandedNodesForSearch");
+        },
+        filter: function () {
+            this.$store.commit("setFieldLevelFilter", this.filter);
+        }
+    },
+    mounted: function () {
+        if (this.search) {
+            this.$store.dispatch("setExpandedNodesForSearch");
         }
     }
 };

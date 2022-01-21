@@ -1,7 +1,7 @@
 <template>
     <dashboard>
         <h2>{{ $t("sections.resource") }}</h2>
-        <div class="description" v-html="$t('resourceLevel.description')"></div>
+        <div class="description" v-html="$t('resourceLevel.description')" />
         <span v-if="loaded">
             <b-row class="action_bar">
                 <b-col class="text-left">
@@ -9,9 +9,9 @@
                 </b-col>
                 <b-col class="text-right">
                     <FilterDropdown
-                        v-on:newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
-                        :filterNames="filterNames"
-                        :startIndex="filterIndex"
+                        :filter-names="filterNames"
+                        :start-index="filterIndex"
+                        @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
                     />
                 </b-col>
             </b-row>
@@ -23,13 +23,13 @@
                     <div class="th col-1 text-right" scope="col">{{ $t("resourceLevel.na") }}</div>
                     <div class="th col-4 d-none d-lg-block" scope="col">&nbsp;</div>
                 </div>
-                <span v-for="(name, index) in sections" v-bind:key="index">
+                <span v-for="(name, index) in sections" :key="index">
                     <ResourceLevelList :section="name" :filter="filters[filterIndex]" />
                 </span>
             </div>
         </span>
         <span v-else>
-            <Loader></Loader>
+            <Loader />
         </span>
     </dashboard>
 </template>
@@ -41,7 +41,13 @@ import FilterDropdown from "@/components/FilterDropdown.vue";
 import Dashboard from "@/views/layouts/Dashboard.vue";
 
 export default {
-    name: "resource",
+    name: "Resource",
+    components: {
+        ResourceLevelList,
+        Loader,
+        FilterDropdown,
+        Dashboard
+    },
     data: function () {
         return {
             sections: ["reference", "consistent", "coherent"],
@@ -60,15 +66,6 @@ export default {
             ]
         };
     },
-    components: {
-        ResourceLevelList,
-        Loader,
-        FilterDropdown,
-        Dashboard
-    },
-    created() {
-        this.filterIndex = this.$store.getters.resourceLevelFilterIndex;
-    },
     computed: {
         loaded() {
             if (this.$store.getters.resourceLevelStats != null) {
@@ -81,6 +78,9 @@ export default {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setResourceLevelFilterIndex", newFilterIndex);
         }
+    },
+    created() {
+        this.filterIndex = this.$store.getters.resourceLevelFilterIndex;
     }
 };
 </script>

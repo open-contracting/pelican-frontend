@@ -3,17 +3,12 @@
         <span v-if="!loaded">
             <div class="result_box loader text-center">
                 <div class="spinner">
-                    <b-spinner
-                        variant="primary"
-                        style="width: 4rem; height: 4rem"
-                        type="grow"
-                        class="spinner"
-                    ></b-spinner>
+                    <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
                 </div>
                 {{ $t("loader.examples") }}
             </div>
         </span>
-        <span v-for="section in exampleSections" v-bind:key="section.header">
+        <span v-for="section in exampleSections" :key="section.header">
             <h5>
                 <span v-if="section.prefix" class="prefix">{{ section.prefix }}:&nbsp;"</span>{{ section.header
                 }}<span v-if="section.prefix" class="prefix">"</span>
@@ -24,12 +19,12 @@
                         <tr class="d-flex">
                             <th class="col-9" scope="col">{{ $t("examples.ocid") }}</th>
                             <th class="col-1 text-left" scope="col">{{ $t("examples.actions") }}</th>
-                            <th class="col-1 text-center" scope="col"></th>
-                            <th class="col-1 text-center" scope="col"></th>
+                            <th class="col-1 text-center" scope="col" />
+                            <th class="col-1 text-center" scope="col" />
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in section.examples.slice(0, 5)" class="d-flex" v-bind:key="index">
+                        <tr v-for="(item, index) in section.examples.slice(0, 5)" :key="index" class="d-flex">
                             <td class="col-9 text-left numeric">
                                 <span class="check_name">{{ item.ocid }}</span>
                             </td>
@@ -37,14 +32,14 @@
                                 <span v-if="index != selectedKey || selectedSection != section.header">
                                     <font-awesome-icon
                                         v-if="!previewDisabled"
-                                        v-on:click.stop.prevent="preview(index, section.header, item.item_id)"
                                         :id="'preview_' + section.header + '_' + index"
                                         class="examples_icon"
                                         :icon="['far', 'eye']"
+                                        @click.stop.prevent="preview(index, section.header, item.item_id)"
                                     />
                                     <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']" />
                                     <b-tooltip :target="'preview_' + section.header + '_' + index" triggers="hover">
-                                        <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                        <span class="tooltip_text" v-html="$t('examples.preview.tooltip')" />
                                     </b-tooltip>
                                 </span>
                                 <span v-if="index == selectedKey && selectedSection == section.header">
@@ -54,29 +49,26 @@
                             <td class="col-1 clickable">
                                 <span>
                                     <font-awesome-icon
-                                        v-on:click.stop.prevent="download(item.item_id)"
                                         :id="'download_' + section.header + '_' + index"
                                         class="examples_icon"
                                         :icon="['fas', 'cloud-download-alt']"
+                                        @click.stop.prevent="download(item.item_id)"
                                     />
                                     <b-tooltip :target="'download_' + section.header + '_' + index" triggers="hover">
-                                        <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                        <span class="tooltip_text" v-html="$t('examples.download.tooltip')" />
                                     </b-tooltip>
                                 </span>
                             </td>
                             <td class="col-1 clickable">
                                 <span>
                                     <font-awesome-icon
-                                        v-on:click.stop.prevent="copyToClipboard(item.item_id)"
                                         :id="'clipboard_' + section.header + '_' + index"
                                         class="examples_icon"
                                         :icon="['fas', 'clipboard']"
+                                        @click.stop.prevent="copyToClipboard(item.item_id)"
                                     />
                                     <b-tooltip :target="'clipboard_' + section.header + '_' + index" triggers="hover">
-                                        <span
-                                            class="tooltip_text"
-                                            v-html="$t('examples.copyToClipboard.tooltip')"
-                                        ></span>
+                                        <span class="tooltip_text" v-html="$t('examples.copyToClipboard.tooltip')" />
                                     </b-tooltip>
                                 </span>
                             </td>
@@ -85,7 +77,7 @@
                             <td
                                 colspan="2"
                                 class="text-center bold clickable moreLess"
-                                v-on:click.stop="showMore(section.header)"
+                                @click.stop="showMore(section.header)"
                             >
                                 <a>
                                     <font-awesome-icon icon="chevron-down" />
@@ -94,7 +86,7 @@
                             </td>
                         </tr>
                         <span v-if="visibleSections(section.header)">
-                            <tr v-for="(item, index) in section.examples.slice(5)" class="d-flex" v-bind:key="index">
+                            <tr v-for="(item, index) in section.examples.slice(5)" :key="index" class="d-flex">
                                 <td class="col-9 text-left numeric">
                                     <span class="check_name">{{ item.ocid }}</span>
                                 </td>
@@ -102,17 +94,17 @@
                                     <span v-if="index + 5 != selectedKey || selectedSection != section.header">
                                         <font-awesome-icon
                                             v-if="!previewDisabled"
-                                            v-on:click.stop.prevent="preview(index + 5, section.header, item.item_id)"
                                             :id="'preview_' + section.header + '_' + (index + 5)"
                                             class="examples_icon"
                                             :icon="['far', 'eye']"
+                                            @click.stop.prevent="preview(index + 5, section.header, item.item_id)"
                                         />
                                         <font-awesome-icon v-else class="examples_icon" :icon="['far', 'eye']" />
                                         <b-tooltip
                                             :target="'preview_' + section.header + '_' + (index + 5)"
                                             triggers="hover"
                                         >
-                                            <span class="tooltip_text" v-html="$t('examples.preview.tooltip')"></span>
+                                            <span class="tooltip_text" v-html="$t('examples.preview.tooltip')" />
                                         </b-tooltip>
                                     </span>
                                     <span v-if="index + 5 == selectedKey && selectedSection == section.header">
@@ -122,26 +114,26 @@
                                 <td class="col-1 clickable">
                                     <span>
                                         <font-awesome-icon
-                                            v-on:click.stop.prevent="download(item.item_id)"
                                             :id="'download_' + section.header + '_' + (index + 5)"
                                             class="examples_icon"
                                             :icon="['fas', 'cloud-download-alt']"
+                                            @click.stop.prevent="download(item.item_id)"
                                         />
                                         <b-tooltip
                                             :target="'download_' + section.header + '_' + (index + 5)"
                                             triggers="hover"
                                         >
-                                            <span class="tooltip_text" v-html="$t('examples.download.tooltip')"></span>
+                                            <span class="tooltip_text" v-html="$t('examples.download.tooltip')" />
                                         </b-tooltip>
                                     </span>
                                 </td>
                                 <td class="col-1 clickable">
                                     <span>
                                         <font-awesome-icon
-                                            v-on:click.stop.prevent="copyToClipboard(item.item_id)"
                                             :id="'clipboard_' + section.header + '_' + (index + 5)"
                                             class="examples_icon"
                                             :icon="['fas', 'clipboard']"
+                                            @click.stop.prevent="copyToClipboard(item.item_id)"
                                         />
                                         <b-tooltip
                                             :target="'clipboard_' + section.header + '_' + (index + 5)"
@@ -150,7 +142,7 @@
                                             <span
                                                 class="tooltip_text"
                                                 v-html="$t('examples.copyToClipboard.tooltip')"
-                                            ></span>
+                                            />
                                         </b-tooltip>
                                     </span>
                                 </td>
@@ -160,7 +152,7 @@
                             <td
                                 colspan="2"
                                 class="text-center bold clickable moreLess"
-                                v-on:click.stop="showLess(section.header)"
+                                @click.stop="showLess(section.header)"
                             >
                                 <a>
                                     <font-awesome-icon icon="chevron-up" />
@@ -177,6 +169,11 @@
 
 <script>
 export default {
+    props: {
+        exampleSections: Array,
+        loaded: Boolean,
+        previewDisabled: Boolean
+    },
     data: function () {
         return {
             openSections: [],
@@ -184,11 +181,7 @@ export default {
             selectedSection: null
         };
     },
-    props: {
-        exampleSections: Array,
-        loaded: Boolean,
-        previewDisabled: Boolean
-    },
+    computed: {},
     methods: {
         preview: function (key, section, id) {
             this.selectedKey = key;
@@ -231,8 +224,7 @@ export default {
         visibleSections: function (section) {
             return this.openSections.includes(section);
         }
-    },
-    computed: {}
+    }
 };
 </script>
 

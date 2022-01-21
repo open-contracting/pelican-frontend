@@ -1,11 +1,11 @@
 <template>
-    <div class="inline_bar numeric" v-bind:class="state" ref="bar">
-        <div class="bar" v-bind:style="{ width: barWidth + 'px' }">
+    <div ref="bar" class="inline_bar numeric" :class="state">
+        <div class="bar" :style="{ width: barWidth + 'px' }">
             <span v-if="barWidth > 30">{{ percentage | formatPercentage }}</span>
             <span v-else>&nbsp;</span>
         </div>
         <div v-if="barWidth <= 30" class="count">
-            <span class="small_label" v-if="barWidth <= 30">{{ percentage | formatPercentage }}</span>
+            <span v-if="barWidth <= 30" class="small_label">{{ percentage | formatPercentage }}</span>
             <span v-if="showCount" class="count_holder">
                 <span class="count_holder">({{ count | formatNumber }})</span>
             </span>
@@ -18,12 +18,12 @@
 
 <script>
 export default {
+    props: ["percentage", "count", "state", "showCount"],
     data: function () {
         return {
             barWidth: 1
         };
     },
-    props: ["percentage", "count", "state", "showCount"],
     mounted() {
         if (this.percentage > 0) {
             if (this.showCount) {

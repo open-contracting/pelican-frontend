@@ -1,10 +1,10 @@
 <template>
     <div class="row h-100">
-        <main-menu></main-menu>
+        <main-menu />
 
         <main role="main" class="main main_content col col-12">
             <div class="main_envelope">
-                <DatasetHeader></DatasetHeader>
+                <DatasetHeader />
                 <slot />
             </div>
         </main>
@@ -16,11 +16,11 @@ import MainMenu from "@/views/layouts/MainMenu.vue";
 import DatasetHeader from "@/components/DatasetHeader.vue";
 
 export default {
-    name: "dashboard",
+    name: "Dashboard",
+    components: { MainMenu, DatasetHeader },
     data: function () {
         return {};
     },
-    components: { MainMenu, DatasetHeader },
     computed: {
         dataset() {
             if (this.$store.getters.dataset != null) {

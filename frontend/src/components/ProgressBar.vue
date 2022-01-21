@@ -3,8 +3,8 @@
         <template v-for="(b, i) in allBars">
             <div
                 v-if="b.value"
-                :class="['inner', b.class]"
                 :key="i"
+                :class="['inner', b.class]"
                 :style="{ width: b.value + '%', 'background-color': b.color }"
             >
                 &nbsp;
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-    name: "progress-bar",
+    name: "ProgressBar",
     props: ["bars", "value", "ok", "failed"],
     computed: {
         allBars: function () {

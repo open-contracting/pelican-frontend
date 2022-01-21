@@ -1,13 +1,13 @@
 <template>
     <b-input-group class="search_input">
-        <template v-slot:prepend>
+        <template #prepend>
             <b-input-group-text>
                 <font-awesome-icon icon="search" />
             </b-input-group-text>
         </template>
         <b-form-input v-model="search" :placeholder="placeholder" />
-        <template v-slot:append>
-            <b-button v-if="search" :disabled="!search" v-on:click="search = null">
+        <template #append>
+            <b-button v-if="search" :disabled="!search" @click="search = null">
                 <font-awesome-icon :icon="['fas', 'times']" />
             </b-button>
         </template>
@@ -16,17 +16,17 @@
 
 <script>
 export default {
-    data: function () {
-        return {
-            search: null,
-            submitTimeout: null
-        };
-    },
     props: {
         placeholder: String,
         onUpdate: Function,
         preset: String,
         submitTimeLimit: { type: Number, default: 400 }
+    },
+    data: function () {
+        return {
+            search: null,
+            submitTimeout: null
+        };
     },
     watch: {
         search: function (value) {

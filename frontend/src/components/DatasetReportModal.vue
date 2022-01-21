@@ -1,6 +1,6 @@
 <template>
     <span class="just_holder">
-        <Loader v-if="isSubmitting"></Loader>
+        <Loader v-if="isSubmitting" />
         <span v-if="submitStatus != null">
             <span v-if="submitStatus == 'ok' && !failedTags">
                 <b-alert class="submit-result" variant="success" show>
@@ -14,13 +14,13 @@
                 </a>
                 <b-row class="buttons">
                     <b-col>
-                        <button class="variant-success btn-success" v-on:click.stop.prevent="retry" href="#">
+                        <button class="variant-success btn-success" href="#" @click.stop.prevent="retry">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
                             {{ $t("tryAgain") }}
                         </button>
                     </b-col>
                     <b-col class="right-align">
-                        <button class="variant-success btn-success" v-on:click.stop.prevent="$emit('close')" href="#">
+                        <button class="variant-success btn-success" href="#" @click.stop.prevent="$emit('close')">
                             <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
                             {{ $t("close") }}
                         </button>
@@ -47,7 +47,7 @@
                     <span>{{ $t("datasetReport.status.templateError") }}</span>
                 </b-alert>
                 <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
-                <div v-for="(error, index) in submitData" v-bind:key="index">
+                <div v-for="(error, index) in submitData" :key="index">
                     <div>reason: {{ error.reason }}</div>
                     <div>full tag: {{ error.full_tag }}</div>
                     <div>
@@ -59,13 +59,13 @@
                 </div>
                 <b-row class="buttons">
                     <b-col>
-                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="retry">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
                             {{ $t("tryAgain") }}
                         </button>
                     </b-col>
                     <b-col class="right-align">
-                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="$emit('close')">
                             <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
                             {{ $t("close") }}
                         </button>
@@ -80,13 +80,13 @@
                 <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
                 <b-row class="buttons">
                     <b-col>
-                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="retry">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
                             {{ $t("tryAgain") }}
                         </button>
                     </b-col>
                     <b-col class="right-align">
-                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="$emit('close')">
                             <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
                             {{ $t("close") }}
                         </button>
@@ -103,13 +103,13 @@
                 </b-alert>
                 <b-row>
                     <b-col>
-                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="retry" href="#">
+                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="retry">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
                             {{ $t("tryAgain") }}
                         </button>
                     </b-col>
                     <b-col class="right-align">
-                        <button class="variant-danger btn-danger" v-on:click.stop.prevent="$emit('close')" href="#">
+                        <button class="variant-danger btn-danger" href="#" @click.stop.prevent="$emit('close')">
                             <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
                             {{ $t("close") }}
                         </button>
@@ -126,13 +126,13 @@
                 <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}&nbsp;</span>
                 <b-row class="buttons">
                     <b-col>
-                        <button class="variant-warning btn-warning" v-on:click.stop.prevent="retry" href="#">
+                        <button class="variant-warning btn-warning" href="#" @click.stop.prevent="retry">
                             <font-awesome-icon :icon="['fas', 'redo-alt']" class="icon" />
                             {{ $t("tryAgain") }}
                         </button>
                     </b-col>
                     <b-col class="right-align">
-                        <button class="variant-warning btn-warning" v-on:click.stop.prevent="$emit('close')" href="#">
+                        <button class="variant-warning btn-warning" href="#" @click.stop.prevent="$emit('close')">
                             <font-awesome-icon :icon="['fas', 'window-close']" class="icon" />
                             {{ $t("close") }}
                         </button>
@@ -148,14 +148,14 @@
                 <div class="col-9">
                     <b-form-input
                         id="documentIdInput"
+                        v-model="documentId"
                         spellcheck="false"
                         autocomplete="off"
                         class="base_input"
-                        v-model="documentId"
                         lazy-formatter
                         :formatter="fileIdFormatter"
                     />
-                    <small v-html="$t('datasetReport.documentIdTooltip')" class="form-text text-muted"></small>
+                    <small class="form-text text-muted" v-html="$t('datasetReport.documentIdTooltip')" />
                 </div>
             </div>
             <div class="form-group row section_row">
@@ -165,14 +165,14 @@
                 <div class="col-9">
                     <b-form-input
                         id="folderIdInput"
+                        v-model="folderId"
                         spellcheck="false"
                         autocomplete="off"
                         class="base_input"
-                        v-model="folderId"
                         lazy-formatter
                         :formatter="fileIdFormatter"
                     />
-                    <small v-html="$t('datasetReport.folderIdTooltip')" class="form-text text-muted"></small>
+                    <small class="form-text text-muted" v-html="$t('datasetReport.folderIdTooltip')" />
                 </div>
             </div>
             <div class="form-group row section_row">
@@ -182,24 +182,24 @@
                 <div class="col-9">
                     <b-form-input
                         id="reportNameInput"
+                        v-model="reportName"
                         spellcheck="false"
                         autocomplete="off"
                         class="base_input"
-                        v-model="reportName"
                     />
-                    <small v-html="$t('datasetReport.reportNameTooltip')" class="form-text text-muted"></small>
+                    <small class="form-text text-muted" v-html="$t('datasetReport.reportNameTooltip')" />
                 </div>
             </div>
             <div class="form-group row section_row">
                 <label class="col-3 col-form-label"
-                    ><div class="label-padding" id="label-padding">
+                    ><div id="label-padding" class="label-padding">
                         {{ $t("datasetReport.reportLanguage") }}
                     </div></label
                 >
                 <div class="col-9 top-margin">
                     <b-row>
-                        <b-col class="col-6" v-for="option in options" :key="option.value">
-                            <b-form-radio :value="option.value" v-model="reportLanguage">
+                        <b-col v-for="option in options" :key="option.value" class="col-6">
+                            <b-form-radio v-model="reportLanguage" :value="option.value">
                                 <div class="top-margin">
                                     {{ option.text }}
                                 </div>
@@ -208,10 +208,7 @@
                     </b-row>
                     <b-row>
                         <b-col class="col-12">
-                            <small
-                                v-html="$t('datasetReport.reportLanguageTooltip')"
-                                class="form-text text-muted"
-                            ></small>
+                            <small class="form-text text-muted" v-html="$t('datasetReport.reportLanguageTooltip')" />
                         </b-col>
                     </b-row>
                 </div>
@@ -220,8 +217,8 @@
                 <button
                     type="button"
                     class="btn btn-primary submit_button"
-                    @click="createDatasetReport"
                     :disabled="dataset == null || !documentId || !folderId"
+                    @click="createDatasetReport"
                 >
                     {{ $t("datasetReport.submit") }}
                 </button>
@@ -236,6 +233,7 @@ import { CONFIG } from "@/config.js";
 import Loader from "@/components/Loader.vue";
 
 export default {
+    components: { Loader },
     props: ["dataset"],
     data: function () {
         return {
@@ -255,7 +253,6 @@ export default {
             reportLanguage: "en"
         };
     },
-    components: { Loader },
     methods: {
         createDatasetReport() {
             if (this.dataset == null) {

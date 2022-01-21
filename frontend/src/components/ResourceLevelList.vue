@@ -1,6 +1,6 @@
 <template>
     <span>
-        <div class="tr row clickable" v-on:click="showChecks = !showChecks">
+        <div class="tr row clickable" @click="showChecks = !showChecks">
             <div class="td col-4 col-lg-5 category" scope="col">
                 <div class="switcher text-center">
                     <span v-if="resourceLevelStats.length > 0">
@@ -18,17 +18,17 @@
                 <span v-else>
                     {{ $t("resourceLevel.averageScore.undefined") }}
                 </span>
-                <Tooltip :text="$t('resourceLevel.averageScore.tooltip')"></Tooltip>
+                <Tooltip :text="$t('resourceLevel.averageScore.tooltip')" />
             </div>
         </div>
-        <span class="checks" v-if="showChecks">
+        <span v-if="showChecks" class="checks">
             <ResourceLevelRow
                 v-for="(value, name, index) in resourceLevelStats"
+                :key="name"
                 :check="value"
                 :name="value.name"
-                v-bind:key="name"
-                v-bind:index="index"
-            ></ResourceLevelRow>
+                :index="index"
+            />
         </span>
     </span>
 </template>
@@ -38,15 +38,15 @@ import ResourceLevelRow from "@/components/ResourceLevelRow";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {
+    components: {
+        ResourceLevelRow,
+        Tooltip
+    },
+    props: ["section", "filter"],
     data: function () {
         return {
             showChecks: false
         };
-    },
-    props: ["section", "filter"],
-    components: {
-        ResourceLevelRow,
-        Tooltip
     },
     computed: {
         resourceLevelStats() {
@@ -126,9 +126,6 @@ export default {
             return (100.0 * passedCount) / (passedCount + failedCount);
         }
     },
-    mounted() {
-        this.showChecks = this.$store.getters.isResourceCheckExpanded(this.section);
-    },
     watch: {
         showChecks: function (newShowChecks) {
             if (newShowChecks) {
@@ -137,6 +134,9 @@ export default {
                 this.$store.commit("removeResourceCheckExpandedNode", this.section);
             }
         }
+    },
+    mounted() {
+        this.showChecks = this.$store.getters.isResourceCheckExpanded(this.section);
     }
 };
 </script>

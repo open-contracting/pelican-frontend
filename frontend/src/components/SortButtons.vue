@@ -4,23 +4,23 @@
             <slot>{{ label }}</slot>
         </div>
         <div class="sort_buttons">
-            <div :class="['asc', { active: active && asc }]" @click.stop="onAsc()"></div>
-            <div :class="['desc', { active: active && !asc }]" @click.stop="onDesc()"></div>
+            <div :class="['asc', { active: active && asc }]" @click.stop="onAsc()" />
+            <div :class="['desc', { active: active && !asc }]" @click.stop="onDesc()" />
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    data: function () {
-        return {};
-    },
     props: {
         label: String,
         asc: Boolean,
         active: Boolean,
         onAsc: Function,
         onDesc: Function
+    },
+    data: function () {
+        return {};
     }
 };
 </script>

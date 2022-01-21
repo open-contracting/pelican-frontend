@@ -1,12 +1,12 @@
 <template>
     <div class="row h-100">
-        <main-menu></main-menu>
+        <main-menu />
 
         <div class="col col-12">
             <div class="main_envelope">
                 <div class="row">
                     <main role="main" class="dataset_level_check_detail main_content col col-7 col-xl-6">
-                        <DatasetHeader></DatasetHeader>
+                        <DatasetHeader />
                         <slot name="content" />
                     </main>
                     <div class="preview col col-5 col-xl-6">
@@ -27,11 +27,11 @@ import MainMenu from "@/views/layouts/MainMenu.vue";
 import DatasetHeader from "@/components/DatasetHeader.vue";
 
 export default {
-    name: "dashboard",
+    name: "Dashboard",
+    components: { MainMenu, DatasetHeader },
     data: function () {
         return {};
     },
-    components: { MainMenu, DatasetHeader },
     computed: {
         dataset() {
             if (this.$store.getters.dataset != null) {

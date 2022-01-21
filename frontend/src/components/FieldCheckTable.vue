@@ -45,8 +45,8 @@
             <template v-for="h in n._hidden">
                 <FieldCheckTableRow
                     v-if="isSearched(h)"
-                    :check="h"
                     :key="h.path"
+                    :check="h"
                     :class="['hidden_row', { hidden: isHidden(n) }]"
                 >
                     <span v-html="highlightSearch(h.path)" />
@@ -62,14 +62,14 @@ import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
 import SortButtons from "@/components/SortButtons.vue";
 
 export default {
+    components: { FieldCheckTableRow, SortButtons },
+    mixins: [fieldCheckMixins],
+    props: ["filter"],
     data: function () {
         return {
             showHidden: {}
         };
     },
-    props: ["filter"],
-    components: { FieldCheckTableRow, SortButtons },
-    mixins: [fieldCheckMixins],
     computed: {
         stats: function () {
             return this.$store.getters.fieldLevelStats;

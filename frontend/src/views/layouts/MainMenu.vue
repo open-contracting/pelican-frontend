@@ -48,7 +48,7 @@
                             <font-awesome-icon icon="sliders-h" />
                         </span>
                         <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                            <b-spinner variant="default" small type="grow" class="spinner" />
                         </span>
                         {{ $t("sections.field").toUpperCase() }}
                     </b-nav-item>
@@ -69,7 +69,7 @@
                             <font-awesome-icon icon="list-alt" />
                         </span>
                         <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                            <b-spinner variant="default" small type="grow" class="spinner" />
                         </span>
                         {{ $t("sections.resource").toUpperCase() }}
                     </b-nav-item>
@@ -90,14 +90,14 @@
                             <font-awesome-icon icon="tasks" />
                         </span>
                         <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                            <b-spinner variant="default" small type="grow" class="spinner" />
                         </span>
                         {{ $t("sections.dataset").toUpperCase() }}
                     </b-nav-item>
 
                     <b-nav-item
-                        :to="{ name: 'time', params: { datasetId: datasetId } }"
                         v-if="showTimeVariance"
+                        :to="{ name: 'time', params: { datasetId: datasetId } }"
                         @contextmenu.prevent="
                             $root.$emit('navigationContextMenu', {
                                 event: $event,
@@ -109,7 +109,7 @@
                             <font-awesome-icon icon="history" />
                         </span>
                         <span v-else class="menu_icon_spinner">
-                            <b-spinner variant="default" small type="grow" class="spinner"></b-spinner>
+                            <b-spinner variant="default" small type="grow" class="spinner" />
                         </span>
                         {{ $t("sections.time").toUpperCase() }}
                     </b-nav-item>

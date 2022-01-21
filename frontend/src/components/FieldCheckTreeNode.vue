@@ -3,8 +3,8 @@
         <FieldCheckTableRow
             :key="path"
             :check="check"
-            :showStats="filter(data._check)"
-            v-bind:class="{ hidden: hide || !isSearched(data) }"
+            :show-stats="filter(data._check)"
+            :class="{ hidden: hide || !isSearched(data) }"
         >
             <div class="d-flex flex-row align-items-center">
                 <div :class="'indent-' + depth" />
@@ -14,8 +14,8 @@
                         <font-awesome-icon v-else icon="chevron-down" />
                     </template>
                 </div>
-                <div v-else class="switcher"></div>
-                <div class="name flex-fill" :title="path" v-html="highlightSearchLast(path)"></div>
+                <div v-else class="switcher" />
+                <div class="name flex-fill" :title="path" v-html="highlightSearchLast(path)" />
             </div>
         </FieldCheckTableRow>
 
@@ -33,22 +33,17 @@ import { Fragment } from "vue-fragment";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
-    data: function () {
-        return {};
-    },
+    name: "TreeNode",
+    components: { FieldCheckTableRow, Fragment },
+    mixins: [fieldCheckMixins],
     props: {
         data: Object,
         expand: Boolean,
         depth: { type: Number, default: 0 },
         hide: { type: Boolean, default: false }
     },
-    name: "tree-node",
-    components: { FieldCheckTableRow, Fragment },
-    mixins: [fieldCheckMixins],
-    mounted: function () {
-        if (this.expand) {
-            this.expanded = true;
-        }
+    data: function () {
+        return {};
     },
     computed: {
         children: function () {
@@ -80,6 +75,11 @@ export default {
         },
         filter: function () {
             return this.$store.getters.fieldLevelFilter;
+        }
+    },
+    mounted: function () {
+        if (this.expand) {
+            this.expanded = true;
         }
     },
     methods: {

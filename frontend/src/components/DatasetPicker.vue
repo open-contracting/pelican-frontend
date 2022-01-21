@@ -66,18 +66,18 @@
             <template v-for="(item, index) in datasets">
                 <DatasetPickerRow
                     v-if="isSearched(item.name)"
-                    v-on:dataset-filter="showFilter($event)"
-                    v-on:dataset-report="showReport($event)"
-                    v-bind:key="index"
+                    :key="index"
                     :dataset="item"
                     :depth="0"
+                    @dataset-filter="showFilter($event)"
+                    @dataset-report="showReport($event)"
                 />
             </template>
         </div>
         <b-modal
             id="filter-modal"
-            size="lg"
             ref="filter-modal"
+            size="lg"
             hide-footer
             :title="$t('datasetFilter.headline')"
             static
@@ -87,8 +87,8 @@
         </b-modal>
         <b-modal
             id="report-modal"
-            size="lg"
             ref="report-modal"
+            size="lg"
             hide-footer
             :title="$t('datasetReport.headline')"
             static
@@ -98,7 +98,7 @@
         </b-modal>
     </span>
     <span v-else>
-        <Loader></Loader>
+        <Loader />
     </span>
 </template>
 
@@ -115,6 +115,14 @@ import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
 import DatasetReportModal from "@/components/DatasetReportModal.vue";
 
 export default {
+    components: {
+        Loader,
+        SortButtons,
+        SearchInput,
+        DatasetPickerRow,
+        DatasetFilterModal,
+        DatasetReportModal
+    },
     mixins: [stateMixin, sortMixins],
     data: function () {
         return {
@@ -123,14 +131,6 @@ export default {
             filteredDataset: null,
             reportDataset: null
         };
-    },
-    components: {
-        Loader,
-        SortButtons,
-        SearchInput,
-        DatasetPickerRow,
-        DatasetFilterModal,
-        DatasetReportModal
     },
     computed: {
         search: function () {
@@ -153,6 +153,39 @@ export default {
         defaultSorting: function () {
             return { by: "created", asc: false };
         }
+    },
+    mounted() {
+        var buildDatasetsTree = function (datasets, filtered_parent_id) {
+            var result = [];
+            datasets.forEach(function (item) {
+                if (item.filtered_parent_id == filtered_parent_id) {
+                    item.filtered_children = buildDatasetsTree(datasets, item.id);
+                    result.push(item);
+                }
+            });
+
+            return result;
+        };
+        var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
+        axios
+            .get(url)
+            .then(response => {
+                this.datasets = buildDatasetsTree(response["data"]["objects"], null);
+
+                var self = this;
+                this.datasets.forEach(function (item) {
+                    if (item.ancestor_id != null) {
+                        var ancestor = self.datasets.find(element => String(element.ancestor_id) == item.ancestor_id);
+                        item.ancestor_name = ancestor.name;
+                    } else {
+                        item.ancestor_name = null;
+                    }
+                });
+                this.sortBy(this.sortedBy, this.isAscendingSorted);
+            })
+            .catch(function (error) {
+                throw new Error(error);
+            });
     },
     methods: {
         showFilter: function (dataset) {
@@ -206,39 +239,6 @@ export default {
         hideReportModal: function () {
             this.$bvModal.hide("report-modal");
         }
-    },
-    mounted() {
-        var buildDatasetsTree = function (datasets, filtered_parent_id) {
-            var result = [];
-            datasets.forEach(function (item) {
-                if (item.filtered_parent_id == filtered_parent_id) {
-                    item.filtered_children = buildDatasetsTree(datasets, item.id);
-                    result.push(item);
-                }
-            });
-
-            return result;
-        };
-        var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
-        axios
-            .get(url)
-            .then(response => {
-                this.datasets = buildDatasetsTree(response["data"]["objects"], null);
-
-                var self = this;
-                this.datasets.forEach(function (item) {
-                    if (item.ancestor_id != null) {
-                        var ancestor = self.datasets.find(element => String(element.ancestor_id) == item.ancestor_id);
-                        item.ancestor_name = ancestor.name;
-                    } else {
-                        item.ancestor_name = null;
-                    }
-                });
-                this.sortBy(this.sortedBy, this.isAscendingSorted);
-            })
-            .catch(function (error) {
-                throw new Error(error);
-            });
     }
 };
 </script>

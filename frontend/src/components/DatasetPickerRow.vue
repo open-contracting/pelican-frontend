@@ -1,8 +1,8 @@
 <template>
     <div>
         <div
-            @click="setDataset(dataset)"
             :class="['row', 'tr', 'clickable', 'align-items-center', { disabled: !isDatasetImported(dataset) }]"
+            @click="setDataset(dataset)"
             @contextmenu.prevent="
                 $root.$emit('navigationContextMenu', {
                     event: $event,
@@ -12,7 +12,7 @@
         >
             <div class="td col-4">
                 <span v-if="depth > 0">
-                    <span v-for="d in depth" v-bind:key="d">&nbsp;&nbsp;</span>
+                    <span v-for="d in depth" :key="d">&nbsp;&nbsp;</span>
 
                     <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
@@ -21,21 +21,19 @@
                 <span v-if="depth == 0">&nbsp;</span>
                 <a
                     v-if="isDatasetImported(dataset) && depth == 0"
-                    v-on:click.stop.prevent="$emit('dataset-filter', dataset)"
                     href="#"
+                    @click.stop.prevent="$emit('dataset-filter', dataset)"
                 >
                     <font-awesome-icon :icon="['fas', 'filter']" />
                 </a>
                 &nbsp;
-                <a
-                    v-if="isDatasetImported(dataset)"
-                    v-on:click.stop.prevent="$emit('dataset-report', dataset)"
-                    href="#"
-                >
+                <a v-if="isDatasetImported(dataset)" href="#" @click.stop.prevent="$emit('dataset-report', dataset)">
                     <font-awesome-icon :icon="['fas', 'file']" />
                 </a>
             </div>
-            <div class="td col-1 numeric text-right">{{ dataset.size | formatNumber }}</div>
+            <div class="td col-1 numeric text-right">
+                {{ dataset.size | formatNumber }}
+            </div>
             <div v-if="dataset.meta.kingfisher_metadata" class="td col-1 numeric text-right">
                 {{ dataset.meta.kingfisher_metadata.collection_id }}
             </div>
@@ -61,7 +59,9 @@
                 <template v-else>
                     <b-row class="progress_label no-gutters">
                         <b-col v-for="p in phases" :key="p">
-                            <template v-if="p == dataset.phase">{{ p }}</template>
+                            <template v-if="p == dataset.phase">
+                                {{ p }}
+                            </template>
                         </b-col>
                     </b-row>
 
@@ -77,8 +77,8 @@
                 <b-link
                     v-if="dataset.ancestor_id"
                     class="time_varinace break_word"
-                    @click.stop="setDataset(dataset, { name: 'time' })"
                     :title="dataset.ancestor_id"
+                    @click.stop="setDataset(dataset, { name: 'time' })"
                 >
                     <span class="small_icon">
                         <font-awesome-icon icon="history" />
@@ -89,11 +89,11 @@
         </div>
         <template v-for="(item, index) in dataset.filtered_children">
             <DatasetPickerRow
-                v-on:dataset-filter="$emit('dataset-filter', $event)"
-                v-on:dataset-report="$emit('dataset-report', $event)"
-                v-bind:key="index"
+                :key="index"
                 :dataset="item"
                 :depth="depth + 1"
+                @dataset-filter="$emit('dataset-filter', $event)"
+                @dataset-report="$emit('dataset-report', $event)"
             />
         </template>
     </div>
@@ -106,14 +106,14 @@ import sortMixins from "@/plugins/sortMixins.js";
 
 export default {
     name: "DatasetPickerRow",
+    components: { ProgressBar },
     mixins: [stateMixin, sortMixins],
+    props: ["dataset", "depth"],
     data: function () {
         return {
             showFilteredChildren: false
         };
     },
-    components: { ProgressBar },
-    props: ["dataset", "depth"],
     computed: {
         phases: function () {
             return ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];

@@ -2,7 +2,7 @@
     <div
         v-if="check"
         class="tr row clickable"
-        v-on:click="detail()"
+        @click="detail()"
         @contextmenu.prevent="
             $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
         "
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </template>
-        <div class="td col col-4" v-else></div>
+        <div v-else class="td col col-4" />
     </div>
 </template>
 
@@ -66,6 +66,15 @@
 import ProgressBar from "@/components/ProgressBar.vue";
 
 export default {
+    name: "FieldCheckTableRow",
+    components: { ProgressBar },
+    props: {
+        check: Object,
+        showStats: {
+            type: Boolean,
+            default: true
+        }
+    },
     data: function () {
         return {
             detailRouterArguments: {
@@ -77,15 +86,6 @@ export default {
             }
         };
     },
-    name: "field-check-table-row",
-    props: {
-        check: Object,
-        showStats: {
-            type: Boolean,
-            default: true
-        }
-    },
-    components: { ProgressBar },
     methods: {
         detail: function () {
             this.$router.push(this.detailRouterArguments);

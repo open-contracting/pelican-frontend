@@ -1,7 +1,7 @@
 <template>
     <div v-if="loaded">
         <!-- <h5>{{ $t("extension.metadata") }}</h5> -->
-        <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="extensionData"></vue-json-pretty>
+        <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="extensionData" />
     </div>
 </template>
 
@@ -9,7 +9,7 @@
 import VueJsonPretty from "vue-json-pretty";
 
 export default {
-    name: "extensionPreview",
+    name: "ExtensionPreview",
     components: {
         VueJsonPretty
     },

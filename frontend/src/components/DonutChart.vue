@@ -8,7 +8,9 @@ import { GChart } from "vue-google-charts";
 import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
+    components: { GChart },
     mixins: [datasetMixin],
+    props: ["check"],
     data() {
         return {
             // Array will be automatically processed with visualization.arrayToDataTable function
@@ -25,8 +27,6 @@ export default {
             }
         };
     },
-    props: ["check"],
-    components: { GChart },
     mounted() {
         this.chartData.push(["Category", "Share"]);
 

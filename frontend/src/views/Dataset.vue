@@ -1,25 +1,21 @@
 <template>
     <dashboard>
         <h2>{{ $t("sections.dataset") }}</h2>
-        <div class="description" v-html="$t('datasetLevel.description')"></div>
+        <div class="description" v-html="$t('datasetLevel.description')" />
         <b-row class="collection_header" align-h="between">
             <b-col class="text-left">
                 <h4>{{ $t("datasetLevel.subheadline") }}</h4>
             </b-col>
             <b-col class="text-right">
                 <FilterDropdown
-                    v-on:newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
-                    :filterNames="filterNames"
-                    :startIndex="filterIndex"
+                    :filter-names="filterNames"
+                    :start-index="filterIndex"
+                    @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
                 />
             </b-col>
         </b-row>
         <template v-for="(section, index) in sections">
-            <DatasetLevelSection
-                :section="section"
-                :filter="filters[filterIndex]"
-                v-bind:key="index"
-            ></DatasetLevelSection>
+            <DatasetLevelSection :key="index" :section="section" :filter="filters[filterIndex]" />
         </template>
     </dashboard>
 </template>
@@ -31,7 +27,7 @@ import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 
 export default {
-    name: "dataset",
+    name: "Dataset",
     components: { Dashboard, DatasetLevelSection, FilterDropdown },
     data: function () {
         return {
@@ -51,13 +47,13 @@ export default {
             ]
         };
     },
-    created() {
-        this.filterIndex = this.$store.getters.datasetLevelFilterIndex;
-    },
     watch: {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setDatasetLevelFilterIndex", newFilterIndex);
         }
+    },
+    created() {
+        this.filterIndex = this.$store.getters.datasetLevelFilterIndex;
     }
 };
 </script>

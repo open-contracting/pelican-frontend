@@ -31,16 +31,12 @@
                 <div>
                     <span>{{ option.value }}</span>
                     <span class="multiselect__tag__items__count">&nbsp;({{ option.count }} items)</span>
-                    <i aria-hidden="true" tabindex="1" @click="remove(option)" class="multiselect__tag-icon"></i>
+                    <i aria-hidden="true" tabindex="1" class="multiselect__tag-icon" @click="remove(option)" />
                 </div>
             </div>
         </template>
         <template slot="clear" slot-scope="props">
-            <div
-                class="multiselect__clear"
-                v-if="selected.length"
-                @mousedown.prevent.stop="clearAll(props.search)"
-            ></div>
+            <div v-if="selected.length" class="multiselect__clear" @mousedown.prevent.stop="clearAll(props.search)" />
         </template>
         <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
     </multiselect>
@@ -51,6 +47,7 @@ const axios = require("axios");
 import { CONFIG } from "@/config.js";
 
 export default {
+    props: ["datasetId", "jsonPath", "updateSelected"],
     data: function () {
         return {
             options: [],
@@ -59,10 +56,17 @@ export default {
             cancelToken: null
         };
     },
-    props: ["datasetId", "jsonPath", "updateSelected"],
+    watch: {
+        selected(value) {
+            this.updateSelected(value.map(el => el.value));
+        }
+    },
+    mounted() {
+        this.asyncFind("");
+    },
     methods: {
         beforeOpen(event) {
-            this.datasetId = event.params.datasetId;
+            this._datasetId = event.params.datasetId;
         },
         asyncFind(query) {
             if (this.cancelToken != null) {
@@ -77,7 +81,7 @@ export default {
                     CONFIG.apiBaseUrl +
                     CONFIG.apiEndpoints.datasetDistinctValues +
                     "/" +
-                    this.datasetId +
+                    this._datasetId +
                     "/" +
                     this.jsonPath +
                     "/" +
@@ -87,7 +91,7 @@ export default {
                     CONFIG.apiBaseUrl +
                     CONFIG.apiEndpoints.datasetDistinctValues +
                     "/" +
-                    this.datasetId +
+                    this._datasetId +
                     "/" +
                     this.jsonPath;
             }
@@ -111,14 +115,6 @@ export default {
         limitText(count) {
             return count + this.$t("datasetValuesMultiselect.limitText");
         }
-    },
-    watch: {
-        selected(value) {
-            this.updateSelected(value.map(el => el.value));
-        }
-    },
-    mounted() {
-        this.asyncFind("");
     }
 };
 </script>

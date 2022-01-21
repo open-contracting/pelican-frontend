@@ -1,6 +1,6 @@
 <template>
     <span class="just_holder">
-        <Loader v-if="isSubmitting && submitResult == null"></Loader>
+        <Loader v-if="isSubmitting && submitResult == null" />
         <b-alert v-if="isSubmitting && submitResult != null" variant="success" show>{{
             $t("datasetFilter.statusOk")
         }}</b-alert>
@@ -11,21 +11,21 @@
                     <div class="row">
                         <div class="col">
                             <b-form-datepicker
+                                v-model="releaseDateFrom"
                                 :min="firstDate"
                                 :max="lastDate"
                                 :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                                v-model="releaseDateFrom"
                                 class="date_picker"
-                            ></b-form-datepicker>
+                            />
                         </div>
                         <div class="col">
                             <b-form-datepicker
+                                v-model="releaseDateTo"
                                 :min="firstDate"
                                 :max="lastDate"
                                 :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                                v-model="releaseDateTo"
                                 class="date_picker"
-                            ></b-form-datepicker>
+                            />
                         </div>
                     </div>
                 </div>
@@ -34,9 +34,9 @@
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
                 <div class="col-8">
                     <DatasetValuesMultiselect
-                        :updateSelected="updateBuyerName"
-                        :datasetId="dataset != null ? dataset.id : null"
-                        jsonPath="buyer.name"
+                        :update-selected="updateBuyerName"
+                        :dataset-id="dataset != null ? dataset.id : null"
+                        json-path="buyer.name"
                     />
                 </div>
             </div>
@@ -44,23 +44,23 @@
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
                 <div class="col-8">
                     <DatasetValuesMultiselect
-                        :updateSelected="updateProcuringEntityName"
-                        :datasetId="dataset != null ? dataset.id : null"
-                        jsonPath="tender.procuringEntity.name"
+                        :update-selected="updateProcuringEntityName"
+                        :dataset-id="dataset != null ? dataset.id : null"
+                        json-path="tender.procuringEntity.name"
                     />
                 </div>
             </div>
             <div class="form-group row section_row">
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
                 <div class="col-8">
-                    <input class="regex_input" v-model="buyerNameRegex" />
+                    <input v-model="buyerNameRegex" class="regex_input" />
                     <small class="form-text text-muted">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
                 </div>
             </div>
             <div class="form-group row procuring_row">
                 <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
                 <div class="col-8">
-                    <input class="regex_input" v-model="procuringEntityNameRegex" />
+                    <input v-model="procuringEntityNameRegex" class="regex_input" />
                     <small class="form-text text-muted">{{
                         $t("datasetFilter.procuringEntityNameRegexTooltip")
                     }}</small>
@@ -70,8 +70,8 @@
                 <button
                     type="button"
                     class="btn btn-primary submit_button"
-                    @click="createDatasetFilter"
                     :disabled="items == 0 || (dataset != null && items == dataset.size) || gettingCountsToken != null"
+                    @click="createDatasetFilter"
                 >
                     {{ $t("datasetFilter.submit") }}
                     <span v-if="gettingCountsToken == null">
@@ -87,7 +87,7 @@
                         v-if="gettingCountsToken != null"
                         variant="default"
                         style="width: 1.2rem; height: 1.2rem"
-                    ></b-spinner>
+                    />
                 </button>
             </div>
         </form>
@@ -102,6 +102,7 @@ import Loader from "@/components/Loader.vue";
 import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
 
 export default {
+    components: { DatasetValuesMultiselect, Loader },
     props: ["dataset"],
     data: function () {
         return {
@@ -169,7 +170,6 @@ export default {
         this.releaseDateTo = this.lastDate;
         this.datasetFilterItems();
     },
-    components: { DatasetValuesMultiselect, Loader },
     methods: {
         createDatasetFilter() {
             this.isSubmitting = true;

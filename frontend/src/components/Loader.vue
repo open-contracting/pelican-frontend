@@ -1,7 +1,7 @@
 <template>
     <div class="result_box loader text-center">
         <div class="spinner">
-            <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner"></b-spinner>
+            <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
         </div>
         {{ $t("loader.generic") }}
     </div>

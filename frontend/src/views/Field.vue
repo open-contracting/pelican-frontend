@@ -1,7 +1,7 @@
 <template>
     <dashboard>
         <h2>{{ $t("field.title") }}</h2>
-        <div id="field_description" class="description" v-html="$t('field.description')"></div>
+        <div id="field_description" class="description" v-html="$t('field.description')" />
 
         <div class="checked_fields_box">
             <div class="checked_fields_icon">
@@ -12,7 +12,9 @@
             </div>
         </div>
 
-        <h4 class="sub_headline">{{ $t("field.all") }}</h4>
+        <h4 class="sub_headline">
+            {{ $t("field.all") }}
+        </h4>
 
         <b-row class="action_bar" align-v="center">
             <b-col class="text-left">
@@ -24,36 +26,36 @@
             </b-col>
             <b-col class="text-right">
                 <b-button-group v-if="layout == 'table'">
-                    <button @click="resetTableSorting()" :class="['btn', 'reset-table-sorting']">
+                    <button :class="['btn', 'reset-table-sorting']" @click="resetTableSorting()">
                         <font-awesome-icon icon="sort-numeric-down" />
                     </button>
                 </b-button-group>
 
                 <b-button-group>
                     <button
-                        @click="$store.commit('setFieldCheckLayout', 'table')"
                         :class="['btn', { active: layout == 'table' }]"
+                        @click="$store.commit('setFieldCheckLayout', 'table')"
                     >
                         <font-awesome-icon icon="bars" />
                     </button>
                     <button
-                        @click="$store.commit('setFieldCheckLayout', 'tree')"
                         :class="['btn', { active: layout == 'tree' }]"
+                        @click="$store.commit('setFieldCheckLayout', 'tree')"
                     >
                         <font-awesome-icon icon="align-right" />
                     </button>
                 </b-button-group>
                 <FilterDropdown
-                    v-on:newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
-                    :filterNames="filterNames"
-                    :startIndex="filterIndex"
+                    :filter-names="filterNames"
+                    :start-index="filterIndex"
+                    @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
                 />
             </b-col>
         </b-row>
 
         <div class="field_result_box">
-            <FieldCheckTable v-if="layout == 'table'" :filter="filters[filterIndex]" ref="field-check-table" />
-            <FieldCheckTree v-else-if="layout == 'tree'" :filter="filters[filterIndex]" ref="field-check-tree" />
+            <FieldCheckTable v-if="layout == 'table'" ref="field-check-table" :filter="filters[filterIndex]" />
+            <FieldCheckTree v-else-if="layout == 'tree'" ref="field-check-tree" :filter="filters[filterIndex]" />
         </div>
     </dashboard>
 </template>
@@ -66,7 +68,14 @@ import SearchInput from "@/components/SearchInput.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 
 export default {
-    name: "field",
+    name: "Field",
+    components: {
+        Dashboard,
+        FieldCheckTable,
+        FieldCheckTree,
+        SearchInput,
+        FilterDropdown
+    },
     data: function () {
         return {
             filterIndex: 0,
@@ -85,16 +94,6 @@ export default {
             ]
         };
     },
-    components: {
-        Dashboard,
-        FieldCheckTable,
-        FieldCheckTree,
-        SearchInput,
-        FilterDropdown
-    },
-    created() {
-        this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
-    },
     computed: {
         layout: function () {
             return this.$store.getters.fieldCheckLayout;
@@ -103,14 +102,17 @@ export default {
             return this.$store.getters.fieldCheckSearch;
         }
     },
-    methods: {
-        resetTableSorting: function () {
-            this.$refs["field-check-table"].resetSorting();
-        }
-    },
     watch: {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setFieldLevelFilterIndex", newFilterIndex);
+        }
+    },
+    created() {
+        this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
+    },
+    methods: {
+        resetTableSorting: function () {
+            this.$refs["field-check-table"].resetSorting();
         }
     }
 };

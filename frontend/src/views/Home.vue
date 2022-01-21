@@ -12,7 +12,7 @@ import DatasetPicker from "@/components/DatasetPicker.vue";
 import Plain from "@/views/layouts/Plain.vue";
 
 export default {
-    name: "home",
+    name: "Home",
     components: {
         DatasetPicker,
         Plain

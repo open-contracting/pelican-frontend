@@ -1,13 +1,13 @@
 <template>
     <dashboard-detail>
-        <template v-if="check" v-slot:content>
+        <template v-if="check" #content>
             <h2 v-if="check">
                 <span class="category_name">
                     {{ $t("resourceLevel." + check.name.split(".")[0] + ".categoryName") }}:
                 </span>
                 {{ $t("resourceLevel." + check.name + ".name") }}
             </h2>
-            <p class="description" v-html="$t('resourceLevel.' + check.name + '.description')"></p>
+            <p class="description" v-html="$t('resourceLevel.' + check.name + '.description')" />
 
             <h5>
                 {{ $t("resourceLevel.count_header") }}
@@ -15,7 +15,7 @@
                     (check.passed_count + check.failed_count + check.undefined_count) | formatNumber
                 }}</span>
                 &nbsp;
-                <Tooltip :text="$t('resourceLevel.count_header_tooltip')"></Tooltip>
+                <Tooltip :text="$t('resourceLevel.count_header_tooltip')" />
             </h5>
 
             <CheckDetailResultBox :check="check" ok failed na />
@@ -24,22 +24,22 @@
                 {{ $t("resourceLevel.application_count_header") }}
                 <span class="bold">{{ check.individual_application_count | formatNumber }}</span
                 >&nbsp;
-                <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')"></Tooltip>
+                <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')" />
             </h5>
-            <CheckDetailResultBox :check="check" individualPass individualNonPass />
+            <CheckDetailResultBox :check="check" individual-pass individual-non-pass />
 
             <ExampleBoxes
-                :exampleSections="exampleSections"
-                v-on:preview="preview"
+                :example-sections="exampleSections"
                 :loaded="check.examples_filled"
-                :previewDisabled="loadingPreviewData"
+                :preview-disabled="loadingPreviewData"
+                @preview="preview"
             />
         </template>
 
-        <template v-slot:preview>
+        <template #preview>
             <span v-if="previewMetaData">
                 <h5>{{ $t("preview.metadata") }}</h5>
-                <vue-json-pretty :highlightMouseoverNode="true" :data="previewMetaData"></vue-json-pretty>
+                <vue-json-pretty :highlight-mouseover-node="true" :data="previewMetaData" />
             </span>
 
             <div class="divider">&nbsp;</div>
@@ -47,12 +47,7 @@
             <span v-if="loadingPreviewData">
                 <div class="result_box loader text-center">
                     <div class="spinner">
-                        <b-spinner
-                            variant="primary"
-                            style="width: 4rem; height: 4rem"
-                            type="grow"
-                            class="spinner"
-                        ></b-spinner>
+                        <b-spinner variant="primary" style="width: 4rem; height: 4rem" type="grow" class="spinner" />
                     </div>
                     {{ $t("loader.data") }}
                 </div>
@@ -60,7 +55,7 @@
 
             <span v-else-if="previewData">
                 <h5>{{ $t("preview.ocdsData") }}</h5>
-                <vue-json-pretty :highlightMouseoverNode="true" :deep="2" :data="previewData"></vue-json-pretty>
+                <vue-json-pretty :highlight-mouseover-node="true" :deep="2" :data="previewData" />
             </span>
         </template>
     </dashboard-detail>
@@ -75,15 +70,7 @@ import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {
-    name: "resourceCheckDetail",
-    mixins: [resourceCheckMixin],
-    data: function () {
-        return {
-            previewMetaData: null,
-            previewDataItemId: null,
-            loadingPreviewData: false
-        };
-    },
+    name: "ResourceCheckDetail",
     components: {
         VueJsonPretty,
         DashboardDetail,
@@ -91,32 +78,13 @@ export default {
         CheckDetailResultBox,
         Tooltip
     },
-    methods: {
-        preview: function (itemId) {
-            this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    this.previewDataItemId = itemId;
-                } else {
-                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
-                    this.previewDataItemId = null;
-                }
-
-                this.loadingPreviewData = false;
-            });
-
-            var allExamples = [];
-            allExamples = allExamples.concat(this.check.failed_examples);
-            allExamples = allExamples.concat(this.check.passed_examples);
-            allExamples = allExamples.concat(this.check.undefined_examples);
-
-            var result = allExamples.find(function (element) {
-                return element.meta.item_id == itemId;
-            });
-            if (result) {
-                this.previewMetaData = result.result;
-            }
-        }
+    mixins: [resourceCheckMixin],
+    data: function () {
+        return {
+            previewMetaData: null,
+            previewDataItemId: null,
+            loadingPreviewData: false
+        };
     },
     computed: {
         check() {
@@ -166,6 +134,33 @@ export default {
             }
 
             return null;
+        }
+    },
+    methods: {
+        preview: function (itemId) {
+            this.loadingPreviewData = true;
+            this.$store.dispatch("loadDataItem", itemId).finally(() => {
+                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
+                    this.previewDataItemId = itemId;
+                } else {
+                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
+                    this.previewDataItemId = null;
+                }
+
+                this.loadingPreviewData = false;
+            });
+
+            var allExamples = [];
+            allExamples = allExamples.concat(this.check.failed_examples);
+            allExamples = allExamples.concat(this.check.passed_examples);
+            allExamples = allExamples.concat(this.check.undefined_examples);
+
+            var result = allExamples.find(function (element) {
+                return element.meta.item_id == itemId;
+            });
+            if (result) {
+                this.previewMetaData = result.result;
+            }
         }
     }
 };
