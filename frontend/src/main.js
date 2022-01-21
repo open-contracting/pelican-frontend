@@ -30,8 +30,8 @@ Vue.use(VueI18n);
 Vue.use(VueSimpleAlert);
 Vue.use(Clipboard);
 Vue.use(Multiselect);
-Vue.component("date-pick", DatePick);
-Vue.component("multiselect", Multiselect);
+Vue.component("DatePick", DatePick);
+Vue.component("Multiselect", Multiselect);
 const i18n = new VueI18n({
     locale: "en", // set locale
     messages: {

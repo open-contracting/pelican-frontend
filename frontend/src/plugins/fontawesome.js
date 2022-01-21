@@ -8,6 +8,6 @@ import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from "@fort
 library.add(fas);
 library.add(far);
 
-Vue.component("font-awesome-icon", FontAwesomeIcon);
-Vue.component("font-awesome-layers", FontAwesomeLayers);
-Vue.component("font-awesome-layers-text", FontAwesomeLayersText);
+Vue.component("FontAwesomeIcon", FontAwesomeIcon);
+Vue.component("FontAwesomeLayers", FontAwesomeLayers);
+Vue.component("FontAwesomeLayersText", FontAwesomeLayersText);
