@@ -132,7 +132,7 @@ export default {
             if (this.check != [] && this.check.name != undefined) {
                 var failed = this.check.failed_examples;
                 var passed = this.check.passed_examples;
-                var undefined = this.check.undefined_examples;
+                var undefineds = this.check.undefined_examples;
 
                 if (failed.length > 0) {
                     exampleSections.push({
@@ -148,10 +148,10 @@ export default {
                     });
                 }
 
-                if (undefined.length > 0) {
+                if (undefineds.length > 0) {
                     exampleSections.push({
                         header: this.$t("core.undefinedExamples"),
-                        examples: undefined.map(val => val.meta)
+                        examples: undefineds.map(val => val.meta)
                     });
                 }
             }
