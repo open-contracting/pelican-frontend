@@ -9,10 +9,10 @@ google-auth
 gunicorn[setproctitle]
 lxml
 matplotlib
-pika
 pillow
 psycopg2
 sentry-sdk
 shortuuid
 simplejson
 uritemplate
+yapw

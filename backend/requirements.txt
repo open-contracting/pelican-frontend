@@ -59,8 +59,8 @@ matplotlib==3.3.0
     # via -r backend/requirements.in
 numpy==1.22.1
     # via matplotlib
-pika==1.1.0
-    # via -r backend/requirements.in
+pika==1.2.0
+    # via yapw
 pillow==9.0.0
     # via
     #   -r backend/requirements.in
@@ -121,6 +121,8 @@ urllib3==1.26.5
     # via
     #   requests
     #   sentry-sdk
+yapw==0.0.12
+    # via -r backend/requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

@@ -1,4 +1,3 @@
-import simplejson as json
 from django.db import connections
 from django.shortcuts import get_object_or_404
 from psycopg2.sql import SQL, Identifier
@@ -70,11 +69,8 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        message = {
-            "name": serializer.data["name"],
-            "collection_id": serializer.data["collection_id"],
-        }
-        publish(json.dumps(message), "ocds_kingfisher_extractor_init")
+        message = {"name": serializer.data["name"], "collection_id": serializer.data["collection_id"]}
+        publish(message, "ocds_kingfisher_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     @action(detail=True, methods=["post"])
@@ -84,19 +80,15 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        message = {
-            "dataset_id_original": int(pk),
-            "filter_message": serializer.data,
-        }
-        publish(json.dumps(message), "dataset_filter_extractor_init")
+        message = {"dataset_id_original": int(pk), "filter_message": serializer.data}
+        publish(message, "dataset_filter_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     def destroy(self, request, pk=None):
         """
         Publishes a message to RabbitMQ to wipe the dataset.
         """
-        message = {"dataset_id": int(pk)}
-        publish(json.dumps(message), "wiper_init")
+        publish({"dataset_id": int(pk)}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     @action(detail=False)
