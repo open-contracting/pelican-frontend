@@ -47,7 +47,7 @@ class ViewsTests(TransactionTestCase):
         )
 
         self.assertEqual(response.status_code, 202)
-        publish.assert_called_once_with('{"name": "anything", "collection_id": 123}', "ocds_kingfisher_extractor_init")
+        publish.assert_called_once_with({"name": "anything", "collection_id": 123}, "ocds_kingfisher_extractor_init")
 
     @patch("controller.views.publish")
     def test_filter_invalid(self, publish):
@@ -62,7 +62,7 @@ class ViewsTests(TransactionTestCase):
 
         self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with(
-            '{"dataset_id_original": 123, "filter_message": {}}', "dataset_filter_extractor_init"
+            {"dataset_id_original": 123, "filter_message": {}}, "dataset_filter_extractor_init"
         )
 
     @patch("controller.views.publish")
@@ -71,7 +71,7 @@ class ViewsTests(TransactionTestCase):
 
         self.assertEqual(response.status_code, 202)
         publish.assert_called_once_with(
-            '{"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}', "dataset_filter_extractor_init"
+            {"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}, "dataset_filter_extractor_init"
         )
 
     @patch("controller.views.publish")
@@ -79,7 +79,7 @@ class ViewsTests(TransactionTestCase):
         response = self.client.delete("/datasets/123/")
 
         self.assertEqual(response.status_code, 202)
-        publish.assert_called_once_with('{"dataset_id": 123}', "wiper_init")
+        publish.assert_called_once_with({"dataset_id": 123}, "wiper_init")
 
     def test_find_by_name_no_name(self):
         self.create(Dataset, name="anything")
