@@ -20,7 +20,7 @@ cycler==0.10.0
     # via matplotlib
 dj-database-url==0.5.0
     # via -r backend/requirements.in
-django==3.2.11
+django==3.2.12
     # via
     #   -r backend/requirements.in
     #   django-cors-headers
@@ -65,7 +65,7 @@ pillow==9.0.0
     # via
     #   -r backend/requirements.in
     #   matplotlib
-protobuf==3.12.2
+protobuf==3.19.4
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -109,7 +109,6 @@ six==1.12.0
     #   google-api-core
     #   google-api-python-client
     #   google-auth
-    #   protobuf
     #   python-dateutil
 sqlparse==0.3.0
     # via django

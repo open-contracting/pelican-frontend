@@ -47,7 +47,7 @@ distlib==0.3.1
     # via virtualenv
 dj-database-url==0.5.0
     # via -r backend/requirements.txt
-django==3.2.11
+django==3.2.12
     # via
     #   -r backend/requirements.txt
     #   django-cors-headers
@@ -137,7 +137,7 @@ platformdirs==2.4.0
     # via black
 pre-commit==2.12.1
     # via -r backend/requirements_dev.in
-protobuf==3.12.2
+protobuf==3.19.4
     # via
     #   -r backend/requirements.txt
     #   google-api-core
@@ -209,7 +209,6 @@ six==1.12.0
     #   google-api-core
     #   google-api-python-client
     #   google-auth
-    #   protobuf
     #   python-dateutil
     #   transifex-client
     #   virtualenv
