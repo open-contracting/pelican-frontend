@@ -127,7 +127,7 @@ pika==1.2.0
     # via
     #   -r backend/requirements.txt
     #   yapw
-pillow==9.0.0
+pillow==9.0.1
     # via
     #   -r backend/requirements.txt
     #   matplotlib

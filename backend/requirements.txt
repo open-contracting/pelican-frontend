@@ -61,7 +61,7 @@ numpy==1.22.1
     # via matplotlib
 pika==1.2.0
     # via yapw
-pillow==9.0.0
+pillow==9.0.1
     # via
     #   -r backend/requirements.in
     #   matplotlib
