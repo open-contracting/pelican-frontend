@@ -502,7 +502,7 @@ def histogram_result_box(counts_pairs, return_aspect_ratio=False):
 
     max_count = max(counts)
     log_10 = int(math.log10(max_count))
-    max_ytick = math.ceil(max_count / (10 ** log_10)) * (10 ** log_10)
+    max_ytick = math.ceil(max_count / (10**log_10)) * (10**log_10)
     ax.set_ylim(top=max_ytick)
 
     yticklabels = [0, max_ytick]
