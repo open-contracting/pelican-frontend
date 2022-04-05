@@ -58,7 +58,7 @@ jobs:
 
   build_frontend:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     defaults:
       run:
         working-directory: frontend
@@ -67,5 +67,7 @@ jobs:
       - uses: actions/setup-node@v3.1.0
         with:
           node-version: 16.x
+          cache: npm
+          cache-dependency-path: "**/package-lock.json"
       - run: npm ci
       - run: npm run build --if-present
