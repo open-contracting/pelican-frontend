@@ -1,9 +1,8 @@
 dj-database-url
-django<4
 django-cors-headers
+django-tastypie
+django<4
 djangorestframework
-# 0.14.3 is not compatible with Django 3.2.
--e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
 google-api-python-client
 google-auth
 gunicorn[setproctitle]

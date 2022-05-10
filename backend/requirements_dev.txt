@@ -4,8 +4,6 @@
 #
 #    pip-compile backend/requirements_dev.in
 #
--e git+https://github.com/django-tastypie/django-tastypie.git@ac18543860a1deb88ed83c6d2eecad02a525419d#egg=django-tastypie
-    # via -r backend/requirements.txt
 appdirs==1.4.4
     # via virtualenv
 asgiref==3.4.1
@@ -53,6 +51,8 @@ django==3.2.13
     #   django-cors-headers
     #   djangorestframework
 django-cors-headers==3.10.0
+    # via -r backend/requirements.txt
+django-tastypie==0.14.4
     # via -r backend/requirements.txt
 djangorestframework==3.12.4
     # via -r backend/requirements.txt
