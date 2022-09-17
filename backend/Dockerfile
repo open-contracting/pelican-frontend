@@ -7,13 +7,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       gettext \
    && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
-
 RUN groupadd -r runner && useradd --no-log-init -r -g runner runner
 
 # Must match the directory of the settings.TOKEN_PATH default value.
 RUN mkdir -p /data && chown -R runner:runner /data
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /workdir
 USER runner:runner
