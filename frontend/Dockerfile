@@ -1,8 +1,11 @@
 # https://cli.vuejs.org/guide/deployment.html#docker-nginx
 FROM node:16 as build-stage-vue
+
 WORKDIR /workdir
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
 RUN npm run build
 
