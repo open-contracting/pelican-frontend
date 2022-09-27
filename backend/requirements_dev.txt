@@ -137,7 +137,7 @@ platformdirs==2.4.0
     # via black
 pre-commit==2.12.1
     # via -r backend/requirements_dev.in
-protobuf==3.19.4
+protobuf==4.21.6
     # via
     #   -r backend/requirements.txt
     #   google-api-core

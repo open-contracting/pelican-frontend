@@ -65,7 +65,7 @@ pillow==9.0.1
     # via
     #   -r backend/requirements.in
     #   matplotlib
-protobuf==3.19.4
+protobuf==4.21.6
     # via
     #   google-api-core
     #   googleapis-common-protos
