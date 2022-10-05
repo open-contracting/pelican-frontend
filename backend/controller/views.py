@@ -134,7 +134,7 @@ class DatasetViewSet(viewsets.ViewSet):
             "parties": ["parties.id"],
             "plannings": ["planning.budget"],
             "tenders": ["tender.id"],
-            "tenderers": ["tenderers.id"],
+            "tenderers": ["tender.tenderers.id"],
             "tenders_items": ["tender.items.id"],
             "awards": ["awards.id"],
             "awards_items": ["awards.items.id"],
@@ -158,7 +158,7 @@ class DatasetViewSet(viewsets.ViewSet):
             "amendments": [
                 "tender.amendments.id",
                 "awards.amendments.id",
-                "contract.amendments.id",
+                "contracts.amendments.id",
             ],
         }
 
