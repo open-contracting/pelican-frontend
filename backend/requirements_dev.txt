@@ -16,7 +16,7 @@ cachetools==4.1.0
     # via
     #   -r backend/requirements.txt
     #   google-auth
-certifi==2020.6.20
+certifi==2022.12.7
     # via
     #   -r backend/requirements.txt
     #   requests
