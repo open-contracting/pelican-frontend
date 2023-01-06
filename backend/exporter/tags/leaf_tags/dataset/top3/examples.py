@@ -6,7 +6,7 @@ from exporter.util import terms_enumeration
 
 
 class ExamplesLeafTag(LeafTag):
-    RANKS = set(["1", "2", "3", "4", "5"])
+    RANKS = {"1", "2", "3", "4", "5"}
     MODES = ("oneLine", "multipleLines")
 
     def __init__(self, gdocs, dataset_id):

@@ -3,15 +3,7 @@ from exporter.util import terms_enumeration
 
 
 class CountLeafTag(LeafTag):
-    PERCENTAGE_RANGES = set(
-        [
-            "0-1",
-            "1-5",
-            "5-20",
-            "20-50",
-            "50-100",
-        ]
-    )
+    PERCENTAGE_RANGES = {"0-1", "1-5", "5-20", "20-50", "50-100"}
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)

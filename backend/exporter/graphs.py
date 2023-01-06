@@ -477,17 +477,7 @@ def histogram_result_box(counts_pairs, return_aspect_ratio=False):
         color=len(counts_pairs) * [COLOR["blue"]],
     )
 
-    ax.set_xticks(
-        list(
-            set(
-                [
-                    0,
-                    len(counts_pairs) // 2,
-                    len(counts_pairs) - 1,
-                ]
-            )
-        )
-    )
+    ax.set_xticks(list({0, len(counts_pairs) // 2, len(counts_pairs) - 1}))
     if len(counts_pairs) == 1:
         xticklabels = [values[0]]
     elif len(counts_pairs) == 2:

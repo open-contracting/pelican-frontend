@@ -3,15 +3,13 @@ from exporter.util import terms_enumeration
 
 
 class LifecycleObjectCountLeafTag(LeafTag):
-    STAGES = set(
-        [
-            "planning",
-            "tender",
-            "award",
-            "contract",
-            "implementation",
-        ]
-    )
+    STAGES = {
+        "planning",
+        "tender",
+        "award",
+        "contract",
+        "implementation",
+    }
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)

@@ -6,13 +6,7 @@ from exporter.util import terms_enumeration
 
 def generate_timestamp_leaf_tag(key, datetime_format):
     class TimestampLeafTag(LeafTag):
-        MODES = set(
-            [
-                "datetime",
-                "date",
-                "time",
-            ]
-        )
+        MODES = {"datetime", "date", "time"}
         BOTH_DATETIME_FORMAT = "%Y-%m-%d %H.%M.%S"
         DATE_DATETIME_FORMAT = "%Y-%m-%d"
         TIME_DATETIME_FORMAT = "%H.%M.%S"

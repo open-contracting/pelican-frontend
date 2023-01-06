@@ -5,12 +5,7 @@ from exporter.util import terms_enumeration
 
 
 class CountsResultBoxImageLeafTag(LeafTag):
-    TYPES = set(
-        [
-            "bar",
-            # 'pie',
-        ]
-    )
+    TYPES = {"bar"}  # "pie"
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)

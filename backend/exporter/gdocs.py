@@ -129,11 +129,11 @@ class GoogleDriveCache:
             os.mkdir(os.path.join(default_storage.location, GoogleDriveCache.ROOT))
 
         self.drive_service = drive_service
-        self.files = dict()
+        self.files = {}
         self.refresh()
 
     def refresh(self):
-        self.files = dict()
+        self.files = {}
         _, filenames = default_storage.listdir(GoogleDriveCache.ROOT)
         for filename in filenames:
             version, file_id = re.search(r"^([^_]+)_(.+)$", filename).groups()

@@ -3,15 +3,7 @@ from exporter.util import terms_enumeration
 
 
 class OcidCountLeafTag(LeafTag):
-    COUNT_RANGES = set(
-        [
-            "1",
-            "2-20",
-            "21-50",
-            "51-100",
-            "100+",
-        ]
-    )
+    COUNT_RANGES = {"1", "2-20", "21-50", "51-100", "100+"}
 
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
