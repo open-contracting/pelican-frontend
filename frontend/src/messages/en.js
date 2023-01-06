@@ -30,7 +30,7 @@ export const messages = {
         timeVariance: "Time-based checks",
         filter: "filter",
         actions: "actions",
-        comparsion: "comparsion"
+        comparison: "comparison"
     },
     datasetFilter: {
         headline: "Dataset filtering",
@@ -72,7 +72,7 @@ export const messages = {
         warningList: "List of checks, which were not computed",
         warningEnd: "We recommend you to check your dataset and template to generate complete report.",
         reportLanguage: "Report language",
-        reportLanguageTooltip: "<p>laguage of the the generated messages in the report&#8482;</p>"
+        reportLanguageTooltip: "<p>language of the the generated messages in the report&#8482;</p>"
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",
@@ -171,21 +171,21 @@ export const messages = {
                 description:
                     "Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
                 description_long:
-                    "<p>Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
+                    "<p>Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if there are no pairs.</p>"
             },
             awards_value_repetition: {
                 name: "Awards value repetition",
                 description:
                     "Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
                 description_long:
-                    "<p>Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
+                    "<p>Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if there are no pairs.</p>"
             },
             tender_value_repetition: {
                 name: "Tender value repetition",
                 description:
                     "Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
                 description_long:
-                    "<p>Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if ther are no pairs.</p>"
+                    "<p>Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if there are no pairs.</p>"
             },
             buyer: {
                 name: "Buyer distribution",
@@ -462,7 +462,7 @@ export const messages = {
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
                 description:
-                    "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparseable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
+                    "<p>For each period, <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>endDate</code>. If <code>endDate</code> is blank or unparsable, then <code>durationInDays</code> is equal to the difference between <code>startDate</code> and <code>maxExtentDate</code>.</p><p>Since the test operates on all period objects, the test silently ignores any dates that can't be parsed.</p>"
             },
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",

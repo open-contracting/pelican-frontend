@@ -62,7 +62,7 @@ class DatasetTemplateTag(TemplateTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.prepare_data, settings.GDOCS_TEMPLATES["DEFAULT_DATASET_TEMPLATE"], gdocs, dataset_id)
 
-        # TODO: check if check was calculated and version compatability
+        # TODO: check if check was calculated and version compatibility
         self.set_param_validation(
             "check",
             lambda v: v in DatasetTemplateTag.CHECK_MAPPING,
