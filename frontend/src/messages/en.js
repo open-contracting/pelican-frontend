@@ -371,8 +371,7 @@ export const messages = {
         averageScore: {
             description: "checks in total with average score",
             undefined: "undefined",
-            tooltip:
-                "The score is computed as the percentage of total successful check applications from total applications (excluding not applicable)."
+            tooltip: "The pass rate is calculated as: all passed / (all passed + all failed)."
         },
         coherent: {
             categoryName: "Coherence",
