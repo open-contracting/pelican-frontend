@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "tastypie",
     "corsheaders",
-    "dqt",
+    "api",
     "controller.apps.ControllerConfig",
     "exporter.apps.ExporterConfig",
 ]
@@ -203,7 +203,7 @@ LANGUAGES = [
     ("es", _("Spanish")),
 ]
 
-DATABASE_ROUTERS = ["dqt.routers.DbRouter"]
+DATABASE_ROUTERS = ["api.routers.DbRouter"]
 
 
 # Dependency configuration

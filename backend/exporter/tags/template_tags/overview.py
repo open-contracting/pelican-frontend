@@ -1,4 +1,4 @@
-from dqt.models import Dataset
+from api.models import Dataset
 from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from exporter.tags.leaf_tags.overview.lifecycle_image import LifecycleImageLeafTag
 from exporter.tags.leaf_tags.overview.lifecycle_object_count import LifecycleObjectCountLeafTag

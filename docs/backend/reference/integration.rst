@@ -3,9 +3,9 @@ Pelican backend integration
 
 Pelican backend's database is treated as a read-only `legacy database <https://docs.djangoproject.com/en/3.2/howto/legacy-databases/>`__, with ``managed = False`` in all model's ``Meta`` class, and with a ``DATABASE_ROUTERS`` setting that routes queries to its database.
 
-To update ``backend/dqt/models.py`` following changes to Pelican backend's database schema:
+To update ``backend/api/models.py`` following changes to Pelican backend's database schema:
 
--  Run ``python backend/manage.py inspectdb > backend/dqt/models.py``
+-  Run ``python backend/manage.py inspectdb > backend/api/models.py``
 -  Replace comments at top of file
 -  Replace ``models.DO_NOTHING`` with ``on_delete=models.CASCADE``
 -  ``Dataset``: Add methods

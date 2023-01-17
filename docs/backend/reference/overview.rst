@@ -3,7 +3,7 @@ Technical overview
 
 The Django project is made up of three apps:
 
--  ``dqt``: Serves API requests for the :doc:`../../frontend/index`
+-  ``api``: Serves API requests for the :doc:`../../frontend/index`
 -  ``exporter``: Generates the exports to Google Docs
 -  ``controller``: Serves API requests for managing datasets in Pelican backend
 

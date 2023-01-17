@@ -1,6 +1,6 @@
 # https://docs.djangoproject.com/en/3.2/topics/db/multi-db/#an-example
 class DbRouter:
-    route_app_labels = {"dqt"}
+    route_app_labels = {"api"}
 
     def db_for_read(self, model, **hints):
         if model._meta.app_label in self.route_app_labels:
