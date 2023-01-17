@@ -130,6 +130,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         self.get_object()  # trigger 404 if no dataset
 
+        # The lists of fields must match the names of field-level checks in pelican-backend.
         mapping = {
             "parties": ["parties.id"],
             "plannings": ["planning.budget"],
