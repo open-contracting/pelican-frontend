@@ -66,3 +66,10 @@ In another terminal, start the frontend server:
 
    cd frontend
    npx vue-cli-service serve
+
+Reference
+---------
+
+-  `Vue v2 <https://v2.vuejs.org>`__
+-  `Vue CLI <https://cli.vuejs.org>`__
+-  `Vue Router <https://v3.router.vuejs.org>`__
