@@ -3,9 +3,6 @@
     v-if="check"
     class="tr row clickable"
     @click="detail()"
-    @contextmenu.prevent="
-      $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
-    "
   >
     <div class="td col col-4 break_word">
       <slot>{{ check.path }}</slot>

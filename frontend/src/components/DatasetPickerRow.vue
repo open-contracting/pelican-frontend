@@ -3,12 +3,6 @@
     <div
       :class="['row', 'tr', 'clickable', 'align-items-center', { disabled: !isDatasetImported(dataset) }]"
       @click="setDataset(dataset)"
-      @contextmenu.prevent="
-        $root.$emit('navigationContextMenu', {
-          event: $event,
-          routerArguments: { name: 'overview', params: { datasetId: dataset.id } }
-        })
-      "
     >
       <div class="td col-4">
         <span v-if="depth > 0">

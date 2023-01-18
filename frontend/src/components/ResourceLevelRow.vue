@@ -2,9 +2,6 @@
   <div
     class="tr row clickable align-items-center"
     @click="detail()"
-    @contextmenu.prevent="
-      $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
-    "
   >
     <div class="col-9 col-lg-5 break_word check_name">
       <span>{{ $t("resourceLevel." + name + ".name") }}</span>

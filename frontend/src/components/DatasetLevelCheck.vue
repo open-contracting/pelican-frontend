@@ -6,11 +6,6 @@
       undef: check.result == undefined || checkType == null
     }"
     @click="detail()"
-    @contextmenu.prevent="
-      check.result != undefined && checkType != null
-        ? $root.$emit('navigationContextMenu', { event: $event, routerArguments: detailRouterArguments })
-        : null
-    "
   >
     <div class="card-body">
       <div class="row no-gutters">
