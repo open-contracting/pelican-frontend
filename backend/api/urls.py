@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .api import (
+from api.api import (
     DataItemResource,
     DatasetLevelCheckResource,
     DatasetResource,
@@ -10,7 +10,7 @@ from .api import (
     ResourceLevelCheckResource,
     TimeVarianceLevelCheckResource,
 )
-from .views import (
+from api.views import (
     dataset_distinct_values,
     dataset_filter_items,
     dataset_level_stats,

@@ -2,7 +2,7 @@
 from tastypie.fields import CharField, DictField, IntegerField, ListField
 from tastypie.resources import ModelResource
 
-from .models import (
+from api.models import (
     DataItem,
     Dataset,
     DatasetLevelCheck,

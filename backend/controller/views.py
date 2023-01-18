@@ -7,8 +7,7 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 
 from api.models import Dataset, FieldLevelCheck, ProgressMonitorDataset
-
-from .rabbitmq import publish
+from controller.rabbitmq import publish
 
 
 class CreateDatasetSerializer(serializers.Serializer):

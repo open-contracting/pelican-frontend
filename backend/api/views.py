@@ -7,7 +7,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from psycopg2.sql import SQL
 
-from .models import DataItem, Dataset, DatasetLevelCheck, TimeVarianceLevelCheck
+from api.models import DataItem, Dataset, DatasetLevelCheck, Report, TimeVarianceLevelCheck
 
 
 @csrf_exempt
@@ -103,21 +103,11 @@ def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
 
 
 def field_level_stats(request, dataset_id):
-    with connections["data"].cursor() as cursor:
-        cursor.execute(
-            """
-            select data
-            from report
-            where dataset_id = %s and type = 'field_level_check';
-            """,
-            [dataset_id],
-        )
-        rows = cursor.fetchall()
-
-        if not rows:
-            return JsonResponse({"error": f"no field_level_check report for dataset_id: {dataset_id}"})
-
-        return JsonResponse(rows[0][0])
+    try:
+        response = Report.objects.filter(dataset_id=dataset_id, type="field_level_check").get().data
+    except Report.DoesNotExist:
+        response = {"error": f"no field_level_check report for dataset_id {dataset_id}"}
+    return JsonResponse(response)
 
 
 def field_level_detail(request, dataset_id, path):
@@ -173,21 +163,11 @@ def field_level_detail(request, dataset_id, path):
 
 
 def resource_level_stats(request, dataset_id):
-    with connections["data"].cursor() as cursor:
-        cursor.execute(
-            """
-            select data
-            from report
-            where dataset_id = %s and type = 'resource_level_check';
-            """,
-            [dataset_id],
-        )
-        rows = cursor.fetchall()
-
-        if not rows:
-            return JsonResponse({"error": f"no resource_level_check report for dataset_id: {dataset_id}"})
-
-        return JsonResponse(rows[0][0])
+    try:
+        response = Report.objects.filter(dataset_id=dataset_id, type="resource_level_check").get().data
+    except Report.DoesNotExist:
+        response = {"error": f"no resource_level_check report for dataset_id {dataset_id}"}
+    return JsonResponse(response)
 
 
 def resource_level_detail(request, dataset_id, check_name):

@@ -6,9 +6,9 @@ from django.http import JsonResponse
 from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
 
-from .exceptions import GoogleDriveError, TagError
-from .gdocs import Gdocs
-from .tags.template_tags.base import BaseTemplateTag
+from exporter.exceptions import GoogleDriveError, TagError
+from exporter.gdocs import Gdocs
+from exporter.tags.template_tags.base import BaseTemplateTag
 
 
 @csrf_exempt

@@ -1,11 +1,10 @@
 from django.conf import settings
 
 from exporter.tags.tag import TemplateTag
-
-from .dataset import DatasetTemplateTag
-from .field import FieldTemplateTag
-from .overview import OverviewTemplateTag
-from .resource import ResourceTemplateTag
+from exporter.tags.template_tags.dataset import DatasetTemplateTag
+from exporter.tags.template_tags.field import FieldTemplateTag
+from exporter.tags.template_tags.overview import OverviewTemplateTag
+from exporter.tags.template_tags.resource import ResourceTemplateTag
 
 
 class BaseTemplateTag(TemplateTag):
