@@ -281,19 +281,6 @@ export default {
     margin-bottom: 20px;
 }
 
-.tr {
-    &.disabled {
-        cursor: not-allowed;
-
-        a {
-            cursor: not-allowed;
-            &:hover {
-                text-decoration: none;
-            }
-        }
-    }
-}
-
 .th {
     .modified {
         font-family: $font-family-thin;

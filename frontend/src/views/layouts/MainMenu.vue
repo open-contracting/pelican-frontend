@@ -179,6 +179,7 @@ export default {
     color: $menu_gray;
     font-weight: 500;
     letter-spacing: 0.05rem;
+    text-decoration: none;
 }
 
 .main_nav a :hover {

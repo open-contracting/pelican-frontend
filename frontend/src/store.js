@@ -265,14 +265,6 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        updateDataset({ dispatch, commit }, newDataset) {
-            dispatch("resetDatasetEnv");
-            commit("setDataset", newDataset);
-            dispatch("loadResourceLevelStats");
-            dispatch("loadDatasetLevelStats");
-            dispatch("loadFieldLevelStats");
-            dispatch("loadTimeVarianceLevelStats");
-        },
         loadDataset({ dispatch, commit }, datasetId) {
             var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset + "/" + datasetId;
 

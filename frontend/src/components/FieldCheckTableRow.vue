@@ -27,7 +27,10 @@
           class="col col-12 col-lg-3 col-xl-4 col-xxl-6 col-xxxxl-7 field_check_bar d-flex align-items-center justify-content-end"
         >
           <span class="field_check_bar_envelope">
-            <ProgressBar :ok="check.coverageOkShare" :failed="check.coverageFailedShare" />
+            <ProgressBar
+              :ok="check.coverageOkShare"
+              :failed="check.coverageFailedShare"
+            />
           </span>
         </div>
       </div>

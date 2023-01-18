@@ -1,8 +1,7 @@
 <template>
   <div>
     <div
-      :class="['row', 'tr', 'clickable', 'align-items-center', { disabled: !isDatasetImported(dataset) }]"
-      @click="setDataset(dataset)"
+      :class="['row', 'tr', 'align-items-center']"
     >
       <div class="td col-4">
         <span v-if="depth > 0">
@@ -13,8 +12,10 @@
 
           <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
         </span>
-        {{ dataset.name }}
-        <span class="dataset_id">(Id {{ dataset.id }})</span>
+        <b-link :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
+          {{ dataset.name }}
+        </b-link>
+        <span class="dataset_id"> (Id {{ dataset.id }})</span>
         <span v-if="depth == 0">&nbsp;</span>
         <a
           v-if="isDatasetImported(dataset) && depth == 0"
@@ -23,7 +24,7 @@
         >
           <font-awesome-icon :icon="['fas', 'filter']" />
         </a>
-                &nbsp;
+        &nbsp;
         <a
           v-if="isDatasetImported(dataset)"
           href="#"
@@ -136,18 +137,6 @@ export default {
         }
     },
     methods: {
-        setDataset: function (dataset, route = { name: "overview" }) {
-            if (!this.isDatasetImported(dataset)) {
-                return;
-            }
-            route.params = { datasetId: dataset.id };
-            if (this.$store.getters.datasetId == dataset.id) {
-                this.$router.push(route);
-            } else {
-                this.$store.dispatch("updateDataset", dataset);
-                this.$router.push(route);
-            }
-        },
         getDatasetProgress: function (dataset) {
             return (this.phases.indexOf(dataset.phase) + 1) * 20;
         },
@@ -186,14 +175,12 @@ export default {
 }
 
 .tr {
-    &.disabled {
-        cursor: not-allowed;
-
-        a {
-            cursor: not-allowed;
-            &:hover {
-                text-decoration: none;
-            }
+    a.disabled {
+        pointer-events: none;
+        color: $gray-600;
+        text-decoration: none;
+        &:hover {
+            text-decoration: none;
         }
     }
 }
