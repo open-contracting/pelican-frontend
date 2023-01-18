@@ -3,6 +3,18 @@ Contributing
 
 Create a Python 3.8 virtual environment.
 
+Setup
+-----
+
+Backend
+~~~~~~~
+
+Change to the ``backend`` directory:
+
+.. code-block:: bash
+
+   cd backend
+
 Install development dependencies:
 
 .. code-block:: bash
@@ -16,12 +28,41 @@ Run database migrations:
 
    ./manage.py migrate
 
-If you don't have an instance of `Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__, create its database and run its migrations:
+If you don't have an instance of `Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__, create its database and load fixtures:
 
 .. code-block:: bash
 
    createdb pelican_backend
-   curl -sS \
-     https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
-     https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
-     | psql pelican_backend -f -
+   psql pelican_backend -f backend/tests/fixtures/pelican-backend.sql
+
+Frontend
+~~~~~~~~
+
+Change to the ``frontend`` directory:
+
+.. code-block:: bash
+
+   cd backend
+
+Install development dependencies:
+
+.. code-block:: bash
+
+   npm install
+
+Development
+-----------
+
+In one terminal, start the backend server:
+
+.. code-block:: bash
+
+   cd backend
+   ./manage.py runserver
+
+In another terminal, start the frontend server:
+
+.. code-block:: bash
+
+   cd frontend
+   npx vue-cli-service serve

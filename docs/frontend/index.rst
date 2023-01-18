@@ -19,19 +19,19 @@ Start a development server:
 
 .. code-block:: bash
 
-   npm run serve
+   npx vue-cli-service serve
 
 Prepare a production build:
 
 .. code-block:: bash
 
-   npm run build
+   npx vue-cli-service build
 
 This automatically sets the ``NODE_ENV`` environment variable to ``"production"``. To `override this default <https://cli.vuejs.org/guide/mode-and-env.html>`__, use:
 
 .. code-block:: bash
 
-   npm run build -- --mode development
+   npx vue-cli-service build --mode development
 
 Test
 ----
@@ -46,4 +46,4 @@ Run linters:
 
 .. code-block:: bash
 
-   npm run lint
+   npx vue-cli-service lint
