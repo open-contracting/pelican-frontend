@@ -7,7 +7,14 @@
       <span>{{ $t("resourceLevel." + name + ".name") }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-right">
-      <span class="value_ok">{{ okPercentage | formatPercentage }}</span>
+      <span
+        v-if="okPercentage"
+        class="value_ok"
+      >{{ okPercentage | formatPercentage }}</span>
+      <span
+        v-else
+        class="value_na opacity"
+      >{{ okPercentage | formatPercentage }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-right">
       <span
@@ -20,7 +27,14 @@
       >{{ failedPercentage | formatPercentage }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-right">
-      <span class="value_na">{{ naPercentage | formatPercentage }}</span>
+      <span
+        v-if="naPercentage"
+        class="value_na"
+      >{{ naPercentage | formatPercentage }}</span>
+      <span
+        v-else
+        class="value_na opacity"
+      >{{ naPercentage | formatPercentage }}</span>
     </div>
     <div class="td col-4 d-none d-lg-block progress_column">
       <ProgressBar
