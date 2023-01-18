@@ -12,7 +12,7 @@ import Clipboard from "v-clipboard";
 import Multiselect from "vue-multiselect";
 import { messages as en } from "./messages/en.js";
 import { messages as cs } from "./messages/cs.js";
-import Fragment from "vue-fragment";
+import { Plugin } from "vue-fragment";
 import DatePick from "vue-date-pick";
 
 if (window.navigator && navigator.serviceWorker) {
@@ -24,7 +24,7 @@ if (window.navigator && navigator.serviceWorker) {
 }
 
 Vue.use(VueGoogleCharts);
-Vue.use(Fragment.Plugin);
+Vue.use(Plugin);
 Vue.use(BootstrapVue);
 Vue.use(VueI18n);
 Vue.use(VueSimpleAlert);
