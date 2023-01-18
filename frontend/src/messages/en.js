@@ -199,9 +199,9 @@ export const messages = {
             tender_value: {
                 name: "Tender value distribution",
                 description:
-                    "The sum of the top 1% of tender values doesn't exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%.",
+                    "The total value of the top 1% of tenders is less than the total value of the remaining tenders. Failure indicates extreme outliers in the top 1%.",
                 description_long:
-                    "<p>The sum of the top 1% of tender values doesn't exceed 50% of the sum of all tender values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                    "<p>The total value of the top 1% of tenders is less than the total value of the remaining tenders. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             awards_value: {
                 name: "Awards value distribution",
