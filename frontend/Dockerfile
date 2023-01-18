@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
+RUN npx vue-cli-service build
 
 FROM nginxinc/nginx-unprivileged:latest as production-stage
 USER root
