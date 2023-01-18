@@ -33,7 +33,7 @@ If you don't have an instance of `Pelican backend <https://pelican-backend.readt
 .. code-block:: bash
 
    createdb pelican_backend
-   psql pelican_backend -f backend/tests/fixtures/pelican-backend.sql
+   gunzip -c backend/tests/fixtures/pelican-backend.sql | psql pelican_backend
 
 Frontend
 ~~~~~~~~
