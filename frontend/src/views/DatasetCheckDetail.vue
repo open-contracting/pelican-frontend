@@ -10,11 +10,11 @@
         </div>
         <div class="col col-2">
           <span
-            v-if="check.result == true"
+            v-if="!reportOnly && check.result == true"
             class="badge badge-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
-            v-if="check.result == false"
+            v-if="!reportOnly && check.result == false"
             class="badge badge-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>

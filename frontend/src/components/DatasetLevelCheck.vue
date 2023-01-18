@@ -20,11 +20,11 @@
           class="col col-2 col-sm-2 col-lg-2 text-right"
         >
           <span
-            v-if="check.result == true"
+            v-if="!reportOnly && check.result == true"
             class="badge badge-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
-            v-if="check.result == false"
+            v-if="!reportOnly && check.result == false"
             class="badge badge-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>

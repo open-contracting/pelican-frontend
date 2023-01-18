@@ -16,10 +16,12 @@ export default {
                 },
                 "distribution.tender_award_criteria": {
                     checkType: "donut",
+                    reportOnly: true,
                     version: 1
                 },
                 "distribution.tender_submission_method": {
                     checkType: "donut",
+                    reportOnly: true,
                     version: 1
                 },
                 "distribution.awards_status": {
@@ -36,18 +38,22 @@ export default {
                 },
                 "distribution.milestone_type": {
                     checkType: "donut",
+                    reportOnly: true,
                     version: 1
                 },
                 "distribution.document_document_type": {
                     checkType: "donut",
+                    reportOnly: true,
                     version: 1
                 },
                 "distribution.value_currency": {
                     checkType: "donut",
+                    reportOnly: true,
                     version: 1
                 },
                 "distribution.related_process_relation": {
                     checkType: "donut",
+                    reportOnly: true,
                     version: 1
                 },
                 "distribution.tender_value": {
@@ -112,6 +118,17 @@ export default {
             }
 
             return this.checkTypeVersionControl[this.check.name].checkType;
+        },
+        reportOnly() {
+            if (!(this.check.name in this.checkTypeVersionControl)) {
+                throw "unknown check: " + this.check.name;
+            }
+
+            if (this.check.meta.version != this.checkTypeVersionControl[this.check.name].version) {
+                return null;
+            }
+
+            return this.checkTypeVersionControl[this.check.name].reportOnly;
         },
         shares() {
             if (this.checkType == "donut") {
