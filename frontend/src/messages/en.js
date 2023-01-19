@@ -461,32 +461,32 @@ export const messages = {
             buyer_in_parties_roles: {
                 name: "Buyer's role is set",
                 description:
-                    "The party referenced by the <code>buyer</code> field has 'buyer' in its <code>roles</code> array."
+                    "<p>The party referenced by the <code>buyer</code> field has 'buyer' in its <code>roles</code> array.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             supplier_in_parties_roles: {
                 name: "Supplier's role is set",
                 description:
-                    "Each party referenced by a <code>awards[].suppliers</code> entry has 'supplier' in its <code>roles</code> array."
+                    "<p>Each party referenced by a <code>awards[].suppliers</code> entry has 'supplier' in its <code>roles</code> array.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             tenderer_in_parties_roles: {
                 name: "Tenderer's role is set",
                 description:
-                    "Each party referenced by a <code>tender.tenderers</code> entry has 'tenderer' in its <code>roles</code> array."
+                    "<p>Each party referenced by a <code>tender.tenderers</code> entry has 'tenderer' in its <code>roles</code> array.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             procuring_entity_in_parties_roles: {
                 name: "Procuring entity's role is set",
                 description:
-                    "The party referenced by the <code>tender.procuringEntity</code> field has 'procuringEntity' in its <code>roles</code> array."
+                    "<p>The party referenced by the <code>tender.procuringEntity</code> field has 'procuringEntity' in its <code>roles</code> array.</p><p>The test is skipped if the referencing <code>id</code> is missing or if it doesn't match the <code>id</code> of exactly one party.</p>"
             },
             payer_in_parties_roles: {
                 name: "Payer's role is set",
                 description:
-                    "Each party referenced by a <code>contracts[].implementation.transactions[].payer</code> field has 'payer' in its <code>roles</code> array."
+                    "<p>Each party referenced by a <code>contracts[].implementation.transactions[].payer</code> field has 'payer' in its <code>roles</code> array.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             payee_in_parties_roles: {
                 name: "Payee's role is set",
                 description:
-                    "Each party referenced by a <code>contracts[].implementation.transactions[].payee</code> field has 'payee' in its <code>roles</code> array."
+                    "<p>Each party referenced by a <code>contracts[].implementation.transactions[].payee</code> field has 'payee' in its <code>roles</code> array.</p><p>The test is skipped if every referencing <code>id</code> is missing or if none matches the <code>id</code> of exactly one party.</p>"
             },
             buyer_name_in_parties: {
                 name: "Buyer's name is consistent",
@@ -528,12 +528,12 @@ export const messages = {
             payee_in_parties: {
                 name: "Payee organization reference",
                 description:
-                    "Every <code>contracts[].implementation.transactions[].payee.id</code> is present and matches the <code>id</code> of exactly one party."
+                    "Each <code>contracts[].implementation.transactions[].payee.id</code> is present and matches the <code>id</code> of exactly one party."
             },
             payer_in_parties: {
                 name: "Payer organization reference",
                 description:
-                    "Every <code>contracts[].implementation.transactions[].payer.id</code> is present and matches the <code>id</code> of exactly one party."
+                    "Each <code>contracts[].implementation.transactions[].payer.id</code> is present and matches the <code>id</code> of exactly one party."
             },
             procuring_entity_in_parties: {
                 name: "Procuring entity organization reference",
@@ -553,7 +553,7 @@ export const messages = {
             contract_in_awards: {
                 name: "Award reference",
                 description:
-                    "<p>Each <code>contracts[].awardID</code> is present and matches the <code>awardID</code> of exactly one award.</p><p>The test is skipped if there are no awards.</p>"
+                    "Each <code>contracts[].awardID</code> is present and matches the <code>id</code> of exactly one award."
             }
         },
         filterDropdown: {
