@@ -2,13 +2,19 @@ from django.db import connections
 from django.db.models import F, OuterRef, Subquery
 from django.shortcuts import get_object_or_404
 from psycopg2.sql import SQL, Identifier
-from rest_framework import serializers, status, viewsets
+from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 
-from api.models import Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset
+from api.models import DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset
 from controller.rabbitmq import publish
+
+
+class DataItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataItem
+        fields = ["id", "data"]
 
 
 class DatasetSerializer(serializers.ModelSerializer):
@@ -68,9 +74,15 @@ class CustomSchema(AutoSchema):
         return responses
 
 
+class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    lookup_value_regex = "[0-9]+"
+    queryset = DataItem.objects.all()
+    serializer_class = DataItemSerializer
+
+
 class DatasetViewSet(viewsets.ViewSet):
     schema = CustomSchema()
-    # ViewSet's don't allow typed paths like <int:pk>.
+    # ViewSet's don't allow typed paths like <int:pk> until next version (> 3.14.0).
     # https://github.com/encode/django-rest-framework/pull/6789
     # https://github.com/encode/django-rest-framework/issues/6148#issuecomment-725297421
     lookup_value_regex = "[0-9]+"
@@ -78,29 +90,40 @@ class DatasetViewSet(viewsets.ViewSet):
     def get_queryset(self):
         return Dataset.objects.all()
 
-    def get_object(self):
-        return get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
-
-    def get_serializer(self, *args, **kwargs):
-        if self.action == "list":
-            return DatasetSerializer(*args, **kwargs)
-        elif self.action == "create":
-            return CreateDatasetSerializer(*args, **kwargs)
-        elif self.action == "filter":
-            return FilterDatasetSerializer(*args, **kwargs)
-        else:
-            raise NotImplementedError(f"no serializer for action {self.action}")
-
-    def list(self, request, *args, **kwargs):
+    def get_annotated_queryset(self):
         dataset_filter = DatasetFilter.objects.filter(dataset=OuterRef("pk"))[:1]
-        queryset = self.get_queryset().annotate(
+        return Dataset.objects.annotate(
             phase=F("progress__phase"),
             state=F("progress__state"),
             parent_id=Subquery(dataset_filter.values("parent__id")),
             parent_name=Subquery(dataset_filter.values("parent__name")),
             filter_message=Subquery(dataset_filter.values("filter_message")),
         )
+
+    def get_object(self):
+        return get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+
+    def get_annotated_object(self):
+        return get_object_or_404(self.get_annotated_queryset(), pk=self.kwargs["pk"])
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action in ("list", "retrieve"):
+            return DatasetSerializer(*args, **kwargs)
+        elif self.action == "create":
+            return CreateDatasetSerializer(*args, **kwargs)
+        elif self.action == "filter":
+            return FilterDatasetSerializer(*args, **kwargs)
+
+    # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L35
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_annotated_queryset()
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_annotated_object()
+        serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
     def create(self, request):

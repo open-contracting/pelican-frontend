@@ -26,14 +26,12 @@ jobs:
             | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -f -
       - name: Run checks and tests
         env:
-          # Tastypie 0.14.3 uses the deprecated django.conf.urls.url.
-          PYTHONWARNINGS: error,ignore:::tastypie.resources
+          PYTHONWARNINGS: error
           DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
           PELICAN_BACKEND_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
-        # Tastypie 0.14.3 has a missing migration.
         run: |
           ./manage.py migrate
-          # ./manage.py makemigrations --check --dry-run
+          ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
           coverage run --source api,controller,core,exporter manage.py test
       - env:

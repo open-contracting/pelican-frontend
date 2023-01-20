@@ -44,14 +44,12 @@ if "ALLOWED_HOSTS" in os.environ:
 # Application definition
 
 INSTALLED_APPS = [
-    # tastypie depends on django.contrib.auth
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "tastypie",
     "corsheaders",
     "api",
     "controller.apps.ControllerConfig",

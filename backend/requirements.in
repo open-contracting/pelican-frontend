@@ -1,6 +1,5 @@
 dj-database-url
 django-cors-headers
-django-tastypie
 django<4
 djangorestframework
 google-api-python-client

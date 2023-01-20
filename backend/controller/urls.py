@@ -6,7 +6,8 @@ from rest_framework.schemas import get_schema_view
 from controller import views
 
 router = SimpleRouter()
-router.register(r"", views.DatasetViewSet, basename="dataset")
+router.register(r"datasets", views.DatasetViewSet, basename="dataset")
+router.register(r"data_items", views.DataItemViewSet, basename="data-item")
 
 urlpatterns = router.urls + [
     # https://www.django-rest-framework.org/api-guide/schemas/#generating-a-dynamic-schema-with-schemaview

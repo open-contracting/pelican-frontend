@@ -1,6 +1,5 @@
-from django.urls import include, path
+from django.urls import path
 
-from api.api import DataItemResource
 from api.views import (
     dataset_distinct_values,
     dataset_filter_items,
@@ -11,8 +10,6 @@ from api.views import (
     resource_level_stats,
     time_variance_level_stats,
 )
-
-data_item_resource = DataItemResource()
 
 urlpatterns = [
     # Check stats
@@ -33,6 +30,4 @@ urlpatterns = [
         dataset_distinct_values,
         name="dataset_distinct_values",
     ),
-    # Tastypie
-    path("api/", include(data_item_resource.urls)),
 ]
