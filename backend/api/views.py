@@ -7,7 +7,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from psycopg2.sql import SQL
 
-from api.models import DataItem, Dataset, DatasetLevelCheck, Report, TimeVarianceLevelCheck
+from api.models import DataItem, DatasetLevelCheck, Report, TimeVarianceLevelCheck
 
 
 @csrf_exempt
@@ -68,15 +68,6 @@ def dataset_filter_items(request):
         return HttpResponseBadRequest(reason="The dataset could not be filtered in this way.")
 
     return JsonResponse({"items": items})
-
-
-def dataset_stats(request, dataset_id):
-    result = {}
-    dataset_meta = Dataset.objects.get(id=dataset_id)
-    result["name"] = dataset_meta.name
-    result["meta"] = dataset_meta.meta
-
-    return JsonResponse(result)
 
 
 def dataset_level_stats(request, dataset_id):
