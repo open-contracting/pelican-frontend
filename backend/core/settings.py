@@ -175,10 +175,25 @@ LOGGING = {
     "loggers": {
         "": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": os.getenv("LOG_LEVEL", "INFO"),
+        },
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("LOG_LEVEL", "INFO"),
+            "propagate": False,
         },
         "django.security.DisallowedHost": {
             "handlers": ["null"],
+            "propagate": False,
+        },
+        "django.template": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.utils.autoreload": {
+            "handlers": ["console"],
+            "level": "INFO",
             "propagate": False,
         },
     },
