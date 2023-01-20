@@ -4,19 +4,13 @@
       :class="['row', 'tr', 'align-items-center']"
     >
       <div class="td col-4">
-        <span v-if="depth > 0">
-          <span
-            v-for="d in depth"
-            :key="d"
-          >&nbsp;&nbsp;</span>
-
-          <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />&nbsp;&nbsp;&nbsp;&nbsp;
+        <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
+          <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />
         </span>
         <b-link :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
           {{ dataset.name }}
         </b-link>
-        <span class="dataset_id"> (Id {{ dataset.id }})</span>
-        <span v-if="depth == 0">&nbsp;</span>
+        <span class="dataset_id">(Id {{ dataset.id }})</span>
         <a
           v-if="isDatasetImported(dataset) && depth == 0"
           href="#"
@@ -24,7 +18,6 @@
         >
           <font-awesome-icon :icon="['fas', 'filter']" />
         </a>
-        &nbsp;
         <a
           v-if="isDatasetImported(dataset)"
           href="#"
@@ -34,13 +27,10 @@
         </a>
       </div>
       <div class="td col-1 numeric text-right">
-        {{ dataset.size | formatNumber }}
+        {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
       </div>
-      <div
-        v-if="dataset.meta.kingfisher_metadata"
-        class="td col-1 numeric text-right"
-      >
-        {{ dataset.meta.kingfisher_metadata.collection_id }}
+      <div class="td col-1 numeric text-right">
+        {{ dataset.meta.kingfisher_metadata?.collection_id }}
       </div>
       <div class="td col-1 phase_cell align-items-center align-middle">
         <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">

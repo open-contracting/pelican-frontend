@@ -3,6 +3,9 @@ import Vue from "vue";
 var numeral = require("numeral");
 
 Vue.filter("formatNumber", function (value) {
+    if (value === undefined) {
+        return value;
+    }
     return numeral(value).format("0,0");
 });
 

@@ -266,7 +266,7 @@ export default new Vuex.Store({
     },
     actions: {
         loadDataset({ dispatch, commit }, datasetId) {
-            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset + "/" + datasetId;
+            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset + datasetId;
 
             return new Promise(resolve => {
                 axios

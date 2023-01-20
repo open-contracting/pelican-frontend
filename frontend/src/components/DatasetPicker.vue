@@ -13,7 +13,7 @@
       <div class="thr row">
         <div
           class="th col-4 align-self-center clickable"
-          @click="sortBy('id')"
+          @click="sortBy('name')"
         >
           <SortButtons
             :label="$t('dataset.name')"
@@ -173,10 +173,10 @@ export default {
         }
     },
     mounted() {
-        var buildDatasetsTree = function (datasets, filtered_parent_id) {
+        var buildDatasetsTree = function (datasets, parent_id) {
             var result = [];
             datasets.forEach(function (item) {
-                if (item.filtered_parent_id == filtered_parent_id) {
+                if (item.parent_id == parent_id) {
                     item.filtered_children = buildDatasetsTree(datasets, item.id);
                     result.push(item);
                 }
@@ -188,7 +188,7 @@ export default {
         axios
             .get(url)
             .then(response => {
-                this.datasets = buildDatasetsTree(response["data"]["objects"], null);
+                this.datasets = buildDatasetsTree(response["data"], null);
 
                 var self = this;
                 this.datasets.forEach(function (item) {
@@ -228,12 +228,16 @@ export default {
             } else if (by == "name") {
                 comp = (a, b) => a.name.localeCompare(b.name);
             } else if (by == "size") {
-                comp = (a, b) => this.compareNumbers(a.size, b.size);
+                comp = (a, b) =>
+                    this.compareNumbers(
+                        a.meta.compiled_releases?.total_unique_ocids || -1,
+                        b.meta.compiled_releases?.total_unique_ocids || -1
+                    );
             } else if (by == "collection_id") {
                 comp = (a, b) =>
                     this.compareNumbers(
-                        a.meta.kingfisher_metadata.collection_id,
-                        b.meta.kingfisher_metadata.collection_id
+                        a.meta.kingfisher_metadata?.collection_id || -1,
+                        b.meta.kingfisher_metadata?.collection_id || -1
                     );
             } else if (by == "phase") {
                 comp = (a, b) => {

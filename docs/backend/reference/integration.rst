@@ -10,8 +10,8 @@ To update ``backend/api/models.py`` following changes to Pelican backend's datab
 -  Replace ``models.DO_NOTHING`` with ``on_delete=models.CASCADE``
 -  ``Dataset``: Add methods
 -  ``Dataset.meta``: Add ``blank=True, default=dict``
--  ``DatasetFilter.dataset_id_original``: Rename to ``dataset_original``, add ``related_name="dataset_filter_parent"``
--  ``DatasetFilter.dataset_id_filtered``: Rename to ``dataset_filtered``, add ``related_name="dataset_filter_child"``
+-  ``DatasetFilter.dataset_id_original``: Rename to ``parent``, add ``related_name="children"``
+-  ``DatasetFilter.dataset_id_filtered``: Rename to ``dataset``, add ``related_name="filtered"``
 -  ``ProgressMonitorDataset.dataset``: Add ``related_name="progress"``
 -  ``ProgressMonitorItem.item``: Rename to ``data_item``
 -  ``Report.type``: Change ``TextField`` to ``CharField``, add ``max_length=255``, and remove ``# This field type is a guess.``

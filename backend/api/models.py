@@ -32,33 +32,6 @@ class Dataset(models.Model):
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
 
-    def get_state(self):
-        if self.progress:
-            return self.progress.state
-
-    def get_phase(self):
-        if self.progress:
-            return self.progress.phase
-
-    def get_size(self):
-        if self.progress:
-            return self.progress.size
-
-    def get_filtered_children_ids(self):
-        return [item.dataset_filtered.id for item in self.dataset_filter_parent.all()]
-
-    def get_filtered_parent_id(self):
-        items = self.dataset_filter_child.all()
-        return items[0].dataset_original.id if items else None
-
-    def get_filtered_parent_name(self):
-        items = self.dataset_filter_child.all()
-        return items[0].dataset_original.name if items else None
-
-    def get_filter_message(self):
-        items = self.dataset_filter_child.all()
-        return items[0].filter_message if items else None
-
     class Meta:
         managed = False
         db_table = "dataset"
@@ -66,11 +39,11 @@ class Dataset(models.Model):
 
 class DatasetFilter(models.Model):
     id = models.BigAutoField(primary_key=True)
-    dataset_original = models.ForeignKey(
-        Dataset, on_delete=models.CASCADE, related_name="dataset_filter_parent", db_column="dataset_id_original"
+    parent = models.ForeignKey(
+        Dataset, on_delete=models.CASCADE, related_name="children", db_column="dataset_id_original"
     )
-    dataset_filtered = models.ForeignKey(
-        Dataset, on_delete=models.CASCADE, related_name="dataset_filter_child", db_column="dataset_id_filtered"
+    dataset = models.ForeignKey(
+        Dataset, on_delete=models.CASCADE, related_name="filtered", db_column="dataset_id_filtered"
     )
     filter_message = models.JSONField()
     created = models.DateTimeField(blank=True, null=True)

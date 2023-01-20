@@ -1,4 +1,5 @@
 from django.db import connections
+from django.db.models import F, OuterRef, Subquery
 from django.shortcuts import get_object_or_404
 from psycopg2.sql import SQL, Identifier
 from rest_framework import serializers, status, viewsets
@@ -6,8 +7,32 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 
-from api.models import Dataset, FieldLevelCheck, ProgressMonitorDataset
+from api.models import Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset
 from controller.rabbitmq import publish
+
+
+class DatasetSerializer(serializers.ModelSerializer):
+    phase = serializers.CharField()
+    state = serializers.CharField()
+    parent_id = serializers.IntegerField()
+    parent_name = serializers.CharField()
+    filter_message = serializers.JSONField()
+
+    class Meta:
+        model = Dataset
+        fields = [
+            "id",
+            "name",
+            "meta",
+            "ancestor_id",
+            "created",
+            "modified",
+            "phase",
+            "state",
+            "parent_id",
+            "parent_name",
+            "filter_message",
+        ]
 
 
 class CreateDatasetSerializer(serializers.Serializer):
@@ -33,11 +58,11 @@ class FilterDatasetSerializer(serializers.Serializer):
 class CustomSchema(AutoSchema):
     def get_responses(self, path, method):
         responses = super().get_responses(path, method)
-        # POST requests return HTTP 202 with no content.
+        # POST requests return HTTP 202 with no content (not 201).
         if "201" in responses:
             responses["202"] = responses.pop("201")
             del responses["202"]["content"]
-        # GET requests return a JSON object.
+        # GET requests return a JSON object (not string).
         elif "200" in responses:
             responses["200"]["content"]["application/json"]["schema"] = {"type": "object"}
         return responses
@@ -57,10 +82,26 @@ class DatasetViewSet(viewsets.ViewSet):
         return get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
 
     def get_serializer(self, *args, **kwargs):
-        if self.action == "create":
+        if self.action == "list":
+            return DatasetSerializer(*args, **kwargs)
+        elif self.action == "create":
             return CreateDatasetSerializer(*args, **kwargs)
         elif self.action == "filter":
             return FilterDatasetSerializer(*args, **kwargs)
+        else:
+            raise NotImplementedError(f"no serializer for action {self.action}")
+
+    def list(self, request, *args, **kwargs):
+        dataset_filter = DatasetFilter.objects.filter(dataset=OuterRef("pk"))[:1]
+        queryset = self.get_queryset().annotate(
+            phase=F("progress__phase"),
+            state=F("progress__state"),
+            parent_id=Subquery(dataset_filter.values("parent__id")),
+            parent_name=Subquery(dataset_filter.values("parent__name")),
+            filter_message=Subquery(dataset_filter.values("filter_message")),
+        )
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         """

@@ -21,8 +21,8 @@
                 {{ $t("overview.filtered.original") }}
               </div>
               <div class="td col col-6">
-                {{ dataset.filtered_parent_name }}
-                <span class="dataset_id">(Id {{ dataset.filtered_parent_id }})</span>&nbsp;
+                {{ dataset.parent_name }}
+                <span class="dataset_id">(Id {{ dataset.parent_id }})</span>
               </div>
             </div>
             <div class="tr row">
