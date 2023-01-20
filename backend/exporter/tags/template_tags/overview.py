@@ -3,7 +3,6 @@ from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from exporter.tags.leaf_tags.overview.lifecycle_image import LifecycleImageLeafTag
 from exporter.tags.leaf_tags.overview.lifecycle_object_count import LifecycleObjectCountLeafTag
 from exporter.tags.leaf_tags.overview.release_date_count import ReleaseDateCountLeafTag
-from exporter.tags.leaf_tags.overview.release_date_distribution_image import ReleaseDateDistributionImageLeafTag
 from exporter.tags.leaf_tags.timestamp_leaf_tag_factory import generate_timestamp_leaf_tag
 from exporter.tags.tag import TemplateTag
 
@@ -30,7 +29,6 @@ class OverviewTemplateTag(TemplateTag):
         self.set_sub_tag("releaseDateCount", ReleaseDateCountLeafTag)
 
         self.set_sub_tag("lifecycleImage", LifecycleImageLeafTag)
-        self.set_sub_tag("releaseDateDistributionImage", ReleaseDateDistributionImageLeafTag)
 
     def prepare_data(self, data):
         dataset = Dataset.objects.filter(id=self.dataset_id).first()
@@ -50,5 +48,4 @@ class OverviewTemplateTag(TemplateTag):
             "collectingStart": dataset.meta["kingfisher_metadata"]["processing_start"],
             "collectingEnd": dataset.meta["kingfisher_metadata"]["processing_end"],
             "lifecycle_object_counts": dataset.meta["tender_lifecycle"],
-            "period_pairs": [(period["date_str"], period["count"]) for period in dataset.meta["period"]],
         }

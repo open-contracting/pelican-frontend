@@ -332,106 +332,16 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12 col-md-6 prices">
-        <h4>
-          {{ $t("overview.prices.title") }}
-          <Tooltip :text="$t('overview.prices.info')" />
-        </h4>
-        <div class="result_box">
-          <h5>{{ $t("overview.prices.value_label") }}</h5>
-          <p class="total_value">
-            <strong class="bold">$ {{ prices.total_volume_positive | formatNumber }}</strong>
-            in
-            <strong class="bold">{{ prices.contracts_positive | formatNumber }}</strong>
-            {{ $t("overview.prices.contracts") }}
-          </p>
-          <div
-            v-if="prices"
-            class
-          >
-            <div class="thr row">
-              <div class="th col col-4">
-                {{ $t("overview.prices.thead.category") }}
-              </div>
-              <div class="th col col-4 text-right">
-                {{ $t("overview.prices.thead.count") }}
-              </div>
-              <div class="th col col-4 text-center">
-                {{ $t("overview.prices.thead.share") }}
-              </div>
-            </div>
-            <div
-              v-for="c in ['0_10000', '10001_100000', '100001_1000000', '1000001+']"
-              :key="c"
-              class="row tr"
-            >
-              <div
-                class="td col col-4"
-                v-html="getPriceCategoryLabel(c)"
-              />
-              <div class="td col col-4 text-right numeric">
-                {{ prices.price_category_positive[c].contracts | formatNumber }}
-              </div>
-              <div class="td col col-4">
-                <div class="row align-items-center share_progressbar no-gutters">
-                  <div class="col col-3 value text-right">
-                    {{ (prices.price_category_positive[c].share * 100) | formatPercentage }}
-                  </div>
-                  <div class="col col-9 value progress_holder d-flex align-items-center">
-                    <progress-bar :value="prices.price_category_positive[c].share * 100" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 period">
-        <h4>{{ $t("overview.period.title") }}</h4>
-        <div class="result_box">
-          <h5>{{ $t("overview.period.subtitle") }}</h5>
-          <p>{{ $t("overview.period.description") }}</p>
-          <div>
-            <GChart
-              type="ColumnChart"
-              :data="period_histogram"
-              :options="{
-                legend: 'none',
-                bar: { groupWidth: '95%' },
-                colors: ['#6C75E1'],
-                hAxis: {
-                  baselineColor: 'transparent',
-                  gridlines: {
-                    color: 'transparent'
-                  },
-                  showTextEvery: parseInt(period_histogram.length / 2.1),
-                  slantedText: false
-                },
-                vAxis: {
-                  baselineColor: 'transparent',
-                  gridlines: {
-                    color: 'transparent'
-                  }
-                }
-              }"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
   </dashboard>
 </template>
 
 <script>
 import Dashboard from "@/views/layouts/Dashboard.vue";
-import ProgressBar from "@/components/ProgressBar.vue";
-import { GChart } from "vue-google-charts";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {
     name: "Overview",
-    components: { Dashboard, ProgressBar, GChart, Tooltip },
+    components: { Dashboard, Tooltip },
     computed: {
         dataset: function () {
             return this.$store.getters.dataset;
@@ -451,21 +361,6 @@ export default {
         lifecycle: function () {
             return this.getMetaData("tender_lifecycle");
         },
-        prices: function () {
-            return this.getMetaData("prices");
-        },
-        period: function () {
-            return this.getMetaData("period");
-        },
-        period_histogram: function () {
-            var hist = [["date", "count"]];
-            if (this.period) {
-                this.period.forEach(function (p) {
-                    hist.push([p.date_str, p.count]);
-                });
-            }
-            return hist;
-        },
         filtered_procuring_entity: function () {
             if (this.dataset.filter_message.procuring_entity) {
                 return this.dataset.filter_message.procuring_entity;
@@ -484,19 +379,6 @@ export default {
     methods: {
         getMetaData: function (type) {
             return this.dataset && this.dataset.meta ? this.dataset.meta[type] : null;
-        },
-        getPriceCategoryLabel(categoryId) {
-            if (categoryId == "0_10000") {
-                return "$" + this.formatNumber(0) + " - $" + this.formatNumber(10000);
-            } else if (categoryId == "10001_100000") {
-                return "$" + this.formatNumber(10001) + " - $" + this.formatNumber(100000);
-            } else if (categoryId == "100001_1000000") {
-                return "$" + this.formatNumber(100001) + " - $" + this.formatNumber(1000000);
-            } else if (categoryId == "1000001+") {
-                return "$" + this.formatNumber(1000001) + "+";
-            }
-
-            return categoryId;
         },
         formatNumber(number) {
             return this.$options.filters.formatNumber(number);
@@ -523,20 +405,6 @@ export default {
 
 .tr:first-of-type .td {
     border-top: none;
-}
-
-.total_value {
-    font-size: 25px;
-}
-
-div.col.col-9.value.progress_holder {
-    padding-left: 5px;
-}
-
-.compiled_releases {
-    .value {
-        font-size: 40px;
-    }
 }
 
 .lifecycle_phase {

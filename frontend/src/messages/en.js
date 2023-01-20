@@ -571,22 +571,6 @@ export const messages = {
             title: "Compiled Releases",
             value_label: "Total Unique OCIDs"
         },
-        prices: {
-            title: "Contract Values",
-            value_label: "Total Contract Value",
-            contracts: "contracts",
-            thead: {
-                category: "Value range (USD)",
-                count: "Contracts count",
-                share: "% of total"
-            },
-            info: "All values are converted to USD as of the compiled release's <code>date</code>. This excludes: contract values with missing amounts, missing currencies, non-numeric amounts, negative amounts, and unknown currencies; and contract values occurring in compiled releases whose release date is invalid, before 1999, or in the future. To determine the number of excluded contract values, compare the number of contracts here to the number of objects in the contract stage, above."
-        },
-        period: {
-            title: "Release Dates",
-            subtitle: "Release Date Distribution",
-            description: "The distribution of release dates of all compiled releases."
-        },
         filtered: {
             title: "Filtered from",
             info: "This dataset has been filtered from previously calculated dataset.",
