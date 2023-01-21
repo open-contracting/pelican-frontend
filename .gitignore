@@ -1,4 +1,5 @@
 node_modules
 *.mo
 dist
+.coverage
 /docs/_build
