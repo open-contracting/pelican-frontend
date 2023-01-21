@@ -7,8 +7,10 @@ from api.models import (
     DatasetFilter,
     DatasetLevelCheck,
     FieldLevelCheck,
+    FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
+    ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
 )
 
@@ -21,8 +23,10 @@ class PelicanTestCase(TestCase):
         DatasetFilter,
         DatasetLevelCheck,
         FieldLevelCheck,
+        FieldLevelCheckExamples,
         ProgressMonitorDataset,
         Report,
+        ResourceLevelCheckExamples,
         TimeVarianceLevelCheck,
     }
 

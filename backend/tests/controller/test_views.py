@@ -1,3 +1,4 @@
+import json
 from unittest.mock import patch
 
 from api.models import (
@@ -6,8 +7,10 @@ from api.models import (
     DatasetFilter,
     DatasetLevelCheck,
     FieldLevelCheck,
+    FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
+    ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
 )
 from tests import PelicanTestCase
@@ -18,7 +21,7 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(0, using="data"):
             response = self.client.get("/data_items/")
 
-        self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 404)
 
     def test_data_items_retrieve(self):
         dataset = self.create(Dataset, name="parent")
@@ -27,8 +30,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/data_items/{data_item.pk}/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"data": {"parties": {"id": 1}}, "id": 1})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"data": {"parties": {"id": 1}}, "id": 1})
 
     def test_datasets_list(self):
         dataset = self.create(Dataset, name="parent")
@@ -39,23 +42,51 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content,
-            [
-                {
-                    "id": dataset.pk,
-                    "name": "parent",
-                    "meta": {},
-                    "ancestor_id": None,
-                    "created": None,
-                    "modified": None,
-                    "phase": "CHECKED",
-                    "state": "OK",
-                    "parent_id": None,
-                    "parent_name": None,
-                    "filter_message": None,
-                },
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(
+                response.content,
+                [
+                    {
+                        "id": dataset.pk,
+                        "name": "parent",
+                        "meta": {},
+                        "ancestor_id": None,
+                        "created": None,
+                        "modified": None,
+                        "phase": "CHECKED",
+                        "state": "OK",
+                        "parent_id": None,
+                        "parent_name": None,
+                        "filter_message": None,
+                    },
+                    {
+                        "id": filtered.pk,
+                        "name": "child",
+                        "meta": {},
+                        "ancestor_id": None,
+                        "created": None,
+                        "modified": None,
+                        "phase": None,
+                        "state": None,
+                        "parent_id": dataset.pk,
+                        "parent_name": "parent",
+                        "filter_message": {"buyer": "Acme Inc."},
+                    },
+                ],
+            )
+
+    def test_datasets_retrieve(self):
+        dataset = self.create(Dataset, name="parent")
+        filtered = self.create(Dataset, name="child")
+        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
+        self.create(DatasetFilter, parent=dataset, dataset=filtered, filter_message={"buyer": "Acme Inc."})
+
+        with self.assertNumQueries(1, using="data"):
+            response = self.client.get(f"/datasets/{filtered.pk}/")
+
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(
+                response.content,
                 {
                     "id": filtered.pk,
                     "name": "child",
@@ -69,42 +100,14 @@ class ViewsTests(PelicanTestCase):
                     "parent_name": "parent",
                     "filter_message": {"buyer": "Acme Inc."},
                 },
-            ],
-        )
-
-    def test_datasets_retrieve(self):
-        dataset = self.create(Dataset, name="parent")
-        filtered = self.create(Dataset, name="child")
-        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
-        self.create(DatasetFilter, parent=dataset, dataset=filtered, filter_message={"buyer": "Acme Inc."})
-
-        with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{filtered.pk}/")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content,
-            {
-                "id": filtered.pk,
-                "name": "child",
-                "meta": {},
-                "ancestor_id": None,
-                "created": None,
-                "modified": None,
-                "phase": None,
-                "state": None,
-                "parent_id": dataset.pk,
-                "parent_name": "parent",
-                "filter_message": {"buyer": "Acme Inc."},
-            },
-        )
+            )
 
     @patch("controller.views.publish")
     def test_datasets_create_invalid(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json")
 
-        self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
     @patch("controller.views.publish")
@@ -112,7 +115,7 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/", {}, "application/json")
 
-        self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
     @patch("controller.views.publish")
@@ -122,44 +125,46 @@ class ViewsTests(PelicanTestCase):
                 "/datasets/", {"name": "anything", "collection_id": "123", "xxx": "xxx"}, "application/json"
             )
 
-        self.assertEqual(response.status_code, 202)
-        publish.assert_called_once_with({"name": "anything", "collection_id": 123}, "ocds_kingfisher_extractor_init")
+            self.assertEqual(response.status_code, 202)
+            publish.assert_called_once_with(
+                {"name": "anything", "collection_id": 123}, "ocds_kingfisher_extractor_init"
+            )
 
     @patch("controller.views.publish")
     def test_datasets_filter_invalid(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/123/filter/", {"buyer": "xxx"}, "application/json")
 
-        self.assertEqual(response.status_code, 400)
-        publish.assert_not_called()
+            self.assertEqual(response.status_code, 400)
+            publish.assert_not_called()
 
     @patch("controller.views.publish")
     def test_datasets_filter_no_values(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/123/filter/", {}, "application/json")
 
-        self.assertEqual(response.status_code, 202)
-        publish.assert_called_once_with(
-            {"dataset_id_original": 123, "filter_message": {}}, "dataset_filter_extractor_init"
-        )
+            self.assertEqual(response.status_code, 202)
+            publish.assert_called_once_with(
+                {"dataset_id_original": 123, "filter_message": {}}, "dataset_filter_extractor_init"
+            )
 
     @patch("controller.views.publish")
     def test_datasets_filter(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/123/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json")
 
-        self.assertEqual(response.status_code, 202)
-        publish.assert_called_once_with(
-            {"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}, "dataset_filter_extractor_init"
-        )
+            self.assertEqual(response.status_code, 202)
+            publish.assert_called_once_with(
+                {"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}, "dataset_filter_extractor_init"
+            )
 
     @patch("controller.views.publish")
     def test_datasets_destroy(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.delete("/datasets/123/")
 
-        self.assertEqual(response.status_code, 202)
-        publish.assert_called_once_with({"dataset_id": 123}, "wiper_init")
+            self.assertEqual(response.status_code, 202)
+            publish.assert_called_once_with({"dataset_id": 123}, "wiper_init")
 
     def test_datasets_find_by_name_no_name(self):
         self.create(Dataset, name="anything")
@@ -167,8 +172,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/find_by_name/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {})
 
     def test_datasets_find_by_name_no_match(self):
         self.create(Dataset, name="anything")
@@ -176,8 +181,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/find_by_name/?name=other")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {})
 
     def test_datasets_find_by_name(self):
         dataset = self.create(Dataset, name="anything")
@@ -185,8 +190,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/find_by_name/?name=anything")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"id": dataset.pk})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"id": dataset.pk})
 
     def test_datasets_field_level_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -195,8 +200,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/field_level_report/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"ocid": {}})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"ocid": {}})
 
     def test_datasets_compiled_release_level_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -205,8 +210,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/compiled_release_level_report/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"coherent.dates": {}})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"coherent.dates": {}})
 
     def test_datasets_dataset_level_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -230,14 +235,14 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/dataset_level_report/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content,
-            {
-                "distribution.awards_value": {"meta": {"total_failed": 1}, "result": False, "value": 0},
-                "distribution.tender_value": {"meta": {"total_passed": 1}, "result": True, "value": 100},
-            },
-        )
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(
+                response.content,
+                {
+                    "distribution.awards_value": {"meta": {"total_failed": 1}, "result": False, "value": 0},
+                    "distribution.tender_value": {"meta": {"total_passed": 1}, "result": True, "value": 100},
+                },
+            )
 
     def test_datasets_time_based_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -265,26 +270,26 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/time_based_report/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content,
-            {
-                "phase_stable": {
-                    "check_result": True,
-                    "check_value": 99,
-                    "coverage_result": True,
-                    "coverage_value": 100,
-                    "meta": {"version": 1.0},
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(
+                response.content,
+                {
+                    "phase_stable": {
+                        "check_result": True,
+                        "check_value": 99,
+                        "coverage_result": True,
+                        "coverage_value": 100,
+                        "meta": {"version": 1.0},
+                    },
+                    "tender_title": {
+                        "check_result": False,
+                        "check_value": 0,
+                        "coverage_result": False,
+                        "coverage_value": 1,
+                        "meta": {"version": 1.1},
+                    },
                 },
-                "tender_title": {
-                    "check_result": False,
-                    "check_value": 0,
-                    "coverage_result": False,
-                    "coverage_value": 1,
-                    "meta": {"version": 1.1},
-                },
-            },
-        )
+            )
 
     def test_datasets_status_no_progress(self):
         dataset = self.create(Dataset, name="anything")
@@ -292,8 +297,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/status/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {})
 
     def test_datasets_status_no_values(self):
         dataset = self.create(Dataset, name="anything")
@@ -302,8 +307,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/status/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"phase": None, "state": None})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"phase": None, "state": None})
 
     def test_datasets_status(self):
         dataset = self.create(Dataset, name="anything")
@@ -312,8 +317,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/status/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
 
     def test_datasets_metadata_no_values(self):
         dataset = self.create(Dataset, name="anything")
@@ -321,8 +326,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {})
 
     def test_datasets_metadata(self):
         dataset = self.create(Dataset, name="anything", meta={"collection_metadata": {"ocid_prefix": "ocds-213czf"}})
@@ -330,8 +335,8 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"ocid_prefix": "ocds-213czf"})
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.content, {"ocid_prefix": "ocds-213czf"})
 
     def test_datasets_coverage(self):
         dataset = self.create(Dataset, name="anything")
@@ -341,65 +346,117 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(2, using="data"):
             response = self.client.get(f"/datasets/{dataset.pk}/coverage/")
 
-        self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content,
-            {
-                "amendments": 0,
-                "awards": 0,
-                "awards_items": 0,
-                "awards_suppliers": 0,
-                "contracts": 0,
-                "contracts_items": 0,
-                "contracts_transactions": 0,
-                "documents": 0,
-                "milestones": 0,
-                "parties": 1,
-                "plannings": 0,
-                "tenderers": 0,
-                "tenders": 0,
-                "tenders_items": 0,
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(
+                response.content,
+                {
+                    "amendments": 0,
+                    "awards": 0,
+                    "awards_items": 0,
+                    "awards_suppliers": 0,
+                    "contracts": 0,
+                    "contracts_items": 0,
+                    "contracts_transactions": 0,
+                    "documents": 0,
+                    "milestones": 0,
+                    "parties": 1,
+                    "plannings": 0,
+                    "tenderers": 0,
+                    "tenders": 0,
+                    "tenders_items": 0,
+                },
+            )
+
+    def test_field_level_detail(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="field_level_check", data={"ocid": {"coverage": {}, "quality": {}}})
+        self.create(
+            FieldLevelCheckExamples,
+            dataset=dataset,
+            path="ocid",
+            data={
+                "coverage": {"passed_examples": [], "failed_examples": [], "checks": {}},
+                "quality": {"passed_examples": [], "failed_examples": [], "checks": {}},
             },
         )
+
+        with self.assertNumQueries(2, using="data"):
+            response = self.client.get(f"/datasets/{dataset.pk}/field_level/ocid/")
+            detail = json.loads(response.content)
+            detail.pop("time")
+
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(
+                json.dumps(detail),
+                {
+                    "coverage": {"failed_examples": [], "passed_examples": []},
+                    "quality": {"failed_examples": [], "passed_examples": []},
+                },
+            )
+
+    def test_resource_level_detail(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="resource_level_check", data={"coherent.dates": {"a": "b"}})
+        self.create(ResourceLevelCheckExamples, dataset=dataset, check_name="coherent.dates", data={"c": "d"})
+
+        with self.assertNumQueries(2, using="data"):
+            response = self.client.get(f"/datasets/{dataset.pk}/compiled_release_level/coherent.dates/")
+            detail = json.loads(response.content)
+            detail.pop("time")
+
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(json.dumps(detail), {"a": "b", "c": "d"})
 
     def test_datasets_field_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/field_level_report/")
 
-        self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 404)
 
     def test_datasets_compiled_release_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/compiled_release_level_report/")
 
-        self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 404)
 
     def test_datasets_dataset_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/dataset_level_report/")
 
-        self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
+            self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
 
     def test_datasets_time_based_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/time_based_report/")
 
-        self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
+            self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
 
     def test_datasets_status_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/status/")
 
-        self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 404)
 
     def test_datasets_metadata_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/metadata/")
 
-        self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 404)
 
     def test_datasets_coverage_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
             response = self.client.get("/datasets/123/coverage/")
 
-        self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.status_code, 404)
+
+    def test_field_level_detail_no_dataset(self):
+        with self.assertNumQueries(1, using="data"):
+            response = self.client.get("/datasets/123/field_level/ocid/")
+
+            self.assertEqual(response.status_code, 404)
+
+    def test_resource_level_detail_no_dataset(self):
+        with self.assertNumQueries(1, using="data"):
+            response = self.client.get("/datasets/123/compiled_release_level/coherent.dates/")
+
+            self.assertEqual(response.status_code, 404)
