@@ -7,8 +7,7 @@ var config = {
         resourceLevelReport: "datasets/{id}/compiled_release_level_report/",
         datasetLevelReport: "datasets/{id}/dataset_level_report/",
         timeVarianceLevelReport: "datasets/{id}/time_based_report/",
-        // Check detail
-        fieldDetail: "api/field_level_detail",
+        fieldLevelDetail: "datasets/{id}/field_level/{name}/",
         resourceLevelCheckDetail: "api/resource_level_detail",
         // Filter datasets
         datasetFilterItems: "api/dataset_filter_items",

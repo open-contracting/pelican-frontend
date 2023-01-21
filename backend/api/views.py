@@ -81,58 +81,6 @@ def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
     return JsonResponse([{"value": el[0], "count": el[1]} for el in query_set], safe=False)
 
 
-def field_level_detail(request, dataset_id, path):
-    start_time = time.time()
-
-    result = None
-
-    with connections["data"].cursor() as cursor:
-        cursor.execute(
-            """
-            select data->%s
-            from report
-            where dataset_id = %s and
-                  type = 'field_level_check' and
-                  data ? %s;
-            """,
-            [path, dataset_id, path],
-        )
-        rows = cursor.fetchall()
-
-        if not rows:
-            return JsonResponse({"error": f"no results for dataset_id: {dataset_id}, path: '{path}' combination"})
-
-        result = rows[0][0]
-
-        # getting examples
-        cursor.execute(
-            """
-            select data
-            from field_level_check_examples
-            where dataset_id = %s and path = %s;
-            """,
-            [dataset_id, path],
-        )
-        data = cursor.fetchall()[0][0]
-
-        result["coverage"]["passed_examples"] = data["coverage"]["passed_examples"]
-        result["coverage"]["failed_examples"] = data["coverage"]["failed_examples"]
-        result["quality"]["passed_examples"] = data["quality"]["passed_examples"]
-        result["quality"]["failed_examples"] = data["quality"]["failed_examples"]
-
-        for check_name, check in data["coverage"]["checks"].items():
-            result["coverage"]["checks"][check_name]["passed_examples"] = check["passed_examples"]
-            result["coverage"]["checks"][check_name]["failed_examples"] = check["failed_examples"]
-
-        for check_name, check in data["quality"]["checks"].items():
-            result["quality"]["checks"][check_name]["passed_examples"] = check["passed_examples"]
-            result["quality"]["checks"][check_name]["failed_examples"] = check["failed_examples"]
-
-    result["time"] = time.time() - start_time
-
-    return JsonResponse(result)
-
-
 def resource_level_detail(request, dataset_id, check_name):
     start_time = time.time()
 

@@ -1,8 +1,10 @@
+import time
+
 from django.db import connections
 from django.db.models import F, OuterRef, Subquery
 from django.shortcuts import get_object_or_404
 from psycopg2.sql import SQL, Identifier
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
@@ -13,6 +15,7 @@ from api.models import (
     DatasetFilter,
     DatasetLevelCheck,
     FieldLevelCheck,
+    FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
     TimeVarianceLevelCheck,
@@ -313,3 +316,23 @@ class DatasetViewSet(viewsets.ViewSet):
                             counts[key] += int(r[1])
 
         return Response(counts)
+
+
+class FieldLevelDetail(views.APIView):
+    def get(self, request, pk, name, format=None):
+        start_time = time.time()
+
+        detail = get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name).data[name]
+
+        data = get_object_or_404(FieldLevelCheckExamples, dataset=pk, path=name).data
+
+        for key in ("coverage", "quality"):
+            detail[key]["passed_examples"] = data[key]["passed_examples"]
+            detail[key]["failed_examples"] = data[key]["failed_examples"]
+            for check_name, check in data[key]["checks"].items():
+                detail[key]["checks"][check_name]["passed_examples"] = check["passed_examples"]
+                detail[key]["checks"][check_name]["failed_examples"] = check["failed_examples"]
+
+        detail["time"] = time.time() - start_time
+
+        return Response(detail)

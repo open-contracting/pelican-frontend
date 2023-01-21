@@ -430,7 +430,10 @@ export default new Vuex.Store({
             if (checkDetail == null || (checkDetail != null && !checkDetail.examplesLoaded)) {
                 if (state.dataset != null && path != null) {
                     var url =
-                        CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldDetail + "/" + state.dataset.id + "/" + path;
+                        CONFIG.apiBaseUrl +
+                        CONFIG.apiEndpoints.fieldLevelDetail
+                            .replace(/{id}/g, state.dataset.id)
+                            .replace(/{name}/g, path);
 
                     var aaa = path;
                     axios

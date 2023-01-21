@@ -1,10 +1,9 @@
 from django.urls import path
 
-from api.views import dataset_distinct_values, dataset_filter_items, field_level_detail, resource_level_detail
+from api.views import dataset_distinct_values, dataset_filter_items, resource_level_detail
 
 urlpatterns = [
     # Check details
-    path("api/field_level_detail/<dataset_id>/<path>", field_level_detail, name="field_level_detail"),
     path("api/resource_level_detail/<dataset_id>/<check_name>", resource_level_detail, name="resource_level_detail"),
     # Filter datasets
     path("api/dataset_filter_items", dataset_filter_items, name="dataset_filter_items"),

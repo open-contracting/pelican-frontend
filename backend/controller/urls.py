@@ -10,6 +10,7 @@ router.register(r"datasets", views.DatasetViewSet, basename="dataset")
 router.register(r"data_items", views.DataItemViewSet, basename="data-item")
 
 urlpatterns = router.urls + [
+    path("datasets/<pk>/field_level/<name>/", views.FieldLevelDetail.as_view()),
     # https://www.django-rest-framework.org/api-guide/schemas/#generating-a-dynamic-schema-with-schemaview
     path(
         "openapi",
