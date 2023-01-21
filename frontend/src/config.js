@@ -3,7 +3,7 @@ var config = {
     apiEndpoints: {
         // List/detail
         dataset: "datasets/",
-        dataItem: "data_items/",
+        dataItem: "data_items/{id}/",
         // Check stats
         fieldStats: "api/field_level_stats",
         resourceLevelStats: "api/resource_level_stats",

@@ -365,7 +365,7 @@ export default new Vuex.Store({
                     dataItem = state.dataItems.find(item => item.id === itemId);
                 }
                 if (dataItem == null) {
-                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataItem + "/" + itemId;
+                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
                     axios
                         .get(url)
                         .then(function (response) {

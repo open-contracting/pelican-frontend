@@ -1,12 +1,12 @@
 from django.db import connections
 from django.test import TransactionTestCase
 
-from api.models import DataItem, Dataset, FieldLevelCheck, ProgressMonitorDataset
+from api.models import DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset, Report
 
 
 class TestCase(TransactionTestCase):
     databases = {"default", "data"}
-    unmanaged = {DataItem, Dataset, FieldLevelCheck, ProgressMonitorDataset}
+    unmanaged = {DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset, Report}
 
     def setUp(self):
         with connections["data"].schema_editor() as schema_editor:

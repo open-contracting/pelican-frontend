@@ -1,10 +1,75 @@
 from unittest.mock import patch
 
-from api.models import DataItem, Dataset, FieldLevelCheck, ProgressMonitorDataset
+from api.models import DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset
 from tests import TestCase
 
 
 class ViewsTests(TestCase):
+    def test_list(self):
+        dataset = self.create(Dataset, name="parent")
+        filtered = self.create(Dataset, name="child")
+        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
+        self.create(DatasetFilter, parent=dataset, dataset=filtered, filter_message={"buyer": "Acme Inc."})
+        response = self.client.get("/datasets/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            response.content,
+            [
+                {
+                    "id": dataset.pk,
+                    "name": "parent",
+                    "meta": {},
+                    "ancestor_id": None,
+                    "created": None,
+                    "modified": None,
+                    "phase": "CHECKED",
+                    "state": "OK",
+                    "parent_id": None,
+                    "parent_name": None,
+                    "filter_message": None,
+                },
+                {
+                    "id": filtered.pk,
+                    "name": "child",
+                    "meta": {},
+                    "ancestor_id": None,
+                    "created": None,
+                    "modified": None,
+                    "phase": None,
+                    "state": None,
+                    "parent_id": dataset.pk,
+                    "parent_name": "parent",
+                    "filter_message": {"buyer": "Acme Inc."},
+                },
+            ],
+        )
+
+    def test_retrieve(self):
+        dataset = self.create(Dataset, name="parent")
+        filtered = self.create(Dataset, name="child")
+        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
+        self.create(DatasetFilter, parent=dataset, dataset=filtered, filter_message={"buyer": "Acme Inc."})
+        response = self.client.get(f"/datasets/{filtered.pk}/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            response.content,
+            {
+                "id": filtered.pk,
+                "name": "child",
+                "meta": {},
+                "ancestor_id": None,
+                "created": None,
+                "modified": None,
+                "phase": None,
+                "state": None,
+                "parent_id": dataset.pk,
+                "parent_name": "parent",
+                "filter_message": {"buyer": "Acme Inc."},
+            },
+        )
+
     @patch("controller.views.publish")
     def test_create_invalid(self, publish):
         response = self.client.post("/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json")

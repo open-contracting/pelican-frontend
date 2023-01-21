@@ -100,37 +100,32 @@ class DatasetViewSet(viewsets.ViewSet):
             filter_message=Subquery(dataset_filter.values("filter_message")),
         )
 
+    def get_object_or_404(self, queryset):
+        return get_object_or_404(queryset, pk=self.kwargs["pk"])
+
     def get_object(self):
-        return get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        return self.get_object_or_404(self.get_queryset())
 
     def get_annotated_object(self):
-        return get_object_or_404(self.get_annotated_queryset(), pk=self.kwargs["pk"])
-
-    def get_serializer(self, *args, **kwargs):
-        if self.action in ("list", "retrieve"):
-            return DatasetSerializer(*args, **kwargs)
-        elif self.action == "create":
-            return CreateDatasetSerializer(*args, **kwargs)
-        elif self.action == "filter":
-            return FilterDatasetSerializer(*args, **kwargs)
+        return self.get_object_or_404(self.get_annotated_queryset())
 
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L35
     def list(self, request, *args, **kwargs):
         queryset = self.get_annotated_queryset()
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = DatasetSerializer(queryset, many=True)
         return Response(serializer.data)
 
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_annotated_object()
-        serializer = self.get_serializer(instance)
+        serializer = DatasetSerializer(instance)
         return Response(serializer.data)
 
     def create(self, request):
         """
         Publishes a message to RabbitMQ to create a dataset.
         """
-        serializer = self.get_serializer(data=request.data)
+        serializer = CreateDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         message = {"name": serializer.data["name"], "collection_id": serializer.data["collection_id"]}
         publish(message, "ocds_kingfisher_extractor_init")
@@ -141,7 +136,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         Publishes a message to RabbitMQ to create a filtered dataset.
         """
-        serializer = self.get_serializer(data=request.data)
+        serializer = FilterDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         message = {"dataset_id_original": int(pk), "filter_message": serializer.data}
         publish(message, "dataset_filter_extractor_init")
@@ -183,7 +178,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         Returns the dataset's collection metadata.
         """
-        meta = get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True), pk=pk)
+        meta = self.get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True))
         return Response(meta or {})
 
     @action(detail=True)
