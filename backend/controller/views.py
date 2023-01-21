@@ -7,7 +7,16 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 
-from api.models import DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset
+from api.models import (
+    DataItem,
+    Dataset,
+    DatasetFilter,
+    DatasetLevelCheck,
+    FieldLevelCheck,
+    ProgressMonitorDataset,
+    Report,
+    TimeVarianceLevelCheck,
+)
 from controller.rabbitmq import publish
 
 
@@ -109,21 +118,35 @@ class DatasetViewSet(viewsets.ViewSet):
     def get_annotated_object(self):
         return self.get_object_or_404(self.get_annotated_queryset())
 
+    def get_report(self, model, fields):
+        return Response(
+            {
+                check.check_name: {field: getattr(check, field) for field in fields}
+                for check in model.objects.filter(dataset=self.kwargs["pk"])
+            }
+        )
+
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L35
     def list(self, request, *args, **kwargs):
+        """
+        Return all datasets with their status and filter metadata.
+        """
         queryset = self.get_annotated_queryset()
         serializer = DatasetSerializer(queryset, many=True)
         return Response(serializer.data)
 
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
     def retrieve(self, request, *args, **kwargs):
+        """
+        Return the dataset with its status and filter metadata.
+        """
         instance = self.get_annotated_object()
         serializer = DatasetSerializer(instance)
         return Response(serializer.data)
 
     def create(self, request):
         """
-        Publishes a message to RabbitMQ to create a dataset.
+        Publish a message to RabbitMQ to create a dataset.
         """
         serializer = CreateDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -134,7 +157,7 @@ class DatasetViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["post"])
     def filter(self, request, pk=None):
         """
-        Publishes a message to RabbitMQ to create a filtered dataset.
+        Publish a message to RabbitMQ to create a filtered dataset.
         """
         serializer = FilterDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -144,7 +167,7 @@ class DatasetViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         """
-        Publishes a message to RabbitMQ to wipe the dataset.
+        Publish a message to RabbitMQ to wipe the dataset.
         """
         publish({"dataset_id": int(pk)}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
@@ -152,7 +175,7 @@ class DatasetViewSet(viewsets.ViewSet):
     @action(detail=False)
     def find_by_name(self, request):
         """
-        Returns the ID of the dataset with the name given in the `name` query string parameter, as an object like
+        Return the ID of the dataset with the name given in the `name` query string parameter, as an object like
         `{"id": 123}`, or `{}` if no name matches.
         """
         try:
@@ -162,21 +185,64 @@ class DatasetViewSet(viewsets.ViewSet):
             return Response({})
 
     @action(detail=True)
+    def field_level_report(self, request, pk=None):
+        """
+        Return a report of the dataset's field-level checks.
+        """
+        return Response(get_object_or_404(Report, dataset=pk, type="field_level_check").data)
+
+    @action(detail=True)
+    def compiled_release_level_report(self, request, pk=None):
+        """
+        Return a report of the dataset's compiled release-level checks.
+        """
+        return Response(get_object_or_404(Report, dataset=pk, type="resource_level_check").data)
+
+    @action(detail=True)
+    def dataset_level_report(self, request, pk=None):
+        """
+        Return a report of the dataset's dataset-level checks.
+        """
+        return self.get_report(
+            DatasetLevelCheck,
+            [
+                "result",
+                "value",
+                "meta",
+            ],
+        )
+
+    @action(detail=True)
+    def time_based_report(self, request, pk=None):
+        """
+        Return a report of the dataset's time-based checks.
+        """
+        return self.get_report(
+            TimeVarianceLevelCheck,
+            [
+                "coverage_value",
+                "coverage_result",
+                "check_value",
+                "check_result",
+                "meta",
+            ],
+        )
+
+    @action(detail=True)
     def status(self, request, pk=None):
         """
-        Returns the dataset's status, as an object like `{"phase": "CHECKED", "state": "OK"}`, or `{}` if not set.
+        Return the dataset's status, as an object like `{"phase": "CHECKED", "state": "OK"}`, or `{}` if not set.
         """
-        self.get_object()  # trigger 404 if no dataset
         try:
-            monitor = ProgressMonitorDataset.objects.values("phase", "state").get(dataset__pk=pk)
-            return Response(monitor)
+            progress = self.get_object_or_404(self.get_queryset().select_related("progress")).progress
+            return Response({"phase": progress.phase, "state": progress.state})
         except ProgressMonitorDataset.DoesNotExist:
             return Response({})
 
     @action(detail=True)
     def metadata(self, request, pk=None):
         """
-        Returns the dataset's collection metadata.
+        Return the dataset's collection metadata.
         """
         meta = self.get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True))
         return Response(meta or {})
@@ -184,7 +250,7 @@ class DatasetViewSet(viewsets.ViewSet):
     @action(detail=True)
     def coverage(self, request, pk=None):
         """
-        Returns the dataset's coverage statistics.
+        Return the dataset's coverage statistics.
         """
         self.get_object()  # trigger 404 if no dataset
 

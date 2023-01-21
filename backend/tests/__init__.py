@@ -1,22 +1,44 @@
 from django.db import connections
-from django.test import TransactionTestCase
+from django.test import TestCase
 
-from api.models import DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset, Report
+from api.models import (
+    DataItem,
+    Dataset,
+    DatasetFilter,
+    DatasetLevelCheck,
+    FieldLevelCheck,
+    ProgressMonitorDataset,
+    Report,
+    TimeVarianceLevelCheck,
+)
 
 
-class TestCase(TransactionTestCase):
+class PelicanTestCase(TestCase):
     databases = {"default", "data"}
-    unmanaged = {DataItem, Dataset, DatasetFilter, FieldLevelCheck, ProgressMonitorDataset, Report}
+    unmanaged = {
+        DataItem,
+        Dataset,
+        DatasetFilter,
+        DatasetLevelCheck,
+        FieldLevelCheck,
+        ProgressMonitorDataset,
+        Report,
+        TimeVarianceLevelCheck,
+    }
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
         with connections["data"].schema_editor() as schema_editor:
-            for model in self.unmanaged:
+            for model in cls.unmanaged:
                 schema_editor.create_model(model)
 
-    def tearDown(self):
+    @classmethod
+    def tearDownClass(cls):
         with connections["data"].schema_editor() as schema_editor:
-            for model in self.unmanaged:
+            for model in cls.unmanaged:
                 schema_editor.delete_model(model)
+        super().tearDownClass()
 
     def create(self, model, **kwargs):
         obj = model(**kwargs)

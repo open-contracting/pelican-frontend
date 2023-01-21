@@ -1,14 +1,12 @@
 var config = {
     apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
     apiEndpoints: {
-        // List/detail
         dataset: "datasets/",
         dataItem: "data_items/{id}/",
-        // Check stats
-        fieldStats: "api/field_level_stats",
-        resourceLevelStats: "api/resource_level_stats",
-        datasetLevelStats: "api/dataset_level_stats",
-        timeVarianceLevelStats: "api/time_variance_level_stats",
+        fieldLevelReport: "datasets/{id}/field_level_report/",
+        resourceLevelReport: "datasets/{id}/compiled_release_level_report/",
+        datasetLevelReport: "datasets/{id}/dataset_level_report/",
+        timeVarianceLevelReport: "datasets/{id}/time_based_report/",
         // Check detail
         fieldDetail: "api/field_level_detail",
         resourceLevelCheckDetail: "api/resource_level_detail",

@@ -7,7 +7,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from psycopg2.sql import SQL
 
-from api.models import DataItem, DatasetLevelCheck, Report, TimeVarianceLevelCheck
+from api.models import DataItem
 
 
 @csrf_exempt
@@ -70,18 +70,6 @@ def dataset_filter_items(request):
     return JsonResponse({"items": items})
 
 
-def dataset_level_stats(request, dataset_id):
-    result = {}
-    checks = DatasetLevelCheck.objects.filter(dataset=dataset_id)
-    for check in checks:
-        result[check.check_name] = {
-            "result": check.result,
-            "value": check.value,
-            "meta": check.meta,
-        }
-    return JsonResponse(result)
-
-
 # json_path requires shape: field1.field2.field3 ...
 def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
     json_path = "data__" + "__".join(json_path.split("."))
@@ -91,14 +79,6 @@ def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
     )
     query_set = data_items_query.values_list(json_path, "count").distinct()[:200]
     return JsonResponse([{"value": el[0], "count": el[1]} for el in query_set], safe=False)
-
-
-def field_level_stats(request, dataset_id):
-    try:
-        response = Report.objects.filter(dataset_id=dataset_id, type="field_level_check").get().data
-    except Report.DoesNotExist:
-        response = {"error": f"no field_level_check report for dataset_id {dataset_id}"}
-    return JsonResponse(response)
 
 
 def field_level_detail(request, dataset_id, path):
@@ -153,14 +133,6 @@ def field_level_detail(request, dataset_id, path):
     return JsonResponse(result)
 
 
-def resource_level_stats(request, dataset_id):
-    try:
-        response = Report.objects.filter(dataset_id=dataset_id, type="resource_level_check").get().data
-    except Report.DoesNotExist:
-        response = {"error": f"no resource_level_check report for dataset_id {dataset_id}"}
-    return JsonResponse(response)
-
-
 def resource_level_detail(request, dataset_id, check_name):
     start_time = time.time()
 
@@ -201,18 +173,4 @@ def resource_level_detail(request, dataset_id, check_name):
 
     result["time"] = time.time() - start_time
 
-    return JsonResponse(result)
-
-
-def time_variance_level_stats(request, dataset_id):
-    result = {}
-    checks = TimeVarianceLevelCheck.objects.all().filter(dataset=dataset_id)
-    for check in checks:
-        result[check.check_name] = {
-            "coverage_value": check.coverage_value,
-            "coverage_result": check.coverage_result,
-            "check_value": check.check_value,
-            "check_result": check.check_result,
-            "meta": check.meta,
-        }
     return JsonResponse(result)

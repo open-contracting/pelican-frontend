@@ -291,7 +291,8 @@ export default new Vuex.Store({
         loadResourceLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setResourceLevelStats", null);
-                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelStats + "/" + state.dataset.id;
+                var url =
+                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(url)
                     .then(function (response) {
@@ -341,7 +342,8 @@ export default new Vuex.Store({
         loadDatasetLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setDatasetLevelStats", null);
-                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelStats + "/" + state.dataset.id;
+                var url =
+                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(url)
                     .then(function (response) {
@@ -384,7 +386,7 @@ export default new Vuex.Store({
             return new Promise(resolve => {
                 commit("setFieldLevelStats", null);
 
-                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldStats + "/" + state.dataset.id;
+                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
 
                 var okShare = function (item) {
                     var result = (item.passed_count / item.total_count) * 100;
@@ -449,7 +451,8 @@ export default new Vuex.Store({
         loadTimeVarianceLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setTimeVarianceLevelStats", null);
-                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.timeVarianceLevelStats + "/" + state.dataset.id;
+                var url =
+                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(url)
                     .then(function (response) {
