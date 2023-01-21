@@ -1,5 +1,3 @@
-import time
-
 import simplejson as json
 from django.db import connections
 from django.db.models import Count
@@ -79,46 +77,3 @@ def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
     )
     query_set = data_items_query.values_list(json_path, "count").distinct()[:200]
     return JsonResponse([{"value": el[0], "count": el[1]} for el in query_set], safe=False)
-
-
-def resource_level_detail(request, dataset_id, check_name):
-    start_time = time.time()
-
-    result = None
-
-    with connections["data"].cursor() as cursor:
-        cursor.execute(
-            """
-            select data->%s
-            from report
-            where dataset_id = %s and
-                  type = 'resource_level_check' and
-                  data ? %s;
-            """,
-            [check_name, dataset_id, check_name],
-        )
-        rows = cursor.fetchall()
-
-        if not rows:
-            return JsonResponse(
-                {"error": f"no results for dataset_id: {dataset_id}, check_name: '{check_name}' combination"}
-            )
-
-        result = rows[0][0]
-
-        # getting examples
-        cursor.execute(
-            """
-            select data
-            from resource_level_check_examples
-            where dataset_id = %s and
-                  check_name = %s;
-            """,
-            [dataset_id, check_name],
-        )
-        data = cursor.fetchall()[0][0]
-        result = {**result, **data}
-
-    result["time"] = time.time() - start_time
-
-    return JsonResponse(result)

@@ -317,11 +317,9 @@ export default new Vuex.Store({
                     if (state.dataset != null && checkName != null) {
                         var url =
                             CONFIG.apiBaseUrl +
-                            CONFIG.apiEndpoints.resourceLevelCheckDetail +
-                            "/" +
-                            state.dataset.id +
-                            "/" +
-                            checkName;
+                            CONFIG.apiEndpoints.resourceLevelDetail
+                                .replace(/{id}/g, state.dataset.id)
+                                .replace(/{name}/g, checkName);
                         axios
                             .get(url)
                             .then(function (response) {

@@ -8,13 +8,10 @@ var config = {
         datasetLevelReport: "datasets/{id}/dataset_level_report/",
         timeVarianceLevelReport: "datasets/{id}/time_based_report/",
         fieldLevelDetail: "datasets/{id}/field_level/{name}/",
-        resourceLevelCheckDetail: "api/resource_level_detail",
-        // Filter datasets
+        resourceLevelDetail: "datasets/{id}/compiled_release_level/{name}/",
         datasetFilterItems: "api/dataset_filter_items",
         datasetDistinctValues: "api/dataset_distinct_values",
-        // Controller
         createDatasetFilter: "datasets/{id}/filter/",
-        // Exporter
         createDatasetReport: "api/generate_report"
     }
 };

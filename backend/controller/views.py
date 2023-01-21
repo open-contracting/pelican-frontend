@@ -18,6 +18,7 @@ from api.models import (
     FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
+    ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
 )
 from controller.rabbitmq import publish
@@ -323,7 +324,6 @@ class FieldLevelDetail(views.APIView):
         start_time = time.time()
 
         detail = get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name).data[name]
-
         data = get_object_or_404(FieldLevelCheckExamples, dataset=pk, path=name).data
 
         for key in ("coverage", "quality"):
@@ -332,6 +332,20 @@ class FieldLevelDetail(views.APIView):
             for check_name, check in data[key]["checks"].items():
                 detail[key]["checks"][check_name]["passed_examples"] = check["passed_examples"]
                 detail[key]["checks"][check_name]["failed_examples"] = check["failed_examples"]
+
+        detail["time"] = time.time() - start_time
+
+        return Response(detail)
+
+
+class ResourceLevelDetail(views.APIView):
+    def get(self, request, pk, name, format=None):
+        start_time = time.time()
+
+        detail = get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name).data[name]
+        data = get_object_or_404(ResourceLevelCheckExamples, dataset=pk, check_name=name).data
+
+        detail.update(data)
 
         detail["time"] = time.time() - start_time
 
