@@ -51,8 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
-    "api",
-    "controller.apps.ControllerConfig",
+    "api.apps.APIConfig",
     "exporter.apps.ExporterConfig",
 ]
 

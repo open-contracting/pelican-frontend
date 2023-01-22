@@ -33,7 +33,7 @@ jobs:
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
-          coverage run --source api,controller,core,exporter manage.py test
+          coverage run --source api,core,exporter manage.py test
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: coveralls --service=github

@@ -102,7 +102,7 @@ class ViewsTests(PelicanTestCase):
                 },
             )
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_create_invalid(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json")
@@ -110,7 +110,7 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_create_no_values(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/", {}, "application/json")
@@ -118,7 +118,7 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_create(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post(
@@ -130,7 +130,7 @@ class ViewsTests(PelicanTestCase):
                 {"name": "anything", "collection_id": 123}, "ocds_kingfisher_extractor_init"
             )
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_filter_invalid(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/123/filter/", {"buyer": "xxx"}, "application/json")
@@ -138,7 +138,7 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.status_code, 400)
             publish.assert_not_called()
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_filter_no_values(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/123/filter/", {}, "application/json")
@@ -148,7 +148,7 @@ class ViewsTests(PelicanTestCase):
                 {"dataset_id_original": 123, "filter_message": {}}, "dataset_filter_extractor_init"
             )
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_filter(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post("/datasets/123/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json")
@@ -158,7 +158,7 @@ class ViewsTests(PelicanTestCase):
                 {"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}, "dataset_filter_extractor_init"
             )
 
-    @patch("controller.views.publish")
+    @patch("api.views.publish")
     def test_datasets_destroy(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.delete("/datasets/123/")
