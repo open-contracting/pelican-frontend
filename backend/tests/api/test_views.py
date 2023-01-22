@@ -17,6 +17,16 @@ from tests import PelicanTestCase
 
 
 class ViewsTests(PelicanTestCase):
+    def test_openapi(self):
+        response = self.client.get("/openapi")
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_swagger_ui(self):
+        response = self.client.get("/swagger-ui/")
+
+        self.assertEqual(response.status_code, 200)
+
     def test_data_items_list_not_implemented(self):
         with self.assertNumQueries(0, using="data"):
             response = self.client.get("/data_items/")
@@ -369,14 +379,36 @@ class ViewsTests(PelicanTestCase):
 
     def test_field_level_detail(self):
         dataset = self.create(Dataset, name="anything")
-        self.create(Report, dataset=dataset, type="field_level_check", data={"ocid": {"coverage": {}, "quality": {}}})
+        self.create(
+            Report,
+            dataset=dataset,
+            type="field_level_check",
+            data={
+                "ocid": {
+                    "coverage": {
+                        "checks": {"exists": {"passed_examples": [1], "failed_examples": [2]}, "non_empty": {}},
+                    },
+                    "quality": {
+                        "checks": {"exists": {"passed_examples": [3], "failed_examples": [4]}, "non_empty": {}},
+                    },
+                }
+            },
+        )
         self.create(
             FieldLevelCheckExamples,
             dataset=dataset,
             path="ocid",
             data={
-                "coverage": {"passed_examples": [], "failed_examples": [], "checks": {}},
-                "quality": {"passed_examples": [], "failed_examples": [], "checks": {}},
+                "coverage": {
+                    "passed_examples": [11],
+                    "failed_examples": [12],
+                    "checks": {"exists": {"passed_examples": [13], "failed_examples": [14]}},
+                },
+                "quality": {
+                    "passed_examples": [15],
+                    "failed_examples": [16],
+                    "checks": {"exists": {"passed_examples": [17], "failed_examples": [18]}},
+                },
             },
         )
 
@@ -389,8 +421,16 @@ class ViewsTests(PelicanTestCase):
             self.assertJSONEqual(
                 json.dumps(detail),
                 {
-                    "coverage": {"failed_examples": [], "passed_examples": []},
-                    "quality": {"failed_examples": [], "passed_examples": []},
+                    "coverage": {
+                        "passed_examples": [11],
+                        "failed_examples": [12],
+                        "checks": {"exists": {"passed_examples": [13], "failed_examples": [14]}, "non_empty": {}},
+                    },
+                    "quality": {
+                        "passed_examples": [15],
+                        "failed_examples": [16],
+                        "checks": {"exists": {"passed_examples": [17], "failed_examples": [18]}, "non_empty": {}},
+                    },
                 },
             )
 
