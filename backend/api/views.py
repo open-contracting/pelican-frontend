@@ -162,6 +162,10 @@ class CustomSchema(AutoSchema):
 
 
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    Return OCDS data that passed or failed a check.
+    """
+
     lookup_value_regex = "[0-9]+"
     queryset = DataItem.objects.all()
     serializer_class = DataItemSerializer
@@ -395,6 +399,9 @@ class DatasetViewSet(viewsets.ViewSet):
 
 class FieldLevelDetail(views.APIView):
     def get(self, request, pk, name, format=None):
+        """
+        Return a report and examples of one field-level check.
+        """
         start_time = time.time()
 
         detail = get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name).data[name]
@@ -414,6 +421,9 @@ class FieldLevelDetail(views.APIView):
 
 class ResourceLevelDetail(views.APIView):
     def get(self, request, pk, name, format=None):
+        """
+        Return a report and examples of one compiled release-level check.
+        """
         start_time = time.time()
 
         detail = get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name).data[name]

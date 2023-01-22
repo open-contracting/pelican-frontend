@@ -1,6 +1,7 @@
 var config = {
     apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
     apiEndpoints: {
+        // GET
         dataset: "datasets/",
         dataItem: "data_items/{id}/",
         fieldLevelReport: "datasets/{id}/field_level_report/",
@@ -11,6 +12,7 @@ var config = {
         resourceLevelDetail: "datasets/{id}/compiled_release_level/{name}/",
         datasetFilterItems: "api/dataset_filter_items",
         datasetDistinctValues: "api/dataset_distinct_values",
+        // POST
         createDatasetFilter: "datasets/{id}/filter/",
         createDatasetReport: "api/generate_report"
     }
