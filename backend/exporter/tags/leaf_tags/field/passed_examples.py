@@ -2,10 +2,7 @@ import random
 
 from exporter.elements import multiple_line_elements
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-LEVELS = ("coverage", "coverageSet", "coverageEmpty", "quality")
-MODES = ("oneLine", "multipleLines")
+from exporter.util import LEVELS, MODES, terms_enumeration
 
 
 class PassedExamplesLeafTag(LeafTag):

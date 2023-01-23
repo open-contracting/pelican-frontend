@@ -1,7 +1,5 @@
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-PERCENTAGE_RANGES = {"0-1", "1-5", "5-20", "20-50", "50-100"}
+from exporter.util import PERCENTAGE_RANGES, terms_enumeration
 
 
 class ShareLeafTag(LeafTag):

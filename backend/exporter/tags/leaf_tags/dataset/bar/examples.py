@@ -2,10 +2,7 @@ import random
 
 from exporter.elements import multiple_line_elements
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-PERCENTAGE_RANGES = {"0-1", "1-5", "5-20", "20-50", "50-100"}
-MODES = ("oneLine", "multipleLines")
+from exporter.util import MODES, PERCENTAGE_RANGES, terms_enumeration
 
 
 class ExamplesLeafTag(LeafTag):

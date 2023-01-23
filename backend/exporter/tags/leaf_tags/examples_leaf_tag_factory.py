@@ -2,9 +2,7 @@ import random
 
 from exporter.elements import multiple_line_elements
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-MODES = ("oneLine", "multipleLines")
+from exporter.util import MODES, terms_enumeration
 
 
 def generate_examples_leaf_tag(key):

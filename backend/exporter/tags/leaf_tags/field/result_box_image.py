@@ -1,9 +1,7 @@
 from exporter import graphs
 from exporter.elements import image_element
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-LEVELS = ("coverage", "coverageSet", "coverageEmpty", "quality")
+from exporter.util import LEVELS, terms_enumeration
 
 
 class ResultBoxImageLeafTag(LeafTag):

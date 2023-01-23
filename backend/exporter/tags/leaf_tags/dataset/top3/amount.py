@@ -1,7 +1,5 @@
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-RANKS = {"1", "2", "3", "4", "5"}
+from exporter.util import RANKS, terms_enumeration
 
 
 class AmountLeafTag(LeafTag):

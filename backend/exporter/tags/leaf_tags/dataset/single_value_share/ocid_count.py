@@ -1,7 +1,5 @@
 from exporter.tags.tag import LeafTag
-from exporter.util import terms_enumeration
-
-COUNT_RANGES = {"1", "2-20", "21-50", "51-100", "100+"}
+from exporter.util import COUNT_RANGES, terms_enumeration
 
 
 class OcidCountLeafTag(LeafTag):
