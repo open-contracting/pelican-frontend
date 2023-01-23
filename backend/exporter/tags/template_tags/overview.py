@@ -1,8 +1,7 @@
 from api.models import Dataset
-from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
+from exporter.tags.leaf_tags.factories import generate_key_leaf_tag, generate_timestamp_leaf_tag
 from exporter.tags.leaf_tags.overview.lifecycle_image import LifecycleImageLeafTag
 from exporter.tags.leaf_tags.overview.lifecycle_object_count import LifecycleObjectCountLeafTag
-from exporter.tags.leaf_tags.timestamp_leaf_tag_factory import generate_timestamp_leaf_tag
 from exporter.tags.tag import TemplateTag
 
 

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import connections
 
+from exporter.tags.leaf_tags.factories import generate_key_leaf_tag
 from exporter.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
 from exporter.tags.leaf_tags.field.description import DescriptionLeafTag
 from exporter.tags.leaf_tags.field.failed_count import FailedCountLeafTag
@@ -9,7 +10,6 @@ from exporter.tags.leaf_tags.field.name import NameLeafTag
 from exporter.tags.leaf_tags.field.passed_count import PassedCountLeafTag
 from exporter.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
 from exporter.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
-from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from exporter.tags.tag import TemplateTag
 from exporter.util import terms_enumeration
 

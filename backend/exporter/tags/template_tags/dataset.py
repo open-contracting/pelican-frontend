@@ -25,8 +25,7 @@ from exporter.tags.leaf_tags.dataset.top3.count import CountLeafTag as top3_Coun
 from exporter.tags.leaf_tags.dataset.top3.examples import ExamplesLeafTag as top3_ExamplesLeafTag
 from exporter.tags.leaf_tags.dataset.top3.share import ShareLeafTag as top3_ShareLeafTag
 from exporter.tags.leaf_tags.dataset.value import ValueLeafTag
-from exporter.tags.leaf_tags.examples_leaf_tag_factory import generate_examples_leaf_tag
-from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
+from exporter.tags.leaf_tags.factories import generate_examples_leaf_tag, generate_key_leaf_tag
 from exporter.tags.tag import TemplateTag
 from exporter.util import terms_enumeration
 
