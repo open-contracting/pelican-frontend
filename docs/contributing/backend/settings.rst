@@ -5,6 +5,8 @@ See `OCP's approach to Django settings <https://ocp-software-handbook.readthedoc
 
 PELICAN_BACKEND_DATABASE_URL
   The `connection string <https://github.com/kennethreitz/dj-database-url#url-schema>`__ for Pelican backend's database
+LOG_LEVEL
+  The log level of the root logger
 CORS_ALLOWED_ORIGINS
   The `origins <https://github.com/adamchainz/django-cors-headers#cors_allowed_origins-sequencestr>`__ that are authorized to make cross-site HTTP requests
 TOKEN_PATH

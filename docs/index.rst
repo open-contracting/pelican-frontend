@@ -5,9 +5,7 @@ Pelican frontend
 
 .. toctree::
    :caption: Contents
-   :maxdepth: 2
+   :maxdepth: 1
 
-   backend/index
-   frontend/index
    contributing/index
    changelog

@@ -1,10 +1,16 @@
 Contributing
 ============
 
-Create a Python 3.8 virtual environment.
+.. toctree::
+   :caption: Contents
+   :maxdepth: 2
+
+   backend/index
 
 Setup
 -----
+
+Create a Python 3.8 virtual environment.
 
 Set up the git pre-commit hook:
 
@@ -57,6 +63,8 @@ Install development dependencies:
 
    npm install
 
+.. _development:
+
 Development
 -----------
 
@@ -73,6 +81,13 @@ In another terminal, start the frontend server:
 
    cd frontend
    npx vue-cli-service serve
+
+Reference
+~~~~~~~~~
+
+-  `Vue v2 <https://v2.vuejs.org>`__
+-  `Vue CLI <https://cli.vuejs.org>`__
+-  `Vue Router <https://v3.router.vuejs.org>`__
 
 Testing
 -------
@@ -111,10 +126,3 @@ This automatically sets the ``NODE_ENV`` environment variable to ``"production"`
 .. code-block:: bash
 
    npx vue-cli-service build --mode development
-
-Reference
----------
-
--  `Vue v2 <https://v2.vuejs.org>`__
--  `Vue CLI <https://cli.vuejs.org>`__
--  `Vue Router <https://v3.router.vuejs.org>`__
