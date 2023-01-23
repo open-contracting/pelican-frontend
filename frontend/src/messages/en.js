@@ -51,7 +51,7 @@ export const messages = {
         statusOk: "Calculation will start in a moment."
     },
     datasetReport: {
-        headline: "Dataset report",
+        headline: "Export report",
         status: {
             ok: "Report has been successfully created.",
             templateError: "Template syntax is invalid.",
@@ -61,18 +61,20 @@ export const messages = {
         },
         link: "Link",
         reason: "Reason",
-        documentId: "Document id",
-        documentIdTooltip: "<p>id or url of the main template on Google Drive&#8482;</p>",
-        folderId: "Folder id",
-        folderIdTooltip: "<p>id or url of the folder for the final report on Google Drive&#8482;</p>",
-        reportName: "Report name",
-        reportNameTooltip: "<p>(optional) name of the the final report on Google Drive&#8482;</p>",
-        submit: "Submit",
-        errorReport: "Error report",
+        documentId: "Main template ID",
+        documentIdTooltip:
+            "<p>ID or URL of the main template in Google Docs</p><p>The template and sub-templates must be editable by data-tools@open-contracting.org.</p>",
+        folderId: "Export folder ID",
+        folderIdTooltip:
+            "<p>ID or URL of the folder to which to write the exported document in Google Drive</p><p>The folder must be writable by data-tools@open-contracting.org.</p>",
+        reportName: "Export name",
+        reportNameTooltip: "<p>(optional) Name of the exported document in Google Docs</p>",
+        reportLanguage: "Export language",
+        reportLanguageTooltip: "<p>Language of the generated content in the exported document</p>",
+        submit: "Export",
+        errorReport: "Errors",
         warningList: "List of checks, which were not computed",
-        warningEnd: "We recommend you to check your dataset and template to generate complete report.",
-        reportLanguage: "Report language",
-        reportLanguageTooltip: "<p>language of the the generated messages in the report&#8482;</p>"
+        warningEnd: "We recommend you to check your dataset and template to generate a complete export."
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",
