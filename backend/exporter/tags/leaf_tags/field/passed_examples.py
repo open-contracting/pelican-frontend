@@ -29,11 +29,10 @@ class PassedExamplesLeafTag(LeafTag):
 
     def process_tag(self, data):
         all_examples = data["%sPassedExamples" % self.get_param("level")]
-        max_count = self.get_param("max")
-        if max_count is None:
-            max_count = len(all_examples)
 
-        examples = random.sample(all_examples, k=int(max_count))
+        max_count = int(self.get_param("max", len(all_examples)))
+
+        examples = random.sample(all_examples, k=min(len(all_examples), max_count))
 
         if self.get_param("mode", "oneLine") == "oneLine":
             return ", ".join(examples)

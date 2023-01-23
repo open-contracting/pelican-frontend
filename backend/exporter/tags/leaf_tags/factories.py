@@ -3,7 +3,7 @@ import random
 
 from exporter.elements import multiple_line_elements
 from exporter.tags.tag import LeafTag
-from exporter.util import MODES, terms_enumeration
+from exporter.util import LEVELS, MODES, terms_enumeration
 
 DATETIME_FORMATS = {
     "datetime": "%Y-%m-%d %H:%M:%S",
@@ -44,6 +44,27 @@ def generate_timestamp_leaf_tag(key, datetime_format):
             return d.strftime(DATETIME_FORMATS[mode])
 
     return TimestampLeafTag
+
+
+def generate_count_leaf_tag(infix):
+    class PassedCountLeafTag(LeafTag):
+        def __init__(self, gdocs, dataset_id):
+            super().__init__(self.process_tag, gdocs, dataset_id)
+
+            self.set_param_validation(
+                "level",
+                lambda v: v in LEVELS,
+                description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
+                required=True,
+            )
+
+            self.set_required_data_field(f"coverage{infix}Count")
+            self.set_required_data_field(f"coverageSet{infix}Count")
+            self.set_required_data_field(f"coverageEmpty{infix}Count")
+            self.set_required_data_field(f"quality{infix}Count")
+
+        def process_tag(self, data):
+            return str(data["%s%sCount" % (self.get_param("level"), infix)])
 
 
 def generate_examples_leaf_tag(key):

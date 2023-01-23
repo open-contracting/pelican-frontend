@@ -1,13 +1,10 @@
 from django.conf import settings
 from django.db import connections
 
-from exporter.tags.leaf_tags.factories import generate_key_leaf_tag
-from exporter.tags.leaf_tags.field.checked_count import CheckedCountLeafTag
+from exporter.tags.leaf_tags.factories import generate_count_leaf_tag, generate_key_leaf_tag
 from exporter.tags.leaf_tags.field.description import DescriptionLeafTag
-from exporter.tags.leaf_tags.field.failed_count import FailedCountLeafTag
 from exporter.tags.leaf_tags.field.failed_examples import FailedExamplesLeafTag
 from exporter.tags.leaf_tags.field.name import NameLeafTag
-from exporter.tags.leaf_tags.field.passed_count import PassedCountLeafTag
 from exporter.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
 from exporter.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
 from exporter.tags.tag import TemplateTag
@@ -610,9 +607,9 @@ class FieldTemplateTag(TemplateTag):
         self.set_sub_tag("name", NameLeafTag)
         self.set_sub_tag("description", DescriptionLeafTag)
 
-        self.set_sub_tag("checkedCount", CheckedCountLeafTag)
-        self.set_sub_tag("passedCount", PassedCountLeafTag)
-        self.set_sub_tag("failedCount", FailedCountLeafTag)
+        self.set_sub_tag("checkedCount", generate_count_leaf_tag("Checked"))
+        self.set_sub_tag("passedCount", generate_count_leaf_tag("Passed"))
+        self.set_sub_tag("failedCount", generate_count_leaf_tag("Failed"))
         self.set_sub_tag("resultBoxImage", ResultBoxImageLeafTag)
         self.set_sub_tag("passedExamples", PassedExamplesLeafTag)
         self.set_sub_tag("failedExamples", FailedExamplesLeafTag)
