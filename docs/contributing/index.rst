@@ -6,6 +6,13 @@ Create a Python 3.8 virtual environment.
 Setup
 -----
 
+Set up the git pre-commit hook:
+
+.. code-block:: bash
+
+   pip install pre-commit
+   pre-commit install
+
 Backend
 ~~~~~~~
 
@@ -42,7 +49,7 @@ Change to the ``frontend`` directory:
 
 .. code-block:: bash
 
-   cd backend
+   cd frontend
 
 Install development dependencies:
 
@@ -66,6 +73,44 @@ In another terminal, start the frontend server:
 
    cd frontend
    npx vue-cli-service serve
+
+Testing
+-------
+
+Backend
+~~~~~~~
+
+.. code-block:: bash
+
+   ./manage.py test
+
+Frontend
+~~~~~~~~
+
+.. code-block:: bash
+
+   npm run test
+
+Run linters:
+
+.. code-block:: bash
+
+   npx vue-cli-service lint
+
+Production
+----------
+
+Prepare a production build:
+
+.. code-block:: bash
+
+   npx vue-cli-service build
+
+This automatically sets the ``NODE_ENV`` environment variable to ``"production"``. To `override this default <https://cli.vuejs.org/guide/mode-and-env.html>`__, use:
+
+.. code-block:: bash
+
+   npx vue-cli-service build --mode development
 
 Reference
 ---------
