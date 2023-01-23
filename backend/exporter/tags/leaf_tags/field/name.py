@@ -17,7 +17,7 @@ class NameLeafTag(LeafTag):
             required=True,
         )
 
-        self.set_required_data_field("qualityCheck")
+        self.required_data_fields = {"qualityCheck"}
 
     def process_tag(self, data):
         if self.get_param("level") == "quality" and data["qualityCheck"] is None:

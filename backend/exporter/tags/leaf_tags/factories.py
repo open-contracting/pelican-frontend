@@ -17,7 +17,7 @@ def generate_key_leaf_tag(key):
         def __init__(self, gdocs, dataset_id):
             super().__init__(self.process_tag, gdocs, dataset_id)
 
-            self.set_required_data_field(key)
+            self.required_data_fields = {key}
 
         def process_tag(self, data):
             return str(data[key])
@@ -36,7 +36,7 @@ def generate_timestamp_leaf_tag(key, datetime_format):
                 description="The value must be one of the following: %s." % terms_enumeration(DATETIME_FORMATS),
             )
 
-            self.set_required_data_field(key)
+            self.required_data_fields = {key}
 
         def process_tag(self, data):
             d = datetime.datetime.strptime(data[key], datetime_format)
@@ -58,10 +58,12 @@ def generate_count_leaf_tag(infix):
                 required=True,
             )
 
-            self.set_required_data_field(f"coverage{infix}Count")
-            self.set_required_data_field(f"coverageSet{infix}Count")
-            self.set_required_data_field(f"coverageEmpty{infix}Count")
-            self.set_required_data_field(f"quality{infix}Count")
+            self.required_data_fields = {
+                f"coverage{infix}Count",
+                f"coverageSet{infix}Count",
+                f"coverageEmpty{infix}Count",
+                f"quality{infix}Count",
+            }
 
         def process_tag(self, data):
             return str(data["%s%sCount" % (self.get_param("level"), infix)])
@@ -81,7 +83,7 @@ def generate_examples_leaf_tag(key):
                 description="The value must be one of the following: %s." % terms_enumeration(MODES),
             )
 
-            self.set_required_data_field(key)
+            self.required_data_fields = {key}
 
         def process_tag(self, data):
             max_count = self.get_param("max")

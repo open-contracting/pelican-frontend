@@ -13,7 +13,7 @@ class AmountLeafTag(LeafTag):
             required=True,
         )
 
-        self.set_required_data_field("amounts")
+        self.required_data_fields = {"amounts"}
 
     def process_tag(self, data):
         return str(data["amounts"][self.get_param("rank")])

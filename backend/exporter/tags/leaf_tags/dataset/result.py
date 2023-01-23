@@ -5,7 +5,7 @@ class ResultLeafTag(LeafTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
-        self.set_required_data_field("result")
+        self.required_data_fields = {"result"}
 
     def process_tag(self, data):
         if data["result"] is True:

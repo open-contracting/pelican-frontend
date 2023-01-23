@@ -12,7 +12,7 @@ class SumLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(PERCENTAGE_RANGES),
         )
 
-        self.set_required_data_field("sums")
+        self.required_data_fields = {"sums"}
 
     def process_tag(self, data):
         if self.get_param("percentageRange") is None:

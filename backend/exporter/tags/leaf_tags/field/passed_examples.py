@@ -22,10 +22,12 @@ class PassedExamplesLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(MODES),
         )
 
-        self.set_required_data_field("coveragePassedExamples")
-        self.set_required_data_field("coverageSetPassedExamples")
-        self.set_required_data_field("coverageEmptyPassedExamples")
-        self.set_required_data_field("qualityPassedExamples")
+        self.required_data_fields = {
+            "coveragePassedExamples",
+            "coverageSetPassedExamples",
+            "coverageEmptyPassedExamples",
+            "qualityPassedExamples",
+        }
 
     def process_tag(self, data):
         all_examples = data["%sPassedExamples" % self.get_param("level")]

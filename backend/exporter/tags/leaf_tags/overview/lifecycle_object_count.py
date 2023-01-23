@@ -21,7 +21,7 @@ class LifecycleObjectCountLeafTag(LeafTag):
             required=True,
         )
 
-        self.set_required_data_field("lifecycle_object_counts")
+        self.required_data_fields = {"lifecycle_object_counts"}
 
     def process_tag(self, data):
         return str(data["lifecycle_object_counts"][self.get_param("stage")])

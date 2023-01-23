@@ -7,9 +7,11 @@ class TableResultBoxImageLeafTag(LeafTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
-        self.set_required_data_field("name")
-        self.set_required_data_field("counts_pairs")
-        self.set_required_data_field("total_count")
+        self.required_data_fields = {
+            "name",
+            "counts_pairs",
+            "total_count",
+        }
 
     def process_tag(self, data):
         buffer, aspect_ratio = graphs.table_result_box(

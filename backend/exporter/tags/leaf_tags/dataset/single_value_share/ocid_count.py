@@ -12,7 +12,7 @@ class OcidCountLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(COUNT_RANGES),
         )
 
-        self.set_required_data_field("ocidCounts")
+        self.required_data_fields = {"ocidCounts"}
 
     def process_tag(self, data):
         if self.get_param("countRange") is None:

@@ -10,7 +10,7 @@ class ShareLeafTag(LeafTag):
             "decimals", lambda v: v.isdigit(), description="The value must be a non-negative integer."
         )
 
-        self.set_required_data_field("shares")
+        self.required_data_fields = {"shares"}
 
     def process_tag(self, data):
         if self.get_param("value") is None:

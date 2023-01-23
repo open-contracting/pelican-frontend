@@ -12,7 +12,7 @@ class BuyerCountLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(COUNT_RANGES),
         )
 
-        self.set_required_data_field("buyerCounts")
+        self.required_data_fields = {"buyerCounts"}
 
     def process_tag(self, data):
         if self.get_param("countRange") is None:

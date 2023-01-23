@@ -41,13 +41,6 @@ class Tag:
         self.param_validations_mapping[name] = validation
         self.param_validations_description_mapping[name] = description
 
-    # adds new field requirement that is must be passed to the tag for its correct function
-    def set_required_data_field(self, name):
-        if name in self.required_data_fields:
-            raise AttributeError(f"{name} data field already exists")
-
-        self.required_data_fields.add(name)
-
     # sets parameter value; raises an exception when the params have already been finalized
     def set_param(self, name, value):
         if self.params_finalized:
@@ -596,7 +589,7 @@ class ErrorTag(TemplateTag):
         super().__init__(self.prepare_data, settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"], gdocs, dataset_id)
         self.sub_tags_mapping["value"] = self.tag_class
         self.key = key
-        self.set_required_data_field(key)
+        self.required_data_fields = {key}
         self.set_param("template", settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"])
         super().finalize_params()
 

@@ -21,7 +21,7 @@ class ExamplesLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(MODES),
         )
 
-        self.set_required_data_field("examples")
+        self.required_data_fields = {"examples"}
 
     def process_tag(self, data):
         if self.get_param("rank") is not None:

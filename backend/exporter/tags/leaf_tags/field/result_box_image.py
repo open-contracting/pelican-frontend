@@ -14,11 +14,14 @@ class ResultBoxImageLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
             required=True,
         )
-        self.set_required_data_field("path")
-        self.set_required_data_field("coveragePassedCount")
-        self.set_required_data_field("coverageFailedCount")
-        self.set_required_data_field("qualityPassedCount")
-        self.set_required_data_field("qualityFailedCount")
+
+        self.required_data_fields = {
+            "path",
+            "coveragePassedCount",
+            "coverageFailedCount",
+            "qualityPassedCount",
+            "qualityFailedCount",
+        }
 
     def process_tag(self, data):
         buffer, aspect_ratio = graphs.passed_result_box(

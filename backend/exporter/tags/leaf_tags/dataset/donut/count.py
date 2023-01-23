@@ -7,7 +7,7 @@ class CountLeafTag(LeafTag):
 
         self.set_param_validation("value", lambda v: isinstance(v, str))
 
-        self.set_required_data_field("counts")
+        self.required_data_fields = {"counts"}
 
     def process_tag(self, data):
         if self.get_param("value") is None:

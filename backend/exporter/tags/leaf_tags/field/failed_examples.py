@@ -22,10 +22,12 @@ class FailedExamplesLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(MODES),
         )
 
-        self.set_required_data_field("coverageFailedExamples")
-        self.set_required_data_field("coverageSetFailedExamples")
-        self.set_required_data_field("coverageEmptyFailedExamples")
-        self.set_required_data_field("qualityFailedExamples")
+        self.required_data_fields = {
+            "coverageFailedExamples",
+            "coverageSetFailedExamples",
+            "coverageEmptyFailedExamples",
+            "qualityFailedExamples",
+        }
 
     def process_tag(self, data):
         all_examples = data["%sFailedExamples" % self.get_param("level")]

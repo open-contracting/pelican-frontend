@@ -7,9 +7,11 @@ class PassedResultBoxImageLeafTag(LeafTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
-        self.set_required_data_field("name")
-        self.set_required_data_field("passedCount")
-        self.set_required_data_field("failedCount")
+        self.required_data_fields = {
+            "name",
+            "passedCount",
+            "failedCount",
+        }
 
     def process_tag(self, data):
         buffer, aspect_ratio = graphs.passed_result_box(
