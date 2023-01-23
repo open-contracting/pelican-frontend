@@ -12,7 +12,6 @@ class OverviewTemplateTag(TemplateTag):
 
         self.set_sub_tag("id", generate_key_leaf_tag("id"))
         self.set_sub_tag("ancestorId", generate_key_leaf_tag("ancestorId"))
-        self.set_sub_tag("url", generate_key_leaf_tag("url"))
         self.set_sub_tag("publisher", generate_key_leaf_tag("publisher"))
         self.set_sub_tag("publishingStart", generate_timestamp_leaf_tag("publishingStart", "%Y-%m-%d %H.%M.%S"))
         self.set_sub_tag("publishingEnd", generate_timestamp_leaf_tag("publishingEnd", "%Y-%m-%d %H.%M.%S"))
@@ -33,7 +32,6 @@ class OverviewTemplateTag(TemplateTag):
         return {
             "id": dataset.id,
             "ancestorId": dataset.ancestor_id,  # TODO
-            "url": dataset.meta["collection_metadata"]["url"],
             "publisher": dataset.meta["collection_metadata"]["publisher"],
             "publishingStart": dataset.meta["collection_metadata"]["published_from"],
             "publishingEnd": dataset.meta["collection_metadata"]["published_to"],

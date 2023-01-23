@@ -113,23 +113,6 @@
             </div>
             <div class="tr row">
               <div class="td col col-4 d-flex align-items-center">
-                URL
-              </div>
-              <div class="td col col-8 d-flex align-items-center break_word">
-                <a
-                  v-if="collection.url && collection.url.startsWith('http')"
-                  :href="collection.url"
-                  target="_blank"
-                >{{ collection.url }}</a>
-                <template v-else>
-                  <template v-if="collection.url">
-                    {{ collection.url }}
-                  </template>
-                </template>
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
                 OCID Prefix
               </div>
               <div class="td col col-8 d-flex align-items-center">
