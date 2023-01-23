@@ -3,6 +3,8 @@ from exporter.util import COUNT_RANGES, terms_enumeration
 
 
 class BuyerCountLeafTag(LeafTag):
+    required_data_fields = {"buyerCounts"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -11,8 +13,6 @@ class BuyerCountLeafTag(LeafTag):
             lambda v: v in COUNT_RANGES,
             description="The value must be one of the following: %s." % terms_enumeration(COUNT_RANGES),
         )
-
-        self.required_data_fields = {"buyerCounts"}
 
     def process_tag(self, data):
         if self.get_param("countRange") is None:

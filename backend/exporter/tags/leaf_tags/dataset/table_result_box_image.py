@@ -4,14 +4,7 @@ from exporter.tags.tag import LeafTag
 
 
 class TableResultBoxImageLeafTag(LeafTag):
-    def __init__(self, gdocs, dataset_id):
-        super().__init__(self.process_tag, gdocs, dataset_id)
-
-        self.required_data_fields = {
-            "name",
-            "counts_pairs",
-            "total_count",
-        }
+    required_data_fields = {"name", "counts_pairs", "total_count"}
 
     def process_tag(self, data):
         buffer, aspect_ratio = graphs.table_result_box(

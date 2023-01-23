@@ -3,6 +3,8 @@ from exporter.util import RANKS, terms_enumeration
 
 
 class AmountLeafTag(LeafTag):
+    required_data_fields = {"amounts"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -12,8 +14,6 @@ class AmountLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(RANKS),
             required=True,
         )
-
-        self.required_data_fields = {"amounts"}
 
     def process_tag(self, data):
         return str(data["amounts"][self.get_param("rank")])

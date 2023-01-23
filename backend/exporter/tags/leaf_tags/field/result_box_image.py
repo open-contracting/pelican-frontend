@@ -5,6 +5,14 @@ from exporter.util import LEVELS, terms_enumeration
 
 
 class ResultBoxImageLeafTag(LeafTag):
+    required_data_fields = {
+        "path",
+        "coveragePassedCount",
+        "coverageFailedCount",
+        "qualityPassedCount",
+        "qualityFailedCount",
+    }
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -14,14 +22,6 @@ class ResultBoxImageLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
             required=True,
         )
-
-        self.required_data_fields = {
-            "path",
-            "coveragePassedCount",
-            "coverageFailedCount",
-            "qualityPassedCount",
-            "qualityFailedCount",
-        }
 
     def process_tag(self, data):
         buffer, aspect_ratio = graphs.passed_result_box(

@@ -3,6 +3,8 @@ from exporter.util import RANKS, terms_enumeration
 
 
 class ShareLeafTag(LeafTag):
+    required_data_fields = {"shares"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -14,8 +16,6 @@ class ShareLeafTag(LeafTag):
         self.set_param_validation(
             "decimals", lambda v: v.isdigit(), description="The value must be a non-negative integer."
         )
-
-        self.required_data_fields = {"shares"}
 
     def process_tag(self, data):
         if self.get_param("rank") is not None:

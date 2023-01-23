@@ -7,6 +7,8 @@ TYPES = {"bar"}
 
 
 class CountsResultBoxImageLeafTag(LeafTag):
+    required_data_fields = {"name", "counts_pairs"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -15,11 +17,6 @@ class CountsResultBoxImageLeafTag(LeafTag):
             lambda v: v in TYPES,
             description="The value must be one of the following: %s." % terms_enumeration(TYPES),
         )
-
-        self.required_data_fields = {
-            "name",
-            "counts_pairs",
-        }
 
     def process_tag(self, data):
         if self.get_param("type", "bar") == "bar":

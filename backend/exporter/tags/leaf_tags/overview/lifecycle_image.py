@@ -4,10 +4,7 @@ from exporter.tags.tag import LeafTag
 
 
 class LifecycleImageLeafTag(LeafTag):
-    def __init__(self, gdocs, dataset_id):
-        super().__init__(self.process_tag, gdocs, dataset_id)
-
-        self.required_data_fields = {"lifecycle_object_counts"}
+    required_data_fields = {"lifecycle_object_counts"}
 
     def process_tag(self, data):
         buffer, aspect_ratio = graphs.lifecycle_image(

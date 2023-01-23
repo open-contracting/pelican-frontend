@@ -6,6 +6,8 @@ from exporter.util import MODES, RANKS, terms_enumeration
 
 
 class ExamplesLeafTag(LeafTag):
+    required_data_fields = {"examples"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -20,8 +22,6 @@ class ExamplesLeafTag(LeafTag):
             lambda v: v in MODES,
             description="The value must be one of the following: %s." % terms_enumeration(MODES),
         )
-
-        self.required_data_fields = {"examples"}
 
     def process_tag(self, data):
         if self.get_param("rank") is not None:

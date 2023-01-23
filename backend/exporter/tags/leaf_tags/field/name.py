@@ -7,6 +7,8 @@ LEVELS = ("coverageSet", "coverageEmpty", "quality")
 
 
 class NameLeafTag(LeafTag):
+    required_data_fields = {"qualityCheck"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -16,8 +18,6 @@ class NameLeafTag(LeafTag):
             description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
             required=True,
         )
-
-        self.required_data_fields = {"qualityCheck"}
 
     def process_tag(self, data):
         if self.get_param("level") == "quality" and data["qualityCheck"] is None:

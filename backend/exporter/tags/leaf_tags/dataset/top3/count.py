@@ -3,6 +3,8 @@ from exporter.util import RANKS, terms_enumeration
 
 
 class CountLeafTag(LeafTag):
+    required_data_fields = {"counts"}
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -11,8 +13,6 @@ class CountLeafTag(LeafTag):
             lambda v: v in RANKS,
             description="The value must be one of the following: %s." % terms_enumeration(RANKS),
         )
-
-        self.required_data_fields = {"counts"}
 
     def process_tag(self, data):
         if self.get_param("rank") is None:

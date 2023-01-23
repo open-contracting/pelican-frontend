@@ -6,6 +6,13 @@ from exporter.util import LEVELS, MODES, terms_enumeration
 
 
 class FailedExamplesLeafTag(LeafTag):
+    required_data_fields = {
+        "coverageFailedExamples",
+        "coverageSetFailedExamples",
+        "coverageEmptyFailedExamples",
+        "qualityFailedExamples",
+    }
+
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
@@ -21,13 +28,6 @@ class FailedExamplesLeafTag(LeafTag):
             lambda v: v in MODES,
             description="The value must be one of the following: %s." % terms_enumeration(MODES),
         )
-
-        self.required_data_fields = {
-            "coverageFailedExamples",
-            "coverageSetFailedExamples",
-            "coverageEmptyFailedExamples",
-            "qualityFailedExamples",
-        }
 
     def process_tag(self, data):
         all_examples = data["%sFailedExamples" % self.get_param("level")]
