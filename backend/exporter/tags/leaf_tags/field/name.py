@@ -3,17 +3,17 @@ from django.utils.translation import gettext as _
 from exporter.tags.tag import LeafTag
 from exporter.util import terms_enumeration
 
+LEVELS = ("coverageSet", "coverageEmpty", "quality")
+
 
 class NameLeafTag(LeafTag):
-    LEVELS = ("coverageSet", "coverageEmpty", "quality")
-
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
         self.set_param_validation(
             "level",
-            lambda v: v in NameLeafTag.LEVELS,
-            description="The value must be one of the following: %s." % terms_enumeration(NameLeafTag.LEVELS),
+            lambda v: v in LEVELS,
+            description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
             required=True,
         )
 

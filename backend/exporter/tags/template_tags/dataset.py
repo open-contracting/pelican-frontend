@@ -30,44 +30,43 @@ from exporter.tags.leaf_tags.key_leaf_tag_factory import generate_key_leaf_tag
 from exporter.tags.tag import TemplateTag
 from exporter.util import terms_enumeration
 
+CHECK_MAPPING = {
+    "distribution.main_procurement_category": {"check_type": "donut", "version": 1},
+    "distribution.tender_status": {"check_type": "donut", "version": 1},
+    "distribution.tender_procurement_method": {"check_type": "donut", "version": 1},
+    "distribution.tender_award_criteria": {"check_type": "donut", "report_only": True, "version": 1},
+    "distribution.tender_submission_method": {"check_type": "donut", "report_only": True, "version": 1},
+    "distribution.awards_status": {"check_type": "donut", "version": 1},
+    "distribution.contracts_status": {"check_type": "donut", "version": 1},
+    "distribution.milestone_status": {"check_type": "donut", "version": 1},
+    "distribution.milestone_type": {"check_type": "donut", "report_only": True, "version": 1},
+    "distribution.document_document_type": {"check_type": "donut", "report_only": True, "version": 1},
+    "distribution.value_currency": {"check_type": "donut", "report_only": True, "version": 1},
+    "distribution.related_process_relation": {"check_type": "donut", "report_only": True, "version": 1},
+    "distribution.tender_value": {"check_type": "bar", "version": 1},
+    "distribution.contracts_value": {"check_type": "bar", "version": 1},
+    "distribution.awards_value": {"check_type": "bar", "version": 1},
+    "misc.url_availability": {"check_type": "numeric", "version": 1},
+    "unique.tender_id": {"check_type": "numeric", "version": 2},
+    "consistent.related_process_title": {"check_type": "numeric", "version": 1},
+    "reference.related_process_identifier": {"check_type": "numeric", "version": 2},
+    "distribution.tender_value_repetition": {"check_type": "top3", "version": 1},
+    "distribution.contracts_value_repetition": {"check_type": "top3", "version": 1},
+    "distribution.awards_value_repetition": {"check_type": "top3", "version": 1},
+    "distribution.buyer_repetition": {"check_type": "biggest_share", "version": 1},
+    "distribution.buyer": {"check_type": "single_value_share", "version": 1},
+}
+
 
 class DatasetTemplateTag(TemplateTag):
-    CHECK_MAPPING = {
-        "distribution.main_procurement_category": {"check_type": "donut", "version": 1},
-        "distribution.tender_status": {"check_type": "donut", "version": 1},
-        "distribution.tender_procurement_method": {"check_type": "donut", "version": 1},
-        "distribution.tender_award_criteria": {"check_type": "donut", "report_only": True, "version": 1},
-        "distribution.tender_submission_method": {"check_type": "donut", "report_only": True, "version": 1},
-        "distribution.awards_status": {"check_type": "donut", "version": 1},
-        "distribution.contracts_status": {"check_type": "donut", "version": 1},
-        "distribution.milestone_status": {"check_type": "donut", "version": 1},
-        "distribution.milestone_type": {"check_type": "donut", "report_only": True, "version": 1},
-        "distribution.document_document_type": {"check_type": "donut", "report_only": True, "version": 1},
-        "distribution.value_currency": {"check_type": "donut", "report_only": True, "version": 1},
-        "distribution.related_process_relation": {"check_type": "donut", "report_only": True, "version": 1},
-        "distribution.tender_value": {"check_type": "bar", "version": 1},
-        "distribution.contracts_value": {"check_type": "bar", "version": 1},
-        "distribution.awards_value": {"check_type": "bar", "version": 1},
-        "misc.url_availability": {"check_type": "numeric", "version": 1},
-        "unique.tender_id": {"check_type": "numeric", "version": 2},
-        "consistent.related_process_title": {"check_type": "numeric", "version": 1},
-        "reference.related_process_identifier": {"check_type": "numeric", "version": 2},
-        "distribution.tender_value_repetition": {"check_type": "top3", "version": 1},
-        "distribution.contracts_value_repetition": {"check_type": "top3", "version": 1},
-        "distribution.awards_value_repetition": {"check_type": "top3", "version": 1},
-        "distribution.buyer_repetition": {"check_type": "biggest_share", "version": 1},
-        "distribution.buyer": {"check_type": "single_value_share", "version": 1},
-    }
-
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.prepare_data, settings.GDOCS_TEMPLATES["DEFAULT_DATASET_TEMPLATE"], gdocs, dataset_id)
 
         # TODO: check if check was calculated and version compatibility
         self.set_param_validation(
             "check",
-            lambda v: v in DatasetTemplateTag.CHECK_MAPPING,
-            description="The value must be one of the following: %s."
-            % terms_enumeration(DatasetTemplateTag.CHECK_MAPPING),
+            lambda v: v in CHECK_MAPPING,
+            description="The value must be one of the following: %s." % terms_enumeration(CHECK_MAPPING),
             required=True,
         )
 

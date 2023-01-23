@@ -10,6 +10,7 @@ class OverviewTemplateTag(TemplateTag):
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.prepare_data, "1sYr5LipKRtegWWl3zfKIDoSZmZluawmAdAu3piKslTw", gdocs, dataset_id)
 
+        # Note: The datetime formats must match DATETIME_STR_FORMAT in pelican-backend.
         self.set_sub_tag("id", generate_key_leaf_tag("id"))
         self.set_sub_tag("ancestorId", generate_key_leaf_tag("ancestorId"))
         self.set_sub_tag("publisher", generate_key_leaf_tag("publisher"))

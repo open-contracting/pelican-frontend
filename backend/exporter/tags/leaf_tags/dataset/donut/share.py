@@ -20,9 +20,6 @@ class ShareLeafTag(LeafTag):
         else:
             share = 100 * data["shares"][self.get_param("value")]
 
-        if self.get_param("decimals") is not None:
-            decimals = int(self.get_param("decimals"))
-        else:
-            decimals = 0
+        decimals = int(self.get_param("decimals", 0))
 
         return ("%." + str(decimals) + "f") % share

@@ -1,17 +1,17 @@
 from exporter.tags.tag import LeafTag
 from exporter.util import terms_enumeration
 
+LEVELS = ("coverage", "coverageSet", "coverageEmpty", "quality")
+
 
 class FailedCountLeafTag(LeafTag):
-    LEVELS = ("coverage", "coverageSet", "coverageEmpty", "quality")
-
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
         self.set_param_validation(
             "level",
-            lambda v: v in FailedCountLeafTag.LEVELS,
-            description="The value must be one of the following: %s." % terms_enumeration(FailedCountLeafTag.LEVELS),
+            lambda v: v in LEVELS,
+            description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
             required=True,
         )
 

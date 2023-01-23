@@ -73,11 +73,11 @@ class Tag:
         self.params_mapping[name] = value
 
     # retrieves respective parameter if set, otherwise None
-    def get_param(self, name):
+    def get_param(self, name, default=None):
         if name in self.params_mapping:
             return self.params_mapping[name]
         else:
-            return None
+            return default
 
     # after param finalization new params cannot added nor set
     def finalize_params(self):

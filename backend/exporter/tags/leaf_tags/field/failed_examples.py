@@ -4,26 +4,25 @@ from exporter.elements import multiple_line_elements
 from exporter.tags.tag import LeafTag
 from exporter.util import terms_enumeration
 
+LEVELS = ("coverage", "coverageSet", "coverageEmpty", "quality")
+MODES = ("oneLine", "multipleLines")
+
 
 class FailedExamplesLeafTag(LeafTag):
-    LEVELS = ("coverage", "coverageSet", "coverageEmpty", "quality")
-    MODES = ("oneLine", "multipleLines")
-
     def __init__(self, gdocs, dataset_id):
         super().__init__(self.process_tag, gdocs, dataset_id)
 
         self.set_param_validation(
             "level",
-            lambda v: v in FailedExamplesLeafTag.LEVELS,
-            description="The value must be one of the following: %s."
-            % terms_enumeration(FailedExamplesLeafTag.LEVELS),
+            lambda v: v in LEVELS,
+            description="The value must be one of the following: %s." % terms_enumeration(LEVELS),
             required=True,
         )
         self.set_param_validation("max", lambda v: v.isdigit(), description="The value must be a positive integer.")
         self.set_param_validation(
             "mode",
-            lambda v: v in FailedExamplesLeafTag.MODES,
-            description="The value must be one of the following: %s." % terms_enumeration(FailedExamplesLeafTag.MODES),
+            lambda v: v in MODES,
+            description="The value must be one of the following: %s." % terms_enumeration(MODES),
         )
 
         self.set_required_data_field("coverageFailedExamples")
@@ -41,11 +40,9 @@ class FailedExamplesLeafTag(LeafTag):
         # Choosing examples, if max count bigger than sample size, choosing all the samples instead
         examples = random.sample(all_examples, k=min(len(all_examples), int(max_count)))
 
-        mode = self.get_param("mode")
-        if mode is None:
-            mode = "oneLine"
+        mode = self.get_param("mode", "oneLine")
 
         if mode == "oneLine":
             return ", ".join(examples)
-        elif mode == "multipleLines":
-            return multiple_line_elements(examples)
+        # multipleLines
+        return multiple_line_elements(examples)
