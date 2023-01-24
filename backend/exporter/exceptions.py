@@ -8,6 +8,7 @@ class GoogleDriveError(Exception):
 
 class TagError(Exception):
     def __init__(self, reason, full_tag=None, template_id=None):
+        self.args = (reason,)
         self.reason = reason
         self.full_tag = full_tag
         self.template_id = template_id
