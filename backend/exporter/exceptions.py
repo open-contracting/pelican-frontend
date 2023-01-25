@@ -1,4 +1,8 @@
-class GoogleDriveError(Exception):
+class PelicanError(Exception):
+    """Base class for exceptions from within this project"""
+
+
+class GoogleDriveError(PelicanError):
     def __init__(self, reason):
         self.reason = reason
 
@@ -6,24 +10,21 @@ class GoogleDriveError(Exception):
         return f"Google Drive Error: {self.reason}"
 
 
-class TagError(Exception):
+class TagError(PelicanError):
+    """Base class for exceptions related to tags."""
+
     def __init__(self, reason, full_tag=None, template_id=None):
         self.args = (reason,)
         self.reason = reason
         self.full_tag = full_tag
         self.template_id = template_id
 
-    def set_reason(self, reason):
-        self.reason = reason
-
-    def set_full_tag(self, full_tag):
-        self.full_tag = full_tag
-
-    def set_template_id(self, template_id):
-        self.template_id = template_id
-
-    def is_set(self):
-        return None not in (self.reason, self.full_tag, self.template_id)
+    def fill(self, full_tag, template_id):
+        if self.full_tag is None:
+            self.full_tag = full_tag
+        if self.template_id is None:
+            self.template_id = template_id
+        return self
 
     def as_dict(self):
         return {
@@ -33,26 +34,21 @@ class TagError(Exception):
         }
 
 
-# Error used for singaling and handling noncomputed checks while generating report
-class CheckNotComputedError(Exception):
-    def __init__(self, reason, check=None):
-        self.reason = reason
-        self.check = check
+class TagSyntaxError(TagError):
+    """Raised if a tag is malformed."""
 
-    def set_reason(self, reason):
-        self.reason = reason
 
-    def set_check(self, check):
-        self.check = check
+class UnknownTagError(TagError):
+    """Raised if a tag's name is unrecognized."""
 
-    def is_set(self):
-        return None not in (self.reason, self.full_tag, self.template_id)
 
-    def get_check(self):
-        return self.check
+class TagArgumentError(TagError):
+    """Raised if a tag's argument is invalid."""
 
-    def as_dict(self):
-        return {
-            "reason": self.reason,
-            "check": self.check,
-        }
+
+class MissingArgumentError(TagError):
+    """Raised if a tag's argument is missing."""
+
+
+class CheckNotComputedError(PelicanError):
+    """Raised if a check cannot be computed. The error message should be the check's name."""

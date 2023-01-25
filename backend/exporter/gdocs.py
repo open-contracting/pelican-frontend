@@ -17,11 +17,13 @@ from lxml import etree
 
 from exporter.exceptions import GoogleDriveError
 
+ROOT = "google_drive_cache"
+NO_OF_ATTEMPTS = 5
+
 
 class Gdocs:
     # If modifying these scopes, delete the file token.pickle.
     SCOPES = ["https://www.googleapis.com/auth/documents"]
-    OUT_FILE_NAME = "out"
 
     """Init (authentication etc.) of all necessary services,"""
 
@@ -30,15 +32,14 @@ class Gdocs:
         if os.path.exists(settings.TOKEN_PATH):
             with open(settings.TOKEN_PATH) as f:
                 self.creds = Credentials.from_authorized_user_info(json.load(f))
-                self.drive_service = build("drive", "v3", credentials=self.creds)
+                self.drive_service = build("drive", "v3", credentials=self.creds, cache_discovery=False)
         else:
             raise RuntimeError("Unable to find token file")
 
-        self.dirpath = self.create_tempdir()
+        self.dirpath = tempfile.mkdtemp()
         self.google_drive_cache = GoogleDriveCache(self.drive_service)
 
-        self.main_template_id = main_template_id
-        self.main_template_path = os.path.join(self.dirpath, Gdocs.OUT_FILE_NAME)
+        self.main_template_path = os.path.join(self.dirpath, "out")
         cache_file_path = self.google_drive_cache.get_file_path(main_template_id)
         with ZipFile(cache_file_path, "r") as zipread:
             with ZipFile(self.main_template_path, "w") as zipwrite:
@@ -47,15 +48,12 @@ class Gdocs:
                         data = zipread.read(item.filename)
                         zipwrite.writestr(item, data)
 
-    def create_tempdir(self):
-        return tempfile.mkdtemp()
-
     def destroy_tempdir(self):
         shutil.rmtree(self.dirpath)
 
     def add_image_file(self, buffer, name="image.png"):
         with ZipFile(self.main_template_path, mode="a") as zip_file:
-            image_file_path = os.path.join("Pictures/", shortuuid.uuid() + "_" + name)
+            image_file_path = os.path.join("Pictures/", f"{shortuuid.uuid()}_{name}")
             zip_file.writestr(image_file_path, buffer.getbuffer())
 
         # Updating manifest
@@ -68,8 +66,8 @@ class Gdocs:
         namespace = "{urn:oasis:names:tc:opendocument:xmlns:manifest:1.0}"
         root.append(
             etree.Element(
-                namespace + "file-entry",
-                attrib={(namespace + "full-path"): image_file_path, (namespace + "media-type"): "image/png"},
+                f"{namespace}file-entry",
+                attrib={f"{namespace}full-path": image_file_path, f"{namespace}media-type": "image/png"},
             )
         )
 
@@ -77,8 +75,6 @@ class Gdocs:
             zip_file.writestr("META-INF/manifest.xml", etree.tostring(root))
 
         return image_file_path
-
-    """Uploads document"""
 
     def upload(self, folder_id, file_name, content):
         with ZipFile(self.main_template_path, mode="a") as out_zip:
@@ -102,31 +98,25 @@ class Gdocs:
 
     def remove_file_from_zip(self, zip_file_path, file_path):
         with ZipFile(zip_file_path, "r") as zipread:
-            with ZipFile(zip_file_path + "_copy", "w") as zipwrite:
+            with ZipFile(f"{zip_file_path}_copy", "w") as zipwrite:
                 for item in zipread.infolist():
                     if item.filename != file_path:
                         data = zipread.read(item.filename)
                         zipwrite.writestr(item, data)
 
-        shutil.move(zip_file_path + "_copy", zip_file_path)
+        shutil.move(f"{zip_file_path}_copy", zip_file_path)
 
-    def get_main_template(self):
-        return self.get_template(self.main_template_id)
-
-    def get_template(self, template_id):
-        cache_file_path = self.google_drive_cache.get_file_path(template_id)
+    def get_content(self, file_id):
+        cache_file_path = self.google_drive_cache.get_file_path(file_id)
         with ZipFile(cache_file_path) as myzip:
             with myzip.open("content.xml") as content:
                 return etree.parse(content).getroot()
 
 
 class GoogleDriveCache:
-    ROOT = "google_drive_cache"
-    NO_OF_ATTEMPTS = 5
-
     def __init__(self, drive_service):
-        if not default_storage.exists(GoogleDriveCache.ROOT):
-            os.mkdir(os.path.join(default_storage.location, GoogleDriveCache.ROOT))
+        if not default_storage.exists(ROOT):
+            os.mkdir(os.path.join(default_storage.location, ROOT))
 
         self.drive_service = drive_service
         self.files = {}
@@ -134,24 +124,24 @@ class GoogleDriveCache:
 
     def refresh(self):
         self.files = {}
-        _, filenames = default_storage.listdir(GoogleDriveCache.ROOT)
+        _, filenames = default_storage.listdir(ROOT)
         for filename in filenames:
             version, file_id = re.search(r"^([^_]+)_(.+)$", filename).groups()
             version = int(version)
             if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-                self.files[file_id] = {"version": version, "path": os.path.join(GoogleDriveCache.ROOT, filename)}
+                self.files[file_id] = {"version": version, "path": os.path.join(ROOT, filename)}
 
     def get_file_path(self, file_id):
         self.refresh()
 
         drive_response = None
-        for i in range(GoogleDriveCache.NO_OF_ATTEMPTS):
+        for i in range(NO_OF_ATTEMPTS):
             try:
                 drive_response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
 
                 break
             except HttpError:
-                if i > (GoogleDriveCache.NO_OF_ATTEMPTS - 2):
+                if i > (NO_OF_ATTEMPTS - 2):
                     raise GoogleDriveError(
                         f"File with id '{file_id}' could not be accessed. "
                         "Possible reasons are a non-existing file or insufficient permission settings."
@@ -162,7 +152,7 @@ class GoogleDriveCache:
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
 
             drive_response = None
-            for i in range(GoogleDriveCache.NO_OF_ATTEMPTS):
+            for i in range(NO_OF_ATTEMPTS):
                 try:
                     drive_response = (
                         self.drive_service.files()
@@ -172,14 +162,12 @@ class GoogleDriveCache:
 
                     break
                 except HttpError:
-                    if i > (GoogleDriveCache.NO_OF_ATTEMPTS - 2):
+                    if i > (NO_OF_ATTEMPTS - 2):
                         raise GoogleDriveError(
                             f"File with id '{file_id}' could not be downloaded. "
                             "Possible reasons are a non-existing folder or insufficient permission settings."
                         )
 
-            return default_storage.save(
-                os.path.join(GoogleDriveCache.ROOT, str(version) + "_" + file_id), ContentFile(drive_response)
-            )
+            return default_storage.save(os.path.join(ROOT, f"{version}_{file_id}"), ContentFile(drive_response))
         else:
             return self.files[file_id]["path"]

@@ -90,7 +90,7 @@ def dataset_filter_items(request):
 # json_path requires shape: field1.field2.field3 ...
 def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
     json_path = "data__" + "__".join(json_path.split("."))
-    kwargs = {"dataset_id": dataset_id, json_path + "__icontains": sub_string}
+    kwargs = {"dataset_id": dataset_id, f"{json_path}__icontains": sub_string}
     data_items_query = (
         DataItem.objects.filter(**kwargs).values(json_path).annotate(count=Count(json_path)).order_by("-count")
     )

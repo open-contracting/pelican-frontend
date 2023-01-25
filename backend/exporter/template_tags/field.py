@@ -1,14 +1,9 @@
 from django.conf import settings
-from django.db import connections
 
-from exporter.tags.leaf_tags.factories import generate_count_leaf_tag, generate_key_leaf_tag
-from exporter.tags.leaf_tags.field.description import DescriptionLeafTag
-from exporter.tags.leaf_tags.field.failed_examples import FailedExamplesLeafTag
-from exporter.tags.leaf_tags.field.name import NameLeafTag
-from exporter.tags.leaf_tags.field.passed_examples import PassedExamplesLeafTag
-from exporter.tags.leaf_tags.field.result_box_image import ResultBoxImageLeafTag
-from exporter.tags.tag import TemplateTag
-from exporter.util import terms_enumeration
+from api.models import FieldLevelCheckExamples, Report
+from exporter.decorators import argument, template
+from exporter.leaf_tags.factories import generate_count_leaf_tag, generate_key_leaf_tag
+from exporter.leaf_tags.field import description, failed_examples, name, passed_examples, result_box_image
 
 CHECKS = {
     "date_time",
@@ -592,97 +587,57 @@ PATHS = {
 }
 
 
-class FieldTemplateTag(TemplateTag):
-    def __init__(self, gdocs, dataset_id):
-        super().__init__(self.prepare_data, settings.GDOCS_TEMPLATES["DEFAULT_FIELD_TEMPLATE"], gdocs, dataset_id)
+@argument("path", required=True, choices=PATHS)
+@template(
+    "field",
+    settings.GDOCS_TEMPLATES["DEFAULT_FIELD_TEMPLATE"],
+    (
+        generate_key_leaf_tag("path"),
+        name,
+        description,
+        generate_count_leaf_tag("Checked"),
+        generate_count_leaf_tag("Passed"),
+        generate_count_leaf_tag("Failed"),
+        passed_examples,
+        failed_examples,
+        result_box_image,
+    ),
+)
+def field(tag):
+    path = tag.arguments["path"]
 
-        self.set_param_validation(
-            "path",
-            lambda v: v in PATHS,
-            description="The value must be one of the following: %s." % terms_enumeration(PATHS),
-            required=True,
-        )
+    result = Report.objects.get(dataset=tag.dataset_id, type="field_level_check", data__has_key=path).data[path]
+    examples = FieldLevelCheckExamples.objects.get(dataset=tag.dataset_id, path=path).data
 
-        self.set_sub_tag("path", generate_key_leaf_tag("path"))
-        self.set_sub_tag("name", NameLeafTag)
-        self.set_sub_tag("description", DescriptionLeafTag)
-
-        self.set_sub_tag("checkedCount", generate_count_leaf_tag("Checked"))
-        self.set_sub_tag("passedCount", generate_count_leaf_tag("Passed"))
-        self.set_sub_tag("failedCount", generate_count_leaf_tag("Failed"))
-        self.set_sub_tag("resultBoxImage", ResultBoxImageLeafTag)
-        self.set_sub_tag("passedExamples", PassedExamplesLeafTag)
-        self.set_sub_tag("failedExamples", FailedExamplesLeafTag)
-
-    def prepare_data(self, data):
-        path = self.get_param("path")
-
-        with connections["data"].cursor() as cursor:
-            cursor.execute(
-                """
-                select data->%s
-                from report
-                where dataset_id = %s and
-                    type = 'field_level_check' and
-                    data ? %s;
-                """,
-                [path, self.dataset_id, path],
-            )
-            rows = cursor.fetchall()
-            result = rows[0][0]
-
-            # getting examples
-            cursor.execute(
-                """
-                select data
-                from field_level_check_examples
-                where dataset_id = %s and path = %s;
-                """,
-                [self.dataset_id, path],
-            )
-            result_examples = cursor.fetchall()[0][0]
-
-            return {
-                "path": path,
-                "qualityCheck": list(result["quality"]["checks"].keys())[0] if result["quality"]["checks"] else None,
-                "coverageCheckedCount": result["coverage"]["total_count"],
-                "coverageSetCheckedCount": result["coverage"]["checks"]["exists"]["total_count"],
-                "coverageEmptyCheckedCount": result["coverage"]["checks"]["non_empty"]["total_count"],
-                "qualityCheckedCount": result["quality"]["total_count"],
-                "coveragePassedCount": result["coverage"]["passed_count"],
-                "coverageSetPassedCount": result["coverage"]["checks"]["exists"]["passed_count"],
-                "coverageEmptyPassedCount": result["coverage"]["checks"]["non_empty"]["passed_count"],
-                "qualityPassedCount": result["quality"]["passed_count"],
-                "coverageFailedCount": result["coverage"]["failed_count"],
-                "coverageSetFailedCount": result["coverage"]["checks"]["exists"]["failed_count"],
-                "coverageEmptyFailedCount": result["coverage"]["checks"]["non_empty"]["failed_count"],
-                "qualityFailedCount": result["quality"]["failed_count"],
-                "coveragePassedExamples": [
-                    example["meta"]["ocid"] for example in result_examples["coverage"]["passed_examples"]
-                ],
-                "coverageSetPassedExamples": [
-                    example["meta"]["ocid"]
-                    for example in result_examples["coverage"]["checks"]["exists"]["passed_examples"]
-                ],
-                "coverageEmptyPassedExamples": [
-                    example["meta"]["ocid"]
-                    for example in result_examples["coverage"]["checks"]["non_empty"]["passed_examples"]
-                ],
-                "qualityPassedExamples": [
-                    example["meta"]["ocid"] for example in result_examples["quality"]["passed_examples"]
-                ],
-                "coverageFailedExamples": [
-                    example["meta"]["ocid"] for example in result_examples["coverage"]["failed_examples"]
-                ],
-                "coverageSetFailedExamples": [
-                    example["meta"]["ocid"]
-                    for example in result_examples["coverage"]["checks"]["exists"]["failed_examples"]
-                ],
-                "coverageEmptyFailedExamples": [
-                    example["meta"]["ocid"]
-                    for example in result_examples["coverage"]["checks"]["non_empty"]["failed_examples"]
-                ],
-                "qualityFailedExamples": [
-                    example["meta"]["ocid"] for example in result_examples["quality"]["failed_examples"]
-                ],
-            }
+    return {
+        "path": path,
+        "qualityCheck": list(result["quality"]["checks"])[0] if result["quality"]["checks"] else None,
+        "coverageCheckedCount": result["coverage"]["total_count"],
+        "coverageSetCheckedCount": result["coverage"]["checks"]["exists"]["total_count"],
+        "coverageEmptyCheckedCount": result["coverage"]["checks"]["non_empty"]["total_count"],
+        "qualityCheckedCount": result["quality"]["total_count"],
+        "coveragePassedCount": result["coverage"]["passed_count"],
+        "coverageSetPassedCount": result["coverage"]["checks"]["exists"]["passed_count"],
+        "coverageEmptyPassedCount": result["coverage"]["checks"]["non_empty"]["passed_count"],
+        "qualityPassedCount": result["quality"]["passed_count"],
+        "coverageFailedCount": result["coverage"]["failed_count"],
+        "coverageSetFailedCount": result["coverage"]["checks"]["exists"]["failed_count"],
+        "coverageEmptyFailedCount": result["coverage"]["checks"]["non_empty"]["failed_count"],
+        "qualityFailedCount": result["quality"]["failed_count"],
+        "coveragePassedExamples": [example["meta"]["ocid"] for example in examples["coverage"]["passed_examples"]],
+        "coverageSetPassedExamples": [
+            example["meta"]["ocid"] for example in examples["coverage"]["checks"]["exists"]["passed_examples"]
+        ],
+        "coverageEmptyPassedExamples": [
+            example["meta"]["ocid"] for example in examples["coverage"]["checks"]["non_empty"]["passed_examples"]
+        ],
+        "qualityPassedExamples": [example["meta"]["ocid"] for example in examples["quality"]["passed_examples"]],
+        "coverageFailedExamples": [example["meta"]["ocid"] for example in examples["coverage"]["failed_examples"]],
+        "coverageSetFailedExamples": [
+            example["meta"]["ocid"] for example in examples["coverage"]["checks"]["exists"]["failed_examples"]
+        ],
+        "coverageEmptyFailedExamples": [
+            example["meta"]["ocid"] for example in examples["coverage"]["checks"]["non_empty"]["failed_examples"]
+        ],
+        "qualityFailedExamples": [example["meta"]["ocid"] for example in examples["quality"]["failed_examples"]],
+    }

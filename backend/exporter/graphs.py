@@ -74,12 +74,12 @@ def resource_result_box(passed_count, failed_count, not_available_count, return_
     for index, value in enumerate(data):
         percentage = 100 * value / max(sum(data), 1)
         percentage_rounded = round(percentage)
-        percentage_str = str(percentage_rounded) + "%"
+        percentage_str = f"{percentage_rounded}%"
         if percentage_rounded == 100.0 and percentage_rounded != percentage:
             percentage_str = "<" + percentage_str
         elif percentage_rounded == 0.0 and percentage_rounded != percentage:
             percentage_str = ">" + percentage_str
-        value_str = "(" + str(value) + ")"
+        value_str = f"({value})"
 
         patch_index = len(data) - index - 1
         bbox = ax.patches[patch_index].get_bbox()
@@ -177,12 +177,12 @@ def passed_result_box(passed_count, failed_count, return_aspect_ratio=False):
     for index, value in enumerate(data):
         percentage = 100 * value / max(sum(data), 1)
         percentage_rounded = round(percentage)
-        percentage_str = str(percentage_rounded) + "%"
+        percentage_str = f"{percentage_rounded}%"
         if percentage_rounded == 100.0 and percentage_rounded != percentage:
             percentage_str = "<" + percentage_str
         elif percentage_rounded == 0.0 and percentage_rounded != percentage:
             percentage_str = ">" + percentage_str
-        value_str = "(" + str(value) + ")"
+        value_str = f"({value})"
 
         patch_index = len(data) - index - 1
         bbox = ax.patches[patch_index].get_bbox()
@@ -283,12 +283,12 @@ def bar_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
     for index, value in enumerate(data):
         percentage = 100 * value / max(total_count, 1)
         percentage_rounded = round(percentage)
-        percentage_str = str(percentage_rounded) + "%"
+        percentage_str = f"{percentage_rounded}%"
         if percentage_rounded == 100.0 and percentage_rounded != percentage:
             percentage_str = "<" + percentage_str
         elif percentage_rounded == 0.0 and percentage_rounded != percentage:
             percentage_str = ">" + percentage_str
-        value_str = "(" + str(value) + ")"
+        value_str = f"({value})"
 
         patch_index = len(data) - index - 1
         bbox = ax.patches[patch_index].get_bbox()

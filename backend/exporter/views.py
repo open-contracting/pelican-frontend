@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from exporter.exceptions import GoogleDriveError, TagError
 from exporter.gdocs import Gdocs
-from exporter.tags.template_tags.base import BaseTemplateTag
+from exporter.template_tags.base import base as base_tag
 
 
 @csrf_exempt
@@ -31,7 +31,6 @@ def generate_report(request):
         )
 
     if "language" in input_message and input_message["language"] in dict(settings.LANGUAGES):
-        # switch to input language
         translation.activate(input_message["language"])
     else:
         translation.activate("en")
@@ -39,19 +38,20 @@ def generate_report(request):
     response = None
     gdocs = None
 
+    failed_tags = []
     try:
         gdocs = Gdocs(input_message["document_id"])
-        base = BaseTemplateTag(gdocs, input_message["dataset_id"])
-        base.set_param("template", input_message["document_id"])
-        base.finalize_params()
-        failed_tags = []
-        main_template, failed_tags = base.validate_and_process({})
+        base = base_tag(gdocs, input_message["dataset_id"])
+        base.set_argument("template", input_message["document_id"])
+        base.finalize_arguments()
+        content, failed_tags = base.validate_and_render({})
 
-        report_name = f"Report {input_message['dataset_id']} {datetime.now()}"
         if "report_name" in input_message and isinstance(input_message["report_name"], str):
-            report_name = input_message["report_name"]
+            filename = input_message["report_name"]
+        else:
+            filename = f"Report {input_message['dataset_id']} {datetime.now()}"
 
-        file_id = gdocs.upload(input_message["folder_id"], report_name, main_template)
+        file_id = gdocs.upload(input_message["folder_id"], filename, content)
 
         response = JsonResponse({"status": "ok", "data": {"file_id": file_id}, "failed_tags": failed_tags})
     except GoogleDriveError as er:
