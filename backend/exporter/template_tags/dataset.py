@@ -28,6 +28,7 @@ from exporter.tag import TemplateTag
 from exporter.util import quote_list
 
 CHECK_MAPPING = {
+    # donut
     "distribution.main_procurement_category": {"check_type": "donut", "version": 1},
     "distribution.tender_status": {"check_type": "donut", "version": 1},
     "distribution.tender_procurement_method": {"check_type": "donut", "version": 1},
@@ -40,22 +41,26 @@ CHECK_MAPPING = {
     "distribution.document_document_type": {"check_type": "donut", "report_only": True, "version": 1},
     "distribution.value_currency": {"check_type": "donut", "report_only": True, "version": 1},
     "distribution.related_process_relation": {"check_type": "donut", "report_only": True, "version": 1},
+    # bar
     "distribution.tender_value": {"check_type": "bar", "version": 1},
     "distribution.contracts_value": {"check_type": "bar", "version": 1},
     "distribution.awards_value": {"check_type": "bar", "version": 1},
+    # numeric
     "misc.url_availability": {"check_type": "numeric", "version": 1},
     "unique.tender_id": {"check_type": "numeric", "version": 2},
     "consistent.related_process_title": {"check_type": "numeric", "version": 1},
     "reference.related_process_identifier": {"check_type": "numeric", "version": 2},
+    # top3
     "distribution.tender_value_repetition": {"check_type": "top3", "version": 1},
     "distribution.contracts_value_repetition": {"check_type": "top3", "version": 1},
     "distribution.awards_value_repetition": {"check_type": "top3", "version": 1},
+    # biggest_share
     "distribution.buyer_repetition": {"check_type": "biggest_share", "version": 1},
+    # single_value_share
     "distribution.buyer": {"check_type": "single_value_share", "version": 1},
 }
 
 
-# TODO: check if check was calculated and version compatibility
 class Dataset(TemplateTag):
     name = "dataset"
     argument_names = set()
