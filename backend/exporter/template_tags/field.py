@@ -5,21 +5,6 @@ from exporter.decorators import argument, template
 from exporter.leaf_tags.factories import generate_count_leaf_tag, generate_key_leaf_tag
 from exporter.leaf_tags.field import description, failed_examples, name, passed_examples, result_box_image
 
-CHECKS = {
-    "date_time",
-    "document_description_length",
-    "document_format_codelist",
-    "document_type",
-    "email",
-    "exists",
-    "identifier_scheme",
-    "language",
-    "non_empty",
-    "number_checks",
-    "ocid_prefix_check",
-    "telephone",
-}
-
 PATHS = {
     "ocid",
     "id",
