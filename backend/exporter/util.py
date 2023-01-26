@@ -1,16 +1,13 @@
 import random
-from collections.abc import Iterable
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Set, Union
 
 from lxml import etree
-
-from exporter.tag import LeafTag
 
 LEVELS = {"coverage", "coverageSet", "coverageEmpty", "quality"}
 MODES = {"oneLine", "multipleLines"}
 
 
-def quote_list(it: Iterable[str]) -> str:
+def quote_list(it: Union[Dict[str, Any], List[str], Set[str]]) -> str:
     """
     Wrap each element in single quotation marks and return as a comma-separated string.
 
@@ -25,29 +22,24 @@ def sample_and_format(population, arguments: Dict[str, Any]) -> Union[str, List[
 
     If ``arguments["mode"]`` is "oneLine", return the sample as a comma-separated string.
 
-    Otherwise, return the sample as a list of paragraphs.
+    Otherwise, return the sample as a paragraph list.
+
+    :param population: the population to sample
+    :param arguments: the tag's arguments
     """
     length = len(population)
     examples = random.sample(population, k=min(length, arguments.get("max", length)))
 
     if arguments["mode"] == "oneLine":
         return ", ".join(examples)
-    return multiple_line_elements(examples)
 
-
-def multiple_line_elements(it: Iterable[str]) -> List[etree.Element]:
-    """
-    Wrap each element in a paragraph and return as a list of paragraphs.
-
-    :param it: an iterable
-    """
     elements = []
-    for el in it:
+    for example in examples:
         element = etree.Element(
             "{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p",
             attrib={"{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name": "Standard"},
         )
-        element.text = str(el)
+        element.text = str(example)
         elements.append(element)
     return elements
 
@@ -87,7 +79,11 @@ def image_element(path: str, aspect_ratio: float) -> etree.Element:
     return frame
 
 
-def box_image(tag: LeafTag, function, filename: str, *args, **kwargs) -> etree.Element:
+def box_image(tag, function, filename: str, *args, **kwargs) -> etree.Element:
+    """
+    Add an image to the OpenDocument file and return an image within a frame.
+    """
+
     return "UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail."
 
     buffer, aspect_ratio = function(*args, return_aspect_ratio=True, **kwargs)

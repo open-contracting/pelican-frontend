@@ -11,7 +11,7 @@ def template(
 ) -> Callable[[Callable[[TemplateTag], Dict[str, Any]]], Type[TemplateTag]]:
     """
     Build a :class:`~exporter.tag.TemplateTag` by decorating a
-    :meth:`~exporter.tag.TemplateTag.get_context`` implementation.
+    :meth:`~exporter.tag.TemplateTag.get_context` implementation.
 
     :param _name: the tag's name
     :param _default_template: the default value of the ``template`` argument

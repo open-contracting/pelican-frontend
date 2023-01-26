@@ -6,7 +6,11 @@ class PelicanError(Exception):
 
 
 class GoogleDriveError(PelicanError):
-    """Raised if an error occurs interacting with a Google API."""
+    """
+    Raised if an error occurs interacting with a Google API.
+
+    :param reason: the error message
+    """
 
     def __init__(self, reason: str):
         self.args = (reason,)
@@ -17,7 +21,13 @@ class GoogleDriveError(PelicanError):
 
 
 class TagError(PelicanError):
-    """Base class for exceptions related to tags."""
+    """
+    Base class for exceptions related to tags.
+
+    :param reason: the error message
+    :param full_tag: the tag as extracted from the template
+    :param template_id: the file ID of the template in Google Docs
+    """
 
     def __init__(self, reason: str, full_tag: Optional[str] = None, template_id: Optional[str] = None):
         self.args = (reason,)
@@ -29,7 +39,7 @@ class TagError(PelicanError):
         """
         Add metadata to the exception to assist in debugging.
 
-        :param full_tag: The tag as extracted from the template
+        :param full_tag: the tag as extracted from the template
         :param template_id: the file ID of the template in Google Docs
         """
         if self.full_tag is None:

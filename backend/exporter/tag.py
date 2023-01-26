@@ -21,6 +21,9 @@ from exporter.util import quote_list
 class Tag:
     """
     A tag for inserting content into a template.
+
+    :param gdocs: a Google API client
+    :param dataset_id: the dataset's ID
     """
 
     #: The tag's name.
@@ -112,7 +115,7 @@ class LeafTag(Tag):
 
     def render(self, data: Dict[str, Any]) -> Union[str, etree.Element, List[etree.Element]]:
         """
-        Render the tag, as a string, ``etree._Element`` or list of ``etree._Element``.
+        Render the tag.
 
         :param data: the data ("context") provided by a template tag
         """
@@ -122,6 +125,9 @@ class LeafTag(Tag):
 class TemplateTag(Tag):
     """
     A template tag renders a template, stored as a document in Google Docs. The template can contain sub-tags.
+
+    :param gdocs: a Google API client
+    :param dataset_id: the dataset's ID
     """
 
     #: The default value of the ``template`` argument.
@@ -250,11 +256,12 @@ class TemplateTag(Tag):
 class TagExpression:
     """
     A representation of the tag as expressed in the template.
+
+    :param name: The tag's name
+    :param arguments: The tag's arguments
     """
 
-    #: The tag's name
     name: str
-    #: The tag's arguments
     arguments: Dict[str, str]
 
     @classmethod
@@ -312,6 +319,9 @@ def generate_error_template_tag(message: str) -> Type[TemplateTag]:
 class ValueTag(LeafTag):
     """
     A tag that returns the "value" key from the context.
+
+    :param gdocs: a Google API client
+    :param dataset_id: the dataset's ID
     """
 
     name = "value"
