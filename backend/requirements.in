@@ -2,6 +2,7 @@ dj-database-url
 django-cors-headers
 django<4
 djangorestframework
+jsonref
 google-api-python-client
 google-auth
 gunicorn[setproctitle]

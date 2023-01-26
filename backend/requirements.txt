@@ -49,6 +49,8 @@ httplib2==0.19.1
     #   google-auth-httplib2
 idna==2.9
     # via requests
+jsonref==1.1.0
+    # via -r backend/requirements.in
 kiwisolver==1.2.0
     # via matplotlib
 lxml==4.9.1

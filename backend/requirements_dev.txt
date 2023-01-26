@@ -95,6 +95,8 @@ idna==2.9
     #   requests
 isort==5.8.0
     # via -r backend/requirements_dev.in
+jsonref==1.1.0
+    # via -r backend/requirements.txt
 kiwisolver==1.2.0
     # via
     #   -r backend/requirements.txt

@@ -2,6 +2,7 @@ from exporter import graphs
 from exporter.decorators import argument, leaf
 from exporter.util import MODES, box_image, sample_and_format
 
+# These are not typos: "_" is replaced with "-" in template_tags/dataset.py.
 COUNT_RANGES = {"1", "2-20", "21-50", "51-100", "100+"}
 PERCENTAGE_RANGES = {"0-1", "1-5", "5-20", "20-50", "50-100"}
 RANKS = {"1", "2", "3", "4", "5"}
