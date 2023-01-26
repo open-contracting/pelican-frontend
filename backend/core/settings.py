@@ -260,6 +260,10 @@ TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else
 GDOCS_TEMPLATES = {
     # The Google Docs ID for the base template.
     "DEFAULT_BASE_TEMPLATE": os.getenv("DEFAULT_BASE_TEMPLATE", "1YMG5KZCPmI6GEcd2XQktrHD8uxEL626g3uuBjLWqQlE"),
+    # The Google Docs ID for the overview template.
+    "DEFAULT_OVERVIEW_TEMPLATE": os.getenv(
+        "DEFAULT_OVERVIEW_TEMPLATE", "1sYr5LipKRtegWWl3zfKIDoSZmZluawmAdAu3piKslTw"
+    ),
     # The Google Docs ID for the field-level template.
     "DEFAULT_DATASET_TEMPLATE": os.getenv("DEFAULT_DATASET_TEMPLATE", "1_1FIg3cuUthk6EEWcYnR5S-J3Xx8p1ZVDBh5oZM3eK8"),
     # The Google Docs ID for the resource-level template.

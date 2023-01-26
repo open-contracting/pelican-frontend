@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from api.models import Dataset
 from exporter.decorators import template
 from exporter.leaf_tags.factories import generate_key_leaf_tag, generate_timestamp_leaf_tag
@@ -6,7 +8,7 @@ from exporter.leaf_tags.overview import lifecycle_image, lifecycle_object_count
 
 @template(
     "overview",
-    "1sYr5LipKRtegWWl3zfKIDoSZmZluawmAdAu3piKslTw",
+    settings.GDOCS_TEMPLATES["DEFAULT_OVERVIEW_TEMPLATE"],
     (
         generate_key_leaf_tag("id"),
         generate_key_leaf_tag("ancestorId"),
