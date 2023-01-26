@@ -6,8 +6,9 @@ Contributing
    :maxdepth: 1
 
    backend
-   addcheck
-   updatecheck
+   add-metadata
+   add-check
+   update-check
 
 Setup
 -----
