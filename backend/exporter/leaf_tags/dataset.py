@@ -176,7 +176,7 @@ def passed_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element
     return box_image(
         tag,
         graphs.passed_result_box,
-        f"resultBoxImage_{tag.arguments.get('level')}_{data['name']}.png",
+        f"resultBoxImage_{data['name']}.png",
         data["passedCount"],
         data["failedCount"],
     )
