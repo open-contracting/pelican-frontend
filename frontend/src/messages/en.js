@@ -208,14 +208,14 @@ export const messages = {
             awards_value: {
                 name: "Awards value distribution",
                 description:
-                    "The sum of the top 1% of award values doesn't exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%.",
+                    "The total value of the top 1% of award values is less than the total value of the remaining award values. Failure indicates extreme outliers in the top 1%.",
                 description_long:
                     "<p>The sum of the top 1% of award values doesn't exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_value: {
                 name: "Contracts value distribution",
                 description:
-                    "The sum of the top 1% of contract values doesn't exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%.",
+                    "The total value of the top 1% of contract values is less than the total value of the remaining contract values. Failure indicates extreme outliers in the top 1%.",
                 description_long:
                     "<p>The sum of the top 1% of contract values doesn't exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
@@ -443,7 +443,7 @@ export const messages = {
             contracts_value: {
                 name: "Contract values are commensurate with award value",
                 description:
-                    "<p>For each award, the sum of its contract's values isn't less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>Since the test operates on all award and contract values, the test silently ignores any contract whose <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                    "<p>For each award, the sum of its contracts' values isn't less than 50%, or more than 150%, of the award's value, after conversion to USD if necessary.</p><p>Since the test operates on all award and contract values, the test silently ignores any contract whose <code>awardID</code> doesn't match the <code>id</code> of exactly one award, if an amount is missing, zero or non-numeric, if a currency is missing or unknown, if the two amounts aren't both positive or both negative, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_implementation_transactions_value: {
                 name: "Transaction values are commensurate with contract value",
