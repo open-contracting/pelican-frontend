@@ -108,6 +108,7 @@ class Tag:
         raise NotImplementedError
 
 
+# Keep this class, because render()'s signature differs between LeafTag and TemplateTag.
 class LeafTag(Tag):
     """
     A leaf tag renders itself, using the data ("context") provided by a template tag.
@@ -220,7 +221,18 @@ class TemplateTag(Tag):
         tags_mapping, failed_tags = self.get_tags_mapping(document.get_tags())
 
         for full_tag, tag in tags_mapping.items():
-            if isinstance(tag, LeafTag):
+            if isinstance(tag, TemplateTag):
+                try:
+                    result, sub_failed_tags = tag.validate_and_render(new_data)
+                    failed_tags += sub_failed_tags
+                except TagError as er:
+                    raise er.fill(full_tag, self.arguments["template"])
+                except CheckNotComputedError as er:
+                    document.set_text("Element could not be computed", full_tag)
+                    failed_tags.append(str(er))
+                    continue
+                document.merge(result, full_tag)
+            else:
                 try:
                     result = tag.validate_and_render(new_data)
                 except MissingArgumentError as er:
@@ -237,17 +249,6 @@ class TemplateTag(Tag):
                         "LeafTag's render method must return of the following types: "
                         "list of 'etree.Element', 'etree.Element', 'str'."
                     )
-            elif isinstance(tag, TemplateTag):
-                try:
-                    result, sub_failed_tags = tag.validate_and_render(new_data)
-                    failed_tags += sub_failed_tags
-                except TagError as er:
-                    raise er.fill(full_tag, self.arguments["template"])
-                except CheckNotComputedError as er:
-                    document.set_text("Element could not be computed", full_tag)
-                    failed_tags.append(str(er))
-                    continue
-                document.merge(result, full_tag)
 
         return document.content, failed_tags
 

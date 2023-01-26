@@ -1,3 +1,9 @@
+"""
+Decorators to construct tags.
+
+Use these for leaf tags if :doc:`generic` is insufficient.
+"""
+
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
 
 from lxml import etree

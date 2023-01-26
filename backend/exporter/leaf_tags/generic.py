@@ -1,3 +1,7 @@
+"""
+Factories for leaf tags.
+"""
+
 import datetime
 from typing import Any, Dict, List, Type, Union
 
