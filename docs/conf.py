@@ -16,7 +16,12 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
+import django
+
+sys.path.insert(0, os.path.join(os.path.abspath(".."), "backend"))
+os.environ["DJANGO_SETTINGS_MODULE"] = "core.settings"
+
+django.setup()
 
 
 # -- Project information -----------------------------------------------------
@@ -34,6 +39,7 @@ author = "Open Contracting Partnership"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.extlinks",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
 ]
 
@@ -71,4 +77,8 @@ extlinks = {
     "issue": ("https://github.com/open-contracting/pelican-frontend/issues/%s", "#%s"),
     "commit": ("https://github.com/open-contracting/pelican-frontend/commit/%s", "%s"),
     "compare": ("https://github.com/open-contracting/pelican-frontend/compare/%s", "%s"),
+}
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
 }

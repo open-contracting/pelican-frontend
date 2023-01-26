@@ -7,5 +7,6 @@ Pelican frontend
    :caption: Contents
    :maxdepth: 1
 
+   api/index
    contributing/index
    changelog
