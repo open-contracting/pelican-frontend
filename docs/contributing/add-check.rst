@@ -30,7 +30,7 @@ Dataset-level
 #. Add an element to the appropriate array in ``frontend/src/components/DatasetLevelSection.vue``
 #. Add new keys to ``datasetLevel`` in ``frontend/src/messages/en.js``
 
-The UI otherwise automatically supports new compiled release-level checks (unless a new visualization is desired).
+The UI otherwise automatically supports new compiled release-level checks.
 
 Time-based
 ----------

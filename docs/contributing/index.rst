@@ -124,7 +124,7 @@ Prepare a production build:
 
    npx vue-cli-service build
 
-This automatically sets the ``NODE_ENV`` environment variable to ``"production"``. To `override this default <https://cli.vuejs.org/guide/mode-and-env.html>`__, use:
+This sets the ``NODE_ENV`` environment variable to ``"production"``. To `override this default <https://cli.vuejs.org/guide/mode-and-env.html>`__, use:
 
 .. code-block:: bash
 

@@ -1,5 +1,5 @@
-Exporter app
-============
+Exporter
+========
 
 .. toctree::
    :maxdepth: 1

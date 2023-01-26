@@ -3,6 +3,11 @@ Changelog
 
 This changelog only notes major changes, to notify other developers.
 
+2022-01-26
+----------
+
+-  refactor: Rewrite the tag system. :commit:`dbd97ed`
+
 2021-11-09
 ----------
 

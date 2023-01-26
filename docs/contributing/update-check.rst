@@ -7,7 +7,7 @@ Pelican frontend should then be updated to support all versions of the check, to
 
 Pelican frontend does not pre-emptively disallow new versions, since breaking changes to Pelican backend are avoided.
 
-.. hint::
+.. tip::
 
    For example, changing the histogram bins (buckets) in Pelican backend would require supporting more bins in:
 

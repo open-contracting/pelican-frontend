@@ -5,7 +5,3 @@ API reference
    :maxdepth: 2
 
    exporter/index
-
-.. automodule:: api.models
-   :members:
-   :undoc-members:
