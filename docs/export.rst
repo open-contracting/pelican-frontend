@@ -56,9 +56,9 @@ When exporting a report, you provide the file ID for the base template.
 The ``base`` tag is not available within templates. It has the other template tags as sub-tags.
 
 overview template tag
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 
-This template tag renders a template with metadata about the dataset.
+This template tag renders a template for metadata about the dataset.
 
 .. code-block:: none
 
@@ -78,19 +78,8 @@ This template tag renders a template with metadata about the dataset.
 
 The ``overview`` template tag has leaf tags as sub-tags.
 
-lifecycleImage
-''''''''''''''
-
-Renders this image in a frame with the number of objects per contracting stage.
-
-.. code-block:: none
-
-   {% lifecycleImage %}
-
-.. image:: ../backend/exporter/assets/images/lifecycle.png
-
 lifecycleObjectCount
-''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^
 
 Renders the number of objects for the specified contracting ``stage``.
 
@@ -109,60 +98,84 @@ Renders the number of objects for the specified contracting ``stage``.
      - ✔️
 
 Simple leaf tags
-''''''''''''''''
+^^^^^^^^^^^^^^^^
 
 Simple tags accept no arguments.
 
 .. list-table::
    :header-rows: 1
+   :widths: 3 8
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% id %}``
-     - The ID of the dataset
+     - the ID of the dataset
    * - ``{% ancestorId %}``
-     - The ID of the dataset's ancestor, for time-based checks
+     - the ID of the dataset's ancestor (for time-based checks)
    * - ``{% publisher %}``
-     - The name of the dataset's publisher
+     - the name of the dataset's publisher
    * - ``{% ocidPrefix %}``
-     - The OCID prefix of the dataset
+     - the OCID prefix of the dataset
    * - ``{% dataLicense %}``
-     - The data license of the dataset
+     - the data license of the dataset
    * - ``{% totalUniqueOcids %}``
-     - The number of compiled releases in the dataset
+     - the number of compiled releases in the dataset
+   * - ``{% lifecycleImage %}``
+     - this image in a frame with the number of objects per contracting stage
+
+       .. image:: ../backend/exporter/assets/images/lifecycle.png
 
 Date leaf tags
-''''''''''''''
+^^^^^^^^^^^^^^
 
-Date tags accept an optional ``mode`` argument, to format the date like:
+Renders a date in the specified date format (defaults to ``datetime``).
 
-``datetime`` (default)
-  2001-02-03 04:05:06
-``date``
-  2001-02-03
-``time``
-  04:05:06
+For example:
+
+.. code-block:: none
+
+   {% publishingStart mode:|datetime| %}
+
+::
+
+   2001-02-03 04:05:06
+
+.. code-block:: none
+
+   {% publishingStart mode:|date| %}
+
+::
+
+   2001-02-03
+
+.. code-block:: none
+
+   {% publishingStart mode:|time| %}
+
+::
+
+   04:05:06
 
 .. list-table::
    :header-rows: 1
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% publishingStart mode:|date| %}``
-     - The earliest ``date`` among compiled releases
+     - the earliest ``date`` among compiled releases
    * - ``{% publishingEnd mode:|date| %}``
-     - The latest ``date`` among compiled releases
+     - the latest ``date`` among compiled releases
    * - ``{% processingStart mode:|date| %}``
-     - The time at which Pelican backend started processing
+     - the time at which Pelican backend started processing
    * - ``{% processingEnd mode:|date| %}``
-     - The time at which Pelican backend finished processing
+     - the time at which Pelican backend finished processing
    * - ``{% collectingStart mode:|date| %}``
-     - The time at which Kingfisher Collect started the collection
+     - the time at which Kingfisher Collect started the collection
    * - ``{% collectingEnd mode:|date| %}``
-     - The time at which Kingfisher Process ended the compilation
+     - the time at which Kingfisher Process ended the compilation
 
 field template tag
-^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~
 
 This template tag renders a template for the specified field-level check.
 
@@ -196,7 +209,7 @@ All sub-tags except ``path`` require a ``level`` argument, which must be one of:
 -  ``quality``
 
 path
-''''
+^^^^
 
 Renders the path to the field, like ``tender.documents.format``.
 
@@ -205,9 +218,9 @@ Renders the path to the field, like ``tender.documents.format``.
    {% path %}
 
 name
-''''
+^^^^
 
-Renders the name of the field-level check, indicated by the ``level`` argument.
+Renders the name of the test, indicated by the ``level`` argument.
 
 For example, if a ``field`` template tag sets ``path:|tender.documents.format|``:
 
@@ -220,9 +233,9 @@ will render:
    Document format is recognized
 
 description
-'''''''''''
+^^^^^^^^^^^
 
-Renders the description of the field-level check, indicated by the ``level`` argument.
+Renders the description of the test, indicated by the ``level`` argument.
 
 For example, if a ``field`` template tag sets ``path:|tender.documents.format|``:
 
@@ -235,33 +248,33 @@ will render:
    The value is a string and is either an IANA Media Type or the 'offline/print' code. (The codelist is open.)
 
 resultBoxImage
-''''''''''''''
+^^^^^^^^^^^^^^
 
-Renders an image describing the pass/fail rate of the test indicated by the ``level`` argument.
+Renders a horizontal bar plot describing the pass/fail rate of the test, indicated by the ``level`` argument.
 
 .. code-block:: none
 
    {% resultBoxImage level:|quality| %}
 
 Count leaf tags
-'''''''''''''''
+^^^^^^^^^^^^^^^
 
-Renders a number relating to the test corresponding to the ``level`` argument.
+Renders the number of times the test, indicated by the ``level`` argument, ran, passed or failed.
 
 .. list-table::
    :header-rows: 1
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% checkedCount level:|quality| %}``
-     - The number of times the test ran
+     - the number of times the test ran
    * - ``{% passedCount level:|quality| %}``
-     - The number of times the test passed
+     - the number of times the test passed
    * - ``{% failedCount level:|quality| %}``
-     - The number of times the test failed
+     - the number of times the test failed
 
 Sample leaf tags
-''''''''''''''''
+^^^^^^^^^^^^^^^^
 
 Renders a sample list of OCIDs that passed (or failed) the test indicated by the ``level`` argument.
 
@@ -282,8 +295,8 @@ Renders a sample list of OCIDs that passed (or failed) the test indicated by the
    * - ``mode``
      - One of:
 
-       oneLine (default)
-         Render a comma-separated list
+       oneLine
+         Render a comma-separated list (default)
        multipleLines
          Render consecutive paragraphs
      -
@@ -292,7 +305,7 @@ Renders a sample list of OCIDs that passed (or failed) the test indicated by the
      -
 
 resource template tag
-^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~
 
 .. note::
 
@@ -322,17 +335,8 @@ This template tag renders a template for the specified compiled release-level ch
 
 The ``resource`` template tag has leaf tags as sub-tags.
 
-resultBoxImage
-''''''''''''''
-
-Renders an image describing the pass/fail rate of the test.
-
-.. code-block:: none
-
-   {% resultBoxImage %}
-
 Simple leaf tags
-''''''''''''''''
+^^^^^^^^^^^^^^^^
 
 Simple tags accept no arguments.
 
@@ -340,22 +344,24 @@ Simple tags accept no arguments.
    :header-rows: 1
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% name %}``
-     - The name of the check
+     - the name of the check
    * - ``{% description %}``
-     - The description of the check
+     - the description of the check
    * - ``{% checkedCount %}``
-     - The number of times the test ran
+     - the number of times the test ran
    * - ``{% passedCount %}``
-     - The number of times the test passed
+     - the number of times the test passed
    * - ``{% failedCount %}``
-     - The number of times the test failed
+     - the number of times the test failed
    * - ``{% notAvailableCount %}``
-     - The number of times the test was skipped
+     - the number of times the test was skipped
+   * - ``{% resultBoxImage %}``
+     - a horizontal bar plot describing the pass/fail/not applicable rate of the test
 
 Sample leaf tags
-''''''''''''''''
+^^^^^^^^^^^^^^^^
 
 Renders a sample list of OCIDs that passed (or failed, or skipped) the test.
 
@@ -380,8 +386,8 @@ Renders a sample list of OCIDs that passed (or failed, or skipped) the test.
    * - ``mode``
      - One of:
 
-       oneLine (default)
-         Render a comma-separated list
+       oneLine
+         Render a comma-separated list (default)
        multipleLines
          Render consecutive paragraphs
      -
@@ -389,8 +395,8 @@ Renders a sample list of OCIDs that passed (or failed, or skipped) the test.
      - The maximum sample size
      -
 
-dataset
-^^^^^^^
+dataset template tag
+~~~~~~~~~~~~~~~~~~~~
 
 .. note::
 
@@ -423,7 +429,7 @@ The ``dataset`` template tag has leaf tags as sub-tags.
 The available tags vary, depending on the type of check.
 
 Common simple leaf tags
-'''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Simple tags accept no arguments.
 
@@ -431,89 +437,325 @@ Simple tags accept no arguments.
    :header-rows: 1
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% name %}``
-     - The name of the check
+     - the name of the check
    * - ``{% description %}``
-     - The description of the check
+     - the description of the check
    * - ``{% result %}``
-     - The result of the check ("Passed", "Failed" or "Undefined")
+     - the result of the check ("Passed", "Failed" or "Undefined")
    * - ``{% value %}``
-     - The value of the check (0 to 100, or "Undefined")
+     - the value of the check (0 to 100, or "Undefined")
 
 Code distribution checks
-''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^
 
--  share
--  count
--  examples
--  resultBoxImage
+share
+'''''
+
+Renders the percentage of cases in which the field equals the ``value``.
+
+If ``value`` isn't set, renders 100%.
+
+.. code-block:: none
+
+   {% share value:|open| decimals:|2| %}
+
+.. list-table::
+   :header-rows: 1
+
+   * - Argument
+     - Value
+     - Required
+   * - ``value``
+     - A code
+     -
+   * - ``decimals``
+     - The number of decimals (default 0)
+     -
+
+count
+'''''
+
+Renders the number of cases in which the field equals the ``value``.
+
+If ``value`` isn't set, renders the number of occurrences of the field.
+
+.. code-block:: none
+
+   {% count value:|open| %}
+
+examples
+''''''''
+
+Renders a sample list of OCIDs in which the field equals the ``value``.
+
+If ``value`` isn't set, renders a sample list of OCIDs in which the field occurs.
+
+.. code-block:: none
+
+   {% examples value:|1| mode:|multipleLines| max:|5| %}
+
+resultBoxImage
+''''''''''''''
+
+Renders a horizontal bar plot describing the number of occurrences of each field value.
+
+.. code-block:: none
+
+   {% resultBoxImage %}
 
 Value distribution checks
-'''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
--  share
--  count
--  examples
--  sum
--  resultBoxImage
+share
+'''''
+
+Renders the percentage of the total value of all amounts represented by the total value of the amounts in the percentile range indicated by the ``percentageRange`` argument.
+
+``0-1``
+   (total value of the top 0-1% of amounts) / (total value of all amounts)
+``1-5``
+   (total value of the top 1-5% of amounts) / (total value of all amounts)
+``5-20``
+   (total value of the top 5-20% of amounts) / (total value of all amounts)
+``20-50``
+   (total value of the top 20-50% of amounts) / (total value of all amounts)
+``50-100``
+   (total value of the top 50-100% of amounts) / (total value of all amounts)
+
+If ``percentageRange`` isn't set, renders 100%.
+
+.. code-block:: none
+
+   {% share percentageRange:|50-100| decimals:|2| %}
+
+.. list-table::
+   :header-rows: 1
+
+   * - Argument
+     - Value
+     - Required
+   * - ``percentageRange``
+     - One of 0-1, 1-5, 5-20, 20-50, 50-100
+     -
+   * - ``decimals``
+     - The number of decimals (default 0)
+     -
+
+count
+'''''
+
+Renders the number of amounts in the percentile range indicated by the ``percentageRange`` argument.
+
+If ``value`` isn't set, renders the total number of amounts.
+
+.. code-block:: none
+
+   {% count percentageRange:|50-100| %}
+
+examples
+''''''''
+
+.. note::
+
+   Pelican backend stores at most 10 samples per percentile range.
+
+Renders a sample list of OCIDs in which an amount is within the percentile range indicated by the ``percentageRange`` argument.
+
+If ``percentageRange`` isn't set, renders a sample list of OCIDs in which an amount occurs.
+
+.. code-block:: none
+
+   {% examples percentageRange:|1| mode:|multipleLines| max:|5| %}
+
+sum
+'''
+
+Renders the total value of the amounts in the percentile range indicated by the ``percentageRange`` argument.
+
+if ``percentageRange`` isn't set, renders the total value of all amounts.
+
+.. code-block:: none
+
+   {% sum percentageRange:|50-100| %}
+
+resultBoxImage
+''''''''''''''
+
+Renders a horizontal bar plot describing the number of amounts in each percentile range.
+
+.. code-block:: none
+
+   {% resultBoxImage %}
 
 Value repetition checks
-'''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^
 
--  share
--  count
--  examples
--  amount
--  resultBoxImage
+share
+'''''
+
+Renders the percentage of values in which the amount-currency pair at the specified ``rank`` occurs.
+
+If ``rank`` isn't set, renders 100%.
+
+.. code-block:: none
+
+   {% share rank:|1| decimals:|2| %}
+
+.. list-table::
+   :header-rows: 1
+
+   * - Argument
+     - Value
+     - Required
+   * - ``rank``
+     - One of 1, 2, 3, 4, 5
+     -
+   * - ``decimals``
+     - The number of decimals (default 0)
+     -
+
+count
+'''''
+
+Renders the number of values in which the amount-currency pair at the specified ``rank`` occurs.
+
+If ``rank`` isn't set, renders the number of values in which the 5 most frequent pairs occur.
+
+.. code-block:: none
+
+   {% count rank:|1| %}
+
+examples
+''''''''
+
+Renders a sample list of OCIDs in which the amount-currency pair at the specified ``rank`` occurs.
+
+If ``rank`` isn't set, renders a sample list of OCIDs in which the 5 most frequent pairs occur.
+
+.. code-block:: none
+
+   {% examples rank:|1| mode:|multipleLines| max:|5| %}
+
+amount
+''''''
+
+Renders the amount-currency pair (like "10000 USD") at the specified ``rank`` (required argument).
+
+.. code-block:: none
+
+   {% amount rank:|1| %}
+
+resultBoxImage
+''''''''''''''
+
+Renders a table with the 5 most frequent amount-currency pairs with the columns:
+
+Value
+  the amount and currency
+Share
+  the percentage of values in which the pair occurs
+Occurrences
+  the number of values in which the pair occurs
+
+.. code-block:: none
+
+   {% resultBoxImage %}
 
 Buyer distribution check
-''''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^^^
 
--  ocidCount
--  buyerCount
--  totalOcidCount
--  totalBuyerCount
--  examples
+buyerCount
+''''''''''
+
+Renders the number of unique buyers that occur the ``countRange`` number of times.
+
+``1``
+   the number of unique buyers that occur only once
+``2-20``
+   the number of unique buyers that occur 2-20 times
+``21-50``
+   the number of unique buyers that occur 21-50 times
+``51-100``
+   the number of unique buyers that occur 51-100 times
+``100+``
+   the number of unique buyers that occur 100+ times
+
+If ``countRange`` isn't set, renders the total number of unique buyers (same as ``{% totalBuyerCount %}``).
+
+.. code-block:: none
+
+   {% buyerCount countRange:|2-20| %}
+
+ocidCount
+'''''''''
+
+Renders the number of OCIDs in which the buyer occurs the ``countRange`` number of times.
+
+If ``countRange`` isn't set, renders the total number of OCIDs (same as ``{% totalOcidCount %}``).
+
+.. code-block:: none
+
+   {% ocidCount countRange:|2-20| %}
+
+Simple leaf tags
+''''''''''''''''
+
+.. list-table::
+   :header-rows: 1
+
+   * - Tag
+     - Renders
+   * - ``{% totalBuyerCount %}``
+     - the number of unique buyers for which the ``identifier`` is set
+   * - ``{% totalOcidCount %}``
+     - the number of OCIDs in which the buyer's ``identifier`` is set
+   * - ``{% examples %}``
+     - a sample list of OCIDs in which the buyer occurs in only that OCID
 
 Buyer repetition check
-''''''''''''''''''''''
+^^^^^^^^^^^^^^^^^^^^^^
+
+These include simple and sample leaf tags.
 
 .. list-table::
    :header-rows: 1
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% buyerIdentifierId %}``
-     - The most common buyer's ``.identifier.id``
+     - the most common buyer's ``.identifier.id``
    * - ``{% buyerIdentifierScheme %}``
-     - The most common buyer's ``.identifier.scheme``
+     - the most common buyer's ``.identifier.scheme``
    * - ``{% ocidCount %}``
-     - The number of OCIDs in which the buyer is represented
+     - the number of OCIDs in which the most common buyer occurs
    * - ``{% ocidShare %}``
-     - The share of OCIDs in which the buyer is represented
+     - the percentage of OCIDs in which the most common buyer occurs
    * - ``{% totalOcidCount %}``
-     - The total number of OCIDs
+     - the number of OCIDs in which the buyer's ``identifier`` is set
    * - ``{% examples max:|5| %}``
-     - A sample list of OCIDs with the most common buyer
+     - a sample list of OCIDs in which the most common buyer occurs
 
 Other checks
-''''''''''''
+^^^^^^^^^^^^
+
+These include simple and sample leaf tags.
 
 .. list-table::
    :header-rows: 1
 
    * - Tag
-     - Description
+     - Renders
    * - ``{% checkedCount %}``
-     - The number of times the test was run
+     - the number of times the test was run
    * - ``{% passedCount %}``
-     - The number of times the test passed
+     - the number of times the test passed
    * - ``{% failedCount %}``
-     - The number of times the test failed
-   * - ``{% passedExamples max:|5| %}``
-     - A sample list of OCIDs that passed the test
-   * - ``{% failedExamples max:|5| %}``
-     - A sample list of OCIDs that failed the test
+     - the number of times the test failed
    * - ``{% resultBoxImage %}``
-     - An image describing the pass/fail rate of the test
+     - a horizontal bar plot describing the pass/fail rate of the test
+   * - ``{% passedExamples max:|5| %}``
+     - a sample list of OCIDs that passed the test
+   * - ``{% failedExamples max:|5| %}``
+     - a sample list of OCIDs that failed the test
