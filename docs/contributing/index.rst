@@ -3,9 +3,11 @@ Contributing
 
 .. toctree::
    :caption: Contents
-   :maxdepth: 2
+   :maxdepth: 1
 
-   backend/index
+   backend
+   addcheck
+   updatecheck
 
 Setup
 -----
