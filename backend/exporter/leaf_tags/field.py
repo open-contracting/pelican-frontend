@@ -1,13 +1,17 @@
+from typing import Any, Dict, List, Union
+
 from django.utils.translation import gettext as _
+from lxml import etree
 
 from exporter import graphs
 from exporter.decorators import argument, leaf
+from exporter.tag import LeafTag
 from exporter.util import LEVELS, MODES, box_image, sample_and_format
 
 
 @argument("level", required=True, choices={"coverageSet", "coverageEmpty", "quality"})
 @leaf("name")
-def name(tag, data):
+def name(tag: LeafTag, data: Dict[str, Any]) -> str:
     if tag.arguments["level"] == "quality" and data["qualityCheck"] is None:
         return ""
     if tag.arguments["level"] == "coverageSet":
@@ -19,7 +23,7 @@ def name(tag, data):
 
 @argument("level", required=True, choices={"coverageSet", "coverageEmpty", "quality"})
 @leaf("description")
-def description(tag, data):
+def description(tag: LeafTag, data: Dict[str, Any]) -> str:
     if tag.arguments["level"] == "quality" and data["qualityCheck"] is None:
         return ""
     if tag.arguments["level"] == "coverageSet":
@@ -33,7 +37,7 @@ def description(tag, data):
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("passedExamples")
-def passed_examples(tag, data):
+def passed_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
     examples = data[f"{tag.arguments['level']}PassedExamples"]
     return sample_and_format(examples, tag.arguments)
 
@@ -42,14 +46,14 @@ def passed_examples(tag, data):
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("failedExamples")
-def failed_examples(tag, data):
+def failed_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
     examples = data[f"{tag.arguments['level']}FailedExamples"]
     return sample_and_format(examples, tag.arguments)
 
 
 @argument("level", required=True, choices=LEVELS)
 @leaf("resultBoxImage")
-def result_box_image(tag, data):
+def result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
     return box_image(
         tag,
         graphs.passed_result_box,

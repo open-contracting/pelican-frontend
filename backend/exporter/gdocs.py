@@ -27,7 +27,7 @@ class Gdocs:
 
     """Init (authentication etc.) of all necessary services,"""
 
-    def __init__(self, main_template_id):
+    def __init__(self, main_template_id: str):
         # TODO: use default_storage
         if os.path.exists(settings.TOKEN_PATH):
             with open(settings.TOKEN_PATH) as f:
@@ -48,13 +48,13 @@ class Gdocs:
                         data = zipread.read(item.filename)
                         zipwrite.writestr(item, data)
 
-    def destroy_tempdir(self):
+    def destroy_tempdir(self) -> None:
         shutil.rmtree(self.dirpath)
 
-    def add_image_file(self, buffer, name="image.png"):
+    def add_image_file(self, buffer, name: str = "image.png") -> str:
         with ZipFile(self.main_template_path, mode="a") as zip_file:
-            image_file_path = os.path.join("Pictures/", f"{shortuuid.uuid()}_{name}")
-            zip_file.writestr(image_file_path, buffer.getbuffer())
+            path = os.path.join("Pictures/", f"{shortuuid.uuid()}_{name}")
+            zip_file.writestr(path, buffer.getbuffer())
 
         # Updating manifest
         with ZipFile(self.main_template_path) as zip_file:
@@ -67,16 +67,16 @@ class Gdocs:
         root.append(
             etree.Element(
                 f"{namespace}file-entry",
-                attrib={f"{namespace}full-path": image_file_path, f"{namespace}media-type": "image/png"},
+                attrib={f"{namespace}full-path": path, f"{namespace}media-type": "image/png"},
             )
         )
 
         with ZipFile(self.main_template_path, mode="a") as zip_file:
             zip_file.writestr("META-INF/manifest.xml", etree.tostring(root))
 
-        return image_file_path
+        return path
 
-    def upload(self, folder_id, file_name, content):
+    def upload(self, folder_id: str, file_name: str, content: etree.Element):
         with ZipFile(self.main_template_path, mode="a") as out_zip:
             out_zip.writestr("content.xml", etree.tostring(content))
 
@@ -96,7 +96,7 @@ class Gdocs:
 
         return file.get("id")
 
-    def remove_file_from_zip(self, zip_file_path, file_path):
+    def remove_file_from_zip(self, zip_file_path: str, file_path: str) -> None:
         with ZipFile(zip_file_path, "r") as zipread:
             with ZipFile(f"{zip_file_path}_copy", "w") as zipwrite:
                 for item in zipread.infolist():
@@ -106,7 +106,7 @@ class Gdocs:
 
         shutil.move(f"{zip_file_path}_copy", zip_file_path)
 
-    def get_content(self, file_id):
+    def get_content(self, file_id: str) -> etree.Element:
         cache_file_path = self.google_drive_cache.get_file_path(file_id)
         with ZipFile(cache_file_path) as myzip:
             with myzip.open("content.xml") as content:
@@ -122,7 +122,7 @@ class GoogleDriveCache:
         self.files = {}
         self.refresh()
 
-    def refresh(self):
+    def refresh(self) -> None:
         self.files = {}
         _, filenames = default_storage.listdir(ROOT)
         for filename in filenames:
@@ -131,7 +131,7 @@ class GoogleDriveCache:
             if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
                 self.files[file_id] = {"version": version, "path": os.path.join(ROOT, filename)}
 
-    def get_file_path(self, file_id):
+    def get_file_path(self, file_id: str):
         self.refresh()
 
         drive_response = None

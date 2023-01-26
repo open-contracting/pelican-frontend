@@ -1,32 +1,47 @@
+from typing import Dict, Optional
+
+
 class PelicanError(Exception):
     """Base class for exceptions from within this project"""
 
 
 class GoogleDriveError(PelicanError):
-    def __init__(self, reason):
+    """Raised if an error occurs interacting with a Google API."""
+
+    def __init__(self, reason: str):
+        self.args = (reason,)
         self.reason = reason
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Google Drive Error: {self.reason}"
 
 
 class TagError(PelicanError):
     """Base class for exceptions related to tags."""
 
-    def __init__(self, reason, full_tag=None, template_id=None):
+    def __init__(self, reason: str, full_tag: Optional[str] = None, template_id: Optional[str] = None):
         self.args = (reason,)
         self.reason = reason
         self.full_tag = full_tag
         self.template_id = template_id
 
-    def fill(self, full_tag, template_id):
+    def fill(self, full_tag: str, template_id: str) -> "TagError":
+        """
+        Add metadata to the exception to assist in debugging.
+
+        :param full_tag: The tag as extracted from the template
+        :param template_id: the file ID of the template in Google Docs
+        """
         if self.full_tag is None:
             self.full_tag = full_tag
         if self.template_id is None:
             self.template_id = template_id
         return self
 
-    def as_dict(self):
+    def as_dict(self) -> Dict[str, Optional[str]]:
+        """
+        Return the exception as a dictionary (e.g. to serialize as JSON for the browser).
+        """
         return {
             "reason": self.reason,
             "full_tag": self.full_tag,

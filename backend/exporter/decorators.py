@@ -1,8 +1,14 @@
-from exporter.tag import LeafTag, TemplateTag
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
+
+from lxml import etree
+
+from exporter.tag import LeafTag, Tag, TemplateTag
 from exporter.util import quote_list
 
 
-def template(_name, _default_template, _tags):
+def template(
+    _name: str, _default_template: str, _tags: Tuple[Type[Tag], ...]
+) -> Callable[[Callable[[TemplateTag], Dict[str, Any]]], Type[TemplateTag]]:
     """
     Build a :class:`~exporter.tag.TemplateTag` by decorating a
     :meth:`~exporter.tag.TemplateTag.get_context`` implementation.
@@ -12,8 +18,8 @@ def template(_name, _default_template, _tags):
     :param _tags: the tag's sub-tags
     """
 
-    def _template(function):
-        class Tag(TemplateTag):
+    def _template(function: Callable[[TemplateTag], Dict[str, Any]]) -> Type[TemplateTag]:
+        class _Tag(TemplateTag):
             name = _name
             argument_names = set()
             argument_required = set()
@@ -25,15 +31,17 @@ def template(_name, _default_template, _tags):
             default_template = _default_template
             tags = _tags
 
-            def get_context(self):
+            def get_context(self) -> Dict[str, Any]:
                 return function(self)
 
-        return Tag
+        return _Tag
 
     return _template
 
 
-def leaf(_name):
+def leaf(
+    _name: str,
+) -> Callable[[Callable[[LeafTag, Dict[str, Any]], Union[str, etree.Element, List[etree.Element]]]], Type[LeafTag]]:
     """
     Build a :class:`~exporter.tag.LeafTag` by decorating a
     :meth:`~exporter.tag.LeafTag.render` implementation.
@@ -41,8 +49,10 @@ def leaf(_name):
     :param _name: the tag's name
     """
 
-    def _leaf(function):
-        class Tag(LeafTag):
+    def _leaf(
+        function: Callable[[LeafTag, Dict[str, Any]], Union[str, etree.Element, List[etree.Element]]]
+    ) -> Type[LeafTag]:
+        class _Tag(LeafTag):
             name = _name
             argument_names = set()
             argument_required = set()
@@ -51,15 +61,22 @@ def leaf(_name):
             argument_converters = {}
             argument_defaults = {}
 
-            def render(self, data):
+            def render(self, data: Dict[str, Any]) -> Union[str, etree.Element, List[etree.Element]]:
                 return function(self, data)
 
-        return Tag
+        return _Tag
 
     return _leaf
 
 
-def argument(name, default=None, required=False, choices=None, type=None, nonzero=False):
+def argument(
+    name: str,
+    default: Optional[Any] = None,
+    required: bool = False,
+    choices: Optional[Union[Set[str], Dict[str, Any]]] = None,
+    type: Optional[Type[int]] = None,
+    nonzero: bool = False,
+) -> Callable[[Type[Tag]], Type[Tag]]:
     """
     Add an argument to the tag.
 
@@ -71,7 +88,7 @@ def argument(name, default=None, required=False, choices=None, type=None, nonzer
     :param nonzero: whether the argument can be 0 (if ``type=int``)
     """
 
-    def _argument(cls):
+    def _argument(cls: Type[Tag]) -> Type[Tag]:
         cls.argument_names.add(name)
 
         if default is not None:

@@ -1,5 +1,10 @@
+from typing import Any, Dict, List, Union
+
+from lxml import etree
+
 from exporter import graphs
 from exporter.decorators import argument, leaf
+from exporter.tag import LeafTag
 from exporter.util import MODES, box_image, sample_and_format
 
 # These are not typos: "_" is replaced with "-" in template_tags/dataset.py.
@@ -9,7 +14,7 @@ RANKS = {"1", "2", "3", "4", "5"}
 
 
 @leaf("result")
-def result(tag, data):
+def result(tag: LeafTag, data: Dict[str, Any]) -> str:
     if data["result"] is True:
         return "Passed"
     if data["result"] is False:
@@ -20,7 +25,7 @@ def result(tag, data):
 
 
 @leaf("value")
-def value(tag, data):
+def value(tag: LeafTag, data: Dict[str, Any]) -> str:
     if data["value"] is None:
         return "Undefined"
     return str(data["value"])
@@ -28,7 +33,7 @@ def value(tag, data):
 
 @argument("countRange", choices=COUNT_RANGES)
 @leaf("ocidCount")
-def ocid_count(tag, data):
+def ocid_count(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "countRange" in tag.arguments:
         return str(data["ocidCounts"][tag.arguments["countRange"]])
     return str(sum(data["ocidCounts"].values()))
@@ -36,7 +41,7 @@ def ocid_count(tag, data):
 
 @argument("countRange", choices=COUNT_RANGES)
 @leaf("buyerCount")
-def buyer_count(tag, data):
+def buyer_count(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "countRange" in tag.arguments:
         return str(data["buyerCounts"][tag.arguments["countRange"]])
     return str(sum(data["buyerCounts"].values()))
@@ -44,7 +49,7 @@ def buyer_count(tag, data):
 
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
 @leaf("count")
-def bar_count(tag, data):
+def bar_count(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:
         return str(data["counts"][tag.arguments["percentageRange"]])
     return str(sum(data["counts"].values()))
@@ -52,7 +57,7 @@ def bar_count(tag, data):
 
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
 @leaf("sum")
-def bar_sum(tag, data):
+def bar_sum(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:
         return str(data["sums"][tag.arguments["percentageRange"]])
     return str(sum(data["sums"].values()))
@@ -61,7 +66,7 @@ def bar_sum(tag, data):
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
 @argument("decimals", type=int, default=0)
 @leaf("share")
-def bar_share(tag, data):
+def bar_share(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:
         share = 100 * data["shares"][tag.arguments["percentageRange"]]
     else:
@@ -73,7 +78,7 @@ def bar_share(tag, data):
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def bar_examples(tag, data):
+def bar_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
     if "percentageRange" in tag.arguments:
         examples = data["examples"][tag.arguments["percentageRange"]]
     else:
@@ -83,7 +88,7 @@ def bar_examples(tag, data):
 
 @argument("value")
 @leaf("count")
-def donut_count(tag, data):
+def donut_count(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "value" not in tag.arguments:
         return str(sum(data["counts"].values()))
     if tag.arguments["value"] in data["counts"]:
@@ -94,7 +99,7 @@ def donut_count(tag, data):
 @argument("value")
 @argument("decimals", type=int, default=0)
 @leaf("share")
-def donut_share(tag, data):
+def donut_share(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "value" not in tag.arguments:
         share = 100.0
     elif tag.arguments["value"] in data["shares"]:
@@ -108,7 +113,7 @@ def donut_share(tag, data):
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def donut_examples(tag, data):
+def donut_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
     if "value" not in tag.arguments:
         examples = [example for examples in data["examples"].values() for example in examples]
     elif tag.arguments["value"] in data["examples"]:
@@ -120,13 +125,13 @@ def donut_examples(tag, data):
 
 @argument("rank", required=True, choices=RANKS)
 @leaf("amount")
-def top3_amount(tag, data):
+def top3_amount(tag: LeafTag, data: Dict[str, Any]) -> str:
     return str(data["amounts"][tag.arguments["rank"]])
 
 
 @argument("rank", choices=RANKS)
 @leaf("count")
-def top3_count(tag, data):
+def top3_count(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "rank" in tag.arguments:
         return str(data["counts"][tag.arguments["rank"]])
     return str(sum(data["counts"].values()))
@@ -135,7 +140,7 @@ def top3_count(tag, data):
 @argument("rank", choices=RANKS)
 @argument("decimals", type=int, default=0)
 @leaf("share")
-def top3_share(tag, data):
+def top3_share(tag: LeafTag, data: Dict[str, Any]) -> str:
     if "rank" in tag.arguments:
         share = 100 * data["shares"][tag.arguments["rank"]]
     else:
@@ -147,7 +152,7 @@ def top3_share(tag, data):
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def top3_examples(tag, data):
+def top3_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
     if "rank" in tag.arguments:
         examples = data["examples"][tag.arguments["rank"]]
     else:
@@ -157,7 +162,7 @@ def top3_examples(tag, data):
 
 @argument("type", choices={"bar"}, default="bar")
 @leaf("resultBoxImage")
-def counts_result_box_image(tag, data):
+def counts_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
     return box_image(
         tag,
         graphs.bar_result_box,
@@ -167,7 +172,7 @@ def counts_result_box_image(tag, data):
 
 
 @leaf("resultBoxImage")
-def passed_result_box_image(tag, data):
+def passed_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
     return box_image(
         tag,
         graphs.passed_result_box,
@@ -178,7 +183,7 @@ def passed_result_box_image(tag, data):
 
 
 @leaf("resultBoxImage")
-def table_result_box_image(tag, data):
+def table_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
     return box_image(
         tag,
         graphs.table_result_box,

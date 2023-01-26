@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
 
 from django.conf import settings
 from lxml import etree
@@ -13,6 +14,7 @@ from exporter.exceptions import (
     TagSyntaxError,
     UnknownTagError,
 )
+from exporter.gdocs import Gdocs
 from exporter.util import quote_list
 
 
@@ -22,27 +24,27 @@ class Tag:
     """
 
     #: The tag's name.
-    name = None
+    name: Optional[str] = None
     #: The names of all arguments.
-    argument_names = set()
+    argument_names: Set[str] = set()
     #: The names of required arguments.
-    argument_required = set()
+    argument_required: Set[str] = set()
     #: A mapping of argument names to validation functions.
-    argument_validators = {}
+    argument_validators: Dict[str, Callable[[str], bool]] = {}
     #: A mapping of argument names to failure messages.
-    argument_validation_messages = {}
+    argument_validation_messages: Dict[str, str] = {}
     #: A mapping of argument names to conversion functions.
-    argument_converters = {}
+    argument_converters: Dict[str, Callable[[str], Any]] = {}
     # . A mapping of argument names to default values.
-    argument_defaults = {}
+    argument_defaults: Dict[str, Any] = {}
 
-    def __init__(self, gdocs, dataset_id):
+    def __init__(self, gdocs: Gdocs, dataset_id: int):
         self.gdocs = gdocs
         self.dataset_id = dataset_id
-        self.arguments = {}
+        self.arguments: Dict[str, Any] = {}
 
     # Do not call after `finalize_arguments`.
-    def set_argument(self, name, value):
+    def set_argument(self, name: str, value: Any) -> None:
         """
         Set an argument.
 
@@ -71,7 +73,7 @@ class Tag:
 
         self.arguments[name] = value
 
-    def finalize_arguments(self):
+    def finalize_arguments(self) -> None:
         """
         Set unused arguments to default values.
 
@@ -82,7 +84,7 @@ class Tag:
                 self.set_argument(name, default)
 
     # Do not call before `finalize_arguments`.
-    def validate_and_render(self, data):
+    def validate_and_render(self, data: Dict[str, Any]) -> Any:
         """
         Check for missing arguments, and call and return :meth:`~exporter.tag.Tag.render`.
 
@@ -94,13 +96,21 @@ class Tag:
 
         return self.render(data)
 
+    def render(self, data: Dict[str, Any]) -> Any:
+        """
+        Render the tag.
+
+        :param data: the data ("context") provided by another tag
+        """
+        raise NotImplementedError
+
 
 class LeafTag(Tag):
     """
     A leaf tag renders itself, using the data ("context") provided by a template tag.
     """
 
-    def render(self, data):
+    def render(self, data: Dict[str, Any]) -> Union[str, etree.Element, List[etree.Element]]:
         """
         Render the tag, as a string, ``etree._Element`` or list of ``etree._Element``.
 
@@ -115,23 +125,23 @@ class TemplateTag(Tag):
     """
 
     #: The default value of the ``template`` argument.
-    default_template = None
+    default_template: Optional[str] = None
     #: The sub-tags supported by the template tag.
-    tags = ()
+    tags: Tuple[Type[Tag], ...] = ()
 
-    def __init__(self, gdocs, dataset_id):
+    def __init__(self, gdocs: Gdocs, dataset_id: int):
         super().__init__(gdocs, dataset_id)
         self.argument_names.add("template")
         self.argument_required.add("template")
         self.argument_defaults["template"] = self.default_template
 
-    def get_context(self):
+    def get_context(self) -> Dict[str, Any]:
         """
         Return the data ("context") to be provided to sub-tags.
         """
         return {}
 
-    def get_tags_mapping(self, texts):
+    def get_tags_mapping(self, texts: List[etree.Element]) -> Tuple[Dict[str, Tag], List[str]]:
         """
         Extract and instantiate the tags in the template.
 
@@ -188,7 +198,7 @@ class TemplateTag(Tag):
 
         return tags_mapping, failed_tags
 
-    def render(self, data):
+    def render(self, data: Dict[str, Any]) -> Tuple[etree.Element, List[str]]:
         """
         Read the template's content, extract its sub-tags, recursively call the sub-tags'
         :meth:`~exporter.tag.Tag.validate_and_render` method, and merge the results into the content.
@@ -245,10 +255,10 @@ class TagExpression:
     #: The tag's name
     name: str
     #: The tag's arguments
-    arguments: dict
+    arguments: Dict[str, str]
 
     @classmethod
-    def parse(cls, string):
+    def parse(cls, string: str) -> "TagExpression":
         """
         Parse the string as a tag.
 
@@ -280,7 +290,7 @@ class TagExpression:
         return cls(tokens[0], arguments)
 
 
-def generate_error_template_tag(message):
+def generate_error_template_tag(message: str) -> Type[TemplateTag]:
     """
     Build a :class:`~exporter.tag.TemplateTag` for the error template and set the error message.
 
@@ -293,7 +303,7 @@ def generate_error_template_tag(message):
         default_template = settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"]
         tags = (ValueTag,)
 
-        def get_context(self):
+        def get_context(self) -> Dict[str, Any]:
             return {"value": message}
 
     return Tag
@@ -306,5 +316,5 @@ class ValueTag(LeafTag):
 
     name = "value"
 
-    def render(self, data):
+    def render(self, data: Dict[str, Any]) -> str:
         return data["value"]

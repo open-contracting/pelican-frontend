@@ -1,14 +1,19 @@
+from typing import Any, Dict, Generator, Optional, Tuple
+
 import jsonref
 from django.conf import settings
 
 from api.models import FieldLevelCheckExamples, Report
 from exporter.decorators import argument, template
-from exporter.leaf_tags.factories import generate_count_leaf_tag, generate_key_leaf_tag
 from exporter.leaf_tags.field import description, failed_examples, name, passed_examples, result_box_image
+from exporter.leaf_tags.generic import generate_count_leaf_tag, generate_key_leaf_tag
+from exporter.tag import TemplateTag
 
 
 # See similar code in Pelican backend's field_level/definitions.py.
-def _descend(value, new_path, dot_path, refs):
+def _descend(
+    value: Dict[str, Any], new_path: Tuple[str, ...], dot_path: str, refs: Tuple[str, ...]
+) -> Generator[str, None, None]:
     if hasattr(value, "__reference__"):
         refs += (value.__reference__["$ref"][14:],)  # remove #/definitions/
 
@@ -16,7 +21,9 @@ def _descend(value, new_path, dot_path, refs):
     yield from _paths(value["properties"], path=new_path, refs=refs)
 
 
-def _paths(properties, path=None, refs=None):
+def _paths(
+    properties: Dict[str, Any], path: Optional[Tuple[str, ...]] = None, refs: Optional[Tuple[str, ...]] = None
+) -> Generator[str, None, None]:
     if path is None:
         path = ()
     if refs is None:
@@ -61,7 +68,7 @@ PATHS = set(_paths(schema["properties"]))
         result_box_image,
     ),
 )
-def field(tag):
+def field(tag: TemplateTag) -> Dict[str, Any]:
     path = tag.arguments["path"]
 
     result = Report.objects.get(dataset=tag.dataset_id, type="field_level_check", data__has_key=path).data[path]

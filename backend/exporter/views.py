@@ -12,7 +12,7 @@ from exporter.template_tags.base import base as base_tag
 
 
 @csrf_exempt
-def generate_report(request):
+def generate_report(request) -> JsonResponse:
     if request.method == "GET":
         return JsonResponse({"status": "report_error", "data": {"reason": "Only post method is accepted."}})
 
@@ -35,7 +35,6 @@ def generate_report(request):
     else:
         translation.activate("en")
 
-    response = None
     gdocs = None
 
     failed_tags = []

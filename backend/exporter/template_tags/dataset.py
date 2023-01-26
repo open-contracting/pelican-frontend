@@ -1,8 +1,11 @@
+from typing import Any, Dict, Tuple, Type
+
 from django.conf import settings
 from django.utils.translation import gettext as _
 
 from api.models import DatasetLevelCheck
 from exporter.exceptions import CheckNotComputedError
+from exporter.gdocs import Gdocs
 from exporter.leaf_tags.dataset import (
     bar_count,
     bar_examples,
@@ -23,8 +26,8 @@ from exporter.leaf_tags.dataset import (
     top3_share,
 )
 from exporter.leaf_tags.dataset import value as value_tag
-from exporter.leaf_tags.factories import generate_key_leaf_tag, generate_sample_leaf_tag
-from exporter.tag import TemplateTag
+from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_sample_leaf_tag
+from exporter.tag import Tag, TemplateTag
 from exporter.util import quote_list
 
 # Keep in sync with checkTypes in datasetMixins.js
@@ -72,21 +75,21 @@ class Dataset(TemplateTag):
     argument_defaults = {}
 
     default_template = settings.GDOCS_TEMPLATES["DEFAULT_DATASET_TEMPLATE"]
-    tags = (
+    tags: Tuple[Type[Tag], ...] = (
         generate_key_leaf_tag("name"),
         generate_key_leaf_tag("description"),
         result,
         value_tag,
     )
 
-    def __init__(self, gdocs, dataset_id):
+    def __init__(self, gdocs: Gdocs, dataset_id: int):
         super().__init__(gdocs, dataset_id)
         self.argument_names.add("check")
         self.argument_required.add("check")
         self.argument_validators["check"] = lambda v: v in CHECK_TYPES
         self.argument_validation_messages["check"] = "The value must be one of: %s." % quote_list(CHECK_TYPES)
 
-    def finalize_arguments(self):
+    def finalize_arguments(self) -> None:
         check_name = self.arguments["check"]
         check_type = CHECK_TYPES[check_name]
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
@@ -129,7 +132,7 @@ class Dataset(TemplateTag):
 
         super().finalize_arguments()
 
-    def get_context(self):
+    def get_context(self) -> Dict[str, Any]:
         check_name = self.arguments["check"]
         check_type = CHECK_TYPES[check_name]
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
