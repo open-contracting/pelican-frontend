@@ -3,4 +3,6 @@ node_modules
 dist
 .coverage
 htmlcov
+credentials.json
+google_drive_cache
 /docs/_build
