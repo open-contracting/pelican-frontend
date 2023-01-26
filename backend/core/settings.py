@@ -259,19 +259,19 @@ TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else
 # The Google Docs IDs for templates, when writing exports to Google Drive.
 GDOCS_TEMPLATES = {
     # The Google Docs ID for the base template.
-    "DEFAULT_BASE_TEMPLATE": os.getenv("DEFAULT_BASE_TEMPLATE", "1YMG5KZCPmI6GEcd2XQktrHD8uxEL626g3uuBjLWqQlE"),
+    "DEFAULT_BASE_TEMPLATE": os.getenv("DEFAULT_BASE_TEMPLATE", "1jSGZKNJP6wBVPwi3JsvdkZ9FSpUwrK2SJxZoQQuJdnM"),
     # The Google Docs ID for the overview template.
     "DEFAULT_OVERVIEW_TEMPLATE": os.getenv(
         "DEFAULT_OVERVIEW_TEMPLATE", "1sYr5LipKRtegWWl3zfKIDoSZmZluawmAdAu3piKslTw"
     ),
     # The Google Docs ID for the field-level template.
-    "DEFAULT_DATASET_TEMPLATE": os.getenv("DEFAULT_DATASET_TEMPLATE", "1_1FIg3cuUthk6EEWcYnR5S-J3Xx8p1ZVDBh5oZM3eK8"),
+    "DEFAULT_FIELD_TEMPLATE": os.getenv("DEFAULT_FIELD_TEMPLATE", "1We-5SJ7i8i-d0c7U8t9QRstf0EHkn5zQeVh5UfDkb2c"),
     # The Google Docs ID for the resource-level template.
-    "DEFAULT_FIELD_TEMPLATE": os.getenv("DEFAULT_FIELD_TEMPLATE", "1DCYMTwh_cXt-kpuxEnyKMfTlmdUoc8MwUWgbgWj7fAA"),
-    # The Google Docs ID for the dataset-level template.
     "DEFAULT_RESOURCE_TEMPLATE": os.getenv(
-        "DEFAULT_RESOURCE_TEMPLATE", "1dX4md9MGOxhngjQ2Q0wY8njNiq5B6F9oFWd1tUN63TM"
+        "DEFAULT_RESOURCE_TEMPLATE", "1bnfFXZ3AYjXc--u9ohM9KTGwo05dz7BJmh4KIDdzalc"
     ),
+    # The Google Docs ID for the dataset-level template.
+    "DEFAULT_DATASET_TEMPLATE": os.getenv("DEFAULT_DATASET_TEMPLATE", "1CBVNkHE4WJCXCkSZlDgL6qDoLFJhcCvln8jvTEyZh_k"),
     # The Google Docs ID for the error template.
     "DEFAULT_ERROR_TEMPLATE": os.getenv("DEFAULT_ERROR_TEMPLATE", "1PW7s6SmaP4tia_QzMSZkTt8Oii-6ZXqB7VCuF8bYmv4"),
 }
