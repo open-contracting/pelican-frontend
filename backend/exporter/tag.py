@@ -178,8 +178,7 @@ class TemplateTag(Tag):
             tag_class = tags_lookup.get(expression.name)
             if tag_class is None:
                 raise UnknownTagError(
-                    f"The tag '{expression.name}' cannot be used in this context. "
-                    "Also, please make sure the check was computed.",
+                    f"The tag '{expression.name}' is not recognized. Please check the spelling and syntax.",
                     full_tag,
                     self.arguments["template"],
                 )
