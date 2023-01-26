@@ -6,7 +6,22 @@ This changelog only notes major changes, to notify other developers.
 2022-01-26
 ----------
 
--  refactor: Rewrite the tag system. :commit:`dbd97ed`
+-  feat: Set default templates to those used in practice. (``template`` arguments should no longer be necessary.) :issue:`32` :issue:`114`
+-  fix: Strip whitespace from user input. :issue:`28`
+-  fix: Remove pass/fail badges from checks that don't pass/fail. :issue:`7`
+-  fix: Make all zeroes gray on compiled release-level checks page. :issue:`38`
+-  fix: Use correct color for field-level failures. :issue:`33`
+-  fix: Use hyperlinks instead of JavaScript on reports list. :issue:`35`
+-  fix: Remove context menu override that interfered with regular browser behavior. :commit:`23428f1`
+-  fix: Correct value distribution plot. :issue:`85`
+-  fix: Remove contract value and release date visualizations from overview page. :issue:`55`
+-  fix: Correct sorting and display of reports list in edge cases. :commit:`b808827`
+-  fix: Clarify the description of value distribution checks and of compiled release-level average scores. :issue:`42` :issue:`41`
+-  fix: Provide clearer error messages. :issue:`31`
+-  fix: Correct spacing of page elements. :issue:`106`
+-  docs: Add documentation about exporting reports and contributing code. :issue:`25` :issue:`109` :issue:`116`
+-  refactor: Rewrite the tag system. :commit:`dbd97ed` :issue:`102`
+-  refactor: Rewrite the API endpoints. :issue:`74` :issue:`77` :issue:`108` :issue:`13` :issue:`103`
 
 2021-11-09
 ----------
