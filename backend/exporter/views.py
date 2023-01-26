@@ -35,13 +35,16 @@ def generate_report(request) -> JsonResponse:
     else:
         translation.activate("en")
 
+    document_id = input_message["document_id"].strip()
+    folder_id = input_message["folder_id"].strip()
+
     gdocs = None
 
     failed_tags = []
     try:
-        gdocs = Gdocs(input_message["document_id"])
+        gdocs = Gdocs(document_id)
         base = base_tag(gdocs, input_message["dataset_id"])
-        base.set_argument("template", input_message["document_id"])
+        base.set_argument("template", document_id)
         base.finalize_arguments()
         content, failed_tags = base.validate_and_render({})
 
@@ -50,7 +53,7 @@ def generate_report(request) -> JsonResponse:
         else:
             filename = f"Report {input_message['dataset_id']} {datetime.now()}"
 
-        file_id = gdocs.upload(input_message["folder_id"], filename, content)
+        file_id = gdocs.upload(folder_id, filename, content)
 
         response = JsonResponse({"status": "ok", "data": {"file_id": file_id}, "failed_tags": failed_tags})
     except GoogleDriveError as er:
