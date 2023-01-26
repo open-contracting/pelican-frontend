@@ -172,6 +172,16 @@ def counts_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element
 
 
 @leaf("resultBoxImage")
+def sums_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
+    return box_image(
+        tag,
+        graphs.bar_result_box,
+        f"resultBoxImage_{data['name']}.png",
+        data["sums_pairs"],
+    )
+
+
+@leaf("resultBoxImage")
 def passed_result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
     return box_image(
         tag,

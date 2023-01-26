@@ -19,6 +19,7 @@ from exporter.leaf_tags.dataset import (
     ocid_count,
     passed_result_box_image,
     result,
+    sums_result_box_image,
     table_result_box_image,
     top3_amount,
     top3_count,
@@ -98,7 +99,7 @@ class Dataset(TemplateTag):
             if check_type == "donut":
                 self.tags += (donut_share, donut_count, donut_examples, counts_result_box_image)
             elif check_type == "bar":
-                self.tags += (bar_share, bar_count, bar_examples, bar_sum, counts_result_box_image)
+                self.tags += (bar_share, bar_count, bar_examples, bar_sum, sums_result_box_image)
             elif check_type == "top3":
                 self.tags += (top3_share, top3_count, top3_examples, top3_amount, table_result_box_image)
             elif check_type == "numeric":
@@ -163,20 +164,18 @@ class Dataset(TemplateTag):
                 if check.result is not None:
                     data["shares"] = {key.replace("_", "-"): value for key, value in check.meta["shares"].items()}
                     data["counts"] = {key.replace("_", "-"): value for key, value in check.meta["counts"].items()}
-                    data["counts_pairs"] = [
-                        (key.replace("_", "-"), value) for key, value in check.meta["counts"].items()
-                    ]
+                    data["sums"] = {key.replace("_", "-"): value for key, value in check.meta["sums"].items()}
+                    data["sums_pairs"] = [(key.replace("_", "-"), value) for key, value in check.meta["sums"].items()]
                     data["examples"] = {
                         key.replace("_", "-"): [example["ocid"] for example in examples]
                         for key, examples in check.meta["examples"].items()
                     }
-                    data["sums"] = {key.replace("_", "-"): value for key, value in check.meta["sums"].items()}
                 else:
                     data["shares"] = {}
                     data["counts"] = {}
-                    data["counts_pairs"] = []
-                    data["examples"] = {}
                     data["sums"] = {}
+                    data["sums_pairs"] = []
+                    data["examples"] = {}
             elif check_type == "top3":
                 data["shares"] = {str(index + 1): el["share"] for index, el in enumerate(check.meta["most_frequent"])}
                 data["counts"] = {str(index + 1): el["count"] for index, el in enumerate(check.meta["most_frequent"])}
