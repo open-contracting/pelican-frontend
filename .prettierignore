@@ -1,3 +1,4 @@
 dist
+backend/release-schema.json
 # .vue files are formatted by eslint.
 *.vue

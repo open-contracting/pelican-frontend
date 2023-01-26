@@ -59,7 +59,9 @@
       "title": "Initiation type",
       "description": "The type of initiation process used for this contract, from the closed [initiationType](https://standard.open-contracting.org/1.1/en/schema/codelists/#initiation-type) codelist.",
       "type": "string",
-      "enum": ["tender"],
+      "enum": [
+        "tender"
+      ],
       "codelist": "initiationType.csv",
       "openCodelist": false
     },
@@ -108,7 +110,10 @@
     "language": {
       "title": "Release language",
       "description": "The default language of the data using either two-letter [ISO639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes), or extended [BCP47 language tags](http://www.w3.org/International/articles/language-tags/). The use of lowercase two-letter codes from [ISO639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is recommended.",
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "default": "en"
     },
     "relatedProcesses": {
@@ -121,7 +126,13 @@
       "type": "array"
     }
   },
-  "required": ["ocid", "id", "date", "tag", "initiationType"],
+  "required": [
+    "ocid",
+    "id",
+    "date",
+    "tag",
+    "initiationType"
+  ],
   "definitions": {
     "Planning": {
       "title": "Planning",
@@ -131,7 +142,10 @@
         "rationale": {
           "title": "Rationale",
           "description": "The rationale for the procurement provided in free text. More detail can be provided in an attached document.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "budget": {
           "title": "Budget",
@@ -157,7 +171,10 @@
       },
       "patternProperties": {
         "^(rationale_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -165,32 +182,55 @@
       "title": "Tender",
       "description": "Data regarding tender process - publicly inviting prospective contractors to submit bids for evaluation and selecting a winner or winners.",
       "type": "object",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
         "id": {
           "title": "Tender ID",
           "description": "An identifier for this tender process. This may be the same as the ocid, or may be an internal identifier for this tender.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1,
           "versionId": true
         },
         "title": {
           "title": "Tender title",
           "description": "A title for this tender. This will often be used by applications as a headline to attract interest, and to help analysts understand the nature of this procurement.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "description": {
           "title": "Tender description",
           "description": "A summary description of the tender. This complements any structured information provided using the items array. Descriptions should be short and easy to read. Avoid using ALL CAPS.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "status": {
           "title": "Tender status",
           "description": "The current status of the tender, from the closed [tenderStatus](https://standard.open-contracting.org/1.1/en/schema/codelists/#tender-status) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "tenderStatus.csv",
           "openCodelist": false,
-          "enum": ["planning", "planned", "active", "cancelled", "unsuccessful", "complete", "withdrawn", null]
+          "enum": [
+            "planning",
+            "planned",
+            "active",
+            "cancelled",
+            "unsuccessful",
+            "complete",
+            "withdrawn",
+            null
+          ]
         },
         "procuringEntity": {
           "title": "Procuring entity",
@@ -219,33 +259,59 @@
         "procurementMethod": {
           "title": "Procurement method",
           "description": "The procurement method, from the closed [method](https://standard.open-contracting.org/1.1/en/schema/codelists/#method) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "method.csv",
           "openCodelist": false,
-          "enum": ["open", "selective", "limited", "direct", null]
+          "enum": [
+            "open",
+            "selective",
+            "limited",
+            "direct",
+            null
+          ]
         },
         "procurementMethodDetails": {
           "title": "Procurement method details",
           "description": "Additional detail on the procurement method used. This field can be used to provide the local name of the particular procurement method used.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "procurementMethodRationale": {
           "title": "Procurement method rationale",
           "description": "Rationale for the chosen procurement method. This is especially important to provide a justification in the case of limited tenders or direct awards.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "mainProcurementCategory": {
           "title": "Main procurement category",
           "description": "The primary category describing the main object of this contracting process, from the closed [procurementCategory](https://standard.open-contracting.org/1.1/en/schema/codelists/#procurement-category) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "procurementCategory.csv",
           "openCodelist": false,
-          "enum": ["goods", "works", "services", null]
+          "enum": [
+            "goods",
+            "works",
+            "services",
+            null
+          ]
         },
         "additionalProcurementCategories": {
           "title": "Additional procurement categories",
           "description": "Any additional categories describing the objects of this contracting process, using the open [extendedProcurementCategory](https://standard.open-contracting.org/1.1/en/schema/codelists/#extended-procurement-category) codelist.",
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "string"
           },
@@ -255,19 +321,28 @@
         "awardCriteria": {
           "title": "Award criteria",
           "description": "The award criteria for the procurement, using the open [awardCriteria](https://standard.open-contracting.org/1.1/en/schema/codelists/#award-criteria) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "awardCriteria.csv",
           "openCodelist": true
         },
         "awardCriteriaDetails": {
           "title": "Award criteria details",
           "description": "Any detailed or further information on the award or selection criteria.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "submissionMethod": {
           "title": "Submission method",
           "description": "The methods by which bids are submitted, using the open [submissionMethod](https://standard.open-contracting.org/1.1/en/schema/codelists/#submission-method) codelist.",
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "string"
           },
@@ -277,7 +352,10 @@
         "submissionMethodDetails": {
           "title": "Submission method details",
           "description": "Any detailed or further information on the submission method. This can include the address, e-mail address or online service to which bids are submitted, and any special requirements to be followed for submissions.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "tenderPeriod": {
           "title": "Tender period",
@@ -292,12 +370,18 @@
         "hasEnquiries": {
           "title": "Has enquiries?",
           "description": "A true/false field to indicate whether any enquiries were received during the tender process. Structured information on enquiries that were received, and responses to them, can be provided using the enquiries extension.",
-          "type": ["boolean", "null"]
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "eligibilityCriteria": {
           "title": "Eligibility criteria",
           "description": "A description of any eligibility criteria for potential suppliers.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "awardPeriod": {
           "title": "Evaluation and award period",
@@ -312,7 +396,10 @@
         "numberOfTenderers": {
           "title": "Number of tenderers",
           "description": "The number of parties who submit a bid.",
-          "type": ["integer", "null"]
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "tenderers": {
           "title": "Tenderers",
@@ -359,22 +446,40 @@
       },
       "patternProperties": {
         "^(title_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(procurementMethodRationale_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(awardCriteriaDetails_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(submissionMethodDetails_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(eligibilityCriteria_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -382,36 +487,59 @@
       "title": "Award",
       "description": "An award for the given procurement. There can be more than one award per contracting process e.g. because the contract is split among different providers, or because it is a standing offer.",
       "type": "object",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
         "id": {
           "title": "Award ID",
           "description": "The identifier for this award. It must be unique and must not change within the Open Contracting Process it is part of (defined by a single ocid). See the [identifier guidance](https://standard.open-contracting.org/1.1/en/schema/identifiers/) for further details.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "title": {
           "title": "Title",
           "description": "Award title",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "description": {
           "title": "Description",
           "description": "Award description",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "status": {
           "title": "Award status",
           "description": "The current status of the award, from the closed [awardStatus](https://standard.open-contracting.org/1.1/en/schema/codelists/#award-status) codelist.",
-          "type": ["string", "null"],
-          "enum": ["pending", "active", "cancelled", "unsuccessful", null],
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "pending",
+            "active",
+            "cancelled",
+            "unsuccessful",
+            null
+          ],
           "codelist": "awardStatus.csv",
           "openCodelist": false
         },
         "date": {
           "title": "Award date",
           "description": "The date of the contract award. This is usually the date on which a decision to award was made.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "value": {
@@ -472,10 +600,16 @@
       },
       "patternProperties": {
         "^(title_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -483,35 +617,59 @@
       "type": "object",
       "title": "Contract",
       "description": "Information regarding the signed contract between the buyer and supplier(s).",
-      "required": ["id", "awardID"],
+      "required": [
+        "id",
+        "awardID"
+      ],
       "properties": {
         "id": {
           "title": "Contract ID",
           "description": "The identifier for this contract. It must be unique and must not change within the Open Contracting Process it is part of (defined by a single ocid). See the [identifier guidance](https://standard.open-contracting.org/1.1/en/schema/identifiers/) for further details.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "awardID": {
           "title": "Award ID",
           "description": "The award.id against which this contract is being issued.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "title": {
           "title": "Contract title",
           "description": "Contract title",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "description": {
           "title": "Contract description",
           "description": "Contract description",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "status": {
           "title": "Contract status",
           "description": "The current status of the contract, from the closed [contractStatus](https://standard.open-contracting.org/1.1/en/schema/codelists/#contract-status) codelist.",
-          "type": ["string", "null"],
-          "enum": ["pending", "active", "cancelled", "terminated", null],
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "pending",
+            "active",
+            "cancelled",
+            "terminated",
+            null
+          ],
           "codelist": "contractStatus.csv",
           "openCodelist": false
         },
@@ -538,7 +696,10 @@
         "dateSigned": {
           "title": "Date signed",
           "description": "The date the contract was signed. In the case of multiple signatures, the date of the last signature.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "documents": {
@@ -592,10 +753,16 @@
       },
       "patternProperties": {
         "^(title_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -637,59 +804,94 @@
       "title": "Milestone",
       "description": "The milestone block can be used to represent a wide variety of events in the lifetime of a contracting process.",
       "type": "object",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
         "id": {
           "title": "ID",
           "description": "A local identifier for this milestone, unique within this block. This field is used to keep track of multiple revisions of a milestone through the compilation from release to record mechanism.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "title": {
           "title": "Title",
           "description": "Milestone title",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "type": {
           "title": "Milestone type",
           "description": "The nature of the milestone, using the open [milestoneType](https://standard.open-contracting.org/1.1/en/schema/codelists/#milestone-type) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "milestoneType.csv",
           "openCodelist": true
         },
         "description": {
           "title": "Description",
           "description": "A description of the milestone.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "code": {
           "title": "Milestone code",
           "description": "Milestone codes can be used to track specific events that take place for a particular kind of contracting process. For example, a code of 'approvalLetter' can be used to allow applications to understand this milestone represents the date an approvalLetter is due or signed.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "dueDate": {
           "title": "Due date",
           "description": "The date the milestone is due.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "dateMet": {
           "format": "date-time",
           "title": "Date met",
           "description": "The date on which the milestone was met.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "dateModified": {
           "title": "Date modified",
           "description": "The date the milestone was last reviewed or modified and the status was altered or confirmed to still be correct.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "status": {
           "title": "Status",
           "description": "The status that was realized on the date provided in `dateModified`, from the closed [milestoneStatus](https://standard.open-contracting.org/1.1/en/schema/codelists/#milestone-status) codelist.",
-          "type": ["string", "null"],
-          "enum": ["scheduled", "met", "notMet", "partiallyMet", null],
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "scheduled",
+            "met",
+            "notMet",
+            "partiallyMet",
+            null
+          ],
           "codelist": "milestoneStatus.csv",
           "openCodelist": false
         },
@@ -709,10 +911,16 @@
       },
       "patternProperties": {
         "^(title_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -720,66 +928,101 @@
       "type": "object",
       "title": "Document",
       "description": "Links to, or descriptions of, external documents can be attached at various locations within the standard. Documents can be supporting information, formal notices, downloadable forms, or any other kind of resource that ought to be made public as part of full open contracting.",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
         "id": {
           "title": "ID",
           "description": "A local, unique identifier for this document. This field is used to keep track of multiple revisions of a document through the compilation from release to record mechanism.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "documentType": {
           "title": "Document type",
           "description": "A classification of the document described, using the open [documentType](https://standard.open-contracting.org/1.1/en/schema/codelists/#document-type) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "documentType.csv",
           "openCodelist": true
         },
         "title": {
           "title": "Title",
           "description": "The document title.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "description": {
           "title": "Description",
           "description": "A short description of the document. Descriptions are recommended to not exceed 250 words. In the event the document is not accessible online, the description field can be used to describe arrangements for obtaining a copy of the document.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "url": {
           "title": "URL",
           "description": "A direct link to the document or attachment. The server providing access to this document ought to be configured to correctly report the document mime type.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "uri"
         },
         "datePublished": {
           "title": "Date published",
           "description": "The date on which the document was first published. This is particularly important for legally important documents such as notices of a tender.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "dateModified": {
           "title": "Date modified",
           "description": "Date that the document was last modified",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "format": {
           "title": "Format",
           "description": "The format of the document, using the open [IANA Media Types](http://www.iana.org/assignments/media-types/) codelist (see the values in the 'Template' column), or using the 'offline/print' code if the described document is published offline. For example, web pages have a format of 'text/html'.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "language": {
           "title": "Language",
           "description": "The language of the linked document using either two-letter [ISO639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes), or extended [BCP47 language tags](http://www.w3.org/International/articles/language-tags/). The use of lowercase two-letter codes from [ISO639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) is recommended unless there is a clear user need for distinguishing the language subtype.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "patternProperties": {
         "^(title_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -791,12 +1034,19 @@
         "id": {
           "title": "ID",
           "description": "An identifier for the budget line item which provides funds for this contracting process. This identifier should be possible to cross-reference against the provided data source.",
-          "type": ["string", "integer", "null"]
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
         },
         "description": {
           "title": "Budget Source",
           "description": "A short free text description of the budget source. May be used to provide the title of the budget line, or the programme used to fund this project.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "amount": {
           "title": "Amount",
@@ -806,23 +1056,36 @@
         "project": {
           "title": "Project title",
           "description": "The name of the project through which this contracting process is funded (if applicable). Some organizations maintain a registry of projects, and the data should use the name by which the project is known in that registry. No translation option is offered for this string, as translated values can be provided in third-party data, linked from the data source above.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "projectID": {
           "title": "Project identifier",
           "description": "An external identifier for the project that this contracting process forms part of, or is funded via (if applicable). Some organizations maintain a registry of projects, and the data should use the identifier from the relevant registry of projects.",
-          "type": ["string", "integer", "null"]
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ]
         },
         "uri": {
           "title": "Linked budget information",
           "description": "A URI pointing directly to a machine-readable record about the budget line-item or line-items that fund this contracting process. Information can be provided in a range of formats, including using IATI, the Open Fiscal Data Standard or any other standard which provides structured data on budget sources. Human readable documents can be included using the planning.documents block.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "uri"
         },
         "source": {
           "title": "Data Source",
           "description": "(Deprecated in 1.1) Used to point either to a corresponding Budget Data Package, or to a machine or human-readable source where users can find further information on the budget line item identifiers, or project identifiers, provided here.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "deprecated": {
             "deprecatedVersion": "1.1",
             "description": "The budget data source field was intended to link to machine-readable data about the budget for a contracting process, but has been widely mis-used to provide free-text descriptions of budget providers. As a result, it has been removed from version 1.1. budget/uri can be used to provide a link to machine-readable budget information, and budget/description can be used to provide human-readable information on the budget source."
@@ -832,13 +1095,22 @@
       },
       "patternProperties": {
         "^(source_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "^(project_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -846,24 +1118,35 @@
       "type": "object",
       "title": "Transaction information",
       "description": "A spending transaction related to the contracting process. Draws upon the data models of the [Fiscal Data Package](https://frictionlessdata.io/specs/fiscal-data-package/) and the [International Aid Transparency Initiative](http://iatistandard.org/activity-standard/iati-activities/iati-activity/transaction/) and should be used to cross-reference to more detailed information held using a Fiscal Data Package, IATI file, or to provide enough information to allow a user to manually or automatically cross-reference with some other published source of transactional spending data.",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
         "id": {
           "title": "ID",
           "description": "A unique identifier for this transaction. This identifier should be possible to cross-reference against the provided data source. For IATI this is the transaction reference.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "source": {
           "title": "Data source",
           "description": "Used to point either to a corresponding Fiscal Data Package, IATI file, or machine or human-readable source where users can find further information on the budget line item identifiers, or project identifiers, provided here.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "uri"
         },
         "date": {
           "title": "Date",
           "description": "The date of the transaction",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "value": {
@@ -884,7 +1167,10 @@
         "uri": {
           "title": "Linked spending information",
           "description": "A URI pointing directly to a machine-readable record about this spending transaction.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "uri"
         },
         "amount": {
@@ -919,13 +1205,19 @@
     "OrganizationReference": {
       "properties": {
         "name": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The name of the party being referenced. This must match the name of an entry in the parties section.",
           "title": "Organization name",
           "minLength": 1
         },
         "id": {
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "description": "The id of the party being referenced. This must match the id of an entry in the parties section.",
           "title": "Organization ID"
         },
@@ -983,7 +1275,10 @@
         "name": {
           "title": "Common name",
           "description": "A common name for this organization or other participant in the contracting process. The identifier object provides a space for the formal legal name, and so this may either repeat that value, or may provide the common name by which this organization or entity is known. This field may also include details of the department or sub-unit involved in this contracting process.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "id": {
           "type": "string",
@@ -1018,7 +1313,10 @@
         "roles": {
           "title": "Party roles",
           "description": "The party's role(s) in the contracting process, using the open [partyRole](https://standard.open-contracting.org/1.1/en/schema/codelists/#party-role) codelist.",
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "string"
           },
@@ -1026,14 +1324,20 @@
           "openCodelist": true
         },
         "details": {
-          "type": ["object", "null"],
+          "type": [
+            "object",
+            "null"
+          ],
           "description": "Additional classification information about parties can be provided using partyDetail extensions that define particular properties and classification schemes.",
           "title": "Details"
         }
       },
       "patternProperties": {
         "^(name_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1041,18 +1345,26 @@
       "title": "Item",
       "type": "object",
       "description": "A good, service, or work to be contracted.",
-      "required": ["id"],
+      "required": [
+        "id"
+      ],
       "properties": {
         "id": {
           "title": "ID",
           "description": "A local identifier to reference and merge the items by. Must be unique within a given array of items.",
-          "type": ["string", "integer"],
+          "type": [
+            "string",
+            "integer"
+          ],
           "minLength": 1
         },
         "description": {
           "title": "Description",
           "description": "A description of the goods, services to be provided.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "classification": {
           "title": "Classification",
@@ -1072,7 +1384,10 @@
         "quantity": {
           "title": "Quantity",
           "description": "The number of units to be provided.",
-          "type": ["number", "null"]
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "unit": {
           "title": "Unit",
@@ -1082,20 +1397,29 @@
             "scheme": {
               "title": "Scheme",
               "description": "The list from which identifiers for units of measure are taken, using the open [unitClassificationScheme](https://standard.open-contracting.org/1.1/en/schema/codelists/#unit-classification-scheme) codelist. 'UNCEFACT' is recommended.",
-              "type": ["string", "null"],
+              "type": [
+                "string",
+                "null"
+              ],
               "codelist": "unitClassificationScheme.csv",
               "openCodelist": true
             },
             "id": {
               "title": "ID",
               "description": "The identifier from the codelist referenced in the scheme property. Check the codelist for details of how to find and use identifiers from the scheme in use.",
-              "type": ["string", "null"],
+              "type": [
+                "string",
+                "null"
+              ],
               "versionId": true
             },
             "name": {
               "title": "Name",
               "description": "Name of the unit.",
-              "type": ["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             },
             "value": {
               "title": "Value",
@@ -1106,19 +1430,28 @@
               "title": "URI",
               "description": "The machine-readable URI for the unit of measure, provided by the scheme.",
               "format": "uri",
-              "type": ["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "patternProperties": {
             "^(name_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-              "type": ["string", "null"]
+              "type": [
+                "string",
+                "null"
+              ]
             }
           }
         }
       },
       "patternProperties": {
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1130,32 +1463,50 @@
         "date": {
           "title": "Amendment date",
           "description": "The date of this amendment.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "rationale": {
           "title": "Rationale",
           "description": "An explanation for the amendment.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "id": {
           "description": "An identifier for this amendment: often the amendment number",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "title": "ID"
         },
         "description": {
           "description": "A free text, or semi-structured, description of the changes made in this amendment.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "title": "Description"
         },
         "amendsReleaseID": {
           "description": "Provide the identifier (release.id) of the OCDS release (from this contracting process) that provides the values for this contracting process **before** the amendment was made.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "title": "Amended release (identifier)"
         },
         "releaseID": {
           "description": "Provide the identifier (release.id) of the OCDS release (from this contracting process) that provides the values for this contracting process **after** the amendment was made.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "title": "Amending release (identifier)"
         },
         "changes": {
@@ -1173,7 +1524,14 @@
               "former_value": {
                 "title": "Former Value",
                 "description": "The previous value of the changed property, in whatever type the property is. (Deprecated in 1.1)",
-                "type": ["string", "number", "integer", "array", "object", "null"]
+                "type": [
+                  "string",
+                  "number",
+                  "integer",
+                  "array",
+                  "object",
+                  "null"
+                ]
               }
             }
           },
@@ -1185,7 +1543,10 @@
       },
       "patternProperties": {
         "^(rationale_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1197,31 +1558,47 @@
         "scheme": {
           "title": "Scheme",
           "description": "The scheme or codelist from which the classification code is taken. For line item classifications, this uses the open [itemClassificationScheme](https://standard.open-contracting.org/1.1/en/schema/codelists/#item-classification-scheme) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "itemClassificationScheme.csv",
           "openCodelist": true
         },
         "id": {
           "title": "ID",
           "description": "The classification code taken from the scheme.",
-          "type": ["string", "integer", "null"],
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ],
           "versionId": true
         },
         "description": {
           "title": "Description",
           "description": "A textual description or title for the classification code.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "uri": {
           "title": "URI",
           "description": "A URI to uniquely identify the classification code.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "uri"
         }
       },
       "patternProperties": {
         "^(description_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1233,29 +1610,45 @@
         "scheme": {
           "title": "Scheme",
           "description": "Organization identifiers should be taken from an existing organization identifier list. The scheme field is used to indicate the list or register from which the identifier is taken. This value should be taken from the [Organization Identifier Scheme](https://standard.open-contracting.org/1.1/en/schema/codelists/#organization-identifier-scheme) codelist.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "id": {
           "title": "ID",
           "description": "The identifier of the organization in the selected scheme.",
-          "type": ["string", "integer", "null"],
+          "type": [
+            "string",
+            "integer",
+            "null"
+          ],
           "versionId": true
         },
         "legalName": {
           "title": "Legal Name",
           "description": "The legally registered name of the organization.",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "uri": {
           "title": "URI",
           "description": "A URI to identify the organization, such as those provided by [Open Corporates](http://www.opencorporates.com) or some other relevant URI provider. This is not for listing the website of the organization: that can be done through the URL field of the Organization contact point.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "uri"
         }
       },
       "patternProperties": {
         "^(legalName_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1266,33 +1659,51 @@
       "properties": {
         "streetAddress": {
           "title": "Street address",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The street address. For example, 1600 Amphitheatre Pkwy."
         },
         "locality": {
           "title": "Locality",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The locality. For example, Mountain View."
         },
         "region": {
           "title": "Region",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The region. For example, CA."
         },
         "postalCode": {
           "title": "Postal code",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The postal code. For example, 94043."
         },
         "countryName": {
           "title": "Country name",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The country name. For example, United States."
         }
       },
       "patternProperties": {
         "^(countryName_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1303,34 +1714,52 @@
       "properties": {
         "name": {
           "title": "Name",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The name of the contact person, department, or contact point, for correspondence relating to this contracting process."
         },
         "email": {
           "title": "Email",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The e-mail address of the contact point/person."
         },
         "telephone": {
           "title": "Telephone",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The telephone number of the contact point/person. This should include the international dialing code."
         },
         "faxNumber": {
           "title": "Fax number",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "The fax number of the contact point/person. This should include the international dialing code."
         },
         "url": {
           "title": "URL",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "A web address for the contact point/person.",
           "format": "uri"
         }
       },
       "patternProperties": {
         "^(name_(((([A-Za-z]{2,3}(-([A-Za-z]{3}(-[A-Za-z]{3}){0,2}))?)|[A-Za-z]{4}|[A-Za-z]{5,8})(-([A-Za-z]{4}))?(-([A-Za-z]{2}|[0-9]{3}))?(-([A-Za-z0-9]{5,8}|[0-9][A-Za-z0-9]{3}))*(-([0-9A-WY-Za-wy-z](-[A-Za-z0-9]{2,8})+))*(-(x(-[A-Za-z0-9]{1,8})+))?)|(x(-[A-Za-z0-9]{1,8})+)))$": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     },
@@ -1342,12 +1771,18 @@
         "amount": {
           "title": "Amount",
           "description": "Amount as a number.",
-          "type": ["number", "null"]
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "currency": {
           "title": "Currency",
           "description": "The currency of the amount, from the closed [currency](https://standard.open-contracting.org/1.1/en/schema/codelists/#currency) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "currency.csv",
           "openCodelist": false,
           "enum": [
@@ -1666,25 +2101,37 @@
         "startDate": {
           "title": "Start date",
           "description": "The start date for the period. When known, a precise start date must be provided.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "endDate": {
           "title": "End date",
           "description": "The end date for the period. When known, a precise end date must be provided.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "format": "date-time"
         },
         "maxExtentDate": {
           "description": "The period cannot be extended beyond this date. This field can be used to express the maximum available date for extension or renewal of this period.",
           "format": "date-time",
           "title": "Maximum extent",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "durationInDays": {
           "description": "The maximum duration of this period in days. A user interface can collect or display this data in months or years as appropriate, and then convert it into days when storing this field. This field can be used when exact dates are not known. If a startDate and endDate are set, this field, if used, should be equal to the difference between startDate and endDate. Otherwise, if a startDate and maxExtentDate are set, this field, if used, should be equal to the difference between startDate and maxExtentDate.",
           "title": "Duration (days)",
-          "type": ["integer", "null"]
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       }
     },
@@ -1704,32 +2151,47 @@
           },
           "description": "The type of relationship, using the open [relatedProcess](https://standard.open-contracting.org/1.1/en/schema/codelists/#related-process) codelist.",
           "title": "Relationship",
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "codelist": "relatedProcess.csv",
           "openCodelist": true
         },
         "title": {
           "description": "The title of the related process, where referencing an open contracting process, this field should match the tender/title field in the related process.",
           "title": "Related process title",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "scheme": {
           "title": "Scheme",
           "description": "The identification scheme used by this cross-reference, using the open [relatedProcessScheme](https://standard.open-contracting.org/1.1/en/schema/codelists/#related-process-scheme) codelist.",
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "codelist": "relatedProcessScheme.csv",
           "openCodelist": true
         },
         "identifier": {
           "description": "The identifier of the related process. If the scheme is 'ocid', this must be an Open Contracting ID (ocid).",
           "title": "Identifier",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "uri": {
           "format": "uri",
           "description": "A URI pointing to a machine-readable document, release or record package containing the identified related process.",
           "title": "Related process URI",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       }
     }
