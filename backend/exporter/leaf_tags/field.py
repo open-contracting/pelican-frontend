@@ -4,8 +4,7 @@ from django.utils.translation import gettext as _
 from lxml import etree
 
 from exporter import graphs
-from exporter.decorators import argument, leaf
-from exporter.tag import LeafTag
+from exporter.tag import LeafTag, argument, leaf
 from exporter.util import LEVELS, MODES, box_image, sample_and_format
 
 

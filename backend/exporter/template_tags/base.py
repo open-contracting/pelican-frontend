@@ -2,8 +2,7 @@ from typing import Any, Dict
 
 from django.conf import settings
 
-from exporter.decorators import template
-from exporter.tag import TemplateTag
+from exporter.tag import TemplateTag, template
 from exporter.template_tags.dataset import Dataset
 from exporter.template_tags.field import field
 from exporter.template_tags.overview import overview

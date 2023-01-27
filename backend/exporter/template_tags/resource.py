@@ -4,10 +4,9 @@ from django.conf import settings
 from django.utils.translation import gettext as _
 
 from api.models import Report, ResourceLevelCheckExamples
-from exporter.decorators import argument, template
 from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_sample_leaf_tag
 from exporter.leaf_tags.resource import result_box_image
-from exporter.tag import TemplateTag
+from exporter.tag import TemplateTag, argument, template
 
 CHECKS = {
     "coherent.period",

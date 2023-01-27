@@ -1,5 +1,6 @@
 import copy
 import re
+from dataclasses import dataclass
 from typing import List
 
 import shortuuid
@@ -32,9 +33,9 @@ def xpath(content: etree.Element, xpath: str) -> etree.Element:
     return content.xpath(xpath, namespaces={"office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0"})
 
 
+@dataclass
 class Document:
-    def __init__(self, content: etree.Element):
-        self.content = content
+    content: etree.Element
 
     def get_tags(self) -> etree.Element:
         return self.content.xpath('.//text()[contains(., "{%")]')

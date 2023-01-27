@@ -3,8 +3,7 @@ from typing import Any, Dict
 from lxml import etree
 
 from exporter import graphs
-from exporter.decorators import argument, leaf
-from exporter.tag import LeafTag
+from exporter.tag import LeafTag, argument, leaf
 from exporter.util import box_image
 
 

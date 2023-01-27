@@ -4,10 +4,9 @@ import jsonref
 from django.conf import settings
 
 from api.models import FieldLevelCheckExamples, Report
-from exporter.decorators import argument, template
 from exporter.leaf_tags.field import description, failed_examples, name, passed_examples, result_box_image
 from exporter.leaf_tags.generic import generate_count_leaf_tag, generate_key_leaf_tag
-from exporter.tag import TemplateTag
+from exporter.tag import TemplateTag, argument, template
 
 
 # See similar code in Pelican backend's field_level/definitions.py.

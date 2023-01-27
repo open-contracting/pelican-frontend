@@ -3,10 +3,9 @@ from typing import Any, Dict
 from django.conf import settings
 
 from api.models import Dataset
-from exporter.decorators import template
 from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_timestamp_leaf_tag
 from exporter.leaf_tags.overview import lifecycle_image, lifecycle_object_count
-from exporter.tag import TemplateTag
+from exporter.tag import TemplateTag, template
 
 
 @template(

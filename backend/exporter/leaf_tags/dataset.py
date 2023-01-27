@@ -3,8 +3,7 @@ from typing import Any, Dict, List, Union
 from lxml import etree
 
 from exporter import graphs
-from exporter.decorators import argument, leaf
-from exporter.tag import LeafTag
+from exporter.tag import LeafTag, argument, leaf
 from exporter.util import MODES, box_image, sample_and_format
 
 # These are not typos: "_" is replaced with "-" in template_tags/dataset.py.

@@ -7,8 +7,7 @@ from typing import Any, Dict, List, Type, Union
 
 from lxml import etree
 
-from exporter.decorators import argument, leaf
-from exporter.tag import LeafTag
+from exporter.tag import LeafTag, argument, leaf
 from exporter.util import LEVELS, MODES, sample_and_format
 
 DATETIME_FORMATS = {
@@ -24,10 +23,10 @@ def generate_key_leaf_tag(key: str) -> Type[LeafTag]:
     """
 
     @leaf(key)
-    def tag(tag: LeafTag, data: Dict[str, Any]) -> str:
+    def _tag(tag: LeafTag, data: Dict[str, Any]) -> str:
         return str(data[key])
 
-    return tag
+    return _tag
 
 
 def generate_count_leaf_tag(infix: str) -> Type[LeafTag]:
