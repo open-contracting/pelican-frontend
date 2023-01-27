@@ -1,19 +1,18 @@
 import math
 import os
-from collections import OrderedDict
 from io import BytesIO
 
+import matplotlib
 import matplotlib.pyplot as plt
+from django.conf import settings
 from matplotlib import font_manager
 from matplotlib.patches import BoxStyle, FancyBboxPatch
 from PIL import Image, ImageDraw, ImageFont
 
-font_dirs = [
-    os.path.join("exporter", "assets", "fonts"),
-]
-font_files = font_manager.findSystemFonts(fontpaths=font_dirs)
-for font_file in font_files:
-    font_manager.fontManager.addfont(font_file)
+matplotlib.use("Agg")
+
+for font in font_manager.findSystemFonts(fontpaths=str(settings.BASE_DIR / "exporter" / "assets" / "fonts")):
+    font_manager.fontManager.addfont(font)
 
 COLOR = {
     "light_black": "#212529",
@@ -27,241 +26,49 @@ COLOR = {
 }
 
 
-def resource_result_box(passed_count, failed_count, not_available_count, return_aspect_ratio=False):
+def build_fig(aspect_ratio):
     plt.figure()
     plt.rcdefaults()
     fig, ax = plt.subplots()
-    aspect_ratio = 3.0 / 15.0
     fig.set_size_inches(6, 6 * aspect_ratio)
 
-    data = [not_available_count, failed_count, passed_count]
-    if sum(data) == 0:
-        data_normalized = len(data) * [0.0]
-    else:
-        data_normalized = [(value / sum(data)) for value in data]
-    ax.barh(
-        y=[0, 1, 2], width=data_normalized, height=0.7, color=[COLOR["not_available"], COLOR["failed"], COLOR["ok"]]
-    )
-    ax.set_xlim(right=1.0)
-    ax.set_yticks([0, 1, 2])
-    ax.set_yticklabels(
-        ["Not applicable", "Failed", "Passed"], fontfamily="GT Eesti Pro Display", color=COLOR["dark_grey"]
-    )
-    ax.tick_params(axis="both", which="both", length=0)
-    ax.get_xaxis().set_ticks([])
+    return fig, ax
+
+
+def hide_spines(ax):
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.spines["bottom"].set_visible(False)
     ax.spines["left"].set_visible(False)
 
-    new_patches = []
-    for patch in reversed(ax.patches):
-        bb = patch.get_bbox()
-        color = patch.get_facecolor()
-        p_bbox = FancyBboxPatch(
-            (bb.xmin, bb.ymin),
-            abs(max(0.01, bb.width)),
-            abs(bb.height),
-            boxstyle=BoxStyle("Round,pad=0.0,rounding_size=0.0"),
-            ec="none",
-            fc=color,
-        )
-        patch.remove()
-        new_patches.append(p_bbox)
-    for patch in new_patches:
-        ax.add_patch(patch)
 
-    for index, value in enumerate(data):
-        percentage = 100 * value / max(sum(data), 1)
-        percentage_rounded = round(percentage)
-        percentage_str = f"{percentage_rounded}%"
-        if percentage_rounded == 100.0 and percentage_rounded != percentage:
-            percentage_str = "<" + percentage_str
-        elif percentage_rounded == 0.0 and percentage_rounded != percentage:
-            percentage_str = ">" + percentage_str
-        value_str = f"({value})"
-
-        patch_index = len(data) - index - 1
-        bbox = ax.patches[patch_index].get_bbox()
-        if patch_index < 2:
-            if percentage >= 7:
-                font_color = "white"
-                percentage_x = bbox.xmin + 0.01
-            else:
-                font_color = COLOR["dark_grey"]
-                percentage_x = bbox.xmax + 0.01
-        else:
-            font_color = COLOR["dark_grey"]
-            if percentage >= 7:
-                percentage_x = bbox.xmin + 0.01
-            else:
-                percentage_x = bbox.xmax + 0.01
-
-        plt.text(
-            percentage_x,
-            bbox.ymin + bbox.height / 2,
-            percentage_str,
-            color=font_color,
-            fontsize=12,
-            fontfamily="Ubuntu mono",
-            fontweight="bold",
-            verticalalignment="center",
-        )
-
-        value_x = max(percentage_x + 0.07, bbox.xmax + 0.01)
-        plt.text(
-            value_x,
-            bbox.ymin + bbox.height / 2,
-            value_str,
-            color=COLOR["grey"],
-            fontsize=12,
-            fontfamily="Ubuntu mono",
-            verticalalignment="center",
-        )
-
+def build_buffer(fig):
     buffer = BytesIO()
     plt.savefig(buffer, dpi=500, format="png", bbox_inches="tight")
     buffer.seek(0)
     plt.close(fig)
 
-    if return_aspect_ratio:
-        return buffer, aspect_ratio
-    else:
-        return buffer
+    return buffer
 
 
-def passed_result_box(passed_count, failed_count, return_aspect_ratio=False):
-    plt.figure()
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
-    aspect_ratio = 2.0 / 15.0
-    fig.set_size_inches(6, 6 * aspect_ratio)
-
-    data = [failed_count, passed_count]
-    if sum(data) == 0:
-        data_normalized = len(data) * [0.0]
-    else:
-        data_normalized = [(value / sum(data)) for value in data]
-    ax.barh(y=[0, 1], width=data_normalized, height=0.7, color=[COLOR["failed"], COLOR["ok"]])
-    ax.set_xlim(right=1.0)
-    ax.set_yticks([0, 1])
-    ax.set_yticklabels(
-        ["Failed", "Passed"],
-        fontfamily="GT Eesti Pro Display",
-        color=COLOR["dark_grey"],
-    )
-    ax.tick_params(axis="both", which="both", length=0)
-    ax.get_xaxis().set_ticks([])
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
-
-    new_patches = []
-    for patch in reversed(ax.patches):
-        bb = patch.get_bbox()
-        color = patch.get_facecolor()
-        p_bbox = FancyBboxPatch(
-            (bb.xmin, bb.ymin),
-            abs(max(0.01, bb.width)),
-            abs(bb.height),
-            boxstyle=BoxStyle("Round,pad=0.0,rounding_size=0.0"),
-            ec="none",
-            fc=color,
-        )
-        patch.remove()
-        new_patches.append(p_bbox)
-    for patch in new_patches:
-        ax.add_patch(patch)
-
-    for index, value in enumerate(data):
-        percentage = 100 * value / max(sum(data), 1)
-        percentage_rounded = round(percentage)
-        percentage_str = f"{percentage_rounded}%"
-        if percentage_rounded == 100.0 and percentage_rounded != percentage:
-            percentage_str = "<" + percentage_str
-        elif percentage_rounded == 0.0 and percentage_rounded != percentage:
-            percentage_str = ">" + percentage_str
-        value_str = f"({value})"
-
-        patch_index = len(data) - index - 1
-        bbox = ax.patches[patch_index].get_bbox()
-        if percentage >= 7:
-            font_color = "white"
-            percentage_x = bbox.xmin + 0.01
-        else:
-            font_color = COLOR["dark_grey"]
-            percentage_x = bbox.xmax + 0.01
-
-        plt.text(
-            percentage_x,
-            bbox.ymin + bbox.height / 2,
-            percentage_str,
-            color=font_color,
-            fontsize=12,
-            fontfamily="Ubuntu mono",
-            fontweight="bold",
-            verticalalignment="center",
-        )
-
-        value_x = max(percentage_x + 0.07, bbox.xmax + 0.01)
-        plt.text(
-            value_x,
-            bbox.ymin + bbox.height / 2,
-            value_str,
-            color=COLOR["grey"],
-            fontsize=12,
-            fontfamily="Ubuntu mono",
-            verticalalignment="center",
-        )
-
-    buffer = BytesIO()
-    plt.savefig(buffer, dpi=500, format="png", bbox_inches="tight")
-    buffer.seek(0)
-    plt.close(fig)
-
-    if return_aspect_ratio:
-        return buffer, aspect_ratio
-    else:
-        return buffer
-
-
-def bar_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
-    # figure initialization
-    plt.figure()
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
-    aspect_ratio = float(len(counts_pairs)) / 15.0
-    fig.set_size_inches(6, 6 * aspect_ratio)
-
-    # data preprocessing
-    counts_mapping_ordered = OrderedDict({key: value for key, value in reversed(counts_pairs)})
-    data = list(counts_mapping_ordered.values())
-
-    if total_count is None:
-        total_count = sum(data)
-
+def box(data, aspect_ratio, ylabels, ycolors, white):
+    total_count = sum(data)
     if total_count == 0:
         data_normalized = len(data) * [0.0]
     else:
-        data_normalized = [(value / total_count) for value in data]
+        data_normalized = [value / total_count for value in data]
 
-    # figure creation
-    ax.barh(
-        y=list(range(len(counts_mapping_ordered))),
-        width=data_normalized,
-        height=0.7,
-        color=len(counts_mapping_ordered) * [COLOR["blue"]],
-    )
+    yticks = list(range(len(ylabels)))
+
+    fig, ax = build_fig(aspect_ratio)
+
+    ax.barh(y=yticks, width=data_normalized, height=0.7, color=ycolors)
     ax.set_xlim(right=1.0)
-    ax.set_yticks(list(range(len(counts_mapping_ordered))))
-    ax.set_yticklabels(counts_mapping_ordered.keys(), fontfamily="GT Eesti Pro Display", color=COLOR["dark_grey"])
+    ax.set_yticks(yticks)
+    ax.set_yticklabels(ylabels, fontfamily="GT Eesti Pro Display", color=COLOR["dark_grey"])
     ax.tick_params(axis="both", which="both", length=0)
     ax.get_xaxis().set_ticks([])
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
+    hide_spines(ax)
 
     new_patches = []
     for patch in reversed(ax.patches):
@@ -292,11 +99,15 @@ def bar_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
 
         patch_index = len(data) - index - 1
         bbox = ax.patches[patch_index].get_bbox()
-        if percentage >= 7:
+
+        if white(patch_index, percentage):
             font_color = "white"
-            percentage_x = bbox.xmin + 0.01
         else:
             font_color = COLOR["dark_grey"]
+
+        if percentage >= 7:
+            percentage_x = bbox.xmin + 0.01
+        else:
             percentage_x = bbox.xmax + 0.01
 
         plt.text(
@@ -321,29 +132,44 @@ def bar_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
             verticalalignment="center",
         )
 
-    buffer = BytesIO()
-    plt.savefig(buffer, dpi=500, format="png", bbox_inches="tight")
-    buffer.seek(0)
-    plt.close(fig)
-
-    if return_aspect_ratio:
-        return buffer, aspect_ratio
-    else:
-        return buffer
+    return build_buffer(fig), aspect_ratio
 
 
-def table_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
-    # figure initialization
-    plt.figure()
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
+def resource_result_box(data):
+    return box(
+        list(reversed(data)),
+        3.0 / 15.0,
+        ["Not applicable", "Failed", "Passed"],
+        [COLOR["not_available"], COLOR["failed"], COLOR["ok"]],
+        lambda patch_index, percentage: patch_index < 2 and percentage >= 7,
+    )
+
+
+def passed_result_box(data):
+    return box(
+        list(reversed(data)),
+        2.0 / 15.0,
+        ["Failed", "Passed"],
+        [COLOR["failed"], COLOR["ok"]],
+        lambda _, percentage: percentage >= 7,
+    )
+
+
+def bar_result_box(counts_pairs):
+    ylabels, data = list(zip(*reversed(counts_pairs)))
+
+    return box(
+        data,
+        float(len(counts_pairs)) / 15.0,
+        ylabels,
+        len(ylabels) * [COLOR["blue"]],
+        lambda _, percentage: percentage >= 7,
+    )
+
+
+def table_result_box(counts_pairs, total_count=None):
+    values, counts = list(zip(*counts_pairs))
     aspect_ratio = float(len(counts_pairs) + 1) / 15.0
-    fig.set_size_inches(6, 6 * aspect_ratio)
-
-    # data preprocessing
-    counts_mapping_ordered = OrderedDict({key: value for key, value in counts_pairs})
-    values = list(counts_mapping_ordered.keys())
-    counts = list(counts_mapping_ordered.values())
 
     if total_count is None:
         total_count = sum(counts)
@@ -364,7 +190,7 @@ def table_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
         else:
             percentage_strs.append("%.2f%%" % percentage_rounded)
 
-    # figure creation
+    fig, ax = build_fig(aspect_ratio)
     table = ax.table(
         cellText=list(zip(values, percentage_strs, counts)),
         colLabels=["Value", "Share", "Occurrences"],
@@ -394,20 +220,10 @@ def table_result_box(counts_pairs, total_count=None, return_aspect_ratio=False):
         cell.set_height(cell.get_height() * 1.5)
         cell.set_edgecolor(COLOR["light_grey"])
 
-    buffer = BytesIO()
-    plt.savefig(buffer, dpi=500, format="png", bbox_inches="tight")
-    buffer.seek(0)
-    plt.close(fig)
-
-    if return_aspect_ratio:
-        return buffer, aspect_ratio
-    else:
-        return buffer
+    return build_buffer(fig), aspect_ratio
 
 
-def lifecycle_image(
-    planning_count, tender_count, award_count, contract_count, implementation_count, return_aspect_ratio=False
-):
+def lifecycle_image(planning_count, tender_count, award_count, contract_count, implementation_count):
     image = Image.open(os.path.join("exporter", "assets", "images", "lifecycle.png"))
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(os.path.join("exporter", "assets", "fonts", "GT Eesti Pro Display Regular.ttf"), 45)
@@ -452,25 +268,15 @@ def lifecycle_image(
     image.save(buffer, format="png")
     buffer.seek(0)
 
-    if return_aspect_ratio:
-        return buffer, (float(image.height) / float(image.width))
-    else:
-        return buffer
+    return buffer, (float(image.height) / float(image.width))
 
 
-def histogram_result_box(counts_pairs, return_aspect_ratio=False):
-    # figure initialization
-    plt.figure()
-    plt.rcdefaults()
-    fig, ax = plt.subplots()
+def histogram_result_box(counts_pairs):
+    values, counts = list(zip(*counts_pairs))
     aspect_ratio = 0.5
-    fig.set_size_inches(6, 6 * aspect_ratio)
 
-    # data preprocessing
-    values = [value for value, count in counts_pairs]
-    counts = [count for value, count in counts_pairs]
+    fig, ax = build_fig(aspect_ratio)
 
-    # figure creation
     ax.bar(
         x=list(range(len(counts_pairs))),
         height=counts,
@@ -504,17 +310,6 @@ def histogram_result_box(counts_pairs, return_aspect_ratio=False):
     )
 
     ax.tick_params(axis="both", which="both", length=0)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
-    ax.spines["left"].set_visible(False)
+    hide_spines(ax)
 
-    buffer = BytesIO()
-    plt.savefig(buffer, dpi=500, format="png", bbox_inches="tight")
-    buffer.seek(0)
-    plt.close(fig)
-
-    if return_aspect_ratio:
-        return buffer, aspect_ratio
-    else:
-        return buffer
+    return build_buffer(fig), aspect_ratio

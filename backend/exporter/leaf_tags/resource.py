@@ -14,7 +14,5 @@ def result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
         tag,
         graphs.resource_result_box,
         f"resultBoxImage_{data['name']}.png",
-        data["passedCount"],
-        data["failedCount"],
-        data["notAvailableCount"],
+        [data["passedCount"], data["failedCount"], data["notAvailableCount"]],
     )

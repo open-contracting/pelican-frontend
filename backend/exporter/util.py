@@ -44,13 +44,16 @@ def sample_and_format(population, arguments: Dict[str, Any]) -> Union[str, List[
     return elements
 
 
-def image_element(path: str, aspect_ratio: float) -> etree.Element:
+def box_image(tag, function, filename: str, *args, **kwargs) -> etree.Element:
     """
-    Return an image within a frame.
+    Add an image to the OpenDocument file and return an image within a frame.
+    """
 
-    :param path: the path to the image within the OpenDocument file
-    :param aspect_ratio: the aspect ratio of the image
-    """
+    buffer, aspect_ratio = function(*args, **kwargs)
+
+    path = tag.gdocs.add_image_file(buffer, filename)
+    buffer.close()
+
     frame = etree.Element(
         "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}frame",
         attrib={
@@ -77,18 +80,3 @@ def image_element(path: str, aspect_ratio: float) -> etree.Element:
         )
     )
     return frame
-
-
-def box_image(tag, function, filename: str, *args, **kwargs) -> etree.Element:
-    """
-    Add an image to the OpenDocument file and return an image within a frame.
-    """
-
-    return "UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail."
-
-    buffer, aspect_ratio = function(*args, return_aspect_ratio=True, **kwargs)
-
-    path = tag.gdocs.add_image_file(buffer, filename)
-    buffer.close()
-
-    return image_element(path, aspect_ratio)
