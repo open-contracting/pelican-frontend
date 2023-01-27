@@ -1,5 +1,4 @@
 import math
-import os
 from io import BytesIO
 
 import matplotlib
@@ -9,11 +8,9 @@ from matplotlib import font_manager
 from matplotlib.patches import BoxStyle, FancyBboxPatch
 from PIL import Image, ImageDraw, ImageFont
 
-matplotlib.use("Agg")
-
-for font in font_manager.findSystemFonts(fontpaths=str(settings.BASE_DIR / "exporter" / "assets" / "fonts")):
-    font_manager.fontManager.addfont(font)
-
+ASSETS_DIR = settings.BASE_DIR / "exporter" / "assets"
+FONT_SANS = "GT Eesti Pro Display"
+FONT_MONO = "Ubuntu mono"
 COLOR = {
     "light_black": "#212529",
     "dark_grey": "#4a4a4a",
@@ -24,6 +21,11 @@ COLOR = {
     "not_available": "#ebedf5",
     "blue": "#555cb3",
 }
+
+matplotlib.use("Agg")
+
+for font in font_manager.findSystemFonts(fontpaths=str(ASSETS_DIR / "fonts")):
+    font_manager.fontManager.addfont(font)
 
 
 def build_fig(aspect_ratio):
@@ -65,7 +67,7 @@ def box(data, aspect_ratio, ylabels, ycolors, white):
     ax.barh(y=yticks, width=data_normalized, height=0.7, color=ycolors)
     ax.set_xlim(right=1.0)
     ax.set_yticks(yticks)
-    ax.set_yticklabels(ylabels, fontfamily="GT Eesti Pro Display", color=COLOR["dark_grey"])
+    ax.set_yticklabels(ylabels, fontfamily=FONT_SANS, color=COLOR["dark_grey"])
     ax.tick_params(axis="both", which="both", length=0)
     ax.get_xaxis().set_ticks([])
     hide_spines(ax)
@@ -116,7 +118,7 @@ def box(data, aspect_ratio, ylabels, ycolors, white):
             percentage_str,
             color=font_color,
             fontsize=12,
-            fontfamily="Ubuntu mono",
+            fontfamily=FONT_MONO,
             fontweight="bold",
             verticalalignment="center",
         )
@@ -128,7 +130,7 @@ def box(data, aspect_ratio, ylabels, ycolors, white):
             value_str,
             color=COLOR["grey"],
             fontsize=12,
-            fontfamily="Ubuntu mono",
+            fontfamily=FONT_MONO,
             verticalalignment="center",
         )
 
@@ -204,15 +206,11 @@ def table_result_box(counts_pairs, total_count=None):
     for position, cell in table.get_celld().items():
         row, col = position
         if row == 0:
-            cell.set_text_props(
-                fontsize=12, fontfamily="GT Eesti Pro Display", fontweight="bold", color=COLOR["dark_grey"]
-            )
+            cell.set_text_props(fontsize=12, fontfamily=FONT_SANS, fontweight="bold", color=COLOR["dark_grey"])
         elif col == 0:
-            cell.set_text_props(
-                fontsize=12, fontfamily="GT Eesti Pro Display", fontweight="normal", color=COLOR["dark_grey"]
-            )
+            cell.set_text_props(fontsize=12, fontfamily=FONT_SANS, fontweight="normal", color=COLOR["dark_grey"])
         else:
-            cell.set_text_props(fontsize=12, fontfamily="Ubuntu mono", fontweight="normal", color=COLOR["dark_grey"])
+            cell.set_text_props(fontsize=12, fontfamily=FONT_MONO, fontweight="normal", color=COLOR["dark_grey"])
 
         if row == len(counts_pairs):
             cell.visible_edges = ""
@@ -224,45 +222,24 @@ def table_result_box(counts_pairs, total_count=None):
 
 
 def lifecycle_image(planning_count, tender_count, award_count, contract_count, implementation_count):
-    image = Image.open(os.path.join("exporter", "assets", "images", "lifecycle.png"))
+    image = Image.open(str(ASSETS_DIR / "images" / "lifecycle.png"))
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype(os.path.join("exporter", "assets", "fonts", "GT Eesti Pro Display Regular.ttf"), 45)
+    font = ImageFont.truetype(str(ASSETS_DIR / "fonts" / "GT Eesti Pro Display Regular.ttf"), 45)
 
-    draw.text(
-        xy=(154, 283),
-        text=str(planning_count),
-        fill=COLOR["light_black"],
-        font=font,
-        anchor="ma",
-    )
-    draw.text(
-        xy=(415, 283),
-        text=str(tender_count),
-        fill=COLOR["light_black"],
-        font=font,
-        anchor="ma",
-    )
-    draw.text(
-        xy=(676, 283),
-        text=str(award_count),
-        fill=COLOR["light_black"],
-        font=font,
-        anchor="ma",
-    )
-    draw.text(
-        xy=(937, 283),
-        text=str(contract_count),
-        fill=COLOR["light_black"],
-        font=font,
-        anchor="ma",
-    )
-    draw.text(
-        xy=(1198, 283),
-        text=str(implementation_count),
-        fill=COLOR["light_black"],
-        font=font,
-        anchor="ma",
-    )
+    for text, xy in (
+        (planning_count, (154, 283)),
+        (tender_count, (415, 283)),
+        (award_count, (676, 283)),
+        (contract_count, (937, 283)),
+        (implementation_count, (1198, 283)),
+    ):
+        draw.text(
+            xy=xy,
+            text=str(text),
+            fill=COLOR["light_black"],
+            font=font,
+            anchor="ma",
+        )
 
     buffer = BytesIO()
     image.save(buffer, format="png")
@@ -277,11 +254,7 @@ def histogram_result_box(counts_pairs):
 
     fig, ax = build_fig(aspect_ratio)
 
-    ax.bar(
-        x=list(range(len(counts_pairs))),
-        height=counts,
-        color=len(counts_pairs) * [COLOR["blue"]],
-    )
+    ax.bar(x=list(range(len(counts_pairs))), height=counts, color=len(counts_pairs) * [COLOR["blue"]])
 
     ax.set_xticks(list({0, len(counts_pairs) // 2, len(counts_pairs) - 1}))
     if len(counts_pairs) == 1:
@@ -290,11 +263,7 @@ def histogram_result_box(counts_pairs):
         xticklabels = [values[0], values[-1]]
     else:
         xticklabels = [values[0], values[len(counts_pairs) // 2], values[-1]]
-    ax.set_xticklabels(
-        xticklabels,
-        fontfamily="GT Eesti Pro Display",
-        color=COLOR["light_black"],
-    )
+    ax.set_xticklabels(xticklabels, fontfamily=FONT_SANS, color=COLOR["light_black"])
 
     max_count = max(counts)
     log_10 = int(math.log10(max_count))
@@ -303,11 +272,7 @@ def histogram_result_box(counts_pairs):
 
     yticklabels = [0, max_ytick]
     ax.set_yticks(yticklabels)
-    ax.set_yticklabels(
-        yticklabels,
-        fontfamily="GT Eesti Pro Display",
-        color=COLOR["light_black"],
-    )
+    ax.set_yticklabels(yticklabels, fontfamily=FONT_SANS, color=COLOR["light_black"])
 
     ax.tick_params(axis="both", which="both", length=0)
     hide_spines(ax)
