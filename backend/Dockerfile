@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN groupadd -r runner && useradd --no-log-init -r -g runner runner
 
-# Must match the directory of the settings.TOKEN_PATH default value.
+# Must match the directory of the settings.SERVICE_ACCOUNT_JSON_FILE default value.
 RUN mkdir -p /data && chown -R runner:runner /data
 
 COPY requirements.txt /tmp/requirements.txt

@@ -9,9 +9,7 @@ The exported *document* is built from *templates* in Google Docs.
 
 .. note::
 
-   The main template, sub-templates and the export folder must be shared with the
-   `Service Account <https://developers.google.com/workspace/guides/create-credentials?hl=en#service-account/>`__
-   pelican@pelican-289615.iam.gserviceaccount.com
+   The main template, sub-templates and export folder must be shared with the service account. See the :ref:`SERVICE_ACCOUNT_JSON_FILE<environment-variables>` environment variable.
 
 Tag syntax
 ----------

@@ -1,4 +1,3 @@
-import json
 import os
 import re
 import shutil
@@ -29,39 +28,37 @@ class Gdocs:
 
     def __init__(self, main_template_id: str):
         # TODO: use default_storage
-        if os.path.exists(settings.TOKEN_PATH):
-            with open(settings.TOKEN_PATH) as f:
-                self.creds = Credentials.from_service_account_info(json.load(f))
-                self.drive_service = build("drive", "v3", credentials=self.creds, cache_discovery=False)
-        else:
+        if not os.path.exists(settings.SERVICE_ACCOUNT_JSON_FILE):
             raise RuntimeError("Unable to find token file")
 
-        self.dirpath = tempfile.mkdtemp()
+        credentials = Credentials.from_service_account_file(settings.SERVICE_ACCOUNT_JSON_FILE)
+        self.drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
         self.google_drive_cache = GoogleDriveCache(self.drive_service)
 
-        self.main_template_path = os.path.join(self.dirpath, "out")
-        cache_file_path = self.google_drive_cache.get_file_path(main_template_id)
-        with ZipFile(cache_file_path, "r") as zipread:
-            with ZipFile(self.main_template_path, "w") as zipwrite:
+        self.directory = tempfile.mkdtemp()
+        self.output_file = os.path.join(self.directory, "out.zip")
+
+        with ZipFile(self.google_drive_cache.get_file_path(main_template_id), "r") as zipread:
+            with ZipFile(self.output_file, "w") as zipwrite:
                 for item in zipread.infolist():
                     if item.filename not in ("content.xml"):
                         data = zipread.read(item.filename)
                         zipwrite.writestr(item, data)
 
     def destroy_tempdir(self) -> None:
-        shutil.rmtree(self.dirpath)
+        shutil.rmtree(self.directory)
 
     def add_image_file(self, buffer, name: str = "image.png") -> str:
-        with ZipFile(self.main_template_path, mode="a") as zip_file:
+        with ZipFile(self.output_file, mode="a") as zipfile:
             path = os.path.join("Pictures/", f"{shortuuid.uuid()}_{name}")
-            zip_file.writestr(path, buffer.getbuffer())
+            zipfile.writestr(path, buffer.getbuffer())
 
         # Updating manifest
-        with ZipFile(self.main_template_path) as zip_file:
-            with zip_file.open("META-INF/manifest.xml") as content:
+        with ZipFile(self.output_file) as zipfile:
+            with zipfile.open("META-INF/manifest.xml") as content:
                 root = etree.parse(content).getroot()
 
-        self.remove_file_from_zip(self.main_template_path, "META-INF/manifest.xml")
+        self.remove_file_from_zip(self.output_file, "META-INF/manifest.xml")
 
         namespace = "{urn:oasis:names:tc:opendocument:xmlns:manifest:1.0}"
         root.append(
@@ -71,20 +68,18 @@ class Gdocs:
             )
         )
 
-        with ZipFile(self.main_template_path, mode="a") as zip_file:
-            zip_file.writestr("META-INF/manifest.xml", etree.tostring(root))
+        with ZipFile(self.output_file, mode="a") as zipfile:
+            zipfile.writestr("META-INF/manifest.xml", etree.tostring(root))
 
         return path
 
     def upload(self, folder_id: str, file_name: str, content: etree.Element):
-        with ZipFile(self.main_template_path, mode="a") as out_zip:
-            out_zip.writestr("content.xml", etree.tostring(content))
+        with ZipFile(self.output_file, mode="a") as zipfile:
+            zipfile.writestr("content.xml", etree.tostring(content))
 
         file_metadata = {"name": file_name, "mimeType": "application/vnd.google-apps.document", "parents": [folder_id]}
 
-        media = MediaFileUpload(
-            self.main_template_path, mimetype="application/vnd.oasis.opendocument.text", resumable=True
-        )
+        media = MediaFileUpload(self.output_file, mimetype="application/vnd.oasis.opendocument.text", resumable=True)
 
         try:
             file = self.drive_service.files().create(body=file_metadata, media_body=media).execute()
@@ -107,9 +102,8 @@ class Gdocs:
         shutil.move(f"{zip_file_path}_copy", zip_file_path)
 
     def get_content(self, file_id: str) -> etree.Element:
-        cache_file_path = self.google_drive_cache.get_file_path(file_id)
-        with ZipFile(cache_file_path) as myzip:
-            with myzip.open("content.xml") as content:
+        with ZipFile(self.google_drive_cache.get_file_path(file_id)) as zipfile:
+            with zipfile.open("content.xml") as content:
                 return etree.parse(content).getroot()
 
 

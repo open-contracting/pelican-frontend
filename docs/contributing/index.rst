@@ -66,15 +66,6 @@ Install development dependencies:
 
    npm install
 
-Export to Google Docs
-~~~~~~~~~~~~~~~~~~~~~
-
-For exporting to Google Docs, we use a Google `Service Account <https://developers.google.com/workspace/guides/create-credentials?hl=en#service-account/>`__.
-
-For managing that account someone with the admin role can go to the `OCP Google Cloud console <https://console.cloud.google.com/apis/credentials?referrer=search&orgonly=true&project=pelican-289615&supportedpurview=organizationId/>`__.
-
-For a guide on how to create a new account or download the account credentials, you can refer to the `official documentation <https://developers.google.com/workspace/guides/create-credentials?hl=en#service-account/>`__.
-
 .. _development:
 
 Development

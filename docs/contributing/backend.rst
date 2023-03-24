@@ -13,6 +13,8 @@ To view the API's documentation, :ref:`run the server<development>` and open htt
 
 The API is used by the Vue frontend (see the endpoints in ``frontend/src/config.js``) and for managing datasets in Pelican backend (see ``PELICAN_FRONTEND_URL`` in the `Data Registry <https://github.com/open-contracting/data-registry>`__).
 
+.. _environment-variables:
+
 Environment variables
 ---------------------
 
@@ -24,8 +26,8 @@ LOG_LEVEL
   The log level of the root logger
 CORS_ALLOWED_ORIGINS
   The `origins <https://github.com/adamchainz/django-cors-headers#cors_allowed_origins-sequencestr>`__ that are authorized to make cross-site HTTP requests
-TOKEN_PATH
-  The path to a `Google credentials.json file <https://developers.google.com/workspace/guides/create-credentials>`__
+SERVICE_ACCOUNT_JSON_FILE
+  The path to a `service account JSON file <https://developers.google.com/workspace/guides/create-credentials#service-account>`__
 RABBIT_URL
   The `connection string <https://pika.readthedocs.io/en/stable/examples/using_urlparameters.html#using-urlparameters>`__ for RabbitMQ
 RABBIT_EXCHANGE_NAME

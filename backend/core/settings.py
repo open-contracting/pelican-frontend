@@ -251,10 +251,13 @@ RABBIT_URL = os.getenv("RABBIT_URL", "amqp://localhost")
 # The name of the RabbitMQ exchange used by Pelican backend.
 RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
 
-# The path to a Google `credentials.json` file, for writing exports to Google Drive.
-# https://developers.google.com/workspace/guides/create-credentials
-# WARNING: If you change the production default, update `Dockerfile` and `docker-compose.yaml` to match.
-TOKEN_PATH = os.getenv("TOKEN_PATH", "/data/credentials.json" if production else "credentials.json")
+# The path to a service account JSON file, for writing exports to Google Drive.
+# https://developers.google.com/workspace/guides/create-credentials#service-account
+# WARNING: If you change the directory for the production default, update `backend/Dockerfile` and
+# `docker-compose.yaml` volumes.
+SERVICE_ACCOUNT_JSON_FILE = os.getenv(
+    "SERVICE_ACCOUNT_JSON_FILE", "/data/credentials.json" if production else "credentials.json"
+)
 
 # The Google Docs IDs for templates, when writing exports to Google Drive.
 GDOCS_TEMPLATES = {
