@@ -9,7 +9,7 @@ import shortuuid
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from google.oauth2.credentials import Credentials
+from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError, ResumableUploadError
 from googleapiclient.http import MediaFileUpload
@@ -31,7 +31,7 @@ class Gdocs:
         # TODO: use default_storage
         if os.path.exists(settings.TOKEN_PATH):
             with open(settings.TOKEN_PATH) as f:
-                self.creds = Credentials.from_authorized_user_info(json.load(f))
+                self.creds = Credentials.from_service_account_info(json.load(f))
                 self.drive_service = build("drive", "v3", credentials=self.creds, cache_discovery=False)
         else:
             raise RuntimeError("Unable to find token file")
