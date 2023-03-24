@@ -7,6 +7,12 @@ The exported *document* is built from *templates* in Google Docs.
 
 *Tags* are added to templates to generate content within the document.
 
+.. note::
+
+   The main template, sub-templates and the export folder must be shared with the
+   `Service Account <https://developers.google.com/workspace/guides/create-credentials?hl=en#service-account/>`__
+   pelican@pelican-289615.iam.gserviceaccount.com
+
 Tag syntax
 ----------
 
