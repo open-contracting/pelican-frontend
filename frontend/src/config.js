@@ -1,5 +1,5 @@
 var config = {
-    apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
+    apiBaseUrl: process.env.VUE_APP_API_BASE_URL || "/",
     apiEndpoints: {
         // GET
         dataset: "datasets/",

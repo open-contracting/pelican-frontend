@@ -36,5 +36,3 @@ jobs:
             ghcr.io/${{ github.repository }}-vue:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            VUE_APP_API_BASE_URL=http://host.docker.internal:8001/
