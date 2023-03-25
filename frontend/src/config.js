@@ -1,5 +1,5 @@
 var config = {
-    apiBaseUrl: process.env.VUE_APP_API_BASE_URL || "/",
+    apiBaseUrl: process.env.VUE_APP_API_BASE_URL || "/api/",
     apiEndpoints: {
         // GET
         dataset: "datasets/",
@@ -10,11 +10,11 @@ var config = {
         timeVarianceLevelReport: "datasets/{id}/time_based_report/",
         fieldLevelDetail: "datasets/{id}/field_level/{name}/",
         resourceLevelDetail: "datasets/{id}/compiled_release_level/{name}/",
-        datasetFilterItems: "api/dataset_filter_items",
-        datasetDistinctValues: "api/dataset_distinct_values",
+        datasetFilterItems: "dataset_filter_items",
+        datasetDistinctValues: "dataset_distinct_values",
         // POST
         createDatasetFilter: "datasets/{id}/filter/",
-        createDatasetReport: "api/generate_report"
+        createDatasetReport: "generate_report"
     }
 };
 

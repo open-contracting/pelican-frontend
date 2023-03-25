@@ -29,7 +29,7 @@ class ViewsTests(PelicanTestCase):
 
     def test_data_items_list_not_implemented(self):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.get("/data_items/")
+            response = self.client.get("/api/data_items/")
 
             self.assertEqual(response.status_code, 404)
 
@@ -38,7 +38,7 @@ class ViewsTests(PelicanTestCase):
         data_item = self.create(DataItem, dataset=dataset, data={"parties": {"id": 1}})
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/data_items/{data_item.pk}/")
+            response = self.client.get(f"/api/data_items/{data_item.pk}/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"data": {"parties": {"id": 1}}, "id": 1})
@@ -50,7 +50,7 @@ class ViewsTests(PelicanTestCase):
         self.create(DatasetFilter, parent=dataset, dataset=filtered, filter_message={"buyer": "Acme Inc."})
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/")
+            response = self.client.get("/api/datasets/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
@@ -92,7 +92,7 @@ class ViewsTests(PelicanTestCase):
         self.create(DatasetFilter, parent=dataset, dataset=filtered, filter_message={"buyer": "Acme Inc."})
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{filtered.pk}/")
+            response = self.client.get(f"/api/datasets/{filtered.pk}/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
@@ -115,7 +115,9 @@ class ViewsTests(PelicanTestCase):
     @patch("api.views.publish")
     def test_datasets_create_invalid(self, publish):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.post("/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json")
+            response = self.client.post(
+                "/api/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json"
+            )
 
             self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
@@ -123,7 +125,7 @@ class ViewsTests(PelicanTestCase):
     @patch("api.views.publish")
     def test_datasets_create_no_values(self, publish):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.post("/datasets/", {}, "application/json")
+            response = self.client.post("/api/datasets/", {}, "application/json")
 
             self.assertEqual(response.status_code, 400)
         publish.assert_not_called()
@@ -132,7 +134,7 @@ class ViewsTests(PelicanTestCase):
     def test_datasets_create(self, publish):
         with self.assertNumQueries(0, using="data"):
             response = self.client.post(
-                "/datasets/", {"name": "anything", "collection_id": "123", "xxx": "xxx"}, "application/json"
+                "/api/datasets/", {"name": "anything", "collection_id": "123", "xxx": "xxx"}, "application/json"
             )
 
             self.assertEqual(response.status_code, 202)
@@ -143,7 +145,7 @@ class ViewsTests(PelicanTestCase):
     @patch("api.views.publish")
     def test_datasets_filter_invalid(self, publish):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.post("/datasets/123/filter/", {"buyer": "xxx"}, "application/json")
+            response = self.client.post("/api/datasets/123/filter/", {"buyer": "xxx"}, "application/json")
 
             self.assertEqual(response.status_code, 400)
             publish.assert_not_called()
@@ -151,7 +153,7 @@ class ViewsTests(PelicanTestCase):
     @patch("api.views.publish")
     def test_datasets_filter_no_values(self, publish):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.post("/datasets/123/filter/", {}, "application/json")
+            response = self.client.post("/api/datasets/123/filter/", {}, "application/json")
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with(
@@ -161,7 +163,9 @@ class ViewsTests(PelicanTestCase):
     @patch("api.views.publish")
     def test_datasets_filter(self, publish):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.post("/datasets/123/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json")
+            response = self.client.post(
+                "/api/datasets/123/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json"
+            )
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with(
@@ -171,7 +175,7 @@ class ViewsTests(PelicanTestCase):
     @patch("api.views.publish")
     def test_datasets_destroy(self, publish):
         with self.assertNumQueries(0, using="data"):
-            response = self.client.delete("/datasets/123/")
+            response = self.client.delete("/api/datasets/123/")
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with({"dataset_id": 123}, "wiper_init")
@@ -180,7 +184,7 @@ class ViewsTests(PelicanTestCase):
         self.create(Dataset, name="anything")
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/find_by_name/")
+            response = self.client.get("/api/datasets/find_by_name/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {})
@@ -189,7 +193,7 @@ class ViewsTests(PelicanTestCase):
         self.create(Dataset, name="anything")
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/find_by_name/?name=other")
+            response = self.client.get("/api/datasets/find_by_name/?name=other")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {})
@@ -198,7 +202,7 @@ class ViewsTests(PelicanTestCase):
         dataset = self.create(Dataset, name="anything")
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/find_by_name/?name=anything")
+            response = self.client.get("/api/datasets/find_by_name/?name=anything")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"id": dataset.pk})
@@ -208,7 +212,7 @@ class ViewsTests(PelicanTestCase):
         self.create(Report, dataset=dataset, type="field_level_check", data={"ocid": {}})
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/field_level_report/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level_report/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"ocid": {}})
@@ -218,7 +222,7 @@ class ViewsTests(PelicanTestCase):
         self.create(Report, dataset=dataset, type="resource_level_check", data={"coherent.dates": {}})
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/compiled_release_level_report/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/compiled_release_level_report/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"coherent.dates": {}})
@@ -243,7 +247,7 @@ class ViewsTests(PelicanTestCase):
         )
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/dataset_level_report/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/dataset_level_report/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
@@ -278,7 +282,7 @@ class ViewsTests(PelicanTestCase):
         )
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/time_based_report/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/time_based_report/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
@@ -305,7 +309,7 @@ class ViewsTests(PelicanTestCase):
         dataset = self.create(Dataset, name="anything")
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/status/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {})
@@ -315,7 +319,7 @@ class ViewsTests(PelicanTestCase):
         self.create(ProgressMonitorDataset, dataset=dataset)
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/status/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"phase": None, "state": None})
@@ -325,7 +329,7 @@ class ViewsTests(PelicanTestCase):
         self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/status/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
@@ -334,7 +338,7 @@ class ViewsTests(PelicanTestCase):
         dataset = self.create(Dataset, name="anything")
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/metadata/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {})
@@ -343,7 +347,7 @@ class ViewsTests(PelicanTestCase):
         dataset = self.create(Dataset, name="anything", meta={"collection_metadata": {"ocid_prefix": "ocds-213czf"}})
 
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/metadata/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/metadata/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"ocid_prefix": "ocds-213czf"})
@@ -354,7 +358,7 @@ class ViewsTests(PelicanTestCase):
         self.create(FieldLevelCheck, dataset=dataset, data_item=data_item, result={"checks": {"parties.id": [{}]}})
 
         with self.assertNumQueries(2, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/coverage/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/coverage/")
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
@@ -413,7 +417,7 @@ class ViewsTests(PelicanTestCase):
         )
 
         with self.assertNumQueries(2, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/field_level/ocid/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/ocid/")
             detail = json.loads(response.content)
             detail.pop("time")
 
@@ -440,7 +444,7 @@ class ViewsTests(PelicanTestCase):
         self.create(ResourceLevelCheckExamples, dataset=dataset, check_name="coherent.dates", data={"c": "d"})
 
         with self.assertNumQueries(2, using="data"):
-            response = self.client.get(f"/datasets/{dataset.pk}/compiled_release_level/coherent.dates/")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/compiled_release_level/coherent.dates/")
             detail = json.loads(response.content)
             detail.pop("time")
 
@@ -449,54 +453,54 @@ class ViewsTests(PelicanTestCase):
 
     def test_datasets_field_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/field_level_report/")
+            response = self.client.get("/api/datasets/123/field_level_report/")
 
             self.assertEqual(response.status_code, 404)
 
     def test_datasets_compiled_release_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/compiled_release_level_report/")
+            response = self.client.get("/api/datasets/123/compiled_release_level_report/")
 
             self.assertEqual(response.status_code, 404)
 
     def test_datasets_dataset_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/dataset_level_report/")
+            response = self.client.get("/api/datasets/123/dataset_level_report/")
 
             self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
 
     def test_datasets_time_based_report_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/time_based_report/")
+            response = self.client.get("/api/datasets/123/time_based_report/")
 
             self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
 
     def test_datasets_status_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/status/")
+            response = self.client.get("/api/datasets/123/status/")
 
             self.assertEqual(response.status_code, 404)
 
     def test_datasets_metadata_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/metadata/")
+            response = self.client.get("/api/datasets/123/metadata/")
 
             self.assertEqual(response.status_code, 404)
 
     def test_datasets_coverage_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/coverage/")
+            response = self.client.get("/api/datasets/123/coverage/")
 
             self.assertEqual(response.status_code, 404)
 
     def test_field_level_detail_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/field_level/ocid/")
+            response = self.client.get("/api/datasets/123/field_level/ocid/")
 
             self.assertEqual(response.status_code, 404)
 
     def test_resource_level_detail_no_dataset(self):
         with self.assertNumQueries(1, using="data"):
-            response = self.client.get("/datasets/123/compiled_release_level/coherent.dates/")
+            response = self.client.get("/api/datasets/123/compiled_release_level/coherent.dates/")
 
             self.assertEqual(response.status_code, 404)

@@ -43,19 +43,19 @@ This changelog only notes major changes, to notify other developers.
          * - Before
            - After
          * - ``POST api/dataset_start``
-           - ``POST datasets/``
+           - ``POST api/datasets/``
          * - ``POST api/create_dataset_filter``
-           - ``POST datasets/{id}/filter/``
+           - ``POST api/datasets/{id}/filter/``
          * - ``POST api/dataset_id``
-           - ``GET datasets/find_by_name/``
+           - ``GET api/datasets/find_by_name/``
          * - ``POST api/dataset_wipe``
-           - ``DELETE datasets/{id}/``
+           - ``DELETE api/datasets/{id}/``
          * - ``GET api/dataset_status/{id}``
-           - ``GET datasets/{id}/status/``
+           - ``GET api/datasets/{id}/status/``
          * - ``GET api/dataset_availability/{id}``
-           - ``GET datasets/{id}/coverage/``
+           - ``GET api/datasets/{id}/coverage/``
          * - ``GET api/dataset_metadata/{id}``
-           - ``GET datasets/{id}/metadata/``
+           - ``GET api/datasets/{id}/metadata/``
 
    -  Status code:
 
