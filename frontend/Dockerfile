@@ -7,7 +7,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npx vue-cli-service build
+ARG VUE_APP_API_BASE_URL
+ENV VUE_APP_API_BASE_URL=${VUE_APP_API_BASE_URL:-http://127.0.0.1:8000/}
+RUN VUE_APP_API_BASE_URL=${VUE_APP_API_BASE_URL} npx vue-cli-service build
 
 FROM nginxinc/nginx-unprivileged:latest as production-stage
 USER root
