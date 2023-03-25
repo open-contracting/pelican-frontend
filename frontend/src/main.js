@@ -15,14 +15,6 @@ import { messages as cs } from "./messages/cs.js";
 import { Plugin } from "vue-fragment";
 import DatePick from "vue-date-pick";
 
-if (window.navigator && navigator.serviceWorker) {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        for (let registration of registrations) {
-            registration.unregister();
-        }
-    });
-}
-
 Vue.use(VueGoogleCharts);
 Vue.use(Plugin);
 Vue.use(BootstrapVue);
