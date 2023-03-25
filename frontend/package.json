@@ -34,7 +34,6 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.0-rc.2",
     "@vue/cli-plugin-eslint": "^5.0.0-rc.2",
-    "@vue/cli-plugin-pwa": "^5.0.0-rc.2",
     "@vue/cli-plugin-unit-mocha": "^5.0.0-rc.2",
     "@vue/cli-service": "^5.0.8",
     "@vue/test-utils": "1.0.0-beta.29",
