@@ -14,7 +14,7 @@ urlpatterns = router.urls + [
     path("datasets/<pk>/compiled_release_level/<name>/", views.ResourceLevelDetail.as_view()),
     # https://www.django-rest-framework.org/api-guide/schemas/#generating-a-dynamic-schema-with-schemaview
     path(
-        "openapi",
+        "api/openapi",
         get_schema_view(
             title="Controller API", description="Endpoints for managing datasets in Pelican backend.", version="1.0.0"
         ),
@@ -22,7 +22,7 @@ urlpatterns = router.urls + [
     ),
     # https://www.django-rest-framework.org/topics/documenting-your-api/#a-minimal-example-with-swagger-ui
     path(
-        "swagger-ui/",
+        "api/swagger-ui/",
         TemplateView.as_view(template_name="swagger-ui.html", extra_context={"schema_url": "openapi-schema"}),
         name="swagger-ui",
     ),

@@ -18,12 +18,12 @@ from tests import PelicanTestCase
 
 class ViewsTests(PelicanTestCase):
     def test_openapi(self):
-        response = self.client.get("/openapi")
+        response = self.client.get("/api/openapi")
 
         self.assertEqual(response.status_code, 200)
 
     def test_swagger_ui(self):
-        response = self.client.get("/swagger-ui/")
+        response = self.client.get("/api/swagger-ui/")
 
         self.assertEqual(response.status_code, 200)
 
