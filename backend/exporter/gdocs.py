@@ -144,7 +144,6 @@ class GoogleDriveCache:
         version = int(drive_response["version"])
 
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-
             drive_response = None
             for i in range(NO_OF_ATTEMPTS):
                 try:
