@@ -10,11 +10,11 @@ var config = {
         timeVarianceLevelReport: "datasets/{id}/time_based_report/",
         fieldLevelDetail: "datasets/{id}/field_level/{name}/",
         resourceLevelDetail: "datasets/{id}/compiled_release_level/{name}/",
-        datasetFilterItems: "dataset_filter_items",
-        datasetDistinctValues: "dataset_distinct_values",
+        datasetFilterItems: "dataset-filter-items",
+        datasetDistinctValues: "dataset-distinct-values",
         // POST
         createDatasetFilter: "datasets/{id}/filter/",
-        createDatasetReport: "generate_report"
+        createDatasetReport: "generate-report"
     }
 };
 
