@@ -87,14 +87,14 @@ def dataset_filter_items(request):
     return JsonResponse({"items": items})
 
 
-# json_path requires shape: field1.field2.field3 ...
-def dataset_distinct_values(request, dataset_id, json_path, sub_string=""):
-    json_path = "data__" + "__".join(json_path.split("."))
-    kwargs = {"dataset_id": dataset_id, f"{json_path}__icontains": sub_string}
+# field is in the format: tender.procuringEntity.name
+def dataset_distinct_values(request, dataset_id, field, query=""):
+    lookup = "data__" + "__".join(field.split("."))
+    kwargs = {"dataset_id": dataset_id, f"{lookup}__icontains": query}
     data_items_query = (
-        DataItem.objects.filter(**kwargs).values(json_path).annotate(count=Count(json_path)).order_by("-count")
+        DataItem.objects.filter(**kwargs).values(lookup).annotate(count=Count(lookup)).order_by("-count")
     )
-    query_set = data_items_query.values_list(json_path, "count").distinct()[:200]
+    query_set = data_items_query.values_list(lookup, "count").distinct()[:200]
     return JsonResponse([{"value": el[0], "count": el[1]} for el in query_set], safe=False)
 
 

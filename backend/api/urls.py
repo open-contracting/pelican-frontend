@@ -28,13 +28,13 @@ urlpatterns = router.urls + [
     ),
     path("dataset_filter_items", views.dataset_filter_items, name="dataset_filter_items"),
     path(
-        "dataset_distinct_values/<dataset_id>/<json_path>",
+        "dataset_distinct_values/<dataset_id>/<field>",
         views.dataset_distinct_values,
-        name="dataset_distinct_values",
+        name="dataset-distinct-values",
     ),
     path(
-        "dataset_distinct_values/<dataset_id>/<json_path>/<sub_string>",
+        "dataset_distinct_values/<dataset_id>/<field>/<query>",
         views.dataset_distinct_values,
-        name="dataset_distinct_values",
+        name="dataset-distinct-values-query",
     ),
 ]
