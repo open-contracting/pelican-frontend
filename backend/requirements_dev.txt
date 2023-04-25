@@ -199,7 +199,7 @@ six==1.12.0
     #   google-auth
     #   python-dateutil
     #   virtualenv
-sqlparse==0.3.0
+sqlparse==0.4.4
     # via
     #   -r backend/requirements.txt
     #   django
