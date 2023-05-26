@@ -12,6 +12,8 @@ asgiref==3.4.1
     #   django
 black==21.12b0
     # via -r backend/requirements_dev.in
+build==0.10.0
+    # via pip-tools
 cachetools==4.1.0
     # via
     #   -r backend/requirements.txt
@@ -23,11 +25,11 @@ certifi==2022.12.7
     #   sentry-sdk
 cfgv==3.2.0
     # via pre-commit
-chardet==3.0.4
+charset-normalizer==3.1.0
     # via
     #   -r backend/requirements.txt
     #   requests
-click==7.1.2
+click==8.1.3
     # via
     #   black
     #   pip-tools
@@ -115,10 +117,10 @@ numpy==1.22.1
     # via
     #   -r backend/requirements.txt
     #   matplotlib
+packaging==23.1
+    # via build
 pathspec==0.9.0
     # via black
-pep517==0.10.0
-    # via pip-tools
 pika==1.2.0
     # via
     #   -r backend/requirements.txt
@@ -127,7 +129,7 @@ pillow==9.3.0
     # via
     #   -r backend/requirements.txt
     #   matplotlib
-pip-tools==6.4.0
+pip-tools==6.13.0
     # via -r backend/requirements_dev.in
 platformdirs==2.4.0
     # via black
@@ -160,6 +162,8 @@ pyparsing==2.4.7
     #   -r backend/requirements.txt
     #   httplib2
     #   matplotlib
+pyproject-hooks==1.0.0
+    # via build
 python-dateutil==2.8.0
     # via
     #   -r backend/requirements.txt
@@ -171,7 +175,7 @@ pytz==2019.1
     #   google-api-core
 pyyaml==5.4.1
     # via pre-commit
-requests==2.25.1
+requests==2.31.0
     # via
     #   -r backend/requirements.txt
     #   coveralls
@@ -204,11 +208,11 @@ sqlparse==0.4.4
     #   -r backend/requirements.txt
     #   django
 toml==0.10.2
-    # via
-    #   pep517
-    #   pre-commit
+    # via pre-commit
 tomli==1.2.2
-    # via black
+    # via
+    #   black
+    #   build
 typing-extensions==3.10.0.2
     # via black
 uritemplate==3.0.1
