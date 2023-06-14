@@ -12,12 +12,12 @@ RUN groupadd -r runner && useradd --no-log-init -r -g runner runner
 # Must match the directory of the settings.SERVICE_ACCOUNT_JSON_FILE default value.
 RUN mkdir -p /data && chown -R runner:runner /data
 
-COPY requirements.txt /tmp/requirements.txt
+COPY backend/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /workdir
 USER runner:runner
-COPY --chown=runner:runner . .
+COPY --chown=runner:runner backend .
 
 ENV DJANGO_ENV=production
 ENV WEB_CONCURRENCY=2
