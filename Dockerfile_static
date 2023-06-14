@@ -1,0 +1,25 @@
+# https://cli.vuejs.org/guide/deployment.html#docker-nginx
+FROM nikolaik/python-nodejs:python3.8-nodejs18 as build-stage
+
+COPY backend/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+WORKDIR /workdir
+
+COPY frontend/package*.json ./
+RUN npm install
+
+COPY . .
+
+ENV DJANGO_ENV=production
+
+WORKDIR /workdir/frontend
+RUN npx vue-cli-service build --dest ../backend/static
+WORKDIR /workdir/backend
+RUN python manage.py collectstatic --noinput -v2
+
+FROM nginxinc/nginx-unprivileged:latest as production-stage
+USER root
+COPY --from=build-stage --chown=nginx:root /workdir/backend/static /usr/share/nginx/html/static
+COPY --chown=nginx:root frontend/default.conf /etc/nginx/conf.d/default.conf
+USER nginx
