@@ -10,6 +10,7 @@ lxml
 matplotlib
 pillow
 psycopg2
+pyyaml
 sentry-sdk
 shortuuid
 simplejson

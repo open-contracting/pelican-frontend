@@ -1,7 +1,7 @@
 # https://cli.vuejs.org/guide/deployment.html#docker-nginx
 FROM nikolaik/python-nodejs:python3.8-nodejs18 as build-stage
 
-COPY backend/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 WORKDIR /workdir

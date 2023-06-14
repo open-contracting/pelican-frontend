@@ -6,9 +6,6 @@ jobs:
   build:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -28,5 +25,5 @@ jobs:
       - run: pip install -r requirements_dev.txt
       - env:
           # https://www.django-rest-framework.org/api-guide/schemas/#generating-an-openapi-schema
-          STANDARD_MAINTENANCE_SCRIPTS_IGNORE: uritemplate
+          STANDARD_MAINTENANCE_SCRIPTS_IGNORE: uritemplate,pyyaml
         run: pytest /tmp/test_requirements.py

@@ -1,2 +1,2 @@
--r ../backend/requirements.txt
+-r ../requirements.txt
 furo
