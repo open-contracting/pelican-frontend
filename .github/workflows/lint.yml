@@ -26,4 +26,5 @@ jobs:
       - env:
           # https://www.django-rest-framework.org/api-guide/schemas/#generating-an-openapi-schema
           STANDARD_MAINTENANCE_SCRIPTS_IGNORE: uritemplate,pyyaml
+        working-directory: backend
         run: pytest /tmp/test_requirements.py
