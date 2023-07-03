@@ -45,16 +45,17 @@ cycler==0.10.0
     #   matplotlib
 distlib==0.3.1
     # via virtualenv
-dj-database-url==0.5.0
+dj-database-url==2.0.0
     # via -r requirements.txt
 django==4.2.2
     # via
     #   -r requirements.txt
+    #   dj-database-url
     #   django-cors-headers
     #   djangorestframework
-django-cors-headers==3.10.0
+django-cors-headers==4.1.0
     # via -r requirements.txt
-djangorestframework==3.12.4
+djangorestframework==3.14.0
     # via -r requirements.txt
 docopt==0.6.2
     # via coveralls
@@ -175,6 +176,7 @@ python-dateutil==2.8.0
 pytz==2019.1
     # via
     #   -r requirements.txt
+    #   djangorestframework
     #   google-api-core
 pyyaml==6.0
     # via
@@ -216,8 +218,11 @@ toml==0.10.2
     # via pre-commit
 tomli==1.2.2
     # via black
-typing-extensions==3.10.0.2
-    # via black
+typing-extensions==4.7.1
+    # via
+    #   -r requirements.txt
+    #   black
+    #   dj-database-url
 uritemplate==3.0.1
     # via
     #   -r requirements.txt
