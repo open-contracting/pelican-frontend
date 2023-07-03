@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-asgiref==3.4.1
+asgiref==3.7.2
     # via django
 cachetools==4.1.0
     # via google-auth
@@ -18,7 +18,7 @@ cycler==0.10.0
     # via matplotlib
 dj-database-url==0.5.0
     # via -r requirements.in
-django==3.2.19
+django==4.2.2
     # via
     #   -r requirements.in
     #   django-cors-headers
@@ -86,9 +86,7 @@ pyparsing==2.4.7
 python-dateutil==2.8.0
     # via matplotlib
 pytz==2019.1
-    # via
-    #   django
-    #   google-api-core
+    # via google-api-core
 pyyaml==6.0
     # via -r requirements.in
 requests==2.31.0

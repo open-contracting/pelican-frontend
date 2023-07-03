@@ -6,7 +6,7 @@
 #
 appdirs==1.4.4
     # via virtualenv
-asgiref==3.4.1
+asgiref==3.7.2
     # via
     #   -r requirements.txt
     #   django
@@ -47,7 +47,7 @@ distlib==0.3.1
     # via virtualenv
 dj-database-url==0.5.0
     # via -r requirements.txt
-django==3.2.19
+django==4.2.2
     # via
     #   -r requirements.txt
     #   django-cors-headers
@@ -175,7 +175,6 @@ python-dateutil==2.8.0
 pytz==2019.1
     # via
     #   -r requirements.txt
-    #   django
     #   google-api-core
 pyyaml==6.0
     # via

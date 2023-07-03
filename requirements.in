@@ -1,6 +1,6 @@
 dj-database-url
 django-cors-headers
-django<4
+django<5
 djangorestframework
 jsonref
 google-api-python-client
