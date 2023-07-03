@@ -15,4 +15,4 @@ sentry-sdk
 shortuuid
 simplejson
 uritemplate
-yapw
+yapw[perf]
