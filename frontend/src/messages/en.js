@@ -301,9 +301,9 @@ export const messages = {
             failed: "Not all values are unique.",
             tender_id: {
                 name: "Unique tender identification",
-                description: "<code>tender.id</code> is unique within the whole dataset",
+                description: "<code>tender.id</code> is unique within the whole dataset.",
                 description_long:
-                    "For each compiled release verifies that its <code>tender.id</code> is unique within the dataset. Such releases that do not have <code>tender.id</code> set are excluded from this calculation"
+                    "For each compiled release verifies that its <code>tender.id</code> is unique within the dataset. Such releases that do not have <code>tender.id</code> set are excluded from this calculation."
             }
         },
         misc: {
