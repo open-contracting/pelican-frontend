@@ -453,7 +453,7 @@ export const messages = {
             parties_roles: {
                 name: "Parties are referenced",
                 description:
-                    "<p>For each role of each party, there is a referencing object. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it is referenced by at least one award's <code>suppliers</code> entry and at least one transaction's <code>payee</code> field. The roles to test are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The 'buyer' role is not tested, because there can be multiple buyers in the <code>parties</code> array, but there is only one <code>buyer</code> field for the primary buyer.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
+                    "<p>For each role of each party, there is an organization reference. <i>Example</i>: If a party has the roles 'supplier' and 'payee', it is referenced by at least one award's <code>suppliers</code> entry and at least one transaction's <code>payee</code> field. The roles to test are:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>The 'buyer' role is not tested, because there can be multiple buyers in the <code>parties</code> array, but there is only one <code>buyer</code> field for the primary buyer.</p><p>Since the test operates on all organization objects, the test silently ignores any party whose <code>id</code> field is missing, as it cannot be referenced.</p>"
             },
             period_duration_in_days: {
                 name: "Period's duration is consistent with start and end dates",
