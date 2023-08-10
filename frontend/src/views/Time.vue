@@ -39,7 +39,7 @@
 
 <script>
 import Dashboard from "@/views/layouts/Dashboard.vue";
-import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck";
+import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 

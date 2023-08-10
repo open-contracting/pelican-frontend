@@ -209,13 +209,14 @@
 </template>
 
 <script>
-import BarChartBig from "@/components/BarChartBig";
-import BarChartSingleValue from "@/components/BarChartSingleValue";
-import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
-import datasetMixin from "@/plugins/datasetMixins.js";
+import 'vue-json-pretty/lib/styles.css';
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
+import BarChartBig from "@/components/BarChartBig.vue";
+import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
+import InlineBar from "@/components/InlineBar.vue";
+import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
     name: "DatasetCheckDetail",

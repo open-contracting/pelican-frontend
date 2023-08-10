@@ -505,10 +505,11 @@
 </template>
 
 <script>
-import InlineBar from "@/components/InlineBar";
 import VueJsonPretty from "vue-json-pretty";
+import 'vue-json-pretty/lib/styles.css';
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import InlineBar from "@/components/InlineBar.vue";
 import timeMixins from "@/plugins/timeMixins.js";
 
 export default {

@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import InlineBar from "@/components/InlineBar";
+import InlineBar from "@/components/InlineBar.vue";
 import ResourceCheckMixins from "@/plugins/resourceCheckMixins.js";
 
 export default {

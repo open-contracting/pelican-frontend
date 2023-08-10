@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import ResourceLevelRow from "@/components/ResourceLevelRow";
+import ResourceLevelRow from "@/components/ResourceLevelRow.vue";
 import Tooltip from "@/components/Tooltip.vue";
 
 export default {

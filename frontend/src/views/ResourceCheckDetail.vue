@@ -91,11 +91,12 @@
 
 <script>
 import VueJsonPretty from "vue-json-pretty";
+import 'vue-json-pretty/lib/styles.css';
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
-import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 
 export default {
     name: "ResourceCheckDetail",

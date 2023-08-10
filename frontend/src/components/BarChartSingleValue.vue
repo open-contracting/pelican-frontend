@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import InlineBar from "@/components/InlineBar";
+import InlineBar from "@/components/InlineBar.vue";
 
 export default {
     components: {
