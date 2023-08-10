@@ -3,7 +3,6 @@
     <!-- <h5>{{ $t("extension.metadata") }}</h5> -->
     <vue-json-pretty
       :highlight-mouseover-node="true"
-      :deep="2"
       :data="extensionData"
     />
   </div>

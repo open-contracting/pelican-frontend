@@ -470,7 +470,7 @@
       <h5>{{ $t("preview.metadata") }}</h5>
       <vue-json-pretty
         :highlight-mouseover-node="true"
-        :deep="2"
+        :deep="3"
         :data="previewMetadata"
       />
 

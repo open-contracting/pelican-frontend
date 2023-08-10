@@ -90,21 +90,21 @@
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_passed }}
+                {{ check.meta.total_passed | formatNumber }}
               </div>
               {{ $t("datasetLevel.numeric.passed") }}
             </div>
 
             <div class="numeric_result color_failed col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_processed - check.meta.total_passed }}
+                {{ (check.meta.total_processed - check.meta.total_passed) | formatNumber }}
               </div>
               {{ $t("datasetLevel.numeric.failed") }}
             </div>
 
             <div class="numeric_result color_na col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_processed }}
+                {{ check.meta.total_processed | formatNumber }}
               </div>
               {{ $t("datasetLevel.numeric.processed") }}
             </div>
@@ -174,7 +174,7 @@
       <h5>{{ $t("preview.metadata") }}</h5>
       <vue-json-pretty
         :highlight-mouseover-node="true"
-        :deep="2"
+        :deep="3"
         :data="previewMetadata"
       />
 
@@ -376,7 +376,7 @@ export default {
 
 .check_numeric_value {
     display: block;
-    font-size: 60px;
+    font-size: 40px;
     font-weight: 700;
 }
 
