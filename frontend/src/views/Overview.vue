@@ -185,8 +185,7 @@
                       target="_blank"
                     >{{
                       e.name.hasOwnProperty("en") ? e.name["en"] : e.name
-                    }}</a>
-                    <template v-if="i + 1 < collection.extensions.length">, </template>
+                    }}</a><template v-if="i + 1 < collection.extensions.length">, </template>
                   </span>
                 </template>
               </div>

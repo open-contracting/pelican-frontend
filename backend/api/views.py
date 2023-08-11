@@ -373,8 +373,7 @@ class DatasetViewSet(viewsets.ViewSet):
             statement = """
                 SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
                 FROM {table} flc, jsonb_each(flc.result->'checks') c
-                WHERE dataset_id = %(dataset_id)s
-                    AND c.key IN %(checks)s
+                WHERE dataset_id = %(dataset_id)s AND c.key IN %(checks)s
                 GROUP BY c.key
                 ORDER BY c.key
                 """
