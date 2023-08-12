@@ -192,6 +192,7 @@ class Dataset(TemplateTag):
                 data["checkedCount"] = check.meta["total_processed"]
                 data["passedCount"] = check.meta["total_passed"]
                 data["failedCount"] = check.meta["total_failed"]
+                # For backwards compatibility until dataset 4 is deleted.
                 data["passedExamples"] = [
                     example["original_process"]["ocid"] if "original_process" in example else example["ocid"]
                     for example in check.meta["passed_examples"]
@@ -200,6 +201,8 @@ class Dataset(TemplateTag):
                     example["original_process"]["ocid"] if "original_process" in example else example["ocid"]
                     for example in check.meta["failed_examples"]
                 ]
+                # data["passedExamples"] = [example["ocid"] for example in check.meta["passed_examples"]]
+                # data["failedExamples"] = [example["ocid"] for example in check.meta["failed_examples"]]
             elif check_type == "biggest_share":
                 data["buyerIdentifierId"] = check.meta["specifics"]["buyer.identifier.id"]
                 data["buyerIdentifierScheme"] = check.meta["specifics"]["buyer.identifier.scheme"]
