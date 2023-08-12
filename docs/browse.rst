@@ -3,12 +3,12 @@ Read a report
 
 The reports are self-documenting, with explanations in paragraphs and tooltips.
 
-Check metadata is displayed verbatim. In principle, any useful metadata should be rendered elsewhere (`#34 <https://github.com/open-contracting/pelican-frontend/issues/34>`__, `#49 <https://github.com/open-contracting/pelican-frontend/issues/49>`__, `#50 <https://github.com/open-contracting/pelican-frontend/issues/50>`__. That said, here are the semantics of the members:
+Check metadata is displayed verbatim. In principle, any useful metadata should be rendered elsewhere (`#34 <https://github.com/open-contracting/pelican-frontend/issues/34>`__, `#49 <https://github.com/open-contracting/pelican-frontend/issues/49>`__, `#50 <https://github.com/open-contracting/pelican-frontend/issues/50>`__). That said, here are the semantics of the properties:
 
 .. See docstring for complete_result_resource() and compiled-release.rst in pelican-backend.
 
-Common members
---------------
+Common properties
+-----------------
 
 result
   Whether the check passes.

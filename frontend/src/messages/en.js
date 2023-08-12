@@ -210,14 +210,14 @@ export const messages = {
                 description:
                     "The total value of the top 1% of award values is less than the total value of the remaining award values. Failure indicates extreme outliers in the top 1%.",
                 description_long:
-                    "<p>The sum of the top 1% of award values doesn't exceed 50% of the sum of all award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                    "<p>The total value of the top 1% of award values is less than the total value of the remaining award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             contracts_value: {
                 name: "Contracts value distribution",
                 description:
                     "The total value of the top 1% of contract values is less than the total value of the remaining contract values. Failure indicates extreme outliers in the top 1%.",
                 description_long:
-                    "<p>The sum of the top 1% of contract values doesn't exceed 50% of the sum of all contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
+                    "<p>The total value of the top 1% of contract values is less than the total value of the remaining contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>"
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
@@ -300,10 +300,10 @@ export const messages = {
             ok: "All values are unique.",
             failed: "Not all values are unique.",
             tender_id: {
-                name: "Unique tender identification",
-                description: "<code>tender.id</code> is unique within the whole dataset.",
+                name: "Tender ID is unique",
+                description: "Each <code>tender.id</code> is unique across the collection.",
                 description_long:
-                    "For each compiled release verifies that its <code>tender.id</code> is unique within the dataset. Such releases that do not have <code>tender.id</code> set are excluded from this calculation."
+                    "<p>Each <code>tender.id</code> is across within the collection.</p><p>The test is skipped if the field is never present.</p>"
             }
         },
         misc: {
@@ -311,7 +311,7 @@ export const messages = {
                 name: "URL availability",
                 description: "A random sample of 100 URL values return no responses with HTTP error codes.",
                 description_long:
-                    "A random sample of 100 URL values return no responses with HTTP error codes. The URL fields are: <ul><li><code>planning.documents.url</code></li><li><code>tender.documents.url</code></li><li><code>awards.documents.url</code></li><li><code>contracts.documents.url</code></li></ul>"
+                    "<p>A random sample of 100 URL values return responses without HTTP error codes. The URL fields are:</p><ul><li><code>planning.documents.url</code></li><li><code>tender.documents.url</code></li><li><code>awards.documents.url</code></li><li><code>contracts.documents.url</code></li><li><code>contracts.implementation.documents.url</code></li></ul><p>The test is skipped if fewer than 100 URL values are present.</p>"
             }
         },
         consistent: {
@@ -705,29 +705,29 @@ export const messages = {
         check: {
             header: "Checking compiled release pairs:",
             header_tooltip:
-                "Once a pair is found, the check is run. <i>Example</i>: The buyer should be invariant across time. If the two releases have different values for the <code>buyer</code> field, this test fails.",
+                "Once a pair is found, the check is run. <i>Example</i>: The buyer is invariant across time. If the two releases have different values for the <code>buyer</code> field, the test fails.",
             ok: "Passed",
             failed: "Failed"
         },
         phase_stable: {
             name: "Stage stability",
             description:
-                "A compiled release in the newer collection should have at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection.",
+                "A compiled release in the newer collection has at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection.",
             descriptionLong:
-                "A compiled release in the newer collection should have at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection."
+                "A compiled release in the newer collection has at least the same number of <code>planning</code>, <code>tender</code>, <code>awards</code> and <code>contracts</code> objects as its pair in the older collection."
         },
         ocid: {
             name: "OCID persistence",
             description:
-                "All OCIDs in an older collection of a data source should be present in this newer collection of the same source.",
+                "All OCIDs in an older collection of a data source are present in this newer collection of the same source.",
             descriptionLong:
-                "<p>All OCIDs in an older collection of a data source should be present in this newer collection of the same source.</p><p>This check always has the same results for pairs found and pairs passed, because no further tests are run in the latter step.</p>"
+                "<p>All OCIDs in an older collection of a data source are present in this newer collection of the same source.</p><p>This check always has the same results for pairs found and pairs passed, because no further tests are run in the latter step.</p>"
         },
         tender_title: {
             name: "Tender title stability",
-            description: "The tender title should be invariant across time.",
+            description: "The tender title is invariant across time.",
             descriptionLong:
-                "<p>The tender title should be invariant across time.</p><p>If an older compiled release sets the <code>tender.title</code> field, then it is attempted to be paired with a newer compiled release. If the lowercased, whitespace-normalized values of the two <code>tender.title</code> fields in the two compiled releases are equal, the test passes.</p>"
+                "<p>The tender title is invariant across time.</p><p>If a compiled release in the older collection sets the <code>tender.title</code> field, then its pair in the newer collection has a matching <code>tender.title</code> field. Values are lowercased and whitespace-normalized for matching.</p>"
         },
         filterDropdown: {
             all: "All",
