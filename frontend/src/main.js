@@ -11,7 +11,6 @@ import VueSimpleAlert from "vue-simple-alert";
 import Clipboard from "v-clipboard";
 import Multiselect from "vue-multiselect";
 import { messages as en } from "./messages/en.js";
-import { messages as cs } from "./messages/cs.js";
 import { Plugin } from "vue-fragment";
 import DatePick from "vue-date-pick";
 
@@ -25,10 +24,9 @@ Vue.use(Multiselect);
 Vue.component("DatePick", DatePick);
 Vue.component("Multiselect", Multiselect);
 const i18n = new VueI18n({
-    locale: "en", // set locale
+    locale: "en",
     messages: {
-        en: en,
-        cs: cs
+        en: en
     }
 });
 
