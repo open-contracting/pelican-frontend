@@ -25,7 +25,6 @@ export default {
                 },
                 fontName: "GTEestiProDisplay-Regular",
                 chartArea: { left: 10, top: 20, width: "100%", height: "85%" },
-                pieHole: 0.4,
                 sliceVisibilityThreshold: 0.5 / 360,
                 colors: []
             }
