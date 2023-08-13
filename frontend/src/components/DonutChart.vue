@@ -1,13 +1,12 @@
 <template>
   <GChart
-    type="PieChart"
+    type="BarChart"
     :data="chartData"
     :options="chartOptions"
   />
 </template>
 
 <script>
-const chroma = require("chroma-js");
 import { GChart } from "vue-google-charts";
 import datasetMixin from "@/plugins/datasetMixins.js";
 
@@ -17,37 +16,56 @@ export default {
     props: ["check"],
     data() {
         return {
-            // Array will be automatically processed with visualization.arrayToDataTable function
             chartData: [],
+            // https://developers.google.com/chart/interactive/docs/gallery/barchart
             chartOptions: {
+                height: 300,
                 legend: {
-                    alignment: "center"
+                    position: "none",
                 },
+                chartArea: {
+                    top: 0,
+                    height: 280,
+                },
+                hAxis: {
+                    viewWindowMode: "maximized",
+                    minValue: 0,
+                },
+                annotations: {
+                    stem: {
+                        color: "transparent",
+                        length: 5,
+                    }
+                },
+                colors: ["#555cb3"],
                 fontName: "GTEestiProDisplay-Regular",
-                chartArea: { left: 10, top: 20, width: "100%", height: "85%" },
-                sliceVisibilityThreshold: 0.5 / 360,
-                colors: []
+                fontSize: 14,
             }
         };
     },
     mounted() {
-        this.chartData.push(["Category", "Share"]);
+        this.chartData.push([
+            this.$t("datasetLevel.code"),
+            this.$t("datasetLevel.count"),
+            {label: this.$t("datasetLevel.percent"), role: "annotation"}
+        ]);
 
-        var totalCount = 0;
         var shares = this.orderedShares(this.check.meta.shares);
+        var labelLength = 0;
+
         for (var key in shares) {
-            this.chartData.push([shares[key][0], shares[key][1].count]);
-            totalCount += shares[key][1].count;
+            this.chartData.push([
+                shares[key][0],
+                shares[key][1].count,
+                this.$options.filters.formatPercentage(100 * shares[key][1].share)
+            ]);
+            labelLength += shares[key][0].length;
         }
 
-        this.chartOptions.colors = this.generateGradient(
-            this.chartData.slice(1).filter(v => v[1] / totalCount >= this.chartOptions.sliceVisibilityThreshold)
-                .length + 1
-        );
-    },
-    methods: {
-        generateGradient: function (colorCount) {
-            return chroma.scale(["#2B2E5A", "#EFF0FC"]).mode("lab").colors(colorCount);
+        // Make more room for long labels.
+        if (labelLength / shares.length > 10) {
+            this.chartOptions.chartArea.left = 120;
+            this.chartOptions.chartArea.width = 200;
         }
     }
 };

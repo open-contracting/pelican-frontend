@@ -137,6 +137,9 @@ export const messages = {
         label_21_50: "21 - 50",
         label_51_100: "51 - 100",
         label_100: "100+",
+        code: "Code",
+        count: "Count",
+        percent: "Percent",
         examples: "Examples",
         from: "from",
         // The section keys are accessed dynamically in DatasetLevelSection.vue.

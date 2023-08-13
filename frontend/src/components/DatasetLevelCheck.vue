@@ -212,7 +212,7 @@ export default {
 }
 
 .card-body {
-    padding: 15px;
+    padding: 15px 15px 0;
 }
 
 .check_headline {
@@ -223,6 +223,7 @@ export default {
 .check_description {
     overflow-wrap: break-word;
     color: $headings_light_color;
+    margin-bottom: 0;
 }
 
 .ok_icon {
