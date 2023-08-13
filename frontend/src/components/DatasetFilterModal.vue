@@ -109,7 +109,6 @@
 
 <script>
 const axios = require("axios");
-const moment = require("moment");
 import { CONFIG } from "@/config.js";
 import Loader from "@/components/Loader.vue";
 import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
@@ -135,22 +134,10 @@ export default {
     },
     computed: {
         firstDate: function () {
-            if (this.dataset.meta.period.length > 0) {
-                return moment(this.dataset.meta.period[0].date_str, "MMM-YY").toDate();
-            } else {
-                return null;
-            }
+            return this.dataset.meta.collection_metadata.published_from;
         },
         lastDate: function () {
-            if (this.dataset.meta.period.length > 0) {
-                var date = moment(
-                    this.dataset.meta.period[this.dataset.meta.period.length - 1].date_str,
-                    "MMM-YY"
-                ).toDate();
-                return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            } else {
-                return null;
-            }
+            return this.dataset.meta.collection_metadata.published_to;
         }
     },
     mounted() {
