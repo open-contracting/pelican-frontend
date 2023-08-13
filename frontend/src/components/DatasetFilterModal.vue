@@ -196,18 +196,19 @@ export default {
                 });
         },
         datasetFilterItems() {
-            var message = this.datasetFilterMessage();
-            if (message == null) {
+            if (this.dataset == null) {
                 return;
             }
-
             if (this.gettingCountsToken != null) {
                 this.gettingCountsToken.cancel("Operation canceled by the user.");
             }
 
             this.gettingCountsToken = axios.CancelToken.source();
             axios
-                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, message, {
+                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, {
+                    dataset_id_original: parseInt(this.dataset.id),
+                    filter_message: this.datasetFilterMessage()
+                }, {
                     cancelToken: this.gettingCountsToken.token
                 })
                 .then(response => {
