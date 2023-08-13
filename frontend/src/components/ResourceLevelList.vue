@@ -26,13 +26,7 @@
         class="td col-8 col-lg-7 text-right text-lg-left info_message"
         scope="col"
       >
-        {{ resourceLevelStats.length }} {{ $t("resourceLevel.averageScore.description") }}:
-        <span v-if="avgScore != null">
-          {{ avgScore | formatPercentage }}
-        </span>
-        <span v-else>
-          {{ $t("resourceLevel.averageScore.undefined") }}
-        </span>
+        {{ $t("resourceLevel.averageScore.description", { applicable: applicableChecks, total: resourceLevelStats.length, average_score: formattedAvgScore }) }}
         <Tooltip :text="$t('resourceLevel.averageScore.tooltip')" />
       </div>
     </div>
@@ -129,7 +123,16 @@ export default {
                 })
                 .filter(this.filter);
         },
-        avgScore() {
+        applicableChecks() {
+            var applicableCount = 0;
+            for (var i = 0; i < this.resourceLevelStats.length; i++) {
+                if (this.resourceLevelStats[i].undefined_count < this.resourceLevelStats[i].total_count) {
+                    applicableCount += 1;
+                }
+            }
+            return applicableCount;
+        },
+        formattedAvgScore() {
             var passedCount = 0;
             var failedCount = 0;
             for (var i = 0; i < this.resourceLevelStats.length; i++) {
@@ -138,10 +141,10 @@ export default {
             }
 
             if (passedCount + failedCount == 0) {
-                return null;
+                return this.$t("resourceLevel.averageScore.undefined");
             }
 
-            return (100.0 * passedCount) / (passedCount + failedCount);
+            return this.$options.filters.formatPercentage(100.0 * passedCount / (passedCount + failedCount));
         }
     },
     watch: {

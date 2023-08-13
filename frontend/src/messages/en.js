@@ -359,7 +359,8 @@ export const messages = {
         application_count_header_tooltip:
             "One 'check' can be made up of many 'tests'; for example, when checking whether start dates aren't after end dates, each pair of start dates and end dates is <i>tested</i>. This shows the proportion of tests that passed or failed, instead of the proportion of compiled releases that passed or failed.",
         averageScore: {
-            description: "checks in total with average score",
+            description:
+                "{applicable} of {total} checks are applicable, with a pass rate of {average_score}, excluding n/a",
             undefined: "undefined",
             tooltip: "The pass rate is calculated as: all passed / (all passed + all failed)."
         },
