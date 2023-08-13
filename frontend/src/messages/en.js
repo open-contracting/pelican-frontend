@@ -620,6 +620,8 @@ export const messages = {
     },
     fieldDetail: {
         path: "Field path",
+        set: "Set",
+        notset: "Not set",
         // The check keys are accessed dynamically in FieldCheckDetail.vue.
         coverage: {
             label: "Coverage",

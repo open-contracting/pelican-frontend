@@ -7,7 +7,7 @@
           class="d-flex"
         >
           <td class="col-3 text-right label">
-            {{ $t("passed") }}
+            {{ $t(passedLabel) }}
           </td>
           <td class="col-9 align-middle">
             <InlineBar
@@ -23,7 +23,7 @@
           class="d-flex"
         >
           <td class="col-3 text-right label">
-            {{ $t("failed") }}
+            {{ $t(failedLabel) }}
           </td>
           <td class="col-9 align-middle">
             <InlineBar
@@ -100,7 +100,15 @@ export default {
         failed: Boolean,
         na: Boolean,
         individualPass: Boolean,
-        individualNonPass: Boolean
+        individualNonPass: Boolean,
+        passedLabel: {
+          type: String,
+          default: 'passed'
+        },
+        failedLabel: {
+          type: String,
+          default: 'failed'
+        }
     },
     data: function () {
         return {};

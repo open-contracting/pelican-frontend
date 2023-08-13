@@ -19,6 +19,8 @@
         <CheckDetailResultBox
           :key="k + '-box'"
           :check="c"
+          :passed-label="k == 'exists' ? 'fieldDetail.set' : undefined"
+          :failed-label="k == 'exists' ? 'fieldDetail.notset' : undefined"
           ok
           failed
         />
