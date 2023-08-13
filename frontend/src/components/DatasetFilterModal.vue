@@ -83,17 +83,17 @@
         <button
           type="button"
           class="btn btn-primary submit_button"
-          :disabled="items == 0 || (dataset != null && items == dataset.size) || gettingCountsToken != null"
+          :disabled="items == 0 || (dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids) || gettingCountsToken != null"
           @click="createDatasetFilter"
         >
           {{ $t("datasetFilter.submit") }}
           <span v-if="gettingCountsToken == null">
             <span
-              v-if="items != null && items > 0 && dataset != null && items != dataset.size"
-            >({{ items | formatNumber }} from {{ dataset.size | formatNumber }}
+              v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases?.total_unique_ocids"
+            >({{ items | formatNumber }} from {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
               {{ $t("datasetFilter.items") }})</span>
             <span
-              v-if="dataset != null && items == dataset.size"
+              v-if="dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids"
             >({{ $t("datasetFilter.itemsAll") }})</span>
           </span>
           <b-spinner
@@ -134,10 +134,13 @@ export default {
     },
     computed: {
         firstDate: function () {
-            return this.dataset.meta.collection_metadata.published_from;
+            return new Date(this.dataset.meta.collection_metadata.published_from.replaceAll('.', ':') + "Z");
         },
         lastDate: function () {
-            return this.dataset.meta.collection_metadata.published_to;
+            // pelican-backend truncates milliseconds, so add a second.
+            var date = new Date(this.dataset.meta.collection_metadata.published_to.replaceAll('.', ':') + "Z");
+            date.setSeconds(date.getSeconds() + 1);
+            return date;
         }
     },
     mounted() {
