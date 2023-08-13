@@ -1,5 +1,5 @@
 <template>
-  <div class="result_box">
+  <div class="result_box" :class="classes">
     <table class="table table-borderless table-sm">
       <tbody>
         <tr
@@ -102,13 +102,14 @@ export default {
         individualPass: Boolean,
         individualNonPass: Boolean,
         passedLabel: {
-          type: String,
-          default: 'passed'
+            type: String,
+            default: 'passed'
         },
         failedLabel: {
-          type: String,
-          default: 'failed'
-        }
+            type: String,
+            default: 'failed'
+        },
+        classes: String
     },
     data: function () {
         return {};

@@ -39,6 +39,7 @@
         <CheckDetailResultBox
           :key="k + '-box'"
           :check="c"
+          :classes="'quality'"
           ok
           failed
         />
@@ -160,7 +161,8 @@ export default {
                         exampleSections.push({
                             prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
                             header: this.$t("fieldDetail.quality." + key + ".count_header"),
-                            examples: failed.map(val => val.meta)
+                            examples: failed.map(val => val.meta),
+                            classes: 'quality'
                         });
                     }
                 });

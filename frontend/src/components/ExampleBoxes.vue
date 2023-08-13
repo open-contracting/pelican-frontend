@@ -27,7 +27,7 @@
           class="prefix"
         >"</span>
       </h5>
-      <div class="result_box">
+      <div class="result_box" :class="section.classes">
         <table class="table table-sm">
           <thead>
             <tr class="d-flex">
