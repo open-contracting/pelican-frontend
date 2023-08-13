@@ -199,11 +199,14 @@ export default {
             if (this.dataset == null) {
                 return;
             }
+
+            // https://axios-http.com/docs/cancellation
             if (this.gettingCountsToken != null) {
-                this.gettingCountsToken.cancel("Operation canceled by the user.");
+                this.gettingCountsToken.cancel();
             }
 
             this.gettingCountsToken = axios.CancelToken.source();
+
             axios
                 .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, {
                     dataset_id_original: parseInt(this.dataset.id),
@@ -221,8 +224,9 @@ export default {
                     this.gettingCountsToken = null;
                 })
                 .catch(function (error) {
-                    // TODO
-                    throw new Error(error);
+                    if (!axios.isCancel(error)) {
+                        throw new Error(error);
+                    }
                 });
         },
         dateIrrelevant(date) {
