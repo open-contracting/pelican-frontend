@@ -83,9 +83,6 @@ export default {
         this.asyncFind("");
     },
     methods: {
-        beforeOpen(event) {
-            this._datasetId = event.params.datasetId;
-        },
         asyncFind(query) {
             if (this.cancelToken != null) {
                 this.cancelToken.cancel();
@@ -99,7 +96,7 @@ export default {
                     CONFIG.apiBaseUrl +
                     CONFIG.apiEndpoints.datasetDistinctValues +
                     "/" +
-                    this._datasetId +
+                    this.datasetId +
                     "/" +
                     this.jsonPath +
                     "/" +
@@ -109,7 +106,7 @@ export default {
                     CONFIG.apiBaseUrl +
                     CONFIG.apiEndpoints.datasetDistinctValues +
                     "/" +
-                    this._datasetId +
+                    this.datasetId +
                     "/" +
                     this.jsonPath;
             }
