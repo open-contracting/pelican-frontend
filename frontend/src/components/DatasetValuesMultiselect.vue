@@ -131,7 +131,7 @@ export default {
             this.selected = [];
         },
         limitText(count) {
-            return count + this.$t("datasetValuesMultiselect.limitText");
+            return this.$t("datasetValuesMultiselect.limitText", { n: count });
         }
     }
 };

@@ -25,12 +25,9 @@ export const messages = {
         name: "Name",
         size: "Count",
         phase: "Status",
-        selectDataset: "Show",
         search: "Search report by name",
         timeVariance: "Time-based checks",
-        filter: "filter",
-        actions: "actions",
-        comparison: "comparison"
+        actions: "actions"
     },
     datasetFilter: {
         headline: "Dataset filtering",
@@ -78,7 +75,7 @@ export const messages = {
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",
-        limitText: " more selected"
+        limitText: "{n} more selected"
     },
     insufficientData: {
         title: "Insufficient data",
@@ -106,11 +103,7 @@ export const messages = {
     examples: {
         failed: "Sample releases with failed rules",
         passed: "Sample releases with passed rules",
-        downloads: "Download",
-        download_json: "JSON",
         actions: "actions",
-        previewOld: "Preview old",
-        previewNew: "Preview new",
         ocid: "ocid",
         showMore: "Show more examples",
         showLess: "Show fewer examples",
@@ -146,8 +139,7 @@ export const messages = {
         label_100: "100+",
         examples: "Examples",
         from: "from",
-        insufficientShown: "Hide not calculated checks",
-        insufficientHidden: "Show not calculated checks",
+        // The section keys are accessed dynamically in DatasetLevelSection.vue.
         sections: {
             status_distribution: "Status distribution",
             value_distribution: "Value distribution",
@@ -155,6 +147,7 @@ export const messages = {
             repetition: "Repetition",
             other: "Other"
         },
+        // The check keys are accessed dynamically in DatasetLevelCheck.vue and DatasetCheckDetail.vue.
         distribution: {
             tender_status: {
                 name: "Tender status distribution",
@@ -298,7 +291,7 @@ export const messages = {
         },
         unique: {
             ok: "All values are unique.",
-            failed: "Not all values are unique.",
+            failed: "Not all values are unique.", // not sure if used
             tender_id: {
                 name: "Tender ID is unique",
                 description: "Each <code>tender.id</code> is unique across the collection.",
@@ -370,6 +363,8 @@ export const messages = {
             undefined: "undefined",
             tooltip: "The pass rate is calculated as: all passed / (all passed + all failed)."
         },
+        // The section keys are accessed dynamically in ResourceLevelList.vue.
+        // The check keys are accessed dynamically in ResourceLevelRow.vue and ResourceCheckDetail.vue.
         coherent: {
             categoryName: "Coherence",
             period: {
@@ -578,6 +573,7 @@ export const messages = {
             info: "This dataset has been filtered from previously calculated dataset.",
             original: "Original dataset"
         },
+        // The stage keys are accessed dynamically in Overview.vue.
         lifecycle: {
             title: "Objects per Stage",
             planning: "Planning",
@@ -591,7 +587,6 @@ export const messages = {
         datalicense: "License",
         publicationPolicy: "Publication policy",
         extensions: "Extensions",
-        extensionsUnsupported: "Unsupported format",
         publishedFrom: "Published from",
         publishedTo: "Published to",
         collectionId: "Compiled Collection ID",
@@ -613,7 +608,7 @@ export const messages = {
             }
         },
         search: "Search field by name",
-        hidden: " {n} hidden",
+        hidden: "{n} hidden",
         checkedFields: "Checks are not performed on fields in extensions or on additional fields.",
         filterDropdown: {
             all: "All",
@@ -625,6 +620,7 @@ export const messages = {
     fieldDetail: {
         checked: "checked",
         path: "Field path",
+        // The check keys are accessed dynamically in FieldCheckDetail.vue.
         coverage: {
             label: "Coverage",
             failureSamplesPrefix: "Coverage failure samples",
@@ -709,6 +705,7 @@ export const messages = {
             ok: "Passed",
             failed: "Failed"
         },
+        // The check keys are accessed dynamically in TimeVarianceLevelCheck.vue and TimeVarianceCheckDetail.vue.
         phase_stable: {
             name: "Stage stability",
             description:

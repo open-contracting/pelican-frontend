@@ -195,7 +195,7 @@ export default {
                     if (response.status == 200) {
                         this.submitResult = this.$t("datasetFilter.submitResultOk");
                     } else {
-                        this.submitResult = this.$t("datasetFilter.submitResultOk");
+                        this.submitResult = this.$t("datasetFilter.submitResultFailed");
                     }
 
                     setTimeout(() => {
