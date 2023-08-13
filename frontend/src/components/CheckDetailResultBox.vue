@@ -121,11 +121,11 @@
 
 <script>
 import InlineBar from "@/components/InlineBar.vue";
-import ResourceCheckMixins from "@/plugins/resourceCheckMixins.js";
+import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 
 export default {
     components: { InlineBar },
-    mixins: [ResourceCheckMixins],
+    mixins: [resourceCheckMixin],
     props: {
         check: Object,
         ok: Boolean,
