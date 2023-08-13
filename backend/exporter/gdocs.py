@@ -1,3 +1,5 @@
+# All interactions with Google Drive APIs should be in this file.
+
 import os
 import re
 import shutil

@@ -1,3 +1,5 @@
+# All interactions with Open Document Format should be in this file.
+
 import copy
 import re
 from dataclasses import dataclass
