@@ -87,7 +87,10 @@
 
     <div class="row">
       <div class="col-12 col-xl-6">
-        <h4>{{ $t("overview.collection_metadata") }}</h4>
+        <h4>
+          {{ $t("overview.collection_metadata") }}
+          <Tooltip :text="$t('overview.collection_metadata_tooltip')" />
+        </h4>
         <div class="result_box collection_metadata col col-12">
           <div
             v-if="collection"
@@ -113,7 +116,7 @@
             </div>
             <div class="tr row">
               <div class="td col col-4 d-flex align-items-center">
-                OCID Prefix
+                {{ $t("overview.ocidPrefix") }}
               </div>
               <div class="td col col-8 d-flex align-items-center">
                 {{ collection.ocid_prefix }}
@@ -121,7 +124,7 @@
             </div>
             <div class="tr row">
               <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.datalicense") }}
+                {{ $t("overview.dataLicense") }}
               </div>
               <div class="td col col-8 d-flex align-items-center break_word">
                 <a

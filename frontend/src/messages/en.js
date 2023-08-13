@@ -565,6 +565,8 @@ export const messages = {
         collection_metadata: "Collection Metadata",
         kingfisher_metadata: "Kingfisher Metadata",
         dqt_metadata: "Data Quality Tool Metadata",
+        collection_metadata_tooltip:
+            "The OCID prefix and package metadata are extracted from the first compiled release.",
         compiled_releases: {
             title: "Compiled Releases",
             value_label: "Total Unique OCIDs"
@@ -585,7 +587,8 @@ export const messages = {
             info: "In OCDS, data is organized into objects, for each stage of a contracting process. Each compiled release has: at most one Planning object, at most one Tender object, any number of Award objects, and any number of Contract objects. Each Contract object has at most one Implementation object. As such, the number of Award objects can exceed the number of unique OCIDs, but the number of Tender objects can't."
         },
         publisher: "Publisher name",
-        datalicense: "License",
+        ocidPrefix: "OCID prefix",
+        dataLicense: "License",
         publicationPolicy: "Publication policy",
         extensions: "Extensions",
         publishedFrom: "Published from",
