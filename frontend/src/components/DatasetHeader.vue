@@ -1,10 +1,9 @@
 <template>
   <h1 v-if="dataset">
     <span class="name">{{ dataset.name }}</span>
-    (Id {{ dataset.id }}) | Size
-    {{ dataset.size | formatNumber }}
-    | Created
-    {{ dataset.meta.data_quality_tool_metadata.processing_start }}
+    ({{ $t("dataset.id") }} {{ dataset.id }})
+    | {{ $t("dataset.size") }} {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
+    | {{ $t("created") }} {{ dataset.meta.data_quality_tool_metadata.processing_start }}
   </h1>
 </template>
 
