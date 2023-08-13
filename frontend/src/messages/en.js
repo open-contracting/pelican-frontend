@@ -619,7 +619,6 @@ export const messages = {
         }
     },
     fieldDetail: {
-        checked: "checked",
         path: "Field path",
         // The check keys are accessed dynamically in FieldCheckDetail.vue.
         coverage: {

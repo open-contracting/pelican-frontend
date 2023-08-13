@@ -9,8 +9,7 @@
       <template v-for="(c, k) in check.coverage.checks">
         <h5 :key="k">
           <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
-          &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo;
-          {{ $t("fieldDetail.checked") }}: &nbsp;
+          &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
             {{ (c.passed_count + c.failed_count) | formatNumber }}
           </span>
@@ -28,8 +27,7 @@
       <template v-for="(c, k) in check.quality.checks">
         <h5 :key="k">
           <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
-          &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo;
-          {{ $t("fieldDetail.checked") }}: &nbsp;
+          &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
             {{ (c.passed_count + c.failed_count) | formatNumber }}
           </span>
