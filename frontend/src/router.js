@@ -96,7 +96,6 @@ export default new Router({
                 } else {
                     store.dispatch("loadResourceLevelCheckDetail", to.params.check);
                 }
-
                 next();
             }
         },
@@ -123,7 +122,6 @@ export default new Router({
                 } else {
                     store.dispatch("loadFieldLevelCheckDetail", to.params.path);
                 }
-
                 next();
             }
         },

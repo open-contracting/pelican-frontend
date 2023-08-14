@@ -1,6 +1,7 @@
 import time
 
 import simplejson as json
+from django.conf import settings
 from django.db import connections
 from django.db.models import Count, F, OuterRef, Subquery
 from django.http import HttpResponseBadRequest, JsonResponse
@@ -25,6 +26,13 @@ from api.models import (
     TimeVarianceLevelCheck,
 )
 from api.rabbitmq import publish
+
+
+@csrf_exempt
+def app_settings(request):
+    return JsonResponse(
+        {"user": settings.GOOGLE_DRIVE_USER, "template": settings.GDOCS_TEMPLATES["DEFAULT_OVERVIEW_TEMPLATE"]},
+    )
 
 
 @csrf_exempt

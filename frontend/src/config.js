@@ -2,6 +2,7 @@ var config = {
     apiBaseUrl: process.env.VUE_APP_API_BASE_URL || "/api/",
     apiEndpoints: {
         // GET
+        settings: "settings/",
         dataset: "datasets/",
         dataItem: "data_items/{id}/",
         fieldLevelReport: "datasets/{id}/field_level_report/",

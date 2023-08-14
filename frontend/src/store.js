@@ -44,6 +44,9 @@ export default new Vuex.Store({
         timeLevelFilterIndex: state => {
             return state.timeLevelFilterIndex;
         },
+        settings: state => {
+            return state.settings;
+        },
         dataset: state => {
             return state.dataset;
         },
@@ -184,6 +187,9 @@ export default new Vuex.Store({
         setTimeLevelFilterIndex(state, newTimeLevelFilterIndex) {
             state.timeLevelFilterIndex = newTimeLevelFilterIndex;
         },
+        setSettings(state, settings) {
+            state.settings = settings;
+        },
         setDataset(state, newDataset) {
             state.dataset = newDataset;
         },
@@ -265,6 +271,19 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        loadSettings({ commit }) {
+            return new Promise(resolve => {
+                axios
+                    .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.settings}`)
+                    .then(response => {
+                        commit("setSettings", response["data"]);
+                        resolve();
+                    })
+                    .catch(function (error) {
+                        throw new Error(error);
+                    });
+            });
+        },
         loadDataset({ dispatch, commit }, datasetId) {
             return new Promise(resolve => {
                 axios

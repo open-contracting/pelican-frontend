@@ -265,7 +265,7 @@
           />
           <small
             class="form-text text-muted"
-            v-html="$t('datasetReport.documentIdTooltip')"
+            v-html="$t('datasetReport.documentIdTooltip', {user: this.$store.getters.settings.user})"
           />
         </div>
       </div>
@@ -285,7 +285,7 @@
           />
           <small
             class="form-text text-muted"
-            v-html="$t('datasetReport.folderIdTooltip')"
+            v-html="$t('datasetReport.folderIdTooltip', {user: this.$store.getters.settings.user})"
           />
         </div>
       </div>

@@ -59,10 +59,10 @@ export const messages = {
         reason: "Reason",
         documentId: "Main template ID",
         documentIdTooltip:
-            "<p>ID or URL of the main template in Google Docs</p><p>The template and sub-templates must be editable by data-tools@open-contracting.org.</p>",
+            "<p>ID or URL of the main template in Google Docs</p><p>The template and sub-templates must be editable by {user}.</p>",
         folderId: "Export folder ID",
         folderIdTooltip:
-            "<p>ID or URL of the folder to which to write the exported document in Google Drive</p><p>The folder must be writable by data-tools@open-contracting.org.</p>",
+            "<p>ID or URL of the folder to which to write the exported document in Google Drive</p><p>The folder must be writable by {user}.</p>",
         reportName: "Export name",
         reportNameTooltip: "<p>(optional) Name of the exported document in Google Docs</p>",
         reportLanguage: "Export language",

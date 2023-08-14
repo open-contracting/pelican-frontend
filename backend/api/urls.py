@@ -40,4 +40,5 @@ urlpatterns = router.urls + [
         views.dataset_distinct_values,
         name="dataset-distinct-values-query",
     ),
+    path("settings/", views.app_settings, name="settings"),
 ]
