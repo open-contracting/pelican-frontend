@@ -82,7 +82,7 @@
 
             <div v-if="checkType == 'bar'">
               <div class="chart_envelope">
-                <BarChart :check="check" />
+                <BarChart :check="check" :ticks="ticks" />
               </div>
             </div>
 

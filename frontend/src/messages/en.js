@@ -132,9 +132,9 @@ export const messages = {
         charts: {
             // common
             count: "Count",
+            share: "Share",
             // bar
             group: "Group",
-            share: "Share",
             label_0_1: "top 1%",
             label_1_5: "top 1-5%",
             label_5_20: "top 5-20%",
@@ -142,7 +142,6 @@ export const messages = {
             label_50_100: "last 50%",
             // donut
             code: "Code",
-            percent: "Percent",
             other: "(other)",
             // single_value_share
             label_1: "1",

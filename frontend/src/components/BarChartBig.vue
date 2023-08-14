@@ -11,33 +11,36 @@ import { GChart } from "vue-google-charts";
 
 export default {
     components: { GChart },
-    props: ["check"],
+    props: ["check", "ticks"],
     data() {
         return {
             chartData: [
                 [
                     this.$t("datasetLevel.charts.group"),
                     this.$t("datasetLevel.charts.share"),
-                    {label: this.$t("datasetLevel.charts.count"), role: "annotation"},
+                    {role: "annotation"},
                     {role: "style"},
                 ]
             ],
             // https://developers.google.com/chart/interactive/docs/gallery/barchart
             chartOptions: {
+                enableInteractivity: false,
                 height: 200,
+                chartArea: {
+                    top: 0,
+                    width: "50%",
+                    height: 180,
+                },
                 legend: {
                     position: "none",
                 },
-                chartArea: {
-                    top: 0,
-                    // auto width
-                    height: 180,
-                },
                 baselineColor: "transparent",
                 hAxis: {
-                    minValue: 0,
-                    maxValue: 1,
-                    ticks: [0.5],
+                    viewWindow: {
+                        min: 0,
+                        max: 1,
+                    },
+                    ticks: this.ticks,
                     format: "percent",
                 },
                 annotations: {

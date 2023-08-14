@@ -26,7 +26,7 @@
 
       <div class="result_box">
         <div v-if="checkType == 'bar'">
-          <BarChartBig :check="check" />
+          <BarChartBig :check="check" :ticks="ticks" />
         </div>
 
         <div v-if="checkType == 'unique'">

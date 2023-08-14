@@ -9,7 +9,7 @@ export default {
                 "distribution.value_currency": true,
                 "distribution.related_process_relation": true
             },
-            // # Keep in sync with CHECK_TYPES in dataset.py
+            // Keep in sync with CHECK_TYPES in dataset.py
             checkTypeData: {
                 // donut
                 "distribution.main_procurement_category": "donut",
@@ -41,6 +41,22 @@ export default {
                 "distribution.buyer_repetition": "biggest_share",
                 // single_value_share
                 "distribution.buyer": "single_value_share"
+            },
+            // Keep in sync with check descriptions.
+            ticksData: {
+                // donut
+                "distribution.main_procurement_category": [0.95],
+                "distribution.tender_status": [0.99],
+                "distribution.awards_status": [0.99],
+                "distribution.contracts_status": [0.99],
+                "distribution.milestone_status": [0.99],
+                "distribution.tender_procurement_method": [0.99],
+                // bar
+                "distribution.tender_value": [0.5],
+                "distribution.contracts_value": [0.5],
+                "distribution.awards_value": [0.5],
+                // single_value_share
+                "distribution.buyer": [0.5]
             }
         };
     },
@@ -53,6 +69,9 @@ export default {
         },
         reportOnly() {
             return this.reportOnlyData[this.check.name];
+        },
+        ticks() {
+            return this.ticksData[this.check.name];
         },
         shares() {
             if (this.checkType == "donut") {
