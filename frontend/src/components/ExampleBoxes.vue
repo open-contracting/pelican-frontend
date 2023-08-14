@@ -27,7 +27,7 @@
           class="prefix"
         >"</span>
       </h5>
-      <div class="result_box" :class="section.classes">
+      <div class="result_box" :class="section.group">
         <table class="table table-sm">
           <thead>
             <tr class="d-flex">
@@ -62,10 +62,10 @@
                 <span v-if="index != selectedKey || selectedSection != section.header">
                   <font-awesome-icon
                     v-if="!previewDisabled"
-                    :id="'preview_' + section.header + '_' + index"
+                    :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['far', 'eye']"
-                    @click.stop.prevent="preview(index, section.header, item.item_id)"
+                    @click.stop.prevent="preview(index, section.header, item.item_id, section.group)"
                   />
                   <font-awesome-icon
                     v-else
@@ -73,7 +73,8 @@
                     :icon="['far', 'eye']"
                   />
                   <b-tooltip
-                    :target="'preview_' + section.header + '_' + index"
+                    v-if="!previewDisabled"
+                    :target="'preview_' + section.id + '_' + index"
                     triggers="hover"
                   >
                     <span
@@ -92,13 +93,13 @@
               <td class="col-1 clickable">
                 <span>
                   <font-awesome-icon
-                    :id="'download_' + section.header + '_' + index"
+                    :id="'download_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'cloud-download-alt']"
                     @click.stop.prevent="download(item.item_id)"
                   />
                   <b-tooltip
-                    :target="'download_' + section.header + '_' + index"
+                    :target="'download_' + section.id + '_' + index"
                     triggers="hover"
                   >
                     <span
@@ -111,13 +112,13 @@
               <td class="col-1 clickable">
                 <span>
                   <font-awesome-icon
-                    :id="'clipboard_' + section.header + '_' + index"
+                    :id="'clipboard_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'clipboard']"
                     @click.stop.prevent="copyToClipboard(item.item_id)"
                   />
                   <b-tooltip
-                    :target="'clipboard_' + section.header + '_' + index"
+                    :target="'clipboard_' + section.id + '_' + index"
                     triggers="hover"
                   >
                     <span
@@ -153,10 +154,10 @@
                   <span v-if="index + 5 != selectedKey || selectedSection != section.header">
                     <font-awesome-icon
                       v-if="!previewDisabled"
-                      :id="'preview_' + section.header + '_' + (index + 5)"
+                      :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['far', 'eye']"
-                      @click.stop.prevent="preview(index + 5, section.header, item.item_id)"
+                      @click.stop.prevent="preview(index + 5, section.header, item.item_id, section.group)"
                     />
                     <font-awesome-icon
                       v-else
@@ -164,7 +165,8 @@
                       :icon="['far', 'eye']"
                     />
                     <b-tooltip
-                      :target="'preview_' + section.header + '_' + (index + 5)"
+                      v-if="!previewDisabled"
+                      :target="'preview_' + section.id + '_' + (index + 5)"
                       triggers="hover"
                     >
                       <span
@@ -183,13 +185,13 @@
                 <td class="col-1 clickable">
                   <span>
                     <font-awesome-icon
-                      :id="'download_' + section.header + '_' + (index + 5)"
+                      :id="'download_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
                       @click.stop.prevent="download(item.item_id)"
                     />
                     <b-tooltip
-                      :target="'download_' + section.header + '_' + (index + 5)"
+                      :target="'download_' + section.id + '_' + (index + 5)"
                       triggers="hover"
                     >
                       <span
@@ -202,13 +204,13 @@
                 <td class="col-1 clickable">
                   <span>
                     <font-awesome-icon
-                      :id="'clipboard_' + section.header + '_' + (index + 5)"
+                      :id="'clipboard_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
                       @click.stop.prevent="copyToClipboard(item.item_id)"
                     />
                     <b-tooltip
-                      :target="'clipboard_' + section.header + '_' + (index + 5)"
+                      :target="'clipboard_' + section.id + '_' + (index + 5)"
                       triggers="hover"
                     >
                       <span
@@ -255,10 +257,10 @@ export default {
     },
     computed: {},
     methods: {
-        preview: function (key, section, id) {
+        preview: function (key, section, item_id, group) {
             this.selectedKey = key;
             this.selectedSection = section;
-            this.$emit("preview", id);
+            this.$emit("preview", item_id, group);
         },
         download: function (itemId) {
             this.$store.dispatch("loadDataItem", itemId).then(() => {

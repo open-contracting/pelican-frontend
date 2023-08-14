@@ -116,6 +116,17 @@ export default {
         };
     },
     computed: {
+        allExamples() {
+            if (!this.check) {
+                return [];
+            }
+
+            var allExamples = [];
+            allExamples = allExamples.concat(this.check.failed_examples);
+            allExamples = allExamples.concat(this.check.passed_examples);
+            allExamples = allExamples.concat(this.check.undefined_examples);
+            return allExamples;
+        },
         check() {
             var stats = this.$store.getters.resourceLevelStats;
             if (stats != null) {
@@ -133,6 +144,7 @@ export default {
 
                 if (failed.length > 0) {
                     exampleSections.push({
+                        id: "failed",
                         header: this.$t("core.failedExamples"),
                         examples: failed.map(val => val.meta)
                     });
@@ -140,6 +152,7 @@ export default {
 
                 if (passed.length > 0) {
                     exampleSections.push({
+                        id: "passed",
                         header: this.$t("core.passedExamples"),
                         examples: passed.map(val => val.meta)
                     });
@@ -147,6 +160,7 @@ export default {
 
                 if (undefineds.length > 0) {
                     exampleSections.push({
+                        id: "undefined",
                         header: this.$t("core.undefinedExamples"),
                         examples: undefineds.map(val => val.meta)
                     });
@@ -179,12 +193,7 @@ export default {
                 this.loadingPreviewData = false;
             });
 
-            var allExamples = [];
-            allExamples = allExamples.concat(this.check.failed_examples);
-            allExamples = allExamples.concat(this.check.passed_examples);
-            allExamples = allExamples.concat(this.check.undefined_examples);
-
-            var result = allExamples.find(function (element) {
+            var result = this.allExamples.find(function (element) {
                 return element.meta.item_id == itemId;
             });
             if (result) {

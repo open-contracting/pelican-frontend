@@ -122,20 +122,19 @@ export default {
                 return [];
             }
 
-            var allExamples = [];
+            var allExamples = {coverage: [], quality: []};
             if (this.check.coverage) {
                 Object.values(this.check.coverage.checks).forEach(value => {
-                    allExamples = allExamples.concat(value.failed_examples);
+                    allExamples.coverage = allExamples.coverage.concat(value.failed_examples);
                 });
-                allExamples = allExamples.concat(this.check.coverage.passed_examples);
+                allExamples.coverage = allExamples.coverage.concat(this.check.coverage.passed_examples);
             }
             if (this.check.quality) {
                 Object.values(this.check.quality.checks).forEach(value => {
-                    allExamples = allExamples.concat(value.failed_examples);
+                    allExamples.quality = allExamples.quality.concat(value.failed_examples);
                 });
-                allExamples = allExamples.concat(this.check.quality.passed_examples);
+                allExamples.quality = allExamples.quality.concat(this.check.quality.passed_examples);
             }
-
             return allExamples;
         },
         check() {
@@ -148,9 +147,11 @@ export default {
                     var failed = this.check.coverage.checks[key].failed_examples;
                     if (failed != undefined && failed.length > 0) {
                         exampleSections.push({
+                            id: `coverage_${key}`,
                             prefix: this.$t("fieldDetail.coverage.failureSamplesPrefix"),
                             header: this.$t("fieldDetail.coverage." + key + ".count_header"),
-                            examples: failed.map(val => val.meta)
+                            examples: failed.map(val => val.meta),
+                            group: "coverage"
                         });
                     }
                 });
@@ -159,24 +160,24 @@ export default {
                     var failed = this.check.quality.checks[key].failed_examples;
                     if (failed != undefined && failed.length > 0) {
                         exampleSections.push({
+                            id: `quality_${key}`,
                             prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
                             header: this.$t("fieldDetail.quality." + key + ".count_header"),
                             examples: failed.map(val => val.meta),
-                            classes: 'quality'
+                            group: "quality"
                         });
                     }
                 });
 
                 var passedSection = {
+                    id: "passed",
                     header: this.$t("core.passedExamples"),
                     examples: []
                 };
                 if (this.check.quality.passed_examples != undefined && this.check.quality.passed_examples.length > 0) {
                     passedSection.examples = this.check.quality.passed_examples.map(val => val.meta);
                 } else if (
-                    this.check.coverage.passed_examples != undefined &&
-                    this.check.coverage.passed_examples.length > 0
-                ) {
+                    this.check.coverage.passed_examples != undefined && this.check.coverage.passed_examples.length > 0) {
                     passedSection.examples = this.check.coverage.passed_examples.map(val => val.meta);
                 }
                 if (passedSection.examples.length > 0) {
@@ -197,7 +198,7 @@ export default {
         }
     },
     methods: {
-        preview: function (itemId) {
+        preview: function (itemId, group) {
             this.loadingPreviewData = true;
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
@@ -210,9 +211,12 @@ export default {
                 this.loadingPreviewData = false;
             });
 
-            var result = this.allExamples.find(function (element) {
-                return element.meta.item_id == itemId;
-            });
+            var result;
+            if (group) {
+                result = this.allExamples[group].find(e => e.meta.item_id == itemId);
+            } else {
+                result = Object.values(this.allExamples).flat().find(e => e.meta.item_id == itemId);
+            }
 
             if (result) {
                 this.previewMetaData = result.result;
