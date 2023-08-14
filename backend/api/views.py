@@ -31,7 +31,11 @@ from api.rabbitmq import publish
 @csrf_exempt
 def app_settings(request):
     return JsonResponse(
-        {"user": settings.GOOGLE_DRIVE_USER, "template": settings.GDOCS_TEMPLATES["DEFAULT_OVERVIEW_TEMPLATE"]},
+        {
+            "user": settings.GOOGLE_DRIVE_USER,
+            "template": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
+            "folder": settings.GOOGLE_DRIVE_FOLDER,
+        },
     )
 
 

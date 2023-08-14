@@ -171,7 +171,8 @@
         >
           <b-row>
             <b-col class="width">
-              {{ $t("datasetReport.status.serverError") }}
+              {{ $t("datasetReport.status.serverError") }}<br>
+              {{ errorMessage }}
             </b-col>
           </b-row>
         </b-alert>
@@ -368,8 +369,8 @@ export default {
     data: function () {
         return {
             isSubmitting: false,
-            documentId: "",
-            folderId: "",
+            documentId: this.$store.getters.settings.template,
+            folderId: this.$store.getters.settings.folder,
             reportName: "",
             submitStatus: null,
             submitData: null,
@@ -420,7 +421,7 @@ export default {
                 })
                 .catch(error => {
                     this.submitStatus = "server_error";
-                    this.errorMessage = error.response.statusText;
+                    this.errorMessage = error;
                 })
                 .finally(() => {
                     this.isSubmitting = false;
