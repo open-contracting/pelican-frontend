@@ -45,18 +45,28 @@ export default {
             // Keep in sync with check descriptions.
             ticksData: {
                 // donut
-                "distribution.main_procurement_category": [0.95],
-                "distribution.tender_status": [0.99],
-                "distribution.awards_status": [0.99],
-                "distribution.contracts_status": [0.99],
-                "distribution.milestone_status": [0.99],
-                "distribution.tender_procurement_method": [0.99],
+                "distribution.main_procurement_category": [0, 0.95],
+                "distribution.tender_status": [0.001, 0.99],
+                "distribution.awards_status": [0.001, 0.99],
+                "distribution.contracts_status": [0.001, 0.99],
+                "distribution.milestone_status": [0.001, 0.99],
+                "distribution.tender_procurement_method": [0.001, 0.99],
                 // bar
-                "distribution.tender_value": [0.5],
-                "distribution.contracts_value": [0.5],
-                "distribution.awards_value": [0.5],
+                "distribution.tender_value": [0, 0.5],
+                "distribution.contracts_value": [0, 0.5],
+                "distribution.awards_value": [0, 0.5],
                 // single_value_share
-                "distribution.buyer": [0.5]
+                "distribution.buyer": [0, 0.5]
+            },
+            // Keep in sync with check descriptions.
+            stylesData: {
+                // donut
+                "distribution.main_procurement_category": [],
+                "distribution.tender_status": ["active", "complete"],
+                "distribution.awards_status": ["active"],
+                "distribution.contracts_status": ["active", "terminated"],
+                "distribution.milestone_status": ["met"],
+                "distribution.tender_procurement_method": ["open"]
             }
         };
     },
@@ -72,6 +82,9 @@ export default {
         },
         ticks() {
             return this.ticksData[this.check.name];
+        },
+        styles() {
+            return this.stylesData[this.check.name];
         },
         shares() {
             if (this.checkType == "donut") {

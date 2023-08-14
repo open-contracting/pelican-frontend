@@ -20,8 +20,9 @@ export default {
                 [
                     this.$t("datasetLevel.charts.code"),
                     this.$t("datasetLevel.charts.share"),
-                    {role: "custom"},
                     {role: "annotation"},
+                    {role: "style"},
+                    {role: "custom"},
                 ]
             ],
             // https://developers.google.com/chart/interactive/docs/gallery/barchart
@@ -67,52 +68,61 @@ export default {
         var shares = this.orderedShares(this.check.meta.shares);
         var labelLength = 0;
 
-        // Index 0 is the header.
+        // Index 0 of chartData is the header.
         for (var key in shares) {
             if (this.limit && this.chartData.length > 10) {
                 this.chartData[10][0] = this.$t("datasetLevel.charts.other");
                 this.chartData[10][1] += shares[key][1].share;
-                this.chartData[10][2] += shares[key][1].count;
-                this.chartData[10][3] += shares[key][1].share;
+                this.chartData[10][2] += shares[key][1].share;
+                this.chartData[10][4] += shares[key][1].count;
             } else {
+                var styles = "";
+                if (this.ticks && (!this.styles.length || this.styles.includes(shares[key][0]))) {
+                    styles = (this.ticks[0] <= shares[key][1].share && shares[key][1].share <= this.ticks[1]) ? "color: #919C03" : "color: #d0021b";
+                }
                 this.chartData.push([
                     shares[key][0],
                     shares[key][1].share,
-                    shares[key][1].count,
                     shares[key][1].share,
+                    styles,
+                    shares[key][1].count,
                 ]);
+            }
+            if (shares.length <= 10 || this.chartData <= 10) {
                 labelLength += shares[key][0].length;
             }
         }
 
         for (let i = 1; i < this.chartData.length; i++) {
             if (this.limit) {
-                this.chartData[i][3] = this.$options.filters.formatPercentage(100 * this.chartData[i][3]);
+                this.chartData[i][2] = this.$options.filters.formatPercentage(100 * this.chartData[i][2]);
             } else {
-                this.chartData[i][3] = `${this.$options.filters.formatPercentage(100 * this.chartData[i][3])} (${this.$options.filters.formatNumber(this.chartData[i][2])})`;
+                this.chartData[i][2] = `${this.$options.filters.formatPercentage(100 * this.chartData[i][2])} (${this.$options.filters.formatNumber(this.chartData[i][4])})`;
             }
         }
 
         // ticks is undefined in data().
         if (this.ticks) {
-            this.chartOptions.hAxis.ticks = this.ticks;
+            this.chartOptions.hAxis.ticks = this.ticks.slice(1);
         } else {
             // Hide the x-axis and use the full height.
-            this.chartOptions.chartArea.height = this.chartOptions.height;
             this.chartOptions.hAxis.textPosition = "none";
+            this.chartOptions.chartArea.height = this.chartOptions.height;
         }
 
-        // Make more room for long labels.
         var averageLabelLength = labelLength / shares.length;
         if (averageLabelLength > 10) {
+            // Make room for long labels, and allow a 100% bar to be fully visible.
             this.chartOptions.chartArea.left = `${~~(averageLabelLength * 2)}%`;
-            this.chartOptions.chartArea.width = "60%"; // for a 100% bar to be fully visible
+            this.chartOptions.chartArea.width = "60%";
         }
 
         if (!this.limit) {
-            this.chartOptions.chartArea.width = averageLabelLength > 10 ? "50%" : "55%"; // longer annotations
+            // Allow longer annotations to be fully visible.
+            this.chartOptions.chartArea.width = averageLabelLength > 10 ? "50%" : "55%";
             this.chartOptions.height = shares.length * 30;
             if (this.ticks) {
+                // Make room for the ticks.
                 this.chartOptions.chartArea.height = this.chartOptions.height;
                 this.chartOptions.height += 30;
             } else {

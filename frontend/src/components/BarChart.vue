@@ -40,7 +40,7 @@ export default {
                         min: 0,
                         max: 1,
                     },
-                    ticks: this.ticks,
+                    ticks: this.ticks.slice(1),
                     format: "percent",
                 },
                 annotations: {
@@ -65,7 +65,7 @@ export default {
             this.$t("datasetLevel.charts.label_0_1"),
             this.check.meta.shares["0_1"],
             this.$options.filters.formatPercentage(100 * this.check.meta.shares["0_1"]),
-            this.check.meta.shares["0_1"] <= 0.5 ? "color: #b9c504" : "color: #d0021b",
+            this.ticks[0] <= this.check.meta.shares["0_1"] && this.check.meta.shares["0_1"] <= this.ticks[1] ? "color: #919C03" : "color: #d0021b",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_1_5"),
