@@ -76,7 +76,7 @@
           <div v-else>
             <div v-if="checkType == 'donut'">
               <div class="chart_envelope">
-                <DonutChart :check="check" />
+                <DonutChart :check="check" :limit="true" />
               </div>
             </div>
 

@@ -13,13 +13,14 @@ import datasetMixin from "@/plugins/datasetMixins.js";
 export default {
     components: { GChart },
     mixins: [datasetMixin],
-    props: ["check"],
+    props: ["check", "limit"],
     data() {
         return {
             chartData: [
                 [
                     this.$t("datasetLevel.charts.code"),
                     this.$t("datasetLevel.charts.share"),
+                    {role: "custom"},
                     {role: "annotation"},
                 ]
             ],
@@ -68,14 +69,16 @@ export default {
 
         // Index 0 is the header.
         for (var key in shares) {
-            if (this.chartData.length > 10) {
+            if (this.limit && this.chartData.length > 10) {
                 this.chartData[10][0] = this.$t("datasetLevel.charts.other");
                 this.chartData[10][1] += shares[key][1].share;
-                this.chartData[10][2] += shares[key][1].share;
+                this.chartData[10][2] += shares[key][1].count;
+                this.chartData[10][3] += shares[key][1].share;
             } else {
                 this.chartData.push([
                     shares[key][0],
                     shares[key][1].share,
+                    shares[key][1].count,
                     shares[key][1].share,
                 ]);
                 labelLength += shares[key][0].length;
@@ -83,12 +86,15 @@ export default {
         }
 
         for (let i = 1; i < this.chartData.length; i++) {
-            this.chartData[i][2] = this.$options.filters.formatPercentage(100 * this.chartData[i][2]);
+            if (this.limit) {
+                this.chartData[i][3] = this.$options.filters.formatPercentage(100 * this.chartData[i][3]);
+            } else {
+                this.chartData[i][3] = `${this.$options.filters.formatPercentage(100 * this.chartData[i][3])} (${this.$options.filters.formatNumber(this.chartData[i][2])})`;
+            }
         }
 
         // ticks is undefined in data().
-        var ticks = this.ticks;
-        if (ticks) {
+        if (this.ticks) {
             this.chartOptions.hAxis.ticks = this.ticks;
         } else {
             // Hide the x-axis and use the full height.
@@ -97,16 +103,22 @@ export default {
         }
 
         // Make more room for long labels.
-        if (labelLength / shares.length > 10) {
-            this.chartOptions.chartArea.left = 120;
-            this.chartOptions.chartArea.width = 200;
+        var averageLabelLength = labelLength / shares.length;
+        if (averageLabelLength > 10) {
+            this.chartOptions.chartArea.left = `${~~(averageLabelLength * 2)}%`;
+            this.chartOptions.chartArea.width = "60%"; // for a 100% bar to be fully visible
+        }
+
+        if (!this.limit) {
+            this.chartOptions.chartArea.width = averageLabelLength > 10 ? "50%" : "55%"; // longer annotations
+            this.chartOptions.height = shares.length * 30;
+            if (this.ticks) {
+                this.chartOptions.chartArea.height = this.chartOptions.height;
+                this.chartOptions.height += 30;
+            } else {
+                this.chartOptions.chartArea.height = "100%";
+            }
         }
     }
 };
 </script>
-
-<style>
-svg > g > g:last-child {
-    pointer-events: none;
-}
-</style>

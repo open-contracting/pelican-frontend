@@ -34,26 +34,7 @@
         </div>
 
         <div v-if="checkType == 'donut'">
-          <table class="table table-borderless table-sm">
-            <tbody>
-              <tr
-                v-for="share in shares"
-                :key="share[0]"
-              >
-                <td class="text-right label">
-                  <span class="check_name">{{ share[0] }}</span>
-                </td>
-                <td class="text-right">
-                  <InlineBar
-                    :count="share[1]['count']"
-                    :percentage="share[1]['share'] * 100"
-                    :state="'reg'"
-                    show-count="true"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <DonutChart :check="check" :limit="false" />
         </div>
 
         <div v-if="checkType == 'top3'">
@@ -211,18 +192,18 @@ import VueJsonPretty from "vue-json-pretty";
 import 'vue-json-pretty/lib/styles.css';
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
+import DonutChart from "@/components/DonutChart.vue";
 import BarChartBig from "@/components/BarChartBig.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
-import InlineBar from "@/components/InlineBar.vue";
 import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
     name: "DatasetCheckDetail",
     components: {
+        DonutChart,
         BarChartBig,
         VueJsonPretty,
         DashboardDetail,
-        InlineBar,
         ExampleBoxes,
         BarChartSingleValue
     },
