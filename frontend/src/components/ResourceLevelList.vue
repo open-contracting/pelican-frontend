@@ -125,8 +125,8 @@ export default {
         },
         applicableChecks() {
             var applicableCount = 0;
-            for (var i = 0; i < this.resourceLevelStats.length; i++) {
-                if (this.resourceLevelStats[i].undefined_count < this.resourceLevelStats[i].total_count) {
+            for (const check of this.resourceLevelStats) {
+                if (check.undefined_count < check.total_count) {
                     applicableCount += 1;
                 }
             }
@@ -135,9 +135,9 @@ export default {
         formattedAvgScore() {
             var passedCount = 0;
             var failedCount = 0;
-            for (var i = 0; i < this.resourceLevelStats.length; i++) {
-                passedCount += this.resourceLevelStats[i].passed_count;
-                failedCount += this.resourceLevelStats[i].failed_count;
+            for (const check of this.resourceLevelStats) {
+                passedCount += check.passed_count;
+                failedCount += check.failed_count;
             }
 
             if (passedCount + failedCount == 0) {
