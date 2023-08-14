@@ -137,6 +137,7 @@ export const messages = {
         label_21_50: "21 - 50",
         label_51_100: "51 - 100",
         label_100: "100+",
+        other: "(other)",
         code: "Code",
         count: "Count",
         percent: "Percent",

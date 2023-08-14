@@ -19,13 +19,13 @@ export default {
             chartData: [],
             // https://developers.google.com/chart/interactive/docs/gallery/barchart
             chartOptions: {
-                height: 300,
+                height: 250,
                 legend: {
                     position: "none",
                 },
                 chartArea: {
                     top: 0,
-                    height: 280,
+                    height: 230,
                 },
                 hAxis: {
                     viewWindowMode: "maximized",
@@ -53,13 +53,24 @@ export default {
         var shares = this.orderedShares(this.check.meta.shares);
         var labelLength = 0;
 
+            // Index 0 is the header.
         for (var key in shares) {
-            this.chartData.push([
-                shares[key][0],
-                shares[key][1].count,
-                this.$options.filters.formatPercentage(100 * shares[key][1].share)
-            ]);
-            labelLength += shares[key][0].length;
+            if (this.chartData.length > 10) {
+                this.chartData[10][0] = this.$t("datasetLevel.other");
+                this.chartData[10][1] += shares[key][1].count;
+                this.chartData[10][2] += shares[key][1].share;
+            } else {
+                this.chartData.push([
+                    shares[key][0],
+                    shares[key][1].count,
+                    shares[key][1].share,
+                ]);
+                labelLength += shares[key][0].length;
+            }
+        }
+
+        for (let i = 1; i < this.chartData.length; i++) {
+            this.chartData[i][2] = this.$options.filters.formatPercentage(100 * this.chartData[i][2]);
         }
 
         // Make more room for long labels.
