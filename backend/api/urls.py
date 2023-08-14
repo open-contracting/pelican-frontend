@@ -29,14 +29,14 @@ urlpatterns = router.urls + [
         TemplateView.as_view(template_name="swagger-ui.html", extra_context={"schema_url": "openapi-schema"}),
         name="swagger-ui",
     ),
-    path("dataset-filter-items", views.dataset_filter_items, name="dataset-filter-items"),
+    path("dataset-filter-items/", views.dataset_filter_items, name="dataset-filter-items"),
     path(
-        "dataset-distinct-values/<dataset_id>/<field>",
+        "dataset-distinct-values/<dataset_id>/<field>/",
         views.dataset_distinct_values,
         name="dataset-distinct-values",
     ),
     path(
-        "dataset-distinct-values/<dataset_id>/<field>/<query>",
+        "dataset-distinct-values/<dataset_id>/<field>/<query>/",
         views.dataset_distinct_values,
         name="dataset-distinct-values-query",
     ),

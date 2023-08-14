@@ -90,25 +90,9 @@ export default {
             }
             this.isLoading = true;
             this.options = [];
-            var url = null;
-            if (query != "") {
-                url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.datasetDistinctValues +
-                    "/" +
-                    this.datasetId +
-                    "/" +
-                    this.jsonPath +
-                    "/" +
-                    query;
-            } else {
-                url =
-                    CONFIG.apiBaseUrl +
-                    CONFIG.apiEndpoints.datasetDistinctValues +
-                    "/" +
-                    this.datasetId +
-                    "/" +
-                    this.jsonPath;
+            var url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}/${this.datasetId}/${this.jsonPath}/`;
+            if (query) {
+                url += `${query}/`;
             }
 
             this.cancelToken = axios.CancelToken.source();

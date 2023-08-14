@@ -184,9 +184,8 @@ export default {
 
             return result;
         };
-        var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset;
         axios
-            .get(url)
+            .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
             .then(response => {
                 this.datasets = buildDatasetsTree(response["data"], null);
 

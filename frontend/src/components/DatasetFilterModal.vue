@@ -178,7 +178,7 @@ export default {
             this.isSubmitting = true;
             axios
                 .post(
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, this.dataset.id),
+                    `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, this.dataset.id)}`,
                     this.datasetFilterMessage()
                 )
                 .then(response => {
@@ -211,7 +211,7 @@ export default {
             this.gettingCountsToken = axios.CancelToken.source();
 
             axios
-                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetFilterItems, {
+                .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`, {
                     dataset_id_original: parseInt(this.dataset.id),
                     filter_message: this.datasetFilterMessage()
                 }, {

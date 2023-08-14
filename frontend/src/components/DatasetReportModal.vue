@@ -402,7 +402,7 @@ export default {
             }
 
             axios
-                .post(CONFIG.apiBaseUrl + CONFIG.apiEndpoints.createDatasetReport, data)
+                .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
                 .then(response => {
                     if (response.data.failed_tags.length == 0) this.failedTags = null;
                     else this.failedTags = response.data.failed_tags;

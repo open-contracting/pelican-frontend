@@ -266,11 +266,9 @@ export default new Vuex.Store({
     },
     actions: {
         loadDataset({ dispatch, commit }, datasetId) {
-            var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataset + datasetId;
-
             return new Promise(resolve => {
                 axios
-                    .get(url)
+                    .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${datasetId}`)
                     .then(response => {
                         dispatch("resetDatasetEnv");
                         commit("setDataset", response["data"]);
@@ -291,10 +289,9 @@ export default new Vuex.Store({
         loadResourceLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setResourceLevelStats", null);
-                var url =
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, state.dataset.id);
+                var formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
-                    .get(url)
+                    .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
@@ -315,13 +312,11 @@ export default new Vuex.Store({
 
                 if (checkDetail != null && !checkDetail.examplesLoaded) {
                     if (state.dataset != null && checkName != null) {
-                        var url =
-                            CONFIG.apiBaseUrl +
-                            CONFIG.apiEndpoints.resourceLevelDetail
-                                .replace(/{id}/g, state.dataset.id)
-                                .replace(/{name}/g, checkName);
+                        var formatted = CONFIG.apiEndpoints.resourceLevelDetail
+                            .replace(/{id}/g, state.dataset.id)
+                            .replace(/{name}/g, checkName);
                         axios
-                            .get(url)
+                            .get(`${CONFIG.apiBaseUrl}${formatted}`)
                             .then(function (response) {
                                 response["data"]["examples_filled"] = true;
                                 commit("setResourceLevelCheckDetail", {
@@ -340,10 +335,9 @@ export default new Vuex.Store({
         loadDatasetLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setDatasetLevelStats", null);
-                var url =
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, state.dataset.id);
+                var formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
-                    .get(url)
+                    .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
@@ -365,9 +359,9 @@ export default new Vuex.Store({
                     dataItem = state.dataItems.find(item => item.id === itemId);
                 }
                 if (dataItem == null) {
-                    var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
+                    var formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
                     axios
-                        .get(url)
+                        .get(`${CONFIG.apiBaseUrl}${formatted}`)
                         .then(function (response) {
                             commit("addDataItem", response["data"]);
                             resolve();
@@ -384,8 +378,6 @@ export default new Vuex.Store({
             return new Promise(resolve => {
                 commit("setFieldLevelStats", null);
 
-                var url = CONFIG.apiBaseUrl + CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
-
                 var okShare = function (item) {
                     var result = (item.passed_count / item.total_count) * 100;
                     return isNaN(result) ? 0 : result;
@@ -396,8 +388,9 @@ export default new Vuex.Store({
                     return isNaN(result) ? 0 : result;
                 };
 
+                var formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
-                    .get(url)
+                    .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
@@ -427,19 +420,15 @@ export default new Vuex.Store({
 
             if (checkDetail == null || (checkDetail != null && !checkDetail.examplesLoaded)) {
                 if (state.dataset != null && path != null) {
-                    var url =
-                        CONFIG.apiBaseUrl +
-                        CONFIG.apiEndpoints.fieldLevelDetail
-                            .replace(/{id}/g, state.dataset.id)
-                            .replace(/{name}/g, path);
-
-                    var aaa = path;
+                    var formatted = CONFIG.apiEndpoints.fieldLevelDetail
+                        .replace(/{id}/g, state.dataset.id)
+                        .replace(/{name}/g, path);
                     axios
-                        .get(url)
+                        .get(`${CONFIG.apiBaseUrl}${formatted}`)
                         .then(function (response) {
                             response["data"]["examples_filled"] = true;
                             commit("setFieldLevelCheckDetail", {
-                                path: aaa,
+                                path: path,
                                 data: response["data"]
                             });
                         })
@@ -452,10 +441,9 @@ export default new Vuex.Store({
         loadTimeVarianceLevelStats({ commit, state }) {
             return new Promise(resolve => {
                 commit("setTimeVarianceLevelStats", null);
-                var url =
-                    CONFIG.apiBaseUrl + CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, state.dataset.id);
+                var formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
-                    .get(url)
+                    .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then(function (response) {
                         var data = [];
                         for (var key in response["data"]) {
