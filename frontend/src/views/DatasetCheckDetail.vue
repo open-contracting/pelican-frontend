@@ -140,9 +140,7 @@
               </div>
               <div class="row">
                 <div class="col col-12 text-center ocid_count">
-                  {{ check.meta.ocid_count | formatNumber }}&nbsp;{{
-                    $t("datasetLevel.from")
-                  }}&nbsp;{{ check.meta.total_ocid_count | formatNumber }} {{ $t("ocids") }}
+                  {{ $t("datasetLevel.ocid_share", { share: $n(check.meta.ocid_count), total: $n(check.meta.total_ocid_count) }) }}
                 </div>
               </div>
             </div>
