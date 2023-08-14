@@ -16,7 +16,13 @@ export default {
     props: ["check"],
     data() {
         return {
-            chartData: [],
+            chartData: [
+                [
+                    this.$t("datasetLevel.charts.code"),
+                    this.$t("datasetLevel.charts.count"),
+                    {label: this.$t("datasetLevel.charts.percent"), role: "annotation"}
+                ]
+            ],
             // https://developers.google.com/chart/interactive/docs/gallery/barchart
             chartOptions: {
                 height: 250,
@@ -44,19 +50,13 @@ export default {
         };
     },
     mounted() {
-        this.chartData.push([
-            this.$t("datasetLevel.code"),
-            this.$t("datasetLevel.count"),
-            {label: this.$t("datasetLevel.percent"), role: "annotation"}
-        ]);
-
         var shares = this.orderedShares(this.check.meta.shares);
         var labelLength = 0;
 
             // Index 0 is the header.
         for (var key in shares) {
             if (this.chartData.length > 10) {
-                this.chartData[10][0] = this.$t("datasetLevel.other");
+                this.chartData[10][0] = this.$t("datasetLevel.charts.other");
                 this.chartData[10][1] += shares[key][1].count;
                 this.chartData[10][2] += shares[key][1].share;
             } else {

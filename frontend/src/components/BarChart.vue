@@ -1,75 +1,93 @@
 <template>
-  <table class="table table-borderless table-sm">
-    <tbody>
-      <tr
-        v-for="item in chartData"
-        :key="item[0]"
-      >
-        <td class="text-right label">
-          <span class="check_name">{{ item[0] }}</span>
-        </td>
-        <td class="text-right">
-          <InlineBar
-            :count="item[1]"
-            :show-count="false"
-            :percentage="item[2] * 100"
-            :state="'reg'"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <GChart
+    type="BarChart"
+    :data="chartData"
+    :options="chartOptions"
+  />
 </template>
 
 <script>
-import InlineBar from "@/components/InlineBar.vue";
+import { GChart } from "vue-google-charts";
 
 export default {
-    components: {
-        InlineBar
-    },
+    components: { GChart },
     props: ["check"],
     data() {
-        return {};
+        return {
+            chartData: [
+                [
+                    this.$t("datasetLevel.charts.group"),
+                    this.$t("datasetLevel.charts.share"),
+                    {label: this.$t("datasetLevel.charts.count"), role: "annotation"},
+                    {role: "style"},
+                ]
+            ],
+            // https://developers.google.com/chart/interactive/docs/gallery/barchart
+            chartOptions: {
+                height: 200,
+                legend: {
+                    position: "none",
+                },
+                chartArea: {
+                    top: 0,
+                    width: 200,
+                    height: 180,
+                },
+                baselineColor: "transparent",
+                hAxis: {
+                    minValue: 0,
+                    maxValue: 1,
+                    ticks: [0.5],
+                    format: "percent",
+                },
+                annotations: {
+                    alwaysOutside: true,
+                    stem: {
+                        color: "transparent",
+                    },
+                    textStyle: {
+                        color: "#4a4a4a",
+                        fontName: "'Ubuntu Mono', monospace",
+                        bold: true,
+                    },
+                },
+                colors: ["#555cb3"],
+                fontName: "GTEestiProDisplay-Regular",
+                fontSize: 14,
+            }
+        };
     },
-    computed: {
-        chartData() {
-            var chartData = [];
-            chartData.push([
-                this.$t("datasetLevel.label_0_1"),
-                this.check.meta.counts["0_1"],
-                this.check.meta.shares["0_1"]
-            ]);
-            chartData.push([
-                this.$t("datasetLevel.label_1_5"),
-                this.check.meta.counts["1_5"],
-                this.check.meta.shares["1_5"]
-            ]);
-            chartData.push([
-                this.$t("datasetLevel.label_5_20"),
-                this.check.meta.counts["5_20"],
-                this.check.meta.shares["5_20"]
-            ]);
-            chartData.push([
-                this.$t("datasetLevel.label_20_50"),
-                this.check.meta.counts["20_50"],
-                this.check.meta.shares["20_50"]
-            ]);
-            chartData.push([
-                this.$t("datasetLevel.label_50_100"),
-                this.check.meta.counts["50_100"],
-                this.check.meta.shares["50_100"]
-            ]);
-
-            return chartData;
-        }
+    mounted() {
+        this.chartData.push([
+            this.$t("datasetLevel.charts.label_0_1"),
+            this.check.meta.shares["0_1"],
+            this.$options.filters.formatPercentage(100 * this.check.meta.shares["0_1"]),
+            this.check.meta.shares["0_1"] <= 0.5 ? "color: #b9c504" : "color: #d0021b",
+        ]);
+        this.chartData.push([
+            this.$t("datasetLevel.charts.label_1_5"),
+            this.check.meta.shares["1_5"],
+            this.$options.filters.formatPercentage(100 * this.check.meta.shares["1_5"]),
+            "",
+        ]);
+        this.chartData.push([
+            this.$t("datasetLevel.charts.label_5_20"),
+            this.check.meta.shares["5_20"],
+            this.$options.filters.formatPercentage(100 * this.check.meta.shares["5_20"]),
+            "",
+        ]);
+        this.chartData.push([
+            this.$t("datasetLevel.charts.label_20_50"),
+            this.check.meta.shares["20_50"],
+            this.$options.filters.formatPercentage(100 * this.check.meta.shares["20_50"]),
+            "",
+        ]);
+        this.chartData.push([
+            this.$t("datasetLevel.charts.label_50_100"),
+            this.check.meta.shares["50_100"],
+            this.$options.filters.formatPercentage(100 * this.check.meta.shares["50_100"]),
+            "",
+        ]);
     }
 };
 </script>
-
-<style>
-.table td.label {
-    width: 80px;
-    padding-top: 7px;
-}
-</style>

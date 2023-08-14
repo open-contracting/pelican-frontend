@@ -37,27 +37,27 @@ export default {
             var chartData = [];
             var onePercent = this.check.meta.total_buyer_count;
             chartData.push([
-                this.$t("datasetLevel.label_1"),
+                this.$t("datasetLevel.charts.label_1"),
                 this.check.meta.counts["1"].total_buyer_count,
                 this.check.meta.counts["1"].total_buyer_count / onePercent
             ]);
             chartData.push([
-                this.$t("datasetLevel.label_2_20"),
+                this.$t("datasetLevel.charts.label_2_20"),
                 this.check.meta.counts["2_20"].total_buyer_count,
                 this.check.meta.counts["2_20"].total_buyer_count / onePercent
             ]);
             chartData.push([
-                this.$t("datasetLevel.label_21_50"),
+                this.$t("datasetLevel.charts.label_21_50"),
                 this.check.meta.counts["21_50"].total_buyer_count,
                 this.check.meta.counts["21_50"].total_buyer_count / onePercent
             ]);
             chartData.push([
-                this.$t("datasetLevel.label_51_100"),
+                this.$t("datasetLevel.charts.label_51_100"),
                 this.check.meta.counts["51_100"].total_buyer_count,
                 this.check.meta.counts["51_100"].total_buyer_count / onePercent
             ]);
             chartData.push([
-                this.$t("datasetLevel.label_100"),
+                this.$t("datasetLevel.charts.label_100"),
                 this.check.meta.counts["100+"].total_buyer_count,
                 this.check.meta.counts["100+"].total_buyer_count / onePercent
             ]);
