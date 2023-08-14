@@ -404,8 +404,11 @@ export default {
             axios
                 .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
                 .then(response => {
-                    if (response.data.failed_tags.length == 0) this.failedTags = null;
-                    else this.failedTags = response.data.failed_tags;
+                    if (response.data.failed_tags && response.data.failed_tags.length == 0) {
+                        this.failedTags = null;
+                    } else {
+                        this.failedTags = response.data.failed_tags;
+                    }
 
                     if (response.status == 200) {
                         this.submitStatus = response.data.status;
