@@ -58,7 +58,7 @@ export default {
         display: inline-block;
 
         &.ok {
-            background-color: $ok_color;
+            background-color: $ok_bright_color;
         }
 
         &.failed {
