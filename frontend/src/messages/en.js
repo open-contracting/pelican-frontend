@@ -69,8 +69,8 @@ export const messages = {
         reportLanguageTooltip: "<p>Language of the generated content in the exported document</p>",
         submit: "Export",
         errorReport: "Errors",
-        warningList: "List of checks, which were not computed",
-        warningEnd: "We recommend you to check your dataset and template to generate a complete export."
+        warningList: "These checks were not calculated, and might yield empty sections in the template:",
+        warningEnd: ""
     },
     datasetValuesMultiselect: {
         noResult: "No values found. Consider changing the search query.",

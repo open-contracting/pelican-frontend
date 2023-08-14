@@ -29,7 +29,9 @@ for font in font_manager.findSystemFonts(fontpaths=str(ASSETS_DIR / "fonts")):
 
 
 def build_fig(aspect_ratio):
-    plt.figure()
+    """
+    Remember to call .close() in the figure.
+    """
     plt.rcdefaults()
     fig, ax = plt.subplots()
     fig.set_size_inches(6, 6 * aspect_ratio)

@@ -16,8 +16,7 @@ def generate_report(request) -> JsonResponse:
     if request.method == "GET":
         return JsonResponse({"status": "report_error", "data": {"reason": "Only POST method is accepted."}})
 
-    body_unicode = request.body.decode("utf-8")
-    input_message = json.loads(body_unicode)
+    input_message = json.loads(request.body)
 
     # checking input_message correctness
     if (

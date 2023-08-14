@@ -281,5 +281,5 @@ GDOCS_TEMPLATES = {
     # The Google Docs ID for the error template.
     "DEFAULT_ERROR_TEMPLATE": os.getenv("DEFAULT_ERROR_TEMPLATE", "1PW7s6SmaP4tia_QzMSZkTt8Oii-6ZXqB7VCuF8bYmv4"),
 }
-GOOGLE_DRIVE_USER = "data-tools@open-contracting.org"
+GOOGLE_DRIVE_USER = os.getenv("GOOGLE_DRIVE_USER", "")
 GOOGLE_DRIVE_FOLDER = "1ZVwf9cr29E4uCuWaVRiQLJI7_ejE00h3"
