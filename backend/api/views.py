@@ -38,7 +38,7 @@ def app_settings(request):
 @csrf_exempt
 def dataset_filter_items(request):
     if request.method == "GET":
-        return HttpResponseBadRequest(reason="Only post method is accepted.")
+        return HttpResponseBadRequest(reason="Only POST method is accepted.")
 
     body_unicode = request.body.decode("utf-8")
     input_message = json.loads(body_unicode)
