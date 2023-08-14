@@ -87,7 +87,7 @@ class Gdocs:
             file = self.drive_service.files().create(body=file_metadata, media_body=media).execute()
         except ResumableUploadError:
             raise GoogleDriveError(
-                f"The final report could not be uploaded to folder with id '{folder_id}'. "
+                f"The final report could not be uploaded to folder ID '{folder_id}'. "
                 "Possible reasons are a non-existing folder or insufficient permission settings."
             )
 
@@ -139,7 +139,7 @@ class GoogleDriveCache:
             except HttpError:
                 if i > (NO_OF_ATTEMPTS - 2):
                     raise GoogleDriveError(
-                        f"File with id '{file_id}' could not be accessed. "
+                        f"Template ID '{file_id}' could not be accessed. "
                         "Possible reasons are a non-existing file or insufficient permission settings."
                     )
 
@@ -159,8 +159,8 @@ class GoogleDriveCache:
                 except HttpError:
                     if i > (NO_OF_ATTEMPTS - 2):
                         raise GoogleDriveError(
-                            f"File with id '{file_id}' could not be downloaded. "
-                            "Possible reasons are a non-existing folder or insufficient permission settings."
+                            f"Template ID '{file_id}' could not be downloaded. "
+                            "Possible reasons are a non-existing file or insufficient permission settings."
                         )
 
             return default_storage.save(os.path.join(ROOT, f"{version}_{file_id}"), ContentFile(drive_response))
