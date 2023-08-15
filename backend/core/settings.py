@@ -266,6 +266,7 @@ SERVICE_ACCOUNT_JSON_FILE = os.getenv(
 GDOCS_TEMPLATES = {
     # The Google Docs ID for the base template.
     "DEFAULT_BASE_TEMPLATE": os.getenv("DEFAULT_BASE_TEMPLATE", "1jSGZKNJP6wBVPwi3JsvdkZ9FSpUwrK2SJxZoQQuJdnM"),
+    "DEFAULT_BASE_TEMPLATE_ES": os.getenv("DEFAULT_BASE_TEMPLATE_ES", "1DOxUeeUUjNPxAKu04etMBWyRbKkn8C1ZCskpeXUKJSg"),
     # The Google Docs ID for the overview template.
     "DEFAULT_OVERVIEW_TEMPLATE": os.getenv(
         "DEFAULT_OVERVIEW_TEMPLATE", "1sYr5LipKRtegWWl3zfKIDoSZmZluawmAdAu3piKslTw"

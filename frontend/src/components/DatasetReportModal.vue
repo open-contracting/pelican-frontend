@@ -253,6 +253,43 @@
       <div class="form-group row section_row">
         <label
           class="col-3 col-form-label"
+        ><div
+          id="label-padding"
+          class="label-padding"
+        >
+          {{ $t("datasetReport.reportLanguage") }}
+        </div></label>
+        <div class="col-9 top-margin">
+          <b-row>
+            <b-col
+              v-for="option in options"
+              :key="option.value"
+              class="col-6"
+            >
+              <b-form-radio
+                v-model="reportLanguage"
+                :value="option.value"
+                @change="setDocumentId"
+              >
+                <div class="top-margin">
+                  {{ option.text }}
+                </div>
+              </b-form-radio>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="col-12">
+              <small
+                class="form-text text-muted"
+                v-html="$t('datasetReport.reportLanguageTooltip')"
+              />
+            </b-col>
+          </b-row>
+        </div>
+      </div>
+      <div class="form-group row section_row">
+        <label
+          class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label>
         <div class="col-9">
           <b-form-input
@@ -308,42 +345,6 @@
           />
         </div>
       </div>
-      <div class="form-group row section_row">
-        <label
-          class="col-3 col-form-label"
-        ><div
-          id="label-padding"
-          class="label-padding"
-        >
-          {{ $t("datasetReport.reportLanguage") }}
-        </div></label>
-        <div class="col-9 top-margin">
-          <b-row>
-            <b-col
-              v-for="option in options"
-              :key="option.value"
-              class="col-6"
-            >
-              <b-form-radio
-                v-model="reportLanguage"
-                :value="option.value"
-              >
-                <div class="top-margin">
-                  {{ option.text }}
-                </div>
-              </b-form-radio>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col class="col-12">
-              <small
-                class="form-text text-muted"
-                v-html="$t('datasetReport.reportLanguageTooltip')"
-              />
-            </b-col>
-          </b-row>
-        </div>
-      </div>
       <div class="text-center">
         <button
           type="button"
@@ -369,7 +370,7 @@ export default {
     data: function () {
         return {
             isSubmitting: false,
-            documentId: this.$store.getters.settings.template,
+            documentId: this.$store.getters.settings.template.en,
             folderId: this.$store.getters.settings.folder,
             reportName: "",
             submitStatus: null,
@@ -385,6 +386,12 @@ export default {
         };
     },
     methods: {
+        setDocumentId(value) {
+            // Only change the template if it is one of the default values.
+            if (Object.values(this.$store.getters.settings.template).includes(this.documentId)) {
+                this.documentId = this.$store.getters.settings.template[value];
+            }
+        },
         createDatasetReport() {
             if (this.dataset == null) {
                 return;

@@ -33,7 +33,10 @@ def app_settings(request):
     return JsonResponse(
         {
             "user": settings.GOOGLE_DRIVE_USER,
-            "template": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
+            "template": {
+                "en": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
+                "es": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE_ES"],
+            },
             "folder": settings.GOOGLE_DRIVE_FOLDER,
         },
     )
