@@ -20,7 +20,7 @@ from lxml import etree
 from exporter.exceptions import GoogleDriveError
 
 ROOT = Path("google_drive_cache")
-NO_OF_ATTEMPTS = 5
+MAX_ATTEMPTS = 5
 
 
 class Gdocs:
@@ -130,41 +130,35 @@ class GoogleDriveCache:
     def get_file_path(self, file_id: str):
         self.refresh()
 
-        drive_response = None
-        for i in range(NO_OF_ATTEMPTS):
+        for attempt in range(MAX_ATTEMPTS, 1):
             try:
-                drive_response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
-
+                response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
                 break
             except HttpError:
-                if i > (NO_OF_ATTEMPTS - 2):
+                if attempt >= MAX_ATTEMPTS:
                     raise GoogleDriveError(
                         f"Template ID '{file_id}' could not be accessed. "
                         "Possible reasons are a non-existing file or insufficient permission settings."
                     )
 
-        version = int(drive_response["version"])
+        version = int(response["version"])
 
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-            drive_response = None
-            for i in range(NO_OF_ATTEMPTS):
+            for attempt in range(MAX_ATTEMPTS, 1):
                 try:
-                    drive_response = (
+                    response = (
                         self.drive_service.files()
                         .export(fileId=file_id, mimeType="application/vnd.oasis.opendocument.text")
                         .execute()
                     )
-
                     break
                 except HttpError:
-                    if i > (NO_OF_ATTEMPTS - 2):
+                    if attempt >= MAX_ATTEMPTS:
                         raise GoogleDriveError(
                             f"Template ID '{file_id}' could not be downloaded. "
                             "Possible reasons are a non-existing file or insufficient permission settings."
                         )
 
-            return default_storage.path(
-                default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(drive_response))
-            )
+            return default_storage.path(default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(response)))
         else:
             return self.files[file_id]["path"]
