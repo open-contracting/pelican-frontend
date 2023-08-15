@@ -220,6 +220,18 @@ LANGUAGES = [
 
 DATABASE_ROUTERS = ["api.routers.DbRouter"]
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": "/data" if production else "",
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 
 # Dependency configuration
 
@@ -258,9 +270,7 @@ RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
 # https://developers.google.com/workspace/guides/create-credentials#service-account
 # WARNING: If you change the directory for the production default, update `backend/Dockerfile` and
 # `docker-compose.yaml` volumes.
-SERVICE_ACCOUNT_JSON_FILE = os.getenv(
-    "SERVICE_ACCOUNT_JSON_FILE", "/data/credentials.json" if production else "credentials.json"
-)
+SERVICE_ACCOUNT_JSON_FILE = os.getenv("SERVICE_ACCOUNT_JSON_FILE", "credentials.json")
 
 # The Google Docs IDs for templates, when writing exports to Google Drive.
 GDOCS_TEMPLATES = {

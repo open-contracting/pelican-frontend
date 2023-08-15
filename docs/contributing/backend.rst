@@ -27,7 +27,7 @@ LOG_LEVEL
 CORS_ALLOWED_ORIGINS
   The `origins <https://github.com/adamchainz/django-cors-headers#cors_allowed_origins-sequencestr>`__ that are authorized to make cross-site HTTP requests
 SERVICE_ACCOUNT_JSON_FILE
-  The path to a `service account JSON file <https://developers.google.com/workspace/guides/create-credentials#service-account>`__
+  The filename of the `service account JSON file <https://developers.google.com/workspace/guides/create-credentials#service-account>`__
 RABBIT_URL
   The `connection string <https://pika.readthedocs.io/en/stable/examples/using_urlparameters.html#using-urlparameters>`__ for RabbitMQ
 RABBIT_EXCHANGE_NAME

@@ -29,11 +29,10 @@ class Gdocs:
     """Init (authentication etc.) of all necessary services,"""
 
     def __init__(self, main_template_id: str):
-        # TODO: use default_storage
-        if not os.path.exists(settings.SERVICE_ACCOUNT_JSON_FILE):
+        if not default_storage.exists(settings.SERVICE_ACCOUNT_JSON_FILE):
             raise RuntimeError("Unable to find token file")
 
-        credentials = Credentials.from_service_account_file(settings.SERVICE_ACCOUNT_JSON_FILE)
+        credentials = Credentials.from_service_account_file(default_storage.path(settings.SERVICE_ACCOUNT_JSON_FILE))
         self.drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
         self.google_drive_cache = GoogleDriveCache(self.drive_service)
 
@@ -112,7 +111,7 @@ class Gdocs:
 class GoogleDriveCache:
     def __init__(self, drive_service):
         if not default_storage.exists(ROOT):
-            os.mkdir(os.path.join(default_storage.location, ROOT))
+            os.mkdir(default_storage.path(ROOT))
 
         self.drive_service = drive_service
         self.files = {}
