@@ -131,7 +131,7 @@ class GoogleDriveCache:
         self.refresh()
 
         response = None
-        for attempt in range(MAX_ATTEMPTS, 1):
+        for attempt in range(MAX_ATTEMPTS + 1, 1):
             try:
                 response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
                 break
@@ -146,7 +146,7 @@ class GoogleDriveCache:
 
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
             response = None
-            for attempt in range(MAX_ATTEMPTS, 1):
+            for attempt in range(MAX_ATTEMPTS + 1, 1):
                 try:
                     response = (
                         self.drive_service.files()
