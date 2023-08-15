@@ -124,7 +124,7 @@ class GoogleDriveCache:
             version, file_id = re.search(r"^([^_]+)_(.+)$", filename).groups()
             version = int(version)
             if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-                self.files[file_id] = {"version": version, "path": os.path.join(ROOT, filename)}
+                self.files[file_id] = {"version": version, "path": default_storage.path(os.path.join(ROOT, filename))}
 
     def get_file_path(self, file_id: str):
         self.refresh()
