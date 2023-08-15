@@ -130,8 +130,7 @@ class GoogleDriveCache:
     def get_file_path(self, file_id: str):
         self.refresh()
 
-        response = None
-        for attempt in range(MAX_ATTEMPTS + 1, 1):
+        for attempt in range(1, MAX_ATTEMPTS + 1):
             try:
                 response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
                 break
@@ -145,8 +144,7 @@ class GoogleDriveCache:
         version = int(response["version"])
 
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-            response = None
-            for attempt in range(MAX_ATTEMPTS + 1, 1):
+            for attempt in range(1, MAX_ATTEMPTS + 1):
                 try:
                     response = (
                         self.drive_service.files()
