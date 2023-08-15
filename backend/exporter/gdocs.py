@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import tempfile
+from pathlib import Path
 from zipfile import ZipFile
 
 import shortuuid
@@ -18,7 +19,7 @@ from lxml import etree
 
 from exporter.exceptions import GoogleDriveError
 
-ROOT = "google_drive_cache"
+ROOT = Path("google_drive_cache")
 NO_OF_ATTEMPTS = 5
 
 
@@ -124,7 +125,7 @@ class GoogleDriveCache:
             version, file_id = re.search(r"^([^_]+)_(.+)$", filename).groups()
             version = int(version)
             if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-                self.files[file_id] = {"version": version, "path": default_storage.path(os.path.join(ROOT, filename))}
+                self.files[file_id] = {"version": version, "path": default_storage.path(ROOT / filename)}
 
     def get_file_path(self, file_id: str):
         self.refresh()
@@ -162,6 +163,8 @@ class GoogleDriveCache:
                             "Possible reasons are a non-existing file or insufficient permission settings."
                         )
 
-            return default_storage.save(os.path.join(ROOT, f"{version}_{file_id}"), ContentFile(drive_response))
+            return default_storage.path(
+                default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(drive_response))
+            )
         else:
             return self.files[file_id]["path"]
