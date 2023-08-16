@@ -146,6 +146,12 @@ class DatasetSerializer(serializers.ModelSerializer):
 class CreateDatasetSerializer(serializers.Serializer):
     name = serializers.CharField(help_text="The name to assign to the dataset")
     collection_id = serializers.IntegerField(help_text="The collection ID in Kingfisher Process")
+    ancestor_id = serializers.IntegerField(
+        required=False, help_text="The ID of the previous report in Pelican, for time-based checks"
+    )
+    max_items = serializers.IntegerField(
+        required=False, help_text="The number of compiled releases to import from Kingfisher Process"
+    )
 
 
 class FilterDatasetSerializer(serializers.Serializer):
@@ -247,7 +253,12 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         serializer = CreateDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        message = {"name": serializer.data["name"], "collection_id": serializer.data["collection_id"]}
+        message = {
+            "name": serializer.data["name"],
+            "collection_id": serializer.data["collection_id"],
+            "ancestor_id": serializer.data.get("ancestor_id"),
+            "max_items": serializer.data.get("max_items"),
+        }
         publish(message, "ocds_kingfisher_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
