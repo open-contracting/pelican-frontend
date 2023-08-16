@@ -81,7 +81,7 @@ def dataset_filter_items(request):
 
         if "buyer_regex" in filter_message:
             variables["buyer_regex"] = filter_message["buyer_regex"]
-            parts.append("data->'buyer'->>'name' LIKE %(buyer_regex)s")
+            parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
 
         if "procuring_entity" in filter_message:
             variables["procuring_entity"] = tuple(
@@ -91,7 +91,7 @@ def dataset_filter_items(request):
 
         if "procuring_entity_regex" in filter_message:
             variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
-            parts.append("data->'tender'->'procuringEntity'->>'name' LIKE %(procuring_entity_regex)s")
+            parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
 
         with connections["data"].cursor() as cursor:
             cursor.execute(SQL(" AND ".join(parts)), variables)
