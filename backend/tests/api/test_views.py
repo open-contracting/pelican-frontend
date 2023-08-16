@@ -139,7 +139,8 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with(
-                {"name": "anything", "collection_id": 123}, "ocds_kingfisher_extractor_init"
+                {"name": "anything", "collection_id": 123, "ancestor_id": None, "max_items": None},
+                "ocds_kingfisher_extractor_init",
             )
 
     @patch("api.views.publish")
