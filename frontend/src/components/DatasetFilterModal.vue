@@ -134,13 +134,23 @@ export default {
     },
     computed: {
         firstDate: function () {
-            return new Date(this.dataset.meta.collection_metadata.published_from.replaceAll('.', ':') + "Z");
+            var publishedFrom = this.dataset.meta.collection_metadata.published_from;
+            if publishedFrom {
+                return new Date(publishedFrom.replaceAll('.', ':') + "Z");
+            } else {
+                return new Date(0);
+            }
         },
         lastDate: function () {
             // pelican-backend truncates milliseconds, so add a second.
-            var date = new Date(this.dataset.meta.collection_metadata.published_to.replaceAll('.', ':') + "Z");
-            date.setSeconds(date.getSeconds() + 1);
-            return date;
+            var publishedTo = this.dataset.meta.collection_metadata.published_to;
+            if publishedTo {
+                var date = new Date(publishedTo.replaceAll('.', ':') + "Z");
+                date.setSeconds(date.getSeconds() + 1);
+                return date;
+            } else {
+                return new Date();
+            }
         }
     },
     mounted() {
