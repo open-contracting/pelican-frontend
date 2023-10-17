@@ -237,7 +237,7 @@ uritemplate==3.0.1
     # via
     #   -r requirements.txt
     #   google-api-python-client
-urllib3==2.0.6
+urllib3==2.0.7
     # via
     #   -r requirements.txt
     #   requests
