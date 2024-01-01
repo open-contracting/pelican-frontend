@@ -1,68 +1,68 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  build_backend:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-          cache-dependency-path: "**/requirements*.txt"
-      - run: pip install -r requirements.txt
-      # Check requirements.txt contains production requirements.
-      - working-directory: backend
-        run: ./manage.py --help
-      - run: pip install -r requirements_dev.txt
-      - name: Run Pelican backend migrations
-        run: |
-          curl -sS \
-            https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
-            https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
-            | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -f -
-      - name: Run checks and tests
-        env:
-          PYTHONWARNINGS: error
-          DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
-          PELICAN_BACKEND_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
-        shell: bash
-        working-directory: backend
-        run: |
-          ./manage.py migrate
-          ./manage.py makemigrations --check --dry-run
-          ./manage.py check --fail-level WARNING
-          coverage run --source api,core,exporter manage.py test
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: backend
-        run: coveralls --service=github
-    services:
-      postgres:
-        image: postgres:12
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432/tcp
+    build_backend:
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
+                  cache: pip
+                  cache-dependency-path: "**/requirements*.txt"
+            - run: pip install -r requirements.txt
+            # Check requirements.txt contains production requirements.
+            - working-directory: backend
+              run: ./manage.py --help
+            - run: pip install -r requirements_dev.txt
+            - name: Run Pelican backend migrations
+              run: |
+                  curl -sS \
+                    https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
+                    https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
+                    | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -f -
+            - name: Run checks and tests
+              env:
+                  PYTHONWARNINGS: error
+                  DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
+                  PELICAN_BACKEND_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
+              shell: bash
+              working-directory: backend
+              run: |
+                  ./manage.py migrate
+                  ./manage.py makemigrations --check --dry-run
+                  ./manage.py check --fail-level WARNING
+                  coverage run --source api,core,exporter manage.py test
+            - env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              working-directory: backend
+              run: coveralls --service=github
+        services:
+            postgres:
+                image: postgres:12
+                env:
+                    POSTGRES_PASSWORD: postgres
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 5432/tcp
 
-  build_frontend:
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
-    runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-          cache-dependency-path: "**/package-lock.json"
-      - run: npm ci
-      - run: npx vue-cli-service build
+    build_frontend:
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+        runs-on: ubuntu-20.04
+        defaults:
+            run:
+                working-directory: frontend
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 18
+                  cache: npm
+                  cache-dependency-path: "**/package-lock.json"
+            - run: npm ci
+            - run: npx vue-cli-service build
