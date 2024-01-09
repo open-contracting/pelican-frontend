@@ -30,7 +30,7 @@ django-cors-headers==4.1.0
     # via -r requirements.in
 djangorestframework==3.14.0
     # via -r requirements.in
-fonttools==4.40.0
+fonttools==4.43.0
     # via matplotlib
 google-api-core==1.21.0
     # via google-api-python-client
