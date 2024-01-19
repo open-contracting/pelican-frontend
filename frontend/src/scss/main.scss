@@ -5,197 +5,197 @@
 @import "~vue-multiselect/dist/vue-multiselect.min.css";
 @import "vue-date-pick-mod.scss";
 body {
-    background-color: #f0f2fb;
-    font-size: 14px;
+  background-color: #f0f2fb;
+  font-size: 14px;
 }
 
 main {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 a {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 h4 {
-    font-size: 10px;
-    color: $headings_light_color;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-top: 20px;
-    text-transform: uppercase;
+  font-size: 10px;
+  color: $headings_light_color;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  text-transform: uppercase;
 }
 
 h5 {
-    font-size: 18px;
-    font-weight: 700;
-    font-family: $font-family-sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: $font-family-sans-serif;
 }
 
 .main_content {
-    padding-top: 5px;
-    padding-left: 30px;
-    padding-right: 30px;
-    width: 100%;
+  padding-top: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  width: 100%;
 }
 
 .result_box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 35px;
-    box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
-    border: 0;
+  background-color: white;
+  border-radius: 10px;
+  padding: 35px;
+  box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
+  border: 0;
 }
 
 .result_box.quality {
-    border: 3px solid #6c75e1;
+  border: 3px solid #6c75e1;
 }
 
 .value_ok {
-    color: $ok_color;
-    font-weight: 700;
+  color: $ok_color;
+  font-weight: 700;
 }
 
 .value_failed {
-    color: $failed_color;
-    font-weight: 700;
+  color: $failed_color;
+  font-weight: 700;
 }
 
 .value_na {
-    color: $na_color;
-    font-weight: 700;
+  color: $na_color;
+  font-weight: 700;
 }
 
 .color_ok {
-    color: $ok_color;
+  color: $ok_color;
 }
 
 .color_failed {
-    color: $failed_color;
+  color: $failed_color;
 }
 
 .color_na {
-    color: $na_color;
+  color: $na_color;
 }
 
 .table {
-    color: $text-color;
+  color: $text-color;
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .result_box {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 
 .vjs-tree .vjs-value__string {
-    color: #6c75e1 !important;
+  color: #6c75e1 !important;
 }
 
 .numeric {
-    font-family: $font-family-mono;
+  font-family: $font-family-mono;
 }
 
 .clickable {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .break_word {
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .thr {
-    border-bottom: solid 2px #e8ecef;
+  border-bottom: solid 2px #e8ecef;
 }
 
 .tr {
-    border-top: solid 1px #e8ecef;
+  border-top: solid 1px #e8ecef;
 }
 
 .tr:hover {
-    background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .td {
-    padding: 12px;
+  padding: 12px;
 }
 
 .th {
-    padding: 12px;
-    font-family: $font-family-bold;
-    text-transform: lowercase;
-    color: #656565;
+  padding: 12px;
+  font-family: $font-family-bold;
+  text-transform: lowercase;
+  color: #656565;
 }
 
 .form-control::-webkit-input-placeholder,
 input::placeholder,
 .form-control::placeholder {
-    color: $na_color;
+  color: $na_color;
 }
 
 .form-control:focus {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .description {
-    margin-bottom: 50px;
-    color: $headings_light_color;
-    line-height: 25px;
+  margin-bottom: 50px;
+  color: $headings_light_color;
+  line-height: 25px;
 }
 
 .bold {
-    font-family: $font-family-bold;
+  font-family: $font-family-bold;
 }
 
 .table_hl > div:nth-child(1) {
-    border-top: none;
+  border-top: none;
 }
 
 .table thead th {
-    border-top: none;
+  border-top: none;
 }
 
 .undef {
-    background-color: #fafbff;
-    filter: alpha(opacity=60);
-    -moz-opacity: 0.6;
-    -khtml-opacity: 0.6;
-    opacity: 0.6;
+  background-color: #fafbff;
+  filter: alpha(opacity=60);
+  -moz-opacity: 0.6;
+  -khtml-opacity: 0.6;
+  opacity: 0.6;
 }
 
 .undefined_title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
 }
 
 .undefined_image {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 code {
-    color: $ok_color;
-    background-color: white;
-    padding: 3px;
-    border: dotted 1px $ok_color;
+  color: $ok_color;
+  background-color: white;
+  padding: 3px;
+  border: dotted 1px $ok_color;
 }
 
 .tooltip_text code {
-    color: #e7ec90;
-    background-color: gray;
-    padding: 3px;
-    border: dotted 1px #e7ec90;
+  color: #e7ec90;
+  background-color: gray;
+  padding: 3px;
+  border: dotted 1px #e7ec90;
 }
 
 /**
@@ -222,8 +222,8 @@ $grid-breakpoints: (xxxs: 0,
 //     }
 // }
 label {
-    font-family: $font-family-sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: right;
+  font-family: $font-family-sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: right;
 }

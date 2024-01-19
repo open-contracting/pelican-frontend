@@ -1,23 +1,23 @@
 @import url("https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700&display=swap");
 
 @font-face {
-    font-family: "GTEestiProDisplay-Regular";
-    src: url("/public/fonts/GTEestiProDisplay-Regular.otf") format("opentype");
+  font-family: "GTEestiProDisplay-Regular";
+  src: url("/public/fonts/GTEestiProDisplay-Regular.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "GTEestiProDisplay-Bold";
-    src: url("/public/fonts/GTEestiProDisplay-Bold.otf") format("opentype");
+  font-family: "GTEestiProDisplay-Bold";
+  src: url("/public/fonts/GTEestiProDisplay-Bold.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "GTEestiProDisplay-Thin";
-    src: url("/public/fonts/GTEestiProDisplay-Thin.otf") format("opentype");
+  font-family: "GTEestiProDisplay-Thin";
+  src: url("/public/fonts/GTEestiProDisplay-Thin.otf") format("opentype");
 }
 
 @font-face {
-    font-family: "GTEestiProDisplay-Medium";
-    src: url("/public/fonts/GTEestiProDisplay-Medium.otf") format("opentype");
+  font-family: "GTEestiProDisplay-Medium";
+  src: url("/public/fonts/GTEestiProDisplay-Medium.otf") format("opentype");
 }
 
 $ok_color: #919c03;
@@ -35,12 +35,14 @@ $menu_gray: #a9adbc;
 $text-color: #4a4a4a;
 $headings-color: #4a4a4a;
 $headings_light_color: #656565;
-$headings-font-family: "GTEestiProDisplay-Bold", "Helvetica Neue", Arial, sans-serif !default;
+$headings-font-family: "GTEestiProDisplay-Bold", "Helvetica Neue", Arial,
+  sans-serif !default;
 
 $font-size-base: 1rem;
 $h3-font-size: 1rem;
 
-$font-family-sans-serif: "GTEestiProDisplay-Regular", "Helvetica Neue", Arial, sans-serif !default;
+$font-family-sans-serif: "GTEestiProDisplay-Regular", "Helvetica Neue", Arial,
+  sans-serif !default;
 
 $font-family-mono: "Ubuntu Mono", monospace !default;
 
@@ -48,4 +50,5 @@ $font-family-thin: "GTEestiProDisplay-Thin", "Helvetica Neue", Arial, sans-serif
 
 $font-family-bold: "GTEestiProDisplay-Bold", "Helvetica Neue", Arial, sans-serif !default;
 
-$font-family-medium: "GTEestiProDisplay-Medium", "Helvetica Neue", Arial, sans-serif !default;
+$font-family-medium: "GTEestiProDisplay-Medium", "Helvetica Neue", Arial,
+  sans-serif !default;
