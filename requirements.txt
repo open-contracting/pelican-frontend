@@ -72,7 +72,7 @@ packaging==23.1
     # via matplotlib
 pika==1.3.2
     # via yapw
-pillow==10.0.1
+pillow==10.2.0
     # via
     #   -r requirements.in
     #   matplotlib
