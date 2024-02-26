@@ -66,7 +66,7 @@ numpy==1.25.0
     # via
     #   contourpy
     #   matplotlib
-orjson==3.9.1
+orjson==3.9.15
     # via yapw
 packaging==23.1
     # via matplotlib
