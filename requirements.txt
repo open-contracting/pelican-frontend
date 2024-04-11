@@ -52,7 +52,7 @@ httplib2==0.22.0
     # via
     #   google-api-python-client
     #   google-auth-httplib2
-idna==2.9
+idna==3.7
     # via requests
 jsonref==1.1.0
     # via -r requirements.in
