@@ -9,6 +9,6 @@ Pelican frontend
 
    browse
    export
-   api/index
    contributing/index
+   api/index
    changelog
