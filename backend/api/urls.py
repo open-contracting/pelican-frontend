@@ -19,7 +19,7 @@ urlpatterns = router.urls + [
     path(
         "openapi",
         get_schema_view(
-            title="Controller API", description="Endpoints for managing datasets in Pelican backend.", version="1.0.0"
+            title="API", description="Endpoints for managing datasets in Pelican backend.", version="1.0.0"
         ),
         name="openapi-schema",
     ),
