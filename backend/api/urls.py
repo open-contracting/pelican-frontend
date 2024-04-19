@@ -1,7 +1,6 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from drf_spectacular import views as drfviews
 from rest_framework.routers import SimpleRouter
-from rest_framework.schemas import get_schema_view
 
 from api import views
 
@@ -13,22 +12,11 @@ urlpatterns = router.urls + [
     # Django REST Framework's @action decorator uses underscores instead of hyphens (for field_level_report, etc.).
     # While we can override it, we instead allow the default behavior and use underscores here for consistency.
     # https://github.com/encode/django-rest-framework/pull/6891
-    path("datasets/<pk>/field_level/<name>/", views.FieldLevelDetail.as_view()),
-    path("datasets/<pk>/compiled_release_level/<name>/", views.ResourceLevelDetail.as_view()),
-    # https://www.django-rest-framework.org/api-guide/schemas/#generating-a-dynamic-schema-with-schemaview
-    path(
-        "openapi",
-        get_schema_view(
-            title="API", description="Endpoints for managing datasets in Pelican backend.", version="1.0.0"
-        ),
-        name="openapi-schema",
-    ),
-    # https://www.django-rest-framework.org/topics/documenting-your-api/#a-minimal-example-with-swagger-ui
-    path(
-        "swagger-ui/",
-        TemplateView.as_view(template_name="swagger-ui.html", extra_context={"schema_url": "openapi-schema"}),
-        name="swagger-ui",
-    ),
+    path("datasets/<int:pk>/field_level/<str:name>/", views.FieldLevelDetail.as_view()),
+    path("datasets/<int:pk>/compiled_release_level/<str:name>/", views.ResourceLevelDetail.as_view()),
+    path("schema/", drfviews.SpectacularAPIView.as_view(), name="schema"),
+    path("schema/swagger-ui/", drfviews.SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("schema/redoc/", drfviews.SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("dataset-filter-items/", views.dataset_filter_items, name="dataset-filter-items"),
     path(
         "dataset-distinct-values/<dataset_id>/<field>/",

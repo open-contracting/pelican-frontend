@@ -7,11 +7,11 @@ from django.db.models import Count, F, OuterRef, Subquery
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from drf_spectacular.utils import extend_schema
 from psycopg2.sql import SQL, Identifier
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.schemas.openapi import AutoSchema
 
 from api.models import (
     DataItem,
@@ -143,6 +143,11 @@ class DatasetSerializer(serializers.ModelSerializer):
         ]
 
 
+class StatusSerializer(serializers.Serializer):
+    state = serializers.ChoiceField(choices=ProgressMonitorDataset.State.choices)
+    phase = serializers.ChoiceField(choices=ProgressMonitorDataset.Phase.choices)
+
+
 class CreateDatasetSerializer(serializers.Serializer):
     name = serializers.CharField(help_text="The name to assign to the dataset")
     collection_id = serializers.IntegerField(help_text="The collection ID in Kingfisher Process")
@@ -167,21 +172,6 @@ class FilterDatasetSerializer(serializers.Serializer):
     )
 
 
-# https://www.django-rest-framework.org/api-guide/schemas/
-# https://www.django-rest-framework.org/coreapi/schemas/
-class CustomSchema(AutoSchema):
-    def get_responses(self, path, method):
-        responses = super().get_responses(path, method)
-        # POST requests return HTTP 202 with no content (not 201).
-        if "201" in responses:
-            responses["202"] = responses.pop("201")
-            del responses["202"]["content"]
-        # GET requests return a JSON object (not string).
-        elif "200" in responses:
-            responses["200"]["content"]["application/json"]["schema"] = {"type": "object"}
-        return responses
-
-
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     Return OCDS data that passed or failed a check.
@@ -193,7 +183,6 @@ class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
 
 class DatasetViewSet(viewsets.ViewSet):
-    schema = CustomSchema()
     # ViewSet's don't allow typed paths like <int:pk> until next version (> 3.14.0).
     # https://github.com/encode/django-rest-framework/pull/6789
     # https://github.com/encode/django-rest-framework/issues/6148#issuecomment-725297421
@@ -230,6 +219,7 @@ class DatasetViewSet(viewsets.ViewSet):
         )
 
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L35
+    @extend_schema(responses=DatasetSerializer)
     def list(self, request, *args, **kwargs):
         """
         Return all datasets with their status and filter metadata.
@@ -239,6 +229,7 @@ class DatasetViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
+    @extend_schema(responses=DatasetSerializer)
     def retrieve(self, request, *args, **kwargs):
         """
         Return the dataset with its status and filter metadata.
@@ -247,6 +238,7 @@ class DatasetViewSet(viewsets.ViewSet):
         serializer = DatasetSerializer(instance)
         return Response(serializer.data)
 
+    @extend_schema(request=CreateDatasetSerializer, responses={202: None})
     def create(self, request):
         """
         Publish a message to RabbitMQ to create a dataset.
@@ -262,6 +254,7 @@ class DatasetViewSet(viewsets.ViewSet):
         publish(message, "ocds_kingfisher_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
+    @extend_schema(request=FilterDatasetSerializer, responses={202: None})
     @action(detail=True, methods=["post"])
     def filter(self, request, pk=None):
         """
@@ -273,6 +266,7 @@ class DatasetViewSet(viewsets.ViewSet):
         publish(message, "dataset_filter_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
+    @extend_schema(responses={202: None})
     def destroy(self, request, pk=None):
         """
         Publish a message to RabbitMQ to wipe the dataset.
@@ -280,6 +274,7 @@ class DatasetViewSet(viewsets.ViewSet):
         publish({"dataset_id": int(pk)}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
+    @extend_schema(responses={200: {"type": "object", "properties": {"id": {"type": "integer"}}}})
     @action(detail=False)
     def find_by_name(self, request):
         """
@@ -292,6 +287,7 @@ class DatasetViewSet(viewsets.ViewSet):
         except Dataset.DoesNotExist:
             return Response({})
 
+    @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def field_level_report(self, request, pk=None):
         """
@@ -299,6 +295,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         return Response(get_object_or_404(Report, dataset=pk, type="field_level_check").data)
 
+    @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def compiled_release_level_report(self, request, pk=None):
         """
@@ -306,6 +303,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         return Response(get_object_or_404(Report, dataset=pk, type="resource_level_check").data)
 
+    @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def dataset_level_report(self, request, pk=None):
         """
@@ -320,6 +318,7 @@ class DatasetViewSet(viewsets.ViewSet):
             ],
         )
 
+    @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def time_based_report(self, request, pk=None):
         """
@@ -336,6 +335,7 @@ class DatasetViewSet(viewsets.ViewSet):
             ],
         )
 
+    @extend_schema(responses=StatusSerializer)
     @action(detail=True)
     def status(self, request, pk=None):
         """
@@ -347,6 +347,7 @@ class DatasetViewSet(viewsets.ViewSet):
         except ProgressMonitorDataset.DoesNotExist:
             return Response({})
 
+    @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def metadata(self, request, pk=None):
         """
@@ -355,6 +356,7 @@ class DatasetViewSet(viewsets.ViewSet):
         meta = self.get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True))
         return Response(meta or {})
 
+    @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def coverage(self, request, pk=None):
         """
@@ -423,6 +425,7 @@ class DatasetViewSet(viewsets.ViewSet):
 
 
 class FieldLevelDetail(views.APIView):
+    @extend_schema(responses={200: {"type": "object"}})
     def get(self, request, pk, name, format=None):
         """
         Return a report and examples of one field-level check.
@@ -445,6 +448,7 @@ class FieldLevelDetail(views.APIView):
 
 
 class ResourceLevelDetail(views.APIView):
+    @extend_schema(responses={200: {"type": "object"}})
     def get(self, request, pk, name, format=None):
         """
         Return a report and examples of one compiled release-level check.

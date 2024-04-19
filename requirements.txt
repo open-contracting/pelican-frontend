@@ -6,6 +6,10 @@
 #
 asgiref==3.7.2
     # via django
+attrs==23.2.0
+    # via
+    #   jsonschema
+    #   referencing
 cachetools==4.1.0
     # via google-auth
 certifi==2023.7.22
@@ -26,9 +30,14 @@ django==4.2.11
     #   dj-database-url
     #   django-cors-headers
     #   djangorestframework
+    #   drf-spectacular
 django-cors-headers==4.1.0
     # via -r requirements.in
 djangorestframework==3.14.0
+    # via
+    #   -r requirements.in
+    #   drf-spectacular
+drf-spectacular==0.27.2
     # via -r requirements.in
 fonttools==4.43.0
     # via matplotlib
@@ -54,8 +63,14 @@ httplib2==0.22.0
     #   google-auth-httplib2
 idna==3.7
     # via requests
+inflection==0.5.1
+    # via drf-spectacular
 jsonref==1.1.0
     # via -r requirements.in
+jsonschema==4.21.1
+    # via drf-spectacular
+jsonschema-specifications==2023.12.1
+    # via jsonschema
 kiwisolver==1.2.0
     # via matplotlib
 lxml==4.9.1
@@ -99,9 +114,17 @@ pytz==2019.1
     #   djangorestframework
     #   google-api-core
 pyyaml==6.0
-    # via -r requirements.in
+    # via drf-spectacular
+referencing==0.34.0
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 requests==2.31.0
     # via google-api-core
+rpds-py==0.18.0
+    # via
+    #   jsonschema
+    #   referencing
 rsa==4.7.2
     # via google-auth
 sentry-sdk==1.19.0
@@ -125,7 +148,7 @@ typing-extensions==4.7.1
     # via dj-database-url
 uritemplate==3.0.1
     # via
-    #   -r requirements.in
+    #   drf-spectacular
     #   google-api-python-client
 urllib3==2.0.7
     # via

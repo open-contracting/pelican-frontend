@@ -2,6 +2,7 @@ dj-database-url
 django-cors-headers
 django<5
 djangorestframework
+drf-spectacular
 jsonref
 google-api-python-client
 google-auth
@@ -10,9 +11,7 @@ lxml
 matplotlib
 pillow
 psycopg2
-pyyaml
 sentry-sdk
 shortuuid
 simplejson
-uritemplate
 yapw[perf]

@@ -49,8 +49,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
     "corsheaders",
+    "drf_spectacular",
+    "rest_framework",
     "api.apps.APIConfig",
     "exporter.apps.ExporterConfig",
 ]
@@ -251,6 +252,7 @@ elif not production:
 
 REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 

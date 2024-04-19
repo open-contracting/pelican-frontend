@@ -108,10 +108,21 @@ class FieldLevelCheckExamples(models.Model):
 
 
 class ProgressMonitorDataset(models.Model):
+    class State(models.TextChoices):
+        IN_PROGRESS = "IN_PROGRESS"
+        OK = "OK"
+
+    class Phase(models.TextChoices):
+        CONTRACTING_PROCESS = "CONTRACTING_PROCESS"
+        DATASET = "DATASET"
+        TIME_VARIANCE = "TIME_VARIANCE"
+        CHECKED = "CHECKED"
+        DELETED = "DELETED"
+
     id = models.BigAutoField(primary_key=True)
     dataset = models.OneToOneField(Dataset, on_delete=models.CASCADE, related_name="progress")
-    state = models.CharField(max_length=255, blank=True, null=True)
-    phase = models.CharField(max_length=255, blank=True, null=True)
+    state = models.CharField(max_length=255, blank=True, null=True, choices=State.choices)
+    phase = models.CharField(max_length=255, blank=True, null=True, choices=Phase.choices)
     size = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
