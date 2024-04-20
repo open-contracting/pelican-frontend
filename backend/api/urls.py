@@ -4,7 +4,7 @@ from rest_framework.routers import SimpleRouter
 
 from api import views
 
-router = SimpleRouter()
+router = SimpleRouter(use_regex_path=False)
 router.register(r"datasets", views.DatasetViewSet, basename="dataset")
 router.register(r"data_items", views.DataItemViewSet, basename="data-item")
 

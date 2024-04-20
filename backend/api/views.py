@@ -177,16 +177,13 @@ class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     Return OCDS data that passed or failed a check.
     """
 
-    lookup_value_regex = "[0-9]+"
     queryset = DataItem.objects.all()
     serializer_class = DataItemSerializer
+    lookup_value_converter = "int"
 
 
 class DatasetViewSet(viewsets.ViewSet):
-    # ViewSet's don't allow typed paths like <int:pk> until next version (> 3.14.0).
-    # https://github.com/encode/django-rest-framework/pull/6789
-    # https://github.com/encode/django-rest-framework/issues/6148#issuecomment-725297421
-    lookup_value_regex = "[0-9]+"
+    lookup_value_converter = "int"
 
     def get_queryset(self):
         return Dataset.objects.all()
@@ -262,7 +259,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         serializer = FilterDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        message = {"dataset_id_original": int(pk), "filter_message": serializer.data}
+        message = {"dataset_id_original": pk, "filter_message": serializer.data}
         publish(message, "dataset_filter_extractor_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -271,7 +268,7 @@ class DatasetViewSet(viewsets.ViewSet):
         """
         Publish a message to RabbitMQ to wipe the dataset.
         """
-        publish({"dataset_id": int(pk)}, "wiper_init")
+        publish({"dataset_id": pk}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
     @extend_schema(responses={200: {"type": "object", "properties": {"id": {"type": "integer"}}}})
@@ -417,9 +414,9 @@ class DatasetViewSet(viewsets.ViewSet):
             for key, items in mapping.items():
                 counts[key] = 0
                 for i in items:
-                    for r in results:
-                        if r[0] == i:
-                            counts[key] += int(r[1])
+                    for result in results:
+                        if result[0] == i:
+                            counts[key] += int(result[1])
 
         return Response(counts)
 
