@@ -5,7 +5,6 @@ Contributing
    :caption: Contents
    :maxdepth: 1
 
-   backend
    add-metadata
    add-check
    update-check
@@ -85,8 +84,42 @@ In another terminal, start the frontend server:
    cd frontend
    npx vue-cli-service serve
 
-Reference
-~~~~~~~~~
+Backend
+~~~~~~~
+
+The Django project is made up of two apps:
+
+-  ``api``: Serves API requests
+-  ``exporter``: Generates the exports to Google Docs
+
+API documentation
+^^^^^^^^^^^^^^^^^
+
+If you edit ``views.py``, regenerate the OpenAPI document by running the server and:
+
+.. code-block:: bash
+
+   curl http://127.0.0.1:8000/api/schema/ -o docs/_static/openapi.yaml
+
+Pelican backend integration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__'s database is treated as a read-only `legacy database <https://docs.djangoproject.com/en/4.2/howto/legacy-databases/>`__, with ``managed = False`` in all model's ``Meta`` class, and with a ``DATABASE_ROUTERS`` setting that routes queries to its database.
+
+To update ``backend/api/models.py`` following changes to Pelican backend's database schema:
+
+-  Run ``python backend/manage.py inspectdb > backend/api/models.py``
+-  Replace comments at top of file
+-  Replace ``models.DO_NOTHING`` with ``on_delete=models.CASCADE``
+-  ``Dataset.meta``: Add ``blank=True, default=dict``
+-  ``DatasetFilter.dataset_id_original``: Rename to ``parent``, add ``related_name="children"``
+-  ``DatasetFilter.dataset_id_filtered``: Rename to ``dataset``, add ``related_name="filtered"``
+-  ``ProgressMonitorDataset.dataset``: Add ``related_name="progress"``
+-  ``ProgressMonitorItem.item``: Rename to ``data_item``
+-  ``Report.type``: Change ``TextField`` to ``CharField``, add ``max_length=255``, and remove ``# This field type is a guess.``
+
+Learning
+~~~~~~~~
 
 -  `Vue v2 <https://v2.vuejs.org>`__
 -  `Vue CLI <https://cli.vuejs.org>`__
