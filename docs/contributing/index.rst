@@ -95,6 +95,10 @@ The Django project is made up of two apps:
 API documentation
 ^^^^^^^^^^^^^^^^^
 
+.. seealso::
+
+   :ref:`api`
+
 If you edit ``views.py``, regenerate the OpenAPI document by running the server and:
 
 .. code-block:: bash
