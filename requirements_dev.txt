@@ -99,7 +99,7 @@ googleapis-common-protos==1.52.0
     # via
     #   -r requirements.txt
     #   google-api-core
-gunicorn[setproctitle]==20.1.0
+gunicorn[setproctitle]==22.0.0
     # via -r requirements.txt
 httplib2==0.22.0
     # via
@@ -156,6 +156,7 @@ packaging==23.1
     #   -r requirements.txt
     #   black
     #   build
+    #   gunicorn
     #   matplotlib
 pathspec==0.9.0
     # via black

@@ -55,7 +55,7 @@ google-auth-httplib2==0.0.3
     # via google-api-python-client
 googleapis-common-protos==1.52.0
     # via google-api-core
-gunicorn[setproctitle]==20.1.0
+gunicorn[setproctitle]==22.0.0
     # via -r requirements.in
 httplib2==0.22.0
     # via
@@ -84,7 +84,9 @@ numpy==1.25.0
 orjson==3.9.15
     # via yapw
 packaging==23.1
-    # via matplotlib
+    # via
+    #   gunicorn
+    #   matplotlib
 pika==1.3.2
     # via yapw
 pillow==10.3.0
