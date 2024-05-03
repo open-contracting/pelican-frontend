@@ -150,7 +150,7 @@ class StatusSerializer(serializers.Serializer):
 
 class CreateDatasetSerializer(serializers.Serializer):
     name = serializers.CharField(help_text="The name to assign to the dataset")
-    collection_id = serializers.IntegerField(help_text="The collection ID in Kingfisher Process")
+    collection_id = serializers.IntegerField(help_text="The compiled collection ID in Kingfisher Process")
     ancestor_id = serializers.IntegerField(
         required=False, help_text="The ID of the previous report in Pelican, for time-based checks"
     )

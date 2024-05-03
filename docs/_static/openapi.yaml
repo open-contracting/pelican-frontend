@@ -428,7 +428,7 @@ components:
           description: The name to assign to the dataset
         collection_id:
           type: integer
-          description: The collection ID in Kingfisher Process
+          description: The compiled collection ID in Kingfisher Process
         ancestor_id:
           type: integer
           description: The ID of the previous report in Pelican, for time-based checks
