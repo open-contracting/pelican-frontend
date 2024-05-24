@@ -253,10 +253,10 @@ export default {
             var data = {};
 
             if (this.releaseDateFrom != "") {
-                data.release_date_from = this.releaseDateFrom;
+                data.release_date_from = this.releaseDateFrom.substring(0, 10);
             }
             if (this.releaseDateTo != "") {
-                data.release_date_to = this.releaseDateTo;
+                data.release_date_to = this.releaseDateTo.substring(0, 10);
             }
             if (this.buyerName.length > 0) {
                 data.buyer = this.buyerName;
