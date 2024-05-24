@@ -78,13 +78,6 @@
       </div>
     </div>
 
-    <!--"release_date_from": '2019-12-02',
-#         "release_date_to": '2020-02-02',
-#         "buyer": ["ministry_of_finance", "state"],
-#         "buyer_regex": "Development$",
-#         "procuring_entity": ["a", "b"],
-        #         "procuring_entity_regex": "(a|b)casdf+"-->
-
     <div class="row">
       <div class="col-12 col-xl-6">
         <h4>
