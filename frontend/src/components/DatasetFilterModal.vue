@@ -253,10 +253,10 @@ export default {
             var data = {};
 
             if (this.releaseDateFrom != "") {
-                data.release_date_from = this.releaseDateFrom.substring(0, 10);
+                data.release_date_from = this.releaseDateFrom.toISOString().split("T")[0];
             }
             if (this.releaseDateTo != "") {
-                data.release_date_to = this.releaseDateTo.substring(0, 10);
+                data.release_date_to = this.releaseDateTo.toISOString().split("T")[0];
             }
             if (this.buyerName.length > 0) {
                 data.buyer = this.buyerName;
