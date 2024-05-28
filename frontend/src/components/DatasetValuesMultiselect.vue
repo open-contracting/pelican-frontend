@@ -38,7 +38,6 @@
           <span>{{ option.value }}</span>
           <span class="multiselect__tag__items__count">&nbsp;({{ option.count }} items)</span>
           <i
-            aria-hidden="true"
             tabindex="1"
             class="multiselect__tag-icon"
             @click="remove(option)"
