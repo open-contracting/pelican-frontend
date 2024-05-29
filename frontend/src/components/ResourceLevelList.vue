@@ -103,8 +103,8 @@ export default {
 
             return result
                 .sort((a, b) => {
-                    var nameA = a["name"];
-                    var nameB = b["name"];
+                    var nameA = a.name;
+                    var nameB = b.name;
                     if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {
                         if (nameA < nameB) {
                             return -1;

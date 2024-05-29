@@ -535,7 +535,7 @@ export default {
             var result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
-                return result["data"];
+                return result.data;
             }
 
             return null;
@@ -592,7 +592,7 @@ export default {
                 .dispatch("loadDataItem", itemId)
                 .then(() => {
                     var result = this.$store.getters.dataItemById(itemId);
-                    var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result["data"], null, 2)]));
+                    var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
                     var fileLink = document.createElement("a");
 
                     fileLink.href = fileURL;

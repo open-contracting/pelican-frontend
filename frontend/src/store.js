@@ -97,7 +97,7 @@ export default new Vuex.Store({
             if (state.dataItems) {
                 var dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
-                    return JSON.stringify(dataItem["data"], null, 2).split("\n").length;
+                    return JSON.stringify(dataItem.data, null, 2).split("\n").length;
                 }
             }
 
@@ -107,7 +107,7 @@ export default new Vuex.Store({
             if (state.dataItems) {
                 var dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
-                    return JSON.stringify(dataItem["data"], null, 2);
+                    return JSON.stringify(dataItem.data, null, 2);
                 }
             }
 
@@ -165,7 +165,7 @@ export default new Vuex.Store({
         },
         extensionDataByName: (state) => (extensionName) => {
             return state.dataset.meta.collection_metadata.extensions.find((item) =>
-                "en" in item.name ? item.name["en"] === extensionName : item.name === extensionName,
+                "en" in item.name ? item.name.en === extensionName : item.name === extensionName,
             );
         },
     },
@@ -274,7 +274,7 @@ export default new Vuex.Store({
                 axios
                     .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.settings}`)
                     .then((response) => {
-                        commit("setSettings", response["data"]);
+                        commit("setSettings", response.data);
                         resolve();
                     })
                     .catch((error) => {
@@ -288,7 +288,7 @@ export default new Vuex.Store({
                     .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${datasetId}`)
                     .then((response) => {
                         dispatch("resetDatasetEnv");
-                        commit("setDataset", response["data"]);
+                        commit("setDataset", response.data);
                         Promise.all([
                             dispatch("loadResourceLevelStats"),
                             dispatch("loadDatasetLevelStats"),
@@ -311,9 +311,9 @@ export default new Vuex.Store({
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
                         var data = [];
-                        for (var key in response["data"]) {
-                            response["data"][key]["name"] = key;
-                            data.push(response["data"][key]);
+                        for (var key in response.data) {
+                            response.data[key].name = key;
+                            data.push(response.data[key]);
                         }
                         commit("setResourceLevelStats", data);
                         resolve();
@@ -335,10 +335,10 @@ export default new Vuex.Store({
                         axios
                             .get(`${CONFIG.apiBaseUrl}${formatted}`)
                             .then((response) => {
-                                response["data"]["examples_filled"] = true;
+                                response.data.examples_filled = true;
                                 commit("setResourceLevelCheckDetail", {
                                     name: checkName,
-                                    data: response["data"],
+                                    data: response.data,
                                 });
                                 resolve();
                             })
@@ -357,9 +357,9 @@ export default new Vuex.Store({
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
                         var data = [];
-                        for (var key in response["data"]) {
-                            response["data"][key]["name"] = key;
-                            data.push(response["data"][key]);
+                        for (var key in response.data) {
+                            response.data[key].name = key;
+                            data.push(response.data[key]);
                         }
                         commit("setDatasetLevelStats", data);
                         resolve();
@@ -380,7 +380,7 @@ export default new Vuex.Store({
                     axios
                         .get(`${CONFIG.apiBaseUrl}${formatted}`)
                         .then((response) => {
-                            commit("addDataItem", response["data"]);
+                            commit("addDataItem", response.data);
                             resolve();
                         })
                         .catch((error) => {
@@ -410,8 +410,8 @@ export default new Vuex.Store({
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
                         var data = [];
-                        for (var key in response["data"]) {
-                            var item = response["data"][key];
+                        for (var key in response.data) {
+                            var item = response.data[key];
                             data.push(
                                 Object.assign({}, item, {
                                     path: key,
@@ -443,10 +443,10 @@ export default new Vuex.Store({
                     axios
                         .get(`${CONFIG.apiBaseUrl}${formatted}`)
                         .then((response) => {
-                            response["data"]["examples_filled"] = true;
+                            response.data.examples_filled = true;
                             commit("setFieldLevelCheckDetail", {
                                 path: path,
-                                data: response["data"],
+                                data: response.data,
                             });
                         })
                         .catch((error) => {
@@ -463,9 +463,9 @@ export default new Vuex.Store({
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
                         var data = [];
-                        for (var key in response["data"]) {
-                            response["data"][key]["name"] = key;
-                            data.push(response["data"][key]);
+                        for (var key in response.data) {
+                            response.data[key].name = key;
+                            data.push(response.data[key]);
                         }
                         commit("setTimeVarianceLevelStats", data);
                         resolve();

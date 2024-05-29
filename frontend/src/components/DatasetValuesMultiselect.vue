@@ -96,7 +96,7 @@ export default {
             axios
                 .get(url, { cancelToken: this.cancelToken.token })
                 .then((response) => {
-                    this.options = response["data"];
+                    this.options = response.data;
                     this.isLoading = false;
                 })
                 .catch((error) => {

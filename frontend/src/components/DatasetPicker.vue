@@ -179,7 +179,7 @@ export default {
         axios
             .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
             .then((response) => {
-                this.datasets = buildDatasetsTree(response["data"], null);
+                this.datasets = buildDatasetsTree(response.data, null);
 
                 var self = this;
                 this.datasets.forEach((item) => {

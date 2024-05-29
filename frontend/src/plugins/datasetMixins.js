@@ -96,7 +96,7 @@ export default {
         orderedShares: (shares) => {
             var items = Object.keys(shares).map((key) => [key, shares[key]]);
 
-            items.sort((first, second) => second[1]["count"] - first[1]["count"]);
+            items.sort((first, second) => second[1].count - first[1].count);
 
             return items;
         },

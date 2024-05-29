@@ -25,7 +25,8 @@
     "rules": {
       "recommended": false,
       "complexity": {
-        "useArrowFunction": "error"
+        "useArrowFunction": "error",
+        "useLiteralKeys": "error"
       },
       "style": {
         "useTemplate": "error"

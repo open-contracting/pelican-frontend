@@ -228,7 +228,7 @@ export default {
                 )
                 .then((response) => {
                     if (response.status === 200) {
-                        this.items = response["data"]["items"];
+                        this.items = response.data.items;
                     } else {
                         this.items = null;
                     }

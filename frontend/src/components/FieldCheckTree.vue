@@ -59,7 +59,7 @@ export default {
                     node = node[p];
                 });
 
-                node["_check"] = n;
+                node._check = n;
             });
 
             return root;
