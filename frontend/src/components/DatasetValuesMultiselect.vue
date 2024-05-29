@@ -89,7 +89,7 @@ export default {
             }
             this.isLoading = true;
             this.options = [];
-            var url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}/${this.datasetId}/${this.jsonPath}/`;
+            var url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}${this.datasetId}/${this.jsonPath}/`;
             if (query) {
                 url += `${query}/`;
             }
