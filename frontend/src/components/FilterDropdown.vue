@@ -24,12 +24,12 @@ export default {
         filterNames: Array,
         startIndex: {
             type: Number,
-            default: 0
-        }
+            default: 0,
+        },
     },
     data: function () {
         return {
-            selectedIndex: 0
+            selectedIndex: 0,
         };
     },
     mounted: function () {
@@ -40,8 +40,8 @@ export default {
         clickItem: function (index) {
             this.selectedIndex = index;
             this.$emit("newSelectedIndex", index);
-        }
-    }
+        },
+    },
 };
 </script>
 

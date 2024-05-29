@@ -170,9 +170,9 @@ export default {
                 name: "datasetCheckDetail",
                 params: {
                     check: this.check.name,
-                    datasetId: this.$store.getters.datasetId
-                }
-            }
+                    datasetId: this.$store.getters.datasetId,
+                },
+            },
         };
     },
     methods: {
@@ -183,8 +183,8 @@ export default {
             if (this.check.result != undefined && this.checkType != null) {
                 this.$router.push(this.detailRouterArguments);
             }
-        }
-    }
+        },
+    },
 };
 </script>
 

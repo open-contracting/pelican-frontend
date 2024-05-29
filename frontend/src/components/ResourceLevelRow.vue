@@ -59,16 +59,16 @@ export default {
                 name: "resourceCheckDetail",
                 params: {
                     check: this.name,
-                    datasetId: this.$store.getters.datasetId
-                }
-            }
+                    datasetId: this.$store.getters.datasetId,
+                },
+            },
         };
     },
     methods: {
         detail: function () {
             this.$router.push(this.detailRouterArguments);
-        }
-    }
+        },
+    },
 };
 </script>
 

@@ -91,7 +91,7 @@
 
 <script>
 import VueJsonPretty from "vue-json-pretty";
-import 'vue-json-pretty/lib/styles.css';
+import "vue-json-pretty/lib/styles.css";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
@@ -105,14 +105,14 @@ export default {
         DashboardDetail,
         ExampleBoxes,
         CheckDetailResultBox,
-        Tooltip
+        Tooltip,
     },
     mixins: [resourceCheckMixin],
     data: function () {
         return {
             previewMetaData: null,
             previewDataItemId: null,
-            loadingPreviewData: false
+            loadingPreviewData: false,
         };
     },
     computed: {
@@ -130,7 +130,7 @@ export default {
         check() {
             var stats = this.$store.getters.resourceLevelStats;
             if (stats != null) {
-                return stats.find(item => item.name === this.$route.params.check);
+                return stats.find((item) => item.name === this.$route.params.check);
             } else {
                 return null;
             }
@@ -146,7 +146,7 @@ export default {
                     exampleSections.push({
                         id: "failed",
                         header: this.$t("core.failedExamples"),
-                        examples: failed.map(val => val.meta)
+                        examples: failed.map((val) => val.meta),
                     });
                 }
 
@@ -154,7 +154,7 @@ export default {
                     exampleSections.push({
                         id: "passed",
                         header: this.$t("core.passedExamples"),
-                        examples: passed.map(val => val.meta)
+                        examples: passed.map((val) => val.meta),
                     });
                 }
 
@@ -162,7 +162,7 @@ export default {
                     exampleSections.push({
                         id: "undefined",
                         header: this.$t("core.undefinedExamples"),
-                        examples: undefineds.map(val => val.meta)
+                        examples: undefineds.map((val) => val.meta),
                     });
                 }
             }
@@ -177,7 +177,7 @@ export default {
             }
 
             return null;
-        }
+        },
     },
     methods: {
         preview: function (itemId) {
@@ -199,8 +199,8 @@ export default {
             if (result) {
                 this.previewMetaData = result.result;
             }
-        }
-    }
+        },
+    },
 };
 </script>
 

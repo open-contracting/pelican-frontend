@@ -30,8 +30,8 @@ export default {
                 return this.$store.getters.dataset;
             }
             return [];
-        }
-    }
+        },
+    },
 };
 </script>
 

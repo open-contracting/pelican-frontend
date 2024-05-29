@@ -506,7 +506,7 @@
 
 <script>
 import VueJsonPretty from "vue-json-pretty";
-import 'vue-json-pretty/lib/styles.css';
+import "vue-json-pretty/lib/styles.css";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import InlineBar from "@/components/InlineBar.vue";
@@ -518,7 +518,7 @@ export default {
         VueJsonPretty,
         DashboardDetail,
         InlineBar,
-        Tooltip
+        Tooltip,
     },
     mixins: [timeMixins],
     data: function () {
@@ -529,7 +529,7 @@ export default {
             loadingPreviewData: false,
             examples: null,
             showMore: false,
-            selectedKey: null
+            selectedKey: null,
         };
     },
     computed: {
@@ -552,7 +552,7 @@ export default {
             this.loadCheck();
 
             return this.check != null;
-        }
+        },
     },
     created() {
         this.loadCheck();
@@ -623,8 +623,8 @@ export default {
                 .catch(() => {
                     this.$alert(this.$t("preview.nonExisting"), null, "error");
                 });
-        }
-    }
+        },
+    },
 };
 </script>
 

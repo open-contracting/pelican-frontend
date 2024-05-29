@@ -24,20 +24,20 @@ Vue.use(Multiselect);
 Vue.component("DatePick", DatePick);
 Vue.component("Multiselect", Multiselect);
 const i18n = new VueI18n({
-  locale: "en",
-  messages: {
-    en: en,
-  },
+    locale: "en",
+    messages: {
+        en: en,
+    },
 });
 
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
-  i18n,
-  render: (h) => h(App),
-  created() {
-    this.$store.dispatch("loadSettings");
-  },
+    router,
+    store,
+    i18n,
+    render: (h) => h(App),
+    created() {
+        this.$store.dispatch("loadSettings");
+    },
 }).$mount("#app");

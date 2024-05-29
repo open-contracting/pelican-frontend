@@ -103,17 +103,17 @@ export default {
         individualNonPass: Boolean,
         passedLabel: {
             type: String,
-            default: 'passed'
+            default: "passed",
         },
         failedLabel: {
             type: String,
-            default: 'failed'
+            default: "failed",
         },
-        classes: String
+        classes: String,
     },
     data: function () {
         return {};
-    }
+    },
 };
 </script>
 

@@ -40,7 +40,7 @@ export default {
     props: ["percentage", "count", "state", "showCount"],
     data: function () {
         return {
-            barWidth: 1
+            barWidth: 1,
         };
     },
     mounted() {
@@ -51,7 +51,7 @@ export default {
                 this.barWidth = (this.$refs.bar.clientWidth / 100) * this.percentage;
             }
         }
-    }
+    },
 };
 </script>
 

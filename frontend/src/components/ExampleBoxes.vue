@@ -246,13 +246,13 @@ export default {
     props: {
         exampleSections: Array,
         loaded: Boolean,
-        previewDisabled: Boolean
+        previewDisabled: Boolean,
     },
     data: function () {
         return {
             openSections: [],
             selectedKey: null,
-            selectedSection: null
+            selectedSection: null,
         };
     },
     computed: {},
@@ -297,8 +297,8 @@ export default {
         },
         visibleSections: function (section) {
             return this.openSections.includes(section);
-        }
-    }
+        },
+    },
 };
 </script>
 

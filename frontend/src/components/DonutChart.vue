@@ -20,10 +20,10 @@ export default {
                 [
                     this.$t("datasetLevel.charts.code"),
                     this.$t("datasetLevel.charts.share"),
-                    {role: "annotation"},
-                    {role: "style"},
-                    {role: "custom"},
-                ]
+                    { role: "annotation" },
+                    { role: "style" },
+                    { role: "custom" },
+                ],
             ],
             // https://developers.google.com/chart/interactive/docs/gallery/barchart
             chartOptions: {
@@ -61,7 +61,7 @@ export default {
                 colors: ["#555cb3"],
                 fontName: "GTEestiProDisplay-Regular",
                 fontSize: 14,
-            }
+            },
         };
     },
     mounted() {
@@ -78,7 +78,10 @@ export default {
             } else {
                 var styles = "";
                 if (this.ticks && (!this.styles.length || this.styles.includes(shares[key][0]))) {
-                    styles = (this.ticks[0] <= shares[key][1].share && shares[key][1].share <= this.ticks[1]) ? "color: #919C03" : "color: #d0021b";
+                    styles =
+                        this.ticks[0] <= shares[key][1].share && shares[key][1].share <= this.ticks[1]
+                            ? "color: #919C03"
+                            : "color: #d0021b";
                 }
                 this.chartData.push([
                     shares[key][0],
@@ -97,7 +100,9 @@ export default {
             if (this.limit) {
                 this.chartData[i][2] = this.$options.filters.formatPercentage(100 * this.chartData[i][2]);
             } else {
-                this.chartData[i][2] = `${this.$options.filters.formatPercentage(100 * this.chartData[i][2])} (${this.$options.filters.formatNumber(this.chartData[i][4])})`;
+                this.chartData[i][2] = `${this.$options.filters.formatPercentage(
+                    100 * this.chartData[i][2],
+                )} (${this.$options.filters.formatNumber(this.chartData[i][4])})`;
             }
         }
 
@@ -129,6 +134,6 @@ export default {
                 this.chartOptions.chartArea.height = "100%";
             }
         }
-    }
+    },
 };
 </script>

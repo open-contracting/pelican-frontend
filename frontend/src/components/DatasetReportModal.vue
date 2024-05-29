@@ -380,9 +380,9 @@ export default {
             failedTags: null,
             options: [
                 { value: "en", text: "English" },
-                { value: "es", text: "Español" }
+                { value: "es", text: "Español" },
             ],
-            reportLanguage: "en"
+            reportLanguage: "en",
         };
     },
     methods: {
@@ -403,7 +403,7 @@ export default {
                 dataset_id: parseInt(this.dataset.id),
                 document_id: this.documentId,
                 folder_id: this.folderId,
-                language: this.reportLanguage
+                language: this.reportLanguage,
             };
             if (this.reportName.trim() != "") {
                 data.report_name = this.reportName.trim();
@@ -411,7 +411,7 @@ export default {
 
             axios
                 .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
-                .then(response => {
+                .then((response) => {
                     if (response.data.failed_tags && response.data.failed_tags.length == 0) {
                         this.failedTags = null;
                     } else {
@@ -426,7 +426,7 @@ export default {
                         this.errorMessage = response.statusText;
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     this.submitStatus = "server_error";
                     this.errorMessage = error;
                 })
@@ -454,8 +454,8 @@ export default {
                 valueMatch = value.match(/\/folders\/([^/]+)/);
             }
             return valueMatch != null ? valueMatch[1] : value;
-        }
-    }
+        },
+    },
 };
 </script>
 

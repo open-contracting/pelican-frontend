@@ -118,13 +118,13 @@ export default {
     props: ["dataset", "depth"],
     data: function () {
         return {
-            showFilteredChildren: false
+            showFilteredChildren: false,
         };
     },
     computed: {
         phases: function () {
             return ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];
-        }
+        },
     },
     methods: {
         getDatasetProgress: function (dataset) {
@@ -132,8 +132,8 @@ export default {
         },
         isDatasetImported: function (dataset) {
             return dataset.phase == "CHECKED" && dataset.state == "OK";
-        }
-    }
+        },
+    },
 };
 </script>
 

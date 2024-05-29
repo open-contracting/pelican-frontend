@@ -79,8 +79,8 @@ export default {
         check: Object,
         showStats: {
             type: Boolean,
-            default: true
-        }
+            default: true,
+        },
     },
     data: function () {
         return {
@@ -88,16 +88,16 @@ export default {
                 name: "fieldCheckDetail",
                 params: {
                     path: this.check.path,
-                    datasetId: this.$store.getters.datasetId
-                }
-            }
+                    datasetId: this.$store.getters.datasetId,
+                },
+            },
         };
     },
     methods: {
         detail: function () {
             this.$router.push(this.detailRouterArguments);
-        }
-    }
+        },
+    },
 };
 </script>
 

@@ -27,12 +27,12 @@ export default {
         placeholder: String,
         onUpdate: Function,
         preset: String,
-        submitTimeLimit: { type: Number, default: 400 }
+        submitTimeLimit: { type: Number, default: 400 },
     },
     data: function () {
         return {
             search: null,
-            submitTimeout: null
+            submitTimeout: null,
         };
     },
     watch: {
@@ -42,11 +42,11 @@ export default {
             }
 
             this.submitTimeout = setTimeout(() => this.onUpdate(value), this.submitTimeLimit);
-        }
+        },
     },
     mounted: function () {
         this.search = this.preset;
-    }
+    },
 };
 </script>
 

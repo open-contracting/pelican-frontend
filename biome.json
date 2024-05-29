@@ -1,7 +1,24 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  },
   "organizeImports": {
-    "enabled": true
+    "enabled": false
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 4,
+    "lineWidth": 119,
+    "ignore": ["backend/release-schema.json"]
+  },
+  "json": {
+    "formatter": {
+      "indentWidth": 2
+    }
   },
   "linter": {
     "enabled": true,

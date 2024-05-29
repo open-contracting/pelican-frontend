@@ -26,8 +26,8 @@ export default {
             var id = "id-" + Math.floor(Math.random() * 10000000000);
 
             return id;
-        }
-    }
+        },
+    },
 };
 </script>
 

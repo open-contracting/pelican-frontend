@@ -52,12 +52,12 @@ import Tooltip from "@/components/Tooltip.vue";
 export default {
     components: {
         ResourceLevelRow,
-        Tooltip
+        Tooltip,
     },
     props: ["section", "filter"],
     data: function () {
         return {
-            showChecks: false
+            showChecks: false,
         };
     },
     computed: {
@@ -100,7 +100,7 @@ export default {
                 "coherent.documents_dates",
                 "coherent.value_realistic",
                 "coherent.period",
-                "coherent.procurement_method_vs_number_of_tenderers"
+                "coherent.procurement_method_vs_number_of_tenderers",
             ];
 
             return result
@@ -144,8 +144,8 @@ export default {
                 return this.$t("resourceLevel.averageScore.undefined");
             }
 
-            return this.$options.filters.formatPercentage(100.0 * passedCount / (passedCount + failedCount));
-        }
+            return this.$options.filters.formatPercentage((100.0 * passedCount) / (passedCount + failedCount));
+        },
     },
     watch: {
         showChecks: function (newShowChecks) {
@@ -154,11 +154,11 @@ export default {
             } else {
                 this.$store.commit("removeResourceCheckExpandedNode", this.section);
             }
-        }
+        },
     },
     mounted() {
         this.showChecks = this.$store.getters.isResourceCheckExpanded(this.section);
-    }
+    },
 };
 </script>
 

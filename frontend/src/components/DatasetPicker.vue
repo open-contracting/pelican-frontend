@@ -139,7 +139,7 @@ export default {
         SearchInput,
         DatasetPickerRow,
         DatasetFilterModal,
-        DatasetReportModal
+        DatasetReportModal,
     },
     mixins: [stateMixin, sortMixins],
     data: function () {
@@ -147,7 +147,7 @@ export default {
             datasets: [],
             loading: false,
             filteredDataset: null,
-            reportDataset: null
+            reportDataset: null,
         };
     },
     computed: {
@@ -170,7 +170,7 @@ export default {
         },
         defaultSorting: function () {
             return { by: "created", asc: false };
-        }
+        },
     },
     mounted() {
         var buildDatasetsTree = function (datasets, parent_id) {
@@ -186,13 +186,15 @@ export default {
         };
         axios
             .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
-            .then(response => {
+            .then((response) => {
                 this.datasets = buildDatasetsTree(response["data"], null);
 
                 var self = this;
                 this.datasets.forEach(function (item) {
                     if (item.ancestor_id != null) {
-                        var ancestor = self.datasets.find(element => String(element.ancestor_id) == item.ancestor_id);
+                        var ancestor = self.datasets.find(
+                            (element) => String(element.ancestor_id) == item.ancestor_id,
+                        );
                         item.ancestor_name = ancestor.name;
                     } else {
                         item.ancestor_name = null;
@@ -230,13 +232,13 @@ export default {
                 comp = (a, b) =>
                     this.compareNumbers(
                         a.meta.compiled_releases?.total_unique_ocids || -1,
-                        b.meta.compiled_releases?.total_unique_ocids || -1
+                        b.meta.compiled_releases?.total_unique_ocids || -1,
                     );
             } else if (by == "collection_id") {
                 comp = (a, b) =>
                     this.compareNumbers(
                         a.meta.kingfisher_metadata?.collection_id || -1,
-                        b.meta.kingfisher_metadata?.collection_id || -1
+                        b.meta.kingfisher_metadata?.collection_id || -1,
                     );
             } else if (by == "phase") {
                 comp = (a, b) => {
@@ -259,8 +261,8 @@ export default {
         },
         hideReportModal: function () {
             this.$bvModal.hide("report-modal");
-        }
-    }
+        },
+    },
 };
 </script>
 

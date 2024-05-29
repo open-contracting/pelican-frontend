@@ -11,7 +11,7 @@
 export default {
     data: function () {
         return {
-            showHidden: {}
+            showHidden: {},
         };
     },
     computed: {
@@ -20,8 +20,8 @@ export default {
                 return this.$store.getters.dataset;
             }
             return undefined;
-        }
-    }
+        },
+    },
 };
 </script>
 

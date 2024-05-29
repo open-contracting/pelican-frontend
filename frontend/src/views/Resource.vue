@@ -70,7 +70,7 @@ export default {
         ResourceLevelList,
         Loader,
         FilterDropdown,
-        Dashboard
+        Dashboard,
     },
     data: function () {
         return {
@@ -80,14 +80,14 @@ export default {
                 this.$t("resourceLevel.filterDropdown.all"),
                 this.$t("resourceLevel.filterDropdown.failedOnly"),
                 this.$t("resourceLevel.filterDropdown.passedOnly"),
-                this.$t("resourceLevel.filterDropdown.calculatedOnly")
+                this.$t("resourceLevel.filterDropdown.calculatedOnly"),
             ],
             filters: [
                 () => true,
-                item => item.failed_count > 0,
-                item => item.failed_count == 0 && item.passed_count > 0,
-                item => item.passed_count > 0 || item.failed_count > 0
-            ]
+                (item) => item.failed_count > 0,
+                (item) => item.failed_count == 0 && item.passed_count > 0,
+                (item) => item.passed_count > 0 || item.failed_count > 0,
+            ],
         };
     },
     computed: {
@@ -96,16 +96,16 @@ export default {
                 return true;
             }
             return false;
-        }
+        },
     },
     watch: {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setResourceLevelFilterIndex", newFilterIndex);
-        }
+        },
     },
     created() {
         this.filterIndex = this.$store.getters.resourceLevelFilterIndex;
-    }
+    },
 };
 </script>
 

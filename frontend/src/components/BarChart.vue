@@ -18,9 +18,9 @@ export default {
                 [
                     this.$t("datasetLevel.charts.group"),
                     this.$t("datasetLevel.charts.share"),
-                    {role: "annotation"},
-                    {role: "style"},
-                ]
+                    { role: "annotation" },
+                    { role: "style" },
+                ],
             ],
             // https://developers.google.com/chart/interactive/docs/gallery/barchart
             chartOptions: {
@@ -57,7 +57,7 @@ export default {
                 colors: ["#555cb3"],
                 fontName: "GTEestiProDisplay-Regular",
                 fontSize: 14,
-            }
+            },
         };
     },
     mounted() {
@@ -65,7 +65,9 @@ export default {
             this.$t("datasetLevel.charts.label_0_1"),
             this.check.meta.shares["0_1"],
             this.$options.filters.formatPercentage(100 * this.check.meta.shares["0_1"]),
-            this.ticks[0] <= this.check.meta.shares["0_1"] && this.check.meta.shares["0_1"] <= this.ticks[1] ? "color: #919C03" : "color: #d0021b",
+            this.ticks[0] <= this.check.meta.shares["0_1"] && this.check.meta.shares["0_1"] <= this.ticks[1]
+                ? "color: #919C03"
+                : "color: #d0021b",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_1_5"),
@@ -91,6 +93,6 @@ export default {
             this.$options.filters.formatPercentage(100 * this.check.meta.shares["50_100"]),
             "",
         ]);
-    }
+    },
 };
 </script>

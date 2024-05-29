@@ -86,7 +86,7 @@ export default {
     props: ["filter"],
     data: function () {
         return {
-            showHidden: {}
+            showHidden: {},
         };
     },
     computed: {
@@ -101,7 +101,7 @@ export default {
 
             this.sortBy(this.stats, "path");
 
-            this.stats.forEach(n => {
+            this.stats.forEach((n) => {
                 if (n.coverage.total_count && this.filter(n)) {
                     data.push(n);
                 }
@@ -119,10 +119,10 @@ export default {
         },
         defaultSorting: function () {
             return { by: "processingOrder", asc: true };
-        }
+        },
     },
     mounted: function () {
-        this.$on("field-check-table-sort", data => this.$store.commit("setFieldCheckSorting", data));
+        this.$on("field-check-table-sort", (data) => this.$store.commit("setFieldCheckSorting", data));
 
         this.sortBy(this.tableData, this.sortedBy, this.isAscendingSorted);
     },
@@ -143,8 +143,8 @@ export default {
         },
         isSearched: function (check) {
             return check && this.isPathSearched(check.path);
-        }
-    }
+        },
+    },
 };
 </script>
 

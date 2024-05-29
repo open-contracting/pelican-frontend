@@ -10,12 +10,12 @@
 
 <script>
 import VueJsonPretty from "vue-json-pretty";
-import 'vue-json-pretty/lib/styles.css';
+import "vue-json-pretty/lib/styles.css";
 
 export default {
     name: "ExtensionPreview",
     components: {
-        VueJsonPretty
+        VueJsonPretty,
     },
     computed: {
         loaded() {
@@ -26,7 +26,7 @@ export default {
         },
         extensionData() {
             return this.$store.getters.extensionDataByName(this.$route.params.extensionName);
-        }
-    }
+        },
+    },
 };
 </script>

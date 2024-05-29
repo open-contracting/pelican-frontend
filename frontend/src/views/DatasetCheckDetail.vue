@@ -189,7 +189,7 @@
 
 <script>
 import VueJsonPretty from "vue-json-pretty";
-import 'vue-json-pretty/lib/styles.css';
+import "vue-json-pretty/lib/styles.css";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import DonutChart from "@/components/DonutChart.vue";
@@ -205,7 +205,7 @@ export default {
         VueJsonPretty,
         DashboardDetail,
         ExampleBoxes,
-        BarChartSingleValue
+        BarChartSingleValue,
     },
     mixins: [datasetMixin],
     data: function () {
@@ -214,7 +214,7 @@ export default {
             previewDataItemId: null,
             previewMetadata: null,
             exampleSections: null,
-            loadingPreviewData: false
+            loadingPreviewData: false,
         };
     },
     computed: {
@@ -231,7 +231,7 @@ export default {
             this.loadCheck();
 
             return this.check != null;
-        }
+        },
     },
     created() {
         this.loadCheck();
@@ -262,7 +262,7 @@ export default {
                         if (this.shares[key][1].examples.length > 0) {
                             this.exampleSections.push({
                                 header: this.shares[key][0],
-                                examples: this.shares[key][1].examples
+                                examples: this.shares[key][1].examples,
                             });
                         }
                     }
@@ -274,7 +274,7 @@ export default {
                         if (this.check.meta.examples[barKey].length > 0) {
                             this.exampleSections.push({
                                 header: this.$t("datasetLevel.charts.label_" + barKey),
-                                examples: this.check.meta.examples[barKey]
+                                examples: this.check.meta.examples[barKey],
                             });
                         }
                     }
@@ -287,7 +287,7 @@ export default {
                         if (mostFrequent[topKey].examples.length > 0) {
                             this.exampleSections.push({
                                 header: mostFrequent[topKey].value_str,
-                                examples: mostFrequent[topKey].examples
+                                examples: mostFrequent[topKey].examples,
                             });
                         }
                     }
@@ -301,14 +301,14 @@ export default {
                     if (failed.length > 0) {
                         this.exampleSections.push({
                             header: this.$t("datasetLevel.numeric.failedExamples"),
-                            examples: failed
+                            examples: failed,
                         });
                     }
 
                     if (passed.length > 0) {
                         this.exampleSections.push({
                             header: this.$t("datasetLevel.numeric.passedExamples"),
-                            examples: passed
+                            examples: passed,
                         });
                     }
                 }
@@ -318,13 +318,13 @@ export default {
                     if (this.check.meta.examples.length > 0) {
                         this.exampleSections.push({
                             header: this.$t("datasetLevel.examples"),
-                            examples: this.check.meta.examples
+                            examples: this.check.meta.examples,
                         });
                     }
                 }
             }
-        }
-    }
+        },
+    },
 };
 </script>
 

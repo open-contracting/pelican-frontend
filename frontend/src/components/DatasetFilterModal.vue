@@ -129,14 +129,14 @@ export default {
             buyerNameRegex: "",
             procuringEntityNameRegex: "",
             submitResult: null,
-            items: null
+            items: null,
         };
     },
     computed: {
         firstDate: function () {
             var publishedFrom = this.dataset.meta.collection_metadata.published_from;
             if (publishedFrom) {
-                return new Date(publishedFrom.replaceAll('.', ':') + "Z");
+                return new Date(publishedFrom.replaceAll(".", ":") + "Z");
             } else {
                 return new Date(0);
             }
@@ -145,23 +145,23 @@ export default {
             // pelican-backend truncates milliseconds, so add a second.
             var publishedTo = this.dataset.meta.collection_metadata.published_to;
             if (publishedTo) {
-                var date = new Date(publishedTo.replaceAll('.', ':') + "Z");
+                var date = new Date(publishedTo.replaceAll(".", ":") + "Z");
                 date.setSeconds(date.getSeconds() + 1);
                 return date;
             } else {
                 return new Date();
             }
-        }
+        },
     },
     mounted() {
         this.$watch(
-            vm => [
+            (vm) => [
                 vm.releaseDateFrom,
                 vm.releaseDateTo,
                 vm.buyerName,
                 vm.procuringEntityName,
                 vm.buyerNameRegex,
-                vm.procuringEntityNameRegex
+                vm.procuringEntityNameRegex,
             ],
             () => {
                 if (this.filteredItemsTimeout) {
@@ -170,13 +170,13 @@ export default {
 
                 this.filteredItemsTimeout = setTimeout(
                     () => this.datasetFilterItems(),
-                    this.filteredItemsTimeoutLimit
+                    this.filteredItemsTimeoutLimit,
                 );
             },
             {
                 immediate: true,
-                deep: true
-            }
+                deep: true,
+            },
         );
 
         this.releaseDateFrom = this.firstDate;
@@ -189,9 +189,9 @@ export default {
             axios
                 .post(
                     `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, this.dataset.id)}`,
-                    this.datasetFilterMessage()
+                    this.datasetFilterMessage(),
                 )
-                .then(response => {
+                .then((response) => {
                     if (response.status == 200) {
                         this.submitResult = this.$t("datasetFilter.submitResultOk");
                     } else {
@@ -221,13 +221,17 @@ export default {
             this.gettingCountsToken = axios.CancelToken.source();
 
             axios
-                .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`, {
-                    dataset_id_original: parseInt(this.dataset.id),
-                    filter_message: this.datasetFilterMessage()
-                }, {
-                    cancelToken: this.gettingCountsToken.token
-                })
-                .then(response => {
+                .post(
+                    `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
+                    {
+                        dataset_id_original: parseInt(this.dataset.id),
+                        filter_message: this.datasetFilterMessage(),
+                    },
+                    {
+                        cancelToken: this.gettingCountsToken.token,
+                    },
+                )
+                .then((response) => {
                     if (response.status == 200) {
                         this.items = response["data"]["items"];
                     } else {
@@ -278,8 +282,8 @@ export default {
         },
         updateProcuringEntityName(value) {
             this.procuringEntityName = value;
-        }
-    }
+        },
+    },
 };
 </script>
 

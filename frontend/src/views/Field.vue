@@ -95,7 +95,7 @@ export default {
         FieldCheckTable,
         FieldCheckTree,
         SearchInput,
-        FilterDropdown
+        FilterDropdown,
     },
     data: function () {
         return {
@@ -104,15 +104,17 @@ export default {
                 this.$t("field.filterDropdown.all"),
                 this.$t("field.filterDropdown.coverageFailedOnly"),
                 this.$t("field.filterDropdown.qualityFailedOnly"),
-                this.$t("field.filterDropdown.passedOnly")
+                this.$t("field.filterDropdown.passedOnly"),
             ],
             filters: [
                 () => true,
-                item => item.coverage.failed_count > 0,
-                item => item.quality.failed_count > 0,
-                item =>
-                    item.coverage.failed_count == 0 && item.quality.failed_count == 0 && item.coverage.passed_count > 0
-            ]
+                (item) => item.coverage.failed_count > 0,
+                (item) => item.quality.failed_count > 0,
+                (item) =>
+                    item.coverage.failed_count == 0 &&
+                    item.quality.failed_count == 0 &&
+                    item.coverage.passed_count > 0,
+            ],
         };
     },
     computed: {
@@ -121,12 +123,12 @@ export default {
         },
         search: function () {
             return this.$store.getters.fieldCheckSearch;
-        }
+        },
     },
     watch: {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setFieldLevelFilterIndex", newFilterIndex);
-        }
+        },
     },
     created() {
         this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
@@ -134,8 +136,8 @@ export default {
     methods: {
         resetTableSorting: function () {
             this.$refs["field-check-table"].resetSorting();
-        }
-    }
+        },
+    },
 };
 </script>
 

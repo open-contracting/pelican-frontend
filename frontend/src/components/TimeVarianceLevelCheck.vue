@@ -99,16 +99,16 @@ export default {
     computed: {
         result() {
             return this.check.coverage_result && this.check.check_result;
-        }
+        },
     },
     methods: {
         detail: function (name) {
             this.$router.push({
                 name: "timeVarianceCheckDetail",
-                params: { check: name }
+                params: { check: name },
             });
-        }
-    }
+        },
+    },
 };
 </script>
 

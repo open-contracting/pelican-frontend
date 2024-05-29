@@ -352,7 +352,7 @@ export default {
             }
 
             return [];
-        }
+        },
     },
     methods: {
         getMetaData: function (type) {
@@ -366,11 +366,11 @@ export default {
                 name: "extensionPreview",
                 params: {
                     extensionName: extensionName,
-                    datasetId: this.$store.getters.datasetId
-                }
+                    datasetId: this.$store.getters.datasetId,
+                },
             });
-        }
-    }
+        },
+    },
 };
 </script>
 

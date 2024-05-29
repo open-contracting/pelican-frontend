@@ -62,7 +62,7 @@ export default {
         data: Object,
         expand: Boolean,
         depth: { type: Number, default: 0 },
-        hide: { type: Boolean, default: false }
+        hide: { type: Boolean, default: false },
     },
     data: function () {
         return {};
@@ -87,7 +87,7 @@ export default {
                 } else {
                     this.$store.commit("removeFieldCheckExpandedNode", this.path);
                 }
-            }
+            },
         },
         path: function () {
             return this.data._check.path;
@@ -97,7 +97,7 @@ export default {
         },
         filter: function () {
             return this.$store.getters.fieldLevelFilter;
-        }
+        },
     },
     mounted: function () {
         if (this.expand) {
@@ -109,7 +109,7 @@ export default {
             return this.isSearchedNode(node) || this.isSearchedSubTree(node);
         },
         isSearchedSubTree: function (node) {
-            return Object.values(this.getChildren(node)).some(n => this.isSearched(n));
+            return Object.values(this.getChildren(node)).some((n) => this.isSearched(n));
         },
         isSearchedNode: function (node) {
             return this.isPathSearched(node._check.path) && this.filter(node._check);
@@ -118,8 +118,8 @@ export default {
             var result = Object.assign({}, node);
             delete result._check;
             return result;
-        }
-    }
+        },
+    },
 };
 </script>
 

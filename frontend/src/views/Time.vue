@@ -52,13 +52,13 @@ export default {
             filterNames: [
                 this.$t("timeLevel.filterDropdown.all"),
                 this.$t("timeLevel.filterDropdown.failedOnly"),
-                this.$t("timeLevel.filterDropdown.passedOnly")
+                this.$t("timeLevel.filterDropdown.passedOnly"),
             ],
             filters: [
                 () => true,
-                item => item.coverage_result != true || item.check_result != true,
-                item => item.coverage_result == true && item.check_result == true
-            ]
+                (item) => item.coverage_result != true || item.check_result != true,
+                (item) => item.coverage_result == true && item.check_result == true,
+            ],
         };
     },
     computed: {
@@ -70,12 +70,12 @@ export default {
         },
         timeVarianceLevelStats() {
             return this.$store.getters.timeVarianceLevelStats.filter(this.filters[this.filterIndex]);
-        }
+        },
     },
     watch: {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setTimeLevelFilterIndex", newFilterIndex);
-        }
+        },
     },
     created() {
         this.filterIndex = this.$store.getters.timeLevelFilterIndex;
@@ -86,11 +86,11 @@ export default {
                 name: "timeVarianceCheckDetail",
                 params: {
                     check: name,
-                    datasetId: this.$store.getters.datasetId
-                }
+                    datasetId: this.$store.getters.datasetId,
+                },
             });
-        }
-    }
+        },
+    },
 };
 </script>
 

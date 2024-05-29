@@ -47,24 +47,24 @@ export default {
                 this.$t("datasetLevel.filterDropdown.all"),
                 this.$t("datasetLevel.filterDropdown.failedOnly"),
                 this.$t("datasetLevel.filterDropdown.passedOnly"),
-                this.$t("datasetLevel.filterDropdown.calculatedOnly")
+                this.$t("datasetLevel.filterDropdown.calculatedOnly"),
             ],
             filters: [
                 () => true,
-                item => item.result == false,
-                item => item.result == true,
-                item => item.result != null
-            ]
+                (item) => item.result == false,
+                (item) => item.result == true,
+                (item) => item.result != null,
+            ],
         };
     },
     watch: {
         filterIndex: function (newFilterIndex) {
             this.$store.commit("setDatasetLevelFilterIndex", newFilterIndex);
-        }
+        },
     },
     created() {
         this.filterIndex = this.$store.getters.datasetLevelFilterIndex;
-    }
+    },
 };
 </script>
 

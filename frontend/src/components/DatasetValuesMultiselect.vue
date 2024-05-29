@@ -70,13 +70,13 @@ export default {
             options: [],
             selected: [],
             isLoading: false,
-            cancelToken: null
+            cancelToken: null,
         };
     },
     watch: {
         selected(value) {
-            this.updateSelected(value.map(el => el.value));
-        }
+            this.updateSelected(value.map((el) => el.value));
+        },
     },
     mounted() {
         this.asyncFind("");
@@ -98,7 +98,7 @@ export default {
             var self = this;
             axios
                 .get(url, { cancelToken: this.cancelToken.token })
-                .then(response => {
+                .then((response) => {
                     this.options = response["data"];
                     this.isLoading = false;
                 })
@@ -112,8 +112,8 @@ export default {
         },
         limitText(count) {
             return this.$t("datasetValuesMultiselect.limitText", { n: count });
-        }
-    }
+        },
+    },
 };
 </script>
 

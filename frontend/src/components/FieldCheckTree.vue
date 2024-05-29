@@ -65,7 +65,7 @@ export default {
             });
 
             return root;
-        }
+        },
     },
     watch: {
         search: function () {
@@ -73,13 +73,13 @@ export default {
         },
         filter: function () {
             this.$store.commit("setFieldLevelFilter", this.filter);
-        }
+        },
     },
     mounted: function () {
         if (this.search) {
             this.$store.dispatch("setExpandedNodesForSearch");
         }
-    }
+    },
 };
 </script>
 

@@ -23,11 +23,11 @@ export default {
         asc: Boolean,
         active: Boolean,
         onAsc: Function,
-        onDesc: Function
+        onDesc: Function,
     },
     data: function () {
         return {};
-    }
+    },
 };
 </script>
 
