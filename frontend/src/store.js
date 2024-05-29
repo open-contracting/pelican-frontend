@@ -97,7 +97,7 @@ export default new Vuex.Store({
             if (state.dataItems) {
                 var dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
-                    return JSON.stringify(dataItem["data"], null, 4).split("\n").length;
+                    return JSON.stringify(dataItem["data"], null, 2).split("\n").length;
                 }
             }
 
@@ -107,7 +107,7 @@ export default new Vuex.Store({
             if (state.dataItems) {
                 var dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
-                    return JSON.stringify(dataItem["data"], null, 4);
+                    return JSON.stringify(dataItem["data"], null, 2);
                 }
             }
 
