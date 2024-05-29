@@ -33,7 +33,8 @@
         "noUselessElse": "error"
       },
       "suspicious": {
-        "noDoubleEquals": "error"
+        "noDoubleEquals": "error",
+        "noGlobalIsNan": "error"
       }
     }
   }

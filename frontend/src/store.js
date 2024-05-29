@@ -397,12 +397,12 @@ export default new Vuex.Store({
 
                 var okShare = (item) => {
                     var result = (item.passed_count / item.total_count) * 100;
-                    return isNaN(result) ? 0 : result;
+                    return Number.isNaN(result) ? 0 : result;
                 };
 
                 var failedShare = (item) => {
                     var result = (item.failed_count / item.total_count) * 100;
-                    return isNaN(result) ? 0 : result;
+                    return Number.isNaN(result) ? 0 : result;
                 };
 
                 var formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
