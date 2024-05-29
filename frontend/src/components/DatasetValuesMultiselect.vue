@@ -93,7 +93,6 @@ export default {
             }
 
             this.cancelToken = axios.CancelToken.source();
-            var self = this;
             axios
                 .get(url, { cancelToken: this.cancelToken.token })
                 .then((response) => {
@@ -101,7 +100,7 @@ export default {
                     this.isLoading = false;
                 })
                 .catch((error) => {
-                    self.isLoading = false;
+                    this.isLoading = false;
                     throw new Error(error);
                 });
         },

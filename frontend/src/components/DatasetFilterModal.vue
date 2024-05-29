@@ -219,7 +219,7 @@ export default {
                 .post(
                     `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
                     {
-                        dataset_id_original: parseInt(this.dataset.id),
+                        dataset_id_original: Number.parseInt(this.dataset.id),
                         filter_message: this.datasetFilterMessage(),
                     },
                     {
