@@ -521,17 +521,15 @@ export default {
         Tooltip,
     },
     mixins: [timeMixins],
-    data: function () {
-        return {
-            check: null,
-            previewDataItemId: null,
-            previewMetadata: null,
-            loadingPreviewData: false,
-            examples: null,
-            showMore: false,
-            selectedKey: null,
-        };
-    },
+    data: () => ({
+        check: null,
+        previewDataItemId: null,
+        previewMetadata: null,
+        loadingPreviewData: false,
+        examples: null,
+        showMore: false,
+        selectedKey: null,
+    }),
     computed: {
         previewData() {
             var result = this.$store.getters.dataItemById(this.previewDataItemId);

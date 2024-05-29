@@ -25,9 +25,7 @@ export default {
         onAsc: Function,
         onDesc: Function,
     },
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
 };
 </script>
 

@@ -208,15 +208,13 @@ export default {
         BarChartSingleValue,
     },
     mixins: [datasetMixin],
-    data: function () {
-        return {
-            check: null,
-            previewDataItemId: null,
-            previewMetadata: null,
-            exampleSections: null,
-            loadingPreviewData: false,
-        };
-    },
+    data: () => ({
+        check: null,
+        previewDataItemId: null,
+        previewMetadata: null,
+        exampleSections: null,
+        loadingPreviewData: false,
+    }),
     computed: {
         previewData() {
             var result = this.$store.getters.dataItemById(this.previewDataItemId);

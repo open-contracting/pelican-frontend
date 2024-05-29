@@ -116,23 +116,17 @@ export default {
     components: { ProgressBar },
     mixins: [stateMixin, sortMixins],
     props: ["dataset", "depth"],
-    data: function () {
-        return {
-            showFilteredChildren: false,
-        };
-    },
+    data: () => ({
+        showFilteredChildren: false,
+    }),
     computed: {
-        phases: function () {
-            return ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];
-        },
+        phases: () => ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"],
     },
     methods: {
         getDatasetProgress: function (dataset) {
             return (this.phases.indexOf(dataset.phase) + 1) * 20;
         },
-        isDatasetImported: function (dataset) {
-            return dataset.phase == "CHECKED" && dataset.state == "OK";
-        },
+        isDatasetImported: (dataset) => dataset.phase == "CHECKED" && dataset.state == "OK",
     },
 };
 </script>

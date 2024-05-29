@@ -55,11 +55,9 @@ export default {
         Tooltip,
     },
     props: ["section", "filter"],
-    data: function () {
-        return {
-            showChecks: false,
-        };
-    },
+    data: () => ({
+        showChecks: false,
+    }),
     computed: {
         resourceLevelStats() {
             var result = this.$store.getters.resourceLevelStatsBySection(this.section);
@@ -104,7 +102,7 @@ export default {
             ];
 
             return result
-                .sort(function (a, b) {
+                .sort((a, b) => {
                     var nameA = a["name"];
                     var nameB = b["name"];
                     if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {

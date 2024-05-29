@@ -1,6 +1,6 @@
 export default {
     methods: {
-        sort: function (checks, comparator, asc = true) {
+        sort: (checks, comparator, asc = true) => {
             if (checks != null) {
                 checks.sort(comparator);
                 if (!asc) {
@@ -8,8 +8,6 @@ export default {
                 }
             }
         },
-        compareNumbers: function (a, b) {
-            return a - b;
-        },
+        compareNumbers: (a, b) => a - b,
     },
 };

@@ -142,24 +142,18 @@ export default {
         DatasetReportModal,
     },
     mixins: [stateMixin, sortMixins],
-    data: function () {
-        return {
-            datasets: [],
-            loading: false,
-            filteredDataset: null,
-            reportDataset: null,
-        };
-    },
+    data: () => ({
+        datasets: [],
+        loading: false,
+        filteredDataset: null,
+        reportDataset: null,
+    }),
     computed: {
         search: function () {
             return this.$store.getters.datasetSearch;
         },
-        phases: function () {
-            return ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];
-        },
-        states: function () {
-            return ["WAITING", "IN_PROGRESS", "OK", "FAILED"];
-        },
+        phases: () => ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"],
+        states: () => ["WAITING", "IN_PROGRESS", "OK", "FAILED"],
         sortedBy: function () {
             var value = this.$store.getters.datasetSortedBy;
             return value == null ? this.defaultSorting.by : value;
@@ -168,14 +162,12 @@ export default {
             var value = this.$store.getters.datasetSortedAscending;
             return value == null ? this.defaultSorting.asc : value;
         },
-        defaultSorting: function () {
-            return { by: "created", asc: false };
-        },
+        defaultSorting: () => ({ by: "created", asc: false }),
     },
     mounted() {
-        var buildDatasetsTree = function (datasets, parent_id) {
+        var buildDatasetsTree = (datasets, parent_id) => {
             var result = [];
-            datasets.forEach(function (item) {
+            datasets.forEach((item) => {
                 if (item.parent_id == parent_id) {
                     item.filtered_children = buildDatasetsTree(datasets, item.id);
                     result.push(item);
@@ -190,7 +182,7 @@ export default {
                 this.datasets = buildDatasetsTree(response["data"], null);
 
                 var self = this;
-                this.datasets.forEach(function (item) {
+                this.datasets.forEach((item) => {
                     if (item.ancestor_id != null) {
                         var ancestor = self.datasets.find(
                             (element) => String(element.ancestor_id) == item.ancestor_id,
@@ -202,7 +194,7 @@ export default {
                 });
                 this.sortBy(this.sortedBy, this.isAscendingSorted);
             })
-            .catch(function (error) {
+            .catch((error) => {
                 throw new Error(error);
             });
     },

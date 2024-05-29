@@ -111,9 +111,7 @@ export default {
         },
         classes: String,
     },
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
 };
 </script>
 

@@ -109,13 +109,11 @@ export default {
         CheckDetailResultBox,
         Tooltip,
     },
-    data: function () {
-        return {
-            previewMetaData: null,
-            previewDataItemId: null,
-            loadingPreviewData: false,
-        };
-    },
+    data: () => ({
+        previewMetaData: null,
+        previewDataItemId: null,
+        loadingPreviewData: false,
+    }),
     computed: {
         allExamples() {
             if (!this.check) {

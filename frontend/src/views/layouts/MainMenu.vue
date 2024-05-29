@@ -138,9 +138,7 @@ import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
     mixins: [stateMixin],
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
     computed: {
         showTimeVariance() {
             if (

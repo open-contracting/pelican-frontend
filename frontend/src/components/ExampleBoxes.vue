@@ -235,13 +235,11 @@ export default {
         exampleSections: Array,
         loaded: Boolean,
     },
-    data: function () {
-        return {
-            openSections: [],
-            selectedKey: null,
-            selectedSection: null,
-        };
-    },
+    data: () => ({
+        openSections: [],
+        selectedKey: null,
+        selectedSection: null,
+    }),
     computed: {},
     methods: {
         preview: function (key, section, itemId, group) {
@@ -278,9 +276,7 @@ export default {
             this.openSections.push(section);
         },
         showLess: function (section) {
-            this.openSections = this.openSections.filter(function (item) {
-                return item !== section;
-            });
+            this.openSections = this.openSections.filter((item) => item !== section);
         },
         visibleSections: function (section) {
             return this.openSections.includes(section);

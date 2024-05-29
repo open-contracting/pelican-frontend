@@ -84,11 +84,9 @@ export default {
     components: { FieldCheckTableRow, SortButtons },
     mixins: [fieldCheckMixins],
     props: ["filter"],
-    data: function () {
-        return {
-            showHidden: {},
-        };
-    },
+    data: () => ({
+        showHidden: {},
+    }),
     computed: {
         stats: function () {
             return this.$store.getters.fieldLevelStats;
@@ -117,9 +115,7 @@ export default {
             var value = this.$store.getters.fieldCheckSortedAscending;
             return value == null ? this.defaultSorting.asc : value;
         },
-        defaultSorting: function () {
-            return { by: "processingOrder", asc: true };
-        },
+        defaultSorting: () => ({ by: "processingOrder", asc: true }),
     },
     mounted: function () {
         this.$on("field-check-table-sort", (data) => this.$store.commit("setFieldCheckSorting", data));
@@ -127,9 +123,7 @@ export default {
         this.sortBy(this.tableData, this.sortedBy, this.isAscendingSorted);
     },
     methods: {
-        hasHidden: function (check) {
-            return "_hidden" in check && check._hidden.length > 0;
-        },
+        hasHidden: (check) => "_hidden" in check && check._hidden.length > 0,
         switchHidden: function (check) {
             var patch = {};
             patch[check.path] = !this.showHidden[check.path];

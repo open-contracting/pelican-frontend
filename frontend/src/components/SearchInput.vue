@@ -29,12 +29,10 @@ export default {
         preset: String,
         submitTimeLimit: { type: Number, default: 400 },
     },
-    data: function () {
-        return {
-            search: null,
-            submitTimeout: null,
-        };
-    },
+    data: () => ({
+        search: null,
+        submitTimeout: null,
+    }),
     watch: {
         search: function (value) {
             if (this.submitTimeout) {

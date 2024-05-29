@@ -9,11 +9,9 @@
 
 <script>
 export default {
-    data: function () {
-        return {
-            showHidden: {},
-        };
-    },
+    data: () => ({
+        showHidden: {},
+    }),
     computed: {
         dataset() {
             if (this.$store.getters.dataset != null && this.$store.getters.dataset.meta != undefined) {

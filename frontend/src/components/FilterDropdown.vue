@@ -27,11 +27,9 @@ export default {
             default: 0,
         },
     },
-    data: function () {
-        return {
-            selectedIndex: 0,
-        };
-    },
+    data: () => ({
+        selectedIndex: 0,
+    }),
     mounted: function () {
         this.selectedIndex = this.startIndex;
         this.clickItem(this.startIndex);

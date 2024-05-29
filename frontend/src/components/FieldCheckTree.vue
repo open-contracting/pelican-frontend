@@ -40,9 +40,7 @@ export default {
     components: { FieldCheckTreeNode },
     mixins: [fieldCheckMixins],
     props: ["filter"],
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
     computed: {
         stats: function () {
             return this.$store.getters.fieldLevelStats;
@@ -52,9 +50,9 @@ export default {
 
             this.sortByProcessingOrder(this.stats);
 
-            this.stats.forEach(function (n) {
+            this.stats.forEach((n) => {
                 var node = root;
-                n.path.split(".").forEach(function (p) {
+                n.path.split(".").forEach((p) => {
                     if (!(p in node)) {
                         node[p] = {};
                     }

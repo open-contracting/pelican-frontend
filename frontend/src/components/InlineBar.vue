@@ -38,11 +38,9 @@
 <script>
 export default {
     props: ["percentage", "count", "state", "showCount"],
-    data: function () {
-        return {
-            barWidth: 1,
-        };
-    },
+    data: () => ({
+        barWidth: 1,
+    }),
     mounted() {
         if (this.percentage > 0) {
             if (this.showCount) {

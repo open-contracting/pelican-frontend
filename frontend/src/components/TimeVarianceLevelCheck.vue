@@ -93,9 +93,7 @@ import timeMixins from "@/plugins/timeMixins.js";
 export default {
     mixins: [timeMixins],
     props: ["check"],
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
     computed: {
         result() {
             return this.check.coverage_result && this.check.check_result;

@@ -18,11 +18,9 @@
 <script>
 export default {
     props: ["text"],
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
     computed: {
-        tooltipId: function () {
+        tooltipId: () => {
             var id = "id-" + Math.floor(Math.random() * 10000000000);
 
             return id;

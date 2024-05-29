@@ -108,13 +108,11 @@ export default {
         Tooltip,
     },
     mixins: [resourceCheckMixin],
-    data: function () {
-        return {
-            previewMetaData: null,
-            previewDataItemId: null,
-            loadingPreviewData: false,
-        };
-    },
+    data: () => ({
+        previewMetaData: null,
+        previewDataItemId: null,
+        loadingPreviewData: false,
+    }),
     computed: {
         allExamples() {
             if (!this.check) {
@@ -193,9 +191,7 @@ export default {
                 this.loadingPreviewData = false;
             });
 
-            var result = this.allExamples.find(function (element) {
-                return element.meta.item_id == itemId;
-            });
+            var result = this.allExamples.find((element) => element.meta.item_id == itemId);
             if (result) {
                 this.previewMetaData = result.result;
             }

@@ -64,9 +64,7 @@ export default {
         depth: { type: Number, default: 0 },
         hide: { type: Boolean, default: false },
     },
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
     computed: {
         children: function () {
             return this.getChildren(this.data);
@@ -114,7 +112,7 @@ export default {
         isSearchedNode: function (node) {
             return this.isPathSearched(node._check.path) && this.filter(node._check);
         },
-        getChildren: function (node) {
+        getChildren: (node) => {
             var result = Object.assign({}, node);
             delete result._check;
             return result;

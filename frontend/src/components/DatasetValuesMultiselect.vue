@@ -65,14 +65,12 @@ import { CONFIG } from "@/config.js";
 
 export default {
     props: ["datasetId", "jsonPath", "updateSelected"],
-    data: function () {
-        return {
-            options: [],
-            selected: [],
-            isLoading: false,
-            cancelToken: null,
-        };
-    },
+    data: () => ({
+        options: [],
+        selected: [],
+        isLoading: false,
+        cancelToken: null,
+    }),
     watch: {
         selected(value) {
             this.updateSelected(value.map((el) => el.value));
@@ -102,7 +100,7 @@ export default {
                     this.options = response["data"];
                     this.isLoading = false;
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     self.isLoading = false;
                     throw new Error(error);
                 });

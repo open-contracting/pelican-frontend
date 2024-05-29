@@ -27,46 +27,44 @@ import Loader from "@/components/Loader.vue";
 export default {
     components: { DatasetLevelCheck, Loader },
     props: ["section", "filter"],
-    data: function () {
-        return {
-            sections: {
-                status_distribution: [
-                    "distribution.tender_status",
-                    "distribution.awards_status",
-                    "distribution.contracts_status",
-                    "distribution.milestone_status",
-                ],
-                value_distribution: [
-                    "distribution.tender_value",
-                    "distribution.awards_value",
-                    "distribution.contracts_value",
-                ],
-                other_distribution: [
-                    "distribution.value_currency",
-                    "distribution.main_procurement_category",
-                    "distribution.tender_procurement_method",
-                    "distribution.tender_submission_method",
-                    "distribution.tender_award_criteria",
-                    "distribution.buyer",
-                    "distribution.document_document_type",
-                    "distribution.milestone_type",
-                    "distribution.related_process_relation",
-                ],
-                repetition: [
-                    "distribution.tender_value_repetition",
-                    "distribution.awards_value_repetition",
-                    "distribution.contracts_value_repetition",
-                    "distribution.buyer_repetition",
-                ],
-                other: [
-                    "misc.url_availability",
-                    "consistent.related_process_title",
-                    "reference.related_process_identifier",
-                    "unique.tender_id",
-                ],
-            },
-        };
-    },
+    data: () => ({
+        sections: {
+            status_distribution: [
+                "distribution.tender_status",
+                "distribution.awards_status",
+                "distribution.contracts_status",
+                "distribution.milestone_status",
+            ],
+            value_distribution: [
+                "distribution.tender_value",
+                "distribution.awards_value",
+                "distribution.contracts_value",
+            ],
+            other_distribution: [
+                "distribution.value_currency",
+                "distribution.main_procurement_category",
+                "distribution.tender_procurement_method",
+                "distribution.tender_submission_method",
+                "distribution.tender_award_criteria",
+                "distribution.buyer",
+                "distribution.document_document_type",
+                "distribution.milestone_type",
+                "distribution.related_process_relation",
+            ],
+            repetition: [
+                "distribution.tender_value_repetition",
+                "distribution.awards_value_repetition",
+                "distribution.contracts_value_repetition",
+                "distribution.buyer_repetition",
+            ],
+            other: [
+                "misc.url_availability",
+                "consistent.related_process_title",
+                "reference.related_process_identifier",
+                "unique.tender_id",
+            ],
+        },
+    }),
     computed: {
         loaded() {
             if (this.$store.getters.datasetLevelStats != null) {

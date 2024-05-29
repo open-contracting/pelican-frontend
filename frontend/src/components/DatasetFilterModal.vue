@@ -116,22 +116,20 @@ import { CONFIG } from "@/config.js";
 export default {
     components: { DatasetValuesMultiselect, Loader },
     props: ["dataset"],
-    data: function () {
-        return {
-            isSubmitting: false,
-            gettingCountsToken: null,
-            filteredItemsTimeout: null,
-            filteredItemsTimeoutLimit: 400,
-            releaseDateFrom: null,
-            releaseDateTo: null,
-            buyerName: [],
-            procuringEntityName: [],
-            buyerNameRegex: "",
-            procuringEntityNameRegex: "",
-            submitResult: null,
-            items: null,
-        };
-    },
+    data: () => ({
+        isSubmitting: false,
+        gettingCountsToken: null,
+        filteredItemsTimeout: null,
+        filteredItemsTimeoutLimit: 400,
+        releaseDateFrom: null,
+        releaseDateTo: null,
+        buyerName: [],
+        procuringEntityName: [],
+        buyerNameRegex: "",
+        procuringEntityNameRegex: "",
+        submitResult: null,
+        items: null,
+    }),
     computed: {
         firstDate: function () {
             var publishedFrom = this.dataset.meta.collection_metadata.published_from;
@@ -200,7 +198,7 @@ export default {
                         this.$router.go();
                     }, 2000);
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     // TODO
                     throw new Error(error);
                 });
@@ -237,7 +235,7 @@ export default {
 
                     this.gettingCountsToken = null;
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     if (!axios.isCancel(error)) {
                         throw new Error(error);
                     }

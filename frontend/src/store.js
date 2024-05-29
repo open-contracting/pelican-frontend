@@ -123,9 +123,7 @@ export default new Vuex.Store({
 
             return null;
         },
-        fieldCheckLayout: function (state) {
-            return state.fieldCheckLayout;
-        },
+        fieldCheckLayout: (state) => state.fieldCheckLayout,
         isFieldCheckExpanded: (state) => (path) => {
             if (state.fieldCheckExpandedNodes != null) {
                 return state.fieldCheckExpandedNodes.includes(path);
@@ -199,7 +197,7 @@ export default new Vuex.Store({
         setResourceLevelCheckDetail(state, { name, data }) {
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.resourceLevelStats);
-            updatedStats.forEach(function (item, i) {
+            updatedStats.forEach((item, i) => {
                 if (item.name == name) Object.assign(updatedStats[i], data);
             });
             state.resourceLevelStats = updatedStats;
@@ -217,7 +215,7 @@ export default new Vuex.Store({
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.fieldLevelStats);
 
-            updatedStats.forEach(function (item, i) {
+            updatedStats.forEach((item, i) => {
                 if (item.path == path) Object.assign(updatedStats[i], data);
             });
 
@@ -279,7 +277,7 @@ export default new Vuex.Store({
                         commit("setSettings", response["data"]);
                         resolve();
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         throw new Error(error);
                     });
             });
@@ -300,7 +298,7 @@ export default new Vuex.Store({
                             resolve();
                         });
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         throw new Error(error);
                     });
             });
@@ -311,7 +309,7 @@ export default new Vuex.Store({
                 var formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                    .then(function (response) {
+                    .then((response) => {
                         var data = [];
                         for (var key in response["data"]) {
                             response["data"][key]["name"] = key;
@@ -320,7 +318,7 @@ export default new Vuex.Store({
                         commit("setResourceLevelStats", data);
                         resolve();
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         throw new Error(error);
                     });
             });
@@ -336,7 +334,7 @@ export default new Vuex.Store({
                             .replace(/{name}/g, checkName);
                         axios
                             .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                            .then(function (response) {
+                            .then((response) => {
                                 response["data"]["examples_filled"] = true;
                                 commit("setResourceLevelCheckDetail", {
                                     name: checkName,
@@ -344,7 +342,7 @@ export default new Vuex.Store({
                                 });
                                 resolve();
                             })
-                            .catch(function (error) {
+                            .catch((error) => {
                                 throw new Error(error);
                             });
                     }
@@ -357,7 +355,7 @@ export default new Vuex.Store({
                 var formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                    .then(function (response) {
+                    .then((response) => {
                         var data = [];
                         for (var key in response["data"]) {
                             response["data"][key]["name"] = key;
@@ -366,7 +364,7 @@ export default new Vuex.Store({
                         commit("setDatasetLevelStats", data);
                         resolve();
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         throw new Error(error);
                     });
             });
@@ -381,11 +379,11 @@ export default new Vuex.Store({
                     var formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
                     axios
                         .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                        .then(function (response) {
+                        .then((response) => {
                             commit("addDataItem", response["data"]);
                             resolve();
                         })
-                        .catch(function (error) {
+                        .catch((error) => {
                             reject(error);
                         });
                 } else {
@@ -397,12 +395,12 @@ export default new Vuex.Store({
             return new Promise((resolve) => {
                 commit("setFieldLevelStats", null);
 
-                var okShare = function (item) {
+                var okShare = (item) => {
                     var result = (item.passed_count / item.total_count) * 100;
                     return isNaN(result) ? 0 : result;
                 };
 
-                var failedShare = function (item) {
+                var failedShare = (item) => {
                     var result = (item.failed_count / item.total_count) * 100;
                     return isNaN(result) ? 0 : result;
                 };
@@ -410,7 +408,7 @@ export default new Vuex.Store({
                 var formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                    .then(function (response) {
+                    .then((response) => {
                         var data = [];
                         for (var key in response["data"]) {
                             var item = response["data"][key];
@@ -429,7 +427,7 @@ export default new Vuex.Store({
                         commit("setFieldLevelStats", data);
                         commit("resetFieldCheckSorting");
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         throw new Error(error);
                     });
             });
@@ -444,14 +442,14 @@ export default new Vuex.Store({
                         .replace(/{name}/g, path);
                     axios
                         .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                        .then(function (response) {
+                        .then((response) => {
                             response["data"]["examples_filled"] = true;
                             commit("setFieldLevelCheckDetail", {
                                 path: path,
                                 data: response["data"],
                             });
                         })
-                        .catch(function (error) {
+                        .catch((error) => {
                             throw new Error(error);
                         });
                 }
@@ -463,7 +461,7 @@ export default new Vuex.Store({
                 var formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
-                    .then(function (response) {
+                    .then((response) => {
                         var data = [];
                         for (var key in response["data"]) {
                             response["data"][key]["name"] = key;
@@ -472,7 +470,7 @@ export default new Vuex.Store({
                         commit("setTimeVarianceLevelStats", data);
                         resolve();
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         throw new Error(error);
                     });
             });
@@ -487,7 +485,7 @@ export default new Vuex.Store({
             commit("setFieldCheckLayout", "table");
         },
         setExpandedNodesForSearch({ getters, commit }) {
-            var isPathSearched = function (path) {
+            var isPathSearched = (path) => {
                 if (getters.fieldCheckSearch && path) {
                     var search_lc = getters.fieldCheckSearch.toLowerCase();
                     var path_lc = path.toLowerCase();

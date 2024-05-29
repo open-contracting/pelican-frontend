@@ -32,9 +32,7 @@ import MainMenu from "@/views/layouts/MainMenu.vue";
 export default {
     name: "Dashboard",
     components: { MainMenu, DatasetHeader },
-    data: function () {
-        return {};
-    },
+    data: () => ({}),
     computed: {
         dataset() {
             if (this.$store.getters.dataset != null) {
