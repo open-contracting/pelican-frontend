@@ -26,6 +26,9 @@
       "recommended": false,
       "complexity": {
         "useArrowFunction": "error"
+      },
+      "style": {
+        "useTemplate": "error"
       }
     }
   }

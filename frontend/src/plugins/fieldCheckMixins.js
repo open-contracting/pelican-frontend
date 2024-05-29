@@ -92,7 +92,7 @@ export default {
 
             // escape regex special characters
             var search_esc = this.search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-            return path.replace(new RegExp("(" + search_esc + ")", "ig"), "<mark>$1</mark>");
+            return path.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
         },
         highlightSearchLast: function (path) {
             var name = path.substring(path.lastIndexOf(".") + 1);
@@ -107,7 +107,7 @@ export default {
             }
             // escape regex special characters
             var search_esc = search_last.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-            return name.replace(new RegExp("(" + search_esc + ")", "ig"), "<mark>$1</mark>");
+            return name.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
         },
         isPathSearched: function (path) {
             if (this.search && path) {

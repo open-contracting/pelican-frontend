@@ -512,7 +512,7 @@ export default new Vuex.Store({
 
                     // add parents
                     remaining.forEach((n) => {
-                        if (nodes.some((m) => m.startsWith(n + "."))) {
+                        if (nodes.some((m) => m.startsWith(`${n}.`))) {
                             nodes.push(n);
                         }
                     });
@@ -526,7 +526,7 @@ export default new Vuex.Store({
                         }
 
                         return matched.some((m) => {
-                            return m.startsWith(n + ".") && isPathSearched(m.substr(n.length));
+                            return m.startsWith(`${n}.`) && isPathSearched(m.substr(n.length));
                         });
                     });
 

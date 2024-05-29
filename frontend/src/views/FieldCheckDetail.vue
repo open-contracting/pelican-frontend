@@ -147,7 +147,7 @@ export default {
                         exampleSections.push({
                             id: `coverage_${key}`,
                             prefix: this.$t("fieldDetail.coverage.failureSamplesPrefix"),
-                            header: this.$t("fieldDetail.coverage." + key + ".count_header"),
+                            header: this.$t(`fieldDetail.coverage.${key}.count_header`),
                             examples: failed.map((val) => val.meta),
                             group: "coverage",
                         });
@@ -160,7 +160,7 @@ export default {
                         exampleSections.push({
                             id: `quality_${key}`,
                             prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
-                            header: this.$t("fieldDetail.quality." + key + ".count_header"),
+                            header: this.$t(`fieldDetail.quality.${key}.count_header`),
                             examples: failed.map((val) => val.meta),
                             group: "quality",
                         });

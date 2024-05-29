@@ -21,7 +21,7 @@ export default {
     data: () => ({}),
     computed: {
         tooltipId: () => {
-            var id = "id-" + Math.floor(Math.random() * 10000000000);
+            var id = `id-${Math.floor(Math.random() * 10000000000)}`;
 
             return id;
         },

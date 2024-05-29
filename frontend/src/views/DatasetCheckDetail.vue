@@ -271,7 +271,7 @@ export default {
                     for (var barKey in this.check.meta.examples) {
                         if (this.check.meta.examples[barKey].length > 0) {
                             this.exampleSections.push({
-                                header: this.$t("datasetLevel.charts.label_" + barKey),
+                                header: this.$t(`datasetLevel.charts.label_${barKey}`),
                                 examples: this.check.meta.examples[barKey],
                             });
                         }

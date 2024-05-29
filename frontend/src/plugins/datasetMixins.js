@@ -71,7 +71,7 @@ export default {
     computed: {
         checkType() {
             if (!(this.check.name in this.checkTypeData)) {
-                throw "unknown check: " + this.check.name;
+                throw `unknown check: ${this.check.name}`;
             }
             return this.checkTypeData[this.check.name];
         },

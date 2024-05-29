@@ -245,7 +245,7 @@ export default {
                     }
                 };
             } else {
-                throw new Error("Unknown sorting method " + by);
+                throw new Error(`Unknown sorting method ${by}`);
             }
 
             this.sort(this.datasets, comp, asc);
