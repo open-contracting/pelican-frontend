@@ -187,7 +187,7 @@ export default {
                     this.datasetFilterMessage(),
                 )
                 .then((response) => {
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         this.submitResult = this.$t("datasetFilter.submitResultOk");
                     } else {
                         this.submitResult = this.$t("datasetFilter.submitResultFailed");
@@ -227,7 +227,7 @@ export default {
                     },
                 )
                 .then((response) => {
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         this.items = response["data"]["items"];
                     } else {
                         this.items = null;
@@ -257,13 +257,13 @@ export default {
             if (this.buyerName.length > 0) {
                 data.buyer = this.buyerName;
             }
-            if (this.buyerNameRegex.trim() != "") {
+            if (this.buyerNameRegex.trim() !== "") {
                 data.buyer_regex = this.buyerNameRegex.trim();
             }
             if (this.procuringEntityName.length > 0) {
                 data.procuring_entity = this.procuringEntityName;
             }
-            if (this.procuringEntityNameRegex.trim() != "") {
+            if (this.procuringEntityNameRegex.trim() !== "") {
                 data.procuring_entity_regex = this.procuringEntityNameRegex.trim();
             }
 

@@ -1,7 +1,7 @@
 export default {
     computed: {
         coverageShare() {
-            if (this.check.meta.total_count == 0) {
+            if (this.check.meta.total_count === 0) {
                 return 0.0;
             }
 
@@ -11,7 +11,7 @@ export default {
             return 100.0 * this.coverageShare;
         },
         checkShare() {
-            if (this.check.meta.coverage_count == 0) {
+            if (this.check.meta.coverage_count === 0) {
                 return 0.0;
             }
 

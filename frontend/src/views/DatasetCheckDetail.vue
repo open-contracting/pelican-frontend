@@ -254,7 +254,7 @@ export default {
             if (this.check != null) {
                 this.previewMetadata = this.check.meta;
 
-                if (this.checkType == "donut") {
+                if (this.checkType === "donut") {
                     this.exampleSections = [];
                     for (var key in this.shares) {
                         if (this.shares[key][1].examples.length > 0) {
@@ -266,7 +266,7 @@ export default {
                     }
                 }
 
-                if (this.checkType == "bar") {
+                if (this.checkType === "bar") {
                     this.exampleSections = [];
                     for (var barKey in this.check.meta.examples) {
                         if (this.check.meta.examples[barKey].length > 0) {
@@ -278,7 +278,7 @@ export default {
                     }
                 }
 
-                if (this.checkType == "top3") {
+                if (this.checkType === "top3") {
                     this.exampleSections = [];
                     var mostFrequent = this.check.meta.most_frequent;
                     for (var topKey in mostFrequent) {
@@ -291,7 +291,7 @@ export default {
                     }
                 }
 
-                if (this.checkType == "numeric") {
+                if (this.checkType === "numeric") {
                     this.exampleSections = [];
                     var failed = this.check.meta.failed_examples;
                     var passed = this.check.meta.passed_examples;
@@ -311,7 +311,7 @@ export default {
                     }
                 }
 
-                if (this.checkType == "biggest_share" || this.checkType == "single_value_share") {
+                if (this.checkType === "biggest_share" || this.checkType === "single_value_share") {
                     this.exampleSections = [];
                     if (this.check.meta.examples.length > 0) {
                         this.exampleSections.push({

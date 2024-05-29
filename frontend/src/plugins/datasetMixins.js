@@ -85,7 +85,7 @@ export default {
             return this.stylesData[this.check.name];
         },
         shares() {
-            if (this.checkType == "donut") {
+            if (this.checkType === "donut") {
                 return this.orderedShares(this.check.meta.shares);
             } else {
                 return null;

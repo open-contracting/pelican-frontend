@@ -165,7 +165,7 @@ export default new Vuex.Store({
         },
         extensionDataByName: (state) => (extensionName) => {
             return state.dataset.meta.collection_metadata.extensions.find((item) =>
-                "en" in item.name ? item.name["en"] == extensionName : item.name == extensionName,
+                "en" in item.name ? item.name["en"] === extensionName : item.name === extensionName,
             );
         },
     },
@@ -198,7 +198,7 @@ export default new Vuex.Store({
             var updatedStats = [];
             updatedStats = updatedStats.concat(state.resourceLevelStats);
             updatedStats.forEach((item, i) => {
-                if (item.name == name) Object.assign(updatedStats[i], data);
+                if (item.name === name) Object.assign(updatedStats[i], data);
             });
             state.resourceLevelStats = updatedStats;
         },
@@ -216,7 +216,7 @@ export default new Vuex.Store({
             updatedStats = updatedStats.concat(state.fieldLevelStats);
 
             updatedStats.forEach((item, i) => {
-                if (item.path == path) Object.assign(updatedStats[i], data);
+                if (item.path === path) Object.assign(updatedStats[i], data);
             });
 
             state.fieldLevelStats = updatedStats;

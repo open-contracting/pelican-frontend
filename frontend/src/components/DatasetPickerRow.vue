@@ -126,7 +126,7 @@ export default {
         getDatasetProgress: function (dataset) {
             return (this.phases.indexOf(dataset.phase) + 1) * 20;
         },
-        isDatasetImported: (dataset) => dataset.phase == "CHECKED" && dataset.state == "OK",
+        isDatasetImported: (dataset) => dataset.phase === "CHECKED" && dataset.state === "OK",
     },
 };
 </script>

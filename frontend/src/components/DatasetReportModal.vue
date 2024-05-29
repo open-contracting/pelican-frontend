@@ -405,20 +405,20 @@ export default {
                 folder_id: this.folderId,
                 language: this.reportLanguage,
             };
-            if (this.reportName.trim() != "") {
+            if (this.reportName.trim() !== "") {
                 data.report_name = this.reportName.trim();
             }
 
             axios
                 .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
                 .then((response) => {
-                    if (response.data.failed_tags && response.data.failed_tags.length == 0) {
+                    if (response.data.failed_tags && response.data.failed_tags.length === 0) {
                         this.failedTags = null;
                     } else {
                         this.failedTags = response.data.failed_tags;
                     }
 
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         this.submitStatus = response.data.status;
                         this.submitData = response.data.data;
                     } else {

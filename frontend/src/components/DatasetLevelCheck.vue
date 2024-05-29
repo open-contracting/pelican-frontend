@@ -180,7 +180,7 @@ export default {
             return (this.check.ok + this.check.failed + this.check.na) / 100;
         },
         detail: function () {
-            if (this.check.result != undefined && this.checkType != null) {
+            if (this.check.result !== undefined && this.checkType != null) {
                 this.$router.push(this.detailRouterArguments);
             }
         },

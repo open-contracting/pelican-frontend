@@ -138,7 +138,7 @@ export default {
                 failedCount += check.failed_count;
             }
 
-            if (passedCount + failedCount == 0) {
+            if (passedCount + failedCount === 0) {
                 return this.$t("resourceLevel.averageScore.undefined");
             }
 

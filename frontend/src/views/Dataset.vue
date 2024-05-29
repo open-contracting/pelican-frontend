@@ -51,8 +51,8 @@ export default {
             ],
             filters: [
                 () => true,
-                (item) => item.result == false,
-                (item) => item.result == true,
+                (item) => item.result === false,
+                (item) => item.result === true,
                 (item) => item.result != null,
             ],
         };

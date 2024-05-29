@@ -18,13 +18,13 @@ export default {
             }
         },
         sortBy: function (checks, by, asc) {
-            if (by == "path") {
+            if (by === "path") {
                 this.sortByPath(checks, asc);
-            } else if (by == "coverage") {
+            } else if (by === "coverage") {
                 this.sortByCoverage(checks, asc);
-            } else if (by == "quality") {
+            } else if (by === "quality") {
                 this.sortByQuality(checks, asc);
-            } else if (by == "processingOrder") {
+            } else if (by === "processingOrder") {
                 this.sortByProcessingOrder(checks, asc);
             }
         },
@@ -36,10 +36,10 @@ export default {
                 checks,
                 (a, b) => {
                     var comparison = this.compareNumbers(a.coverageOkShare, b.coverageOkShare);
-                    if (comparison == 0) {
+                    if (comparison === 0) {
                         comparison = this.compareNumbers(a.coverage.total_count, b.coverage.total_count);
                     }
-                    if (comparison == 0) {
+                    if (comparison === 0) {
                         comparison = a.path.localeCompare(b.path);
                     }
 
@@ -53,21 +53,21 @@ export default {
             this._sort(
                 checks,
                 (a, b) => {
-                    if (a.quality.total_count == 0) {
-                        if (b.quality.total_count == 0) {
+                    if (a.quality.total_count === 0) {
+                        if (b.quality.total_count === 0) {
                             return a.path.localeCompare(b.path);
                         }
 
                         return asc ? 1 : -1;
-                    } else if (b.quality.total_count == 0) {
+                    } else if (b.quality.total_count === 0) {
                         return asc ? -1 : 1;
                     }
 
                     var comparison = this.compareNumbers(a.qualityOkShare, b.qualityOkShare);
-                    if (comparison == 0) {
+                    if (comparison === 0) {
                         comparison = this.compareNumbers(a.quality.total_count, b.quality.total_count);
                     }
-                    if (comparison == 0) {
+                    if (comparison === 0) {
                         comparison = a.path.localeCompare(b.path);
                     }
 

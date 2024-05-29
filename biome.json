@@ -29,6 +29,9 @@
       },
       "style": {
         "useTemplate": "error"
+      },
+      "suspicious": {
+        "noDoubleEquals": "error"
       }
     }
   }

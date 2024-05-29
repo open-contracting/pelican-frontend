@@ -56,8 +56,8 @@ export default {
             ],
             filters: [
                 () => true,
-                (item) => item.coverage_result != true || item.check_result != true,
-                (item) => item.coverage_result == true && item.check_result == true,
+                (item) => item.coverage_result !== true || item.check_result !== true,
+                (item) => item.coverage_result === true && item.check_result === true,
             ],
         };
     },

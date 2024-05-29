@@ -36,7 +36,7 @@ export default new Router({
             name: "overview",
             component: Overview,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -47,7 +47,7 @@ export default new Router({
             name: "field",
             component: Field,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -58,7 +58,7 @@ export default new Router({
             name: "resource",
             component: Resource,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -69,7 +69,7 @@ export default new Router({
             name: "dataset",
             component: Dataset,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -80,7 +80,7 @@ export default new Router({
             name: "time",
             component: Time,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -91,7 +91,7 @@ export default new Router({
             name: "resourceCheckDetail",
             component: ResourceCheckDetail,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId).then(() => {
                         store.dispatch("loadResourceLevelCheckDetail", to.params.check);
                     });
@@ -106,7 +106,7 @@ export default new Router({
             name: "datasetCheckDetail",
             component: DatasetCheckDetail,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -117,7 +117,7 @@ export default new Router({
             name: "fieldCheckDetail",
             component: FieldCheckDetail,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId).then(() => {
                         store.dispatch("loadFieldLevelCheckDetail", to.params.path);
                     });
@@ -132,7 +132,7 @@ export default new Router({
             name: "timeVarianceCheckDetail",
             component: TimeVarianceCheckDetail,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();
@@ -143,7 +143,7 @@ export default new Router({
             name: "extensionPreview",
             component: ExtensionPreview,
             beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId != to.params.datasetId) {
+                if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
                 next();

@@ -135,7 +135,7 @@ export default {
         },
         exampleSections() {
             var exampleSections = [];
-            if (this.check != [] && this.check.name != undefined) {
+            if (this.check !== [] && this.check.name !== undefined) {
                 var failed = this.check.failed_examples;
                 var passed = this.check.passed_examples;
                 var undefineds = this.check.undefined_examples;
@@ -191,7 +191,7 @@ export default {
                 this.loadingPreviewData = false;
             });
 
-            var result = this.allExamples.find((element) => element.meta.item_id == itemId);
+            var result = this.allExamples.find((element) => element.meta.item_id === itemId);
             if (result) {
                 this.previewMetaData = result.result;
             }

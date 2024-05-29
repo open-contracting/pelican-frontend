@@ -111,8 +111,8 @@ export default {
                 (item) => item.coverage.failed_count > 0,
                 (item) => item.quality.failed_count > 0,
                 (item) =>
-                    item.coverage.failed_count == 0 &&
-                    item.quality.failed_count == 0 &&
+                    item.coverage.failed_count === 0 &&
+                    item.quality.failed_count === 0 &&
                     item.coverage.passed_count > 0,
             ],
         };

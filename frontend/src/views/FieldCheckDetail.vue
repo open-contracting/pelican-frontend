@@ -140,10 +140,10 @@ export default {
         },
         exampleSections() {
             var exampleSections = [];
-            if (this.check != [] && this.check.path != undefined) {
+            if (this.check !== [] && this.check.path !== undefined) {
                 Object.keys(this.check.coverage.checks).forEach((key) => {
                     var failed = this.check.coverage.checks[key].failed_examples;
-                    if (failed != undefined && failed.length > 0) {
+                    if (failed !== undefined && failed.length > 0) {
                         exampleSections.push({
                             id: `coverage_${key}`,
                             prefix: this.$t("fieldDetail.coverage.failureSamplesPrefix"),
@@ -156,7 +156,7 @@ export default {
 
                 Object.keys(this.check.quality.checks).forEach((key) => {
                     var failed = this.check.quality.checks[key].failed_examples;
-                    if (failed != undefined && failed.length > 0) {
+                    if (failed !== undefined && failed.length > 0) {
                         exampleSections.push({
                             id: `quality_${key}`,
                             prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
@@ -172,10 +172,13 @@ export default {
                     header: this.$t("core.passedExamples"),
                     examples: [],
                 };
-                if (this.check.quality.passed_examples != undefined && this.check.quality.passed_examples.length > 0) {
+                if (
+                    this.check.quality.passed_examples !== undefined &&
+                    this.check.quality.passed_examples.length > 0
+                ) {
                     passedSection.examples = this.check.quality.passed_examples.map((val) => val.meta);
                 } else if (
-                    this.check.coverage.passed_examples != undefined &&
+                    this.check.coverage.passed_examples !== undefined &&
                     this.check.coverage.passed_examples.length > 0
                 ) {
                     passedSection.examples = this.check.coverage.passed_examples.map((val) => val.meta);
@@ -213,11 +216,11 @@ export default {
 
             var result;
             if (group) {
-                result = this.allExamples[group].find((e) => e.meta.item_id == itemId);
+                result = this.allExamples[group].find((e) => e.meta.item_id === itemId);
             } else {
                 result = Object.values(this.allExamples)
                     .flat()
-                    .find((e) => e.meta.item_id == itemId);
+                    .find((e) => e.meta.item_id === itemId);
             }
 
             if (result) {

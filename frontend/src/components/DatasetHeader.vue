@@ -14,7 +14,7 @@ export default {
     }),
     computed: {
         dataset() {
-            if (this.$store.getters.dataset != null && this.$store.getters.dataset.meta != undefined) {
+            if (this.$store.getters.dataset != null && this.$store.getters.dataset.meta !== undefined) {
                 return this.$store.getters.dataset;
             }
             return undefined;

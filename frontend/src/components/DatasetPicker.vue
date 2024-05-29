@@ -168,7 +168,7 @@ export default {
         var buildDatasetsTree = (datasets, parent_id) => {
             var result = [];
             datasets.forEach((item) => {
-                if (item.parent_id == parent_id) {
+                if (item.parent_id === parent_id) {
                     item.filtered_children = buildDatasetsTree(datasets, item.id);
                     result.push(item);
                 }
@@ -185,7 +185,7 @@ export default {
                 this.datasets.forEach((item) => {
                     if (item.ancestor_id != null) {
                         var ancestor = self.datasets.find(
-                            (element) => String(element.ancestor_id) == item.ancestor_id,
+                            (element) => String(element.ancestor_id) === item.ancestor_id,
                         );
                         item.ancestor_name = ancestor.name;
                     } else {
@@ -216,26 +216,26 @@ export default {
             }
 
             var comp;
-            if (by == "created") {
+            if (by === "created") {
                 comp = (a, b) => a.created.localeCompare(b.created);
-            } else if (by == "name") {
+            } else if (by === "name") {
                 comp = (a, b) => a.name.localeCompare(b.name);
-            } else if (by == "size") {
+            } else if (by === "size") {
                 comp = (a, b) =>
                     this.compareNumbers(
                         a.meta.compiled_releases?.total_unique_ocids || -1,
                         b.meta.compiled_releases?.total_unique_ocids || -1,
                     );
-            } else if (by == "collection_id") {
+            } else if (by === "collection_id") {
                 comp = (a, b) =>
                     this.compareNumbers(
                         a.meta.kingfisher_metadata?.collection_id || -1,
                         b.meta.kingfisher_metadata?.collection_id || -1,
                     );
-            } else if (by == "phase") {
+            } else if (by === "phase") {
                 comp = (a, b) => {
-                    if (a.phase == b.phase) {
-                        if (a.state == b.state) {
+                    if (a.phase === b.phase) {
+                        if (a.state === b.state) {
                             return a.id.localeCompare(b.id);
                         } else {
                             return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state));

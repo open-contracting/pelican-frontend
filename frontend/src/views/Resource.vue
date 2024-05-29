@@ -85,7 +85,7 @@ export default {
             filters: [
                 () => true,
                 (item) => item.failed_count > 0,
-                (item) => item.failed_count == 0 && item.passed_count > 0,
+                (item) => item.failed_count === 0 && item.passed_count > 0,
                 (item) => item.passed_count > 0 || item.failed_count > 0,
             ],
         };
