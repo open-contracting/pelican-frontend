@@ -23,24 +23,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false,
-      "complexity": {
-        "useArrowFunction": "error",
-        "useLiteralKeys": "error",
-        "useOptionalChain": "error"
-      },
-      "performance": {
-        "noDelete": "error"
-      },
-      "style": {
-        "useTemplate": "error",
-        "noUselessElse": "error",
-        "noVar": "error"
-      },
-      "suspicious": {
-        "noDoubleEquals": "error",
-        "noGlobalIsNan": "error"
-      }
+      "recommended": true
     }
   }
 }
