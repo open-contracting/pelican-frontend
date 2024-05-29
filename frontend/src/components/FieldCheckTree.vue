@@ -46,12 +46,12 @@ export default {
             return this.$store.getters.fieldLevelStats;
         },
         tree: function () {
-            var root = {};
+            const root = {};
 
             this.sortByProcessingOrder(this.stats);
 
             for (const n of this.stats) {
-                var node = root;
+                let node = root;
                 for (const p of n.path.split(".")) {
                     if (!(p in node)) {
                         node[p] = {};

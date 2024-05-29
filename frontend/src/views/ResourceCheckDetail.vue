@@ -119,25 +119,25 @@ export default {
                 return [];
             }
 
-            var allExamples = [];
+            let allExamples = [];
             allExamples = allExamples.concat(this.check.failed_examples);
             allExamples = allExamples.concat(this.check.passed_examples);
             allExamples = allExamples.concat(this.check.undefined_examples);
             return allExamples;
         },
         check() {
-            var stats = this.$store.getters.resourceLevelStats;
+            const stats = this.$store.getters.resourceLevelStats;
             if (stats != null) {
                 return stats.find((item) => item.name === this.$route.params.check);
             }
             return null;
         },
         exampleSections() {
-            var exampleSections = [];
+            const exampleSections = [];
             if (this.check !== [] && this.check.name !== undefined) {
-                var failed = this.check.failed_examples;
-                var passed = this.check.passed_examples;
-                var undefineds = this.check.undefined_examples;
+                const failed = this.check.failed_examples;
+                const passed = this.check.passed_examples;
+                const undefineds = this.check.undefined_examples;
 
                 if (failed.length > 0) {
                     exampleSections.push({
@@ -167,7 +167,7 @@ export default {
             return exampleSections;
         },
         previewData() {
-            var result = this.$store.getters.dataItemById(this.previewDataItemId);
+            const result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
                 return result.data;
@@ -190,7 +190,7 @@ export default {
                 this.loadingPreviewData = false;
             });
 
-            var result = this.allExamples.find((element) => element.meta.item_id === itemId);
+            const result = this.allExamples.find((element) => element.meta.item_id === itemId);
             if (result) {
                 this.previewMetaData = result.result;
             }

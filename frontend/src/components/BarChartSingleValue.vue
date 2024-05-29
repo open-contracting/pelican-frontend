@@ -34,8 +34,8 @@ export default {
     },
     computed: {
         chartData() {
-            var chartData = [];
-            var onePercent = this.check.meta.total_buyer_count;
+            const chartData = [];
+            const onePercent = this.check.meta.total_buyer_count;
             chartData.push([
                 this.$t("datasetLevel.charts.label_1"),
                 this.check.meta.counts["1"].total_buyer_count,

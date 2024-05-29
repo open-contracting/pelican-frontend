@@ -60,9 +60,9 @@ export default {
     }),
     computed: {
         resourceLevelStats() {
-            var result = this.$store.getters.resourceLevelStatsBySection(this.section);
+            const result = this.$store.getters.resourceLevelStatsBySection(this.section);
 
-            var order = [
+            const order = [
                 "reference.buyer_in_parties",
                 "reference.procuring_entity_in_parties",
                 "reference.tenderer_in_parties",
@@ -103,8 +103,8 @@ export default {
 
             return result
                 .sort((a, b) => {
-                    var nameA = a.name;
-                    var nameB = b.name;
+                    const nameA = a.name;
+                    const nameB = b.name;
                     if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {
                         if (nameA < nameB) {
                             return -1;
@@ -124,7 +124,7 @@ export default {
                 .filter(this.filter);
         },
         applicableChecks() {
-            var applicableCount = 0;
+            let applicableCount = 0;
             for (const check of this.resourceLevelStats) {
                 if (check.undefined_count < check.total_count) {
                     applicableCount += 1;
@@ -133,8 +133,8 @@ export default {
             return applicableCount;
         },
         formattedAvgScore() {
-            var passedCount = 0;
-            var failedCount = 0;
+            let passedCount = 0;
+            let failedCount = 0;
             for (const check of this.resourceLevelStats) {
                 passedCount += check.passed_count;
                 failedCount += check.failed_count;

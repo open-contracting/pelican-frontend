@@ -399,7 +399,7 @@ export default {
             this.errorMessage = null;
             this.isSubmitting = true;
 
-            var data = {
+            const data = {
                 dataset_id: Number.parseInt(this.dataset.id),
                 document_id: this.documentId,
                 folder_id: this.folderId,
@@ -449,7 +449,7 @@ export default {
             this.createDatasetReport();
         },
         fileIdFormatter(value) {
-            var valueMatch = value.match(/\/d\/([^/]+)/);
+            let valueMatch = value.match(/\/d\/([^/]+)/);
             if (valueMatch == null) {
                 valueMatch = value.match(/\/folders\/([^/]+)/);
             }

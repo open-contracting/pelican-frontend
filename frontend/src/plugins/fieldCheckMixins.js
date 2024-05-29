@@ -35,7 +35,7 @@ export default {
             this._sort(
                 checks,
                 (a, b) => {
-                    var comparison = this.compareNumbers(a.coverageOkShare, b.coverageOkShare);
+                    let comparison = this.compareNumbers(a.coverageOkShare, b.coverageOkShare);
                     if (comparison === 0) {
                         comparison = this.compareNumbers(a.coverage.total_count, b.coverage.total_count);
                     }
@@ -64,7 +64,7 @@ export default {
                         return asc ? -1 : 1;
                     }
 
-                    var comparison = this.compareNumbers(a.qualityOkShare, b.qualityOkShare);
+                    let comparison = this.compareNumbers(a.qualityOkShare, b.qualityOkShare);
                     if (comparison === 0) {
                         comparison = this.compareNumbers(a.quality.total_count, b.quality.total_count);
                     }
@@ -92,27 +92,27 @@ export default {
             }
 
             // escape regex special characters
-            var search_esc = this.search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+            const search_esc = this.search.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             return path.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
         },
         highlightSearchLast: function (path) {
-            var name = path.substring(path.lastIndexOf(".") + 1);
+            const name = path.substring(path.lastIndexOf(".") + 1);
 
             if (!this.search || !this.isPathSearched(path)) {
                 return name;
             }
 
-            var search_last = this.search.replace(/^[.]+|[.]+$/g, "");
+            let search_last = this.search.replace(/^[.]+|[.]+$/g, "");
             if (search_last.includes(".")) {
                 search_last = search_last.split(".").slice(-1)[0];
             }
             // escape regex special characters
-            var search_esc = search_last.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+            const search_esc = search_last.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             return name.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
         },
         isPathSearched: function (path) {
             if (this.search && path) {
-                var path_lc = path.toLowerCase();
+                const path_lc = path.toLowerCase();
                 return path_lc.includes(this.search);
             }
 

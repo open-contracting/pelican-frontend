@@ -19,7 +19,7 @@ export default {
     props: ["bars", "value", "ok", "failed"],
     computed: {
         allBars: function () {
-            var result = [];
+            const result = [];
 
             if (this.value) {
                 result.push({ value: this.value });

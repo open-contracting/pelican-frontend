@@ -155,18 +155,18 @@ export default {
         phases: () => ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"],
         states: () => ["WAITING", "IN_PROGRESS", "OK", "FAILED"],
         sortedBy: function () {
-            var value = this.$store.getters.datasetSortedBy;
+            const value = this.$store.getters.datasetSortedBy;
             return value == null ? this.defaultSorting.by : value;
         },
         isAscendingSorted: function () {
-            var value = this.$store.getters.datasetSortedAscending;
+            const value = this.$store.getters.datasetSortedAscending;
             return value == null ? this.defaultSorting.asc : value;
         },
         defaultSorting: () => ({ by: "created", asc: false }),
     },
     mounted() {
-        var buildDatasetsTree = (datasets, parent_id) => {
-            var result = [];
+        const buildDatasetsTree = (datasets, parent_id) => {
+            const result = [];
             for (const item of datasets) {
                 if (item.parent_id === parent_id) {
                     item.filtered_children = buildDatasetsTree(datasets, item.id);
@@ -181,10 +181,10 @@ export default {
             .then((response) => {
                 this.datasets = buildDatasetsTree(response.data, null);
 
-                var self = this;
+                const self = this;
                 for (const item of this.datasets) {
                     if (item.ancestor_id != null) {
-                        var ancestor = self.datasets.find(
+                        const ancestor = self.datasets.find(
                             (element) => String(element.ancestor_id) === item.ancestor_id,
                         );
                         item.ancestor_name = ancestor.name;
@@ -215,7 +215,7 @@ export default {
                 return;
             }
 
-            var comp;
+            let comp;
             if (by === "created") {
                 comp = (a, b) => a.created.localeCompare(b.created);
             } else if (by === "name") {

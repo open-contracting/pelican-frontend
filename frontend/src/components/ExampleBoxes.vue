@@ -249,9 +249,9 @@ export default {
         },
         download: function (itemId) {
             this.$store.dispatch("loadDataItem", itemId).then(() => {
-                var result = this.$store.getters.dataItemById(itemId);
-                var fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
-                var fileLink = document.createElement("a");
+                const result = this.$store.getters.dataItemById(itemId);
+                const fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
+                const fileLink = document.createElement("a");
 
                 fileLink.href = fileURL;
                 fileLink.setAttribute("download", `data_item_${itemId}.json`);

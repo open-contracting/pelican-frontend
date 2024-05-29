@@ -113,7 +113,7 @@ export default {
             return this.isPathSearched(node._check.path) && this.filter(node._check);
         },
         getChildren: (node) => {
-            var result = Object.assign({}, node);
+            const result = Object.assign({}, node);
             result._check = undefined;
             return result;
         },

@@ -65,18 +65,18 @@ export default {
         };
     },
     mounted() {
-        var shares = this.orderedShares(this.check.meta.shares);
-        var labelLength = 0;
+        const shares = this.orderedShares(this.check.meta.shares);
+        let labelLength = 0;
 
         // Index 0 of chartData is the header.
-        for (var key in shares) {
+        for (const key in shares) {
             if (this.limit && this.chartData.length > 10) {
                 this.chartData[10][0] = this.$t("datasetLevel.charts.other");
                 this.chartData[10][1] += shares[key][1].share;
                 this.chartData[10][2] += shares[key][1].share;
                 this.chartData[10][4] += shares[key][1].count;
             } else {
-                var styles = "";
+                let styles = "";
                 if (this.ticks && (!this.styles.length || this.styles.includes(shares[key][0]))) {
                     styles =
                         this.ticks[0] <= shares[key][1].share && shares[key][1].share <= this.ticks[1]
@@ -115,7 +115,7 @@ export default {
             this.chartOptions.chartArea.height = this.chartOptions.height;
         }
 
-        var averageLabelLength = labelLength / shares.length;
+        const averageLabelLength = labelLength / shares.length;
         if (averageLabelLength > 10) {
             // Make room for long labels, and allow a 100% bar to be fully visible.
             this.chartOptions.chartArea.left = `${~~(averageLabelLength * 2)}%`;

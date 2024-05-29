@@ -85,7 +85,7 @@ export default new Vuex.Store({
         },
         dataItemById: (state) => (itemId) => {
             if (state.dataItems) {
-                var dataItem = state.dataItems.find((item) => item.id === itemId);
+                const dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
                     return dataItem;
                 }
@@ -95,7 +95,7 @@ export default new Vuex.Store({
         },
         dataItemJSONLines: (state) => (itemId) => {
             if (state.dataItems) {
-                var dataItem = state.dataItems.find((item) => item.id === itemId);
+                const dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
                     return JSON.stringify(dataItem.data, null, 2).split("\n").length;
                 }
@@ -105,7 +105,7 @@ export default new Vuex.Store({
         },
         dataItemJSON: (state) => (itemId) => {
             if (state.dataItems) {
-                var dataItem = state.dataItems.find((item) => item.id === itemId);
+                const dataItem = state.dataItems.find((item) => item.id === itemId);
                 if (dataItem != null) {
                     return JSON.stringify(dataItem.data, null, 2);
                 }
@@ -195,7 +195,7 @@ export default new Vuex.Store({
             state.resourceLevelStats = stats;
         },
         setResourceLevelCheckDetail(state, { name, data }) {
-            var updatedStats = [];
+            let updatedStats = [];
             updatedStats = updatedStats.concat(state.resourceLevelStats);
             updatedStats.forEach((item, i) => {
                 if (item.name === name) Object.assign(updatedStats[i], data);
@@ -212,7 +212,7 @@ export default new Vuex.Store({
             state.fieldLevelStats = stats;
         },
         setFieldLevelCheckDetail(state, { path, data }) {
-            var updatedStats = [];
+            let updatedStats = [];
             updatedStats = updatedStats.concat(state.fieldLevelStats);
 
             updatedStats.forEach((item, i) => {
@@ -306,12 +306,12 @@ export default new Vuex.Store({
         loadResourceLevelStats({ commit, state }) {
             return new Promise((resolve) => {
                 commit("setResourceLevelStats", null);
-                var formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, state.dataset.id);
+                const formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
-                        var data = [];
-                        for (var key in response.data) {
+                        const data = [];
+                        for (const key in response.data) {
                             response.data[key].name = key;
                             data.push(response.data[key]);
                         }
@@ -325,11 +325,11 @@ export default new Vuex.Store({
         },
         loadResourceLevelCheckDetail({ commit, state, getters }, checkName) {
             return new Promise((resolve) => {
-                var checkDetail = getters.resourceLevelCheckByName(checkName);
+                const checkDetail = getters.resourceLevelCheckByName(checkName);
 
                 if (checkDetail != null && !checkDetail.examplesLoaded) {
                     if (state.dataset != null && checkName != null) {
-                        var formatted = CONFIG.apiEndpoints.resourceLevelDetail
+                        const formatted = CONFIG.apiEndpoints.resourceLevelDetail
                             .replace(/{id}/g, state.dataset.id)
                             .replace(/{name}/g, checkName);
                         axios
@@ -352,12 +352,12 @@ export default new Vuex.Store({
         loadDatasetLevelStats({ commit, state }) {
             return new Promise((resolve) => {
                 commit("setDatasetLevelStats", null);
-                var formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, state.dataset.id);
+                const formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
-                        var data = [];
-                        for (var key in response.data) {
+                        const data = [];
+                        for (const key in response.data) {
                             response.data[key].name = key;
                             data.push(response.data[key]);
                         }
@@ -371,12 +371,12 @@ export default new Vuex.Store({
         },
         loadDataItem({ commit, state }, itemId) {
             return new Promise((resolve, reject) => {
-                var dataItem = null;
+                let dataItem = null;
                 if (state.dataItems) {
                     dataItem = state.dataItems.find((item) => item.id === itemId);
                 }
                 if (dataItem == null) {
-                    var formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
+                    const formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
                     axios
                         .get(`${CONFIG.apiBaseUrl}${formatted}`)
                         .then((response) => {
@@ -395,23 +395,23 @@ export default new Vuex.Store({
             return new Promise((resolve) => {
                 commit("setFieldLevelStats", null);
 
-                var okShare = (item) => {
-                    var result = (item.passed_count / item.total_count) * 100;
+                const okShare = (item) => {
+                    const result = (item.passed_count / item.total_count) * 100;
                     return Number.isNaN(result) ? 0 : result;
                 };
 
-                var failedShare = (item) => {
-                    var result = (item.failed_count / item.total_count) * 100;
+                const failedShare = (item) => {
+                    const result = (item.failed_count / item.total_count) * 100;
                     return Number.isNaN(result) ? 0 : result;
                 };
 
-                var formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
+                const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
-                        var data = [];
-                        for (var key in response.data) {
-                            var item = response.data[key];
+                        const data = [];
+                        for (const key in response.data) {
+                            const item = response.data[key];
                             data.push(
                                 Object.assign({}, item, {
                                     path: key,
@@ -433,11 +433,11 @@ export default new Vuex.Store({
             });
         },
         loadFieldLevelCheckDetail({ commit, state, getters }, path) {
-            var checkDetail = getters.fieldLevelCheckByPath(path);
+            const checkDetail = getters.fieldLevelCheckByPath(path);
 
             if (checkDetail == null || (checkDetail != null && !checkDetail.examplesLoaded)) {
                 if (state.dataset != null && path != null) {
-                    var formatted = CONFIG.apiEndpoints.fieldLevelDetail
+                    const formatted = CONFIG.apiEndpoints.fieldLevelDetail
                         .replace(/{id}/g, state.dataset.id)
                         .replace(/{name}/g, path);
                     axios
@@ -458,12 +458,12 @@ export default new Vuex.Store({
         loadTimeVarianceLevelStats({ commit, state }) {
             return new Promise((resolve) => {
                 commit("setTimeVarianceLevelStats", null);
-                var formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, state.dataset.id);
+                const formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, state.dataset.id);
                 axios
                     .get(`${CONFIG.apiBaseUrl}${formatted}`)
                     .then((response) => {
-                        var data = [];
-                        for (var key in response.data) {
+                        const data = [];
+                        for (const key in response.data) {
                             response.data[key].name = key;
                             data.push(response.data[key]);
                         }
@@ -485,10 +485,10 @@ export default new Vuex.Store({
             commit("setFieldCheckLayout", "table");
         },
         setExpandedNodesForSearch({ getters, commit }) {
-            var isPathSearched = (path) => {
+            const isPathSearched = (path) => {
                 if (getters.fieldCheckSearch && path) {
-                    var search_lc = getters.fieldCheckSearch.toLowerCase();
-                    var path_lc = path.toLowerCase();
+                    const search_lc = getters.fieldCheckSearch.toLowerCase();
+                    const path_lc = path.toLowerCase();
                     return path_lc.includes(search_lc);
                 }
 
@@ -499,8 +499,8 @@ export default new Vuex.Store({
                 commit("collapseAllFieldCheckExpandedNodes");
 
                 if (getters.fieldCheckSearch) {
-                    var nodes = [];
-                    var remaining = [];
+                    let nodes = [];
+                    const remaining = [];
                     // select paths that match the search
                     for (const n of getters.fieldLevelStats) {
                         if (isPathSearched(n.path)) {
@@ -518,7 +518,7 @@ export default new Vuex.Store({
                     }
 
                     // collapse matched nodes without matching child
-                    var matched = [...nodes];
+                    const matched = [...nodes];
                     nodes = nodes.filter((n) => {
                         // keep parent without match
                         if (!isPathSearched(n)) {

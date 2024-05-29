@@ -217,7 +217,7 @@ export default {
     }),
     computed: {
         previewData() {
-            var result = this.$store.getters.dataItemById(this.previewDataItemId);
+            const result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
                 return result.data;
@@ -256,7 +256,7 @@ export default {
 
                 if (this.checkType === "donut") {
                     this.exampleSections = [];
-                    for (var key in this.shares) {
+                    for (const key in this.shares) {
                         if (this.shares[key][1].examples.length > 0) {
                             this.exampleSections.push({
                                 header: this.shares[key][0],
@@ -268,7 +268,7 @@ export default {
 
                 if (this.checkType === "bar") {
                     this.exampleSections = [];
-                    for (var barKey in this.check.meta.examples) {
+                    for (const barKey in this.check.meta.examples) {
                         if (this.check.meta.examples[barKey].length > 0) {
                             this.exampleSections.push({
                                 header: this.$t(`datasetLevel.charts.label_${barKey}`),
@@ -280,8 +280,8 @@ export default {
 
                 if (this.checkType === "top3") {
                     this.exampleSections = [];
-                    var mostFrequent = this.check.meta.most_frequent;
-                    for (var topKey in mostFrequent) {
+                    const mostFrequent = this.check.meta.most_frequent;
+                    for (const topKey in mostFrequent) {
                         if (mostFrequent[topKey].examples.length > 0) {
                             this.exampleSections.push({
                                 header: mostFrequent[topKey].value_str,
@@ -293,8 +293,8 @@ export default {
 
                 if (this.checkType === "numeric") {
                     this.exampleSections = [];
-                    var failed = this.check.meta.failed_examples;
-                    var passed = this.check.meta.passed_examples;
+                    const failed = this.check.meta.failed_examples;
+                    const passed = this.check.meta.passed_examples;
 
                     if (failed.length > 0) {
                         this.exampleSections.push({

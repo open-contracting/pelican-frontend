@@ -132,14 +132,14 @@ export default {
     }),
     computed: {
         firstDate: function () {
-            var publishedFrom = this.dataset.meta.collection_metadata.published_from;
+            const publishedFrom = this.dataset.meta.collection_metadata.published_from;
             if (publishedFrom) {
                 return publishedFrom.substring(0, 10);
             }
             return "1970-01-01";
         },
         lastDate: function () {
-            var publishedTo = this.dataset.meta.collection_metadata.published_to;
+            const publishedTo = this.dataset.meta.collection_metadata.published_to;
             if (publishedTo) {
                 return publishedTo.substring(0, 10);
             }
@@ -244,7 +244,7 @@ export default {
                 return null;
             }
 
-            var data = {};
+            const data = {};
 
             if (this.releaseDateFrom > this.firstDate) {
                 data.release_date_from = this.releaseDateFrom;

@@ -34,7 +34,8 @@
       },
       "style": {
         "useTemplate": "error",
-        "noUselessElse": "error"
+        "noUselessElse": "error",
+        "noVar": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error",

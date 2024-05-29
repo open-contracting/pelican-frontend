@@ -95,7 +95,7 @@ export default {
             if (!this.stats) {
                 return [];
             }
-            var data = [];
+            const data = [];
 
             this.sortBy(this.stats, "path");
 
@@ -108,11 +108,11 @@ export default {
             return data;
         },
         sortedBy: function () {
-            var value = this.$store.getters.fieldCheckSortedBy;
+            const value = this.$store.getters.fieldCheckSortedBy;
             return value == null ? this.defaultSorting.by : value;
         },
         isAscendingSorted: function () {
-            var value = this.$store.getters.fieldCheckSortedAscending;
+            const value = this.$store.getters.fieldCheckSortedAscending;
             return value == null ? this.defaultSorting.asc : value;
         },
         defaultSorting: () => ({ by: "processingOrder", asc: true }),
@@ -125,7 +125,7 @@ export default {
     methods: {
         hasHidden: (check) => "_hidden" in check && check._hidden.length > 0,
         switchHidden: function (check) {
-            var patch = {};
+            const patch = {};
             patch[check.path] = !this.showHidden[check.path];
             this.showHidden = Object.assign({}, this.showHidden, patch);
         },

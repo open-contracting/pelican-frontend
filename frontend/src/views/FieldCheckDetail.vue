@@ -120,7 +120,7 @@ export default {
                 return [];
             }
 
-            var allExamples = { coverage: [], quality: [] };
+            const allExamples = { coverage: [], quality: [] };
             if (this.check.coverage) {
                 for (const value of Object.values(this.check.coverage.checks)) {
                     allExamples.coverage = allExamples.coverage.concat(value.failed_examples);
@@ -139,8 +139,8 @@ export default {
             return this.$store.getters.fieldLevelCheckByPath(this.$route.params.path);
         },
         exampleSections() {
-            var exampleSections = [];
-            var failed;
+            const exampleSections = [];
+            let failed;
             if (this.check !== [] && this.check.path !== undefined) {
                 for (const key of Object.keys(this.check.coverage.checks)) {
                     failed = this.check.coverage.checks[key].failed_examples;
@@ -168,7 +168,7 @@ export default {
                     }
                 }
 
-                var passedSection = {
+                const passedSection = {
                     id: "passed",
                     header: this.$t("core.passedExamples"),
                     examples: [],
@@ -192,7 +192,7 @@ export default {
             return exampleSections;
         },
         previewData() {
-            var result = this.$store.getters.dataItemById(this.previewDataItemId);
+            const result = this.$store.getters.dataItemById(this.previewDataItemId);
 
             if (result) {
                 return result.data;
@@ -215,7 +215,7 @@ export default {
                 this.loadingPreviewData = false;
             });
 
-            var result;
+            let result;
             if (group) {
                 result = this.allExamples[group].find((e) => e.meta.item_id === itemId);
             } else {
