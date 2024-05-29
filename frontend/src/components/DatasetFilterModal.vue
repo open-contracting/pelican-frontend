@@ -136,20 +136,17 @@ export default {
         firstDate: function () {
             var publishedFrom = this.dataset.meta.collection_metadata.published_from;
             if (publishedFrom) {
-                return new Date(publishedFrom.replaceAll(".", ":") + "Z");
+                return publishedFrom.substring(0, 10);
             } else {
-                return new Date(0);
+                return "1970-01-01";
             }
         },
         lastDate: function () {
-            // pelican-backend truncates milliseconds, so add a second.
             var publishedTo = this.dataset.meta.collection_metadata.published_to;
             if (publishedTo) {
-                var date = new Date(publishedTo.replaceAll(".", ":") + "Z");
-                date.setSeconds(date.getSeconds() + 1);
-                return date;
+                return publishedTo.substring(0, 10);
             } else {
-                return new Date();
+                return new Date().toISOString().split("T")[0];
             }
         },
     },
@@ -246,9 +243,6 @@ export default {
                     }
                 });
         },
-        dateIrrelevant(date) {
-            return date < this.firstDate || date > this.lastDate;
-        },
         datasetFilterMessage() {
             if (this.dataset == null) {
                 return null;
@@ -256,11 +250,11 @@ export default {
 
             var data = {};
 
-            if (this.releaseDateFrom != "") {
-                data.release_date_from = this.releaseDateFrom.toISOString().split("T")[0];
+            if (this.releaseDateFrom > this.firstDate) {
+                data.release_date_from = this.releaseDateFrom;
             }
-            if (this.releaseDateTo != "") {
-                data.release_date_to = this.releaseDateTo.toISOString().split("T")[0];
+            if (this.releaseDateTo < this.lastDate) {
+                data.release_date_to = this.releaseDateTo;
             }
             if (this.buyerName.length > 0) {
                 data.buyer = this.buyerName;
