@@ -28,6 +28,9 @@
         "useArrowFunction": "error",
         "useLiteralKeys": "error"
       },
+      "performance": {
+        "noDelete": "error"
+      },
       "style": {
         "useTemplate": "error",
         "noUselessElse": "error"

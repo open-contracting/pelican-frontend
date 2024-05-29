@@ -114,7 +114,7 @@ export default {
         },
         getChildren: (node) => {
             var result = Object.assign({}, node);
-            delete result._check;
+            result._check = undefined;
             return result;
         },
     },

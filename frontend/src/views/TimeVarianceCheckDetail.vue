@@ -561,7 +561,7 @@ export default {
 
             if (this.check != null) {
                 this.previewMetadata = Object.assign({}, this.check.meta);
-                delete this.previewMetadata.examples;
+                this.previewMetadata.examples = undefined;
             }
         },
         preview: function (selectedKey, itemId) {
