@@ -50,17 +50,17 @@ export default {
 
             this.sortByProcessingOrder(this.stats);
 
-            this.stats.forEach((n) => {
+            for (const n of this.stats) {
                 var node = root;
-                n.path.split(".").forEach((p) => {
+                for (const p of n.path.split(".")) {
                     if (!(p in node)) {
                         node[p] = {};
                     }
                     node = node[p];
-                });
+                }
 
                 node._check = n;
-            });
+            }
 
             return root;
         },

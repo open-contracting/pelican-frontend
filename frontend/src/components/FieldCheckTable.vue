@@ -99,11 +99,11 @@ export default {
 
             this.sortBy(this.stats, "path");
 
-            this.stats.forEach((n) => {
+            for (const n of this.stats) {
                 if (n.coverage.total_count && this.filter(n)) {
                     data.push(n);
                 }
-            });
+            }
 
             return data;
         },

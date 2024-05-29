@@ -167,12 +167,12 @@ export default {
     mounted() {
         var buildDatasetsTree = (datasets, parent_id) => {
             var result = [];
-            datasets.forEach((item) => {
+            for (const item of datasets) {
                 if (item.parent_id === parent_id) {
                     item.filtered_children = buildDatasetsTree(datasets, item.id);
                     result.push(item);
                 }
-            });
+            }
 
             return result;
         };
@@ -182,7 +182,7 @@ export default {
                 this.datasets = buildDatasetsTree(response.data, null);
 
                 var self = this;
-                this.datasets.forEach((item) => {
+                for (const item of this.datasets) {
                     if (item.ancestor_id != null) {
                         var ancestor = self.datasets.find(
                             (element) => String(element.ancestor_id) === item.ancestor_id,
@@ -191,7 +191,7 @@ export default {
                     } else {
                         item.ancestor_name = null;
                     }
-                });
+                }
                 this.sortBy(this.sortedBy, this.isAscendingSorted);
             })
             .catch((error) => {

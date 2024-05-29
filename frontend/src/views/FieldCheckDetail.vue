@@ -122,15 +122,15 @@ export default {
 
             var allExamples = { coverage: [], quality: [] };
             if (this.check.coverage) {
-                Object.values(this.check.coverage.checks).forEach((value) => {
+                for (const value of Object.values(this.check.coverage.checks)) {
                     allExamples.coverage = allExamples.coverage.concat(value.failed_examples);
-                });
+                }
                 allExamples.coverage = allExamples.coverage.concat(this.check.coverage.passed_examples);
             }
             if (this.check.quality) {
-                Object.values(this.check.quality.checks).forEach((value) => {
+                for (const value of Object.values(this.check.quality.checks)) {
                     allExamples.quality = allExamples.quality.concat(value.failed_examples);
-                });
+                }
                 allExamples.quality = allExamples.quality.concat(this.check.quality.passed_examples);
             }
             return allExamples;
@@ -140,9 +140,10 @@ export default {
         },
         exampleSections() {
             var exampleSections = [];
+            var failed;
             if (this.check !== [] && this.check.path !== undefined) {
-                Object.keys(this.check.coverage.checks).forEach((key) => {
-                    var failed = this.check.coverage.checks[key].failed_examples;
+                for (const key of Object.keys(this.check.coverage.checks)) {
+                    failed = this.check.coverage.checks[key].failed_examples;
                     if (failed !== undefined && failed.length > 0) {
                         exampleSections.push({
                             id: `coverage_${key}`,
@@ -152,10 +153,10 @@ export default {
                             group: "coverage",
                         });
                     }
-                });
+                }
 
-                Object.keys(this.check.quality.checks).forEach((key) => {
-                    var failed = this.check.quality.checks[key].failed_examples;
+                for (const key of Object.keys(this.check.quality.checks)) {
+                    failed = this.check.quality.checks[key].failed_examples;
                     if (failed !== undefined && failed.length > 0) {
                         exampleSections.push({
                             id: `quality_${key}`,
@@ -165,7 +166,7 @@ export default {
                             group: "quality",
                         });
                     }
-                });
+                }
 
                 var passedSection = {
                     id: "passed",

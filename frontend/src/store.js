@@ -502,20 +502,20 @@ export default new Vuex.Store({
                     var nodes = [];
                     var remaining = [];
                     // select paths that match the search
-                    getters.fieldLevelStats.forEach((n) => {
+                    for (const n of getters.fieldLevelStats) {
                         if (isPathSearched(n.path)) {
                             nodes.push(n.path);
                         } else {
                             remaining.push(n.path);
                         }
-                    });
+                    }
 
                     // add parents
-                    remaining.forEach((n) => {
+                    for (const n of remaining) {
                         if (nodes.some((m) => m.startsWith(`${n}.`))) {
                             nodes.push(n);
                         }
-                    });
+                    }
 
                     // collapse matched nodes without matching child
                     var matched = [...nodes];
