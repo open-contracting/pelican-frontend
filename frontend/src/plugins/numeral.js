@@ -16,11 +16,11 @@ Vue.filter("formatPercentage", (value) => {
 
     if (rounded === 0.0 && value !== 0.0) {
         return `>${numeral(rounded).format("0")}%`;
-    } else if (rounded === 100.0 && value !== 100.0) {
-        return `<${numeral(rounded).format("0")}%`;
-    } else {
-        return `${numeral(rounded).format("0")}%`;
     }
+    if (rounded === 100.0 && value !== 100.0) {
+        return `<${numeral(rounded).format("0")}%`;
+    }
+    return `${numeral(rounded).format("0")}%`;
 });
 
 Vue.filter("formatPercentageOmitZero", (value) => {
@@ -28,13 +28,14 @@ Vue.filter("formatPercentageOmitZero", (value) => {
 
     if (value === 0.0) {
         return "";
-    } else if (rounded === 0.0 && value !== 0.0) {
-        return `>${numeral(rounded).format("0")}%`;
-    } else if (rounded === 100.0 && value !== 100.0) {
-        return `<${numeral(rounded).format("0")}%`;
-    } else {
-        return `${numeral(rounded).format("0")}%`;
     }
+    if (rounded === 0.0 && value !== 0.0) {
+        return `>${numeral(rounded).format("0")}%`;
+    }
+    if (rounded === 100.0 && value !== 100.0) {
+        return `<${numeral(rounded).format("0")}%`;
+    }
+    return `${numeral(rounded).format("0")}%`;
 });
 
 Vue.filter("formatPercentage2D", (value) => {
@@ -42,9 +43,9 @@ Vue.filter("formatPercentage2D", (value) => {
 
     if (rounded === 0.0 && value !== 0.0) {
         return `>${numeral(rounded).format("0.00")}%`;
-    } else if (rounded === 100.0 && value !== 100.0) {
-        return `<${numeral(rounded).format("0.00")}%`;
-    } else {
-        return `${numeral(rounded).format("0.00")}%`;
     }
+    if (rounded === 100.0 && value !== 100.0) {
+        return `<${numeral(rounded).format("0.00")}%`;
+    }
+    return `${numeral(rounded).format("0.00")}%`;
 });

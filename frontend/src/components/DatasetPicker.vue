@@ -237,12 +237,10 @@ export default {
                     if (a.phase === b.phase) {
                         if (a.state === b.state) {
                             return a.id.localeCompare(b.id);
-                        } else {
-                            return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state));
                         }
-                    } else {
-                        return this.compareNumbers(this.phases.indexOf(a.phase), this.phases.indexOf(b.phase));
+                        return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state));
                     }
+                    return this.compareNumbers(this.phases.indexOf(a.phase), this.phases.indexOf(b.phase));
                 };
             } else {
                 throw new Error(`Unknown sorting method ${by}`);

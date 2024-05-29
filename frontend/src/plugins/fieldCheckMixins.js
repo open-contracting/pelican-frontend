@@ -59,7 +59,8 @@ export default {
                         }
 
                         return asc ? 1 : -1;
-                    } else if (b.quality.total_count === 0) {
+                    }
+                    if (b.quality.total_count === 0) {
                         return asc ? -1 : 1;
                     }
 

@@ -29,7 +29,8 @@
         "useLiteralKeys": "error"
       },
       "style": {
-        "useTemplate": "error"
+        "useTemplate": "error",
+        "noUselessElse": "error"
       },
       "suspicious": {
         "noDoubleEquals": "error"

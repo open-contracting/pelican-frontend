@@ -135,17 +135,15 @@ export default {
             var publishedFrom = this.dataset.meta.collection_metadata.published_from;
             if (publishedFrom) {
                 return publishedFrom.substring(0, 10);
-            } else {
-                return "1970-01-01";
             }
+            return "1970-01-01";
         },
         lastDate: function () {
             var publishedTo = this.dataset.meta.collection_metadata.published_to;
             if (publishedTo) {
                 return publishedTo.substring(0, 10);
-            } else {
-                return new Date().toISOString().split("T")[0];
             }
+            return new Date().toISOString().split("T")[0];
         },
     },
     mounted() {

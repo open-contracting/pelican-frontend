@@ -111,9 +111,11 @@ export default {
                         }
 
                         return 1;
-                    } else if (order.indexOf(nameA) < 0) {
+                    }
+                    if (order.indexOf(nameA) < 0) {
                         return 1;
-                    } else if (order.indexOf(nameB) < 0) {
+                    }
+                    if (order.indexOf(nameB) < 0) {
                         return -1;
                     }
 

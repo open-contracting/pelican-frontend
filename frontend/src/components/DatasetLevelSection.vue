@@ -75,11 +75,10 @@ export default {
         datasetLevelStats() {
             if (!(this.section in this.sections)) {
                 return [];
-            } else {
-                return this.sections[this.section]
-                    .map((item) => this.$store.getters.datasetLevelCheckByName(item))
-                    .filter(this.filter);
             }
+            return this.sections[this.section]
+                .map((item) => this.$store.getters.datasetLevelCheckByName(item))
+                .filter(this.filter);
         },
     },
 };

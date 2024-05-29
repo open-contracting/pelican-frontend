@@ -129,9 +129,8 @@ export default {
             var stats = this.$store.getters.resourceLevelStats;
             if (stats != null) {
                 return stats.find((item) => item.name === this.$route.params.check);
-            } else {
-                return null;
             }
+            return null;
         },
         exampleSections() {
             var exampleSections = [];
