@@ -26,7 +26,8 @@
       "recommended": false,
       "complexity": {
         "useArrowFunction": "error",
-        "useLiteralKeys": "error"
+        "useLiteralKeys": "error",
+        "useOptionalChain": "error"
       },
       "performance": {
         "noDelete": "error"
