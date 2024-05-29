@@ -108,8 +108,8 @@
 
 <script>
 import ProgressBar from "@/components/ProgressBar.vue";
-import stateMixin from "@/plugins/stateMixins.js";
 import sortMixins from "@/plugins/sortMixins.js";
+import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
     name: "DatasetPickerRow",

@@ -122,15 +122,15 @@
 
 <script>
 const axios = require("axios");
-import { CONFIG } from "@/config.js";
-import Loader from "@/components/Loader.vue";
-import SortButtons from "@/components/SortButtons.vue";
-import stateMixin from "@/plugins/stateMixins.js";
-import sortMixins from "@/plugins/sortMixins.js";
-import SearchInput from "@/components/SearchInput.vue";
-import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
+import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 import DatasetReportModal from "@/components/DatasetReportModal.vue";
+import Loader from "@/components/Loader.vue";
+import SearchInput from "@/components/SearchInput.vue";
+import SortButtons from "@/components/SortButtons.vue";
+import { CONFIG } from "@/config.js";
+import sortMixins from "@/plugins/sortMixins.js";
+import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
     components: {

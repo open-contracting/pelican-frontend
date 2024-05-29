@@ -314,8 +314,8 @@
 </template>
 
 <script>
-import Dashboard from "@/views/layouts/Dashboard.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import Dashboard from "@/views/layouts/Dashboard.vue";
 
 export default {
     name: "Overview",

@@ -76,9 +76,9 @@
 </template>
 
 <script>
-import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
 import SortButtons from "@/components/SortButtons.vue";
+import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     components: { FieldCheckTableRow, SortButtons },

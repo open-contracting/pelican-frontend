@@ -188,14 +188,14 @@
 </template>
 
 <script>
-import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
-import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
-import ExampleBoxes from "@/components/ExampleBoxes.vue";
-import DonutChart from "@/components/DonutChart.vue";
 import BarChartBig from "@/components/BarChartBig.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
+import DonutChart from "@/components/DonutChart.vue";
+import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import datasetMixin from "@/plugins/datasetMixins.js";
+import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import VueJsonPretty from "vue-json-pretty";
 
 export default {
     name: "DatasetCheckDetail",

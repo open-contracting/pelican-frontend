@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import VueJsonPretty from "vue-json-pretty";
 import "vue-json-pretty/lib/styles.css";
+import VueJsonPretty from "vue-json-pretty";
 
 export default {
     name: "ExtensionPreview",

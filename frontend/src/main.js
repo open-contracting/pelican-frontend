@@ -1,18 +1,18 @@
-import Vue from "vue";
 import "./plugins/fontawesome";
 import "./plugins/numeral";
+import BootstrapVue from "bootstrap-vue";
+import Clipboard from "v-clipboard";
+import Vue from "vue";
+import DatePick from "vue-date-pick";
+import { Plugin } from "vue-fragment";
+import VueGoogleCharts from "vue-google-charts";
+import VueI18n from "vue-i18n";
+import Multiselect from "vue-multiselect";
+import VueSimpleAlert from "vue-simple-alert";
 import App from "./App.vue";
+import { messages as en } from "./messages/en.js";
 import router from "./router";
 import store from "./store";
-import BootstrapVue from "bootstrap-vue";
-import VueI18n from "vue-i18n";
-import VueGoogleCharts from "vue-google-charts";
-import VueSimpleAlert from "vue-simple-alert";
-import Clipboard from "v-clipboard";
-import Multiselect from "vue-multiselect";
-import { messages as en } from "./messages/en.js";
-import { Plugin } from "vue-fragment";
-import DatePick from "vue-date-pick";
 
 Vue.use(VueGoogleCharts);
 Vue.use(Plugin);

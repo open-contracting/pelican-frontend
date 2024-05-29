@@ -154,11 +154,11 @@
 </template>
 
 <script>
-import DonutChart from "@/components/DonutChart.vue";
 import BarChart from "@/components/BarChart.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
-import datasetMixin from "@/plugins/datasetMixins.js";
+import DonutChart from "@/components/DonutChart.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import datasetMixin from "@/plugins/datasetMixins.js";
 
 export default {
     components: { DonutChart, BarChart, BarChartSingleValue, Tooltip },

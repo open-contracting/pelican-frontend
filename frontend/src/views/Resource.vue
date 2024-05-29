@@ -59,9 +59,9 @@
 </template>
 
 <script>
-import ResourceLevelList from "@/components/ResourceLevelList.vue";
-import Loader from "@/components/Loader.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
+import Loader from "@/components/Loader.vue";
+import ResourceLevelList from "@/components/ResourceLevelList.vue";
 import Dashboard from "@/views/layouts/Dashboard.vue";
 
 export default {

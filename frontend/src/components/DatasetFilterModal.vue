@@ -109,9 +109,9 @@
 
 <script>
 const axios = require("axios");
-import { CONFIG } from "@/config.js";
-import Loader from "@/components/Loader.vue";
 import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
+import Loader from "@/components/Loader.vue";
+import { CONFIG } from "@/config.js";
 
 export default {
     components: { DatasetValuesMultiselect, Loader },

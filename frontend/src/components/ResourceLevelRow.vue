@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 import ProgressBar from "@/components/ProgressBar.vue";
+import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
 
 export default {
     components: { ProgressBar },

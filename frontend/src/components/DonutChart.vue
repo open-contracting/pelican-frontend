@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import { GChart } from "vue-google-charts";
 import datasetMixin from "@/plugins/datasetMixins.js";
+import { GChart } from "vue-google-charts";
 
 export default {
     components: { GChart },

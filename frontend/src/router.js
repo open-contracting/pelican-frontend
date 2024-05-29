@@ -1,17 +1,19 @@
 import Vue from "vue";
 import Router from "vue-router";
+import store from "./store";
+import Dataset from "./views/Dataset.vue";
+import ExtensionPreview from "./views/ExtensionPreview.vue";
+import Field from "./views/Field.vue";
 import Home from "./views/Home.vue";
 import Overview from "./views/Overview.vue";
-import Field from "./views/Field.vue";
 import Resource from "./views/Resource.vue";
-import Dataset from "./views/Dataset.vue";
 import Time from "./views/Time.vue";
-import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
+
+// If these are in the same group as above, the preview pane is incorrectly sized.
 import DatasetCheckDetail from "./views/DatasetCheckDetail.vue";
 import FieldCheckDetail from "./views/FieldCheckDetail.vue";
+import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
 import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
-import ExtensionPreview from "./views/ExtensionPreview.vue";
-import store from "./store";
 
 Vue.use(Router);
 
