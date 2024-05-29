@@ -61,19 +61,12 @@
               <td class="col-1 clickable">
                 <span v-if="index != selectedKey || selectedSection != section.header">
                   <font-awesome-icon
-                    v-if="!previewDisabled"
                     :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['far', 'eye']"
                     @click.stop.prevent="preview(index, section.header, item.item_id, section.group)"
                   />
-                  <font-awesome-icon
-                    v-else
-                    class="examples_icon"
-                    :icon="['far', 'eye']"
-                  />
                   <b-tooltip
-                    v-if="!previewDisabled"
                     :target="'preview_' + section.id + '_' + index"
                     triggers="hover"
                   >
@@ -85,6 +78,7 @@
                 </span>
                 <span v-if="index == selectedKey && selectedSection == section.header">
                   <font-awesome-icon
+                    :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'eye']"
                   />
@@ -153,19 +147,12 @@
                 <td class="col-1 clickable">
                   <span v-if="index + 5 != selectedKey || selectedSection != section.header">
                     <font-awesome-icon
-                      v-if="!previewDisabled"
                       :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['far', 'eye']"
                       @click.stop.prevent="preview(index + 5, section.header, item.item_id, section.group)"
                     />
-                    <font-awesome-icon
-                      v-else
-                      class="examples_icon"
-                      :icon="['far', 'eye']"
-                    />
                     <b-tooltip
-                      v-if="!previewDisabled"
                       :target="'preview_' + section.id + '_' + (index + 5)"
                       triggers="hover"
                     >
@@ -177,6 +164,7 @@
                   </span>
                   <span v-if="index + 5 == selectedKey && selectedSection == section.header">
                     <font-awesome-icon
+                      :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'eye']"
                     />
@@ -246,7 +234,6 @@ export default {
     props: {
         exampleSections: Array,
         loaded: Boolean,
-        previewDisabled: Boolean,
     },
     data: function () {
         return {
@@ -257,10 +244,10 @@ export default {
     },
     computed: {},
     methods: {
-        preview: function (key, section, item_id, group) {
+        preview: function (key, section, itemId, group) {
             this.selectedKey = key;
             this.selectedSection = section;
-            this.$emit("preview", item_id, group);
+            this.$emit("preview", itemId, group);
         },
         download: function (itemId) {
             this.$store.dispatch("loadDataItem", itemId).then(() => {
