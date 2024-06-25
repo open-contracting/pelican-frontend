@@ -93,6 +93,7 @@ export default {
                 "coherent.contracts_status",
                 "coherent.milestone_status",
                 "coherent.dates",
+                "coherent.release_date",
                 "coherent.milestones_dates",
                 "coherent.amendments_dates",
                 "coherent.documents_dates",
