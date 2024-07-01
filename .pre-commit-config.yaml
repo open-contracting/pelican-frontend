@@ -3,11 +3,11 @@ ci:
   skip: [pip-compile]
 repos:
   - repo: https://github.com/psf/black
-    rev: 24.3.0
+    rev: 24.4.2
     hooks:
       - id: black
   - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
+    rev: 7.1.0
     hooks:
       - id: flake8
         additional_dependencies: [flake8-comprehensions]
@@ -26,7 +26,7 @@ repos:
         files: ^requirements(_dev)?\.(in|txt)$
         args: [requirements_dev.in]
   - repo: https://github.com/biomejs/pre-commit
-    rev: v0.1.0
+    rev: v0.4.0
     hooks:
       - id: biome-check
         additional_dependencies: ["@biomejs/biome@1.7.3"]
