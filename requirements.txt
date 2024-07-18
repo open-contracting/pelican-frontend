@@ -127,7 +127,7 @@ rpds-py==0.18.0
     #   referencing
 rsa==4.7.2
     # via google-auth
-sentry-sdk==1.19.0
+sentry-sdk==2.8.0
     # via -r requirements.in
 setproctitle==1.2.2
     # via gunicorn
