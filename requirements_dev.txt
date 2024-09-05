@@ -59,23 +59,23 @@ fonttools==4.43.0
     # via
     #   -r requirements.txt
     #   matplotlib
-google-api-core==1.21.0
+google-api-core==2.19.2
     # via
     #   -r requirements.txt
     #   google-api-python-client
-google-api-python-client==1.9.3
+google-api-python-client==2.143.0
     # via -r requirements.txt
-google-auth==1.18.0
+google-auth==2.34.0
     # via
     #   -r requirements.txt
     #   google-api-core
     #   google-api-python-client
     #   google-auth-httplib2
-google-auth-httplib2==0.0.3
+google-auth-httplib2==0.2.0
     # via
     #   -r requirements.txt
     #   google-api-python-client
-googleapis-common-protos==1.52.0
+googleapis-common-protos==1.65.0
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -132,11 +132,16 @@ pillow==10.3.0
     # via
     #   -r requirements.txt
     #   matplotlib
+proto-plus==1.24.0
+    # via
+    #   -r requirements.txt
+    #   google-api-core
 protobuf==4.21.6
     # via
     #   -r requirements.txt
     #   google-api-core
     #   googleapis-common-protos
+    #   proto-plus
 psycopg2==2.9.6
     # via -r requirements.txt
 psycopg2-binary==2.9.6
@@ -159,10 +164,6 @@ python-dateutil==2.8.0
     # via
     #   -r requirements.txt
     #   matplotlib
-pytz==2019.1
-    # via
-    #   -r requirements.txt
-    #   google-api-core
 pyyaml==6.0
     # via
     #   -r requirements.txt
@@ -190,11 +191,6 @@ sentry-sdk==2.8.0
     # via -r requirements.txt
 setproctitle==1.2.2
     # via -r requirements.txt
-setuptools==74.1.2
-    # via
-    #   -r requirements.txt
-    #   google-api-core
-    #   google-auth
 shortuuid==1.0.1
     # via -r requirements.txt
 simplejson==3.16.0
@@ -203,9 +199,6 @@ six==1.16.0
     # via
     #   -r requirements.txt
     #   cycler
-    #   google-api-core
-    #   google-api-python-client
-    #   google-auth
     #   python-dateutil
 sqlparse==0.5.0
     # via
