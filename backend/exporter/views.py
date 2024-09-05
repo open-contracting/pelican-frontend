@@ -67,7 +67,7 @@ def generate_report(request) -> JsonResponse:
         )
     finally:
         if gdocs is not None:
-            gdocs.destroy_tempdir()
+            gdocs.close()
 
     # restores default english translations
     translation.activate("en")

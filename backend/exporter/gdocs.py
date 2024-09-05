@@ -49,8 +49,9 @@ class Gdocs:
                     data = zipread.read(item.filename)
                     zipwrite.writestr(item, data)
 
-    def destroy_tempdir(self) -> None:
+    def close(self) -> None:
         shutil.rmtree(self.directory)
+        self.drive_service.close()
 
     def add_image_file(self, buffer, name: str = "image.png") -> str:
         with ZipFile(self.output_file, mode="a") as zipfile:
