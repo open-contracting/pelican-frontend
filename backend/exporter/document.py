@@ -3,7 +3,6 @@
 import copy
 import re
 from dataclasses import dataclass
-from typing import List
 
 import shortuuid
 from lxml import etree
@@ -85,7 +84,7 @@ class Document:
     # replaces all occurrences of full_tag with etree._Element values in the content
     # does not wrap each of the new elements in <text:p>
     # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
-    def set_elements(self, elements: List[etree.Element], full_tag: str) -> None:
+    def set_elements(self, elements: list[etree.Element], full_tag: str) -> None:
         nodes = self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
         for node in nodes:
             if node.text:

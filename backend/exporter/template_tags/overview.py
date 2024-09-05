@@ -1,8 +1,8 @@
-from typing import Any, Dict
-
-from django.conf import settings
+from typing import Any
 
 from api.models import Dataset
+from django.conf import settings
+
 from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_timestamp_leaf_tag
 from exporter.leaf_tags.overview import lifecycle_image, lifecycle_object_count
 from exporter.tag import TemplateTag, template
@@ -29,7 +29,7 @@ from exporter.tag import TemplateTag, template
         lifecycle_image,
     ),
 )
-def overview(tag: TemplateTag) -> Dict[str, Any]:
+def overview(tag: TemplateTag) -> dict[str, Any]:
     dataset = Dataset.objects.filter(id=tag.dataset_id).first()
 
     return {

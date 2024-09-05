@@ -1,5 +1,5 @@
 import random
-from typing import Any, Dict, List, Set, Union
+from typing import Any
 
 from lxml import etree
 
@@ -7,7 +7,7 @@ LEVELS = {"coverage", "coverageSet", "coverageEmpty", "quality"}
 MODES = {"oneLine", "multipleLines"}
 
 
-def quote_list(it: Union[Dict[str, Any], List[str], Set[str]]) -> str:
+def quote_list(it: dict[str, Any] | list[str] | set[str]) -> str:
     """
     Wrap each element in single quotation marks and return as a comma-separated string.
 
@@ -16,7 +16,7 @@ def quote_list(it: Union[Dict[str, Any], List[str], Set[str]]) -> str:
     return ", ".join(f"'{el}'" for el in sorted(it))
 
 
-def sample_and_format(population, arguments: Dict[str, Any]) -> Union[str, List[etree.Element]]:
+def sample_and_format(population, arguments: dict[str, Any]) -> str | list[etree.Element]:
     """
     Call :py:func:`random.sample`, bounding the sample size in ``arguments["max"]`` to the population size.
 
@@ -48,7 +48,6 @@ def box_image(tag, function, filename: str, *args, **kwargs) -> etree.Element:
     """
     Add an image to the OpenDocument file and return an image within a frame.
     """
-
     buffer, aspect_ratio = function(*args, **kwargs)
 
     path = tag.gdocs.add_image_file(buffer, filename)

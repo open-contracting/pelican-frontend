@@ -1,6 +1,8 @@
+import builtins
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Type, Union
+from typing import Any
 
 from django.conf import settings
 from lxml import etree
@@ -27,24 +29,24 @@ class Tag:
     """
 
     #: The tag's name.
-    name: Optional[str] = None
+    name: str | None = None
     #: The names of all arguments.
-    argument_names: Set[str] = set()
+    argument_names: set[str] = set()
     #: The names of required arguments.
-    argument_required: Set[str] = set()
+    argument_required: set[str] = set()
     #: A mapping of argument names to validation functions.
-    argument_validators: Dict[str, Callable[[str], bool]] = {}
+    argument_validators: dict[str, Callable[[str], bool]] = {}
     #: A mapping of argument names to failure messages.
-    argument_validation_messages: Dict[str, str] = {}
+    argument_validation_messages: dict[str, str] = {}
     #: A mapping of argument names to conversion functions.
-    argument_converters: Dict[str, Callable[[str], Any]] = {}
+    argument_converters: dict[str, Callable[[str], Any]] = {}
     # . A mapping of argument names to default values.
-    argument_defaults: Dict[str, Any] = {}
+    argument_defaults: dict[str, Any] = {}
 
     def __init__(self, gdocs: Gdocs, dataset_id: int):
         self.gdocs = gdocs
         self.dataset_id = dataset_id
-        self.arguments: Dict[str, Any] = {}
+        self.arguments: dict[str, Any] = {}
 
     # Do not call after `finalize_arguments`.
     def set_argument(self, name: str, value: Any) -> None:
@@ -87,7 +89,7 @@ class Tag:
                 self.set_argument(name, default)
 
     # Do not call before `finalize_arguments`.
-    def validate_and_render(self, data: Dict[str, Any]) -> Any:
+    def validate_and_render(self, data: dict[str, Any]) -> Any:
         """
         Check for missing arguments, and call and return :meth:`~exporter.tag.Tag.render`.
 
@@ -99,7 +101,7 @@ class Tag:
 
         return self.render(data)
 
-    def render(self, data: Dict[str, Any]) -> Any:
+    def render(self, data: dict[str, Any]) -> Any:
         """
         Render the tag.
 
@@ -114,7 +116,7 @@ class LeafTag(Tag):
     A leaf tag renders itself, using the data ("context") provided by a template tag.
     """
 
-    def render(self, data: Dict[str, Any]) -> Union[str, etree.Element, List[etree.Element]]:
+    def render(self, data: dict[str, Any]) -> str | etree.Element | list[etree.Element]:
         """
         Render the tag.
 
@@ -132,9 +134,9 @@ class TemplateTag(Tag):
     """
 
     #: The default value of the ``template`` argument.
-    default_template: Optional[str] = None
+    default_template: str | None = None
     #: The sub-tags supported by the template tag.
-    tags: Tuple[Type[Tag], ...] = ()
+    tags: tuple[type[Tag], ...] = ()
 
     def __init__(self, gdocs: Gdocs, dataset_id: int):
         super().__init__(gdocs, dataset_id)
@@ -142,13 +144,13 @@ class TemplateTag(Tag):
         self.argument_required.add("template")
         self.argument_defaults["template"] = self.default_template
 
-    def get_context(self) -> Dict[str, Any]:
+    def get_context(self) -> dict[str, Any]:
         """
         Return the data ("context") to be provided to sub-tags.
         """
         return {}
 
-    def get_tags_mapping(self, texts: List[etree.Element]) -> Tuple[Dict[str, Tag], List[str]]:
+    def get_tags_mapping(self, texts: list[etree.Element]) -> tuple[dict[str, Tag], list[str]]:
         """
         Extract and instantiate the tags in the template.
 
@@ -173,7 +175,7 @@ class TemplateTag(Tag):
             try:
                 expression = TagExpression.parse(full_tag)
             except TagSyntaxError as er:
-                raise er.fill(full_tag, self.arguments["template"])
+                raise er.fill(full_tag, self.arguments["template"]) from er
 
             tag_class = tags_lookup.get(expression.name)
             if tag_class is None:
@@ -189,13 +191,13 @@ class TemplateTag(Tag):
                 try:
                     tag.set_argument(name, value)
                 except TagArgumentError as er:
-                    raise er.fill(full_tag, self.arguments["template"])
+                    raise er.fill(full_tag, self.arguments["template"]) from er
 
             try:
                 tag.finalize_arguments()
             except CheckNotComputedError as er:
                 tag = generate_error_template_tag(
-                    f"WARNING: Check {str(er)} was not computed. Please check your dataset.",
+                    f"WARNING: Check {er!s} was not computed. Please check your dataset.",
                 )(self.gdocs, self.dataset_id)
                 tag.finalize_arguments()
                 failed_tags.append(str(er))
@@ -204,7 +206,7 @@ class TemplateTag(Tag):
 
         return tags_mapping, failed_tags
 
-    def render(self, data: Dict[str, Any]) -> Tuple[etree.Element, List[str]]:
+    def render(self, data: dict[str, Any]) -> tuple[etree.Element, list[str]]:
         """
         Read the template's content, extract its sub-tags, recursively call the sub-tags'
         :meth:`~exporter.tag.Tag.validate_and_render` method, and merge the results into the content.
@@ -225,7 +227,7 @@ class TemplateTag(Tag):
                     result, sub_failed_tags = tag.validate_and_render(new_data)
                     failed_tags += sub_failed_tags
                 except TagError as er:
-                    raise er.fill(full_tag, self.arguments["template"])
+                    raise er.fill(full_tag, self.arguments["template"]) from er
                 except CheckNotComputedError as er:
                     document.set_text("Element could not be computed", full_tag)
                     failed_tags.append(str(er))
@@ -235,7 +237,7 @@ class TemplateTag(Tag):
                 try:
                     result = tag.validate_and_render(new_data)
                 except MissingArgumentError as er:
-                    raise er.fill(full_tag, self.arguments["template"])
+                    raise er.fill(full_tag, self.arguments["template"]) from er
 
                 if isinstance(result, list) and all(isinstance(el, etree._Element) for el in result):
                     document.set_elements(result, full_tag)
@@ -262,7 +264,7 @@ class TagExpression:
     """
 
     name: str
-    arguments: Dict[str, str]
+    arguments: dict[str, str]
 
     @classmethod
     def parse(cls, string: str) -> "TagExpression":
@@ -298,8 +300,8 @@ class TagExpression:
 
 
 def template(
-    _name: str, _default_template: str, _tags: Tuple[Type[Tag], ...]
-) -> Callable[[Callable[[TemplateTag], Dict[str, Any]]], Type[TemplateTag]]:
+    _name: str, _default_template: str, _tags: tuple[type[Tag], ...]
+) -> Callable[[Callable[[TemplateTag], dict[str, Any]]], type[TemplateTag]]:
     """
     Build a :class:`~exporter.tag.TemplateTag` by decorating a
     :meth:`~exporter.tag.TemplateTag.get_context` implementation.
@@ -309,7 +311,7 @@ def template(
     :param _tags: the tag's sub-tags
     """
 
-    def _template(function: Callable[[TemplateTag], Dict[str, Any]]) -> Type[TemplateTag]:
+    def _template(function: Callable[[TemplateTag], dict[str, Any]]) -> type[TemplateTag]:
         class _Tag(TemplateTag):
             name = _name
             argument_names = set()
@@ -322,7 +324,7 @@ def template(
             default_template = _default_template
             tags = _tags
 
-            def get_context(self) -> Dict[str, Any]:
+            def get_context(self) -> dict[str, Any]:
                 return function(self)
 
         return _Tag
@@ -332,7 +334,7 @@ def template(
 
 def leaf(
     _name: str,
-) -> Callable[[Callable[[LeafTag, Dict[str, Any]], Union[str, etree.Element, List[etree.Element]]]], Type[LeafTag]]:
+) -> Callable[[Callable[[LeafTag, dict[str, Any]], str | etree.Element | list[etree.Element]]], type[LeafTag]]:
     """
     Build a :class:`~exporter.tag.LeafTag` by decorating a
     :meth:`~exporter.tag.LeafTag.render` implementation.
@@ -341,8 +343,8 @@ def leaf(
     """
 
     def _leaf(
-        function: Callable[[LeafTag, Dict[str, Any]], Union[str, etree.Element, List[etree.Element]]]
-    ) -> Type[LeafTag]:
+        function: Callable[[LeafTag, dict[str, Any]], str | etree.Element | list[etree.Element]],
+    ) -> type[LeafTag]:
         class _Tag(LeafTag):
             name = _name
             argument_names = set()
@@ -352,7 +354,7 @@ def leaf(
             argument_converters = {}
             argument_defaults = {}
 
-            def render(self, data: Dict[str, Any]) -> Union[str, etree.Element, List[etree.Element]]:
+            def render(self, data: dict[str, Any]) -> str | etree.Element | list[etree.Element]:
                 return function(self, data)
 
         return _Tag
@@ -362,12 +364,13 @@ def leaf(
 
 def argument(
     name: str,
-    default: Optional[Any] = None,
+    *,
+    default: Any | None = None,
     required: bool = False,
-    choices: Optional[Union[Set[str], Dict[str, Any]]] = None,
-    type: Optional[Type[int]] = None,
+    choices: set[str] | dict[str, Any] | None = None,
+    type: type[int] | None = None,
     nonzero: bool = False,
-) -> Callable[[Type[Tag]], Type[Tag]]:
+) -> Callable[[type[Tag]], type[Tag]]:
     """
     Add an argument to the tag.
 
@@ -379,7 +382,7 @@ def argument(
     :param nonzero: whether the argument can be 0 (if ``type=int``)
     """
 
-    def _argument(cls: Type[Tag]) -> Type[Tag]:
+    def _argument(cls: builtins.type[Tag]) -> builtins.type[Tag]:
         cls.argument_names.add(name)
 
         if default is not None:
@@ -390,7 +393,7 @@ def argument(
 
         if choices:
             cls.argument_validators[name] = lambda v: v in choices
-            cls.argument_validation_messages[name] = "The value must be one of: %s." % quote_list(choices)
+            cls.argument_validation_messages[name] = f"The value must be one of: {quote_list(choices)}."
 
         if type is int:
             cls.argument_converters[name] = int
@@ -406,18 +409,18 @@ def argument(
     return _argument
 
 
-def generate_error_template_tag(message: str) -> Type[TemplateTag]:
+def generate_error_template_tag(message: str) -> type[TemplateTag]:
     """
     Build a :class:`~exporter.tag.TemplateTag` for the error template and set the error ``message``.
     """
 
     @template("error", settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"], (value_tag,))
-    def _tag(tag: TemplateTag) -> Dict[str, Any]:
+    def _tag(tag: TemplateTag) -> dict[str, Any]:
         return {"value": message}
 
     return _tag
 
 
 @leaf("value")
-def value_tag(tag: LeafTag, data: Dict[str, Any]) -> str:
+def value_tag(tag: LeafTag, data: dict[str, Any]) -> str:
     return data["value"]

@@ -1,6 +1,3 @@
-from django.db import connections
-from django.test import TestCase
-
 from api.models import (
     DataItem,
     Dataset,
@@ -13,6 +10,8 @@ from api.models import (
     ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
 )
+from django.db import connections
+from django.test import TestCase
 
 
 class PelicanTestCase(TestCase):

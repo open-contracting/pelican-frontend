@@ -40,12 +40,14 @@ class Gdocs:
         self.directory = tempfile.mkdtemp()
         self.output_file = os.path.join(self.directory, "out.zip")
 
-        with ZipFile(self.google_drive_cache.get_file_path(main_template_id), "r") as zipread:
-            with ZipFile(self.output_file, "w") as zipwrite:
-                for item in zipread.infolist():
-                    if item.filename not in ("content.xml"):
-                        data = zipread.read(item.filename)
-                        zipwrite.writestr(item, data)
+        with (
+            ZipFile(self.google_drive_cache.get_file_path(main_template_id), "r") as zipread,
+            ZipFile(self.output_file, "w") as zipwrite,
+        ):
+            for item in zipread.infolist():
+                if item.filename not in ("content.xml"):
+                    data = zipread.read(item.filename)
+                    zipwrite.writestr(item, data)
 
     def destroy_tempdir(self) -> None:
         shutil.rmtree(self.directory)
@@ -56,9 +58,8 @@ class Gdocs:
             zipfile.writestr(path, buffer.getbuffer())
 
         # Updating manifest
-        with ZipFile(self.output_file) as zipfile:
-            with zipfile.open("META-INF/manifest.xml") as content:
-                root = etree.parse(content).getroot()
+        with ZipFile(self.output_file) as zipfile, zipfile.open("META-INF/manifest.xml") as content:
+            root = etree.parse(content).getroot()
 
         self.remove_file_from_zip(self.output_file, "META-INF/manifest.xml")
 
@@ -89,24 +90,25 @@ class Gdocs:
             raise GoogleDriveError(
                 f"The final report could not be uploaded to folder ID '{folder_id}'. "
                 "Possible reasons are a non-existing folder or insufficient permission settings."
-            )
+            ) from None
 
         return file.get("id")
 
     def remove_file_from_zip(self, zip_file_path: str, file_path: str) -> None:
-        with ZipFile(zip_file_path, "r") as zipread:
-            with ZipFile(f"{zip_file_path}_copy", "w") as zipwrite:
-                for item in zipread.infolist():
-                    if item.filename != file_path:
-                        data = zipread.read(item.filename)
-                        zipwrite.writestr(item, data)
+        with ZipFile(zip_file_path, "r") as zipread, ZipFile(f"{zip_file_path}_copy", "w") as zipwrite:
+            for item in zipread.infolist():
+                if item.filename != file_path:
+                    data = zipread.read(item.filename)
+                    zipwrite.writestr(item, data)
 
         shutil.move(f"{zip_file_path}_copy", zip_file_path)
 
     def get_content(self, file_id: str) -> etree.Element:
-        with ZipFile(self.google_drive_cache.get_file_path(file_id)) as zipfile:
-            with zipfile.open("content.xml") as content:
-                return etree.parse(content).getroot()
+        with (
+            ZipFile(self.google_drive_cache.get_file_path(file_id)) as zipfile,
+            zipfile.open("content.xml") as content,
+        ):
+            return etree.parse(content).getroot()
 
 
 class GoogleDriveCache:
@@ -139,7 +141,7 @@ class GoogleDriveCache:
                     raise GoogleDriveError(
                         f"Template ID '{file_id}' could not be accessed. "
                         "Possible reasons are a non-existing file or insufficient permission settings."
-                    )
+                    ) from None
 
         version = int(response["version"])
 
@@ -157,8 +159,7 @@ class GoogleDriveCache:
                         raise GoogleDriveError(
                             f"Template ID '{file_id}' could not be downloaded. "
                             "Possible reasons are a non-existing file or insufficient permission settings."
-                        )
+                        ) from None
 
             return default_storage.path(default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(response)))
-        else:
-            return self.files[file_id]["path"]
+        return self.files[file_id]["path"]

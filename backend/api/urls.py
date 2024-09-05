@@ -8,7 +8,8 @@ router = SimpleRouter(use_regex_path=False)
 router.register(r"datasets", views.DatasetViewSet, basename="dataset")
 router.register(r"data_items", views.DataItemViewSet, basename="data-item")
 
-urlpatterns = router.urls + [
+urlpatterns = [
+    *router.urls,
     # Django REST Framework's @action decorator uses underscores instead of hyphens (for field_level_report, etc.).
     # While we can override it, we instead allow the default behavior and use underscores here for consistency.
     # https://github.com/encode/django-rest-framework/pull/6891

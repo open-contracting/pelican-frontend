@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Any
 
 from django.utils.translation import gettext as _
 from lxml import etree
@@ -10,7 +10,7 @@ from exporter.util import LEVELS, MODES, box_image, sample_and_format
 
 @argument("level", required=True, choices={"coverageSet", "coverageEmpty", "quality"})
 @leaf("name")
-def name(tag: LeafTag, data: Dict[str, Any]) -> str:
+def name(tag: LeafTag, data: dict[str, Any]) -> str:
     if tag.arguments["level"] == "quality" and data["qualityCheck"] is None:
         return ""
     if tag.arguments["level"] == "coverageSet":
@@ -22,7 +22,7 @@ def name(tag: LeafTag, data: Dict[str, Any]) -> str:
 
 @argument("level", required=True, choices={"coverageSet", "coverageEmpty", "quality"})
 @leaf("description")
-def description(tag: LeafTag, data: Dict[str, Any]) -> str:
+def description(tag: LeafTag, data: dict[str, Any]) -> str:
     if tag.arguments["level"] == "quality" and data["qualityCheck"] is None:
         return ""
     if tag.arguments["level"] == "coverageSet":
@@ -36,7 +36,7 @@ def description(tag: LeafTag, data: Dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("passedExamples")
-def passed_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
+def passed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
     examples = data[f"{tag.arguments['level']}PassedExamples"]
     return sample_and_format(examples, tag.arguments)
 
@@ -45,14 +45,14 @@ def passed_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("failedExamples")
-def failed_examples(tag: LeafTag, data: Dict[str, Any]) -> Union[str, List[etree.Element]]:
+def failed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
     examples = data[f"{tag.arguments['level']}FailedExamples"]
     return sample_and_format(examples, tag.arguments)
 
 
 @argument("level", required=True, choices=LEVELS)
 @leaf("resultBoxImage")
-def result_box_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
+def result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
     return box_image(
         tag,
         graphs.passed_result_box,

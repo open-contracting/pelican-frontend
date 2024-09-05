@@ -34,8 +34,7 @@ Install development dependencies:
 
 .. code-block:: bash
 
-   pip install pip-tools
-   pip-sync requirements_dev.txt
+   pip install -r requirements_dev.txt
 
 Run database migrations:
 

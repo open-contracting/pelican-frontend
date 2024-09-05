@@ -1,7 +1,7 @@
 import math
 from io import BytesIO
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from django.conf import settings
 from matplotlib import font_manager
@@ -22,7 +22,7 @@ COLOR = {
     "blue": "#555cb3",
 }
 
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 for font in font_manager.findSystemFonts(fontpaths=str(ASSETS_DIR / "fonts")):
     font_manager.fontManager.addfont(font)
@@ -57,10 +57,7 @@ def build_buffer(fig):
 
 def box(data, aspect_ratio, ylabels, ycolors, white):
     total_count = sum(data)
-    if total_count == 0:
-        data_normalized = len(data) * [0.0]
-    else:
-        data_normalized = [value / total_count for value in data]
+    data_normalized = len(data) * [0.0] if total_count == 0 else [value / total_count for value in data]
 
     yticks = list(range(len(ylabels)))
 
@@ -103,16 +100,8 @@ def box(data, aspect_ratio, ylabels, ycolors, white):
 
         patch_index = len(data) - index - 1
         bbox = ax.patches[patch_index].get_bbox()
-
-        if white(patch_index, percentage):
-            font_color = "white"
-        else:
-            font_color = COLOR["dark_grey"]
-
-        if percentage >= 7:
-            percentage_x = bbox.xmin + 0.01
-        else:
-            percentage_x = bbox.xmax + 0.01
+        font_color = "white" if white(patch_index, percentage) else COLOR["dark_grey"]
+        percentage_x = bbox.xmin + 0.01 if percentage >= 7 else bbox.xmax + 0.01
 
         plt.text(
             percentage_x,
@@ -160,7 +149,7 @@ def passed_result_box(data):
 
 
 def bar_result_box(counts_pairs):
-    ylabels, data = list(zip(*reversed(counts_pairs)))
+    ylabels, data = list(zip(*reversed(counts_pairs), strict=True))
 
     return box(
         data,
@@ -172,31 +161,28 @@ def bar_result_box(counts_pairs):
 
 
 def table_result_box(counts_pairs, total_count=None):
-    values, counts = list(zip(*counts_pairs))
+    values, counts = list(zip(*counts_pairs, strict=True))
     aspect_ratio = float(len(counts_pairs) + 1) / 15.0
 
     if total_count is None:
         total_count = sum(counts)
 
-    if total_count == 0:
-        shares = len(counts) * [0.0]
-    else:
-        shares = [(count / total_count) for count in counts]
+    shares = len(counts) * [0.0] if total_count == 0 else [(count / total_count) for count in counts]
 
     percentage_strs = []
     for share in shares:
         percentage = 100 * share
         percentage_rounded = round(percentage, 2)
         if percentage_rounded == 0.0 and percentage != 0.0:
-            percentage_strs.append(">%.2f%%" % percentage_rounded)
+            percentage_strs.append(f">{percentage_rounded:.2f}%")
         elif percentage_rounded == 100.0 and percentage != 100.0:
-            percentage_strs.append("<%.2f%%" % percentage_rounded)
+            percentage_strs.append(f"<{percentage_rounded:.2f}%")
         else:
-            percentage_strs.append("%.2f%%" % percentage_rounded)
+            percentage_strs.append(f"{percentage_rounded:.2f}%")
 
     fig, ax = build_fig(aspect_ratio)
     table = ax.table(
-        cellText=list(zip(values, percentage_strs, counts)),
+        cellText=list(zip(values, percentage_strs, counts, strict=True)),
         colLabels=["Value", "Share", "Occurrences"],
         cellLoc="left",
         colLoc="left",
@@ -251,7 +237,7 @@ def lifecycle_image(planning_count, tender_count, award_count, contract_count, i
 
 
 def histogram_result_box(counts_pairs):
-    values, counts = list(zip(*counts_pairs))
+    values, counts = list(zip(*counts_pairs, strict=True))
     aspect_ratio = 0.5
 
     fig, ax = build_fig(aspect_ratio)

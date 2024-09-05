@@ -1,8 +1,5 @@
-from typing import Dict, Optional
-
-
 class PelicanError(Exception):
-    """Base class for exceptions from within this project"""
+    """Base class for exceptions from within this project."""
 
 
 class GoogleDriveError(PelicanError):
@@ -29,7 +26,7 @@ class TagError(PelicanError):
     :param template_id: the file ID of the template in Google Docs
     """
 
-    def __init__(self, reason: str, full_tag: Optional[str] = None, template_id: Optional[str] = None):
+    def __init__(self, reason: str, full_tag: str | None = None, template_id: str | None = None):
         self.args = (reason,)
         self.reason = reason
         self.full_tag = full_tag
@@ -48,7 +45,7 @@ class TagError(PelicanError):
             self.template_id = template_id
         return self
 
-    def as_dict(self) -> Dict[str, Optional[str]]:
+    def as_dict(self) -> dict[str, str | None]:
         """
         Return the exception as a dictionary (e.g. to serialize as JSON for the browser).
         """

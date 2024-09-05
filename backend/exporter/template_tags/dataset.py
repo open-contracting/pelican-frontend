@@ -1,9 +1,9 @@
-from typing import Any, Dict, Tuple, Type
+from typing import Any
 
+from api.models import DatasetLevelCheck
 from django.conf import settings
 from django.utils.translation import gettext as _
 
-from api.models import DatasetLevelCheck
 from exporter.exceptions import CheckNotComputedError
 from exporter.gdocs import Gdocs
 from exporter.leaf_tags.dataset import (
@@ -76,7 +76,7 @@ class Dataset(TemplateTag):
     argument_defaults = {}
 
     default_template = settings.GDOCS_TEMPLATES["DEFAULT_DATASET_TEMPLATE"]
-    tags: Tuple[Type[Tag], ...] = (
+    tags: tuple[type[Tag], ...] = (
         generate_key_leaf_tag("name"),
         generate_key_leaf_tag("description"),
         result,
@@ -88,7 +88,7 @@ class Dataset(TemplateTag):
         self.argument_names.add("check")
         self.argument_required.add("check")
         self.argument_validators["check"] = lambda v: v in CHECK_TYPES
-        self.argument_validation_messages["check"] = "The value must be one of: %s." % quote_list(CHECK_TYPES)
+        self.argument_validation_messages["check"] = f"The value must be one of: {quote_list(CHECK_TYPES)}."
 
     def finalize_arguments(self) -> None:
         check_name = self.arguments["check"]
@@ -133,7 +133,7 @@ class Dataset(TemplateTag):
 
         super().finalize_arguments()
 
-    def get_context(self) -> Dict[str, Any]:
+    def get_context(self) -> dict[str, Any]:
         check_name = self.arguments["check"]
         check_type = CHECK_TYPES[check_name]
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
@@ -192,17 +192,8 @@ class Dataset(TemplateTag):
                 data["checkedCount"] = check.meta["total_processed"]
                 data["passedCount"] = check.meta["total_passed"]
                 data["failedCount"] = check.meta["total_failed"]
-                # For backwards compatibility until dataset 4 is deleted.
-                data["passedExamples"] = [
-                    example["original_process"]["ocid"] if "original_process" in example else example["ocid"]
-                    for example in check.meta["passed_examples"]
-                ]
-                data["failedExamples"] = [
-                    example["original_process"]["ocid"] if "original_process" in example else example["ocid"]
-                    for example in check.meta["failed_examples"]
-                ]
-                # data["passedExamples"] = [example["ocid"] for example in check.meta["passed_examples"]]
-                # data["failedExamples"] = [example["ocid"] for example in check.meta["failed_examples"]]
+                data["passedExamples"] = [example["ocid"] for example in check.meta["passed_examples"]]
+                data["failedExamples"] = [example["ocid"] for example in check.meta["failed_examples"]]
             elif check_type == "biggest_share":
                 data["buyerIdentifierId"] = check.meta["specifics"]["buyer.identifier.id"]
                 data["buyerIdentifierScheme"] = check.meta["specifics"]["buyer.identifier.scheme"]

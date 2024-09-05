@@ -1,9 +1,10 @@
-from typing import Any, Dict, Generator, Optional, Tuple
+from collections.abc import Generator
+from typing import Any
 
 import jsonref
+from api.models import FieldLevelCheckExamples, Report
 from django.conf import settings
 
-from api.models import FieldLevelCheckExamples, Report
 from exporter.leaf_tags.field import description, failed_examples, name, passed_examples, result_box_image
 from exporter.leaf_tags.generic import generate_count_leaf_tag, generate_key_leaf_tag
 from exporter.tag import TemplateTag, argument, template
@@ -11,7 +12,7 @@ from exporter.tag import TemplateTag, argument, template
 
 # See similar code in Pelican backend's field_level/definitions.py.
 def _descend(
-    value: Dict[str, Any], new_path: Tuple[str, ...], dot_path: str, refs: Tuple[str, ...]
+    value: dict[str, Any], new_path: tuple[str, ...], dot_path: str, refs: tuple[str, ...]
 ) -> Generator[str, None, None]:
     if hasattr(value, "__reference__"):
         refs += (value.__reference__["$ref"][14:],)  # remove #/definitions/
@@ -21,7 +22,7 @@ def _descend(
 
 
 def _paths(
-    properties: Dict[str, Any], path: Optional[Tuple[str, ...]] = None, refs: Optional[Tuple[str, ...]] = None
+    properties: dict[str, Any], path: tuple[str, ...] | None = None, refs: tuple[str, ...] | None = None
 ) -> Generator[str, None, None]:
     if path is None:
         path = ()
@@ -29,7 +30,7 @@ def _paths(
         refs = ()
 
     for key, value in properties.items():
-        new_path = path + (key,)
+        new_path = (*path, key)
         dot_path = ".".join(new_path)
 
         if "object" in value["type"] and "properties" in value:
@@ -67,7 +68,7 @@ PATHS = set(_paths(schema["properties"]))
         result_box_image,
     ),
 )
-def field(tag: TemplateTag) -> Dict[str, Any]:
+def field(tag: TemplateTag) -> dict[str, Any]:
     path = tag.arguments["path"]
 
     result = Report.objects.get(dataset=tag.dataset_id, type="field_level_check", data__has_key=path).data[path]
@@ -75,7 +76,7 @@ def field(tag: TemplateTag) -> Dict[str, Any]:
 
     return {
         "path": path,
-        "qualityCheck": list(result["quality"]["checks"])[0] if result["quality"]["checks"] else None,
+        "qualityCheck": next(iter(result["quality"]["checks"])) if result["quality"]["checks"] else None,
         "coverageCheckedCount": result["coverage"]["total_count"],
         "coverageSetCheckedCount": result["coverage"]["checks"]["exists"]["total_count"],
         "coverageEmptyCheckedCount": result["coverage"]["checks"]["non_empty"]["total_count"],

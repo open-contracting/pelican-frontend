@@ -1,9 +1,9 @@
-from typing import Any, Dict
+from typing import Any
 
+from api.models import Report, ResourceLevelCheckExamples
 from django.conf import settings
 from django.utils.translation import gettext as _
 
-from api.models import Report, ResourceLevelCheckExamples
 from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_sample_leaf_tag
 from exporter.leaf_tags.resource import result_box_image
 from exporter.tag import TemplateTag, argument, template
@@ -66,7 +66,7 @@ CHECKS = {
         result_box_image,
     ),
 )
-def resource(tag: TemplateTag) -> Dict[str, Any]:
+def resource(tag: TemplateTag) -> dict[str, Any]:
     name = tag.arguments["check"]
 
     result = Report.objects.get(dataset=tag.dataset_id, type="resource_level_check", data__has_key=name).data[name]

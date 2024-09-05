@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 import simplejson as json
 from django.conf import settings
@@ -50,7 +50,7 @@ def generate_report(request) -> JsonResponse:
         if "report_name" in input_message and isinstance(input_message["report_name"], str):
             filename = input_message["report_name"]
         else:
-            filename = f"Report {input_message['dataset_id']} {datetime.now()}"
+            filename = f"Report {input_message['dataset_id']} {datetime.datetime.now(tz=datetime.UTC)}"
 
         file_id = gdocs.upload(folder_id, filename, content)
 

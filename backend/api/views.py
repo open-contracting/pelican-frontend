@@ -63,41 +63,38 @@ def dataset_filter_items(request):
     filter_message = input_message["filter_message"]
 
     # See similar code in dataset_filter.py in pelican-backend.
-    try:
-        variables = {"dataset_id_original": dataset_id_original}
-        parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]
+    variables = {"dataset_id_original": dataset_id_original}
+    parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]
 
-        if "release_date_from" in filter_message:
-            variables["release_date_from"] = filter_message["release_date_from"]
-            parts.append("data->>'date' >= %(release_date_from)s")
+    if "release_date_from" in filter_message:
+        variables["release_date_from"] = filter_message["release_date_from"]
+        parts.append("data->>'date' >= %(release_date_from)s")
 
-        if "release_date_to" in filter_message:
-            variables["release_date_to"] = filter_message["release_date_to"]
-            parts.append("data->>'date' <= %(release_date_to)s")
+    if "release_date_to" in filter_message:
+        variables["release_date_to"] = filter_message["release_date_to"]
+        parts.append("data->>'date' <= %(release_date_to)s")
 
-        if "buyer" in filter_message:
-            variables["buyer"] = tuple(buyer for buyer in filter_message["buyer"])
-            parts.append("data->'buyer'->>'name' IN %(buyer)s")
+    if "buyer" in filter_message:
+        variables["buyer"] = tuple(buyer for buyer in filter_message["buyer"])
+        parts.append("data->'buyer'->>'name' IN %(buyer)s")
 
-        if "buyer_regex" in filter_message:
-            variables["buyer_regex"] = filter_message["buyer_regex"]
-            parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
+    if "buyer_regex" in filter_message:
+        variables["buyer_regex"] = filter_message["buyer_regex"]
+        parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
 
-        if "procuring_entity" in filter_message:
-            variables["procuring_entity"] = tuple(
-                procuring_entity for procuring_entity in filter_message["procuring_entity"]
-            )
-            parts.append("data->'tender'->'procuringEntity'->>'name' IN %(procuring_entity)s")
+    if "procuring_entity" in filter_message:
+        variables["procuring_entity"] = tuple(
+            procuring_entity for procuring_entity in filter_message["procuring_entity"]
+        )
+        parts.append("data->'tender'->'procuringEntity'->>'name' IN %(procuring_entity)s")
 
-        if "procuring_entity_regex" in filter_message:
-            variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
-            parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
+    if "procuring_entity_regex" in filter_message:
+        variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
+        parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
 
-        with connections["data"].cursor() as cursor:
-            cursor.execute(SQL(" AND ".join(parts)), variables)
-            items = cursor.fetchall()[0][0]
-    except Exception:
-        return HttpResponseBadRequest(reason="The dataset could not be filtered in this way.")
+    with connections["data"].cursor() as cursor:
+        cursor.execute(SQL(" AND ".join(parts)), variables)
+        items = cursor.fetchall()[0][0]
 
     return JsonResponse({"items": items})
 

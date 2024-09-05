@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from django.conf import settings
 
@@ -14,5 +14,5 @@ from exporter.template_tags.resource import resource
     settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
     (overview, field, resource, Dataset),
 )
-def base(tag: TemplateTag) -> Dict[str, Any]:
+def base(tag: TemplateTag) -> dict[str, Any]:
     return {}

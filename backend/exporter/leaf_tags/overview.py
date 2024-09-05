@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from lxml import etree
 
@@ -9,12 +9,12 @@ from exporter.util import box_image
 
 @argument("stage", required=True, choices={"planning", "tender", "award", "contract", "implementation"})
 @leaf("lifecycleObjectCount")
-def lifecycle_object_count(tag: LeafTag, data: Dict[str, Any]) -> str:
+def lifecycle_object_count(tag: LeafTag, data: dict[str, Any]) -> str:
     return str(data["lifecycleObjectCounts"][tag.arguments["stage"]])
 
 
 @leaf("lifecycleImage")
-def lifecycle_image(tag: LeafTag, data: Dict[str, Any]) -> etree.Element:
+def lifecycle_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
     return box_image(
         tag,
         graphs.lifecycle_image,
