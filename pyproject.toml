@@ -40,3 +40,6 @@ builtins-ignorelist = ["copyright"]
   "PT",  # Django
   "S101",  # assert
 ]
+
+[tool.isort]
+src_paths = ["backend"]
