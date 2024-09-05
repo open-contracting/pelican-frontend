@@ -116,7 +116,7 @@ class LeafTag(Tag):
     A leaf tag renders itself, using the data ("context") provided by a template tag.
     """
 
-    def render(self, data: dict[str, Any]) -> str | etree.Element | list[etree.Element]:
+    def render(self, data: dict[str, Any]) -> str | etree._Element | list[etree._Element]:
         """
         Render the tag.
 
@@ -150,7 +150,7 @@ class TemplateTag(Tag):
         """
         return {}
 
-    def get_tags_mapping(self, texts: list[etree.Element]) -> tuple[dict[str, Tag], list[str]]:
+    def get_tags_mapping(self, texts: list[etree._Element]) -> tuple[dict[str, Tag], list[str]]:
         """
         Extract and instantiate the tags in the template.
 
@@ -206,7 +206,7 @@ class TemplateTag(Tag):
 
         return tags_mapping, failed_tags
 
-    def render(self, data: dict[str, Any]) -> tuple[etree.Element, list[str]]:
+    def render(self, data: dict[str, Any]) -> tuple[etree._Element, list[str]]:
         """
         Read the template's content, extract its sub-tags, recursively call the sub-tags'
         :meth:`~exporter.tag.Tag.validate_and_render` method, and merge the results into the content.
@@ -248,7 +248,7 @@ class TemplateTag(Tag):
                 else:
                     raise ValueError(
                         "LeafTag's render method must return of the following types: "
-                        "list of 'etree.Element', 'etree.Element', 'str'."
+                        "list of 'etree._Element', 'etree._Element', 'str'."
                     )
 
         return document.content, failed_tags
@@ -334,7 +334,7 @@ def template(
 
 def leaf(
     _name: str,
-) -> Callable[[Callable[[LeafTag, dict[str, Any]], str | etree.Element | list[etree.Element]]], type[LeafTag]]:
+) -> Callable[[Callable[[LeafTag, dict[str, Any]], str | etree._Element | list[etree._Element]]], type[LeafTag]]:
     """
     Build a :class:`~exporter.tag.LeafTag` by decorating a
     :meth:`~exporter.tag.LeafTag.render` implementation.
@@ -343,7 +343,7 @@ def leaf(
     """
 
     def _leaf(
-        function: Callable[[LeafTag, dict[str, Any]], str | etree.Element | list[etree.Element]],
+        function: Callable[[LeafTag, dict[str, Any]], str | etree._Element | list[etree._Element]],
     ) -> type[LeafTag]:
         class _Tag(LeafTag):
             name = _name
@@ -354,7 +354,7 @@ def leaf(
             argument_converters = {}
             argument_defaults = {}
 
-            def render(self, data: dict[str, Any]) -> str | etree.Element | list[etree.Element]:
+            def render(self, data: dict[str, Any]) -> str | etree._Element | list[etree._Element]:
                 return function(self, data)
 
         return _Tag

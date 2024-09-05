@@ -48,7 +48,7 @@ def template(
 
 def leaf(
     _name: str,
-) -> Callable[[Callable[[LeafTag, dict[str, Any]], str | etree.Element | list[etree.Element]]], type[LeafTag]]:
+) -> Callable[[Callable[[LeafTag, dict[str, Any]], str | etree._Element | list[etree._Element]]], type[LeafTag]]:
     """
     Build a :class:`~exporter.tag.LeafTag` by decorating a
     :meth:`~exporter.tag.LeafTag.render` implementation.
@@ -57,7 +57,7 @@ def leaf(
     """
 
     def _leaf(
-        function: Callable[[LeafTag, dict[str, Any]], str | etree.Element | list[etree.Element]],
+        function: Callable[[LeafTag, dict[str, Any]], str | etree._Element | list[etree._Element]],
     ) -> type[LeafTag]:
         class _Tag(LeafTag):
             name = _name
@@ -68,7 +68,7 @@ def leaf(
             argument_converters = {}
             argument_defaults = {}
 
-            def render(self, data: dict[str, Any]) -> str | etree.Element | list[etree.Element]:
+            def render(self, data: dict[str, Any]) -> str | etree._Element | list[etree._Element]:
                 return function(self, data)
 
         return _Tag

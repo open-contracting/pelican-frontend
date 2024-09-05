@@ -8,7 +8,7 @@ from exporter.util import box_image
 
 
 @leaf("resultBoxImage")
-def result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.resource_result_box,

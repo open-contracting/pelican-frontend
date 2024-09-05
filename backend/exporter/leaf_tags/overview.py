@@ -14,7 +14,7 @@ def lifecycle_object_count(tag: LeafTag, data: dict[str, Any]) -> str:
 
 
 @leaf("lifecycleImage")
-def lifecycle_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def lifecycle_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.lifecycle_image,

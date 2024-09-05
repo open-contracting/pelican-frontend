@@ -77,7 +77,7 @@ class Gdocs:
 
         return path
 
-    def upload(self, folder_id: str, file_name: str, content: etree.Element):
+    def upload(self, folder_id: str, file_name: str, content: etree._Element):
         with ZipFile(self.output_file, mode="a") as zipfile:
             zipfile.writestr("content.xml", etree.tostring(content))
 
@@ -104,7 +104,7 @@ class Gdocs:
 
         shutil.move(f"{zip_file_path}_copy", zip_file_path)
 
-    def get_content(self, file_id: str) -> etree.Element:
+    def get_content(self, file_id: str) -> etree._Element:
         with (
             ZipFile(self.google_drive_cache.get_file_path(file_id)) as zipfile,
             zipfile.open("content.xml") as content,

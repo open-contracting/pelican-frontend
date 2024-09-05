@@ -77,7 +77,7 @@ def bar_share(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def bar_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
+def bar_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     if "percentageRange" in tag.arguments:
         examples = data["examples"][tag.arguments["percentageRange"]]
     else:
@@ -112,7 +112,7 @@ def donut_share(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def donut_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
+def donut_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     if "value" not in tag.arguments:
         examples = [example for examples in data["examples"].values() for example in examples]
     elif tag.arguments["value"] in data["examples"]:
@@ -151,7 +151,7 @@ def top3_share(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def top3_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
+def top3_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     if "rank" in tag.arguments:
         examples = data["examples"][tag.arguments["rank"]]
     else:
@@ -161,7 +161,7 @@ def top3_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Elemen
 
 @argument("type", choices={"bar"}, default="bar")
 @leaf("resultBoxImage")
-def counts_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def counts_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.bar_result_box,
@@ -171,7 +171,7 @@ def counts_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element
 
 
 @leaf("resultBoxImage")
-def sums_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def sums_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.bar_result_box,
@@ -181,7 +181,7 @@ def sums_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
 
 
 @leaf("resultBoxImage")
-def passed_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def passed_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.passed_result_box,
@@ -191,7 +191,7 @@ def passed_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element
 
 
 @leaf("resultBoxImage")
-def table_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def table_result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.table_result_box,

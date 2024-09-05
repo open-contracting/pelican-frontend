@@ -36,7 +36,7 @@ def description(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("passedExamples")
-def passed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
+def passed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     examples = data[f"{tag.arguments['level']}PassedExamples"]
     return sample_and_format(examples, tag.arguments)
 
@@ -45,14 +45,14 @@ def passed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Elem
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("failedExamples")
-def failed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
+def failed_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     examples = data[f"{tag.arguments['level']}FailedExamples"]
     return sample_and_format(examples, tag.arguments)
 
 
 @argument("level", required=True, choices=LEVELS)
 @leaf("resultBoxImage")
-def result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree.Element:
+def result_box_image(tag: LeafTag, data: dict[str, Any]) -> etree._Element:
     return box_image(
         tag,
         graphs.passed_result_box,

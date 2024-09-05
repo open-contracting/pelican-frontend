@@ -30,15 +30,15 @@ DEFAULT_STYLES = (
 )
 
 
-def xpath(content: etree.Element, xpath: str) -> etree.Element:
+def xpath(content: etree._Element, xpath: str) -> etree._Element:
     return content.xpath(xpath, namespaces={"office": "urn:oasis:names:tc:opendocument:xmlns:office:1.0"})
 
 
 @dataclass
 class Document:
-    content: etree.Element
+    content: etree._Element
 
-    def get_tags(self) -> etree.Element:
+    def get_tags(self) -> etree._Element:
         return self.content.xpath('.//text()[contains(., "{%")]')
 
     # replaces all occurrences of full_tag with string value in the content
@@ -56,7 +56,7 @@ class Document:
     # replaces all occurrences of full_tag with etree._Element value in the content
     # automatically wraps an element in <text:p>
     # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
-    def set_element(self, element: etree.Element, full_tag: str) -> None:
+    def set_element(self, element: etree._Element, full_tag: str) -> None:
         wrapper_element = etree.Element(
             "{urn:oasis:names:tc:opendocument:xmlns:text:1.0}p",
             attrib={"{urn:oasis:names:tc:opendocument:xmlns:text:1.0}style-name": "Standard"},
@@ -84,7 +84,7 @@ class Document:
     # replaces all occurrences of full_tag with etree._Element values in the content
     # does not wrap each of the new elements in <text:p>
     # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
-    def set_elements(self, elements: list[etree.Element], full_tag: str) -> None:
+    def set_elements(self, elements: list[etree._Element], full_tag: str) -> None:
         nodes = self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
         for node in nodes:
             if node.text:
@@ -107,7 +107,7 @@ class Document:
                 current_node.addnext(element_copy)
                 current_node = element_copy
 
-    def merge_styles(self, other: etree.Element, prefix: str) -> None:
+    def merge_styles(self, other: etree._Element, prefix: str) -> None:
         other_styles = xpath(other, "//office:automatic-styles")[0]
 
         for main_style_node in xpath(self.content, "//office:automatic-styles"):
@@ -124,7 +124,7 @@ class Document:
 
                 main_style_node.append(sub_style)
 
-    def merge_fonts(self, other: etree.Element) -> None:
+    def merge_fonts(self, other: etree._Element) -> None:
         included_fonts = set()
         for child in xpath(self.content, "//office:font-face-decls")[0]:
             for attrib_name in child.attrib:
@@ -139,7 +139,7 @@ class Document:
                         main_font_node.append(sub_font)
                         break
 
-    def merge(self, other: etree.Element, full_tag: str) -> None:
+    def merge(self, other: etree._Element, full_tag: str) -> None:
         prefix = shortuuid.uuid()
         other_content = xpath(other, "//office:text")[0]
         for child in other_content.iter():

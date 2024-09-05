@@ -16,7 +16,7 @@ def quote_list(it: dict[str, Any] | list[str] | set[str]) -> str:
     return ", ".join(f"'{el}'" for el in sorted(it))
 
 
-def sample_and_format(population, arguments: dict[str, Any]) -> str | list[etree.Element]:
+def sample_and_format(population, arguments: dict[str, Any]) -> str | list[etree._Element]:
     """
     Call :py:func:`random.sample`, bounding the sample size in ``arguments["max"]`` to the population size.
 
@@ -44,7 +44,7 @@ def sample_and_format(population, arguments: dict[str, Any]) -> str | list[etree
     return elements
 
 
-def box_image(tag, function, filename: str, *args, **kwargs) -> etree.Element:
+def box_image(tag, function, filename: str, *args, **kwargs) -> etree._Element:
     """
     Add an image to the OpenDocument file and return an image within a frame.
     """

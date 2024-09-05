@@ -52,7 +52,7 @@ def generate_sample_leaf_tag(key: str) -> type[LeafTag]:
     @argument("mode", choices=MODES, default="oneLine")
     @argument("max", type=int, nonzero=True)
     @leaf(key)
-    def _tag(tag: LeafTag, data: dict[str, Any]) -> str | list[etree.Element]:
+    def _tag(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
         return sample_and_format(data[key], tag.arguments)
 
     return _tag
