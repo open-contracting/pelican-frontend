@@ -19,7 +19,7 @@ class Tests(SimpleTestCase):
         with self.assertRaises(TagError) as cm:
             get_tag({}).validate_and_render(data)
 
-        self.assertEqual(cm.exception.reason, "Missing arguments: 'level'.")
+        self.assertEqual(cm.exception.reason, "Missing argument(s) for tag name: 'level'.")
 
     def test_invalid(self):
         with self.assertRaises(TagError) as cm:
