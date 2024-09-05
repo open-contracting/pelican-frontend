@@ -1,9 +1,9 @@
 from typing import Any
 
-from api.models import DatasetLevelCheck
 from django.conf import settings
 from django.utils.translation import gettext as _
 
+from api.models import DatasetLevelCheck
 from exporter.exceptions import CheckNotComputedError
 from exporter.gdocs import Gdocs
 from exporter.leaf_tags.dataset import (

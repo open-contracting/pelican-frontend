@@ -5,6 +5,7 @@ version = "0.0.0"
 [tool.ruff]
 line-length = 119
 target-version = "py311"
+src = ["backend"]
 
 [tool.ruff.lint]
 select = ["ALL"]

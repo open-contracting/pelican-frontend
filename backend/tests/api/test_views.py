@@ -13,7 +13,6 @@ from api.models import (
     ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
 )
-
 from tests import PelicanTestCase
 
 
