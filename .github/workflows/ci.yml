@@ -34,10 +34,7 @@ jobs:
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
           coverage run --source api,core,exporter manage.py test
-      - env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: backend
-        run: coveralls --service=github
+      - uses: coverallsapp/github-action@v2
     services:
       postgres:
         image: postgres:12

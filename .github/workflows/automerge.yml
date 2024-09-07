@@ -4,8 +4,8 @@
 name: Auto-merge
 on: pull_request_target
 permissions:
-  pull-requests: write # to approve the PR
-  contents: write # to merge the PR
+  pull-requests: write  # to approve the PR
+  contents: write  # to merge the PR
 jobs:
   dependabot:
     if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
