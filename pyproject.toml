@@ -43,4 +43,4 @@ builtins-ignorelist = ["copyright"]
 ]
 
 [tool.isort]
-src_paths = ["backend"]
+src_paths = ["backend"]  # for lint workflow
