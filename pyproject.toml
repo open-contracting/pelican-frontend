@@ -41,3 +41,6 @@ builtins-ignorelist = ["copyright"]
   "PT",  # Django
   "S101",  # assert
 ]
+
+[tool.coverage.run]
+omit = ["*/translations.py"]
