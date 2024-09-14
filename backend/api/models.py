@@ -56,7 +56,7 @@ class DatasetFilter(models.Model):
 
 class DatasetLevelCheck(models.Model):
     id = models.BigAutoField(primary_key=True)
-    check_name = models.CharField(max_length=255, blank=True, null=True)
+    check_name = models.CharField(max_length=255, blank=True, null=True)  # noqa: DJ001
     result = models.BooleanField(blank=True, null=True)
     value = models.IntegerField(blank=True, null=True)
     meta = models.JSONField()
@@ -98,7 +98,7 @@ class FieldLevelCheckExamples(models.Model):
     id = models.BigAutoField(primary_key=True)
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     data = models.JSONField(blank=True, null=True)
-    path = models.CharField(max_length=255, blank=True, null=True)
+    path = models.CharField(max_length=255, blank=True, null=True)  # noqa: DJ001
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
 
@@ -121,8 +121,8 @@ class ProgressMonitorDataset(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     dataset = models.OneToOneField(Dataset, on_delete=models.CASCADE, related_name="progress")
-    state = models.CharField(max_length=255, blank=True, null=True, choices=State.choices)
-    phase = models.CharField(max_length=255, blank=True, null=True, choices=Phase.choices)
+    state = models.CharField(max_length=255, blank=True, null=True, choices=State.choices)  # noqa: DJ001
+    phase = models.CharField(max_length=255, blank=True, null=True, choices=Phase.choices)  # noqa: DJ001
     size = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
@@ -136,7 +136,7 @@ class ProgressMonitorItem(models.Model):
     id = models.BigAutoField(primary_key=True)
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     data_item = models.ForeignKey(DataItem, on_delete=models.CASCADE)
-    state = models.CharField(max_length=255, blank=True, null=True)
+    state = models.CharField(max_length=255, blank=True, null=True)  # noqa: DJ001
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
 
@@ -149,7 +149,7 @@ class ProgressMonitorItem(models.Model):
 class Report(models.Model):
     id = models.BigAutoField(primary_key=True)
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
-    type = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)  # noqa: DJ001
     data = models.JSONField()
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
@@ -176,7 +176,7 @@ class ResourceLevelCheckExamples(models.Model):
     id = models.BigAutoField(primary_key=True)
     dataset = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     data = models.JSONField(blank=True, null=True)
-    check_name = models.CharField(max_length=255, blank=True, null=True)
+    check_name = models.CharField(max_length=255, blank=True, null=True)  # noqa: DJ001
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
 
@@ -187,7 +187,7 @@ class ResourceLevelCheckExamples(models.Model):
 
 class TimeVarianceLevelCheck(models.Model):
     id = models.BigAutoField(primary_key=True)
-    check_name = models.CharField(max_length=255, blank=True, null=True)
+    check_name = models.CharField(max_length=255, blank=True, null=True)  # noqa: DJ001
     coverage_result = models.BooleanField(blank=True, null=True)
     coverage_value = models.IntegerField(blank=True, null=True)
     check_result = models.BooleanField(blank=True, null=True)

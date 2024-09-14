@@ -21,11 +21,8 @@ ignore = [
   "A001",  # Django REST framework
   "A002", # tag type
   "ARG001", "ARG002", "DJ008", "RUF012", "SLF001",  # Django
-  "DJ001",  # https://github.com/open-contracting/pelican-backend/issues/87
   "PLR2004",  # magic values
   "PLW2901",  # for-loop variable
-  "S104",  # Docker ALLOWED_HOSTS
-  "S320",  # lxml untrusted data
   "TRY003",  # error messages
 ]
 
