@@ -60,7 +60,7 @@ class Gdocs:
 
         # Updating manifest
         with ZipFile(self.output_file) as zipfile, zipfile.open("META-INF/manifest.xml") as content:
-            root = etree.parse(content).getroot()  # noqa: S320
+            root = etree.parse(content).getroot()  # noqa: S320 # our data
 
         self.remove_file_from_zip(self.output_file, "META-INF/manifest.xml")
 
@@ -109,7 +109,7 @@ class Gdocs:
             ZipFile(self.google_drive_cache.get_file_path(file_id)) as zipfile,
             zipfile.open("content.xml") as content,
         ):
-            return etree.parse(content).getroot()  # noqa: S320
+            return etree.parse(content).getroot()  # noqa: S320 # our data
 
 
 class GoogleDriveCache:
