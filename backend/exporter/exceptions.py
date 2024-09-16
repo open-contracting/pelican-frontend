@@ -46,9 +46,7 @@ class TagError(PelicanError):
         return self
 
     def as_dict(self) -> dict[str, str | None]:
-        """
-        Return the exception as a dictionary (e.g. to serialize as JSON for the browser).
-        """
+        """Return the exception as a dictionary (e.g. to serialize as JSON for the browser)."""
         return {
             "reason": self.reason,
             "full_tag": self.full_tag,

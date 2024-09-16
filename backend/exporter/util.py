@@ -45,9 +45,7 @@ def sample_and_format(population, arguments: dict[str, Any]) -> str | list[etree
 
 
 def box_image(tag, function, filename: str, *args, **kwargs) -> etree._Element:
-    """
-    Add an image to the OpenDocument file and return an image within a frame.
-    """
+    """Add an image to the OpenDocument file and return an image within a frame."""
     buffer, aspect_ratio = function(*args, **kwargs)
 
     path = tag.gdocs.add_image_file(buffer, filename)

@@ -1,6 +1,4 @@
-"""
-Factories for leaf tags.
-"""
+"""Factories for leaf tags."""
 
 import datetime
 from typing import Any
@@ -18,9 +16,7 @@ DATETIME_FORMATS = {
 
 
 def generate_key_leaf_tag(key: str) -> type[LeafTag]:
-    """
-    Build a :class:`~exporter.tag.LeafTag` named ``key``, that returns the ``key`` from the context.
-    """
+    """Build a :class:`~exporter.tag.LeafTag` named ``key``, that returns the ``key`` from the context."""
 
     @leaf(key)
     def _tag(tag: LeafTag, data: dict[str, Any]) -> str:

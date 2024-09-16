@@ -112,9 +112,7 @@ class Tag:
 
 # Keep this class, because render()'s signature differs between LeafTag and TemplateTag.
 class LeafTag(Tag):
-    """
-    A leaf tag renders itself, using the data ("context") provided by a template tag.
-    """
+    """A leaf tag renders itself, using the data ("context") provided by a template tag."""
 
     def render(self, data: dict[str, Any]) -> str | etree._Element | list[etree._Element]:
         """
@@ -145,9 +143,7 @@ class TemplateTag(Tag):
         self.argument_defaults["template"] = self.default_template
 
     def get_context(self) -> dict[str, Any]:
-        """
-        Return the data ("context") to be provided to sub-tags.
-        """
+        """Return the data ("context") to be provided to sub-tags."""
         return {}
 
     def get_tags_mapping(self, texts: list[etree._Element]) -> tuple[dict[str, Tag], list[str]]:
@@ -410,9 +406,7 @@ def argument(
 
 
 def generate_error_template_tag(message: str) -> type[TemplateTag]:
-    """
-    Build a :class:`~exporter.tag.TemplateTag` for the error template and set the error ``message``.
-    """
+    """Build a :class:`~exporter.tag.TemplateTag` for the error template and set the error ``message``."""
 
     @template("error", settings.GDOCS_TEMPLATES["DEFAULT_ERROR_TEMPLATE"], (value_tag,))
     def _tag(tag: TemplateTag) -> dict[str, Any]:

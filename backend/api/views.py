@@ -170,9 +170,7 @@ class FilterDatasetSerializer(serializers.Serializer):
 
 
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """
-    Return OCDS data that passed or failed a check.
-    """
+    """Return OCDS data that passed or failed a check."""
 
     queryset = DataItem.objects.all()
     serializer_class = DataItemSerializer
@@ -215,9 +213,7 @@ class DatasetViewSet(viewsets.ViewSet):
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L35
     @extend_schema(responses=DatasetSerializer)
     def list(self, request, *args, **kwargs):
-        """
-        Return all datasets with their status and filter metadata.
-        """
+        """Return all datasets with their status and filter metadata."""
         queryset = self.get_annotated_queryset()
         serializer = DatasetSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -225,18 +221,14 @@ class DatasetViewSet(viewsets.ViewSet):
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
     @extend_schema(responses=DatasetSerializer)
     def retrieve(self, request, *args, **kwargs):
-        """
-        Return the dataset with its status and filter metadata.
-        """
+        """Return the dataset with its status and filter metadata."""
         instance = self.get_annotated_object()
         serializer = DatasetSerializer(instance)
         return Response(serializer.data)
 
     @extend_schema(request=CreateDatasetSerializer, responses={202: None})
     def create(self, request):
-        """
-        Publish a message to RabbitMQ to create a dataset.
-        """
+        """Publish a message to RabbitMQ to create a dataset."""
         serializer = CreateDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         message = {
@@ -251,9 +243,7 @@ class DatasetViewSet(viewsets.ViewSet):
     @extend_schema(request=FilterDatasetSerializer, responses={202: None})
     @action(detail=True, methods=["post"])
     def filter(self, request, pk=None):
-        """
-        Publish a message to RabbitMQ to create a filtered dataset.
-        """
+        """Publish a message to RabbitMQ to create a filtered dataset."""
         serializer = FilterDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         message = {"dataset_id_original": pk, "filter_message": serializer.data}
@@ -262,9 +252,7 @@ class DatasetViewSet(viewsets.ViewSet):
 
     @extend_schema(responses={202: None})
     def destroy(self, request, pk=None):
-        """
-        Publish a message to RabbitMQ to wipe the dataset.
-        """
+        """Publish a message to RabbitMQ to wipe the dataset."""
         publish({"dataset_id": pk}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -272,8 +260,9 @@ class DatasetViewSet(viewsets.ViewSet):
     @action(detail=False)
     def find_by_name(self, request):
         """
-        Return the ID of the dataset with the name given in the `name` query string parameter, as an object like
-        `{"id": 123}`, or `{}` if no name matches.
+        Return the ID of the dataset with the name given in the `name` query string parameter, as an object.
+
+        ``{"id": 123}`` for example, or ``{}`` if no name matches.
         """
         try:
             dataset = self.get_queryset().get(name=request.query_params.get("name"))
@@ -284,25 +273,19 @@ class DatasetViewSet(viewsets.ViewSet):
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def field_level_report(self, request, pk=None):
-        """
-        Return a report of the dataset's field-level checks.
-        """
+        """Return a report of the dataset's field-level checks."""
         return Response(get_object_or_404(Report, dataset=pk, type="field_level_check").data)
 
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def compiled_release_level_report(self, request, pk=None):
-        """
-        Return a report of the dataset's compiled release-level checks.
-        """
+        """Return a report of the dataset's compiled release-level checks."""
         return Response(get_object_or_404(Report, dataset=pk, type="resource_level_check").data)
 
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def dataset_level_report(self, request, pk=None):
-        """
-        Return a report of the dataset's dataset-level checks.
-        """
+        """Return a report of the dataset's dataset-level checks."""
         return self.get_report(
             DatasetLevelCheck,
             [
@@ -315,9 +298,7 @@ class DatasetViewSet(viewsets.ViewSet):
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def time_based_report(self, request, pk=None):
-        """
-        Return a report of the dataset's time-based checks.
-        """
+        """Return a report of the dataset's time-based checks."""
         return self.get_report(
             TimeVarianceLevelCheck,
             [
@@ -332,9 +313,7 @@ class DatasetViewSet(viewsets.ViewSet):
     @extend_schema(responses=StatusSerializer)
     @action(detail=True)
     def status(self, request, pk=None):
-        """
-        Return the dataset's status, as an object like `{"phase": "CHECKED", "state": "OK"}`, or `{}` if not set.
-        """
+        """Return the dataset's status, as an object like `{"phase": "CHECKED", "state": "OK"}`, or `{}` if not set."""
         try:
             progress = self.get_object_or_404(self.get_queryset().select_related("progress")).progress
             return Response({"phase": progress.phase, "state": progress.state})
@@ -344,18 +323,14 @@ class DatasetViewSet(viewsets.ViewSet):
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def metadata(self, request, pk=None):
-        """
-        Return the dataset's collection metadata.
-        """
+        """Return the dataset's collection metadata."""
         meta = self.get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True))
         return Response(meta or {})
 
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def coverage(self, request, pk=None):
-        """
-        Return the dataset's coverage statistics.
-        """
+        """Return the dataset's coverage statistics."""
         self.get_object()  # trigger 404 if no dataset
 
         # The lists of fields must match the names of field-level checks in pelican-backend.
@@ -421,9 +396,7 @@ class DatasetViewSet(viewsets.ViewSet):
 class FieldLevelDetail(views.APIView):
     @extend_schema(responses={200: {"type": "object"}})
     def get(self, request, pk, name, format=None):
-        """
-        Return a report and examples of one field-level check.
-        """
+        """Return a report and examples of one field-level check."""
         start_time = time.time()
 
         detail = get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name).data[name]
@@ -444,9 +417,7 @@ class FieldLevelDetail(views.APIView):
 class ResourceLevelDetail(views.APIView):
     @extend_schema(responses={200: {"type": "object"}})
     def get(self, request, pk, name, format=None):
-        """
-        Return a report and examples of one compiled release-level check.
-        """
+        """Return a report and examples of one compiled release-level check."""
         start_time = time.time()
 
         detail = get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name).data[name]
