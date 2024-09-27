@@ -45,7 +45,7 @@ class Gdocs:
             ZipFile(self.output_file, "w") as zipwrite,
         ):
             for item in zipread.infolist():
-                if item.filename not in ("content.xml"):
+                if item.filename != "content.xml":
                     data = zipread.read(item.filename)
                     zipwrite.writestr(item, data)
 
