@@ -43,8 +43,7 @@ class Document:
 
     # replaces all occurrences of full_tag with string value in the content
     def set_text(self, value: str, full_tag: str) -> None:
-        nodes = self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
-        for node in nodes:
+        for node in self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag)):
             if node.text:
                 node.text = node.text.replace(full_tag, str(value))
             for child in node:
@@ -63,8 +62,7 @@ class Document:
         )
         wrapper_element.append(copy.deepcopy(element))
 
-        nodes = self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
-        for node in nodes:
+        for node in self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag)):
             if node.text:
                 node.text = node.text.replace(full_tag, "")
             for child in node:
@@ -85,8 +83,7 @@ class Document:
     # does not wrap each of the new elements in <text:p>
     # if the node containing full_tag is not a <text:p> element the new element is added to the root of the document
     def set_elements(self, elements: list[etree._Element], full_tag: str) -> None:
-        nodes = self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
-        for node in nodes:
+        for node in self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag)):
             if node.text:
                 node.text = node.text.replace(full_tag, "")
             for child in node:
@@ -147,8 +144,7 @@ class Document:
                 if re.match(r"\{[^}]*\}style-name", attrib_name) and child.get(attrib_name) not in DEFAULT_STYLES:
                     child.set(attrib_name, prefix + child.get(attrib_name))
 
-        nodes = self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag))
-        for node in nodes:
+        for node in self.content.xpath(FULL_TAG_LOCATION_XPATH.format(full_tag=full_tag)):
             if node.text:
                 node.text = node.text.replace(full_tag, "")
             for child in node:
