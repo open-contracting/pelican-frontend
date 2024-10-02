@@ -242,7 +242,7 @@ if "SENTRY_DSN" in os.environ:
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
         integrations=[DjangoIntegration()],
-        traces_sample_rate=0,  # The Sentry plan does not include Performance.
+        traces_sample_rate=1.0,
     )
 
 if "CORS_ALLOWED_ORIGINS" in os.environ:
