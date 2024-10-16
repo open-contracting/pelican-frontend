@@ -11,5 +11,5 @@ Pelican frontend does not pre-emptively disallow new versions, since breaking ch
 
    For example, changing the histogram bins (buckets) in Pelican backend would require supporting more bins in:
 
-   -  ``backend/exporter/leaf_tags/dataset.py``
+   -  ``exporter/leaf_tags/dataset.py``
    -  ``frontend/src/components/BarChartSingleValue.vue``
