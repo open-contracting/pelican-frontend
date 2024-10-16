@@ -127,7 +127,7 @@ Simple tags accept no arguments.
    * - ``{% lifecycleImage %}``
      - this image in a frame with the number of objects per contracting stage
 
-       .. image:: ../backend/exporter/assets/images/lifecycle.png
+       .. image:: ../exporter/assets/images/lifecycle.png
 
 Date leaf tags
 ^^^^^^^^^^^^^^

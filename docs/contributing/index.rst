@@ -24,12 +24,6 @@ Set up the git pre-commit hook:
 Backend
 ~~~~~~~
 
-Change to the ``backend`` directory:
-
-.. code-block:: bash
-
-   cd backend
-
 Install development dependencies:
 
 .. code-block:: bash
@@ -47,7 +41,7 @@ If you don't have an instance of `Pelican backend <https://pelican-backend.readt
 .. code-block:: bash
 
    createdb pelican_backend
-   gunzip -c backend/tests/fixtures/pelican-backend.sql | psql pelican_backend
+   gunzip -c tests/fixtures/pelican-backend.sql | psql pelican_backend
 
 Frontend
 ~~~~~~~~
@@ -73,7 +67,6 @@ In one terminal, start the backend server:
 
 .. code-block:: bash
 
-   cd backend
    ./manage.py runserver
 
 In another terminal, start the frontend server:
@@ -109,9 +102,9 @@ Pelican backend integration
 
 `Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__'s database is treated as a read-only `legacy database <https://docs.djangoproject.com/en/4.2/howto/legacy-databases/>`__, with ``managed = False`` in all model's ``Meta`` class, and with a ``DATABASE_ROUTERS`` setting that routes queries to its database.
 
-To update ``backend/api/models.py`` following changes to Pelican backend's database schema:
+To update ``api/models.py`` following changes to Pelican backend's database schema:
 
--  Run ``python backend/manage.py inspectdb > backend/api/models.py``
+-  Run ``python manage.py inspectdb > api/models.py``
 -  Replace comments at top of file
 -  Replace ``models.DO_NOTHING`` with ``on_delete=models.CASCADE``
 -  ``Dataset.meta``: Add ``blank=True, default=dict``

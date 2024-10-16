@@ -1,7 +1,7 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  build_backend:
+  backend:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
     steps:
@@ -13,8 +13,7 @@ jobs:
           cache-dependency-path: "**/requirements*.txt"
       - run: pip install -r requirements.txt
       # Check requirements.txt contains production requirements.
-      - working-directory: backend
-        run: ./manage.py --help
+      - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
       - name: Run Pelican backend migrations
         run: |
@@ -28,7 +27,6 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
           PELICAN_BACKEND_DATABASE_URL: postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
         shell: bash
-        working-directory: backend
         run: |
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
@@ -48,7 +46,7 @@ jobs:
         ports:
           - 5432/tcp
 
-  build_frontend:
+  frontend:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-20.04
     defaults:

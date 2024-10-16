@@ -13,7 +13,7 @@
     "indentStyle": "space",
     "indentWidth": 4,
     "lineWidth": 119,
-    "ignore": ["backend/release-schema.json"]
+    "ignore": ["release-schema.json"]
   },
   "json": {
     "formatter": {

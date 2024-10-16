@@ -3,8 +3,8 @@ node_modules
 *.mo
 dist
 .coverage
-htmlcov
-credentials.json
-google_drive_cache
-/backend/static
+/htmlcov
+/credentials.json
+/google_drive_cache
+/static
 /docs/_build

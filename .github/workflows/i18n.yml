@@ -18,8 +18,7 @@ jobs:
           sudo apt update
           sudo apt install gettext translate-toolkit
       - run: pip install -r requirements.txt
-      - working-directory: backend
-        run: python manage.py makemessages -a
+      - run: python manage.py makemessages -a
       - name: Count incomplete translations
         shell: bash
         run: |
