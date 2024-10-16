@@ -2,10 +2,10 @@ FROM python:3.11
 
 # Required by lxml Python package.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      libxml2-dev \
-      libxslt-dev \
-      gettext \
-   && rm -rf /var/lib/apt/lists/*
+        libxml2-dev \
+        libxslt-dev \
+        gettext \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r runner && useradd --no-log-init -r -g runner runner
 
