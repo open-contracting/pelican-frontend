@@ -16,7 +16,7 @@
     "core-js": "^3.20.3",
     "numeral": "^2.0.6",
     "v-clipboard": "^2.2.3",
-    "vue": "^2.6.11",
+    "vue": "^3.0.0",
     "vue-date-pick": "^1.4.1",
     "vue-fragment": "^1.5.1",
     "vue-google-charts": "^0.3.3",
