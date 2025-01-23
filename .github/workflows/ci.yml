@@ -20,7 +20,9 @@ jobs:
           curl -sS \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
-            | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -f -
+            | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -v ON_ERROR_STOP=1 -f -
+      - name: Load Kingfisher Process fixtures
+        run: psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -v ON_ERROR_STOP=1 -f tests/fixtures/kingfisher-process.sql
       - name: Run checks and tests
         env:
           PYTHONWARNINGS: error

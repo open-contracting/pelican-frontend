@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any  # noqa: A005
 
 from django.conf import settings
 from django.utils.translation import gettext as _
