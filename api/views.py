@@ -226,14 +226,27 @@ class DatasetViewSet(viewsets.ViewSet):
         serializer = DatasetSerializer(instance)
         return Response(serializer.data)
 
-    @extend_schema(request=CreateDatasetSerializer, responses={202: None})
+    @extend_schema(request=CreateDatasetSerializer, responses={202: None, 404: {"type": "string"}})
     def create(self, request):
         """Publish a message to RabbitMQ to create a dataset."""
         serializer = CreateDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        collection_id = serializer.data["collection_id"]
+        with connections["kingfisher_process"].cursor() as cursor:
+            cursor.execute(
+                "SELECT EXISTS (SELECT 1 FROM compiled_release WHERE collection_id = %(id)s)",
+                {"id": collection_id},
+            )
+            if not cursor.fetchone()[0]:
+                return Response(
+                    f"No rows found in `compiled_release` where collection_id = {collection_id}",
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
         message = {
             "name": serializer.data["name"],
-            "collection_id": serializer.data["collection_id"],
+            "collection_id": collection_id,
             "ancestor_id": serializer.data.get("ancestor_id"),
             "max_items": serializer.data.get("max_items"),
         }

@@ -97,7 +97,12 @@ DATABASES = {
     "default": dj_database_url.config(default="postgresql:///pelican_frontend?application_name=pelican_frontend"),
     # The connection string for Pelican backend's database.
     "data": dj_database_url.config(
-        env="PELICAN_BACKEND_DATABASE_URL", default="postgresql:///pelican_backend?application_name=pelican_frontend"
+        env="PELICAN_BACKEND_DATABASE_URL",
+        default="postgresql:///pelican_backend?application_name=pelican_frontend",
+    ),
+    "kingfisher_process": dj_database_url.config(
+        env="KINGFISHER_PROCESS_DATABASE_URL",
+        default="postgresql:///kingfisher_process?application_name=pelican_frontend",
     ),
 }
 
