@@ -92,7 +92,7 @@ def dataset_filter_items(request):
         variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
         parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
 
-    with connections["data"].cursor() as cursor:
+    with connections["pelican_backend"].cursor() as cursor:
         cursor.execute(SQL(" AND ".join(parts)), variables)
         items = cursor.fetchall()[0][0]
 
@@ -379,7 +379,7 @@ class DatasetViewSet(viewsets.ViewSet):
             ],
         }
 
-        with connections["data"].cursor() as cursor:
+        with connections["pelican_backend"].cursor() as cursor:
             statement = """
                 SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
                 FROM {table} flc, jsonb_each(flc.result->'checks') c

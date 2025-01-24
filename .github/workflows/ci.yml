@@ -22,8 +22,7 @@ jobs:
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
             | psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -v ON_ERROR_STOP=1 \
               -c "CREATE EXTENSION btree_gin" \
-              -f - \
-              -f tests/fixtures/kingfisher-process.sql
+              -f -
       - name: Run checks and tests
         env:
           PYTHONWARNINGS: error
