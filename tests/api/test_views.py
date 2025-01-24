@@ -1,6 +1,8 @@
 import json
 from unittest.mock import patch
 
+from django.db import connections
+
 from api.models import (
     DataItem,
     Dataset,
@@ -18,6 +20,20 @@ from tests import PelicanTestCase
 
 class CreateTests(PelicanTestCase):
     databases = {"default", "pelican_backend", "kingfisher_process"}
+
+    def setUp(self):
+        with connections["kingfisher_process"].cursor() as cursor:
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS compiled_release (
+                    id bigserial PRIMARY KEY,
+                    ocid text NOT NULL,
+                    collection_id bigint NOT NULL,
+                    collection_file_id bigint NOT NULL,
+                    data_id bigint NOT NULL,
+                    release_date text NOT NULL
+                );
+                INSERT INTO compiled_release VALUES (1, 'ocds-213czf-1', 123, 1, 1, '2000-01-01T00:00:00Z');
+            """)
 
     @patch("api.views.publish")
     def test_datasets_create(self, publish):
