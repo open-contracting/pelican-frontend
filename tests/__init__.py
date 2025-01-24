@@ -16,7 +16,7 @@ from api.models import (
 
 
 class PelicanTestCase(TestCase):
-    databases = {"default", "data"}
+    databases = {"default", "pelican_backend"}
     unmanaged = {
         DataItem,
         Dataset,
@@ -33,13 +33,13 @@ class PelicanTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        with connections["data"].schema_editor() as schema_editor:
+        with connections["pelican_backend"].schema_editor() as schema_editor:
             for model in cls.unmanaged:
                 schema_editor.create_model(model)
 
     @classmethod
     def tearDownClass(cls):
-        with connections["data"].schema_editor() as schema_editor:
+        with connections["pelican_backend"].schema_editor() as schema_editor:
             for model in cls.unmanaged:
                 schema_editor.delete_model(model)
         super().tearDownClass()

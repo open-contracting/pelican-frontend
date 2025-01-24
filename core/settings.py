@@ -96,7 +96,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": dj_database_url.config(default="postgresql:///pelican_frontend?application_name=pelican_frontend"),
     # The connection string for Pelican backend's database.
-    "data": dj_database_url.config(
+    "pelican_backend": dj_database_url.config(
         env="PELICAN_BACKEND_DATABASE_URL",
         default="postgresql:///pelican_backend?application_name=pelican_frontend",
     ),
