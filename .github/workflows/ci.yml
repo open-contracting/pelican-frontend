@@ -24,6 +24,7 @@ jobs:
               -c "CREATE EXTENSION btree_gin" \
               -f - \
               -f tests/fixtures/kingfisher-process.sql
+      - run: psql postgresql://postgres:postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres -c '\d'
       - name: Run checks and tests
         env:
           PYTHONWARNINGS: error
