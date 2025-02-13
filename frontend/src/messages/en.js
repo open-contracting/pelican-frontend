@@ -629,6 +629,9 @@ export const messages = {
         search: "Search field by name",
         hidden: "{n} hidden",
         checkedFields: "Checks are not performed on fields in extensions or on additional fields.",
+        resetTableSorting: "Use schema sort order",
+        tableLayout: "Use table layout",
+        treeLayout: "Use tree layout",
         filterDropdown: {
             all: "All",
             coverageFailedOnly: "Coverage failed only",

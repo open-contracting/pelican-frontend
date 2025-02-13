@@ -38,6 +38,7 @@
         <b-button-group v-if="layout == 'table'">
           <button
             :class="['btn', 'reset-table-sorting']"
+            :title="$t('field.resetTableSorting')"
             @click="resetTableSorting()"
           >
             <font-awesome-icon icon="sort-numeric-down" />
@@ -47,12 +48,14 @@
         <b-button-group>
           <button
             :class="['btn', { active: layout == 'table' }]"
+            :title="$t('field.tableLayout')"
             @click="$store.commit('setFieldCheckLayout', 'table')"
           >
             <font-awesome-icon icon="bars" />
           </button>
           <button
             :class="['btn', { active: layout == 'tree' }]"
+            :title="$t('field.treeLayout')"
             @click="$store.commit('setFieldCheckLayout', 'tree')"
           >
             <font-awesome-icon icon="align-right" />
