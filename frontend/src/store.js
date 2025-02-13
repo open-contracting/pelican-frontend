@@ -125,11 +125,7 @@ export default new Vuex.Store({
         },
         fieldCheckLayout: (state) => state.fieldCheckLayout,
         isFieldCheckExpanded: (state) => (path) => {
-            if (state.fieldCheckExpandedNodes != null) {
-                return state.fieldCheckExpandedNodes.includes(path);
-            }
-
-            return false;
+            return !!state.fieldCheckExpandedNodes?.includes(path);
         },
         timeVarianceLevelCheckByName: (state) => (checkName) => {
             if (state.timeVarianceLevelStats) {
@@ -157,11 +153,7 @@ export default new Vuex.Store({
             return state.datasetSorting?.asc;
         },
         isResourceCheckExpanded: (state) => (section) => {
-            if (state.resourceCheckExpandedNodes != null) {
-                return state.resourceCheckExpandedNodes.includes(section);
-            }
-
-            return false;
+            return !!state.resourceCheckExpandedNodes?.includes(section);
         },
         extensionDataByName: (state) => (extensionName) => {
             return state.dataset.meta.collection_metadata.extensions.find((item) =>
@@ -486,13 +478,7 @@ export default new Vuex.Store({
         },
         setExpandedNodesForSearch({ getters, commit }) {
             const isPathSearched = (path) => {
-                if (getters.fieldCheckSearch && path) {
-                    const search_lc = getters.fieldCheckSearch.toLowerCase();
-                    const path_lc = path.toLowerCase();
-                    return path_lc.includes(search_lc);
-                }
-
-                return false;
+                return !!path?.toLowerCase().includes(getters.fieldCheckSearch.toLowerCase());
             };
 
             if (getters.fieldLevelStats) {
@@ -520,14 +506,13 @@ export default new Vuex.Store({
                     // collapse matched nodes without matching child
                     const matched = [...nodes];
                     nodes = nodes.filter((n) => {
-                        // keep parent without match
-                        if (!isPathSearched(n)) {
-                            return true;
-                        }
-
-                        return matched.some((m) => {
-                            return m.startsWith(`${n}.`) && isPathSearched(m.substr(n.length));
-                        });
+                        return (
+                            // keep parent without match
+                            !isPathSearched(n) ||
+                            matched.some((m) => {
+                                return m.startsWith(`${n}.`) && isPathSearched(m.substr(n.length));
+                            })
+                        );
                     });
 
                     commit("setFieldCheckExpandedNodes", nodes);

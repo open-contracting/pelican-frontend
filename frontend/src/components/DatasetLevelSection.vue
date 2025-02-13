@@ -67,10 +67,7 @@ export default {
     }),
     computed: {
         loaded() {
-            if (this.$store.getters.datasetLevelStats != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.datasetLevelStats != null;
         },
         datasetLevelStats() {
             if (!(this.section in this.sections)) {

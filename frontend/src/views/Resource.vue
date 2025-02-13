@@ -92,10 +92,7 @@ export default {
     },
     computed: {
         loaded() {
-            if (this.$store.getters.resourceLevelStats != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.resourceLevelStats != null;
         },
     },
     watch: {

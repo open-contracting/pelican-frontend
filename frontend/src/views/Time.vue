@@ -63,10 +63,7 @@ export default {
     },
     computed: {
         loaded() {
-            if (this.$store.getters.datasetLevelStats != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.datasetLevelStats != null;
         },
         timeVarianceLevelStats() {
             return this.$store.getters.timeVarianceLevelStats.filter(this.filters[this.filterIndex]);

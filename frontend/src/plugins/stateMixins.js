@@ -3,29 +3,17 @@ export default {
         datasetId() {
             return this.$store.getters.datasetId;
         },
+        fieldLoaded() {
+            return this.$store.getters.fieldLevelStats != null;
+        },
         resourceLoaded() {
-            if (this.$store.getters.resourceLevelStats != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.resourceLevelStats != null;
         },
         datasetLoaded() {
-            if (this.$store.getters.datasetLevelStats != null) {
-                return true;
-            }
-            return false;
-        },
-        fieldLoaded() {
-            if (this.$store.getters.fieldLevelStats != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.datasetLevelStats != null;
         },
         timeVarianceLoaded() {
-            if (this.$store.getters.timeVarianceLevelStats != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.timeVarianceLevelStats != null;
         },
         atLeastOneLoaded() {
             return this.datasetLoaded || this.resourceLoaded || this.fieldLoaded || this.timeVarianceLoaded;

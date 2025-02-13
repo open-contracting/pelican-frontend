@@ -19,10 +19,7 @@ export default {
     },
     computed: {
         loaded() {
-            if (this.$store.getters.dataset != null) {
-                return true;
-            }
-            return false;
+            return this.$store.getters.dataset != null;
         },
         extensionData() {
             return this.$store.getters.extensionDataByName(this.$route.params.extensionName);

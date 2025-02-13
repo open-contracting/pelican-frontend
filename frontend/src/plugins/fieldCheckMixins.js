@@ -111,12 +111,7 @@ export default {
             return name.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
         },
         isPathSearched: function (path) {
-            if (this.search && path) {
-                const path_lc = path.toLowerCase();
-                return path_lc.includes(this.search);
-            }
-
-            return true;
+            return !this.search || !path || path.toLowerCase().includes(this.search);
         },
     },
 };

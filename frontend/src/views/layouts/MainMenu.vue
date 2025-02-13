@@ -141,13 +141,10 @@ export default {
     data: () => ({}),
     computed: {
         showTimeVariance() {
-            if (
+            return (
                 this.$store.getters.timeVarianceLevelStats != null &&
                 this.$store.getters.timeVarianceLevelStats.length > 0
-            ) {
-                return true;
-            }
-            return false;
+            );
         },
     },
 };
