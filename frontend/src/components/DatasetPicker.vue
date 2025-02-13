@@ -180,16 +180,8 @@ export default {
             .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
             .then((response) => {
                 this.datasets = buildDatasetsTree(response.data, null);
-
-                const self = this;
                 for (const item of this.datasets) {
-                    if (item.ancestor_id != null) {
-                        item.ancestor_name = self.datasets.find(
-                            (element) => element.ancestor_id === item.ancestor_id,
-                        ).name;
-                    } else {
-                        item.ancestor_name = null;
-                    }
+                    item.ancestor_name = item.ancestor_id && this.datasets.find((e) => e.id === item.ancestor_id).name;
                 }
                 this.sortBy(this.sortedBy, this.isAscendingSorted);
             })
