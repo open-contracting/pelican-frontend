@@ -356,7 +356,7 @@ export default {
     },
     methods: {
         getMetaData: function (type) {
-            return this.dataset?.meta ? this.dataset.meta[type] : null;
+            return this.dataset?.meta?.[type];
         },
         formatNumber(number) {
             return this.$options.filters.formatNumber(number);

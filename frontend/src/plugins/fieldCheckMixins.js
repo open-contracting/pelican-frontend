@@ -4,7 +4,7 @@ export default {
     mixins: [sortMixins],
     computed: {
         search: function () {
-            return this.searchRaw ? this.searchRaw.toLowerCase() : null;
+            return this.searchRaw?.toLowerCase();
         },
         searchRaw: function () {
             return this.$store.getters.fieldCheckSearch;

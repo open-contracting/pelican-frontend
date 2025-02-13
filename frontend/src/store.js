@@ -51,7 +51,7 @@ export default new Vuex.Store({
             return state.dataset;
         },
         datasetId: (state) => {
-            return state.dataset ? state.dataset.id : null;
+            return state.dataset?.id;
         },
         resourceLevelStats: (state) => {
             return state.resourceLevelStats;
@@ -139,10 +139,10 @@ export default new Vuex.Store({
             return null;
         },
         fieldCheckSortedBy: (state) => {
-            return state.fieldCheckSorting != null ? state.fieldCheckSorting.by : null;
+            return state.fieldCheckSorting?.by;
         },
         fieldCheckSortedAscending: (state) => {
-            return state.fieldCheckSorting != null ? state.fieldCheckSorting.asc : null;
+            return state.fieldCheckSorting?.asc;
         },
         fieldCheckSearch: (state) => {
             return state.fieldCheckSearch;
@@ -151,10 +151,10 @@ export default new Vuex.Store({
             return state.datasetSearch;
         },
         datasetSortedBy: (state) => {
-            return state.datasetSorting != null ? state.datasetSorting.by : null;
+            return state.datasetSorting?.by;
         },
         datasetSortedAscending: (state) => {
-            return state.datasetSorting != null ? state.datasetSorting.asc : null;
+            return state.datasetSorting?.asc;
         },
         isResourceCheckExpanded: (state) => (section) => {
             if (state.resourceCheckExpandedNodes != null) {

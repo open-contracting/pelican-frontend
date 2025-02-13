@@ -42,7 +42,7 @@
         <div class="col-8">
           <DatasetValuesMultiselect
             :update-selected="updateBuyerName"
-            :dataset-id="dataset != null ? dataset.id : null"
+            :dataset-id="dataset?.id"
             json-path="buyer.name"
           />
         </div>
@@ -52,7 +52,7 @@
         <div class="col-8">
           <DatasetValuesMultiselect
             :update-selected="updateProcuringEntityName"
-            :dataset-id="dataset != null ? dataset.id : null"
+            :dataset-id="dataset?.id"
             json-path="tender.procuringEntity.name"
           />
         </div>
