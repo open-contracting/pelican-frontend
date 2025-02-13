@@ -192,13 +192,7 @@ export default {
             return exampleSections;
         },
         previewData() {
-            const result = this.$store.getters.dataItemById(this.previewDataItemId);
-
-            if (result) {
-                return result.data;
-            }
-
-            return null;
+            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
         },
     },
     methods: {

@@ -70,69 +70,40 @@ export default new Vuex.Store({
             return [];
         },
         resourceLevelCheckByName: (state) => (checkName) => {
-            if (state.resourceLevelStats != null) {
-                return state.resourceLevelStats.find((item) => item.name === checkName);
-            }
-
-            return null;
+            return state.resourceLevelStats?.find((item) => item.name === checkName);
         },
         datasetLevelCheckByName: (state) => (checkName) => {
-            if (state.datasetLevelStats) {
-                return state.datasetLevelStats.find((item) => item.name === checkName);
-            }
-
-            return null;
+            return state.datasetLevelStats?.find((item) => item.name === checkName);
         },
         dataItemById: (state) => (itemId) => {
-            if (state.dataItems) {
-                const dataItem = state.dataItems.find((item) => item.id === itemId);
-                if (dataItem != null) {
-                    return dataItem;
-                }
-            }
-
-            return null;
+            return state.dataItems?.find((item) => item.id === itemId);
         },
         dataItemJSONLines: (state) => (itemId) => {
-            if (state.dataItems) {
-                const dataItem = state.dataItems.find((item) => item.id === itemId);
-                if (dataItem != null) {
-                    return JSON.stringify(dataItem.data, null, 2).split("\n").length;
-                }
+            const dataItem = state.dataItems?.find((item) => item.id === itemId);
+            if (dataItem) {
+                return JSON.stringify(dataItem.data, null, 2).split("\n").length;
             }
-
             return null;
         },
         dataItemJSON: (state) => (itemId) => {
-            if (state.dataItems) {
-                const dataItem = state.dataItems.find((item) => item.id === itemId);
-                if (dataItem != null) {
-                    return JSON.stringify(dataItem.data, null, 2);
-                }
+            const dataItem = state.dataItems?.find((item) => item.id === itemId);
+            if (dataItem) {
+                return JSON.stringify(dataItem.data, null, 2);
             }
-
             return null;
         },
         fieldLevelStats: (state) => {
             return state.fieldLevelStats;
         },
         fieldLevelCheckByPath: (state) => (path) => {
-            if (state.fieldLevelStats != null) {
-                return state.fieldLevelStats.find((item) => item.path === path);
-            }
-
-            return null;
+            return state.fieldLevelStats?.find((item) => item.path === path);
         },
         fieldCheckLayout: (state) => state.fieldCheckLayout,
         isFieldCheckExpanded: (state) => (path) => {
             return !!state.fieldCheckExpandedNodes?.includes(path);
         },
         timeVarianceLevelCheckByName: (state) => (checkName) => {
-            if (state.timeVarianceLevelStats) {
-                return state.timeVarianceLevelStats.find((item) => item.name === checkName);
-            }
-
-            return null;
+            return state.timeVarianceLevelStats?.find((item) => item.name === checkName);
         },
         fieldCheckSortedBy: (state) => {
             return state.fieldCheckSorting?.by;

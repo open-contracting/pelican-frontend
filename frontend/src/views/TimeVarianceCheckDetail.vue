@@ -532,13 +532,7 @@ export default {
     }),
     computed: {
         previewData() {
-            const result = this.$store.getters.dataItemById(this.previewDataItemId);
-
-            if (result) {
-                return result.data;
-            }
-
-            return null;
+            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
         },
         coverageState() {
             return this.check.coverage_result ? "ok" : "failed";

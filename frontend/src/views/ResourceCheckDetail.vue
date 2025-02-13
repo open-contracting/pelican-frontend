@@ -126,11 +126,7 @@ export default {
             return allExamples;
         },
         check() {
-            const stats = this.$store.getters.resourceLevelStats;
-            if (stats != null) {
-                return stats.find((item) => item.name === this.$route.params.check);
-            }
-            return null;
+            return this.$store.getters.resourceLevelStats?.find((item) => item.name === this.$route.params.check);
         },
         exampleSections() {
             const exampleSections = [];
@@ -167,13 +163,7 @@ export default {
             return exampleSections;
         },
         previewData() {
-            const result = this.$store.getters.dataItemById(this.previewDataItemId);
-
-            if (result) {
-                return result.data;
-            }
-
-            return null;
+            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
         },
     },
     methods: {
