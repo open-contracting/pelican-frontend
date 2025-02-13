@@ -184,10 +184,9 @@ export default {
                 const self = this;
                 for (const item of this.datasets) {
                     if (item.ancestor_id != null) {
-                        const ancestor = self.datasets.find(
-                            (element) => String(element.ancestor_id) === item.ancestor_id,
-                        );
-                        item.ancestor_name = ancestor.name;
+                        item.ancestor_name = self.datasets.find(
+                            (element) => element.ancestor_id === item.ancestor_id,
+                        ).name;
                     } else {
                         item.ancestor_name = null;
                     }
