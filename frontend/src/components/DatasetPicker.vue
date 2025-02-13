@@ -310,7 +310,7 @@ export default {
     }
 }
 
-.time_varinace {
+.time_variance {
     font-family: $font-family-thin;
     color: $primary;
     max-width: 110px;

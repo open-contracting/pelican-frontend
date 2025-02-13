@@ -83,7 +83,7 @@
       <div class="td col">
         <b-link
           v-if="dataset.ancestor_id"
-          class="time_varinace break_word"
+          class="time_variance break_word"
           :title="dataset.ancestor_id"
           @click.stop="setDataset(dataset, { name: 'time' })"
         >
@@ -212,7 +212,7 @@ export default {
     }
 }
 
-.time_varinace {
+.time_variance {
     font-family: $font-family-thin;
     color: $primary;
     max-width: 110px;
