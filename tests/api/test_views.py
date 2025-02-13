@@ -39,7 +39,7 @@ class CreateTests(PelicanTestCase):
     def test_datasets_create(self, publish):
         with self.assertNumQueries(0, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
             response = self.client.post(
-                "/api/datasets/", {"name": "anything", "collection_id": "123", "xxx": "xxx"}, "application/json"
+                "/api/datasets/", {"name": "anything", "collection_id": 123, "xxx": "xxx"}, "application/json"
             )
 
             self.assertEqual(response.status_code, 202)
@@ -47,6 +47,28 @@ class CreateTests(PelicanTestCase):
                 {"name": "anything", "collection_id": 123, "ancestor_id": None, "max_items": None},
                 "ocds_kingfisher_extractor_init",
             )
+
+    @patch("api.views.publish")
+    def test_datasets_create_nonexistent_collection(self, publish):
+        with self.assertNumQueries(0, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
+            response = self.client.post(
+                "/api/datasets/", {"name": "anything", "collection_id": 999}, "application/json"
+            )
+
+            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.json(), "collection_id 999 matches no compiled_release rows")
+            publish.assert_not_called()
+
+    @patch("api.views.publish")
+    def test_datasets_create_nonexistent_ancestor(self, publish):
+        with self.assertNumQueries(1, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
+            response = self.client.post(
+                "/api/datasets/", {"name": "anything", "collection_id": 123, "ancestor_id": 1}, "application/json"
+            )
+
+            self.assertEqual(response.status_code, 404)
+            self.assertEqual(response.json(), "ancestor_id 1 matches no Pelican reports")
+            publish.assert_not_called()
 
 
 class ViewsTests(PelicanTestCase):

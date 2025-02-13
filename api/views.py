@@ -240,14 +240,20 @@ class DatasetViewSet(viewsets.ViewSet):
             )
             if not cursor.fetchone()[0]:
                 return Response(
-                    f"No rows found in `compiled_release` where collection_id = {collection_id}",
+                    f"collection_id {collection_id} matches no compiled_release rows",
                     status=status.HTTP_404_NOT_FOUND,
                 )
+
+        if (ancestor_id := serializer.data.get("ancestor_id")) and not Dataset.objects.filter(pk=ancestor_id).exists():
+            return Response(
+                f"ancestor_id {ancestor_id} matches no Pelican reports",
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         message = {
             "name": serializer.data["name"],
             "collection_id": collection_id,
-            "ancestor_id": serializer.data.get("ancestor_id"),
+            "ancestor_id": ancestor_id,
             "max_items": serializer.data.get("max_items"),
         }
         publish(message, "ocds_kingfisher_extractor_init")
