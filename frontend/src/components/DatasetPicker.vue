@@ -156,13 +156,12 @@ export default {
         states: () => ["WAITING", "IN_PROGRESS", "OK", "FAILED"],
         sortedBy: function () {
             const value = this.$store.getters.datasetSortedBy;
-            return value == null ? this.defaultSorting.by : value;
+            return value == null ? "created" : value;
         },
         isAscendingSorted: function () {
             const value = this.$store.getters.datasetSortedAscending;
-            return value == null ? this.defaultSorting.asc : value;
+            return value == null ? false : value;
         },
-        defaultSorting: () => ({ by: "created", asc: false }),
     },
     mounted() {
         const buildDatasetsTree = (datasets, parent_id) => {

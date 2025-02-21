@@ -109,13 +109,12 @@ export default {
         },
         sortedBy: function () {
             const value = this.$store.getters.fieldCheckSortedBy;
-            return value == null ? this.defaultSorting.by : value;
+            return value == null ? "processingOrder" : value;
         },
         isAscendingSorted: function () {
             const value = this.$store.getters.fieldCheckSortedAscending;
-            return value == null ? this.defaultSorting.asc : value;
+            return value == null ? true : value;
         },
-        defaultSorting: () => ({ by: "processingOrder", asc: true }),
     },
     mounted: function () {
         this.$on("field-check-table-sort", (data) => this.$store.commit("setFieldCheckSorting", data));
