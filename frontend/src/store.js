@@ -126,11 +126,6 @@ export default new Vuex.Store({
         isResourceCheckExpanded: (state) => (section) => {
             return !!state.resourceCheckExpandedNodes?.includes(section);
         },
-        extensionDataByName: (state) => (extensionName) => {
-            return state.dataset.meta.collection_metadata.extensions.find((item) =>
-                "en" in item.name ? item.name.en === extensionName : item.name === extensionName,
-            );
-        },
     },
     mutations: {
         setFieldLevelFilterIndex(state, newFieldLevelFilterIndex) {

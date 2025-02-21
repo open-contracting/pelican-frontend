@@ -2,7 +2,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import store from "./store";
 import Dataset from "./views/Dataset.vue";
-import ExtensionPreview from "./views/ExtensionPreview.vue";
 import Field from "./views/Field.vue";
 import Home from "./views/Home.vue";
 import Overview from "./views/Overview.vue";
@@ -131,17 +130,6 @@ export default new Router({
             path: "/time/:datasetId/detail/:check",
             name: "timeVarianceCheckDetail",
             component: TimeVarianceCheckDetail,
-            beforeEnter: (to, from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/extensionPreview/:datasetId/:extensionName",
-            name: "extensionPreview",
-            component: ExtensionPreview,
             beforeEnter: (to, from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);

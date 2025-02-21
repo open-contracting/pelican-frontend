@@ -361,15 +361,6 @@ export default {
         formatNumber(number) {
             return this.$options.filters.formatNumber(number);
         },
-        extensionPreview(extensionName) {
-            this.$router.push({
-                name: "extensionPreview",
-                params: {
-                    extensionName: extensionName,
-                    datasetId: this.$store.getters.datasetId,
-                },
-            });
-        },
     },
 };
 </script>
