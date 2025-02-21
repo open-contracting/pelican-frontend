@@ -1,3 +1,6 @@
-54a7e890a355b107d6a453b55d520ce064b81bf1 # chore: Run npx eslint --ext .js,.vue --fix .
-c9a763af76ebaf384f39a34af710a430f8cd443a # chore: Run npx eslint --ext .js,.vue --fix .
-1bf86fc793da8a03f71f38881523d0dba3b6dfc4 # lint: Add and run prettier
+# chore: Run npx eslint --ext .js,.vue --fix .
+54a7e890a355b107d6a453b55d520ce064b81bf1
+# chore: Run npx eslint --ext .js,.vue --fix .
+c9a763af76ebaf384f39a34af710a430f8cd443a
+# lint: Add and run prettier
+1bf86fc793da8a03f71f38881523d0dba3b6dfc4
