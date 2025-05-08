@@ -20,7 +20,7 @@ cycler==0.10.0
     # via matplotlib
 dj-database-url==2.0.0
     # via -r requirements.in
-django==4.2.20
+django==4.2.21
     # via
     #   -r requirements.in
     #   dj-database-url
@@ -51,7 +51,7 @@ google-auth-httplib2==0.2.0
     # via google-api-python-client
 googleapis-common-protos==1.65.0
     # via google-api-core
-gunicorn==23.0.0
+gunicorn[setproctitle]==23.0.0
     # via -r requirements.in
 httplib2==0.22.0
     # via
@@ -148,5 +148,5 @@ urllib3==2.2.2
     # via
     #   requests
     #   sentry-sdk
-yapw==0.1.4
+yapw[perf]==0.1.4
     # via -r requirements.in
