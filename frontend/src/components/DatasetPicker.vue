@@ -47,7 +47,6 @@
             :on-desc="() => sortBy('collection_id', false)"
           />
         </div>
-        <!-- <div class="th col-1 align-self-center clickable" @click="sortBy('collection_id')">{{ $t('kingfisherId') }}</div> -->
         <div
           class="th col-1 align-self-center clickable"
           @click="sortBy('phase')"
