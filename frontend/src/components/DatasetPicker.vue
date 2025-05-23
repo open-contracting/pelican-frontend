@@ -225,7 +225,7 @@ export default {
                 comp = (a, b) => {
                     if (a.phase === b.phase) {
                         if (a.state === b.state) {
-                            return a.id.localeCompare(b.id);
+                            return this.compareNumbers(a.id, b.id);
                         }
                         return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state));
                     }
