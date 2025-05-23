@@ -84,8 +84,7 @@
         <b-link
           v-if="dataset.ancestor_id"
           class="time_variance break_word"
-          :title="dataset.ancestor_id"
-          @click.stop="setDataset(dataset, { name: 'time' })"
+          :to="{ name: 'time', params: { datasetId: dataset.id } }"
         >
           <span class="small_icon">
             <font-awesome-icon icon="history" />
