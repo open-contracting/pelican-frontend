@@ -51,6 +51,8 @@ export default new Vuex.Store({
             return state.dataset;
         },
         datasetId: (state) => {
+            // "[vue-router] missing param for named route "overview": Expected "datasetId" to be defined"
+            // When refreshing a subpage, state.dataset is not set by setDataset() until loadDataset() is called.
             return state.dataset?.id;
         },
         resourceLevelStats: (state) => {
