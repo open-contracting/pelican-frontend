@@ -5,7 +5,7 @@
       clickable: check.result != undefined && checkType != null,
       undef: check.result == undefined || checkType == null
     }"
-    @click="detail()"
+    @click="check.result != undefined && checkType != null && detail()"
   >
     <div class="card-body">
       <div class="row no-gutters">
