@@ -104,17 +104,15 @@ export default {
     },
     methods: {
         isSearched: function (node) {
-            return this.isSearchedNode(node) || this.isSearchedSubTree(node);
+            return (this.isPathSearched(node._check.path) && this.filter(node._check)) || this.isSearchedSubTree(node);
         },
         isSearchedSubTree: function (node) {
             return Object.values(this.getChildren(node)).some((n) => this.isSearched(n));
         },
-        isSearchedNode: function (node) {
-            return this.isPathSearched(node._check.path) && this.filter(node._check);
-        },
         getChildren: (node) => {
             const result = Object.assign({}, node);
-            result._check = undefined;
+            // biome-ignore lint/performance/noDelete: Breaks tree layout
+            delete result._check;
             return result;
         },
     },
