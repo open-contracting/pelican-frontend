@@ -91,7 +91,7 @@ pillow==10.3.0
     #   matplotlib
 proto-plus==1.24.0
     # via google-api-core
-protobuf==4.21.6
+protobuf==4.25.8
     # via
     #   google-api-core
     #   googleapis-common-protos
