@@ -270,7 +270,7 @@ FATHOM = {
 }
 
 # The connection string for RabbitMQ.
-RABBIT_URL = os.getenv("RABBIT_URL", "amqp://localhost")
+RABBIT_URL = os.getenv("RABBIT_URL", "amqp://127.0.0.1")
 # The name of the RabbitMQ exchange used by Pelican backend.
 RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
 
