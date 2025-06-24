@@ -73,7 +73,7 @@ googleapis-common-protos==1.65.0
     # via
     #   -r requirements.txt
     #   google-api-core
-gunicorn[setproctitle]==23.0.0
+gunicorn==23.0.0
     # via -r requirements.txt
 httplib2==0.22.0
     # via
@@ -112,9 +112,7 @@ numpy==1.25.0
     #   contourpy
     #   matplotlib
 orjson==3.9.15
-    # via
-    #   -r requirements.txt
-    #   yapw
+    # via -r requirements.txt
 packaging==23.1
     # via
     #   -r requirements.txt
@@ -185,9 +183,7 @@ rsa==4.7.2
 sentry-sdk==2.8.0
     # via -r requirements.txt
 setproctitle==1.2.2
-    # via
-    #   -r requirements.txt
-    #   gunicorn
+    # via -r requirements.txt
 shortuuid==1.0.1
     # via -r requirements.txt
 simplejson==3.16.0
@@ -215,5 +211,5 @@ urllib3==2.5.0
     #   -r requirements.txt
     #   requests
     #   sentry-sdk
-yapw[perf]==0.1.4
+yapw==0.1.4
     # via -r requirements.txt

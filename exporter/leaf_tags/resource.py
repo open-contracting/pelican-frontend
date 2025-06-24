@@ -1,4 +1,4 @@
-from typing import Any  # noqa: A005
+from typing import Any
 
 from lxml import etree
 
