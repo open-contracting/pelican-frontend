@@ -51,7 +51,7 @@ google-auth-httplib2==0.2.0
     # via google-api-python-client
 googleapis-common-protos==1.65.0
     # via google-api-core
-gunicorn==23.0.0
+gunicorn[setproctitle]==23.0.0
     # via -r requirements.in
 httplib2==0.22.0
     # via
@@ -85,7 +85,7 @@ packaging==23.1
     #   matplotlib
 pika==1.3.2
     # via yapw
-pillow==11.2.1
+pillow==11.3.0
     # via
     #   -r requirements.in
     #   matplotlib
@@ -148,5 +148,5 @@ urllib3==2.5.0
     # via
     #   requests
     #   sentry-sdk
-yapw==0.1.4
+yapw[perf]==0.1.4
     # via -r requirements.in
