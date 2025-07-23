@@ -155,29 +155,6 @@ paths:
               schema:
                 type: object
           description: ""
-  /api/datasets/{id}/coverage/:
-    get:
-      operationId: datasets_coverage_retrieve
-      description: Return the dataset's coverage statistics.
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      tags:
-        - datasets
-      security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: object
-          description: ""
   /api/datasets/{id}/dataset_level_report/:
     get:
       operationId: datasets_dataset_level_report_retrieve

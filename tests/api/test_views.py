@@ -8,7 +8,6 @@ from api.models import (
     Dataset,
     DatasetFilter,
     DatasetLevelCheck,
-    FieldLevelCheck,
     FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
@@ -395,35 +394,6 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(response.content, {"ocid_prefix": "ocds-213czf"})
 
-    def test_datasets_coverage(self):
-        dataset = self.create(Dataset, name="anything")
-        data_item = self.create(DataItem, dataset=dataset, data={"parties": {"id": 1}})
-        self.create(FieldLevelCheck, dataset=dataset, data_item=data_item, result={"checks": {"parties.id": [{}]}})
-
-        with self.assertNumQueries(2, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/coverage/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(
-                response.content,
-                {
-                    "amendments": 0,
-                    "awards": 0,
-                    "awards_items": 0,
-                    "awards_suppliers": 0,
-                    "contracts": 0,
-                    "contracts_items": 0,
-                    "contracts_transactions": 0,
-                    "documents": 0,
-                    "milestones": 0,
-                    "parties": 1,
-                    "plannings": 0,
-                    "tenderers": 0,
-                    "tenders": 0,
-                    "tenders_items": 0,
-                },
-            )
-
     def test_field_level_detail(self):
         dataset = self.create(Dataset, name="anything")
         self.create(
@@ -527,12 +497,6 @@ class ViewsTests(PelicanTestCase):
     def test_datasets_metadata_no_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/metadata/")
-
-            self.assertEqual(response.status_code, 404)
-
-    def test_datasets_coverage_no_dataset(self):
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/123/coverage/")
 
             self.assertEqual(response.status_code, 404)
 

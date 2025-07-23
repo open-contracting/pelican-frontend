@@ -8,7 +8,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import extend_schema
-from psycopg2.sql import SQL, Identifier
+from psycopg2.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -18,7 +18,6 @@ from api.models import (
     Dataset,
     DatasetFilter,
     DatasetLevelCheck,
-    FieldLevelCheck,
     FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
@@ -345,71 +344,6 @@ class DatasetViewSet(viewsets.ViewSet):
         """Return the dataset's collection metadata."""
         meta = self.get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True))
         return Response(meta or {})
-
-    @extend_schema(responses={200: {"type": "object"}})
-    @action(detail=True)
-    def coverage(self, request, pk=None):
-        """Return the dataset's coverage statistics."""
-        self.get_object()  # trigger 404 if no dataset
-
-        # The lists of fields must match the names of field-level checks in pelican-backend.
-        mapping = {
-            "parties": ["parties.id"],
-            "plannings": ["planning.budget"],
-            "tenders": ["tender.id"],
-            "tenderers": ["tender.tenderers.id"],
-            "tenders_items": ["tender.items.id"],
-            "awards": ["awards.id"],
-            "awards_items": ["awards.items.id"],
-            "awards_suppliers": ["awards.suppliers.id"],
-            "contracts": ["contracts.id"],
-            "contracts_items": ["contracts.items.id"],
-            "contracts_transactions": ["contracts.implementation.transactions.id"],
-            "documents": [
-                "planning.documents.id",
-                "tender.documents.id",
-                "awards.documents.id",
-                "contracts.documents.id",
-                "contracts.implementation.documents.id",
-            ],
-            "milestones": [
-                "planning.milestones.id",
-                "tender.milestones.id",
-                "contracts.milestones.id",
-                "contracts.implementation.milestones.id",
-            ],
-            "amendments": [
-                "tender.amendments.id",
-                "awards.amendments.id",
-                "contracts.amendments.id",
-            ],
-        }
-
-        with connections["pelican_backend"].cursor() as cursor:
-            statement = """
-                SELECT c.key AS check, SUM(jsonb_array_length(c.value)) AS count
-                FROM {table} flc, jsonb_each(flc.result->'checks') c
-                WHERE dataset_id = %(dataset_id)s AND c.key IN %(checks)s
-                GROUP BY c.key
-                ORDER BY c.key
-                """
-
-            cursor.execute(
-                SQL(statement).format(table=Identifier(FieldLevelCheck._meta.db_table)),
-                {"checks": tuple(j for i in mapping.values() for j in i), "dataset_id": pk},
-            )
-
-            results = cursor.fetchall()
-
-            counts = {}
-            for key, items in mapping.items():
-                counts[key] = 0
-                for i in items:
-                    for result in results:
-                        if result[0] == i:
-                            counts[key] += int(result[1])
-
-        return Response(counts)
 
 
 class FieldLevelDetail(views.APIView):
