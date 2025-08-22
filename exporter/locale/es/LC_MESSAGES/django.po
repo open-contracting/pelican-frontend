@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-09 01:59+0000\n"
+"POT-Creation-Date: 2025-08-22 17:21-0400\n"
 "PO-Revision-Date: 2020-11-06 22:18+0000\n"
 "Last-Translator: James McKinney, 2021\n"
 "Language-Team: Spanish (https://www.transifex.com/open-contracting-"
@@ -26,7 +26,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: exporter/tags/leaf_tags/field/description.py:26 exporter/translations.py:18
+#: exporter/leaf_tags/field.py:17 exporter/translations.py:4
+msgid "field.exists.name"
+msgstr "El campo está establecido"
+
+#: exporter/leaf_tags/field.py:19 exporter/translations.py:5
+msgid "field.non_empty.name"
+msgstr "El campo no es nulo ni está vacío"
+
+#: exporter/leaf_tags/field.py:29 exporter/translations.py:18
 msgid "field.exists.description"
 msgstr ""
 "Hay una prueba por posible aparición del campo. Ejemplo: si el campo padre  "
@@ -35,21 +43,13 @@ msgstr ""
 "todos los compiled releases, entonces se reporta el campo awards.id sobre "
 "100."
 
-#: exporter/tags/leaf_tags/field/description.py:28 exporter/translations.py:19
+#: exporter/leaf_tags/field.py:31 exporter/translations.py:19
 msgid "field.non_empty.description"
 msgstr ""
 "Hay una prueba por ocurrencia real del campo. La prueba pasa si el valor del "
 "campo no es nulo ni está vacío (es decir, no es una cadena vacía, un array "
 "vacío o un objeto vacío). Vea la comprobación de arriba para obtener más "
 "detalles."
-
-#: exporter/tags/leaf_tags/field/name.py:26 exporter/translations.py:4
-msgid "field.exists.name"
-msgstr "El campo está establecido"
-
-#: exporter/tags/leaf_tags/field/name.py:28 exporter/translations.py:5
-msgid "field.non_empty.name"
-msgstr "El campo no es nulo ni está vacío"
 
 #: exporter/translations.py:6
 msgid "field.ocid_prefix_check.name"
@@ -407,8 +407,8 @@ msgstr ""
 #: exporter/translations.py:82
 msgid "resource.consistent.tender_value.description"
 msgstr ""
-"planning.budget.amount no es menos que el 50%, o más que el 150%, de tender."
-"value, después de la conversión a USD si es necesario.\n"
+"planning.budget.amount no es menos que el 50%, o más que el 150%, de "
+"tender.value, después de la conversión a USD si es necesario.\n"
 "\n"
 "La prueba es omitida si un monto no se encuentra, es cero o no numérico, si "
 "la moneda no se encuentra o es desconocida, si los dos montos no son ambos "
@@ -430,8 +430,7 @@ msgstr ""
 "moneda y si la fecha del release es invalida, anterior a 1999 o en el futuro."
 
 #: exporter/translations.py:84
-msgid ""
-"resource.consistent.contracts_implementation_transactions_value.description"
+msgid "resource.consistent.contracts_implementation_transactions_value.description"
 msgstr ""
 "Para cada contrato, la suma de los valores de las transacciones es menor o "
 "igual al valor del contrato, después de la conversión a USD si es "
@@ -500,14 +499,16 @@ msgstr ""
 #: exporter/translations.py:91
 msgid "resource.consistent.payer_in_parties_roles.description"
 msgstr ""
-"Cada parte involucrada referenciada por un campo contracts[].implementation."
-"transactions[].payer tiene 'payer' en su array de roles."
+"Cada parte involucrada referenciada por un campo "
+"contracts[].implementation.transactions[].payer tiene 'payer' en su array de "
+"roles."
 
 #: exporter/translations.py:92
 msgid "resource.consistent.payee_in_parties_roles.description"
 msgstr ""
-"Cada parte referenciada por el campo contracts[].implementation."
-"transactions[].payee tiene 'payee' en su array de roles."
+"Cada parte referenciada por el campo "
+"contracts[].implementation.transactions[].payee tiene 'payee' en su array de "
+"roles."
 
 #: exporter/translations.py:93
 msgid "resource.consistent.buyer_name_in_parties.description"
@@ -822,23 +823,23 @@ msgstr ""
 #: exporter/translations.py:153
 msgid "dataset.distribution.tender_value_repetition.description"
 msgstr ""
-"Lista los 5 pares más frecuentes de tender.value.amount y tender.value."
-"currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de "
-"los casos."
+"Lista los 5 pares más frecuentes de tender.value.amount y "
+"tender.value.currency. Los 3 pares más frecuentes aparecen en un poco menos "
+"que el 10% de los casos."
 
 #: exporter/translations.py:154
 msgid "dataset.distribution.contracts_value_repetition.description"
 msgstr ""
-"Lista los 5 pares más frecuentes de contracts.value.amount y contracts.value."
-"currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de "
-"los casos."
+"Lista los 5 pares más frecuentes de contracts.value.amount y "
+"contracts.value.currency. Los 3 pares más frecuentes aparecen en un poco "
+"menos que el 10% de los casos."
 
 #: exporter/translations.py:155
 msgid "dataset.distribution.awards_value_repetition.description"
 msgstr ""
-"Lista los 5 pares más frecuentes de awards.value.amount y awards.value."
-"currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de "
-"los casos."
+"Lista los 5 pares más frecuentes de awards.value.amount y "
+"awards.value.currency. Los 3 pares más frecuentes aparecen en un poco menos "
+"que el 10% de los casos."
 
 #: exporter/translations.py:156
 msgid "dataset.distribution.buyer_repetition.description"

@@ -1,9 +1,0 @@
-[main]
-host = https://www.transifex.com
-
-[o:open-contracting-partnership-1:p:pelican-1:r:django]
-file_filter = api/locale/<lang>/LC_MESSAGES/django.po
-source_file = api/locale/en_US/LC_MESSAGES/django.po
-source_lang = en_US
-type        = PO
-

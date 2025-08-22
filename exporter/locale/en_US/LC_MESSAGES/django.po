@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-09 01:59+0000\n"
+"POT-Creation-Date: 2025-08-22 17:19-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: exporter/tags/leaf_tags/field/description.py:26 exporter/translations.py:18
-msgid "field.exists.description"
-msgstr ""
-
-#: exporter/tags/leaf_tags/field/description.py:28 exporter/translations.py:19
-msgid "field.non_empty.description"
-msgstr ""
-
-#: exporter/tags/leaf_tags/field/name.py:26 exporter/translations.py:4
+#: exporter/leaf_tags/field.py:17 exporter/translations.py:4
 msgid "field.exists.name"
 msgstr ""
 
-#: exporter/tags/leaf_tags/field/name.py:28 exporter/translations.py:5
+#: exporter/leaf_tags/field.py:19 exporter/translations.py:5
 msgid "field.non_empty.name"
+msgstr ""
+
+#: exporter/leaf_tags/field.py:29 exporter/translations.py:18
+msgid "field.exists.description"
+msgstr ""
+
+#: exporter/leaf_tags/field.py:31 exporter/translations.py:19
+msgid "field.non_empty.description"
 msgstr ""
 
 #: exporter/translations.py:6
@@ -314,8 +314,7 @@ msgid "resource.consistent.contracts_value.description"
 msgstr ""
 
 #: exporter/translations.py:84
-msgid ""
-"resource.consistent.contracts_implementation_transactions_value.description"
+msgid "resource.consistent.contracts_implementation_transactions_value.description"
 msgstr ""
 
 #: exporter/translations.py:85

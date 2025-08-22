@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-09 01:59+0000\n"
+"POT-Creation-Date: 2025-08-22 17:21-0400\n"
 "PO-Revision-Date: 2020-11-06 22:18+0000\n"
 "Last-Translator: James McKinney, 2021\n"
 "Language-Team: English (https://www.transifex.com/open-contracting-"
@@ -23,7 +23,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: exporter/tags/leaf_tags/field/description.py:26 exporter/translations.py:18
+#: exporter/leaf_tags/field.py:17 exporter/translations.py:4
+msgid "field.exists.name"
+msgstr "Field is set"
+
+#: exporter/leaf_tags/field.py:19 exporter/translations.py:5
+msgid "field.non_empty.name"
+msgstr "Field isn't null or empty"
+
+#: exporter/leaf_tags/field.py:29 exporter/translations.py:18
 msgid "field.exists.description"
 msgstr ""
 "There is one test per possible occurrence of the field. Example: If the "
@@ -32,20 +40,12 @@ msgstr ""
 "arrays in all compiled releases, then the awards.id field is reported out of "
 "100."
 
-#: exporter/tags/leaf_tags/field/description.py:28 exporter/translations.py:19
+#: exporter/leaf_tags/field.py:31 exporter/translations.py:19
 msgid "field.non_empty.description"
 msgstr ""
 "There is one test per actual occurrence of the field. The test passes if the "
 "field value is neither null nor empty (i.e. it is not an empty string, empty "
 "array or empty object). See the above check for other details."
-
-#: exporter/tags/leaf_tags/field/name.py:26 exporter/translations.py:4
-msgid "field.exists.name"
-msgstr "Field is set"
-
-#: exporter/tags/leaf_tags/field/name.py:28 exporter/translations.py:5
-msgid "field.non_empty.name"
-msgstr "Field isn't null or empty"
 
 #: exporter/translations.py:6
 msgid "field.ocid_prefix_check.name"
@@ -294,8 +294,8 @@ msgstr ""
 #: exporter/translations.py:71
 msgid "resource.coherent.procurement_method_vs_number_of_tenderers.description"
 msgstr ""
-"If the tender.procurementMethod is 'direct', then the tender."
-"numberOfTenderers is at most 1."
+"If the tender.procurementMethod is 'direct', then the "
+"tender.numberOfTenderers is at most 1."
 
 #: exporter/translations.py:72
 msgid "resource.coherent.tender_status.description"
@@ -395,8 +395,8 @@ msgstr ""
 #: exporter/translations.py:82
 msgid "resource.consistent.tender_value.description"
 msgstr ""
-"planning.budget.amount isn't less than 50%, or more than 150%, of tender."
-"value, after conversion to USD if necessary.\n"
+"planning.budget.amount isn't less than 50%, or more than 150%, of "
+"tender.value, after conversion to USD if necessary.\n"
 "\n"
 "The test is skipped if an amount is missing, zero or non-numeric, if a "
 "currency is missing or unknown, if the two amounts aren't both positive or "
@@ -417,8 +417,7 @@ msgstr ""
 "invalid, before 1999, or in the future."
 
 #: exporter/translations.py:84
-msgid ""
-"resource.consistent.contracts_implementation_transactions_value.description"
+msgid "resource.consistent.contracts_implementation_transactions_value.description"
 msgstr ""
 "For each contract, the sum of its transaction's values is less than or equal "
 "to the contract's value, after conversion to USD if necessary.\n"
@@ -881,25 +880,27 @@ msgstr ""
 #: exporter/translations.py:153
 msgid "dataset.distribution.tender_value_repetition.description"
 msgstr ""
-"Lists the 5 most frequent pairs of tender.value.amount and tender.value."
-"currency. The 3 most frequent pairs appear in fewer than 10% of cases.\n"
+"Lists the 5 most frequent pairs of tender.value.amount and "
+"tender.value.currency. The 3 most frequent pairs appear in fewer than 10% of "
+"cases.\n"
 "\n"
 "The test is skipped if ther are no pairs."
 
 #: exporter/translations.py:154
 msgid "dataset.distribution.contracts_value_repetition.description"
 msgstr ""
-"Lists the 5 most frequent pairs of contracts.value.amount and contracts."
-"value.currency. The 3 most frequent pairs appear in fewer than 10% of "
-"cases.\n"
+"Lists the 5 most frequent pairs of contracts.value.amount and "
+"contracts.value.currency. The 3 most frequent pairs appear in fewer than 10% "
+"of cases.\n"
 "\n"
 "The test is skipped if ther are no pairs."
 
 #: exporter/translations.py:155
 msgid "dataset.distribution.awards_value_repetition.description"
 msgstr ""
-"Lists the 5 most frequent pairs of awards.value.amount and awards.value."
-"currency. The 3 most frequent pairs appear in fewer than 10% of cases.\n"
+"Lists the 5 most frequent pairs of awards.value.amount and "
+"awards.value.currency. The 3 most frequent pairs appear in fewer than 10% of "
+"cases.\n"
 "\n"
 "The test is skipped if ther are no pairs."
 
@@ -908,8 +909,8 @@ msgid "dataset.distribution.buyer_repetition.description"
 msgstr ""
 "The most common buyer is identified in 1% to 50% of compiled releases. "
 "Failure indicates issues in buyer identification or buyer over-"
-"representation. Buyers are identified by buyer.identifier.scheme and buyer."
-"identifier.id.\n"
+"representation. Buyers are identified by buyer.identifier.scheme and "
+"buyer.identifier.id.\n"
 "\n"
 "The test is skipped if the buyer.identifier.scheme and buyer.identifier.id "
 "fields are both present in fewer than 1,000 compiled releases."
