@@ -6,5 +6,5 @@ Pelican frontend reports results from `Pelican backend <https://pelican-backend.
 
 .. |Build Status| image:: https://github.com/open-contracting/pelican-frontend/actions/workflows/ci.yml/badge.svg
    :target: https://github.com/open-contracting/pelican-frontend/actions/workflows/ci.yml
-.. |Coverage Status| image:: https://coveralls.io/repos/github/open-contracting/pelican-frontend/badge.svg?branch=main
-   :target: https://coveralls.io/github/open-contracting/pelican-frontend?branch=main
+.. |Coverage Status| image:: https://codecov.io/github/open-contracting/pelican-frontend/graph/badge.svg
+   :target: https://codecov.io/github/open-contracting/pelican-frontend
