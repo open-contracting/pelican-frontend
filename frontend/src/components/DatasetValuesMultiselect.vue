@@ -61,6 +61,7 @@
 
 <script>
 const axios = require("axios");
+
 import { CONFIG } from "@/config.js";
 
 export default {

@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
+
 const axios = require("axios");
+
 import { CONFIG } from "./config.js";
 
 Vue.use(Vuex);

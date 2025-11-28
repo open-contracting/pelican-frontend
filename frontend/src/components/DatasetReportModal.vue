@@ -361,6 +361,7 @@
 
 <script>
 const axios = require("axios");
+
 import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
 
