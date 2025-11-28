@@ -111,7 +111,6 @@ export default {
         },
         getChildren: (node) => {
             const result = Object.assign({}, node);
-            // biome-ignore lint/performance/noDelete: Breaks tree layout
             delete result._check;
             return result;
         },

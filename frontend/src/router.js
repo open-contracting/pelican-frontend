@@ -34,7 +34,7 @@ export default new Router({
             path: "/overview/:datasetId",
             name: "overview",
             component: Overview,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
@@ -45,7 +45,7 @@ export default new Router({
             path: "/field/:datasetId",
             name: "field",
             component: Field,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
@@ -56,7 +56,7 @@ export default new Router({
             path: "/resource/:datasetId",
             name: "resource",
             component: Resource,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
@@ -67,7 +67,7 @@ export default new Router({
             path: "/dataset/:datasetId",
             name: "dataset",
             component: Dataset,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
@@ -78,7 +78,7 @@ export default new Router({
             path: "/time/:datasetId",
             name: "time",
             component: Time,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
@@ -89,7 +89,7 @@ export default new Router({
             path: "/resource/:datasetId/detail/:check",
             name: "resourceCheckDetail",
             component: ResourceCheckDetail,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId).then(() => {
                         store.dispatch("loadResourceLevelCheckDetail", to.params.check);
@@ -104,7 +104,7 @@ export default new Router({
             path: "/dataset/:datasetId/detail/:check",
             name: "datasetCheckDetail",
             component: DatasetCheckDetail,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }
@@ -115,7 +115,7 @@ export default new Router({
             path: "/field/:datasetId/detail/:path",
             name: "fieldCheckDetail",
             component: FieldCheckDetail,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId).then(() => {
                         store.dispatch("loadFieldLevelCheckDetail", to.params.path);
@@ -130,7 +130,7 @@ export default new Router({
             path: "/time/:datasetId/detail/:check",
             name: "timeVarianceCheckDetail",
             component: TimeVarianceCheckDetail,
-            beforeEnter: (to, from, next) => {
+            beforeEnter: (to, _from, next) => {
                 if (store.getters.datasetId !== to.params.datasetId) {
                     store.dispatch("loadDataset", to.params.datasetId);
                 }

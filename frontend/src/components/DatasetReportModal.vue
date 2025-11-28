@@ -401,7 +401,7 @@ export default {
             this.isSubmitting = true;
 
             const data = {
-                dataset_id: Number.parseInt(this.dataset.id),
+                dataset_id: Number.parseInt(this.dataset.id, 10),
                 document_id: this.documentId,
                 folder_id: this.folderId,
                 language: this.reportLanguage,
