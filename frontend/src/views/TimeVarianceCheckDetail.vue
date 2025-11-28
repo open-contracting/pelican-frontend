@@ -506,11 +506,11 @@
 
 <script>
 import "vue-json-pretty/lib/styles.css";
+import VueJsonPretty from "vue-json-pretty";
 import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import timeMixins from "@/plugins/timeMixins.js";
 import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
-import VueJsonPretty from "vue-json-pretty";
 
 export default {
     name: "TimeVarianceCheckDetail",
