@@ -1,0 +1,9 @@
+name: JavaScript
+on: [push, pull_request]
+jobs:
+  js:
+    uses: open-contracting/.github/.github/workflows/js.yml@main
+    permissions:
+      contents: read
+    with:
+      lockfile_path: frontend/package-lock.json

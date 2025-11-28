@@ -50,9 +50,9 @@
 </template>
 
 <script>
+import { Fragment } from "vue-fragment";
 import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
-import { Fragment } from "vue-fragment";
 
 export default {
     name: "TreeNode",

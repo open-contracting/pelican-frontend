@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: Import order affects preview pane sizing.
 import Vue from "vue";
 import Router from "vue-router";
 import store from "./store";
