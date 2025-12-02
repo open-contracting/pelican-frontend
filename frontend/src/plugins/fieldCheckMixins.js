@@ -14,7 +14,7 @@ export default {
         _sort: function (checks, comparator, sortedBy, asc = true) {
             if (checks != null) {
                 this.sort(checks, comparator, asc);
-                this.$emit("field-check-table-sort", { by: sortedBy, asc: asc });
+                this.$store.commit("setFieldCheckSorting", { by: sortedBy, asc: asc });
             }
         },
         sortBy: function (checks, by, asc) {

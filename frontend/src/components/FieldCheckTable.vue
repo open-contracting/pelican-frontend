@@ -115,8 +115,6 @@ export default {
         },
     },
     mounted: function () {
-        this.$on("field-check-table-sort", (data) => this.$store.commit("setFieldCheckSorting", data));
-
         this.sortBy(this.tableData, this.sortedBy, this.isAscendingSorted);
     },
     methods: {
