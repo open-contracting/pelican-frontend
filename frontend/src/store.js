@@ -1,13 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
-
-const axios = require("axios");
-
+import axios from "axios";
+import { createStore } from "vuex";
 import { CONFIG } from "./config.js";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
     state: {
         dataset: null,
         resourceLevelStats: null,
