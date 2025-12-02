@@ -39,10 +39,9 @@
       </div>
     </div>
 
-    <template v-for="n in tableData">
+    <template v-for="n in tableData" :key="n.path">
       <FieldCheckTableRow
         v-if="isSearched(n)"
-        :key="n.path"
         :check="n"
       >
         <span v-html="highlightSearch(n.path)" />
@@ -61,10 +60,9 @@
           </div>
         </template>
       </FieldCheckTableRow>
-      <template v-for="h in n._hidden">
+      <template v-for="h in n._hidden" :key="h.path">
         <FieldCheckTableRow
           v-if="isSearched(h)"
-          :key="h.path"
           :check="h"
           :class="['hidden_row', { hidden: isHidden(n) }]"
         >

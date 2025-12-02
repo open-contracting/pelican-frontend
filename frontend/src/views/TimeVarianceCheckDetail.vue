@@ -115,9 +115,8 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(item, index) in check.meta.examples.slice(0, 5)">
+            <template v-for="(item, index) in check.meta.examples.slice(0, 5)" :key="index">
               <tr
-                :key="'new_' + index"
                 class="d-flex new_row"
               >
                 <td class="col-9 text-left numeric d-flex align-items-center">
@@ -196,7 +195,6 @@
                 </td>
               </tr>
               <tr
-                :key="'old_' + index"
                 class="d-flex old_row"
               >
                 <td class="col-9 text-left numeric d-flex align-items-center">
@@ -288,9 +286,8 @@
               </td>
             </tr>
             <span v-if="showMore">
-              <template v-for="(item, index) in check.meta.examples.slice(5)">
+              <template v-for="(item, index) in check.meta.examples.slice(5)" :key="index + 5">
                 <tr
-                  :key="'new_' + (index + 5)"
                   class="d-flex new_row"
                 >
                   <td class="col-9 text-left numeric d-flex align-items-center">
@@ -369,7 +366,6 @@
                   </td>
                 </tr>
                 <tr
-                  :key="'old_' + (index + 5)"
                   class="d-flex old_row"
                 >
                   <td class="col-9 text-left numeric d-flex align-items-center">

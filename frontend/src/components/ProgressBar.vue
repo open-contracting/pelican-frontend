@@ -1,9 +1,8 @@
 <template>
   <div class="progress_bar">
-    <template v-for="(b, i) in allBars">
+    <template v-for="(b, i) in allBars" :key="i">
       <div
         v-if="b.value"
-        :key="i"
         :class="['inner', b.class]"
         :style="{ width: b.value + '%', 'background-color': b.color }"
       >

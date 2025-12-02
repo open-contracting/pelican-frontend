@@ -77,10 +77,9 @@
         <div class="th col align-self-center text-left">{{ $t("dataset.timeVariance") }}</div>
       </div>
 
-      <template v-for="(item, index) in datasets">
+      <template v-for="(item, index) in datasets" :key="index">
         <DatasetPickerRow
           v-if="isSearched(item.name)"
-          :key="index"
           :dataset="item"
           :depth="0"
           @dataset-filter="showFilter($event)"

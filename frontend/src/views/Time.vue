@@ -24,9 +24,8 @@
       v-if="loaded"
       class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3"
     >
-      <template v-for="(check, index) in timeVarianceLevelStats">
+      <template v-for="(check, index) in timeVarianceLevelStats" :key="index">
         <div
-          :key="index"
           class="col mb-4"
         >
           <TimeVarianceLevelCheck :check="check" />

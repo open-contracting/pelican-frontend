@@ -1,62 +1,58 @@
 <template>
-  <fragment>
-    <FieldCheckTableRow
-      :key="path"
-      :check="check"
-      :show-stats="filter(data._check)"
-      :class="{ hidden: hide || !isSearched(data) }"
-    >
-      <div class="d-flex flex-row align-items-center">
-        <div :class="'indent-' + depth" />
-        <div
-          v-if="isExpandable"
-          class="switcher text-center"
-          @click.stop="expanded = !expanded"
-        >
-          <template v-if="isExpandable">
-            <font-awesome-icon
-              v-if="!expanded"
-              icon="chevron-right"
-            />
-            <font-awesome-icon
-              v-else
-              icon="chevron-down"
-            />
-          </template>
-        </div>
-        <div
-          v-else
-          class="switcher"
-        />
-        <div
-          class="name flex-fill"
-          :title="path"
-          v-html="highlightSearchLast(path)"
-        />
+  <FieldCheckTableRow
+    :key="path"
+    :check="check"
+    :show-stats="filter(data._check)"
+    :class="{ hidden: hide || !isSearched(data) }"
+  >
+    <div class="d-flex flex-row align-items-center">
+      <div :class="'indent-' + depth" />
+      <div
+        v-if="isExpandable"
+        class="switcher text-center"
+        @click.stop="expanded = !expanded"
+      >
+        <template v-if="isExpandable">
+          <font-awesome-icon
+            v-if="!expanded"
+            icon="chevron-right"
+          />
+          <font-awesome-icon
+            v-else
+            icon="chevron-down"
+          />
+        </template>
       </div>
-    </FieldCheckTableRow>
+      <div
+        v-else
+        class="switcher"
+      />
+      <div
+        class="name flex-fill"
+        :title="path"
+        v-html="highlightSearchLast(path)"
+      />
+    </div>
+  </FieldCheckTableRow>
 
-    <template v-if="hasChildren">
-      <template v-for="n in children">
-        <tree-node
-          :key="n._path"
-          :data="n"
-          :depth="depth + 1"
-          :hide="!expanded"
-        />
-      </template>
+  <template v-if="hasChildren">
+    <template v-for="n in children" :key="n._path">
+      <tree-node
+        :data="n"
+        :depth="depth + 1"
+        :hide="!expanded"
+      />
     </template>
-  </fragment>
+  </template>
 </template>
 
 <script>
-import { Fragment } from "vue-fragment";
 import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
 import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
 
 export default {
     name: "TreeNode",
-    components: { FieldCheckTableRow, Fragment },
+    components: { FieldCheckTableRow },
     mixins: [fieldCheckMixins],
     props: {
         data: Object,

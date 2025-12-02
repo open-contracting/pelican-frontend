@@ -149,10 +149,9 @@
                 v-if="collection.extensions"
                 class="td col col-8"
               >
-                <template v-for="(e, i) in collection.extensions">
+                <template v-for="(e, i) in collection.extensions" :key="i">
                   <span
                     v-if="e.hasOwnProperty('name')"
-                    :key="i"
                   >
                     <a
                       v-if="
@@ -161,7 +160,6 @@
                             ? e.documentationUrl['en'] != ''
                             : e.documentationUrl != '')
                       "
-                      :key="i"
                       :href="
                         e.documentationUrl.hasOwnProperty('en')
                           ? e.documentationUrl['en']
@@ -171,13 +169,11 @@
                     >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
                     <a
                       v-else-if="e.hasOwnProperty('repositoryUrl')"
-                      :key="i"
                       :href="e.repositoryUrl"
                       target="_blank"
                     >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
                     <a
                       v-else
-                      :key="i"
                       target="_blank"
                     >{{
                       e.name.hasOwnProperty("en") ? e.name["en"] : e.name
@@ -280,9 +276,8 @@
         </h4>
         <div class="result_box">
           <div class="row">
-            <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']">
+            <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']" :key="n">
               <div
-                :key="n"
                 class="col col-sm-2 col-md text-center lifecycle_phase"
               >
                 <div class="lifecycle_label">

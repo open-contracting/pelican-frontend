@@ -93,9 +93,8 @@
         </b-link>
       </div>
     </div>
-    <template v-for="(item, index) in dataset.filtered_children">
+    <template v-for="(item, index) in dataset.filtered_children" :key="index">
       <DatasetPickerRow
-        :key="index"
         :dataset="item"
         :depth="depth + 1"
         @dataset-filter="$emit('dataset-filter', $event)"

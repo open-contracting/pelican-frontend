@@ -20,9 +20,8 @@
         />
       </b-col>
     </b-row>
-    <template v-for="(section, index) in sections">
+    <template v-for="(section, index) in sections" :key="index">
       <DatasetLevelSection
-        :key="index"
         :section="section"
         :filter="filters[filterIndex]"
       />

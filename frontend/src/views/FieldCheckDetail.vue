@@ -6,8 +6,8 @@
     >
       <h2>{{ $t("fieldDetail.path") }}: {{ check.path }}</h2>
 
-      <template v-for="(c, k) in check.coverage.checks">
-        <h5 :key="k">
+      <template v-for="(c, k) in check.coverage.checks" :key="k">
+        <h5>
           <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
           &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
@@ -17,7 +17,6 @@
           <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
         </h5>
         <CheckDetailResultBox
-          :key="k + '-box'"
           :check="c"
           :passed-label="k == 'exists' ? 'fieldDetail.set' : undefined"
           :failed-label="k == 'exists' ? 'fieldDetail.notset' : undefined"
@@ -26,8 +25,8 @@
         />
       </template>
 
-      <template v-for="(c, k) in check.quality.checks">
-        <h5 :key="k">
+      <template v-for="(c, k) in check.quality.checks" :key="k">
+        <h5>
           <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
           &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
@@ -37,7 +36,6 @@
           <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />
         </h5>
         <CheckDetailResultBox
-          :key="k + '-box'"
           :check="c"
           :classes="'quality'"
           ok
