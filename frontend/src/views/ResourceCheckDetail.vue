@@ -18,7 +18,7 @@
       <h5>
         {{ $t("resourceLevel.count_header") }}
         <span class="bold">{{
-          (check.passed_count + check.failed_count + check.undefined_count) | formatNumber
+          $filters.formatNumber(check.passed_count + check.failed_count + check.undefined_count)
         }}</span>
                 &nbsp;
         <Tooltip :text="$t('resourceLevel.count_header_tooltip')" />
@@ -33,7 +33,7 @@
 
       <h5>
         {{ $t("resourceLevel.application_count_header") }}
-        <span class="bold">{{ check.individual_application_count | formatNumber }}</span>&nbsp;
+        <span class="bold">{{ $filters.formatNumber(check.individual_application_count) }}</span>&nbsp;
         <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')" />
       </h5>
       <CheckDetailResultBox

@@ -57,10 +57,10 @@
               >
                 <td>{{ item.value_str }}</td>
                 <td class="text-right numeric">
-                  {{ (item.share * 100) | formatPercentage2D }}
+                  {{ $filters.formatPercentage2D(item.share * 100) }}
                 </td>
                 <td class="text-right numeric">
-                  {{ item.count | formatNumber }}
+                  {{ $filters.formatNumber(item.count) }}
                 </td>
               </tr>
             </tbody>
@@ -71,21 +71,21 @@
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_passed | formatNumber }}
+                {{ $filters.formatNumber(check.meta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.passed") }}
             </div>
 
             <div class="numeric_result color_failed col-4">
               <div class="check_numeric_value">
-                {{ (check.meta.total_processed - check.meta.total_passed) | formatNumber }}
+                {{ $filters.formatNumber(check.meta.total_processed - check.meta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.failed") }}
             </div>
 
             <div class="numeric_result color_na col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_processed | formatNumber }}
+                {{ $filters.formatNumber(check.meta.total_processed) }}
               </div>
               {{ $t("datasetLevel.numeric.processed") }}
             </div>
@@ -116,7 +116,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ (check.meta.ocid_share * 100) | formatPercentage2D }}
+                  {{ $filters.formatPercentage2D(check.meta.ocid_share * 100) }}
                 </div>
               </div>
               <div class="row">

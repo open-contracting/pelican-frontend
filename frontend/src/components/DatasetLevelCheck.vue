@@ -90,8 +90,8 @@
               v-if="checkType == 'numeric'"
               class="text-center"
             >
-              <span class="check_numeric_value">{{ check.meta.total_passed | formatNumber }}</span>
-              <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed | formatNumber }}</span>
+              <span class="check_numeric_value">{{ $filters.formatNumber(check.meta.total_passed) }}</span>
+              <span class="check_numeric_count">&nbsp;/&nbsp;{{ $filters.formatNumber(check.meta.total_processed) }}</span>
             </div>
 
             <div
@@ -109,7 +109,7 @@
                   >
                     <td>{{ item.value_str }}</td>
                     <td class="text-right numeric">
-                      {{ (item.share * 100) | formatPercentage2D }}
+                      {{ $filters.formatPercentage2D(item.share * 100) }}
                     </td>
                   </tr>
                 </table>
@@ -128,7 +128,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ (check.meta.ocid_share * 100) | formatPercentage2D }}
+                  {{ $filters.formatPercentage2D(check.meta.ocid_share * 100) }}
                 </div>
               </div>
               <div class="row">

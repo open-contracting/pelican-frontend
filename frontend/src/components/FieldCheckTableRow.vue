@@ -16,11 +16,11 @@
         <div
           class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end"
         >
-          <span class="field_check_result_value">{{ check.coverageOkShare | formatPercentage }}</span>
+          <span class="field_check_result_value">{{ $filters.formatPercentage(check.coverageOkShare) }}</span>
         </div>
         <div
           class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
-        >{{ check.coverage.passed_count | formatNumber }}/{{ check.coverage.total_count | formatNumber }}</div>
+        >{{ $filters.formatNumber(check.coverage.passed_count) }}/{{ $filters.formatNumber(check.coverage.total_count) }}</div>
         <div
           class="col col-12 col-lg-3 col-xl-4 col-xxl-6 col-xxxxl-7 field_check_bar d-flex align-items-center justify-content-end"
         >
@@ -43,11 +43,11 @@
           <div
             class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end"
           >
-            <span class="field_check_result_value">{{ check.qualityOkShare | formatPercentage }}</span>
+            <span class="field_check_result_value">{{ $filters.formatPercentage(check.qualityOkShare) }}</span>
           </div>
           <div
             class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
-          >{{ check.quality.passed_count | formatNumber }}/{{ check.quality.total_count | formatNumber }}</div>
+          >{{ $filters.formatNumber(check.quality.passed_count) }}/{{ $filters.formatNumber(check.quality.total_count) }}</div>
           <div
             class="col col-12 col-lg-3 col-xl-4 col-xxl-6 col-xxxxl-7 field_check_bar d-flex align-items-center justify-content-end"
           >

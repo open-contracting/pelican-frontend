@@ -11,7 +11,7 @@
           <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
           &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
-            {{ (c.passed_count + c.failed_count) | formatNumber }}
+            {{ $filters.formatNumber(c.passed_count + c.failed_count) }}
           </span>
                     &nbsp;
           <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
@@ -31,7 +31,7 @@
           <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
           &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
-            {{ (c.passed_count + c.failed_count) | formatNumber }}
+            {{ $filters.formatNumber(c.passed_count + c.failed_count) }}
           </span>
                     &nbsp;
           <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />

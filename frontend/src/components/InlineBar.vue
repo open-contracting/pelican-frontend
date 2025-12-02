@@ -8,7 +8,7 @@
       class="bar"
       :style="{ width: barWidth + 'px' }"
     >
-      <span v-if="barWidth > 30">{{ percentage | formatPercentage }}</span>
+      <span v-if="barWidth > 30">{{ $filters.formatPercentage(percentage) }}</span>
       <span v-else>&nbsp;</span>
     </div>
     <div
@@ -18,19 +18,19 @@
       <span
         v-if="barWidth <= 30"
         class="small_label"
-      >{{ percentage | formatPercentage }}</span>
+      >{{ $filters.formatPercentage(percentage) }}</span>
       <span
         v-if="showCount"
         class="count_holder"
       >
-        <span class="count_holder">({{ count | formatNumber }})</span>
+        <span class="count_holder">({{ $filters.formatNumber(count) }})</span>
       </span>
     </div>
     <div
       v-if="barWidth > 30 && showCount"
       class="count"
     >
-      <span class="count_holder">({{ count | formatNumber }})</span>
+      <span class="count_holder">({{ $filters.formatNumber(count) }})</span>
     </div>
   </div>
 </template>

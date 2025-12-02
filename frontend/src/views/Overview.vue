@@ -95,7 +95,7 @@
               </div>
               <div class="td col col-8 d-flex align-items-center break_word">
                 <span class="ocid_count bold">{{
-                  compiled_releases.total_unique_ocids | formatNumber
+                  $filters.formatNumber(compiled_releases.total_unique_ocids)
                 }}</span>
               </div>
             </div>
@@ -295,7 +295,7 @@
                   >
                 </div>
                 <div class="lifecycle_value">
-                  <strong>{{ lifecycle[n] | formatNumber }}</strong>
+                  <strong>{{ $filters.formatNumber(lifecycle[n]) }}</strong>
                 </div>
               </div>
               <div

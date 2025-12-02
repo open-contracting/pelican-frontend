@@ -9,7 +9,7 @@
 
       <h5>
         {{ $t("timeLevel.coverage.header") }}
-        <span class="bold">{{ check.meta.total_count | formatNumber }}</span>
+        <span class="bold">{{ $filters.formatNumber(check.meta.total_count) }}</span>
                 &nbsp;
         <Tooltip :text="$t('timeLevel.coverage.header_tooltip')" />
       </h5>
@@ -48,7 +48,7 @@
 
       <h5>
         {{ $t("timeLevel.check.header") }}
-        <span class="bold">{{ check.meta.coverage_count | formatNumber }}</span>
+        <span class="bold">{{ $filters.formatNumber(check.meta.coverage_count) }}</span>
                 &nbsp;
         <Tooltip :text="$t('timeLevel.check.header_tooltip')" />
       </h5>

@@ -52,7 +52,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.coverage_result }"
                 >
-                  {{ coveragePercentage | formatPercentage }}
+                  {{ $filters.formatPercentage(coveragePercentage) }}
                 </span>
               </div>
               <div class="col col-6 text-center">
@@ -60,7 +60,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.check_result }"
                 >
-                  {{ checkPercentage | formatPercentage }}
+                  {{ $filters.formatPercentage(checkPercentage) }}
                 </span>
               </div>
             </div>

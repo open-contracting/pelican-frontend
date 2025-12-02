@@ -27,7 +27,7 @@
         </a>
       </div>
       <div class="td col-1 numeric text-right">
-        {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
+        {{ $filters.formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
       </div>
       <div class="td col-1 numeric text-right">
         {{ dataset.meta.kingfisher_metadata?.collection_id }}
