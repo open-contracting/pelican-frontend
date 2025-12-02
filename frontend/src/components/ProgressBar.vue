@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 
 .progress_bar {
     width: 100%;

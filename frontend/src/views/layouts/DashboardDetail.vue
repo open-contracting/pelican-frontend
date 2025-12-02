@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 .preview {
     background-color: white;
     position: relative;

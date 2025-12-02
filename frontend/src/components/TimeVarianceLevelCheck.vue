@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .ok_status {
     background-color: $ok_color;

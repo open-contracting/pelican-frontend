@@ -102,7 +102,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 
 tbody tr {
     cursor: pointer;

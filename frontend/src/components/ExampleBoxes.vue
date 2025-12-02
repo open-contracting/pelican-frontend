@@ -286,8 +286,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
-@import "src/scss/variables";
+@import "@/scss/main";
+@import "@/scss/variables";
 
 .moreLess {
     padding-top: 25px;

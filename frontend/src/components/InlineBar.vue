@@ -54,7 +54,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 .inline_bar {
     width: 100%;
     text-align: left;

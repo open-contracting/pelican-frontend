@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .info_message {
     color: $na_color;

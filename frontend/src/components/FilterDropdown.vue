@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 #filter_dropdown {
     margin: 0.5rem;

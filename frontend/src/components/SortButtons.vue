@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .sort_buttons {
     margin-left: 10px;

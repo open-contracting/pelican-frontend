@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 
 @media (max-width: 1199.98px) {
     .main_envelope {

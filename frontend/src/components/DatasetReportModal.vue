@@ -461,7 +461,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 
 .submit-result {
     display: flex;

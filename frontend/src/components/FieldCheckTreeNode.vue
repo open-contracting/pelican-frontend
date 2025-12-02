@@ -119,7 +119,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 
 $indent-width-px: 35px;
 

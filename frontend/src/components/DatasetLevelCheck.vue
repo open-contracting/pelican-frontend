@@ -189,7 +189,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .chart_envelope {
     margin-bottom: 10px;

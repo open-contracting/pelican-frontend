@@ -621,7 +621,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .examples_icon {
     color: $primary;

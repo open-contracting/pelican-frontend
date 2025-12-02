@@ -145,8 +145,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "src/scss/_variables";
-@import "src/scss/main";
+@import "@/scss/_variables";
+@import "@/scss/main";
 
 .sub_headline {
     margin-bottom: 0px;

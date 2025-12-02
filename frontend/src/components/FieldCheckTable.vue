@@ -142,7 +142,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
+@import "@/scss/main";
 .hide_button {
     color: $na_color;
     font-size: 10px;

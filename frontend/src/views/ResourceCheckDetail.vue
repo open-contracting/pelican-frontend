@@ -190,7 +190,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .category_name {
     color: $headings-light-color;
