@@ -34,7 +34,7 @@ cycler==0.10.0
     #   matplotlib
 dj-database-url==2.0.0
     # via -r requirements.txt
-django==4.2.26
+django==4.2.27
     # via
     #   -r requirements.txt
     #   dj-database-url
