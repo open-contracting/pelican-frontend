@@ -134,10 +134,6 @@ Backend
 Frontend
 ~~~~~~~~
 
-.. code-block:: bash
-
-   npm run test
-
 Run linters:
 
 .. code-block:: bash
