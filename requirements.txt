@@ -144,7 +144,7 @@ uritemplate==3.0.1
     # via
     #   drf-spectacular
     #   google-api-python-client
-urllib3==2.6.0
+urllib3==2.6.3
     # via
     #   requests
     #   sentry-sdk
