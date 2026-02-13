@@ -197,7 +197,7 @@ six==1.16.0
     #   -r requirements.txt
     #   cycler
     #   python-dateutil
-sqlparse==0.5.0
+sqlparse==0.5.4
     # via
     #   -r requirements.txt
     #   django
