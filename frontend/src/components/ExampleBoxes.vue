@@ -259,16 +259,16 @@ export default {
 
                 fileLink.click();
 
-                this.$alert(this.$t("examples.download.success"), null, "success");
+                this.$toast(this.$t("examples.download.success"), "success");
             });
         },
         copyToClipboard: function (itemId) {
             this.$store.dispatch("loadDataItem", itemId).finally(() => {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     navigator.clipboard.writeText(this.$store.getters.dataItemJSON(itemId));
-                    this.$alert(this.$t("examples.copyToClipboard.success"), null, "success");
+                    this.$toast(this.$t("examples.copyToClipboard.success"), "success");
                 } else {
-                    this.$alert(this.$t("examples.copyToClipboard.failure"), null, "error");
+                    this.$toast(this.$t("examples.copyToClipboard.failure"), "danger");
                 }
             });
         },

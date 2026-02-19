@@ -169,7 +169,7 @@ export default {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
-                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
+                    this.$toast(this.$t("preview.cannotDisplay"), "danger");
                     this.previewDataItemId = null;
                 }
 
