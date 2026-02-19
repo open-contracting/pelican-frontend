@@ -602,7 +602,7 @@ export default {
                 .dispatch("loadDataItem", itemId)
                 .then(() => {
                     if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                        this.$clipboard(this.$store.getters.dataItemJSON(itemId));
+                        navigator.clipboard.writeText(this.$store.getters.dataItemJSON(itemId));
                         this.$alert(this.$t("examples.copyToClipboard.success"), null, "success");
                     } else {
                         this.$alert(this.$t("examples.copyToClipboard.failure"), null, "error");
