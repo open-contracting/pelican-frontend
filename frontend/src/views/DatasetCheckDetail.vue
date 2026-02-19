@@ -152,7 +152,6 @@
     <template #preview>
       <h5>{{ $t("preview.metadata") }}</h5>
       <vue-json-pretty
-        :highlight-mouseover-node="true"
         :deep="3"
         :data="previewMetadata"
       />
@@ -178,7 +177,6 @@
       <span v-else-if="previewData">
         <h5>{{ $t("preview.ocdsData") }}</h5>
         <vue-json-pretty
-          :highlight-mouseover-node="true"
           :deep="2"
           :data="previewData"
         />
