@@ -17,20 +17,24 @@
         <div class="col-8 modal_input">
           <div class="row">
             <div class="col">
-              <b-form-datepicker
+              <VueDatePicker
                 v-model="releaseDateFrom"
-                :min="firstDate"
-                :max="lastDate"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                :min-date="firstDate"
+                :max-date="lastDate"
+                :time-config="{ enableTimePicker: false }"
+                :formats="{ input: 'yyyy-MM-dd' }"
+                auto-apply
                 class="date_picker"
               />
             </div>
             <div class="col">
-              <b-form-datepicker
+              <VueDatePicker
                 v-model="releaseDateTo"
-                :min="firstDate"
-                :max="lastDate"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                :min-date="firstDate"
+                :max-date="lastDate"
+                :time-config="{ enableTimePicker: false }"
+                :formats="{ input: 'yyyy-MM-dd' }"
+                auto-apply
                 class="date_picker"
               />
             </div>
