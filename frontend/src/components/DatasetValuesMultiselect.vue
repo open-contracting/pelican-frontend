@@ -20,19 +20,13 @@
     :hide-selected="true"
     @search-change="asyncFind"
   >
-    <template
-      slot="option"
-      slot-scope="props"
-    >
+    <template #option="props">
       <div class="option__desc">
         <span class="option__title">{{ props.option.value }}</span>
         <span class="option__small">&nbsp;({{ props.option.count }} items)</span>
       </div>
     </template>
-    <template
-      slot="tag"
-      slot-scope="{ option, remove }"
-    >
+    <template #tag="{ option, remove }">
       <div class="multiselect__tag">
         <div>
           <span>{{ option.value }}</span>
@@ -45,17 +39,14 @@
         </div>
       </div>
     </template>
-    <template
-      slot="clear"
-      slot-scope="props"
-    >
+    <template #clear="props">
       <div
         v-if="selected.length"
         class="multiselect__clear"
         @mousedown.prevent.stop="clearAll(props.search)"
       />
     </template>
-    <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
+    <template #noResult>{{ $t("datasetValuesMultiselect.noResult") }}</template>
   </multiselect>
 </template>
 
