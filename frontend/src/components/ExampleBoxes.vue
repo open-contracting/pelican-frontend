@@ -235,6 +235,7 @@ export default {
         exampleSections: Array,
         loaded: Boolean,
     },
+    emits: ["preview"],
     data: () => ({
         openSections: [],
         selectedKey: null,

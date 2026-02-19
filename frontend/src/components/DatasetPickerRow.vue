@@ -114,6 +114,7 @@ export default {
     components: { ProgressBar },
     mixins: [stateMixin, sortMixins],
     props: ["dataset", "depth"],
+    emits: ["dataset-filter", "dataset-report"],
     data: () => ({
         showFilteredChildren: false,
     }),

@@ -27,6 +27,7 @@ export default {
             default: 0,
         },
     },
+    emits: ["newSelectedIndex"],
     data: () => ({
         selectedIndex: 0,
     }),

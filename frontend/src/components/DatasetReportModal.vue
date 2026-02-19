@@ -368,6 +368,7 @@ import { CONFIG } from "@/config.js";
 export default {
     components: { Loader },
     props: ["dataset"],
+    emits: ["close"],
     data: function () {
         return {
             isSubmitting: false,
