@@ -64,9 +64,9 @@ export default {
         this.chartData.push([
             this.$t("datasetLevel.charts.label_0_1"),
             this.check.meta.shares["0_1"],
-            `${this.$options.filters.formatPercentage(
+            `${this.$filters.formatPercentage(
                 100 * this.check.meta.shares["0_1"],
-            )} (${this.$options.filters.formatNumber(this.check.meta.counts["0_1"])})`,
+            )} (${this.$filters.formatNumber(this.check.meta.counts["0_1"])})`,
             this.ticks[0] <= this.check.meta.shares["0_1"] && this.check.meta.shares["0_1"] <= this.ticks[1]
                 ? "color: #919C03"
                 : "color: #d0021b",
@@ -74,33 +74,33 @@ export default {
         this.chartData.push([
             this.$t("datasetLevel.charts.label_1_5"),
             this.check.meta.shares["1_5"],
-            `${this.$options.filters.formatPercentage(
+            `${this.$filters.formatPercentage(
                 100 * this.check.meta.shares["1_5"],
-            )} (${this.$options.filters.formatNumber(this.check.meta.counts["1_5"])})`,
+            )} (${this.$filters.formatNumber(this.check.meta.counts["1_5"])})`,
             "",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_5_20"),
             this.check.meta.shares["5_20"],
-            `${this.$options.filters.formatPercentage(
+            `${this.$filters.formatPercentage(
                 100 * this.check.meta.shares["5_20"],
-            )} (${this.$options.filters.formatNumber(this.check.meta.counts["5_20"])})`,
+            )} (${this.$filters.formatNumber(this.check.meta.counts["5_20"])})`,
             "",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_20_50"),
             this.check.meta.shares["20_50"],
-            `${this.$options.filters.formatPercentage(
+            `${this.$filters.formatPercentage(
                 100 * this.check.meta.shares["20_50"],
-            )} (${this.$options.filters.formatNumber(this.check.meta.counts["20_50"])})`,
+            )} (${this.$filters.formatNumber(this.check.meta.counts["20_50"])})`,
             "",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_50_100"),
             this.check.meta.shares["50_100"],
-            `${this.$options.filters.formatPercentage(
+            `${this.$filters.formatPercentage(
                 100 * this.check.meta.shares["50_100"],
-            )} (${this.$options.filters.formatNumber(this.check.meta.counts["50_100"])})`,
+            )} (${this.$filters.formatNumber(this.check.meta.counts["50_100"])})`,
             "",
         ]);
     },

@@ -354,7 +354,7 @@ export default {
             return this.dataset?.meta?.[type];
         },
         formatNumber(number) {
-            return this.$options.filters.formatNumber(number);
+            return this.$filters.formatNumber(number);
         },
     },
 };

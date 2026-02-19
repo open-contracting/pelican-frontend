@@ -98,11 +98,11 @@ export default {
 
         for (let i = 1; i < this.chartData.length; i++) {
             if (this.limit) {
-                this.chartData[i][2] = this.$options.filters.formatPercentage(100 * this.chartData[i][2]);
+                this.chartData[i][2] = this.$filters.formatPercentage(100 * this.chartData[i][2]);
             } else {
-                this.chartData[i][2] = `${this.$options.filters.formatPercentage(
+                this.chartData[i][2] = `${this.$filters.formatPercentage(
                     100 * this.chartData[i][2],
-                )} (${this.$options.filters.formatNumber(this.chartData[i][4])})`;
+                )} (${this.$filters.formatNumber(this.chartData[i][4])})`;
             }
         }
 

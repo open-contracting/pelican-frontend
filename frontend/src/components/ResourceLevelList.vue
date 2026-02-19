@@ -145,7 +145,7 @@ export default {
                 return this.$t("resourceLevel.averageScore.undefined");
             }
 
-            return this.$options.filters.formatPercentage((100.0 * passedCount) / (passedCount + failedCount));
+            return this.$filters.formatPercentage((100.0 * passedCount) / (passedCount + failedCount));
         },
     },
     watch: {
