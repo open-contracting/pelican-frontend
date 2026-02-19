@@ -74,7 +74,7 @@ In another terminal, start the frontend server:
 .. code-block:: bash
 
    cd frontend
-   npx vue-cli-service serve
+   npx vite
 
 Backend
 ~~~~~~~
@@ -117,40 +117,19 @@ To update ``api/models.py`` following changes to Pelican backend's database sche
 Learning
 ~~~~~~~~
 
--  `Vue v2 <https://v2.vuejs.org>`__
--  `Vue CLI <https://cli.vuejs.org>`__
--  `Vue Router <https://v3.router.vuejs.org>`__
+-  `Vue <https://vuejs.org>`__
+-  `Vue Router <https://router.vuejs.org>`__
 
 Testing
 -------
-
-Backend
-~~~~~~~
 
 .. code-block:: bash
 
    ./manage.py test
 
-Frontend
-~~~~~~~~
-
-Run linters:
-
-.. code-block:: bash
-
-   npx vue-cli-service lint
-
 Production
 ----------
 
-Prepare a production build:
-
 .. code-block:: bash
 
-   npx vue-cli-service build
-
-This sets the ``NODE_ENV`` environment variable to ``"production"``. To `override this default <https://cli.vuejs.org/guide/mode-and-env.html>`__, use:
-
-.. code-block:: bash
-
-   npx vue-cli-service build --mode development
+   npx vite build

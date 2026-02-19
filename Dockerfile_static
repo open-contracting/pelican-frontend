@@ -1,4 +1,3 @@
-# https://cli.vuejs.org/guide/deployment.html#docker-nginx
 FROM nikolaik/python-nodejs:python3.11-nodejs22 AS build-stage
 
 COPY requirements.txt /tmp/requirements.txt
@@ -14,7 +13,7 @@ COPY . .
 ENV DJANGO_ENV=production
 
 WORKDIR /workdir/frontend
-RUN npx vue-cli-service build
+RUN npx vite build
 WORKDIR /workdir
 RUN python manage.py collectstatic --noinput -v2
 
