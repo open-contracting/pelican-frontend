@@ -11,7 +11,7 @@
     <div class="td col col-4">
       <div
         v-if="showStats"
-        class="row h-100 no-gutters align-items-center"
+        class="row h-100 g-0 align-items-center"
       >
         <div
           class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end"
@@ -38,7 +38,7 @@
       <div class="td col col-4">
         <div
           v-if="showStats"
-          class="row h-100 no-gutters align-items-center"
+          class="row h-100 g-0 align-items-center"
         >
           <div
             class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end"

@@ -8,7 +8,7 @@
     @click="check.result != undefined && checkType != null && detail()"
   >
     <div class="card-body">
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
             {{ $t("datasetLevel." + check.name + ".name") }}
@@ -17,20 +17,20 @@
 
         <div
           v-if="check.result != undefined && checkType != null"
-          class="col col-2 col-sm-2 col-lg-2 text-right"
+          class="col col-2 col-sm-2 col-lg-2 text-end"
         >
           <span
             v-if="!reportOnly && check.result == true"
-            class="badge badge-pill ok_status"
+            class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
             v-if="!reportOnly && check.result == false"
-            class="badge badge-pill failed_status"
+            class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
       </div>
 
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-12">
           <p
             class="check_description"
@@ -41,7 +41,7 @@
     </div>
 
     <div class="card-body">
-      <div class="row no-gutters justify-content-end">
+      <div class="row g-0 justify-content-end">
         <div class="col col-12">
           <div
             v-if="check.result == undefined"
@@ -108,7 +108,7 @@
                     :key="index"
                   >
                     <td>{{ item.value_str }}</td>
-                    <td class="text-right numeric">
+                    <td class="text-end numeric">
                       {{ $filters.formatPercentage2D(item.share * 100) }}
                     </td>
                   </tr>

@@ -7,10 +7,10 @@
     />
     <span v-if="loaded">
       <b-row class="action_bar">
-        <b-col class="text-left">
+        <b-col class="text-start">
           <h4>{{ $t("resourceLevel.subheadline") }}</h4>
         </b-col>
-        <b-col class="text-right">
+        <b-col class="text-end">
           <FilterDropdown
             :filter-names="filterNames"
             :start-index="filterIndex"
@@ -25,15 +25,15 @@
             scope="col"
           >{{ $t("resourceLevel.check") }}</div>
           <div
-            class="th col-1 text-right"
+            class="th col-1 text-end"
             scope="col"
           >{{ $t("resourceLevel.ok") }}</div>
           <div
-            class="th col-1 text-right"
+            class="th col-1 text-end"
             scope="col"
           >{{ $t("resourceLevel.failed") }}</div>
           <div
-            class="th col-1 text-right"
+            class="th col-1 text-end"
             scope="col"
           >{{ $t("resourceLevel.na") }}</div>
           <div

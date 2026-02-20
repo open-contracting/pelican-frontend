@@ -23,7 +23,7 @@
         {{ $t("resourceLevel." + section + ".categoryName") }}
       </div>
       <div
-        class="td col-8 col-lg-7 text-right text-lg-left info_message"
+        class="td col-8 col-lg-7 text-end text-lg-start info_message"
         scope="col"
       >
         {{ $t("resourceLevel.averageScore.description", { applicable: applicableChecks, total: resourceLevelStats.length, average_score: formattedAvgScore }) }}

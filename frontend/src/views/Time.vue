@@ -9,10 +9,10 @@
       class="collection_header"
       align-h="between"
     >
-      <b-col class="text-left">
+      <b-col class="text-start">
         <h4>{{ $t("timeLevel.subheadline") }}</h4>
       </b-col>
-      <b-col class="text-right">
+      <b-col class="text-end">
         <FilterDropdown
           :filter-names="filterNames"
           :start-index="filterIndex"

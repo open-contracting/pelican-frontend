@@ -74,7 +74,7 @@
             <span class="modified">{{ $t("modified") }}</span>
           </SortButtons>
         </div>
-        <div class="th col align-self-center text-left">{{ $t("dataset.timeVariance") }}</div>
+        <div class="th col align-self-center text-start">{{ $t("dataset.timeVariance") }}</div>
       </div>
 
       <template v-for="(item, index) in datasets" :key="index">

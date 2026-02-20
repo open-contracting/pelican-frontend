@@ -6,7 +6,7 @@
           v-if="ok && 'passed_count' in check"
           class="d-flex"
         >
-          <td class="col-3 text-right label">
+          <td class="col-3 text-end label">
             {{ $t(passedLabel) }}
           </td>
           <td class="col-9 align-middle">
@@ -22,7 +22,7 @@
           v-if="failed && 'failed_count' in check"
           class="d-flex"
         >
-          <td class="col-3 text-right label">
+          <td class="col-3 text-end label">
             {{ $t(failedLabel) }}
           </td>
           <td class="col-9 align-middle">
@@ -38,7 +38,7 @@
           v-if="na && 'undefined_count' in check"
           class="d-flex"
         >
-          <td class="col-3 text-right label">
+          <td class="col-3 text-end label">
             {{ $t("notAvailable") }}
           </td>
           <td class="col-9 align-middle">
@@ -54,7 +54,7 @@
           v-if="individualPass && 'individual_passed_count' in check"
           class="d-flex"
         >
-          <td class="col-3 text-right label">
+          <td class="col-3 text-end label">
             {{ $t("passed") }}
           </td>
           <td class="col-9 align-middle">
@@ -70,7 +70,7 @@
           v-if="individualNonPass && 'individual_failed_count' in check"
           class="d-flex"
         >
-          <td class="col-3 text-right label">
+          <td class="col-3 text-end label">
             {{ $t("failed") }}
           </td>
           <td class="col-9 align-middle">

@@ -12,7 +12,7 @@
           id="logo"
           src="@/assets/ocp_logo.svg"
         >
-        <b-nav class="main_nav text-left">
+        <b-nav class="main_nav text-start">
           <b-nav-item
             id="home_link"
             to="/"

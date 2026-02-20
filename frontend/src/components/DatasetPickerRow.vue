@@ -26,10 +26,10 @@
           <font-awesome-icon :icon="['fas', 'file']" />
         </a>
       </div>
-      <div class="td col-1 numeric text-right">
+      <div class="td col-1 numeric text-end">
         {{ $filters.formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
       </div>
-      <div class="td col-1 numeric text-right">
+      <div class="td col-1 numeric text-end">
         {{ dataset.meta.kingfisher_metadata?.collection_id }}
       </div>
       <div class="td col-1 phase_cell align-items-center align-middle">
@@ -61,7 +61,7 @@
           {{ dataset.phase }}
         </template>
         <template v-else>
-          <b-row class="progress_label no-gutters">
+          <b-row class="progress_label g-0">
             <b-col
               v-for="p in phases"
               :key="p"

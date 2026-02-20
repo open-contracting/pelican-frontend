@@ -12,7 +12,7 @@
       v-if="!isSubmitting"
       class="modal_box align-items-center"
     >
-      <div class="form-group row">
+      <div class="row mb-3">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
         <div class="col-8 modal_input">
           <div class="row">
@@ -41,7 +41,7 @@
           </div>
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
         <div class="col-8">
           <DatasetValuesMultiselect
@@ -51,7 +51,7 @@
           />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="row mb-3">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
         <div class="col-8">
           <DatasetValuesMultiselect
@@ -61,24 +61,24 @@
           />
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
         <div class="col-8">
           <input
             v-model="buyerNameRegex"
             class="regex_input"
           >
-          <small class="form-text text-muted">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
+          <small class="form-text text-body-secondary">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
         </div>
       </div>
-      <div class="form-group row procuring_row">
+      <div class="row mb-3 procuring_row">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
         <div class="col-8">
           <input
             v-model="procuringEntityNameRegex"
             class="regex_input"
           >
-          <small class="form-text text-muted">{{
+          <small class="form-text text-body-secondary">{{
             $t("datasetFilter.procuringEntityNameRegexTooltip")
           }}</small>
         </div>

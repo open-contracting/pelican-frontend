@@ -5,10 +5,10 @@
         v-for="item in chartData"
         :key="item[0]"
       >
-        <td class="text-right label">
+        <td class="text-end label">
           <span class="check_name">{{ item[0] }}</span>
         </td>
-        <td class="text-right">
+        <td class="text-end">
           <InlineBar
             :count="item[1]"
             :show-count="showCount"

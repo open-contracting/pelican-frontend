@@ -36,7 +36,7 @@
                 scope="col"
               >{{ $t("examples.ocid") }}</th>
               <th
-                class="col-1 text-left"
+                class="col-1 text-start"
                 scope="col"
               >{{ $t("examples.actions") }}</th>
               <th
@@ -55,7 +55,7 @@
               :key="index"
               class="d-flex"
             >
-              <td class="col-9 text-left numeric">
+              <td class="col-9 text-start numeric">
                 <span class="check_name">{{ item.ocid }}</span>
               </td>
               <td class="col-1 clickable">
@@ -141,7 +141,7 @@
                 :key="index"
                 class="d-flex"
               >
-                <td class="col-9 text-left numeric">
+                <td class="col-9 text-start numeric">
                   <span class="check_name">{{ item.ocid }}</span>
                 </td>
                 <td class="col-1 clickable">

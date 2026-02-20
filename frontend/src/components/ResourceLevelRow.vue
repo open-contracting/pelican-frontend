@@ -6,7 +6,7 @@
     <div class="col-9 col-lg-5 break_word check_name">
       <span>{{ $t("resourceLevel." + name + ".name") }}</span>
     </div>
-    <div class="td col-1 col-lg-1 text-right">
+    <div class="td col-1 col-lg-1 text-end">
       <span
         v-if="okPercentage"
         class="value_ok"
@@ -16,7 +16,7 @@
         class="value_na opacity"
       >{{ $filters.formatPercentage(okPercentage) }}</span>
     </div>
-    <div class="td col-1 col-lg-1 text-right">
+    <div class="td col-1 col-lg-1 text-end">
       <span
         v-if="failedPercentage"
         class="value_failed"
@@ -26,7 +26,7 @@
         class="value_na opacity"
       >{{ $filters.formatPercentage(failedPercentage) }}</span>
     </div>
-    <div class="td col-1 col-lg-1 text-right">
+    <div class="td col-1 col-lg-1 text-end">
       <span
         v-if="naPercentage"
         class="value_na"

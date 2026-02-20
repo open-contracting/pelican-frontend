@@ -17,7 +17,7 @@
         <table class="table table-borderless table-sm">
           <tbody>
             <tr class="d-flex">
-              <td class="col-4 text-right label">
+              <td class="col-4 text-end label">
                 <span class="check_name">{{ $t("timeLevel.coverage.ok") }}</span>
               </td>
               <td class="col-8">
@@ -30,7 +30,7 @@
               </td>
             </tr>
             <tr class="d-flex">
-              <td class="col-4 text-right label">
+              <td class="col-4 text-end label">
                 <span class="check_name">{{ $t("timeLevel.coverage.failed") }}</span>
               </td>
               <td class="col-8">
@@ -56,7 +56,7 @@
         <table class="table table-borderless table-sm">
           <tbody>
             <tr class="d-flex">
-              <td class="col-4 text-right label">
+              <td class="col-4 text-end label">
                 <span class="check_name">{{ $t("timeLevel.check.ok") }}</span>
               </td>
               <td class="col-8">
@@ -69,7 +69,7 @@
               </td>
             </tr>
             <tr class="d-flex">
-              <td class="col-4 text-right label">
+              <td class="col-4 text-end label">
                 <span class="check_name">{{ $t("timeLevel.check.failed") }}</span>
               </td>
               <td class="col-8">
@@ -99,7 +99,7 @@
                 {{ $t("examples.ocid") }}
               </th>
               <th
-                class="col-1 text-left"
+                class="col-1 text-start"
                 scope="col"
               >
                 {{ $t("examples.actions") }}
@@ -119,7 +119,7 @@
               <tr
                 class="d-flex new_row"
               >
-                <td class="col-9 text-left numeric d-flex align-items-center">
+                <td class="col-9 text-start numeric d-flex align-items-center">
                   <span class="check_name">{{ item.new_item_ocid }}</span>
                                     &nbsp;
                   <span class="example_version">[{{ $t("examples.new") }}]</span>
@@ -197,7 +197,7 @@
               <tr
                 class="d-flex old_row"
               >
-                <td class="col-9 text-left numeric d-flex align-items-center">
+                <td class="col-9 text-start numeric d-flex align-items-center">
                   <span class="check_name">{{ item.ocid }}</span>
                                     &nbsp;
                   <span class="example_version">[{{ $t("examples.old") }}]</span>
@@ -290,7 +290,7 @@
                 <tr
                   class="d-flex new_row"
                 >
-                  <td class="col-9 text-left numeric d-flex align-items-center">
+                  <td class="col-9 text-start numeric d-flex align-items-center">
                     <span class="check_name">{{ item.new_item_ocid }}</span>
                                         &nbsp;
                     <span class="example_version">[{{ $t("examples.new") }}]</span>
@@ -368,7 +368,7 @@
                 <tr
                   class="d-flex old_row"
                 >
-                  <td class="col-9 text-left numeric d-flex align-items-center">
+                  <td class="col-9 text-start numeric d-flex align-items-center">
                     <span class="check_name">{{ item.ocid }}</span>
                                         &nbsp;
                     <span class="example_version">[{{ $t("examples.old") }}]</span>

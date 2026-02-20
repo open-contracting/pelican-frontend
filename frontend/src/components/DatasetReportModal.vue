@@ -250,7 +250,7 @@
       v-if="!isSubmitting && submitStatus == null"
       class="modal_box align-items-center"
     >
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label
           class="col-3 col-form-label"
         ><div
@@ -280,14 +280,14 @@
           <b-row>
             <b-col class="col-12">
               <small
-                class="form-text text-muted"
+                class="form-text text-body-secondary"
                 v-html="$t('datasetReport.reportLanguageTooltip')"
               />
             </b-col>
           </b-row>
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label
           class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label>
@@ -302,12 +302,12 @@
             :formatter="fileIdFormatter"
           />
           <small
-            class="form-text text-muted"
+            class="form-text text-body-secondary"
             v-html="$t('datasetReport.documentIdTooltip', {user: this.$store.getters.settings.user})"
           />
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label
           class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.folderId") }}</div></label>
@@ -322,12 +322,12 @@
             :formatter="fileIdFormatter"
           />
           <small
-            class="form-text text-muted"
+            class="form-text text-body-secondary"
             v-html="$t('datasetReport.folderIdTooltip', {user: this.$store.getters.settings.user})"
           />
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label
           class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.reportName") }}</div></label>
@@ -340,7 +340,7 @@
             class="base_input"
           />
           <small
-            class="form-text text-muted"
+            class="form-text text-body-secondary"
             v-html="$t('datasetReport.reportNameTooltip')"
           />
         </div>

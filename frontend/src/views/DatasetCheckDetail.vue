@@ -11,11 +11,11 @@
         <div class="col col-2">
           <span
             v-if="!reportOnly && check.result == true"
-            class="badge badge-pill ok_status"
+            class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
             v-if="!reportOnly && check.result == false"
-            class="badge badge-pill failed_status"
+            class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
       </div>
@@ -56,10 +56,10 @@
                 :key="index"
               >
                 <td>{{ item.value_str }}</td>
-                <td class="text-right numeric">
+                <td class="text-end numeric">
                   {{ $filters.formatPercentage2D(item.share * 100) }}
                 </td>
-                <td class="text-right numeric">
+                <td class="text-end numeric">
                   {{ $filters.formatNumber(item.count) }}
                 </td>
               </tr>
@@ -96,7 +96,7 @@
           v-if="checkType == 'biggest_share'"
           class="biggest_share"
         >
-          <div class="row text-left">
+          <div class="row text-start">
             <div class="col-7 specifics">
               <span
                 v-for="(item, index) in check.meta.specifics"

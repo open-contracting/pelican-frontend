@@ -27,14 +27,14 @@
       class="action_bar"
       align-v="center"
     >
-      <b-col class="text-left">
+      <b-col class="text-start">
         <SearchInput
           :placeholder="$t('field.search')"
           :preset="search"
           :on-update="search => $store.commit('setFieldCheckSearch', search)"
         />
       </b-col>
-      <b-col class="text-right">
+      <b-col class="text-end">
         <b-button-group v-if="layout == 'table'">
           <button
             :class="['btn', 'reset-table-sorting']"

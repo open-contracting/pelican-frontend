@@ -5,26 +5,26 @@
     @click="detail(check.name)"
   >
     <div class="card-body">
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
             {{ $t("timeLevel." + check.name + ".name") }}
           </h5>
         </div>
 
-        <div class="col col-2 col-sm-2 col-lg-2 text-right">
+        <div class="col col-2 col-sm-2 col-lg-2 text-end">
           <span
             v-if="result == true"
-            class="badge badge-pill ok_status"
+            class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
             v-if="result == false"
-            class="badge badge-pill failed_status"
+            class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
       </div>
 
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-12">
           <p
             class="check_description"
@@ -35,7 +35,7 @@
     </div>
 
     <div class="card-body">
-      <div class="row no-gutters justify-content-end">
+      <div class="row g-0 justify-content-end">
         <div class="col col-12">
           <template v-if="check.coverage_result != null">
             <div class="row">
