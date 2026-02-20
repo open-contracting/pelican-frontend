@@ -126,14 +126,14 @@
                 </td>
                 <td class="col-1 clickable">
                   <span v-if="'new_' + index != selectedKey">
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       v-if="!loadingPreviewData"
                       :id="'preview_new_' + index"
                       class="examples_icon"
                       :icon="['far', 'eye']"
                       @click.stop.prevent="preview('new_' + index, item.new_item_id)"
                     />
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       v-else
                       class="examples_icon"
                       :icon="['far', 'eye']"
@@ -148,7 +148,7 @@
                     </BTooltip>
                   </span>
                   <span v-if="'new_' + index == selectedKey">
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'eye']"
                     />
@@ -156,7 +156,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span>
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'download_new_' + index"
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
@@ -174,7 +174,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span>
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'clipboard_new_' + index"
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
@@ -201,14 +201,14 @@
                 </td>
                 <td class="col-1 clickable">
                   <span v-if="'old_' + index != selectedKey">
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       v-if="!loadingPreviewData"
                       :id="'preview_old_' + index"
                       class="examples_icon"
                       :icon="['far', 'eye']"
                       @click.stop.prevent="preview('old_' + index, item.item_id)"
                     />
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       v-else
                       class="examples_icon"
                       :icon="['far', 'eye']"
@@ -223,7 +223,7 @@
                     </BTooltip>
                   </span>
                   <span v-if="'old_' + index == selectedKey">
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'eye']"
                     />
@@ -231,7 +231,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span>
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'download_old_' + index"
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
@@ -249,7 +249,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span>
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'clipboard_old_' + index"
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
@@ -274,7 +274,7 @@
                 @click.stop="showMore = true"
               >
                 <a>
-                  <font-awesome-icon icon="chevron-down" />
+                  <FontAwesomeIcon icon="chevron-down" />
                   {{ $t("examples.showMore") }}
                 </a>
               </td>
@@ -291,14 +291,14 @@
                   </td>
                   <td class="col-1 clickable">
                     <span v-if="'new_' + (index + 5) != selectedKey">
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         v-if="!loadingPreviewData"
                         :id="'preview_new_' + (index + 5)"
                         class="examples_icon"
                         :icon="['far', 'eye']"
                         @click.stop.prevent="preview('new_' + (index + 5), item.new_item_id)"
                       />
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         v-else
                         class="examples_icon"
                         :icon="['far', 'eye']"
@@ -313,7 +313,7 @@
                       </BTooltip>
                     </span>
                     <span v-if="'new_' + (index + 5) == selectedKey">
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         class="examples_icon"
                         :icon="['fas', 'eye']"
                       />
@@ -321,7 +321,7 @@
                   </td>
                   <td class="col-1 clickable">
                     <span>
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         :id="'download_new_' + (index + 5)"
                         class="examples_icon"
                         :icon="['fas', 'cloud-download-alt']"
@@ -339,7 +339,7 @@
                   </td>
                   <td class="col-1 clickable">
                     <span>
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         :id="'clipboard_new_' + (index + 5)"
                         class="examples_icon"
                         :icon="['fas', 'clipboard']"
@@ -366,14 +366,14 @@
                   </td>
                   <td class="col-1 clickable">
                     <span v-if="'old_' + (index + 5) != selectedKey">
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         v-if="!loadingPreviewData"
                         :id="'preview_old_' + (index + 5)"
                         class="examples_icon"
                         :icon="['far', 'eye']"
                         @click.stop.prevent="preview('old_' + (index + 5), item.item_id)"
                       />
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         v-else
                         class="examples_icon"
                         :icon="['far', 'eye']"
@@ -388,7 +388,7 @@
                       </BTooltip>
                     </span>
                     <span v-if="'old_' + (index + 5) == selectedKey">
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         class="examples_icon"
                         :icon="['fas', 'eye']"
                       />
@@ -396,7 +396,7 @@
                   </td>
                   <td class="col-1 clickable">
                     <span>
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         :id="'download_old_' + (index + 5)"
                         class="examples_icon"
                         :icon="['fas', 'cloud-download-alt']"
@@ -414,7 +414,7 @@
                   </td>
                   <td class="col-1 clickable">
                     <span>
-                      <font-awesome-icon
+                      <FontAwesomeIcon
                         :id="'clipboard_old_' + (index + 5)"
                         class="examples_icon"
                         :icon="['fas', 'clipboard']"
@@ -440,7 +440,7 @@
                 @click.stop="showMore = false"
               >
                 <a>
-                  <font-awesome-icon icon="chevron-up" />
+                  <FontAwesomeIcon icon="chevron-up" />
                   {{ $t("examples.showLess") }}
                 </a>
               </td>

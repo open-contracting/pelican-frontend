@@ -10,11 +10,11 @@
       >
         <div class="switcher text-center">
           <span v-if="resourceLevelStats.length > 0">
-            <font-awesome-icon
+            <FontAwesomeIcon
               v-if="!showChecks"
               icon="chevron-right"
             />
-            <font-awesome-icon
+            <FontAwesomeIcon
               v-if="showChecks"
               icon="chevron-down"
             />

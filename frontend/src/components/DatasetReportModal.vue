@@ -26,7 +26,7 @@
               href="#"
               @click.stop.prevent="retry"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'redo-alt']"
                 class="icon"
               />
@@ -39,7 +39,7 @@
               href="#"
               @click.stop.prevent="$emit('close')"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'window-close']"
                 class="icon"
               />
@@ -101,7 +101,7 @@
               href="#"
               @click.stop.prevent="retry"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'redo-alt']"
                 class="icon"
               />
@@ -114,7 +114,7 @@
               href="#"
               @click.stop.prevent="$emit('close')"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'window-close']"
                 class="icon"
               />
@@ -140,7 +140,7 @@
               href="#"
               @click.stop.prevent="retry"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'redo-alt']"
                 class="icon"
               />
@@ -153,7 +153,7 @@
               href="#"
               @click.stop.prevent="$emit('close')"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'window-close']"
                 class="icon"
               />
@@ -182,7 +182,7 @@
               href="#"
               @click.stop.prevent="retry"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'redo-alt']"
                 class="icon"
               />
@@ -195,7 +195,7 @@
               href="#"
               @click.stop.prevent="$emit('close')"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'window-close']"
                 class="icon"
               />
@@ -222,7 +222,7 @@
               href="#"
               @click.stop.prevent="retry"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'redo-alt']"
                 class="icon"
               />
@@ -235,7 +235,7 @@
               href="#"
               @click.stop.prevent="$emit('close')"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 :icon="['fas', 'window-close']"
                 class="icon"
               />

@@ -298,7 +298,7 @@
                 :key="n + '-arrow'"
                 class="lifecycle_arrow"
               >
-                <font-awesome-icon icon="long-arrow-alt-right" />
+                <FontAwesomeIcon icon="long-arrow-alt-right" />
               </div>
             </template>
           </div>

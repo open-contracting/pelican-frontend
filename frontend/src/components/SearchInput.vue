@@ -2,7 +2,7 @@
   <BInputGroup class="search_input">
     <template #prepend>
       <BInputGroupText>
-        <font-awesome-icon icon="search" />
+        <FontAwesomeIcon icon="search" />
       </BInputGroupText>
     </template>
     <BFormInput
@@ -15,7 +15,7 @@
         :disabled="!search"
         @click="search = null"
       >
-        <font-awesome-icon :icon="['fas', 'times']" />
+        <FontAwesomeIcon :icon="['fas', 'times']" />
       </BButton>
     </template>
   </BInputGroup>

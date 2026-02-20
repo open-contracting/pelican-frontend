@@ -5,7 +5,7 @@
     >
       <div class="td col-4">
         <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
-          <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />
+          <FontAwesomeIcon :icon="['fas', 'long-arrow-alt-right']" />
         </span>
         <BLink :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
           {{ dataset.name }}
@@ -16,14 +16,14 @@
           href="#"
           @click.stop.prevent="$emit('dataset-filter', dataset)"
         >
-          <font-awesome-icon :icon="['fas', 'filter']" />
+          <FontAwesomeIcon :icon="['fas', 'filter']" />
         </a>
         <a
           v-if="isDatasetImported(dataset)"
           href="#"
           @click.stop.prevent="$emit('dataset-report', dataset)"
         >
-          <font-awesome-icon :icon="['fas', 'file']" />
+          <FontAwesomeIcon :icon="['fas', 'file']" />
         </a>
       </div>
       <div class="td col-1 numeric text-end">
@@ -35,7 +35,7 @@
       <div class="td col-1 phase_cell align-items-center align-middle">
         <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
           <span class="small_icon">
-            <font-awesome-icon
+            <FontAwesomeIcon
               :icon="['far', 'check-circle']"
               class="text-success"
             />
@@ -44,7 +44,7 @@
         </template>
         <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
           <span class="small_icon">
-            <font-awesome-icon
+            <FontAwesomeIcon
               :icon="['fas', 'ban']"
               class="text-danger"
             />
@@ -53,7 +53,7 @@
         </template>
         <template v-else-if="dataset.state == 'FAILED'">
           <span class="small_icon">
-            <font-awesome-icon
+            <FontAwesomeIcon
               :icon="['far', 'times-circle']"
               class="text-danger"
             />
@@ -87,7 +87,7 @@
           :to="{ name: 'time', params: { datasetId: dataset.id } }"
         >
           <span class="small_icon">
-            <font-awesome-icon icon="history" />
+            <FontAwesomeIcon icon="history" />
           </span>
           {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
         </BLink>

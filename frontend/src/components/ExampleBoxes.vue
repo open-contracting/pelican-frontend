@@ -60,7 +60,7 @@
               </td>
               <td class="col-1 clickable">
                 <span v-if="index != selectedKey || selectedSection != section.header">
-                  <font-awesome-icon
+                  <FontAwesomeIcon
                     :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['far', 'eye']"
@@ -76,7 +76,7 @@
                   </BTooltip>
                 </span>
                 <span v-if="index == selectedKey && selectedSection == section.header">
-                  <font-awesome-icon
+                  <FontAwesomeIcon
                     :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'eye']"
@@ -85,7 +85,7 @@
               </td>
               <td class="col-1 clickable">
                 <span>
-                  <font-awesome-icon
+                  <FontAwesomeIcon
                     :id="'download_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'cloud-download-alt']"
@@ -103,7 +103,7 @@
               </td>
               <td class="col-1 clickable">
                 <span>
-                  <font-awesome-icon
+                  <FontAwesomeIcon
                     :id="'clipboard_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'clipboard']"
@@ -127,7 +127,7 @@
                 @click.stop="showMore(section.header)"
               >
                 <a>
-                  <font-awesome-icon icon="chevron-down" />
+                  <FontAwesomeIcon icon="chevron-down" />
                   {{ $t("examples.showMore") }}
                 </a>
               </td>
@@ -143,7 +143,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span v-if="index + 5 != selectedKey || selectedSection != section.header">
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['far', 'eye']"
@@ -159,7 +159,7 @@
                     </BTooltip>
                   </span>
                   <span v-if="index + 5 == selectedKey && selectedSection == section.header">
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'eye']"
@@ -168,7 +168,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span>
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'download_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
@@ -186,7 +186,7 @@
                 </td>
                 <td class="col-1 clickable">
                   <span>
-                    <font-awesome-icon
+                    <FontAwesomeIcon
                       :id="'clipboard_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
@@ -211,7 +211,7 @@
                 @click.stop="showLess(section.header)"
               >
                 <a>
-                  <font-awesome-icon icon="chevron-up" />
+                  <FontAwesomeIcon icon="chevron-up" />
                   {{ $t("examples.showLess") }}
                 </a>
               </td>

@@ -13,11 +13,11 @@
         @click.stop="expanded = !expanded"
       >
         <template v-if="isExpandable">
-          <font-awesome-icon
+          <FontAwesomeIcon
             v-if="!expanded"
             icon="chevron-right"
           />
-          <font-awesome-icon
+          <FontAwesomeIcon
             v-else
             icon="chevron-down"
           />

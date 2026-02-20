@@ -9,7 +9,7 @@
 
     <div class="checked_fields_box">
       <div class="checked_fields_icon">
-        <font-awesome-icon
+        <FontAwesomeIcon
           :icon="['fas', 'hand-point-right']"
           :style="{ color: '#FDC926' }"
         />
@@ -41,7 +41,7 @@
             :title="$t('field.resetTableSorting')"
             @click="resetTableSorting()"
           >
-            <font-awesome-icon icon="sort-numeric-down" />
+            <FontAwesomeIcon icon="sort-numeric-down" />
           </button>
         </BButtonGroup>
 
@@ -51,14 +51,14 @@
             :title="$t('field.tableLayout')"
             @click="$store.commit('setFieldCheckLayout', 'table')"
           >
-            <font-awesome-icon icon="bars" />
+            <FontAwesomeIcon icon="bars" />
           </button>
           <button
             :class="['btn', { active: layout == 'tree' }]"
             :title="$t('field.treeLayout')"
             @click="$store.commit('setFieldCheckLayout', 'tree')"
           >
-            <font-awesome-icon icon="align-right" />
+            <FontAwesomeIcon icon="align-right" />
           </button>
         </BButtonGroup>
         <FilterDropdown

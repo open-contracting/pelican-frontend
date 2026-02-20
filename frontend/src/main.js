@@ -37,7 +37,7 @@ app.mixin({
     },
 });
 
-app.component("font-awesome-icon", FontAwesomeIcon);
+app.component("FontAwesomeIcon", FontAwesomeIcon);
 app.component("Multiselect", Multiselect);
 app.component("VueDatePicker", VueDatePicker);
 

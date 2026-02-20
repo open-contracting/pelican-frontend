@@ -51,7 +51,7 @@
               class="hide_button"
               @click.stop="switchHidden(n)"
             >
-              <font-awesome-icon
+              <FontAwesomeIcon
                 icon="eye-slash"
                 class="hidden_icon"
               />

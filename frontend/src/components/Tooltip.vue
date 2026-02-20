@@ -1,7 +1,7 @@
 <template>
   <span>
     <span :id="tooltipId">
-      <font-awesome-icon icon="info-circle" />
+      <FontAwesomeIcon icon="info-circle" />
     </span>
     <BTooltip
       :target="tooltipId"
