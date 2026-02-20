@@ -1,9 +1,6 @@
-import { VueDatePicker } from "@vuepic/vue-datepicker";
 import { useToast } from "bootstrap-vue-next";
 import { createApp } from "vue";
-import VueGoogleCharts from "vue-google-charts";
 import { createI18n } from "vue-i18n";
-import Multiselect from "vue-multiselect";
 import App from "./App.vue";
 import { useFormatters } from "./composables/useFormatters";
 import { messages as en } from "./messages/en.js";
@@ -26,7 +23,6 @@ app.config.globalProperties.$filters = useFormatters();
 app.use(i18n);
 app.use(router);
 app.use(store);
-app.use(VueGoogleCharts);
 
 app.mixin({
     methods: {
@@ -38,8 +34,6 @@ app.mixin({
 });
 
 app.component("FontAwesomeIcon", FontAwesomeIcon);
-app.component("Multiselect", Multiselect);
-app.component("VueDatePicker", VueDatePicker);
 
 app.mount("#app");
 

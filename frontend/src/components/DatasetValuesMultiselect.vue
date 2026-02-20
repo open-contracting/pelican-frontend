@@ -53,9 +53,12 @@
 <script>
 const axios = require("axios");
 
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 import { CONFIG } from "@/config.js";
 
 export default {
+    components: { Multiselect },
     props: ["datasetId", "jsonPath", "updateSelected"],
     data: () => ({
         options: [],

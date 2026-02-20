@@ -113,13 +113,15 @@
 <script>
 const axios = require("axios");
 
+import { VueDatePicker } from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
 import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
 import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
 
 export default {
-    components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader },
+    components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader, VueDatePicker },
     props: ["dataset"],
     emits: ["close"],
     data: () => ({
