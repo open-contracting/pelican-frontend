@@ -1,7 +1,7 @@
 <template>
   <b-dropdown
     id="filter_dropdown"
-    right
+    placement="bottom-end"
     split
     split-button-type="button"
     variant="primary"
