@@ -4,9 +4,11 @@
     right
     split
     split-button-type="button"
-    :html="'<span id=\'show_prefix\'>Show: </span>' + filterNames[selectedIndex]"
     variant="primary"
   >
+    <template #button-content>
+      <span id="show_prefix">Show: </span>{{ filterNames[selectedIndex] }}
+    </template>
     <b-dropdown-item-button
       v-for="(name, index) in filterNames"
       :key="index"
