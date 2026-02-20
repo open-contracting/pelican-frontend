@@ -1,3 +1,25 @@
+@import url("https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700&display=swap");
+
+@font-face {
+  font-family: "GTEestiProDisplay-Regular";
+  src: url("/public/fonts/GTEestiProDisplay-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GTEestiProDisplay-Bold";
+  src: url("/public/fonts/GTEestiProDisplay-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GTEestiProDisplay-Thin";
+  src: url("/public/fonts/GTEestiProDisplay-Thin.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "GTEestiProDisplay-Medium";
+  src: url("/public/fonts/GTEestiProDisplay-Medium.otf") format("opentype");
+}
+
 @import "variables";
 @import "breakpoints";
 @import "bootstrap/scss/bootstrap";
