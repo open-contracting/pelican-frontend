@@ -47,7 +47,6 @@
               class="menu_icon_spinner"
             >
               <b-spinner
-                variant="default"
                 small
                 type="grow"
                 class="spinner"
@@ -71,7 +70,6 @@
               class="menu_icon_spinner"
             >
               <b-spinner
-                variant="default"
                 small
                 type="grow"
                 class="spinner"
@@ -95,7 +93,6 @@
               class="menu_icon_spinner"
             >
               <b-spinner
-                variant="default"
                 small
                 type="grow"
                 class="spinner"
@@ -119,7 +116,6 @@
               class="menu_icon_spinner"
             >
               <b-spinner
-                variant="default"
                 small
                 type="grow"
                 class="spinner"

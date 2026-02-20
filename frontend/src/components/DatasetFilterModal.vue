@@ -102,7 +102,6 @@
           </span>
           <b-spinner
             v-if="gettingCountsToken != null"
-            variant="default"
             style="width: 1.2rem; height: 1.2rem"
           />
         </button>

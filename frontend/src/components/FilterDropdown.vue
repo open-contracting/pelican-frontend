@@ -12,7 +12,6 @@
     <b-dropdown-item-button
       v-for="(name, index) in filterNames"
       :key="index"
-      variant="bg-transparent border-transparent"
       @click="clickItem(index)"
     >
       {{ name }}
