@@ -22,6 +22,9 @@ export default defineConfig({
         preprocessorOptions: {
             scss: {
                 additionalData: '@import "@/scss/_variables.scss"; @import "@/scss/_breakpoints.scss";',
+                // @use depends on Bootstrap 6. https://github.com/twbs/bootstrap/issues/29853
+                silenceDeprecations: ["import"],
+                quietDeps: true,
             },
         },
     },
