@@ -93,10 +93,13 @@
       size="lg"
       no-footer
       :title="$t('datasetFilter.headline')"
-      static
+      teleport-disabled
       lazy
     >
-      <DatasetFilterModal :dataset="filteredDataset" />
+      <DatasetFilterModal
+        :dataset="filteredDataset"
+        @close="hideFilterModal"
+      />
     </b-modal>
     <b-modal
       id="report-modal"
@@ -104,7 +107,7 @@
       size="lg"
       no-footer
       :title="$t('datasetReport.headline')"
-      static
+      teleport-disabled
       lazy
     >
       <DatasetReportModal
@@ -190,11 +193,11 @@ export default {
     methods: {
         showFilter: function (dataset) {
             this.filteredDataset = dataset;
-            this.$bvModal.show("filter-modal");
+            this.$refs["filter-modal"].show();
         },
         showReport: function (dataset) {
             this.reportDataset = dataset;
-            this.$bvModal.show("report-modal");
+            this.$refs["report-modal"].show();
         },
         isSearched: function (name) {
             return !this.search || name.toLowerCase().includes(this.search.toLowerCase());
@@ -238,8 +241,11 @@ export default {
             this.sort(this.datasets, comp, asc);
             this.$store.commit("setDatasetSorting", { by: by, asc: asc });
         },
+        hideFilterModal: function () {
+            this.$refs["filter-modal"].hide();
+        },
         hideReportModal: function () {
-            this.$bvModal.hide("report-modal");
+            this.$refs["report-modal"].hide();
         },
     },
 };

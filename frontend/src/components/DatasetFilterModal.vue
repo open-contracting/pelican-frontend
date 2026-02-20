@@ -120,6 +120,7 @@ import { CONFIG } from "@/config.js";
 export default {
     components: { DatasetValuesMultiselect, Loader },
     props: ["dataset"],
+    emits: ["close"],
     data: () => ({
         isSubmitting: false,
         gettingCountsToken: null,
@@ -196,7 +197,7 @@ export default {
                     }
 
                     setTimeout(() => {
-                        this.$bvModal.hide();
+                        this.$emit("close");
                         this.$router.go();
                     }, 2000);
                 })
