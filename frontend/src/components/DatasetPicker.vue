@@ -91,7 +91,7 @@
       id="filter-modal"
       ref="filter-modal"
       size="lg"
-      hide-footer
+      no-footer
       :title="$t('datasetFilter.headline')"
       static
       lazy
@@ -102,7 +102,7 @@
       id="report-modal"
       ref="report-modal"
       size="lg"
-      hide-footer
+      no-footer
       :title="$t('datasetReport.headline')"
       static
       lazy
