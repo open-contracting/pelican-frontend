@@ -6,7 +6,7 @@
         <b-alert
           class="submit-result"
           variant="success"
-          show
+          :model-value="true"
         >
           <span>
             {{ $t("datasetReport.status.ok") }}
@@ -52,7 +52,7 @@
         <b-alert
           class="submit-result"
           variant="warning"
-          show
+          :model-value="true"
         >
           <span>
             {{ $t("datasetReport.status.warning") }}
@@ -73,7 +73,7 @@
         <b-alert
           class="submit-result"
           variant="danger"
-          show
+          :model-value="true"
         >
           <span>{{ $t("datasetReport.status.templateError") }}</span>
         </b-alert>
@@ -127,7 +127,7 @@
         <b-alert
           class="submit-result"
           variant="danger"
-          show
+          :model-value="true"
         >
           <span>{{ $t("datasetReport.status.reportError") }}</span>
         </b-alert>
@@ -166,7 +166,7 @@
         <b-alert
           class="submit-result"
           variant="danger"
-          show
+          :model-value="true"
         >
           <b-row>
             <b-col class="width">

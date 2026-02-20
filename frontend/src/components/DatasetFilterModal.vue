@@ -4,7 +4,7 @@
     <b-alert
       v-if="isSubmitting && submitResult != null"
       variant="success"
-      show
+      :model-value="true"
     >{{
       $t("datasetFilter.statusOk")
     }}</b-alert>
