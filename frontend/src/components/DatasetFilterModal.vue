@@ -202,7 +202,6 @@ export default {
                     }, 2000);
                 })
                 .catch((error) => {
-                    // TODO
                     throw new Error(error);
                 });
         },

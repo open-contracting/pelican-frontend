@@ -69,7 +69,6 @@
           </a>
         </div>
       </span>
-      <!-- TODO -->
       <span v-if="submitStatus == 'template_error'">
         <b-alert
           class="submit-result"
