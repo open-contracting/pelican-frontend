@@ -140,7 +140,6 @@
                     />
                     <b-tooltip
                       :target="'preview_new_' + index"
-                      triggers="hover"
                     >
                       <span
                         class="tooltip_text"
@@ -165,7 +164,6 @@
                     />
                     <b-tooltip
                       :target="'download_new_' + index"
-                      triggers="hover"
                     >
                       <span
                         class="tooltip_text"
@@ -184,7 +182,6 @@
                     />
                     <b-tooltip
                       :target="'clipboard_new_' + index"
-                      triggers="hover"
                     >
                       <span
                         class="tooltip_text"
@@ -218,7 +215,6 @@
                     />
                     <b-tooltip
                       :target="'preview_old_' + index"
-                      triggers="hover"
                     >
                       <span
                         class="tooltip_text"
@@ -243,7 +239,6 @@
                     />
                     <b-tooltip
                       :target="'download_old_' + index"
-                      triggers="hover"
                     >
                       <span
                         class="tooltip_text"
@@ -262,7 +257,6 @@
                     />
                     <b-tooltip
                       :target="'clipboard_old_' + index"
-                      triggers="hover"
                     >
                       <span
                         class="tooltip_text"
@@ -311,8 +305,7 @@
                       />
                       <b-tooltip
                         :target="'preview_new_' + (index + 5)"
-                        triggers="hover"
-                      >
+                        >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.preview.tooltip')"
@@ -336,8 +329,7 @@
                       />
                       <b-tooltip
                         :target="'download_new_' + (index + 5)"
-                        triggers="hover"
-                      >
+                        >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.download.tooltip')"
@@ -355,8 +347,7 @@
                       />
                       <b-tooltip
                         :target="'clipboard_new_' + (index + 5)"
-                        triggers="hover"
-                      >
+                        >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.copyToClipboard.tooltip')"
@@ -389,8 +380,7 @@
                       />
                       <b-tooltip
                         :target="'preview_old_' + (index + 5)"
-                        triggers="hover"
-                      >
+                        >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.preview.tooltip')"
@@ -414,8 +404,7 @@
                       />
                       <b-tooltip
                         :target="'download_old_' + (index + 5)"
-                        triggers="hover"
-                      >
+                        >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.download.tooltip')"
@@ -433,8 +422,7 @@
                       />
                       <b-tooltip
                         :target="'clipboard_old_' + (index + 5)"
-                        triggers="hover"
-                      >
+                        >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.copyToClipboard.tooltip')"

@@ -5,7 +5,6 @@
     </span>
     <b-tooltip
       :target="tooltipId"
-      triggers="hover"
     >
       <span
         class="tooltip_text"
