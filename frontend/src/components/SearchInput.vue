@@ -22,7 +22,10 @@
 </template>
 
 <script>
+import { BButton, BFormInput, BInputGroup, BInputGroupText } from "bootstrap-vue-next";
+
 export default {
+    components: { BButton, BFormInput, BInputGroup, BInputGroupText },
     props: {
         placeholder: String,
         onUpdate: Function,

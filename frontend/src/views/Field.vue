@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import { BButtonGroup, BCol, BRow } from "bootstrap-vue-next";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
@@ -94,6 +95,9 @@ import Dashboard from "@/views/layouts/Dashboard.vue";
 export default {
     name: "Field",
     components: {
+        BButtonGroup,
+        BCol,
+        BRow,
         Dashboard,
         FieldCheckTable,
         FieldCheckTree,

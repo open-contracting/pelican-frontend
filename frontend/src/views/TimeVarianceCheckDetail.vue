@@ -487,6 +487,7 @@
 </template>
 
 <script>
+import { BSpinner, BTooltip } from "bootstrap-vue-next";
 import "vue-json-pretty/lib/styles.css";
 import VueJsonPretty from "vue-json-pretty";
 import InlineBar from "@/components/InlineBar.vue";
@@ -497,6 +498,8 @@ import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 export default {
     name: "TimeVarianceCheckDetail",
     components: {
+        BSpinner,
+        BTooltip,
         VueJsonPretty,
         DashboardDetail,
         InlineBar,

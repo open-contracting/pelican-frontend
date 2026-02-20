@@ -20,7 +20,10 @@
 </template>
 
 <script>
+import { BDropdown, BDropdownItemButton } from "bootstrap-vue-next";
+
 export default {
+    components: { BDropdown, BDropdownItemButton },
     props: {
         filterNames: Array,
         startIndex: {

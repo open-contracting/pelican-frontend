@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { BCol, BRow } from "bootstrap-vue-next";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 // import Loader from "@/components/Loader.vue";
@@ -37,7 +38,7 @@ import Dashboard from "@/views/layouts/Dashboard.vue";
 
 export default {
     name: "Dataset",
-    components: { Dashboard, DatasetLevelSection, FilterDropdown },
+    components: { BCol, BRow, Dashboard, DatasetLevelSection, FilterDropdown },
     data: function () {
         return {
             sections: ["status_distribution", "value_distribution", "other_distribution", "repetition", "other"],

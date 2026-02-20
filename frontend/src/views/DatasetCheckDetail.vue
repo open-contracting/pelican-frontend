@@ -186,6 +186,7 @@
 </template>
 
 <script>
+import { BSpinner } from "bootstrap-vue-next";
 import "vue-json-pretty/lib/styles.css";
 import VueJsonPretty from "vue-json-pretty";
 import BarChartBig from "@/components/BarChartBig.vue";
@@ -198,6 +199,7 @@ import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 export default {
     name: "DatasetCheckDetail",
     components: {
+        BSpinner,
         DonutChart,
         BarChartBig,
         VueJsonPretty,

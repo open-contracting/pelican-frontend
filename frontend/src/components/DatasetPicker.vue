@@ -124,6 +124,7 @@
 <script>
 const axios = require("axios");
 
+import { BModal } from "bootstrap-vue-next";
 import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
 import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 import DatasetReportModal from "@/components/DatasetReportModal.vue";
@@ -136,6 +137,7 @@ import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
     components: {
+        BModal,
         Loader,
         SortButtons,
         SearchInput,

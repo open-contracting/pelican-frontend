@@ -130,9 +130,11 @@
 </template>
 
 <script>
+import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
 import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
+    components: { BNav, BNavItem, BSpinner },
     mixins: [stateMixin],
     data: () => ({}),
     computed: {

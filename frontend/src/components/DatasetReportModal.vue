@@ -361,11 +361,12 @@
 <script>
 const axios = require("axios");
 
+import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
 import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
 
 export default {
-    components: { Loader },
+    components: { BAlert, BCol, BFormInput, BFormRadio, BRow, Loader },
     props: ["dataset"],
     emits: ["close"],
     data: function () {

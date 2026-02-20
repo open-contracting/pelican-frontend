@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import { BSpinner } from "bootstrap-vue-next";
 import "vue-json-pretty/lib/styles.css";
 import VueJsonPretty from "vue-json-pretty";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
@@ -97,6 +98,7 @@ import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
 export default {
     name: "ResourceCheckDetail",
     components: {
+        BSpinner,
         VueJsonPretty,
         DashboardDetail,
         ExampleBoxes,

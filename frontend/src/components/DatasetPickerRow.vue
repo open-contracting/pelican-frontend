@@ -105,13 +105,14 @@
 </template>
 
 <script>
+import { BCol, BLink, BRow } from "bootstrap-vue-next";
 import ProgressBar from "@/components/ProgressBar.vue";
 import sortMixins from "@/plugins/sortMixins.js";
 import stateMixin from "@/plugins/stateMixins.js";
 
 export default {
     name: "DatasetPickerRow",
-    components: { ProgressBar },
+    components: { BCol, BLink, BRow, ProgressBar },
     mixins: [stateMixin, sortMixins],
     props: ["dataset", "depth"],
     emits: ["dataset-filter", "dataset-report"],

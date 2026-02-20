@@ -113,12 +113,13 @@
 <script>
 const axios = require("axios");
 
+import { BAlert, BSpinner } from "bootstrap-vue-next";
 import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
 import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
 
 export default {
-    components: { DatasetValuesMultiselect, Loader },
+    components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader },
     props: ["dataset"],
     emits: ["close"],
     data: () => ({

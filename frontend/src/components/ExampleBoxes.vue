@@ -224,7 +224,10 @@
 </template>
 
 <script>
+import { BSpinner, BTooltip } from "bootstrap-vue-next";
+
 export default {
+    components: { BSpinner, BTooltip },
     props: {
         exampleSections: Array,
         loaded: Boolean,

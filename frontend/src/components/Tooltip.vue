@@ -15,7 +15,10 @@
 </template>
 
 <script>
+import { BTooltip } from "bootstrap-vue-next";
+
 export default {
+    components: { BTooltip },
     props: ["text"],
     data: () => ({}),
     computed: {
