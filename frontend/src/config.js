@@ -1,5 +1,5 @@
 const config = {
-    apiBaseUrl: process.env.VUE_APP_API_BASE_URL || "/api/",
+    apiBaseUrl: import.meta.env.VITE_API_BASE_URL || "/api/",
     apiEndpoints: {
         // GET
         settings: "settings/",
