@@ -2,52 +2,29 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.29",
-    "@fortawesome/free-brands-svg-icons": "^5.13.1",
-    "@fortawesome/free-regular-svg-icons": "^5.13.1",
-    "@fortawesome/free-solid-svg-icons": "^5.13.1",
-    "@fortawesome/vue-fontawesome": "^0.1.10",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-regular-svg-icons": "^6.0.0",
+    "@fortawesome/free-solid-svg-icons": "^6.0.0",
+    "@fortawesome/vue-fontawesome": "^3.0.0",
+    "@vuepic/vue-datepicker": "^12.1.0",
     "axios": "^1.12.0",
-    "bootstrap-vue": "^2.17.3",
-    "chart.js": "^2.9.3",
-    "chroma": "0.0.1",
-    "chroma-js": "^2.1.0",
-    "core-js": "^3.20.3",
+    "bootstrap": "^5.3.0",
+    "bootstrap-vue-next": "^0.43.5",
     "numeral": "^2.0.6",
-    "v-clipboard": "^2.2.3",
-    "vue": "^2.7.0",
-    "vue-date-pick": "^1.4.1",
-    "vue-fragment": "^1.5.1",
-    "vue-google-charts": "^0.3.3",
-    "vue-i18n": "^8.18.2",
-    "vue-js-modal": "^2.0.0-rc.3",
-    "vue-json-pretty": "^1.6.3",
-    "vue-multiselect": "^2.1.6",
-    "vue-router": "^3.6.5",
-    "vue-simple-alert": "^1.1.1",
-    "vuex": "^3.5.1"
+    "vue": "^3.5.0",
+    "vue-google-charts": "^1.1.0",
+    "vue-i18n": "^11.2.8",
+    "vue-json-pretty": "^2.6.0",
+    "vue-multiselect": "^3.0.0",
+    "vue-router": "^4.0.0",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.7.3",
-    "@vue/cli-plugin-babel": "^5.0.0-rc.2",
-    "@vue/cli-plugin-unit-mocha": "^5.0.0-rc.2",
-    "@vue/cli-service": "^5.0.8",
-    "@vue/test-utils": "1.0.0-beta.29",
-    "chai": "^4.1.2",
-    "css-loader": "^3.5.3",
-    "sass": "~1.32.0",
-    "sass-loader": "^11.1.1",
-    "vue-cli-plugin-fontawesome": "^0.3.1",
-    "vue-template-compiler": "^2.7.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+    "@biomejs/biome": "2.3.8",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "sass": "^1.80.0",
+    "vite": "^5.0.0"
+  }
 }
