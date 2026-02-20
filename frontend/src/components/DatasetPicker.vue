@@ -87,7 +87,7 @@
         />
       </template>
     </div>
-    <b-modal
+    <BModal
       id="filter-modal"
       ref="filter-modal"
       size="lg"
@@ -100,8 +100,8 @@
         :dataset="filteredDataset"
         @close="hideFilterModal"
       />
-    </b-modal>
-    <b-modal
+    </BModal>
+    <BModal
       id="report-modal"
       ref="report-modal"
       size="lg"
@@ -114,7 +114,7 @@
         :dataset="reportDataset"
         @close="hideReportModal"
       />
-    </b-modal>
+    </BModal>
   </span>
   <span v-else>
     <Loader />

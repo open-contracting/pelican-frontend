@@ -1,13 +1,13 @@
 <template>
   <span class="just_holder">
     <Loader v-if="isSubmitting && submitResult == null" />
-    <b-alert
+    <BAlert
       v-if="isSubmitting && submitResult != null"
       variant="success"
       :model-value="true"
     >{{
       $t("datasetFilter.statusOk")
-    }}</b-alert>
+    }}</BAlert>
     <form
       v-if="!isSubmitting"
       class="modal_box align-items-center"
@@ -100,7 +100,7 @@
               v-if="dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids"
             >({{ $t("datasetFilter.itemsAll") }})</span>
           </span>
-          <b-spinner
+          <BSpinner
             v-if="gettingCountsToken != null"
             style="width: 1.2rem; height: 1.2rem"
           />

@@ -23,19 +23,19 @@
       {{ $t("field.all") }}
     </h4>
 
-    <b-row
+    <BRow
       class="action_bar"
       align-v="center"
     >
-      <b-col class="text-start">
+      <BCol class="text-start">
         <SearchInput
           :placeholder="$t('field.search')"
           :preset="search"
           :on-update="search => $store.commit('setFieldCheckSearch', search)"
         />
-      </b-col>
-      <b-col class="text-end">
-        <b-button-group v-if="layout == 'table'">
+      </BCol>
+      <BCol class="text-end">
+        <BButtonGroup v-if="layout == 'table'">
           <button
             :class="['btn', 'reset-table-sorting']"
             :title="$t('field.resetTableSorting')"
@@ -43,9 +43,9 @@
           >
             <font-awesome-icon icon="sort-numeric-down" />
           </button>
-        </b-button-group>
+        </BButtonGroup>
 
-        <b-button-group>
+        <BButtonGroup>
           <button
             :class="['btn', { active: layout == 'table' }]"
             :title="$t('field.tableLayout')"
@@ -60,14 +60,14 @@
           >
             <font-awesome-icon icon="align-right" />
           </button>
-        </b-button-group>
+        </BButtonGroup>
         <FilterDropdown
           :filter-names="filterNames"
           :start-index="filterIndex"
           @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
         />
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
 
     <div class="field_result_box">
       <FieldCheckTable

@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown
+  <BDropdown
     id="filter_dropdown"
     placement="bottom-end"
     split
@@ -9,14 +9,14 @@
     <template #button-content>
       <span id="show_prefix">Show: </span>{{ filterNames[selectedIndex] }}
     </template>
-    <b-dropdown-item-button
+    <BDropdownItemButton
       v-for="(name, index) in filterNames"
       :key="index"
       @click="clickItem(index)"
     >
       {{ name }}
-    </b-dropdown-item-button>
-  </b-dropdown>
+    </BDropdownItemButton>
+  </BDropdown>
 </template>
 
 <script>

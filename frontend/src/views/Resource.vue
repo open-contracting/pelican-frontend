@@ -6,18 +6,18 @@
       v-html="$t('resourceLevel.description')"
     />
     <span v-if="loaded">
-      <b-row class="action_bar">
-        <b-col class="text-start">
+      <BRow class="action_bar">
+        <BCol class="text-start">
           <h4>{{ $t("resourceLevel.subheadline") }}</h4>
-        </b-col>
-        <b-col class="text-end">
+        </BCol>
+        <BCol class="text-end">
           <FilterDropdown
             :filter-names="filterNames"
             :start-index="filterIndex"
             @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
           />
-        </b-col>
-      </b-row>
+        </BCol>
+      </BRow>
       <div class="resource_result_box">
         <div class="thr row">
           <div

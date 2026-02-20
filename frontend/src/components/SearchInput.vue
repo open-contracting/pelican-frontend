@@ -1,24 +1,24 @@
 <template>
-  <b-input-group class="search_input">
+  <BInputGroup class="search_input">
     <template #prepend>
-      <b-input-group-text>
+      <BInputGroupText>
         <font-awesome-icon icon="search" />
-      </b-input-group-text>
+      </BInputGroupText>
     </template>
-    <b-form-input
+    <BFormInput
       v-model="search"
       :placeholder="placeholder"
     />
     <template #append>
-      <b-button
+      <BButton
         v-if="search"
         :disabled="!search"
         @click="search = null"
       >
         <font-awesome-icon :icon="['fas', 'times']" />
-      </b-button>
+      </BButton>
     </template>
-  </b-input-group>
+  </BInputGroup>
 </template>
 
 <script>

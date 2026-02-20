@@ -5,21 +5,21 @@
       class="description"
       v-html="$t('timeLevel.description')"
     />
-    <b-row
+    <BRow
       class="collection_header"
       align-h="between"
     >
-      <b-col class="text-start">
+      <BCol class="text-start">
         <h4>{{ $t("timeLevel.subheadline") }}</h4>
-      </b-col>
-      <b-col class="text-end">
+      </BCol>
+      <BCol class="text-end">
         <FilterDropdown
           :filter-names="filterNames"
           :start-index="filterIndex"
           @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
         />
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
     <div
       v-if="loaded"
       class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-3"

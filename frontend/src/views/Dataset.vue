@@ -5,21 +5,21 @@
       class="description"
       v-html="$t('datasetLevel.description')"
     />
-    <b-row
+    <BRow
       class="collection_header"
       align-h="between"
     >
-      <b-col class="text-start">
+      <BCol class="text-start">
         <h4>{{ $t("datasetLevel.subheadline") }}</h4>
-      </b-col>
-      <b-col class="text-end">
+      </BCol>
+      <BCol class="text-end">
         <FilterDropdown
           :filter-names="filterNames"
           :start-index="filterIndex"
           @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
         />
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
     <template v-for="(section, index) in sections" :key="index">
       <DatasetLevelSection
         :section="section"

@@ -3,7 +3,7 @@
     <span v-if="!loaded">
       <div class="result_box loader text-center">
         <div class="spinner">
-          <b-spinner
+          <BSpinner
             variant="primary"
             style="width: 4rem; height: 4rem"
             type="grow"
@@ -66,14 +66,14 @@
                     :icon="['far', 'eye']"
                     @click.stop.prevent="preview(index, section.header, item.item_id, section.group)"
                   />
-                  <b-tooltip
+                  <BTooltip
                     :target="'preview_' + section.id + '_' + index"
                   >
                     <span
                       class="tooltip_text"
                       v-html="$t('examples.preview.tooltip')"
                     />
-                  </b-tooltip>
+                  </BTooltip>
                 </span>
                 <span v-if="index == selectedKey && selectedSection == section.header">
                   <font-awesome-icon
@@ -91,14 +91,14 @@
                     :icon="['fas', 'cloud-download-alt']"
                     @click.stop.prevent="download(item.item_id)"
                   />
-                  <b-tooltip
+                  <BTooltip
                     :target="'download_' + section.id + '_' + index"
                   >
                     <span
                       class="tooltip_text"
                       v-html="$t('examples.download.tooltip')"
                     />
-                  </b-tooltip>
+                  </BTooltip>
                 </span>
               </td>
               <td class="col-1 clickable">
@@ -109,14 +109,14 @@
                     :icon="['fas', 'clipboard']"
                     @click.stop.prevent="copyToClipboard(item.item_id)"
                   />
-                  <b-tooltip
+                  <BTooltip
                     :target="'clipboard_' + section.id + '_' + index"
                   >
                     <span
                       class="tooltip_text"
                       v-html="$t('examples.copyToClipboard.tooltip')"
                     />
-                  </b-tooltip>
+                  </BTooltip>
                 </span>
               </td>
             </tr>
@@ -149,14 +149,14 @@
                       :icon="['far', 'eye']"
                       @click.stop.prevent="preview(index + 5, section.header, item.item_id, section.group)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'preview_' + section.id + '_' + (index + 5)"
                       >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.preview.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                   <span v-if="index + 5 == selectedKey && selectedSection == section.header">
                     <font-awesome-icon
@@ -174,14 +174,14 @@
                       :icon="['fas', 'cloud-download-alt']"
                       @click.stop.prevent="download(item.item_id)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'download_' + section.id + '_' + (index + 5)"
                       >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.download.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                 </td>
                 <td class="col-1 clickable">
@@ -192,14 +192,14 @@
                       :icon="['fas', 'clipboard']"
                       @click.stop.prevent="copyToClipboard(item.item_id)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'clipboard_' + section.id + '_' + (index + 5)"
                       >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.copyToClipboard.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                 </td>
               </tr>

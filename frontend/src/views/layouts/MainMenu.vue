@@ -12,8 +12,8 @@
           id="logo"
           src="@/assets/ocp_logo.svg"
         >
-        <b-nav class="main_nav text-start">
-          <b-nav-item
+        <BNav class="main_nav text-start">
+          <BNavItem
             id="home_link"
             to="/"
           >
@@ -21,18 +21,18 @@
               <font-awesome-icon icon="cogs" />
             </span>
             {{ $t("sections.home").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'overview', params: { datasetId: datasetId } }"
           >
             <span class="menu_icon_small">
               <font-awesome-icon icon="home" />
             </span>
             {{ $t("sections.overview").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'field', params: { datasetId: datasetId } }"
             :disabled="!fieldLoaded"
           >
@@ -46,16 +46,16 @@
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.field").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'resource', params: { datasetId: datasetId } }"
             :disabled="!resourceLoaded"
           >
@@ -69,16 +69,16 @@
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.resource").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'dataset', params: { datasetId: datasetId } }"
             :disabled="!datasetLoaded"
           >
@@ -92,16 +92,16 @@
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.dataset").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             v-if="showTimeVariance"
             :to="{ name: 'time', params: { datasetId: datasetId } }"
           >
@@ -115,15 +115,15 @@
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.time").toUpperCase() }}
-          </b-nav-item>
-        </b-nav>
+          </BNavItem>
+        </BNav>
       </div>
     </div>
   </div>

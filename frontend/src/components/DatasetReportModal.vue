@@ -3,7 +3,7 @@
     <Loader v-if="isSubmitting" />
     <span v-if="submitStatus != null">
       <span v-if="submitStatus == 'ok' && !failedTags">
-        <b-alert
+        <BAlert
           class="submit-result"
           variant="success"
           :model-value="true"
@@ -11,7 +11,7 @@
           <span>
             {{ $t("datasetReport.status.ok") }}
           </span>
-        </b-alert>
+        </BAlert>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:&nbsp;</span>
         <a
           :href="'https://docs.google.com/document/d/' + submitData.file_id"
@@ -19,8 +19,8 @@
         >
           {{ "https://docs.google.com/document/d/" + submitData.file_id }}
         </a>
-        <b-row class="buttons">
-          <b-col>
+        <BRow class="buttons">
+          <BCol>
             <button
               class="variant-success btn-success"
               href="#"
@@ -32,8 +32,8 @@
               />
               {{ $t("tryAgain") }}
             </button>
-          </b-col>
-          <b-col class="right-align">
+          </BCol>
+          <BCol class="right-align">
             <button
               class="variant-success btn-success"
               href="#"
@@ -45,11 +45,11 @@
               />
               {{ $t("close") }}
             </button>
-          </b-col>
-        </b-row>
+          </BCol>
+        </BRow>
       </span>
       <span v-if="submitStatus == 'ok' && failedTags">
-        <b-alert
+        <BAlert
           class="submit-result"
           variant="warning"
           :model-value="true"
@@ -57,7 +57,7 @@
           <span>
             {{ $t("datasetReport.status.warning") }}
           </span>
-        </b-alert>
+        </BAlert>
 
         <div class="margin_bottom">
           <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
@@ -70,13 +70,13 @@
         </div>
       </span>
       <span v-if="submitStatus == 'template_error'">
-        <b-alert
+        <BAlert
           class="submit-result"
           variant="danger"
           :model-value="true"
         >
           <span>{{ $t("datasetReport.status.templateError") }}</span>
-        </b-alert>
+        </BAlert>
         <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
         <div
           v-for="(error, index) in submitData"
@@ -94,8 +94,8 @@
             </a>
           </div>
         </div>
-        <b-row class="buttons">
-          <b-col>
+        <BRow class="buttons">
+          <BCol>
             <button
               class="variant-danger btn-danger"
               href="#"
@@ -107,8 +107,8 @@
               />
               {{ $t("tryAgain") }}
             </button>
-          </b-col>
-          <b-col class="right-align">
+          </BCol>
+          <BCol class="right-align">
             <button
               class="variant-danger btn-danger"
               href="#"
@@ -120,21 +120,21 @@
               />
               {{ $t("close") }}
             </button>
-          </b-col>
-        </b-row>
+          </BCol>
+        </BRow>
       </span>
       <span v-if="submitStatus == 'report_error'">
-        <b-alert
+        <BAlert
           class="submit-result"
           variant="danger"
           :model-value="true"
         >
           <span>{{ $t("datasetReport.status.reportError") }}</span>
-        </b-alert>
+        </BAlert>
 
         <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
-        <b-row class="buttons">
-          <b-col>
+        <BRow class="buttons">
+          <BCol>
             <button
               class="variant-danger btn-danger"
               href="#"
@@ -146,8 +146,8 @@
               />
               {{ $t("tryAgain") }}
             </button>
-          </b-col>
-          <b-col class="right-align">
+          </BCol>
+          <BCol class="right-align">
             <button
               class="variant-danger btn-danger"
               href="#"
@@ -159,24 +159,24 @@
               />
               {{ $t("close") }}
             </button>
-          </b-col>
-        </b-row>
+          </BCol>
+        </BRow>
       </span>
       <span v-if="submitStatus == 'server_error'">
-        <b-alert
+        <BAlert
           class="submit-result"
           variant="danger"
           :model-value="true"
         >
-          <b-row>
-            <b-col class="width">
+          <BRow>
+            <BCol class="width">
               {{ $t("datasetReport.status.serverError") }}<br>
               {{ errorMessage }}
-            </b-col>
-          </b-row>
-        </b-alert>
-        <b-row>
-          <b-col>
+            </BCol>
+          </BRow>
+        </BAlert>
+        <BRow>
+          <BCol>
             <button
               class="variant-danger btn-danger"
               href="#"
@@ -188,8 +188,8 @@
               />
               {{ $t("tryAgain") }}
             </button>
-          </b-col>
-          <b-col class="right-align">
+          </BCol>
+          <BCol class="right-align">
             <button
               class="variant-danger btn-danger"
               href="#"
@@ -201,8 +201,8 @@
               />
               {{ $t("close") }}
             </button>
-          </b-col>
-        </b-row>
+          </BCol>
+        </BRow>
       </span>
       <span v-if="failedTags != [] && failedTags != null">
         <span class="info_prefix">{{ $t("datasetReport.warningList") }}:&nbsp;</span>
@@ -215,8 +215,8 @@
           </li>
         </ul>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}&nbsp;</span>
-        <b-row class="buttons">
-          <b-col>
+        <BRow class="buttons">
+          <BCol>
             <button
               class="variant-warning btn-warning"
               href="#"
@@ -228,8 +228,8 @@
               />
               {{ $t("tryAgain") }}
             </button>
-          </b-col>
-          <b-col class="right-align">
+          </BCol>
+          <BCol class="right-align">
             <button
               class="variant-warning btn-warning"
               href="#"
@@ -241,8 +241,8 @@
               />
               {{ $t("close") }}
             </button>
-          </b-col>
-        </b-row>
+          </BCol>
+        </BRow>
       </span>
     </span>
     <form
@@ -259,13 +259,13 @@
           {{ $t("datasetReport.reportLanguage") }}
         </div></label>
         <div class="col-9 top-margin">
-          <b-row>
-            <b-col
+          <BRow>
+            <BCol
               v-for="option in options"
               :key="option.value"
               class="col-6"
             >
-              <b-form-radio
+              <BFormRadio
                 v-model="reportLanguage"
                 :value="option.value"
                 @change="setDocumentId"
@@ -273,17 +273,17 @@
                 <div class="top-margin">
                   {{ option.text }}
                 </div>
-              </b-form-radio>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col class="col-12">
+              </BFormRadio>
+            </BCol>
+          </BRow>
+          <BRow>
+            <BCol class="col-12">
               <small
                 class="form-text text-body-secondary"
                 v-html="$t('datasetReport.reportLanguageTooltip')"
               />
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
         </div>
       </div>
       <div class="row mb-3 section_row">
@@ -291,7 +291,7 @@
           class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label>
         <div class="col-9">
-          <b-form-input
+          <BFormInput
             id="documentIdInput"
             v-model="documentId"
             spellcheck="false"
@@ -311,7 +311,7 @@
           class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.folderId") }}</div></label>
         <div class="col-9">
-          <b-form-input
+          <BFormInput
             id="folderIdInput"
             v-model="folderId"
             spellcheck="false"
@@ -331,7 +331,7 @@
           class="col-3 col-form-label"
         ><div class="label-padding">{{ $t("datasetReport.reportName") }}</div></label>
         <div class="col-9">
-          <b-form-input
+          <BFormInput
             id="reportNameInput"
             v-model="reportName"
             spellcheck="false"

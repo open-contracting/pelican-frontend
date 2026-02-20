@@ -3,14 +3,14 @@
     <span :id="tooltipId">
       <font-awesome-icon icon="info-circle" />
     </span>
-    <b-tooltip
+    <BTooltip
       :target="tooltipId"
     >
       <span
         class="tooltip_text"
         v-html="text"
       />
-    </b-tooltip>
+    </BTooltip>
   </span>
 </template>
 

@@ -7,9 +7,9 @@
         <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
           <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />
         </span>
-        <b-link :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
+        <BLink :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
           {{ dataset.name }}
-        </b-link>
+        </BLink>
         <span class="dataset_id">(Id {{ dataset.id }})</span>
         <a
           v-if="isDatasetImported(dataset) && depth == 0"
@@ -61,16 +61,16 @@
           {{ dataset.phase }}
         </template>
         <template v-else>
-          <b-row class="progress_label g-0">
-            <b-col
+          <BRow class="progress_label g-0">
+            <BCol
               v-for="p in phases"
               :key="p"
             >
               <template v-if="p == dataset.phase">
                 {{ p }}
               </template>
-            </b-col>
-          </b-row>
+            </BCol>
+          </BRow>
 
           <ProgressBar :value="getDatasetProgress(dataset)" />
         </template>
@@ -81,7 +81,7 @@
         <span class="modified">{{ dataset.modified }}</span>
       </div>
       <div class="td col">
-        <b-link
+        <BLink
           v-if="dataset.ancestor_id"
           class="time_variance break_word"
           :to="{ name: 'time', params: { datasetId: dataset.id } }"
@@ -90,7 +90,7 @@
             <font-awesome-icon icon="history" />
           </span>
           {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
-        </b-link>
+        </BLink>
       </div>
     </div>
     <template v-for="(item, index) in dataset.filtered_children" :key="index">

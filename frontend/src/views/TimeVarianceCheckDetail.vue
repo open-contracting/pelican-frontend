@@ -138,14 +138,14 @@
                       class="examples_icon"
                       :icon="['far', 'eye']"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'preview_new_' + index"
                     >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.preview.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                   <span v-if="'new_' + index == selectedKey">
                     <font-awesome-icon
@@ -162,14 +162,14 @@
                       :icon="['fas', 'cloud-download-alt']"
                       @click.stop.prevent="download(item.new_item_id)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'download_new_' + index"
                     >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.download.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                 </td>
                 <td class="col-1 clickable">
@@ -180,14 +180,14 @@
                       :icon="['fas', 'clipboard']"
                       @click.stop.prevent="copyToClipboard(item.new_item_id)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'clipboard_new_' + index"
                     >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.copyToClipboard.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                 </td>
               </tr>
@@ -213,14 +213,14 @@
                       class="examples_icon"
                       :icon="['far', 'eye']"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'preview_old_' + index"
                     >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.preview.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                   <span v-if="'old_' + index == selectedKey">
                     <font-awesome-icon
@@ -237,14 +237,14 @@
                       :icon="['fas', 'cloud-download-alt']"
                       @click.stop.prevent="download(item.item_id)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'download_old_' + index"
                     >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.download.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                 </td>
                 <td class="col-1 clickable">
@@ -255,14 +255,14 @@
                       :icon="['fas', 'clipboard']"
                       @click.stop.prevent="copyToClipboard(item.item_id)"
                     />
-                    <b-tooltip
+                    <BTooltip
                       :target="'clipboard_old_' + index"
                     >
                       <span
                         class="tooltip_text"
                         v-html="$t('examples.copyToClipboard.tooltip')"
                       />
-                    </b-tooltip>
+                    </BTooltip>
                   </span>
                 </td>
               </tr>
@@ -303,14 +303,14 @@
                         class="examples_icon"
                         :icon="['far', 'eye']"
                       />
-                      <b-tooltip
+                      <BTooltip
                         :target="'preview_new_' + (index + 5)"
                         >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.preview.tooltip')"
                         />
-                      </b-tooltip>
+                      </BTooltip>
                     </span>
                     <span v-if="'new_' + (index + 5) == selectedKey">
                       <font-awesome-icon
@@ -327,14 +327,14 @@
                         :icon="['fas', 'cloud-download-alt']"
                         @click.stop.prevent="download(item.new_item_id)"
                       />
-                      <b-tooltip
+                      <BTooltip
                         :target="'download_new_' + (index + 5)"
                         >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.download.tooltip')"
                         />
-                      </b-tooltip>
+                      </BTooltip>
                     </span>
                   </td>
                   <td class="col-1 clickable">
@@ -345,14 +345,14 @@
                         :icon="['fas', 'clipboard']"
                         @click.stop.prevent="copyToClipboard(item.new_item_id)"
                       />
-                      <b-tooltip
+                      <BTooltip
                         :target="'clipboard_new_' + (index + 5)"
                         >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.copyToClipboard.tooltip')"
                         />
-                      </b-tooltip>
+                      </BTooltip>
                     </span>
                   </td>
                 </tr>
@@ -378,14 +378,14 @@
                         class="examples_icon"
                         :icon="['far', 'eye']"
                       />
-                      <b-tooltip
+                      <BTooltip
                         :target="'preview_old_' + (index + 5)"
                         >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.preview.tooltip')"
                         />
-                      </b-tooltip>
+                      </BTooltip>
                     </span>
                     <span v-if="'old_' + (index + 5) == selectedKey">
                       <font-awesome-icon
@@ -402,14 +402,14 @@
                         :icon="['fas', 'cloud-download-alt']"
                         @click.stop.prevent="download(item.item_id)"
                       />
-                      <b-tooltip
+                      <BTooltip
                         :target="'download_old_' + (index + 5)"
                         >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.download.tooltip')"
                         />
-                      </b-tooltip>
+                      </BTooltip>
                     </span>
                   </td>
                   <td class="col-1 clickable">
@@ -420,14 +420,14 @@
                         :icon="['fas', 'clipboard']"
                         @click.stop.prevent="copyToClipboard(item.item_id)"
                       />
-                      <b-tooltip
+                      <BTooltip
                         :target="'clipboard_old_' + (index + 5)"
                         >
                         <span
                           class="tooltip_text"
                           v-html="$t('examples.copyToClipboard.tooltip')"
                         />
-                      </b-tooltip>
+                      </BTooltip>
                     </span>
                   </td>
                 </tr>
@@ -464,7 +464,7 @@
       <span v-if="loadingPreviewData">
         <div class="result_box loader text-center">
           <div class="spinner">
-            <b-spinner
+            <BSpinner
               variant="primary"
               style="width: 4rem; height: 4rem"
               type="grow"
