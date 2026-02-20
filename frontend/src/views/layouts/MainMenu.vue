@@ -215,7 +215,7 @@ export default {
     z-index: 1000;
 }
 
-#sidebar_envelope .main_nav .nav-item .router-link-active {
+#sidebar_envelope .main_nav .nav-item .nav-link.active {
     color: $primary;
 }
 
@@ -260,7 +260,7 @@ export default {
     }
 
     #sidebar_envelope .nav-item :hover,
-    #sidebar_envelope .main_nav .nav-item .router-link-active:hover,
+    #sidebar_envelope .main_nav .nav-item .nav-link.active:hover,
     #sidebar_envelope .main_nav #home_link .nav-link:hover {
         background-color: $na_color;
         color: white;
