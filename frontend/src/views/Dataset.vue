@@ -73,6 +73,7 @@ export default {
 
 .collection_header {
     margin-bottom: 5px;
+    position: relative;
 
     h4 {
         position: absolute;

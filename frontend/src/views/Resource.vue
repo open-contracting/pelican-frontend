@@ -112,6 +112,7 @@ export default {
 <style lang="scss">
 .action_bar {
     margin-bottom: 5px;
+    position: relative;
 
     h4 {
         position: absolute;
