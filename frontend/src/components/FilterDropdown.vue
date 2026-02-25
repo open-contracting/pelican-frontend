@@ -78,11 +78,6 @@ export default {
         background-color: transparent;
         border-color: $primary;
     }
-
-    &:focus {
-        box-shadow: none;
-        outline: none;
-    }
 }
 
 #filter_dropdown-menu {
@@ -97,11 +92,6 @@ export default {
             color: $primary;
             background-color: transparent;
             border-color: $primary;
-        }
-
-        &:focus {
-            box-shadow: none;
-            outline: none;
         }
     }
 }
