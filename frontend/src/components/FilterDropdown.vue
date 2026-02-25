@@ -52,53 +52,57 @@ export default {
 @import "@/scss/variables";
 
 #filter_dropdown {
-    margin: 0.5rem;
-    margin-left: 15px;
-    margin-right: 0px;
+    border: none;
+    background-color: transparent;
+    color: $headings-color;
+    pointer-events: none;
+    padding-left: 0px;
+    padding-right: 7px;
+    padding-top: 7px;
+    padding-bottom: 5px;
+}
 
-    .dropdown-menu {
-        padding: 0px;
-        border-radius: 4px;
-    }
+#filter_dropdown-split {
+    border: none;
+    background-color: transparent;
+    color: $headings-color;
+    padding-top: 7px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+    border: 1px solid transparent;
 
-    .btn-primary {
-        border: none;
-        background-color: transparent;
-        color: $headings-color;
-    }
-
-    .btn-primary:first-of-type {
-        pointer-events: none;
-        padding-left: 0px;
-        padding-right: 7px;
-        padding-top: 7px;
-        padding-bottom: 5px;
-    }
-
-    .dropdown-toggle {
-        padding-top: 9px;
-        padding-bottom: 3px;
-    }
-
-    .dropdown-toggle,
-    .dropdown-item {
-        border-radius: 4px;
-        border: 1px solid transparent;
-    }
-
-    .dropdown-toggle:hover,
-    .dropdown-toggle:active,
-    .dropdown-toggle[aria-expanded="true"],
-    .dropdown-item:hover {
+    &:hover,
+    &:active,
+    &[aria-expanded="true"] {
         color: $primary;
         background-color: transparent;
         border-color: $primary;
     }
 
-    .dropdown-toggle:focus,
-    .dropdown-item:focus {
+    &:focus {
         box-shadow: none;
         outline: none;
+    }
+}
+
+#filter_dropdown-menu {
+    padding: 0px;
+    border-radius: 4px;
+
+    .dropdown-item {
+        border-radius: 4px;
+        border: 1px solid transparent;
+
+        &:hover {
+            color: $primary;
+            background-color: transparent;
+            border-color: $primary;
+        }
+
+        &:focus {
+            box-shadow: none;
+            outline: none;
+        }
     }
 }
 
