@@ -11,6 +11,7 @@ import store from "./store";
 const i18n = createI18n({
     legacy: false,
     locale: "en",
+    warnHtmlMessage: false,
     messages: {
         en: en,
     },
