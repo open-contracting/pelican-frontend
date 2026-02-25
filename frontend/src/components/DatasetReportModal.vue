@@ -278,10 +278,9 @@
           </BRow>
           <BRow>
             <BCol class="col-12">
-              <small
-                class="form-text text-body-secondary"
-                v-html="$t('datasetReport.reportLanguageTooltip')"
-              />
+              <small class="form-text text-body-secondary">
+                {{ $t("datasetReport.reportLanguageTooltip") }}
+              </small>
             </BCol>
           </BRow>
         </div>
@@ -300,10 +299,10 @@
             lazy-formatter
             :formatter="fileIdFormatter"
           />
-          <small
-            class="form-text text-body-secondary"
-            v-html="$t('datasetReport.documentIdTooltip', {user: this.$store.getters.settings.user})"
-          />
+          <small class="form-text text-body-secondary">
+            <p>{{ $t("datasetReport.documentIdTooltip") }}</p>
+            <p>{{ $t("datasetReport.documentIdPermissions", {user: $store.getters.settings.user}) }}</p>
+          </small>
         </div>
       </div>
       <div class="row mb-3 section_row">
@@ -320,10 +319,10 @@
             lazy-formatter
             :formatter="fileIdFormatter"
           />
-          <small
-            class="form-text text-body-secondary"
-            v-html="$t('datasetReport.folderIdTooltip', {user: this.$store.getters.settings.user})"
-          />
+          <small class="form-text text-body-secondary">
+            <p>{{ $t("datasetReport.folderIdTooltip") }}</p>
+            <p>{{ $t("datasetReport.folderIdPermissions", {user: $store.getters.settings.user}) }}</p>
+          </small>
         </div>
       </div>
       <div class="row mb-3 section_row">
@@ -338,10 +337,9 @@
             autocomplete="off"
             class="base_input"
           />
-          <small
-            class="form-text text-body-secondary"
-            v-html="$t('datasetReport.reportNameTooltip')"
-          />
+          <small class="form-text text-body-secondary">
+            {{ $t("datasetReport.reportNameTooltip") }}
+          </small>
         </div>
       </div>
       <div class="text-center">
