@@ -17,26 +17,22 @@
         <div class="col-8 modal_input">
           <div class="row">
             <div class="col">
-              <VueDatePicker
+              <input
                 v-model="releaseDateFrom"
-                :min-date="firstDate"
-                :max-date="lastDate"
-                :time-config="{ enableTimePicker: false }"
-                :formats="{ input: 'yyyy-MM-dd' }"
-                auto-apply
-                class="date_picker"
-              />
+                type="date"
+                :min="firstDate"
+                :max="lastDate"
+                class="form-control"
+              >
             </div>
             <div class="col">
-              <VueDatePicker
+              <input
                 v-model="releaseDateTo"
-                :min-date="firstDate"
-                :max-date="lastDate"
-                :time-config="{ enableTimePicker: false }"
-                :formats="{ input: 'yyyy-MM-dd' }"
-                auto-apply
-                class="date_picker"
-              />
+                type="date"
+                :min="firstDate"
+                :max="lastDate"
+                class="form-control"
+              >
             </div>
           </div>
         </div>
@@ -111,17 +107,14 @@
 </template>
 
 <script>
-const axios = require("axios");
-
-import { VueDatePicker } from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
+import axios from "axios";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
 import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
 import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
 
 export default {
-    components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader, VueDatePicker },
+    components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader },
     props: ["dataset"],
     emits: ["close"],
     data: () => ({
@@ -331,10 +324,6 @@ export default {
 
 .section_row {
     padding-top: 30px;
-}
-
-.date_picker label {
-    text-align: left !important;
 }
 
 .multiselect__tag-icon:after {

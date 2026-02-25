@@ -359,8 +359,7 @@
 </template>
 
 <script>
-const axios = require("axios");
-
+import axios from "axios";
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
 import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
@@ -548,10 +547,6 @@ export default {
 
 .section_row {
     padding-top: 30px;
-}
-
-.date_picker label {
-    text-align: left !important;
 }
 
 .multiselect__tag-icon:after {
