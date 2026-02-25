@@ -268,7 +268,7 @@
               <BFormRadio
                 v-model="reportLanguage"
                 :value="option.value"
-                @change="setDocumentId"
+                @update:model-value="setDocumentId"
               >
                 <div class="top-margin">
                   {{ option.text }}
