@@ -210,7 +210,7 @@ export default {
     top: 0px;
     left: 0px;
     bottom: 0px;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 50px 5px 30px 5px;
     width: 210px;
     background-color: white;
@@ -246,7 +246,7 @@ export default {
         top: 0px;
         left: 0px;
         bottom: 0px;
-        overflow-y: scroll;
+        overflow-y: auto;
         padding: 60px 0px 0px 0px;
         z-index: 100;
         border-right: 1px solid $na_light_color;
