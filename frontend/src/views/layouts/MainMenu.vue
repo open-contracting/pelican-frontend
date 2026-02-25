@@ -18,7 +18,7 @@
             to="/"
           >
             <span class="menu_icon_small">
-              <FontAwesomeIcon icon="cogs" />
+              <FontAwesomeIcon icon="cogs" fixed-width />
             </span>
             {{ $t("sections.home").toUpperCase() }}
           </BNavItem>
@@ -27,7 +27,7 @@
             :to="{ name: 'overview', params: { datasetId: datasetId } }"
           >
             <span class="menu_icon_small">
-              <FontAwesomeIcon icon="home" />
+              <FontAwesomeIcon icon="home" fixed-width />
             </span>
             {{ $t("sections.overview").toUpperCase() }}
           </BNavItem>
@@ -40,7 +40,7 @@
               v-if="fieldLoaded"
               class="menu_icon_small"
             >
-              <FontAwesomeIcon icon="sliders-h" />
+              <FontAwesomeIcon icon="sliders-h" fixed-width />
             </span>
             <span
               v-else
@@ -63,7 +63,7 @@
               v-if="resourceLoaded"
               class="menu_icon_small"
             >
-              <FontAwesomeIcon icon="list-alt" />
+              <FontAwesomeIcon icon="list-alt" fixed-width />
             </span>
             <span
               v-else
@@ -86,7 +86,7 @@
               v-if="datasetLoaded"
               class="menu_icon_small"
             >
-              <FontAwesomeIcon icon="tasks" />
+              <FontAwesomeIcon icon="tasks" fixed-width />
             </span>
             <span
               v-else
@@ -109,7 +109,7 @@
               v-if="timeVarianceLoaded"
               class="menu_icon_small"
             >
-              <FontAwesomeIcon icon="history" />
+              <FontAwesomeIcon icon="history" fixed-width />
             </span>
             <span
               v-else
