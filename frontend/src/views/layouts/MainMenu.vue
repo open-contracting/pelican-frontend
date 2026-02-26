@@ -129,23 +129,20 @@
   </div>
 </template>
 
-<script>
-import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
-import stateMixin from "@/plugins/stateMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
 
-export default {
-    components: { BNav, BNavItem, BSpinner },
-    mixins: [stateMixin],
-    data: () => ({}),
-    computed: {
-        showTimeVariance() {
-            return (
-                this.$store.getters.timeVarianceLevelStats != null &&
-                this.$store.getters.timeVarianceLevelStats.length > 0
-            );
-        },
-    },
-};
+const store = useStore();
+
+const datasetId = computed(() => store.getters.datasetId);
+const fieldLoaded = computed(() => store.getters.fieldLevelStats != null);
+const resourceLoaded = computed(() => store.getters.resourceLevelStats != null);
+const datasetLoaded = computed(() => store.getters.datasetLevelStats != null);
+const timeVarianceLoaded = computed(() => store.getters.timeVarianceLevelStats != null);
+const showTimeVariance = computed(
+    () => store.getters.timeVarianceLevelStats != null && store.getters.timeVarianceLevelStats.length > 0,
+);
 </script>
 
 <style lang="scss">
