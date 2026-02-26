@@ -8,7 +8,7 @@
       class="bar"
       :style="{ width: barWidth + 'px' }"
     >
-      <span v-if="barWidth > 30">{{ $filters.formatPercentage(percentage) }}</span>
+      <span v-if="barWidth > 30">{{ formatPercentage(ratio) }}</span>
       <span v-else>&nbsp;</span>
     </div>
     <div
@@ -18,39 +18,55 @@
       <span
         v-if="barWidth <= 30"
         class="small_label"
-      >{{ $filters.formatPercentage(percentage) }}</span>
+      >{{ formatPercentage(ratio) }}</span>
       <span
         v-if="showCount"
         class="count_holder"
       >
-        <span class="count_holder">({{ $filters.formatNumber(count) }})</span>
+        <span class="count_holder">({{ formatNumber(count) }})</span>
       </span>
     </div>
     <div
       v-if="barWidth > 30 && showCount"
       class="count"
     >
-      <span class="count_holder">({{ $filters.formatNumber(count) }})</span>
+      <span class="count_holder">({{ formatNumber(count) }})</span>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-    props: ["percentage", "count", "state", "showCount"],
-    data: () => ({
-        barWidth: 1,
-    }),
-    mounted() {
-        if (this.percentage > 0) {
-            if (this.showCount) {
-                this.barWidth = ((this.$refs.bar.clientWidth - 100) / 100) * this.percentage;
-            } else {
-                this.barWidth = (this.$refs.bar.clientWidth / 100) * this.percentage;
-            }
+<script setup>
+import { computed, onMounted, ref } from "vue";
+import { useFormatters } from "@/composables/useFormatters.js";
+
+const props = defineProps({
+    numerator: { type: Number, required: true },
+    denominator: { type: Number, required: true },
+    count: Number,
+    state: String,
+    showCount: Boolean,
+});
+
+// biome-ignore lint/correctness/noUnusedVariables: used in template
+const { formatPercentage, formatNumber } = useFormatters();
+
+const bar = ref(null);
+const barWidth = ref(1);
+
+const ratio = computed(() => {
+    if (!props.denominator) return 0;
+    return props.numerator / props.denominator;
+});
+
+onMounted(() => {
+    if (ratio.value > 0) {
+        if (props.showCount) {
+            barWidth.value = (bar.value.clientWidth - 100) * ratio.value;
+        } else {
+            barWidth.value = bar.value.clientWidth * ratio.value;
         }
-    },
-};
+    }
+});
 </script>
 
 <style scoped lang="scss">
