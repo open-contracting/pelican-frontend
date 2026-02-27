@@ -130,6 +130,7 @@
 </template>
 
 <script setup>
+import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
 import { computed } from "vue";
 import { useStore } from "vuex";
 

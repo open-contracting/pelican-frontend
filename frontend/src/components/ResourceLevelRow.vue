@@ -8,68 +8,66 @@
     </div>
     <div class="td col-1 col-lg-1 text-end">
       <span
-        v-if="okPercentage"
+        v-if="okRatio"
         class="value_ok"
-      >{{ $filters.formatPercentage(okPercentage) }}</span>
+      >{{ $filters.formatPercentage(okRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ $filters.formatPercentage(okPercentage) }}</span>
+      >{{ $filters.formatPercentage(okRatio) }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-end">
       <span
-        v-if="failedPercentage"
+        v-if="failedRatio"
         class="value_failed"
-      >{{ $filters.formatPercentage(failedPercentage) }}</span>
+      >{{ $filters.formatPercentage(failedRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ $filters.formatPercentage(failedPercentage) }}</span>
+      >{{ $filters.formatPercentage(failedRatio) }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-end">
       <span
-        v-if="naPercentage"
+        v-if="naRatio"
         class="value_na"
-      >{{ $filters.formatPercentage(naPercentage) }}</span>
+      >{{ $filters.formatPercentage(naRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ $filters.formatPercentage(naPercentage) }}</span>
+      >{{ $filters.formatPercentage(naRatio) }}</span>
     </div>
     <div class="td col-4 d-none d-lg-block progress_column">
       <ProgressBar
-        :ok="okPercentage"
-        :failed="failedPercentage"
+        :ok="okRatio * 100"
+        :failed="failedRatio * 100"
       />
     </div>
   </div>
 </template>
 
-<script>
-import ProgressBar from "@/components/ProgressBar.vue";
-import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import ProgressBar from "./ProgressBar.vue";
 
-export default {
-    components: { ProgressBar },
-    mixins: [resourceCheckMixin],
-    props: ["check", "name"],
-    data: function () {
-        return {
-            detailRouterArguments: {
-                name: "resourceCheckDetail",
-                params: {
-                    check: this.name,
-                    datasetId: this.$store.getters.datasetId,
-                },
-            },
-        };
-    },
-    methods: {
-        detail: function () {
-            this.$router.push(this.detailRouterArguments);
+const props = defineProps(["check", "name"]);
+const router = useRouter();
+const store = useStore();
+
+const okRatio = computed(() => props.check.passed_count / props.check.total_count);
+const failedRatio = computed(() => props.check.failed_count / props.check.total_count);
+const naRatio = computed(() => props.check.undefined_count / props.check.total_count);
+
+function detail() {
+    router.push({
+        name: "resourceCheckDetail",
+        params: {
+            check: props.name,
+            datasetId: store.getters.datasetId,
         },
-    },
-};
+    });
+}
 </script>
 
 <style scoped lang="scss">

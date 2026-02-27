@@ -121,136 +121,121 @@
   </span>
 </template>
 
-<script>
-const axios = require("axios");
-
+<script setup>
+import axios from "axios";
 import { BModal } from "bootstrap-vue-next";
-import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
-import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
-import DatasetReportModal from "@/components/DatasetReportModal.vue";
-import Loader from "@/components/Loader.vue";
-import SearchInput from "@/components/SearchInput.vue";
-import SortButtons from "@/components/SortButtons.vue";
-import { CONFIG } from "@/config.js";
-import sortMixins from "@/plugins/sortMixins.js";
-import stateMixin from "@/plugins/stateMixins.js";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { useStore } from "vuex";
+import { CONFIG, PHASES, STATES } from "@/config.js";
+import DatasetFilterModal from "./DatasetFilterModal.vue";
+import DatasetPickerRow from "./DatasetPickerRow.vue";
+import DatasetReportModal from "./DatasetReportModal.vue";
+import Loader from "./Loader.vue";
+import SearchInput from "./SearchInput.vue";
+import SortButtons from "./SortButtons.vue";
 
-export default {
-    components: {
-        BModal,
-        Loader,
-        SortButtons,
-        SearchInput,
-        DatasetPickerRow,
-        DatasetFilterModal,
-        DatasetReportModal,
-    },
-    mixins: [stateMixin, sortMixins],
-    data: () => ({
-        datasets: [],
-        loading: false,
-        filteredDataset: null,
-        reportDataset: null,
-    }),
-    computed: {
-        search: function () {
-            return this.$store.getters.datasetSearch;
-        },
-        phases: () => ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"],
-        states: () => ["WAITING", "IN_PROGRESS", "OK", "FAILED"],
-        sortedBy: function () {
-            const value = this.$store.getters.datasetSortedBy;
-            return value == null ? "created" : value;
-        },
-        isAscendingSorted: function () {
-            const value = this.$store.getters.datasetSortedAscending;
-            return value == null ? false : value;
-        },
-    },
-    mounted() {
-        const buildDatasetsTree = (datasets, parent_id) => {
-            const result = [];
-            for (const item of datasets) {
-                if (item.parent_id === parent_id) {
-                    item.filtered_children = buildDatasetsTree(datasets, item.id);
-                    result.push(item);
+const store = useStore();
+
+const datasets = ref([]);
+const loading = ref(false);
+const filteredDataset = ref(null);
+const reportDataset = ref(null);
+
+const filterModal = useTemplateRef("filter-modal");
+const reportModal = useTemplateRef("report-modal");
+
+const search = computed(() => store.getters.datasetSearch);
+const sortedBy = computed(() => {
+    const value = store.getters.datasetSortedBy;
+    return value == null ? "created" : value;
+});
+const isAscendingSorted = computed(() => {
+    const value = store.getters.datasetSortedAscending;
+    return value == null ? false : value;
+});
+
+function showFilter(dataset) {
+    filteredDataset.value = dataset;
+    filterModal.value.show();
+}
+
+function showReport(dataset) {
+    reportDataset.value = dataset;
+    reportModal.value.show();
+}
+
+function hideFilterModal() {
+    filterModal.value.hide();
+}
+
+function hideReportModal() {
+    reportModal.value.hide();
+}
+
+function isSearched(name) {
+    return !search.value || name.toLowerCase().includes(search.value.toLowerCase());
+}
+
+function sortBy(by, asc = true) {
+    if (!datasets.value) {
+        return;
+    }
+
+    let comp;
+    if (by === "created") {
+        comp = (a, b) => a.created.localeCompare(b.created);
+    } else if (by === "name") {
+        comp = (a, b) => a.name.localeCompare(b.name);
+    } else if (by === "size") {
+        comp = (a, b) =>
+            (a.meta.compiled_releases?.total_unique_ocids || -1) -
+            (b.meta.compiled_releases?.total_unique_ocids || -1);
+    } else if (by === "collection_id") {
+        comp = (a, b) =>
+            (a.meta.kingfisher_metadata?.collection_id || -1) - (b.meta.kingfisher_metadata?.collection_id || -1);
+    } else if (by === "phase") {
+        comp = (a, b) => {
+            if (a.phase === b.phase) {
+                if (a.state === b.state) {
+                    return a.id - b.id;
                 }
+                return STATES.indexOf(a.state) - STATES.indexOf(b.state);
             }
-
-            return result;
+            return PHASES.indexOf(a.phase) - PHASES.indexOf(b.phase);
         };
-        axios
-            .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
-            .then((response) => {
-                this.datasets = buildDatasetsTree(response.data, null);
-                for (const item of this.datasets) {
-                    item.ancestor_name = item.ancestor_id && this.datasets.find((e) => e.id === item.ancestor_id).name;
-                }
-                this.sortBy(this.sortedBy, this.isAscendingSorted);
-            })
-            .catch((error) => {
-                throw new Error(error);
-            });
-    },
-    methods: {
-        showFilter: function (dataset) {
-            this.filteredDataset = dataset;
-            this.$refs["filter-modal"].show();
-        },
-        showReport: function (dataset) {
-            this.reportDataset = dataset;
-            this.$refs["report-modal"].show();
-        },
-        isSearched: function (name) {
-            return !this.search || name.toLowerCase().includes(this.search.toLowerCase());
-        },
-        sortBy: function (by, asc = true) {
-            if (!this.datasets) {
-                return;
-            }
+    } else {
+        throw new Error(`Unknown sorting method ${by}`);
+    }
 
-            let comp;
-            if (by === "created") {
-                comp = (a, b) => a.created.localeCompare(b.created);
-            } else if (by === "name") {
-                comp = (a, b) => a.name.localeCompare(b.name);
-            } else if (by === "size") {
-                comp = (a, b) =>
-                    this.compareNumbers(
-                        a.meta.compiled_releases?.total_unique_ocids || -1,
-                        b.meta.compiled_releases?.total_unique_ocids || -1,
-                    );
-            } else if (by === "collection_id") {
-                comp = (a, b) =>
-                    this.compareNumbers(
-                        a.meta.kingfisher_metadata?.collection_id || -1,
-                        b.meta.kingfisher_metadata?.collection_id || -1,
-                    );
-            } else if (by === "phase") {
-                comp = (a, b) => {
-                    if (a.phase === b.phase) {
-                        if (a.state === b.state) {
-                            return this.compareNumbers(a.id, b.id);
-                        }
-                        return this.compareNumbers(this.states.indexOf(a.state), this.states.indexOf(b.state));
-                    }
-                    return this.compareNumbers(this.phases.indexOf(a.phase), this.phases.indexOf(b.phase));
-                };
-            } else {
-                throw new Error(`Unknown sorting method ${by}`);
-            }
+    datasets.value.sort((a, b) => (asc ? comp(a, b) : comp(b, a)));
+    store.commit("setDatasetSorting", { by: by, asc: asc });
+}
 
-            this.sort(this.datasets, comp, asc);
-            this.$store.commit("setDatasetSorting", { by: by, asc: asc });
-        },
-        hideFilterModal: function () {
-            this.$refs["filter-modal"].hide();
-        },
-        hideReportModal: function () {
-            this.$refs["report-modal"].hide();
-        },
-    },
-};
+onMounted(() => {
+    const buildDatasetsTree = (allDatasets, parent_id) => {
+        const result = [];
+        for (const item of allDatasets) {
+            if (item.parent_id === parent_id) {
+                item.filtered_children = buildDatasetsTree(allDatasets, item.id);
+                result.push(item);
+            }
+        }
+        return result;
+    };
+
+    axios
+        .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
+        .then((response) => {
+            datasets.value = buildDatasetsTree(response.data, null);
+            for (const item of datasets.value) {
+                item.ancestor_name = item.ancestor_id && datasets.value.find((e) => e.id === item.ancestor_id)?.name;
+            }
+            sortBy(sortedBy.value, isAscendingSorted.value);
+        })
+        .catch((error) => {
+            throw new Error(error);
+        });
+});
 </script>
 
 <style scoped lang="scss">

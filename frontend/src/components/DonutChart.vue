@@ -6,134 +6,134 @@
   />
 </template>
 
-<script>
+<script setup>
+import { onMounted, reactive } from "vue";
 import { GChart } from "vue-google-charts";
-import datasetMixin from "@/plugins/datasetMixins.js";
+import { useI18n } from "vue-i18n";
+import { useFormatters } from "@/composables/useFormatters.js";
+import { CHECK_STYLES, CHECK_TICKS } from "@/config.js";
+import { orderedShares } from "@/util.js";
 
-export default {
-    components: { GChart },
-    mixins: [datasetMixin],
-    props: ["check", "limit"],
-    data() {
-        return {
-            chartData: [
-                [
-                    this.$t("datasetLevel.charts.code"),
-                    this.$t("datasetLevel.charts.share"),
-                    { role: "annotation" },
-                    { role: "style" },
-                    { role: "custom" },
-                ],
-            ],
-            // https://developers.google.com/chart/interactive/docs/gallery/barchart
-            chartOptions: {
-                enableInteractivity: false,
-                height: 250,
-                chartArea: {
-                    top: 0,
-                    height: 230,
-                },
-                legend: {
-                    position: "none",
-                },
-                baselineColor: "transparent",
-                hAxis: {
-                    viewWindow: {
-                        min: 0,
-                        max: 1,
-                    },
-                    gridlines: {
-                        count: 0,
-                    },
-                    format: "#,###.#%",
-                },
-                annotations: {
-                    alwaysOutside: true,
-                    stem: {
-                        color: "transparent",
-                    },
-                    textStyle: {
-                        color: "#4a4a4a",
-                        fontName: "'Ubuntu Mono', monospace",
-                        bold: true,
-                    },
-                },
-                colors: ["#555cb3"],
-                fontName: "GTEestiProDisplay-Regular",
-                fontSize: 14,
-            },
-        };
+const props = defineProps(["check", "limit"]);
+const { t } = useI18n();
+const { formatPercentage, formatNumber } = useFormatters();
+
+const chartData = reactive([
+    [
+        t("datasetLevel.charts.code"),
+        t("datasetLevel.charts.share"),
+        { role: "annotation" },
+        { role: "style" },
+        { role: "custom" },
+    ],
+]);
+
+// https://developers.google.com/chart/interactive/docs/gallery/barchart
+const chartOptions = reactive({
+    enableInteractivity: false,
+    height: 250,
+    chartArea: {
+        top: 0,
+        height: 230,
     },
-    mounted() {
-        const shares = this.orderedShares(this.check.meta.shares);
-        let labelLength = 0;
+    legend: {
+        position: "none",
+    },
+    baselineColor: "transparent",
+    hAxis: {
+        viewWindow: {
+            min: 0,
+            max: 1,
+        },
+        gridlines: {
+            count: 0,
+        },
+        format: "#,###.#%",
+    },
+    annotations: {
+        alwaysOutside: true,
+        stem: {
+            color: "transparent",
+        },
+        textStyle: {
+            color: "#4a4a4a",
+            fontName: "'Ubuntu Mono', monospace",
+            bold: true,
+        },
+    },
+    colors: ["#555cb3"],
+    fontName: "GTEestiProDisplay-Regular",
+    fontSize: 14,
+});
 
-        // Index 0 of chartData is the header.
-        for (const key in shares) {
-            if (this.limit && this.chartData.length > 10) {
-                this.chartData[10][0] = this.$t("datasetLevel.charts.other");
-                this.chartData[10][1] += shares[key][1].share;
-                this.chartData[10][2] += shares[key][1].share;
-                this.chartData[10][4] += shares[key][1].count;
-            } else {
-                let styles = "";
-                if (this.ticks && (!this.styles.length || this.styles.includes(shares[key][0]))) {
-                    styles =
-                        this.ticks[0] <= shares[key][1].share && shares[key][1].share <= this.ticks[1]
-                            ? "color: #919C03"
-                            : "color: #d0021b";
-                }
-                this.chartData.push([
-                    shares[key][0],
-                    shares[key][1].share,
-                    shares[key][1].share,
-                    styles,
-                    shares[key][1].count,
-                ]);
-            }
-            if (shares.length <= 10 || this.chartData <= 10) {
-                labelLength += shares[key][0].length;
-            }
-        }
+onMounted(() => {
+    const shares = orderedShares(props.check.meta.shares);
+    const ticks = CHECK_TICKS[props.check.name];
+    const styles = CHECK_STYLES[props.check.name];
+    let labelLength = 0;
 
-        for (let i = 1; i < this.chartData.length; i++) {
-            if (this.limit) {
-                this.chartData[i][2] = this.$filters.formatPercentage(100 * this.chartData[i][2]);
-            } else {
-                this.chartData[i][2] = `${this.$filters.formatPercentage(
-                    100 * this.chartData[i][2],
-                )} (${this.$filters.formatNumber(this.chartData[i][4])})`;
-            }
-        }
-
-        // ticks is undefined in data().
-        if (this.ticks) {
-            this.chartOptions.hAxis.ticks = this.ticks.slice(1);
+    // Index 0 of chartData is the header.
+    for (const key in shares) {
+        if (props.limit && chartData.length > 10) {
+            chartData[10][0] = t("datasetLevel.charts.other");
+            chartData[10][1] += shares[key][1].share;
+            chartData[10][2] += shares[key][1].share;
+            chartData[10][4] += shares[key][1].count;
         } else {
-            // Hide the x-axis and use the full height.
-            this.chartOptions.hAxis.textPosition = "none";
-            this.chartOptions.chartArea.height = this.chartOptions.height;
-        }
-
-        const averageLabelLength = labelLength / shares.length;
-        if (averageLabelLength > 10) {
-            // Make room for long labels, and allow a 100% bar to be fully visible.
-            this.chartOptions.chartArea.left = `${~~(averageLabelLength * 2)}%`;
-            this.chartOptions.chartArea.width = "60%";
-        }
-
-        if (!this.limit) {
-            // Allow longer annotations to be fully visible.
-            this.chartOptions.chartArea.width = averageLabelLength > 10 ? "50%" : "55%";
-            this.chartOptions.height = shares.length * 30;
-            if (this.ticks) {
-                // Make room for the ticks.
-                this.chartOptions.chartArea.height = this.chartOptions.height;
-                this.chartOptions.height += 30;
-            } else {
-                this.chartOptions.chartArea.height = "100%";
+            let chartStyles = "";
+            if (ticks && (!styles?.length || styles.includes(shares[key][0]))) {
+                chartStyles =
+                    ticks[0] <= shares[key][1].share && shares[key][1].share <= ticks[1]
+                        ? "color: #919C03"
+                        : "color: #d0021b";
             }
+            chartData.push([
+                shares[key][0],
+                shares[key][1].share,
+                shares[key][1].share,
+                chartStyles,
+                shares[key][1].count,
+            ]);
         }
-    },
-};
+        if (shares.length <= 10 || chartData <= 10) {
+            labelLength += shares[key][0].length;
+        }
+    }
+
+    for (let i = 1; i < chartData.length; i++) {
+        if (props.limit) {
+            chartData[i][2] = formatPercentage(chartData[i][2]);
+        } else {
+            chartData[i][2] = `${formatPercentage(chartData[i][2])} (${formatNumber(chartData[i][4])})`;
+        }
+    }
+
+    if (ticks) {
+        chartOptions.hAxis.ticks = ticks.slice(1);
+    } else {
+        // Hide the x-axis and use the full height.
+        chartOptions.hAxis.textPosition = "none";
+        chartOptions.chartArea.height = chartOptions.height;
+    }
+
+    const averageLabelLength = labelLength / shares.length;
+    if (averageLabelLength > 10) {
+        // Make room for long labels, and allow a 100% bar to be fully visible.
+        chartOptions.chartArea.left = `${~~(averageLabelLength * 2)}%`;
+        chartOptions.chartArea.width = "60%";
+    }
+
+    if (!props.limit) {
+        // Allow longer annotations to be fully visible.
+        chartOptions.chartArea.width = averageLabelLength > 10 ? "50%" : "55%";
+        chartOptions.height = shares.length * 30;
+        if (ticks) {
+            // Make room for the ticks.
+            chartOptions.chartArea.height = chartOptions.height;
+            chartOptions.height += 30;
+        } else {
+            chartOptions.chartArea.height = "100%";
+        }
+    }
+});
 </script>

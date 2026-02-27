@@ -9,7 +9,7 @@
 
 <script>
 import DatasetPicker from "@/components/DatasetPicker.vue";
-import Plain from "@/views/layouts/Plain.vue";
+import Plain from "./layouts/Plain.vue";
 
 export default {
     name: "Home",

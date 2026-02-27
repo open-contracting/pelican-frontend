@@ -52,7 +52,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.coverage_result }"
                 >
-                  {{ $filters.formatPercentage(coveragePercentage) }}
+                  {{ $filters.formatPercentage(coverageRatio) }}
                 </span>
               </div>
               <div class="col col-6 text-center">
@@ -60,7 +60,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.check_result }"
                 >
-                  {{ $filters.formatPercentage(checkPercentage) }}
+                  {{ $filters.formatPercentage(checkRatio) }}
                 </span>
               </div>
             </div>
@@ -87,27 +87,29 @@
   </div>
 </template>
 
-<script>
-import timeMixins from "@/plugins/timeMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-    mixins: [timeMixins],
-    props: ["check"],
-    data: () => ({}),
-    computed: {
-        result() {
-            return this.check.coverage_result && this.check.check_result;
-        },
-    },
-    methods: {
-        detail: function (name) {
-            this.$router.push({
-                name: "timeVarianceCheckDetail",
-                params: { check: name },
-            });
-        },
-    },
-};
+const props = defineProps(["check"]);
+const router = useRouter();
+
+const result = computed(() => props.check.coverage_result && props.check.check_result);
+const coverageRatio = computed(() => {
+    if (props.check.meta.total_count === 0) return 0;
+    return props.check.meta.coverage_count / props.check.meta.total_count;
+});
+const checkRatio = computed(() => {
+    if (props.check.meta.coverage_count === 0) return 0;
+    return props.check.meta.ok_count / props.check.meta.coverage_count;
+});
+
+function detail(name) {
+    router.push({
+        name: "timeVarianceCheckDetail",
+        params: { check: name },
+    });
+}
 </script>
 
 <style scoped lang="scss">

@@ -85,106 +85,93 @@
   </dashboard-detail>
 </template>
 
-<script>
+<script setup>
 import { BSpinner } from "bootstrap-vue-next";
-import "vue-json-pretty/lib/styles.css";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import "vue-json-pretty/lib/styles.css";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import Tooltip from "@/components/Tooltip.vue";
-import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
-import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import DashboardDetail from "./layouts/DashboardDetail.vue";
 
-export default {
-    name: "ResourceCheckDetail",
-    components: {
-        BSpinner,
-        VueJsonPretty,
-        DashboardDetail,
-        ExampleBoxes,
-        CheckDetailResultBox,
-        Tooltip,
-    },
-    mixins: [resourceCheckMixin],
-    data: () => ({
-        previewMetaData: null,
-        previewDataItemId: null,
-        loadingPreviewData: false,
-    }),
-    computed: {
-        allExamples() {
-            if (!this.check) {
-                return [];
-            }
+const route = useRoute();
+const store = useStore();
+const { t } = useI18n();
 
-            let allExamples = [];
-            allExamples = allExamples.concat(this.check.failed_examples);
-            allExamples = allExamples.concat(this.check.passed_examples);
-            allExamples = allExamples.concat(this.check.undefined_examples);
-            return allExamples;
-        },
-        check() {
-            return this.$store.getters.resourceLevelStats?.find((item) => item.name === this.$route.params.check);
-        },
-        exampleSections() {
-            const exampleSections = [];
-            if (this.check !== [] && this.check.name !== undefined) {
-                const failed = this.check.failed_examples;
-                const passed = this.check.passed_examples;
-                const undefineds = this.check.undefined_examples;
+const previewMetaData = ref(null);
+const previewDataItemId = ref(null);
+const loadingPreviewData = ref(false);
 
-                if (failed.length > 0) {
-                    exampleSections.push({
-                        id: "failed",
-                        header: this.$t("core.failedExamples"),
-                        examples: failed.map((val) => val.meta),
-                    });
-                }
+const check = computed(() => store.getters.resourceLevelStats?.find((item) => item.name === route.params.check));
+const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
+const allExamples = computed(() => {
+    if (!check.value) {
+        return [];
+    }
 
-                if (passed.length > 0) {
-                    exampleSections.push({
-                        id: "passed",
-                        header: this.$t("core.passedExamples"),
-                        examples: passed.map((val) => val.meta),
-                    });
-                }
+    let examples = [];
+    examples = examples.concat(check.value.failed_examples);
+    examples = examples.concat(check.value.passed_examples);
+    examples = examples.concat(check.value.undefined_examples);
+    return examples;
+});
+const exampleSections = computed(() => {
+    const sections = [];
+    if (check.value !== [] && check.value.name !== undefined) {
+        const failed = check.value.failed_examples;
+        const passed = check.value.passed_examples;
+        const undefineds = check.value.undefined_examples;
 
-                if (undefineds.length > 0) {
-                    exampleSections.push({
-                        id: "undefined",
-                        header: this.$t("core.undefinedExamples"),
-                        examples: undefineds.map((val) => val.meta),
-                    });
-                }
-            }
-
-            return exampleSections;
-        },
-        previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
-        },
-    },
-    methods: {
-        preview: function (itemId) {
-            this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    this.previewDataItemId = itemId;
-                } else {
-                    this.$toast(this.$t("preview.cannotDisplay"), "danger");
-                    this.previewDataItemId = null;
-                }
-
-                this.loadingPreviewData = false;
+        if (failed.length > 0) {
+            sections.push({
+                id: "failed",
+                header: t("core.failedExamples"),
+                examples: failed.map((val) => val.meta),
             });
+        }
 
-            const result = this.allExamples.find((element) => element.meta.item_id === itemId);
-            if (result) {
-                this.previewMetaData = result.result;
-            }
-        },
-    },
-};
+        if (passed.length > 0) {
+            sections.push({
+                id: "passed",
+                header: t("core.passedExamples"),
+                examples: passed.map((val) => val.meta),
+            });
+        }
+
+        if (undefineds.length > 0) {
+            sections.push({
+                id: "undefined",
+                header: t("core.undefinedExamples"),
+                examples: undefineds.map((val) => val.meta),
+            });
+        }
+    }
+
+    return sections;
+});
+
+function preview(itemId) {
+    loadingPreviewData.value = true;
+    store.dispatch("loadDataItem", itemId).finally(() => {
+        if (store.getters.dataItemJSONLines(itemId) < 3000) {
+            previewDataItemId.value = itemId;
+        } else {
+            // Toast handled by component
+            previewDataItemId.value = null;
+        }
+
+        loadingPreviewData.value = false;
+    });
+
+    const result = allExamples.value.find((element) => element.meta.item_id === itemId);
+    if (result) {
+        previewMetaData.value = result.result;
+    }
+}
 </script>
 
 <style scoped lang="scss">

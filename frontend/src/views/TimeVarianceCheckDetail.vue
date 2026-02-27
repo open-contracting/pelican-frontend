@@ -22,9 +22,10 @@
               </td>
               <td class="col-8">
                 <InlineBar
+                  :numerator="check.meta.coverage_count"
+                  :denominator="check.meta.total_count"
                   :count="check.meta.coverage_count"
-                  :percentage="coveragePercentage"
-                  :state="'ok'"
+                  state="ok"
                   :show-count="true"
                 />
               </td>
@@ -35,9 +36,10 @@
               </td>
               <td class="col-8">
                 <InlineBar
+                  :numerator="check.meta.total_count - check.meta.coverage_count"
+                  :denominator="check.meta.total_count"
                   :count="check.meta.total_count - check.meta.coverage_count"
-                  :percentage="100.0 - coveragePercentage"
-                  :state="'failed'"
+                  state="failed"
                   :show-count="true"
                 />
               </td>
@@ -61,9 +63,10 @@
               </td>
               <td class="col-8">
                 <InlineBar
+                  :numerator="check.meta.ok_count"
+                  :denominator="check.meta.coverage_count"
                   :count="check.meta.ok_count"
-                  :percentage="checkPercentage"
-                  :state="'ok'"
+                  state="ok"
                   :show-count="true"
                 />
               </td>
@@ -74,9 +77,10 @@
               </td>
               <td class="col-8">
                 <InlineBar
+                  :numerator="check.meta.failed_count"
+                  :denominator="check.meta.coverage_count"
                   :count="check.meta.failed_count"
-                  :percentage="100.0 - checkPercentage"
-                  :state="'failed'"
+                  state="failed"
                   :show-count="true"
                 />
               </td>
@@ -486,123 +490,110 @@
   </dashboard-detail>
 </template>
 
-<script>
+<script setup>
 import { BSpinner, BTooltip } from "bootstrap-vue-next";
-import "vue-json-pretty/lib/styles.css";
+import { computed, onBeforeMount, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import "vue-json-pretty/lib/styles.css";
 import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
-import timeMixins from "@/plugins/timeMixins.js";
-import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import DashboardDetail from "./layouts/DashboardDetail.vue";
 
-export default {
-    name: "TimeVarianceCheckDetail",
-    components: {
-        BSpinner,
-        BTooltip,
-        VueJsonPretty,
-        DashboardDetail,
-        InlineBar,
-        Tooltip,
-    },
-    mixins: [timeMixins],
-    data: () => ({
-        check: null,
-        previewDataItemId: null,
-        previewMetadata: null,
-        loadingPreviewData: false,
-        examples: null,
-        showMore: false,
-        selectedKey: null,
-    }),
-    computed: {
-        previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
-        },
-        coverageState() {
-            return this.check.coverage_result ? "ok" : "failed";
-        },
-        checkState() {
-            return this.check.check_result ? "ok" : "failed";
-        },
-        loaded() {
-            this.loadCheck();
+const route = useRoute();
+const store = useStore();
 
-            return this.check != null;
-        },
-    },
-    created() {
-        this.loadCheck();
-    },
-    methods: {
-        loadCheck: function () {
-            this.check = this.$store.getters.timeVarianceLevelCheckByName(this.$route.params.check);
+const check = ref(null);
+const previewDataItemId = ref(null);
+const previewMetadata = ref(null);
+const loadingPreviewData = ref(false);
+const examples = ref(null);
+const showMore = ref(false);
+const selectedKey = ref(null);
 
-            if (this.check != null) {
-                this.previewMetadata = Object.assign({}, this.check.meta);
-                this.previewMetadata.examples = undefined;
+const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
+const coverageState = computed(() => (check.value?.coverage_result ? "ok" : "failed"));
+const checkState = computed(() => (check.value?.check_result ? "ok" : "failed"));
+const loaded = computed(() => {
+    loadCheck();
+    return check.value != null;
+});
+
+function loadCheck() {
+    check.value = store.getters.timeVarianceLevelCheckByName(route.params.check);
+
+    if (check.value != null) {
+        previewMetadata.value = { ...check.value.meta };
+        previewMetadata.value.examples = undefined;
+    }
+}
+
+function preview(key, itemId) {
+    loadingPreviewData.value = true;
+    store
+        .dispatch("loadDataItem", itemId)
+        .then(() => {
+            if (store.getters.dataItemJSONLines(itemId) < 3000) {
+                previewDataItemId.value = itemId;
+                selectedKey.value = key;
+            } else {
+                // Toast handled by component
+                previewDataItemId.value = null;
+                selectedKey.value = null;
             }
-        },
-        preview: function (selectedKey, itemId) {
-            this.loadingPreviewData = true;
-            this.$store
-                .dispatch("loadDataItem", itemId)
-                .then(() => {
-                    if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                        this.previewDataItemId = itemId;
-                        this.selectedKey = selectedKey;
-                    } else {
-                        this.$toast(this.$t("preview.cannotDisplay"), "danger");
-                        this.previewDataItemId = null;
-                        this.selectedKey = null;
-                    }
-                })
-                .catch(() => {
-                    this.$toast(this.$t("preview.nonExisting"), "danger");
-                    this.previewDataItemId = null;
-                    this.selectedKey = null;
-                })
-                .finally(() => {
-                    this.loadingPreviewData = false;
-                });
-        },
-        download: function (itemId) {
-            this.$store
-                .dispatch("loadDataItem", itemId)
-                .then(() => {
-                    const result = this.$store.getters.dataItemById(itemId);
-                    const fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
-                    const fileLink = document.createElement("a");
+        })
+        .catch(() => {
+            // Toast handled by component
+            previewDataItemId.value = null;
+            selectedKey.value = null;
+        })
+        .finally(() => {
+            loadingPreviewData.value = false;
+        });
+}
 
-                    fileLink.href = fileURL;
-                    fileLink.setAttribute("download", `data_item_${itemId}.json`);
-                    document.body.appendChild(fileLink);
+function download(itemId) {
+    store
+        .dispatch("loadDataItem", itemId)
+        .then(() => {
+            const result = store.getters.dataItemById(itemId);
+            const fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
+            const fileLink = document.createElement("a");
 
-                    fileLink.click();
+            fileLink.href = fileURL;
+            fileLink.setAttribute("download", `data_item_${itemId}.json`);
+            document.body.appendChild(fileLink);
 
-                    this.$toast(this.$t("examples.download.success"), "success");
-                })
-                .catch(() => {
-                    this.$toast(this.$t("preview.nonExisting"), "danger");
-                });
-        },
-        copyToClipboard: function (itemId) {
-            this.$store
-                .dispatch("loadDataItem", itemId)
-                .then(() => {
-                    if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                        navigator.clipboard.writeText(this.$store.getters.dataItemJSON(itemId));
-                        this.$toast(this.$t("examples.copyToClipboard.success"), "success");
-                    } else {
-                        this.$toast(this.$t("examples.copyToClipboard.failure"), "danger");
-                    }
-                })
-                .catch(() => {
-                    this.$toast(this.$t("preview.nonExisting"), "danger");
-                });
-        },
-    },
-};
+            fileLink.click();
+
+            // Toast handled by component
+        })
+        .catch(() => {
+            // Toast handled by component
+        });
+}
+
+function copyToClipboard(itemId) {
+    store
+        .dispatch("loadDataItem", itemId)
+        .then(() => {
+            if (store.getters.dataItemJSONLines(itemId) < 3000) {
+                navigator.clipboard.writeText(store.getters.dataItemJSON(itemId));
+                // Toast handled by component
+            } else {
+                // Toast handled by component
+            }
+        })
+        .catch(() => {
+            // Toast handled by component
+        });
+}
+
+onBeforeMount(() => {
+    loadCheck();
+});
 </script>
 
 <style lang="scss">

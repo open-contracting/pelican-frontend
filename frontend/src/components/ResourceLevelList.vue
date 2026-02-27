@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import ResourceLevelRow from "@/components/ResourceLevelRow.vue";
-import Tooltip from "@/components/Tooltip.vue";
+import ResourceLevelRow from "./ResourceLevelRow.vue";
+import Tooltip from "./Tooltip.vue";
 
 export default {
     components: {
@@ -145,7 +145,7 @@ export default {
                 return this.$t("resourceLevel.averageScore.undefined");
             }
 
-            return this.$filters.formatPercentage((100.0 * passedCount) / (passedCount + failedCount));
+            return this.$filters.formatPercentage(passedCount / (passedCount + failedCount));
         },
     },
     watch: {

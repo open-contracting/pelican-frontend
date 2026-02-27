@@ -310,7 +310,7 @@
 
 <script>
 import Tooltip from "@/components/Tooltip.vue";
-import Dashboard from "@/views/layouts/Dashboard.vue";
+import Dashboard from "./layouts/Dashboard.vue";
 
 export default {
     name: "Overview",

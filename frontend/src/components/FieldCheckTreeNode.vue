@@ -46,72 +46,60 @@
   </template>
 </template>
 
-<script>
-import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
-import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
+<script setup>
+import { computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 
-export default {
-    name: "TreeNode",
-    components: { FieldCheckTableRow },
-    mixins: [fieldCheckMixins],
-    props: {
-        data: Object,
-        expand: Boolean,
-        depth: { type: Number, default: 0 },
-        hide: { type: Boolean, default: false },
-    },
-    data: () => ({}),
-    computed: {
-        children: function () {
-            return this.getChildren(this.data);
-        },
-        isExpandable: function () {
-            return this.hasChildren && this.isSearchedSubTree(this.data);
-        },
-        hasChildren: function () {
-            return Object.keys(this.children).length > 0;
-        },
-        expanded: {
-            get: function () {
-                return this.$store.getters.isFieldCheckExpanded(this.path);
-            },
-            set: function (value) {
-                if (value) {
-                    this.$store.commit("addFieldCheckExpandedNode", this.path);
-                } else {
-                    this.$store.commit("removeFieldCheckExpandedNode", this.path);
-                }
-            },
-        },
-        path: function () {
-            return this.data._check.path;
-        },
-        check: function () {
-            return this.data._check;
-        },
-        filter: function () {
-            return this.$store.getters.fieldLevelFilter;
-        },
-    },
-    mounted: function () {
-        if (this.expand) {
-            this.expanded = true;
+defineOptions({ name: "TreeNode" });
+
+const props = defineProps({
+    data: Object,
+    expand: Boolean,
+    depth: { type: Number, default: 0 },
+    hide: { type: Boolean, default: false },
+});
+
+const store = useStore();
+const { highlightSearchLast, isPathSearched } = useFieldCheckSearch();
+
+function getChildren(node) {
+    const result = { ...node };
+    delete result._check;
+    return result;
+}
+
+function isSearched(node) {
+    return (isPathSearched(node._check.path) && filter.value(node._check)) || isSearchedSubTree(node);
+}
+
+function isSearchedSubTree(node) {
+    return Object.values(getChildren(node)).some((n) => isSearched(n));
+}
+
+const check = computed(() => props.data._check);
+const path = computed(() => props.data._check.path);
+const filter = computed(() => store.getters.fieldLevelFilter);
+const children = computed(() => getChildren(props.data));
+const hasChildren = computed(() => Object.keys(children.value).length > 0);
+const isExpandable = computed(() => hasChildren.value && isSearchedSubTree(props.data));
+const expanded = computed({
+    get: () => store.getters.isFieldCheckExpanded(path.value),
+    set: (value) => {
+        if (value) {
+            store.commit("addFieldCheckExpandedNode", path.value);
+        } else {
+            store.commit("removeFieldCheckExpandedNode", path.value);
         }
     },
-    methods: {
-        isSearched: function (node) {
-            return (this.isPathSearched(node._check.path) && this.filter(node._check)) || this.isSearchedSubTree(node);
-        },
-        isSearchedSubTree: function (node) {
-            return Object.values(this.getChildren(node)).some((n) => this.isSearched(n));
-        },
-        getChildren: (node) => {
-            const result = Object.assign({}, node);
-            delete result._check;
-            return result;
-        },
-    },
-};
+});
+
+onMounted(() => {
+    if (props.expand) {
+        expanded.value = true;
+    }
+});
 </script>
 
 <style scoped lang="scss">

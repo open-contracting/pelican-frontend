@@ -185,139 +185,133 @@
   </dashboard-detail>
 </template>
 
-<script>
+<script setup>
 import { BSpinner } from "bootstrap-vue-next";
-import "vue-json-pretty/lib/styles.css";
+import { computed, onBeforeMount, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import "vue-json-pretty/lib/styles.css";
 import BarChartBig from "@/components/BarChartBig.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
-import datasetMixin from "@/plugins/datasetMixins.js";
-import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import { CHECK_TICKS, CHECK_TYPES, REPORT_ONLY_CHECKS } from "@/config.js";
+import { orderedShares } from "@/util.js";
+import DashboardDetail from "./layouts/DashboardDetail.vue";
 
-export default {
-    name: "DatasetCheckDetail",
-    components: {
-        BSpinner,
-        DonutChart,
-        BarChartBig,
-        VueJsonPretty,
-        DashboardDetail,
-        ExampleBoxes,
-        BarChartSingleValue,
-    },
-    mixins: [datasetMixin],
-    data: () => ({
-        check: null,
-        previewDataItemId: null,
-        previewMetadata: null,
-        exampleSections: null,
-        loadingPreviewData: false,
-    }),
-    computed: {
-        previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
-        },
-        loaded() {
-            this.loadCheck();
+const route = useRoute();
+const store = useStore();
+const { t } = useI18n();
 
-            return this.check != null;
-        },
-    },
-    created() {
-        this.loadCheck();
-    },
-    methods: {
-        preview: function (itemId) {
-            this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    this.previewDataItemId = itemId;
-                } else {
-                    this.$toast(this.$t("preview.cannotDisplay"), "danger");
-                    this.previewDataItemId = null;
-                }
+const check = ref(null);
+const previewDataItemId = ref(null);
+const previewMetadata = ref(null);
+const exampleSections = ref(null);
+const loadingPreviewData = ref(false);
 
-                this.loadingPreviewData = false;
-            });
-        },
-        loadCheck: function () {
-            this.check = this.$store.getters.datasetLevelCheckByName(this.$route.params.check);
+const checkType = computed(() => CHECK_TYPES[check.value?.name]);
+const reportOnly = computed(() => REPORT_ONLY_CHECKS[check.value?.name]);
+const ticks = computed(() => CHECK_TICKS[check.value?.name]);
+const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
+const loaded = computed(() => {
+    loadCheck();
+    return check.value != null;
+});
 
-            if (this.check != null) {
-                this.previewMetadata = this.check.meta;
+function preview(itemId) {
+    loadingPreviewData.value = true;
+    store.dispatch("loadDataItem", itemId).finally(() => {
+        if (store.getters.dataItemJSONLines(itemId) < 3000) {
+            previewDataItemId.value = itemId;
+        } else {
+            // Toast handled by component
+            previewDataItemId.value = null;
+        }
+        loadingPreviewData.value = false;
+    });
+}
 
-                if (this.checkType === "donut") {
-                    this.exampleSections = [];
-                    for (const key in this.shares) {
-                        if (this.shares[key][1].examples.length > 0) {
-                            this.exampleSections.push({
-                                header: this.shares[key][0],
-                                examples: this.shares[key][1].examples,
-                            });
-                        }
-                    }
-                }
+function loadCheck() {
+    check.value = store.getters.datasetLevelCheckByName(route.params.check);
 
-                if (this.checkType === "bar") {
-                    this.exampleSections = [];
-                    for (const barKey in this.check.meta.examples) {
-                        if (this.check.meta.examples[barKey].length > 0) {
-                            this.exampleSections.push({
-                                header: this.$t(`datasetLevel.charts.label_${barKey}`),
-                                examples: this.check.meta.examples[barKey],
-                            });
-                        }
-                    }
-                }
+    if (check.value != null) {
+        previewMetadata.value = check.value.meta;
 
-                if (this.checkType === "top3") {
-                    this.exampleSections = [];
-                    const mostFrequent = this.check.meta.most_frequent;
-                    for (const topKey in mostFrequent) {
-                        if (mostFrequent[topKey].examples.length > 0) {
-                            this.exampleSections.push({
-                                header: mostFrequent[topKey].value_str,
-                                examples: mostFrequent[topKey].examples,
-                            });
-                        }
-                    }
-                }
-
-                if (this.checkType === "numeric") {
-                    this.exampleSections = [];
-                    const failed = this.check.meta.failed_examples;
-                    const passed = this.check.meta.passed_examples;
-
-                    if (failed.length > 0) {
-                        this.exampleSections.push({
-                            header: this.$t("datasetLevel.numeric.failedExamples"),
-                            examples: failed,
-                        });
-                    }
-
-                    if (passed.length > 0) {
-                        this.exampleSections.push({
-                            header: this.$t("datasetLevel.numeric.passedExamples"),
-                            examples: passed,
-                        });
-                    }
-                }
-
-                if (this.checkType === "biggest_share" || this.checkType === "single_value_share") {
-                    this.exampleSections = [];
-                    if (this.check.meta.examples.length > 0) {
-                        this.exampleSections.push({
-                            header: this.$t("datasetLevel.examples"),
-                            examples: this.check.meta.examples,
-                        });
-                    }
+        if (checkType.value === "donut") {
+            exampleSections.value = [];
+            const shares = orderedShares(check.value.meta.shares);
+            for (const key in shares) {
+                if (shares[key][1].examples.length > 0) {
+                    exampleSections.value.push({
+                        header: shares[key][0],
+                        examples: shares[key][1].examples,
+                    });
                 }
             }
-        },
-    },
-};
+        }
+
+        if (checkType.value === "bar") {
+            exampleSections.value = [];
+            for (const barKey in check.value.meta.examples) {
+                if (check.value.meta.examples[barKey].length > 0) {
+                    exampleSections.value.push({
+                        header: t(`datasetLevel.charts.label_${barKey}`),
+                        examples: check.value.meta.examples[barKey],
+                    });
+                }
+            }
+        }
+
+        if (checkType.value === "top3") {
+            exampleSections.value = [];
+            const mostFrequent = check.value.meta.most_frequent;
+            for (const topKey in mostFrequent) {
+                if (mostFrequent[topKey].examples.length > 0) {
+                    exampleSections.value.push({
+                        header: mostFrequent[topKey].value_str,
+                        examples: mostFrequent[topKey].examples,
+                    });
+                }
+            }
+        }
+
+        if (checkType.value === "numeric") {
+            exampleSections.value = [];
+            const failed = check.value.meta.failed_examples;
+            const passed = check.value.meta.passed_examples;
+
+            if (failed.length > 0) {
+                exampleSections.value.push({
+                    header: t("datasetLevel.numeric.failedExamples"),
+                    examples: failed,
+                });
+            }
+
+            if (passed.length > 0) {
+                exampleSections.value.push({
+                    header: t("datasetLevel.numeric.passedExamples"),
+                    examples: passed,
+                });
+            }
+        }
+
+        if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
+            exampleSections.value = [];
+            if (check.value.meta.examples.length > 0) {
+                exampleSections.value.push({
+                    header: t("datasetLevel.examples"),
+                    examples: check.value.meta.examples,
+                });
+            }
+        }
+    }
+}
+
+onBeforeMount(() => {
+    loadCheck();
+});
 </script>
 
 <style scoped lang="scss">

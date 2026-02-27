@@ -47,7 +47,6 @@ const props = defineProps({
     showCount: Boolean,
 });
 
-// biome-ignore lint/correctness/noUnusedVariables: used in template
 const { formatPercentage, formatNumber } = useFormatters();
 
 const bar = ref(null);

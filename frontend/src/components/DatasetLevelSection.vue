@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import DatasetLevelCheck from "@/components/DatasetLevelCheck.vue";
-import Loader from "@/components/Loader.vue";
+import DatasetLevelCheck from "./DatasetLevelCheck.vue";
+import Loader from "./Loader.vue";
 
 export default {
     components: { DatasetLevelCheck, Loader },

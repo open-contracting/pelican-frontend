@@ -41,7 +41,7 @@ import { BCol, BRow } from "bootstrap-vue-next";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
-import Dashboard from "@/views/layouts/Dashboard.vue";
+import Dashboard from "./layouts/Dashboard.vue";
 
 export default {
     name: "TimeLevel",

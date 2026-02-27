@@ -63,7 +63,7 @@
         <template v-else>
           <BRow class="progress_label g-0">
             <BCol
-              v-for="p in phases"
+              v-for="p in PHASES"
               :key="p"
             >
               <template v-if="p == dataset.phase">
@@ -104,31 +104,23 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { BCol, BLink, BRow } from "bootstrap-vue-next";
-import ProgressBar from "@/components/ProgressBar.vue";
-import sortMixins from "@/plugins/sortMixins.js";
-import stateMixin from "@/plugins/stateMixins.js";
+import { PHASES } from "@/config";
+import ProgressBar from "./ProgressBar.vue";
 
-export default {
-    name: "DatasetPickerRow",
-    components: { BCol, BLink, BRow, ProgressBar },
-    mixins: [stateMixin, sortMixins],
-    props: ["dataset", "depth"],
-    emits: ["dataset-filter", "dataset-report"],
-    data: () => ({
-        showFilteredChildren: false,
-    }),
-    computed: {
-        phases: () => ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"],
-    },
-    methods: {
-        getDatasetProgress: function (dataset) {
-            return (this.phases.indexOf(dataset.phase) + 1) * 20;
-        },
-        isDatasetImported: (dataset) => dataset.phase === "CHECKED" && dataset.state === "OK",
-    },
-};
+defineOptions({ name: "DatasetPickerRow" });
+
+defineProps(["dataset", "depth"]);
+defineEmits(["dataset-filter", "dataset-report"]);
+
+function getDatasetProgress(dataset) {
+    return (PHASES.indexOf(dataset.phase) + 1) * 25;
+}
+
+function isDatasetImported(dataset) {
+    return dataset.phase === "CHECKED" && dataset.state === "OK";
+}
 </script>
 
 <style scoped lang="scss">

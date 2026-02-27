@@ -73,68 +73,70 @@
   </div>
 </template>
 
-<script>
-import FieldCheckTableRow from "@/components/FieldCheckTableRow.vue";
-import SortButtons from "@/components/SortButtons.vue";
-import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
+<script setup>
+import { computed, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import FieldCheckTableRow from "./FieldCheckTableRow.vue";
+import SortButtons from "./SortButtons.vue";
 
-export default {
-    components: { FieldCheckTableRow, SortButtons },
-    mixins: [fieldCheckMixins],
-    props: ["filter"],
-    data: () => ({
-        showHidden: {},
-    }),
-    computed: {
-        stats: function () {
-            return this.$store.getters.fieldLevelStats;
-        },
-        tableData: function () {
-            if (!this.stats) {
-                return [];
-            }
-            const data = [];
+const props = defineProps(["filter"]);
+const store = useStore();
 
-            this.sortBy(this.stats, "path");
+const { sortBy, sortByPath, sortByCoverage, sortByQuality, sortByProcessingOrder, highlightSearch, isPathSearched } =
+    useFieldCheckSearch();
 
-            for (const n of this.stats) {
-                if (n.coverage.total_count && this.filter(n)) {
-                    data.push(n);
-                }
-            }
+const showHidden = ref({});
 
-            return data;
-        },
-        sortedBy: function () {
-            const value = this.$store.getters.fieldCheckSortedBy;
-            return value == null ? "processingOrder" : value;
-        },
-        isAscendingSorted: function () {
-            const value = this.$store.getters.fieldCheckSortedAscending;
-            return value == null ? true : value;
-        },
-    },
-    mounted: function () {
-        this.sortBy(this.tableData, this.sortedBy, this.isAscendingSorted);
-    },
-    methods: {
-        hasHidden: (check) => "_hidden" in check && check._hidden.length > 0,
-        switchHidden: function (check) {
-            const patch = {};
-            patch[check.path] = !this.showHidden[check.path];
-            this.showHidden = Object.assign({}, this.showHidden, patch);
-        },
-        isHidden: function (check) {
-            return !this.showHidden[check.path];
-        },
-        resetSorting: function () {
-            this.sortByProcessingOrder(this.tableData);
-        },
-        isSearched: function (check) {
-            return check && this.isPathSearched(check.path);
-        },
-    },
-};
+const stats = computed(() => store.getters.fieldLevelStats);
+const sortedBy = computed(() => {
+    const value = store.getters.fieldCheckSortedBy;
+    return value == null ? "processingOrder" : value;
+});
+const isAscendingSorted = computed(() => {
+    const value = store.getters.fieldCheckSortedAscending;
+    return value == null ? true : value;
+});
+const tableData = computed(() => {
+    if (!stats.value) {
+        return [];
+    }
+    const data = [];
+
+    sortBy(stats.value, "path");
+
+    for (const n of stats.value) {
+        if (n.coverage.total_count && props.filter(n)) {
+            data.push(n);
+        }
+    }
+
+    return data;
+});
+
+function hasHidden(check) {
+    return "_hidden" in check && check._hidden.length > 0;
+}
+
+function switchHidden(check) {
+    showHidden.value[check.path] = !showHidden.value[check.path];
+}
+
+function isHidden(check) {
+    return !showHidden.value[check.path];
+}
+
+function resetSorting() {
+    sortByProcessingOrder(tableData.value);
+}
+
+function isSearched(check) {
+    return check && isPathSearched(check.path);
+}
+
+onMounted(() => {
+    sortBy(tableData.value, sortedBy.value, isAscendingSorted.value);
+});
 </script>
 
 <style scoped lang="scss">

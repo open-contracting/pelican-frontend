@@ -109,9 +109,9 @@
 <script>
 import axios from "axios";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
-import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
-import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
+import DatasetValuesMultiselect from "./DatasetValuesMultiselect.vue";
+import Loader from "./Loader.vue";
 
 export default {
     components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader },

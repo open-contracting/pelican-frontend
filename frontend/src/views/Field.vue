@@ -90,7 +90,7 @@ import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import SearchInput from "@/components/SearchInput.vue";
-import Dashboard from "@/views/layouts/Dashboard.vue";
+import Dashboard from "./layouts/Dashboard.vue";
 
 export default {
     name: "Field",

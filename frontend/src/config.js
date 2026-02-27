@@ -19,6 +19,12 @@ export const CONFIG = {
     },
 };
 
+// Sync with Phase in services.py
+export const PHASES = ["CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"];
+
+// Sync with State in services.py
+export const STATES = ["IN_PROGRESS", "OK"];
+
 export const REPORT_ONLY_CHECKS = {
     "distribution.tender_award_criteria": true,
     "distribution.tender_submission_method": true,
@@ -28,7 +34,7 @@ export const REPORT_ONLY_CHECKS = {
     "distribution.related_process_relation": true,
 };
 
-// Keep in sync with CHECK_TYPES in dataset.py
+// Sync with CHECK_TYPES in dataset.py
 export const CHECK_TYPES = {
     // donut
     "distribution.main_procurement_category": "donut",
@@ -62,7 +68,7 @@ export const CHECK_TYPES = {
     "distribution.buyer": "single_value_share",
 };
 
-// Keep in sync with check descriptions.
+// Sync with check descriptions.
 export const CHECK_TICKS = {
     // donut
     "distribution.main_procurement_category": [0, 0.95],
@@ -79,7 +85,7 @@ export const CHECK_TICKS = {
     "distribution.buyer": [0, 0.5],
 };
 
-// Keep in sync with check descriptions.
+// Sync with check descriptions.
 export const CHECK_STYLES = {
     // donut
     "distribution.main_procurement_category": [],

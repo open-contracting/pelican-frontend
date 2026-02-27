@@ -16,7 +16,7 @@
 
 <script>
 import DatasetHeader from "@/components/DatasetHeader.vue";
-import MainMenu from "@/views/layouts/MainMenu.vue";
+import MainMenu from "./MainMenu.vue";
 
 export default {
     name: "Dashboard",

@@ -109,7 +109,7 @@
                   >
                     <td>{{ item.value_str }}</td>
                     <td class="text-end numeric">
-                      {{ $filters.formatPercentage2D(item.share * 100) }}
+                      {{ $filters.formatPercentage2D(item.share) }}
                     </td>
                   </tr>
                 </table>
@@ -128,7 +128,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ $filters.formatPercentage2D(check.meta.ocid_share * 100) }}
+                  {{ $filters.formatPercentage2D(check.meta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
@@ -153,39 +153,35 @@
   </div>
 </template>
 
-<script>
-import BarChart from "@/components/BarChart.vue";
-import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
-import DonutChart from "@/components/DonutChart.vue";
-import Tooltip from "@/components/Tooltip.vue";
-import datasetMixin from "@/plugins/datasetMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { CHECK_TICKS, CHECK_TYPES, REPORT_ONLY_CHECKS } from "@/config.js";
+import BarChart from "./BarChart.vue";
+import BarChartSingleValue from "./BarChartSingleValue.vue";
+import DonutChart from "./DonutChart.vue";
+import Tooltip from "./Tooltip.vue";
 
-export default {
-    components: { DonutChart, BarChart, BarChartSingleValue, Tooltip },
-    mixins: [datasetMixin],
-    props: ["check"],
-    data: function () {
-        return {
-            detailRouterArguments: {
-                name: "datasetCheckDetail",
-                params: {
-                    check: this.check.name,
-                    datasetId: this.$store.getters.datasetId,
-                },
+const props = defineProps(["check"]);
+const router = useRouter();
+const store = useStore();
+
+const checkType = computed(() => CHECK_TYPES[props.check.name]);
+const reportOnly = computed(() => REPORT_ONLY_CHECKS[props.check.name]);
+const ticks = computed(() => CHECK_TICKS[props.check.name]);
+
+function detail() {
+    if (props.check.result !== undefined && checkType.value != null) {
+        router.push({
+            name: "datasetCheckDetail",
+            params: {
+                check: props.check.name,
+                datasetId: store.getters.datasetId,
             },
-        };
-    },
-    methods: {
-        onePercent: function () {
-            return (this.check.ok + this.check.failed + this.check.na) / 100;
-        },
-        detail: function () {
-            if (this.check.result !== undefined && this.checkType != null) {
-                this.$router.push(this.detailRouterArguments);
-            }
-        },
-    },
-};
+        });
+    }
+}
 </script>
 
 <style scoped lang="scss">

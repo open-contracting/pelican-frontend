@@ -32,53 +32,54 @@
   </div>
 </template>
 
-<script>
-import FieldCheckTreeNode from "@/components/FieldCheckTreeNode.vue";
-import fieldCheckMixins from "@/plugins/fieldCheckMixins.js";
+<script setup>
+import { computed, onMounted, watch } from "vue";
+import { useStore } from "vuex";
+import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import FieldCheckTreeNode from "./FieldCheckTreeNode.vue";
 
-export default {
-    components: { FieldCheckTreeNode },
-    mixins: [fieldCheckMixins],
-    props: ["filter"],
-    data: () => ({}),
-    computed: {
-        stats: function () {
-            return this.$store.getters.fieldLevelStats;
-        },
-        tree: function () {
-            const root = {};
+const props = defineProps(["filter"]);
+const store = useStore();
 
-            this.sortByProcessingOrder(this.stats);
+const { search, sortByProcessingOrder, sortByCoverage, sortByQuality } = useFieldCheckSearch();
 
-            for (const n of this.stats) {
-                let node = root;
-                for (const p of n.path.split(".")) {
-                    if (!(p in node)) {
-                        node[p] = {};
-                    }
-                    node = node[p];
-                }
+const stats = computed(() => store.getters.fieldLevelStats);
+const tree = computed(() => {
+    const root = {};
 
-                node._check = n;
+    sortByProcessingOrder(stats.value);
+
+    for (const n of stats.value) {
+        let node = root;
+        for (const p of n.path.split(".")) {
+            if (!(p in node)) {
+                node[p] = {};
             }
-
-            return root;
-        },
-    },
-    watch: {
-        search: function () {
-            this.$store.dispatch("setExpandedNodesForSearch");
-        },
-        filter: function () {
-            this.$store.commit("setFieldLevelFilter", this.filter);
-        },
-    },
-    mounted: function () {
-        if (this.search) {
-            this.$store.dispatch("setExpandedNodesForSearch");
+            node = node[p];
         }
+
+        node._check = n;
+    }
+
+    return root;
+});
+
+watch(search, () => {
+    store.dispatch("setExpandedNodesForSearch");
+});
+
+watch(
+    () => props.filter,
+    () => {
+        store.commit("setFieldLevelFilter", props.filter);
     },
-};
+);
+
+onMounted(() => {
+    if (search.value) {
+        store.dispatch("setExpandedNodesForSearch");
+    }
+});
 </script>
 
 <style scoped lang="scss">

@@ -359,8 +359,8 @@
 <script>
 import axios from "axios";
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
-import Loader from "@/components/Loader.vue";
 import { CONFIG } from "@/config.js";
+import Loader from "./Loader.vue";
 
 export default {
     components: { BAlert, BCol, BFormInput, BFormRadio, BRow, Loader },

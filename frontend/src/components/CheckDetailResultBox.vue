@@ -11,9 +11,10 @@
           </td>
           <td class="col-9 align-middle">
             <InlineBar
+              :numerator="check.passed_count"
+              :denominator="check.total_count"
               :count="check.passed_count"
-              :percentage="okPercentage"
-              :state="'ok'"
+              state="ok"
               :show-count="true"
             />
           </td>
@@ -27,9 +28,10 @@
           </td>
           <td class="col-9 align-middle">
             <InlineBar
+              :numerator="check.failed_count"
+              :denominator="check.total_count"
               :count="check.failed_count"
-              :percentage="failedPercentage"
-              :state="'failed'"
+              state="failed"
               :show-count="true"
             />
           </td>
@@ -43,9 +45,10 @@
           </td>
           <td class="col-9 align-middle">
             <InlineBar
+              :numerator="check.undefined_count"
+              :denominator="check.total_count"
               :count="check.undefined_count"
-              :percentage="naPercentage"
-              :state="'na'"
+              state="na"
               :show-count="true"
             />
           </td>
@@ -59,9 +62,10 @@
           </td>
           <td class="col-9 align-middle">
             <InlineBar
+              :numerator="check.individual_passed_count"
+              :denominator="check.individual_application_count"
               :count="check.individual_passed_count"
-              :percentage="individualPassPercentage"
-              :state="'ok'"
+              state="ok"
               :show-count="true"
             />
           </td>
@@ -75,9 +79,10 @@
           </td>
           <td class="col-9 align-middle">
             <InlineBar
+              :numerator="check.individual_failed_count"
+              :denominator="check.individual_application_count"
               :count="check.individual_failed_count"
-              :percentage="individualFailedPercentage"
-              :state="'failed'"
+              state="failed"
               :show-count="true"
             />
           </td>
@@ -87,32 +92,26 @@
   </div>
 </template>
 
-<script>
-import InlineBar from "@/components/InlineBar.vue";
-import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
+<script setup>
+import InlineBar from "./InlineBar.vue";
 
-export default {
-    components: { InlineBar },
-    mixins: [resourceCheckMixin],
-    props: {
-        check: Object,
-        ok: Boolean,
-        failed: Boolean,
-        na: Boolean,
-        individualPass: Boolean,
-        individualNonPass: Boolean,
-        passedLabel: {
-            type: String,
-            default: "passed",
-        },
-        failedLabel: {
-            type: String,
-            default: "failed",
-        },
-        classes: String,
+defineProps({
+    check: Object,
+    ok: Boolean,
+    failed: Boolean,
+    na: Boolean,
+    individualPass: Boolean,
+    individualNonPass: Boolean,
+    passedLabel: {
+        type: String,
+        default: "passed",
     },
-    data: () => ({}),
-};
+    failedLabel: {
+        type: String,
+        default: "failed",
+    },
+    classes: String,
+});
 </script>
 
 <style scoped lang="scss">
