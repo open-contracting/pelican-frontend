@@ -369,15 +369,14 @@ export default createStore({
                         const data = [];
                         for (const key in response.data) {
                             const item = response.data[key];
-                            data.push(
-                                Object.assign({}, item, {
-                                    path: key,
-                                    coverageOkShare: okShare(item.coverage),
-                                    coverageFailedShare: failedShare(item.coverage),
-                                    qualityOkShare: okShare(item.quality),
-                                    qualityFailedShare: failedShare(item.quality),
-                                }),
-                            );
+                            data.push({
+                                ...item,
+                                path: key,
+                                coverageOkShare: okShare(item.coverage),
+                                coverageFailedShare: failedShare(item.coverage),
+                                qualityOkShare: okShare(item.quality),
+                                qualityFailedShare: failedShare(item.quality),
+                            });
                             resolve();
                         }
 
