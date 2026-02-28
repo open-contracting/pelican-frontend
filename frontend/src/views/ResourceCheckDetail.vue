@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import { BSpinner } from "bootstrap-vue-next";
+import { BSpinner, useToast } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
@@ -101,6 +101,7 @@ import DashboardDetail from "./layouts/DashboardDetail.vue";
 const route = useRoute();
 const store = useStore();
 const { t } = useI18n();
+const { create: showToast } = useToast();
 
 const previewMetaData = ref(null);
 const previewDataItemId = ref(null);
@@ -160,7 +161,7 @@ function preview(itemId) {
         if (store.getters.dataItemJSONLines(itemId) < 3000) {
             previewDataItemId.value = itemId;
         } else {
-            // Toast handled by component
+            showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
             previewDataItemId.value = null;
         }
 

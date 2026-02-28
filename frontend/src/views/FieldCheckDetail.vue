@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { BSpinner } from "bootstrap-vue-next";
+import { BSpinner, useToast } from "bootstrap-vue-next";
 import "vue-json-pretty/lib/styles.css";
 import VueJsonPretty from "vue-json-pretty";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
@@ -104,6 +104,10 @@ export default {
         ExampleBoxes,
         CheckDetailResultBox,
         Tooltip,
+    },
+    setup() {
+        const { create: showToast } = useToast();
+        return { showToast };
     },
     data: () => ({
         previewMetaData: null,
@@ -198,7 +202,11 @@ export default {
                 if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
                     this.previewDataItemId = itemId;
                 } else {
-                    this.$toast(this.$t("preview.cannotDisplay"), "danger");
+                    this.showToast({
+                        body: this.$t("preview.cannotDisplay"),
+                        variant: "danger",
+                        pos: "middle-center",
+                    });
                     this.previewDataItemId = null;
                 }
 
