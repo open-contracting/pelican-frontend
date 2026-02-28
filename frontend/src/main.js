@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import App from "./App.vue";
-import { useFormatters } from "./composables/useFormatters";
 import { messages as en } from "./messages/en.js";
 import { FontAwesomeIcon } from "./plugins/fontawesome";
 import router from "./router";
@@ -17,8 +16,6 @@ const i18n = createI18n({
 });
 
 const app = createApp(App);
-
-app.config.globalProperties.$filters = useFormatters();
 
 app.use(i18n);
 app.use(router);

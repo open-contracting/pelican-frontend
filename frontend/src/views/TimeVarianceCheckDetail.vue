@@ -9,7 +9,7 @@
 
       <h5>
         {{ $t("timeLevel.coverage.header") }}
-        <span class="bold">{{ $filters.formatNumber(check.meta.total_count) }}</span>
+        <span class="bold">{{ formatNumber(check.meta.total_count) }}</span>
                 &nbsp;
         <Tooltip :text="$t('timeLevel.coverage.header_tooltip')" />
       </h5>
@@ -50,7 +50,7 @@
 
       <h5>
         {{ $t("timeLevel.check.header") }}
-        <span class="bold">{{ $filters.formatNumber(check.meta.coverage_count) }}</span>
+        <span class="bold">{{ formatNumber(check.meta.coverage_count) }}</span>
                 &nbsp;
         <Tooltip :text="$t('timeLevel.check.header_tooltip')" />
       </h5>
@@ -405,7 +405,10 @@ import "vue-json-pretty/lib/styles.css";
 import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
+import { useFormatters } from "@/composables/useFormatters";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
+
+const { formatNumber } = useFormatters();
 
 const route = useRoute();
 const store = useStore();

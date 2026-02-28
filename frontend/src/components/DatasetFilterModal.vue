@@ -90,7 +90,7 @@
           <span v-if="gettingCountsToken == null">
             <span
               v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases?.total_unique_ocids"
-            >({{ $filters.formatNumber(items) }} from {{ $filters.formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
+            >({{ formatNumber(items) }} from {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
               {{ $t("datasetFilter.items") }})</span>
             <span
               v-if="dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids"
@@ -109,6 +109,7 @@
 <script>
 import axios from "axios";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
+import { useFormatters } from "@/composables/useFormatters";
 import { CONFIG } from "@/config.js";
 import DatasetValuesMultiselect from "./DatasetValuesMultiselect.vue";
 import Loader from "./Loader.vue";
@@ -117,6 +118,10 @@ export default {
     components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader },
     props: ["dataset"],
     emits: ["close"],
+    setup() {
+        const { formatNumber } = useFormatters();
+        return { formatNumber };
+    },
     data: () => ({
         isSubmitting: false,
         gettingCountsToken: null,

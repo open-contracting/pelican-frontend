@@ -57,10 +57,10 @@
               >
                 <td>{{ item.value_str }}</td>
                 <td class="text-end numeric">
-                  {{ $filters.formatPercentage2D(item.share * 100) }}
+                  {{ formatPercentage2D(item.share * 100) }}
                 </td>
                 <td class="text-end numeric">
-                  {{ $filters.formatNumber(item.count) }}
+                  {{ formatNumber(item.count) }}
                 </td>
               </tr>
             </tbody>
@@ -71,21 +71,21 @@
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
-                {{ $filters.formatNumber(check.meta.total_passed) }}
+                {{ formatNumber(check.meta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.passed") }}
             </div>
 
             <div class="numeric_result color_failed col-4">
               <div class="check_numeric_value">
-                {{ $filters.formatNumber(check.meta.total_processed - check.meta.total_passed) }}
+                {{ formatNumber(check.meta.total_processed - check.meta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.failed") }}
             </div>
 
             <div class="numeric_result color_na col-4">
               <div class="check_numeric_value">
-                {{ $filters.formatNumber(check.meta.total_processed) }}
+                {{ formatNumber(check.meta.total_processed) }}
               </div>
               {{ $t("datasetLevel.numeric.processed") }}
             </div>
@@ -116,7 +116,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ $filters.formatPercentage2D(check.meta.ocid_share * 100) }}
+                  {{ formatPercentage2D(check.meta.ocid_share * 100) }}
                 </div>
               </div>
               <div class="row">
@@ -197,9 +197,12 @@ import BarChartBig from "@/components/BarChartBig.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
+import { useFormatters } from "@/composables/useFormatters";
 import { CHECK_TICKS, CHECK_TYPES, REPORT_ONLY_CHECKS } from "@/config.js";
 import { orderedShares } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
+
+const { formatNumber, formatPercentage2D } = useFormatters();
 
 const route = useRoute();
 const store = useStore();

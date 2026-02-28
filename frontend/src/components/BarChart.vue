@@ -8,10 +8,15 @@
 
 <script>
 import { GChart } from "vue-google-charts";
+import { useFormatters } from "@/composables/useFormatters";
 
 export default {
     components: { GChart },
     props: ["check", "ticks"],
+    setup() {
+        const { formatPercentage } = useFormatters();
+        return { formatPercentage };
+    },
     data() {
         return {
             chartData: [
@@ -64,7 +69,7 @@ export default {
         this.chartData.push([
             this.$t("datasetLevel.charts.label_0_1"),
             this.check.meta.shares["0_1"],
-            this.$filters.formatPercentage(this.check.meta.shares["0_1"]),
+            this.formatPercentage(this.check.meta.shares["0_1"]),
             this.ticks[0] <= this.check.meta.shares["0_1"] && this.check.meta.shares["0_1"] <= this.ticks[1]
                 ? "color: #919C03"
                 : "color: #d0021b",
@@ -72,25 +77,25 @@ export default {
         this.chartData.push([
             this.$t("datasetLevel.charts.label_1_5"),
             this.check.meta.shares["1_5"],
-            this.$filters.formatPercentage(this.check.meta.shares["1_5"]),
+            this.formatPercentage(this.check.meta.shares["1_5"]),
             "",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_5_20"),
             this.check.meta.shares["5_20"],
-            this.$filters.formatPercentage(this.check.meta.shares["5_20"]),
+            this.formatPercentage(this.check.meta.shares["5_20"]),
             "",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_20_50"),
             this.check.meta.shares["20_50"],
-            this.$filters.formatPercentage(this.check.meta.shares["20_50"]),
+            this.formatPercentage(this.check.meta.shares["20_50"]),
             "",
         ]);
         this.chartData.push([
             this.$t("datasetLevel.charts.label_50_100"),
             this.check.meta.shares["50_100"],
-            this.$filters.formatPercentage(this.check.meta.shares["50_100"]),
+            this.formatPercentage(this.check.meta.shares["50_100"]),
             "",
         ]);
     },

@@ -18,7 +18,7 @@
       <h5>
         {{ $t("resourceLevel.count_header") }}
         <span class="bold">{{
-          $filters.formatNumber(check.passed_count + check.failed_count + check.undefined_count)
+          formatNumber(check.passed_count + check.failed_count + check.undefined_count)
         }}</span>
                 &nbsp;
         <Tooltip :text="$t('resourceLevel.count_header_tooltip')" />
@@ -33,7 +33,7 @@
 
       <h5>
         {{ $t("resourceLevel.application_count_header") }}
-        <span class="bold">{{ $filters.formatNumber(check.individual_application_count) }}</span>&nbsp;
+        <span class="bold">{{ formatNumber(check.individual_application_count) }}</span>&nbsp;
         <Tooltip :text="$t('resourceLevel.application_count_header_tooltip')" />
       </h5>
       <CheckDetailResultBox
@@ -96,7 +96,10 @@ import "vue-json-pretty/lib/styles.css";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import { useFormatters } from "@/composables/useFormatters";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
+
+const { formatNumber } = useFormatters();
 
 const route = useRoute();
 const store = useStore();

@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { useFormatters } from "@/composables/useFormatters";
 import ResourceLevelRow from "./ResourceLevelRow.vue";
 import Tooltip from "./Tooltip.vue";
 
@@ -55,6 +56,10 @@ export default {
         Tooltip,
     },
     props: ["section", "filter"],
+    setup() {
+        const { formatPercentage } = useFormatters();
+        return { formatPercentage };
+    },
     data: () => ({
         showChecks: false,
     }),
@@ -145,7 +150,7 @@ export default {
                 return this.$t("resourceLevel.averageScore.undefined");
             }
 
-            return this.$filters.formatPercentage(passedCount / (passedCount + failedCount));
+            return this.formatPercentage(passedCount / (passedCount + failedCount));
         },
     },
     watch: {

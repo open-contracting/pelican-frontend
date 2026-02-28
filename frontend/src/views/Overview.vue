@@ -95,7 +95,7 @@
               </div>
               <div class="td col col-8 d-flex align-items-center break_word">
                 <span class="ocid_count bold">{{
-                  $filters.formatNumber(compiled_releases.total_unique_ocids)
+                  formatNumber(compiled_releases.total_unique_ocids)
                 }}</span>
               </div>
             </div>
@@ -290,7 +290,7 @@
                   >
                 </div>
                 <div class="lifecycle_value">
-                  <strong>{{ $filters.formatNumber(lifecycle[n]) }}</strong>
+                  <strong>{{ formatNumber(lifecycle[n]) }}</strong>
                 </div>
               </div>
               <div
@@ -310,11 +310,16 @@
 
 <script>
 import Tooltip from "@/components/Tooltip.vue";
+import { useFormatters } from "@/composables/useFormatters";
 import Dashboard from "./layouts/Dashboard.vue";
 
 export default {
     name: "Overview",
     components: { Dashboard, Tooltip },
+    setup() {
+        const { formatNumber } = useFormatters();
+        return { formatNumber };
+    },
     computed: {
         dataset: function () {
             return this.$store.getters.dataset;
@@ -352,9 +357,6 @@ export default {
     methods: {
         getMetaData: function (type) {
             return this.dataset?.meta?.[type];
-        },
-        formatNumber(number) {
-            return this.$filters.formatNumber(number);
         },
     },
 };

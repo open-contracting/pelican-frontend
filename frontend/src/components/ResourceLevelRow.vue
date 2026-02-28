@@ -10,31 +10,31 @@
       <span
         v-if="okRatio"
         class="value_ok"
-      >{{ $filters.formatPercentage(okRatio) }}</span>
+      >{{ formatPercentage(okRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ $filters.formatPercentage(okRatio) }}</span>
+      >{{ formatPercentage(okRatio) }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-end">
       <span
         v-if="failedRatio"
         class="value_failed"
-      >{{ $filters.formatPercentage(failedRatio) }}</span>
+      >{{ formatPercentage(failedRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ $filters.formatPercentage(failedRatio) }}</span>
+      >{{ formatPercentage(failedRatio) }}</span>
     </div>
     <div class="td col-1 col-lg-1 text-end">
       <span
         v-if="naRatio"
         class="value_na"
-      >{{ $filters.formatPercentage(naRatio) }}</span>
+      >{{ formatPercentage(naRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ $filters.formatPercentage(naRatio) }}</span>
+      >{{ formatPercentage(naRatio) }}</span>
     </div>
     <div class="td col-4 d-none d-lg-block progress_column">
       <ProgressBar
@@ -49,7 +49,10 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useFormatters } from "@/composables/useFormatters";
 import ProgressBar from "./ProgressBar.vue";
+
+const { formatPercentage } = useFormatters();
 
 const props = defineProps(["check", "name"]);
 const router = useRouter();

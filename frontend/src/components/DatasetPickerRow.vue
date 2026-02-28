@@ -27,7 +27,7 @@
         </a>
       </div>
       <div class="td col-1 numeric text-end">
-        {{ $filters.formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
+        {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
       </div>
       <div class="td col-1 numeric text-end">
         {{ dataset.meta.kingfisher_metadata?.collection_id }}
@@ -106,8 +106,11 @@
 
 <script setup>
 import { BCol, BLink, BRow } from "bootstrap-vue-next";
+import { useFormatters } from "@/composables/useFormatters";
 import { PHASES } from "@/config";
 import ProgressBar from "./ProgressBar.vue";
+
+const { formatNumber } = useFormatters();
 
 defineOptions({ name: "DatasetPickerRow" });
 

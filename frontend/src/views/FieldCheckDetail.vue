@@ -11,7 +11,7 @@
           <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
           &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
-            {{ $filters.formatNumber(c.passed_count + c.failed_count) }}
+            {{ formatNumber(c.passed_count + c.failed_count) }}
           </span>
                     &nbsp;
           <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
@@ -30,7 +30,7 @@
           <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
           &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; &nbsp;
           <span class="bold">
-            {{ $filters.formatNumber(c.passed_count + c.failed_count) }}
+            {{ formatNumber(c.passed_count + c.failed_count) }}
           </span>
                     &nbsp;
           <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />
@@ -93,6 +93,7 @@ import VueJsonPretty from "vue-json-pretty";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import { useFormatters } from "@/composables/useFormatters";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 export default {
@@ -107,7 +108,8 @@ export default {
     },
     setup() {
         const { create: showToast } = useToast();
-        return { showToast };
+        const { formatNumber } = useFormatters();
+        return { showToast, formatNumber };
     },
     data: () => ({
         previewMetaData: null,

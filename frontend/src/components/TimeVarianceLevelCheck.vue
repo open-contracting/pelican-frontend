@@ -52,7 +52,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.coverage_result }"
                 >
-                  {{ $filters.formatPercentage(coverageRatio) }}
+                  {{ formatPercentage(coverageRatio) }}
                 </span>
               </div>
               <div class="col col-6 text-center">
@@ -60,7 +60,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.check_result }"
                 >
-                  {{ $filters.formatPercentage(checkRatio) }}
+                  {{ formatPercentage(checkRatio) }}
                 </span>
               </div>
             </div>
@@ -90,8 +90,10 @@
 <script setup>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
+import { useFormatters } from "@/composables/useFormatters";
 
 const props = defineProps(["check"]);
+const { formatPercentage } = useFormatters();
 const router = useRouter();
 
 const result = computed(() => props.check.coverage_result && props.check.check_result);

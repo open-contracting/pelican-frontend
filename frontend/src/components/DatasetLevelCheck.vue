@@ -90,8 +90,8 @@
               v-if="checkType == 'numeric'"
               class="text-center"
             >
-              <span class="check_numeric_value">{{ $filters.formatNumber(check.meta.total_passed) }}</span>
-              <span class="check_numeric_count">&nbsp;/&nbsp;{{ $filters.formatNumber(check.meta.total_processed) }}</span>
+              <span class="check_numeric_value">{{ formatNumber(check.meta.total_passed) }}</span>
+              <span class="check_numeric_count">&nbsp;/&nbsp;{{ formatNumber(check.meta.total_processed) }}</span>
             </div>
 
             <div
@@ -109,7 +109,7 @@
                   >
                     <td>{{ item.value_str }}</td>
                     <td class="text-end numeric">
-                      {{ $filters.formatPercentage2D(item.share) }}
+                      {{ formatPercentage2D(item.share) }}
                     </td>
                   </tr>
                 </table>
@@ -128,7 +128,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ $filters.formatPercentage2D(check.meta.ocid_share) }}
+                  {{ formatPercentage2D(check.meta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
@@ -157,7 +157,11 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useFormatters } from "@/composables/useFormatters";
 import { CHECK_TICKS, CHECK_TYPES, REPORT_ONLY_CHECKS } from "@/config.js";
+
+const { formatNumber, formatPercentage2D } = useFormatters();
+
 import BarChart from "./BarChart.vue";
 import BarChartSingleValue from "./BarChartSingleValue.vue";
 import DonutChart from "./DonutChart.vue";
