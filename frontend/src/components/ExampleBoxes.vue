@@ -173,64 +173,41 @@
   </span>
 </template>
 
-<script>
-import { BSpinner, BTooltip } from "bootstrap-vue-next";
+<script setup>
+import { BSpinner } from "bootstrap-vue-next";
+import { ref } from "vue";
+import { useDataItem } from "@/composables/useDataItem.js";
 
-export default {
-    components: { BSpinner, BTooltip },
-    props: {
-        exampleSections: Array,
-        loaded: Boolean,
-    },
-    emits: ["preview"],
-    data: () => ({
-        openSections: [],
-        selectedKey: null,
-        selectedSection: null,
-    }),
-    computed: {},
-    methods: {
-        preview: function (key, section, itemId, group) {
-            this.selectedKey = key;
-            this.selectedSection = section;
-            this.$emit("preview", itemId, group);
-        },
-        download: function (itemId) {
-            this.$store.dispatch("loadDataItem", itemId).then(() => {
-                const result = this.$store.getters.dataItemById(itemId);
-                const fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
-                const fileLink = document.createElement("a");
+defineProps({
+    exampleSections: Array,
+    loaded: Boolean,
+});
 
-                fileLink.href = fileURL;
-                fileLink.setAttribute("download", `data_item_${itemId}.json`);
-                document.body.appendChild(fileLink);
+const emit = defineEmits(["preview"]);
 
-                fileLink.click();
+const { download, copyToClipboard } = useDataItem();
 
-                this.$toast(this.$t("examples.download.success"), "success");
-            });
-        },
-        copyToClipboard: function (itemId) {
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    navigator.clipboard.writeText(this.$store.getters.dataItemJSON(itemId));
-                    this.$toast(this.$t("examples.copyToClipboard.success"), "success");
-                } else {
-                    this.$toast(this.$t("examples.copyToClipboard.failure"), "danger");
-                }
-            });
-        },
-        showMore: function (section) {
-            this.openSections.push(section);
-        },
-        showLess: function (section) {
-            this.openSections = this.openSections.filter((item) => item !== section);
-        },
-        visibleSections: function (section) {
-            return this.openSections.includes(section);
-        },
-    },
-};
+const openSections = ref([]);
+const selectedKey = ref(null);
+const selectedSection = ref(null);
+
+function preview(key, section, itemId, group) {
+    selectedKey.value = key;
+    selectedSection.value = section;
+    emit("preview", itemId, group);
+}
+
+function showMore(section) {
+    openSections.value.push(section);
+}
+
+function showLess(section) {
+    openSections.value = openSections.value.filter((item) => item !== section);
+}
+
+function visibleSections(section) {
+    return openSections.value.includes(section);
+}
 </script>
 
 <style scoped lang="scss">

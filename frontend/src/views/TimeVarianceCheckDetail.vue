@@ -395,7 +395,7 @@
 </template>
 
 <script setup>
-import { BSpinner, BTooltip } from "bootstrap-vue-next";
+import { BSpinner, useToast } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
@@ -404,10 +404,14 @@ import { useStore } from "vuex";
 import "vue-json-pretty/lib/styles.css";
 import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import { useDataItem } from "@/composables/useDataItem.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 const route = useRoute();
 const store = useStore();
+const { t } = useI18n();
+const { create: showToast } = useToast();
+const { download, copyToClipboard } = useDataItem();
 
 const check = ref(null);
 const previewDataItemId = ref(null);
@@ -443,55 +447,18 @@ function preview(key, itemId) {
                 previewDataItemId.value = itemId;
                 selectedKey.value = key;
             } else {
-                // Toast handled by component
+                showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
                 previewDataItemId.value = null;
                 selectedKey.value = null;
             }
         })
         .catch(() => {
-            // Toast handled by component
+            showToast({ body: t("preview.nonExisting"), variant: "danger", pos: "middle-center" });
             previewDataItemId.value = null;
             selectedKey.value = null;
         })
         .finally(() => {
             loadingPreviewData.value = false;
-        });
-}
-
-function download(itemId) {
-    store
-        .dispatch("loadDataItem", itemId)
-        .then(() => {
-            const result = store.getters.dataItemById(itemId);
-            const fileURL = window.URL.createObjectURL(new Blob([JSON.stringify(result.data, null, 2)]));
-            const fileLink = document.createElement("a");
-
-            fileLink.href = fileURL;
-            fileLink.setAttribute("download", `data_item_${itemId}.json`);
-            document.body.appendChild(fileLink);
-
-            fileLink.click();
-
-            // Toast handled by component
-        })
-        .catch(() => {
-            // Toast handled by component
-        });
-}
-
-function copyToClipboard(itemId) {
-    store
-        .dispatch("loadDataItem", itemId)
-        .then(() => {
-            if (store.getters.dataItemJSONLines(itemId) < 3000) {
-                navigator.clipboard.writeText(store.getters.dataItemJSON(itemId));
-                // Toast handled by component
-            } else {
-                // Toast handled by component
-            }
-        })
-        .catch(() => {
-            // Toast handled by component
         });
 }
 
