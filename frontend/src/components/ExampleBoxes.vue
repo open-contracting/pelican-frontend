@@ -58,65 +58,40 @@
               <td class="col-9 text-start numeric">
                 <span class="check_name">{{ item.ocid }}</span>
               </td>
-              <td class="col-1 clickable">
-                <span v-if="index != selectedKey || selectedSection != section.header">
+              <td class="clickable">
+                <span
+                  v-if="index != selectedKey || selectedSection != section.header"
+                  :title="$t('examples.preview.tooltip')"
+                >
                   <FontAwesomeIcon
-                    :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['far', 'eye']"
                     @click.stop.prevent="preview(index, section.header, item.item_id, section.group)"
                   />
-                  <BTooltip
-                    :target="'preview_' + section.id + '_' + index"
-                  >
-                    <span
-                      class="tooltip_text"
-                      v-html="$t('examples.preview.tooltip')"
-                    />
-                  </BTooltip>
                 </span>
                 <span v-if="index == selectedKey && selectedSection == section.header">
                   <FontAwesomeIcon
-                    :id="'preview_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'eye']"
                   />
                 </span>
               </td>
-              <td class="col-1 clickable">
-                <span>
+              <td class="clickable">
+                <span :title="$t('examples.download.tooltip')">
                   <FontAwesomeIcon
-                    :id="'download_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'cloud-download-alt']"
                     @click.stop.prevent="download(item.item_id)"
                   />
-                  <BTooltip
-                    :target="'download_' + section.id + '_' + index"
-                  >
-                    <span
-                      class="tooltip_text"
-                      v-html="$t('examples.download.tooltip')"
-                    />
-                  </BTooltip>
                 </span>
               </td>
-              <td class="col-1 clickable">
-                <span>
+              <td class="clickable">
+                <span :title="$t('examples.copyToClipboard.tooltip')">
                   <FontAwesomeIcon
-                    :id="'clipboard_' + section.id + '_' + index"
                     class="examples_icon"
                     :icon="['fas', 'clipboard']"
                     @click.stop.prevent="copyToClipboard(item.item_id)"
                   />
-                  <BTooltip
-                    :target="'clipboard_' + section.id + '_' + index"
-                  >
-                    <span
-                      class="tooltip_text"
-                      v-html="$t('examples.copyToClipboard.tooltip')"
-                    />
-                  </BTooltip>
                 </span>
               </td>
             </tr>
@@ -141,65 +116,40 @@
                 <td class="col-9 text-start numeric">
                   <span class="check_name">{{ item.ocid }}</span>
                 </td>
-                <td class="col-1 clickable">
-                  <span v-if="index + 5 != selectedKey || selectedSection != section.header">
+                <td class="clickable">
+                  <span
+                    v-if="index + 5 != selectedKey || selectedSection != section.header"
+                    :title="$t('examples.preview.tooltip')"
+                  >
                     <FontAwesomeIcon
-                      :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['far', 'eye']"
                       @click.stop.prevent="preview(index + 5, section.header, item.item_id, section.group)"
                     />
-                    <BTooltip
-                      :target="'preview_' + section.id + '_' + (index + 5)"
-                      >
-                      <span
-                        class="tooltip_text"
-                        v-html="$t('examples.preview.tooltip')"
-                      />
-                    </BTooltip>
                   </span>
                   <span v-if="index + 5 == selectedKey && selectedSection == section.header">
                     <FontAwesomeIcon
-                      :id="'preview_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'eye']"
                     />
                   </span>
                 </td>
-                <td class="col-1 clickable">
-                  <span>
+                <td class="clickable">
+                  <span :title="$t('examples.download.tooltip')">
                     <FontAwesomeIcon
-                      :id="'download_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
                       @click.stop.prevent="download(item.item_id)"
                     />
-                    <BTooltip
-                      :target="'download_' + section.id + '_' + (index + 5)"
-                      >
-                      <span
-                        class="tooltip_text"
-                        v-html="$t('examples.download.tooltip')"
-                      />
-                    </BTooltip>
                   </span>
                 </td>
-                <td class="col-1 clickable">
-                  <span>
+                <td class="clickable">
+                  <span :title="$t('examples.copyToClipboard.tooltip')">
                     <FontAwesomeIcon
-                      :id="'clipboard_' + section.id + '_' + (index + 5)"
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
                       @click.stop.prevent="copyToClipboard(item.item_id)"
                     />
-                    <BTooltip
-                      :target="'clipboard_' + section.id + '_' + (index + 5)"
-                      >
-                      <span
-                        class="tooltip_text"
-                        v-html="$t('examples.copyToClipboard.tooltip')"
-                      />
-                    </BTooltip>
                   </span>
                 </td>
               </tr>
