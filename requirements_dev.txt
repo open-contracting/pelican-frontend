@@ -111,7 +111,7 @@ numpy==2.3.1
     #   -r requirements.txt
     #   contourpy
     #   matplotlib
-orjson==3.9.15
+orjson==3.11.6
     # via
     #   -r requirements.txt
     #   yapw
