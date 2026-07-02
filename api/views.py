@@ -8,7 +8,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import extend_schema
-from psycopg2.sql import SQL
+from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -74,18 +74,16 @@ def dataset_filter_items(request):
         parts.append("data->>'date' <= %(release_date_to)s")
 
     if "buyer" in filter_message:
-        variables["buyer"] = tuple(buyer for buyer in filter_message["buyer"])
-        parts.append("data->'buyer'->>'name' IN %(buyer)s")
+        variables["buyer"] = filter_message["buyer"]
+        parts.append("data->'buyer'->>'name' = ANY(%(buyer)s)")
 
     if "buyer_regex" in filter_message:
         variables["buyer_regex"] = filter_message["buyer_regex"]
         parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
 
     if "procuring_entity" in filter_message:
-        variables["procuring_entity"] = tuple(
-            procuring_entity for procuring_entity in filter_message["procuring_entity"]
-        )
-        parts.append("data->'tender'->'procuringEntity'->>'name' IN %(procuring_entity)s")
+        variables["procuring_entity"] = filter_message["procuring_entity"]
+        parts.append("data->'tender'->'procuringEntity'->>'name' = ANY(%(procuring_entity)s)")
 
     if "procuring_entity_regex" in filter_message:
         variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]

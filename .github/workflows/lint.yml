@@ -5,5 +5,7 @@ jobs:
     uses: open-contracting/.github/.github/workflows/lint.yml@main
     permissions:
       contents: write
+    with:
+      standard-maintenance-scripts-files: requirements_base.in
     secrets:
       personal-access-token: ${{ secrets.PAT }}
