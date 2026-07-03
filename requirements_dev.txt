@@ -137,7 +137,9 @@ protobuf==5.29.6
     #   googleapis-common-protos
     #   proto-plus
 psycopg==3.3.4
-    # via -r requirements_dev.in
+    # via
+    #   -r requirements_base.txt
+    #   -r requirements_dev.in
 psycopg-binary==3.3.4
     # via psycopg
 pyasn1==0.4.8

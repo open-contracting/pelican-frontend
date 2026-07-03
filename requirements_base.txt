@@ -96,6 +96,8 @@ protobuf==5.29.6
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
+psycopg==3.3.4
+    # via -r requirements_base.in
 pyasn1==0.4.8
     # via
     #   pyasn1-modules
@@ -137,7 +139,9 @@ six==1.16.0
 sqlparse==0.5.4
     # via django
 typing-extensions==4.7.1
-    # via dj-database-url
+    # via
+    #   dj-database-url
+    #   psycopg
 uritemplate==3.0.1
     # via
     #   drf-spectacular
