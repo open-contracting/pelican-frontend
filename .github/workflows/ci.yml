@@ -64,7 +64,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: "**/package-lock.json"
-      - run: npm ci --ignore-scripts
-      - run: npx vite build
+          cache: pnpm
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec vite build

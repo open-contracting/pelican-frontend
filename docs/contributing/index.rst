@@ -56,7 +56,7 @@ Install development dependencies:
 
 .. code-block:: bash
 
-   npm install
+   pnpm install
 
 .. _development:
 
@@ -74,7 +74,7 @@ In another terminal, start the frontend server:
 .. code-block:: bash
 
    cd frontend
-   npx vite
+   pnpm exec vite
 
 Backend
 ~~~~~~~
@@ -132,4 +132,4 @@ Production
 
 .. code-block:: bash
 
-   npx vite build
+   pnpm exec vite build

@@ -6,4 +6,4 @@ jobs:
     permissions:
       contents: read
     with:
-      lockfile_path: frontend/package-lock.json
+      lockfile_path: frontend/pnpm-lock.yaml
