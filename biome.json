@@ -12,6 +12,9 @@
       }
     }
   },
+  "linter": {
+    "enabled": true
+  },
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 4,
@@ -22,9 +25,6 @@
     "formatter": {
       "indentWidth": 2
     }
-  },
-  "linter": {
-    "enabled": true
   },
   "overrides": [
     {
