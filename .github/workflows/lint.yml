@@ -6,7 +6,6 @@ jobs:
     permissions:
       contents: write
     with:
-      standard-maintenance-scripts-files: requirements_base.in
       ocds-schema-exceptions: release-schema.json
     secrets:
       personal-access-token: ${{ secrets.PAT }}
