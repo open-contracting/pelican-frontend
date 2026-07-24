@@ -73,7 +73,7 @@ googleapis-common-protos==1.65.0
     #   google-api-core
 gunicorn[setproctitle]==23.0.0
     # via -r requirements_base.txt
-httplib2==0.22.0
+httplib2==0.32.0
     # via
     #   -r requirements_base.txt
     #   google-api-python-client
