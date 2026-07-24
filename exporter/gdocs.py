@@ -1,6 +1,5 @@
 # All interactions with Google Drive APIs should be in this file.
 
-import os
 import re
 import shutil
 import tempfile
@@ -37,8 +36,8 @@ class Gdocs:
         self.drive_service = build("drive", "v3", credentials=credentials, cache_discovery=False)
         self.google_drive_cache = GoogleDriveCache(self.drive_service)
 
-        self.directory = tempfile.mkdtemp()
-        self.output_file = os.path.join(self.directory, "out.zip")
+        self.directory = Path(tempfile.mkdtemp())
+        self.output_file = self.directory / "out.zip"
 
         with (
             ZipFile(self.google_drive_cache.get_file_path(main_template_id), "r") as zipread,
@@ -55,7 +54,7 @@ class Gdocs:
 
     def add_image_file(self, buffer, name: str = "image.png") -> str:
         with ZipFile(self.output_file, mode="a") as zipfile:
-            path = os.path.join("Pictures/", f"{shortuuid.uuid()}_{name}")
+            path = f"Pictures/{shortuuid.uuid()}_{name}"
             zipfile.writestr(path, buffer.getbuffer())
 
         # Updating manifest
@@ -95,7 +94,7 @@ class Gdocs:
 
         return file.get("id")
 
-    def remove_file_from_zip(self, zip_file_path: str, file_path: str) -> None:
+    def remove_file_from_zip(self, zip_file_path: Path, file_path: str) -> None:
         with ZipFile(zip_file_path, "r") as zipread, ZipFile(f"{zip_file_path}_copy", "w") as zipwrite:
             for item in zipread.infolist():
                 if item.filename != file_path:
@@ -115,7 +114,7 @@ class Gdocs:
 class GoogleDriveCache:
     def __init__(self, drive_service):
         if not default_storage.exists(ROOT):
-            os.mkdir(default_storage.path(ROOT))
+            Path(default_storage.path(ROOT)).mkdir()
 
         self.drive_service = drive_service
         self.files = {}
