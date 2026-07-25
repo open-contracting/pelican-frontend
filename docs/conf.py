@@ -39,6 +39,11 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 html_theme = "furo"
 html_static_path = ["_static"]
+# Georg Leonhart Huth, George Edwards, Mark Catesby & Johann Michael Seligmann,
+# "Recueil de divers oiseaux étrangers et peu communs" (1771-1772).
+# Digitized by the Biodiversity Heritage Library (https://doi.org/10.5962/bhl.title.65000),
+# courtesy of Smithsonian Libraries and Archives. Public domain. https://flic.kr/p/2k38JRw
+html_logo = "_static/logo.jpg"
 html_additional_pages = {
     "reference/redoc": "redoc.html",
     "reference/swagger-ui": "swagger-ui.html",
