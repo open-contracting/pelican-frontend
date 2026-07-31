@@ -1,13 +1,14 @@
+import csv
 import time
 
 import simplejson as json
 from django.conf import settings
 from django.db import connections
 from django.db.models import Count, F, OuterRef, Subquery
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
@@ -344,6 +345,30 @@ class DatasetViewSet(viewsets.ViewSet):
         return Response(meta or {})
 
 
+class Echo:
+    """A file-like object that returns the value written, for use with `csv.writer` in streaming responses."""
+
+    def write(self, value):
+        return value
+
+
+def failed_ocids_csv_response(filename, statement, variables):
+    def rows():
+        writer = csv.writer(Echo())
+        yield writer.writerow(["ocid"])
+        with connections["pelican_backend"].cursor() as cursor:
+            cursor.execute(statement, variables)
+            while batch := cursor.fetchmany(1000):
+                for row in batch:
+                    yield writer.writerow(row)
+
+    return StreamingHttpResponse(
+        rows(),
+        content_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
 class FieldLevelDetail(views.APIView):
     @extend_schema(responses={200: {"type": "object"}})
     def get(self, request, pk, name, format=None):
@@ -379,3 +404,59 @@ class ResourceLevelDetail(views.APIView):
         detail["time"] = time.time() - start_time
 
         return Response(detail)
+
+
+class FieldLevelFailedOcids(views.APIView):
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "level",
+                description="The level at which the check is performed",
+                enum=["coverage", "quality"],
+                default="quality",
+            ),
+        ],
+        responses={(200, "text/csv"): {"type": "string"}},
+    )
+    def get(self, request, pk, name, format=None):
+        """Return, as a CSV file, the OCIDs of all compiled releases that failed one field-level check."""
+        get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name)
+
+        level = request.query_params.get("level", "quality")
+        if level not in {"coverage", "quality"}:
+            return HttpResponseBadRequest(reason="level must be either 'coverage' or 'quality'.")
+
+        return failed_ocids_csv_response(
+            f"dataset_{pk}_{name}_{level}_failed_ocids.csv",
+            """
+            SELECT result->'meta'->>'ocid'
+            FROM field_level_check
+            WHERE dataset_id = %(dataset_id)s
+                AND EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(result->'checks'->%(path)s) AS occurrence
+                    WHERE (occurrence->%(level)s->>'overall_result')::boolean IS FALSE
+                )
+            ORDER BY 1
+            """,
+            {"dataset_id": pk, "path": name, "level": level},
+        )
+
+
+class ResourceLevelFailedOcids(views.APIView):
+    @extend_schema(responses={(200, "text/csv"): {"type": "string"}})
+    def get(self, request, pk, name, format=None):
+        """Return, as a CSV file, the OCIDs of all compiled releases that failed one compiled release-level check."""
+        get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name)
+
+        return failed_ocids_csv_response(
+            f"dataset_{pk}_{name}_failed_ocids.csv",
+            """
+            SELECT result->'meta'->>'ocid'
+            FROM resource_level_check
+            WHERE dataset_id = %(dataset_id)s
+                AND (result->'checks'->%(name)s->>'result')::boolean IS FALSE
+            ORDER BY 1
+            """,
+            {"dataset_id": pk, "name": name},
+        )
