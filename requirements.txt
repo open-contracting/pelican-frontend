@@ -140,7 +140,7 @@ psycopg==3.3.4
     #   -r requirements_base.txt
 psycopg-c==3.3.4
     # via psycopg
-pyasn1==0.6.4
+pyasn1==0.4.8
     # via
     #   -r requirements_base.txt
     #   pyasn1-modules
