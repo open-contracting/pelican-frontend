@@ -71,7 +71,7 @@ googleapis-common-protos==1.65.0
     # via
     #   -r requirements_base.txt
     #   google-api-core
-gunicorn==23.0.0
+gunicorn==26.0.0
     # via -r requirements_base.txt
 httplib2==0.32.0
     # via
