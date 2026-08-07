@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import simplejson as json
 from django.conf import settings
@@ -9,6 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from exporter.exceptions import GoogleDriveError, TagError
 from exporter.gdocs import Gdocs
 from exporter.template_tags.base import base as base_tag
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
@@ -55,13 +58,14 @@ def generate_report(request) -> JsonResponse:
         file_id = gdocs.upload(folder_id, filename, content)
 
         response = JsonResponse({"status": "ok", "data": {"file_id": file_id}, "failed_tags": failed_tags})
-    except GoogleDriveError as er:
-        response = JsonResponse({"status": "report_error", "data": {"reason": str(er)}})
-    except TagError as er:
+    except GoogleDriveError as e:
+        logger.exception("Unable to export the report for dataset %s", input_message["dataset_id"])
+        response = JsonResponse({"status": "report_error", "data": {"reason": str(e)}})
+    except TagError as e:
         response = JsonResponse(
             {
                 "status": "template_error",
-                "data": [er.as_dict()],  # Can accommodate multiple TagErrors in the future
+                "data": [e.as_dict()],  # Can accommodate multiple TagErrors in the future
                 "failed_tags": failed_tags,
             }
         )
