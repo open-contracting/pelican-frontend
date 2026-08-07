@@ -498,12 +498,12 @@ class ViewsTests(PelicanTestCase):
             content = b"".join(response.streaming_content)
 
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.headers["Content-Type"], "text/csv")
+            self.assertEqual(response.headers["Content-Type"], "text/plain")
             self.assertEqual(
                 response.headers["Content-Disposition"],
-                f'attachment; filename="dataset_{dataset.pk}_date_quality_failed_ocids.csv"',
+                f'attachment; filename="dataset_{dataset.pk}_date_quality_failed_ocids.txt"',
             )
-            self.assertEqual(content, b"ocid\r\nocds-213czf-2\r\n")
+            self.assertEqual(content, b"ocds-213czf-2\n")
 
     def test_field_level_failed_ocids_coverage(self):
         dataset = self.create(Dataset, name="anything")
@@ -519,9 +519,9 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(
                 response.headers["Content-Disposition"],
-                f'attachment; filename="dataset_{dataset.pk}_date_coverage_failed_ocids.csv"',
+                f'attachment; filename="dataset_{dataset.pk}_date_coverage_failed_ocids.txt"',
             )
-            self.assertEqual(content, b"ocid\r\nocds-213czf-3\r\n")
+            self.assertEqual(content, b"ocds-213czf-3\n")
 
     def test_field_level_failed_ocids_invalid_level(self):
         dataset = self.create(Dataset, name="anything")
@@ -570,12 +570,12 @@ class ViewsTests(PelicanTestCase):
             content = b"".join(response.streaming_content)
 
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.headers["Content-Type"], "text/csv")
+            self.assertEqual(response.headers["Content-Type"], "text/plain")
             self.assertEqual(
                 response.headers["Content-Disposition"],
-                f'attachment; filename="dataset_{dataset.pk}_coherent.dates_failed_ocids.csv"',
+                f'attachment; filename="dataset_{dataset.pk}_coherent.dates_failed_ocids.txt"',
             )
-            self.assertEqual(content, b"ocid\r\nocds-213czf-2\r\nocds-213czf-4\r\n")
+            self.assertEqual(content, b"ocds-213czf-2\nocds-213czf-4\n")
 
     def test_resource_level_failed_ocids_nonexistent_check(self):
         dataset = self.create(Dataset, name="anything")

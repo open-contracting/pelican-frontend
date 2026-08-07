@@ -142,8 +142,8 @@ paths:
     get:
       operationId: datasets_compiled_release_level_failed_ocids_retrieve
       description:
-        Return, as a CSV file, the OCIDs of all compiled releases that
-        failed one compiled release-level check.
+        Return, one OCID per line, the compiled releases failing one compiled
+        release-level check.
       parameters:
         - in: path
           name: id
@@ -164,7 +164,7 @@ paths:
       responses:
         "200":
           content:
-            text/csv:
+            text/plain:
               schema:
                 type: string
           description: ""
@@ -246,8 +246,8 @@ paths:
     get:
       operationId: datasets_field_level_failed_ocids_retrieve
       description:
-        Return, as a CSV file, the OCIDs of all compiled releases that
-        failed one field-level check.
+        Return, one OCID per line, the compiled releases failing one field-level
+        check.
       parameters:
         - in: path
           name: id
@@ -277,7 +277,7 @@ paths:
       responses:
         "200":
           content:
-            text/csv:
+            text/plain:
               schema:
                 type: string
           description: ""

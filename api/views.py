@@ -1,4 +1,3 @@
-import csv
 import time
 
 import simplejson as json
@@ -345,26 +344,17 @@ class DatasetViewSet(viewsets.ViewSet):
         return Response(meta or {})
 
 
-class Echo:
-    """A file-like object that returns the value written, for use with `csv.writer` in streaming responses."""
-
-    def write(self, value):
-        return value
-
-
-def failed_ocids_csv_response(filename, statement, variables):
+def failed_ocids_response(filename, statement, variables):
     def rows():
-        writer = csv.writer(Echo())
-        yield writer.writerow(["ocid"])
         with connections["pelican_backend"].cursor() as cursor:
             cursor.execute(statement, variables)
             while batch := cursor.fetchmany(1000):
                 for row in batch:
-                    yield writer.writerow(row)
+                    yield f"{row[0]}\n"
 
     return StreamingHttpResponse(
         rows(),
-        content_type="text/csv",
+        content_type="text/plain",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
@@ -416,18 +406,18 @@ class FieldLevelFailedOcids(views.APIView):
                 default="quality",
             ),
         ],
-        responses={(200, "text/csv"): {"type": "string"}},
+        responses={(200, "text/plain"): {"type": "string"}},
     )
     def get(self, request, pk, name, format=None):
-        """Return, as a CSV file, the OCIDs of all compiled releases that failed one field-level check."""
+        """Return, one OCID per line, the compiled releases failing one field-level check."""
         get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name)
 
         level = request.query_params.get("level", "quality")
         if level not in {"coverage", "quality"}:
             return HttpResponseBadRequest(reason="level must be either 'coverage' or 'quality'.")
 
-        return failed_ocids_csv_response(
-            f"dataset_{pk}_{name}_{level}_failed_ocids.csv",
+        return failed_ocids_response(
+            f"dataset_{pk}_{name}_{level}_failed_ocids.txt",
             """
             SELECT result->'meta'->>'ocid'
             FROM field_level_check
@@ -444,13 +434,13 @@ class FieldLevelFailedOcids(views.APIView):
 
 
 class ResourceLevelFailedOcids(views.APIView):
-    @extend_schema(responses={(200, "text/csv"): {"type": "string"}})
+    @extend_schema(responses={(200, "text/plain"): {"type": "string"}})
     def get(self, request, pk, name, format=None):
-        """Return, as a CSV file, the OCIDs of all compiled releases that failed one compiled release-level check."""
+        """Return, one OCID per line, the compiled releases failing one compiled release-level check."""
         get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name)
 
-        return failed_ocids_csv_response(
-            f"dataset_{pk}_{name}_failed_ocids.csv",
+        return failed_ocids_response(
+            f"dataset_{pk}_{name}_failed_ocids.txt",
             """
             SELECT result->'meta'->>'ocid'
             FROM resource_level_check
