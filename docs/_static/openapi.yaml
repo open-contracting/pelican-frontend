@@ -254,20 +254,20 @@ paths:
           schema:
             type: integer
           required: true
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
         - in: query
-          name: level
+          name: type
           schema:
             type: string
             enum:
               - coverage
               - quality
             default: quality
-          description: The level at which the check is performed
-        - in: path
-          name: name
-          schema:
-            type: string
-          required: true
+          description: The type of check
       tags:
         - datasets
       security:

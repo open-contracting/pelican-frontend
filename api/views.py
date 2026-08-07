@@ -400,8 +400,8 @@ class FieldLevelFailedOcids(views.APIView):
     @extend_schema(
         parameters=[
             OpenApiParameter(
-                "level",
-                description="The level at which the check is performed",
+                "type",
+                description="The type of check",
                 enum=["coverage", "quality"],
                 default="quality",
             ),
@@ -412,12 +412,12 @@ class FieldLevelFailedOcids(views.APIView):
         """Return, one OCID per line, the compiled releases failing one field-level check."""
         get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name)
 
-        level = request.query_params.get("level", "quality")
-        if level not in {"coverage", "quality"}:
-            return HttpResponseBadRequest(reason="level must be either 'coverage' or 'quality'.")
+        type = request.query_params.get("type", "quality")
+        if type not in {"coverage", "quality"}:
+            return HttpResponseBadRequest(reason="type must be either 'coverage' or 'quality'.")
 
         return failed_ocids_response(
-            f"dataset_{pk}_{name}_{level}_failed_ocids.txt",
+            f"dataset_{pk}_{name}_{type}_failed_ocids.txt",
             """
             SELECT result->'meta'->>'ocid'
             FROM field_level_check
@@ -425,11 +425,11 @@ class FieldLevelFailedOcids(views.APIView):
                 AND EXISTS (
                     SELECT 1
                     FROM jsonb_array_elements(result->'checks'->%(path)s) AS occurrence
-                    WHERE (occurrence->%(level)s->>'overall_result')::boolean IS FALSE
+                    WHERE (occurrence->%(type)s->>'overall_result')::boolean IS FALSE
                 )
             ORDER BY 1
             """,
-            {"dataset_id": pk, "path": name, "level": level},
+            {"dataset_id": pk, "path": name, "type": type},
         )
 
 

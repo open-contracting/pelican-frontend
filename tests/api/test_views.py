@@ -513,7 +513,7 @@ class ViewsTests(PelicanTestCase):
         self.create_field_level_check(dataset, "ocds-213czf-3", False, None)
 
         with self.assertNumQueries(2, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failed_ocids/?level=coverage")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failed_ocids/?type=coverage")
             content = b"".join(response.streaming_content)
 
             self.assertEqual(response.status_code, 200)
@@ -523,12 +523,12 @@ class ViewsTests(PelicanTestCase):
             )
             self.assertEqual(content, b"ocds-213czf-3\n")
 
-    def test_field_level_failed_ocids_invalid_level(self):
+    def test_field_level_failed_ocids_invalid_type(self):
         dataset = self.create(Dataset, name="anything")
         self.create(Report, dataset=dataset, type="field_level_check", data={"date": {}})
 
         with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failed_ocids/?level=invalid")
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failed_ocids/?type=invalid")
 
             self.assertEqual(response.status_code, 400)
 
