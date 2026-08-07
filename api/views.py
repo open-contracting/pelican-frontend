@@ -344,21 +344,6 @@ class DatasetViewSet(viewsets.ViewSet):
         return Response(meta or {})
 
 
-def failures_response(filename, statement, variables):
-    def rows():
-        with connections["pelican_backend"].cursor() as cursor:
-            cursor.execute(statement, variables)
-            while batch := cursor.fetchmany(1000):
-                for row in batch:
-                    yield f"{row[0]}\n"
-
-    return StreamingHttpResponse(
-        rows(),
-        content_type="text/plain",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-    )
-
-
 class FieldLevelDetail(views.APIView):
     @extend_schema(responses={200: {"type": "object"}})
     def get(self, request, pk, name, format=None):
@@ -394,6 +379,21 @@ class ResourceLevelDetail(views.APIView):
         detail["time"] = time.time() - start_time
 
         return Response(detail)
+
+
+def failures_response(filename, statement, variables):
+    def rows():
+        with connections["pelican_backend"].cursor() as cursor:
+            cursor.execute(statement, variables)
+            while batch := cursor.fetchmany(1000):
+                for row in batch:
+                    yield f"{row[0]}\n"
+
+    return StreamingHttpResponse(
+        rows(),
+        content_type="text/plain",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 class FieldLevelFailures(views.APIView):
