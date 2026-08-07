@@ -8,9 +8,11 @@ from api.models import (
     Dataset,
     DatasetFilter,
     DatasetLevelCheck,
+    FieldLevelCheck,
     FieldLevelCheckExamples,
     ProgressMonitorDataset,
     Report,
+    ResourceLevelCheck,
     ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
 )
@@ -463,6 +465,125 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(json.dumps(detail), {"a": "b", "c": "d"})
+
+    def create_field_level_check(self, dataset, ocid, coverage_result, quality_result):
+        data_item = self.create(DataItem, dataset=dataset, data={"ocid": ocid})
+        return self.create(
+            FieldLevelCheck,
+            dataset=dataset,
+            data_item=data_item,
+            result={
+                "meta": {"ocid": ocid, "item_id": data_item.pk},
+                "checks": {
+                    "date": [
+                        {
+                            "path": "date",
+                            "coverage": {"check_results": [], "overall_result": coverage_result},
+                            "quality": {"check_results": [], "overall_result": quality_result},
+                        }
+                    ],
+                },
+            },
+        )
+
+    def test_field_level_failures(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="field_level_check", data={"date": {}})
+        self.create_field_level_check(dataset, "ocds-213czf-1", True, True)
+        self.create_field_level_check(dataset, "ocds-213czf-2", True, False)
+        self.create_field_level_check(dataset, "ocds-213czf-3", False, None)
+
+        with self.assertNumQueries(2, using="pelican_backend"):
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failures/")
+            content = b"".join(response.streaming_content)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers["Content-Type"], "text/plain")
+            self.assertEqual(
+                response.headers["Content-Disposition"],
+                f'attachment; filename="dataset_{dataset.pk}_date_quality_failures.txt"',
+            )
+            self.assertEqual(content, b"ocds-213czf-2\n")
+
+    def test_field_level_failures_coverage(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="field_level_check", data={"date": {}})
+        self.create_field_level_check(dataset, "ocds-213czf-1", True, True)
+        self.create_field_level_check(dataset, "ocds-213czf-2", True, False)
+        self.create_field_level_check(dataset, "ocds-213czf-3", False, None)
+
+        with self.assertNumQueries(2, using="pelican_backend"):
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failures/?type=coverage")
+            content = b"".join(response.streaming_content)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers["Content-Type"], "text/plain")
+            self.assertEqual(
+                response.headers["Content-Disposition"],
+                f'attachment; filename="dataset_{dataset.pk}_date_coverage_failures.txt"',
+            )
+            self.assertEqual(content, b"ocds-213czf-3\n")
+
+    def test_field_level_failures_invalid_type(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="field_level_check", data={"date": {}})
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/date/failures/?type=invalid")
+
+            self.assertEqual(response.status_code, 400)
+
+    def test_field_level_failures_nonexistent_path(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="field_level_check", data={"date": {}})
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/nonexistent/failures/")
+
+            self.assertEqual(response.status_code, 404)
+
+    def create_resource_level_check(self, dataset, ocid, result):
+        data_item = self.create(DataItem, dataset=dataset, data={"ocid": ocid})
+        return self.create(
+            ResourceLevelCheck,
+            dataset=dataset,
+            data_item=data_item,
+            result={
+                "meta": {"ocid": ocid, "item_id": data_item.pk},
+                "checks": {
+                    "coherent.dates": {"meta": {}, "result": result, "version": 1.0},
+                },
+            },
+        )
+
+    def test_resource_level_failures(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="resource_level_check", data={"coherent.dates": {}})
+        self.create_resource_level_check(dataset, "ocds-213czf-1", True)
+        self.create_resource_level_check(dataset, "ocds-213czf-2", False)
+        self.create_resource_level_check(dataset, "ocds-213czf-3", None)
+        self.create_resource_level_check(dataset, "ocds-213czf-4", False)
+
+        with self.assertNumQueries(2, using="pelican_backend"):
+            response = self.client.get(f"/api/datasets/{dataset.pk}/compiled_release_level/coherent.dates/failures/")
+            content = b"".join(response.streaming_content)
+
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers["Content-Type"], "text/plain")
+            self.assertEqual(
+                response.headers["Content-Disposition"],
+                f'attachment; filename="dataset_{dataset.pk}_coherent.dates_failures.txt"',
+            )
+            self.assertEqual(content, b"ocds-213czf-2\nocds-213czf-4\n")
+
+    def test_resource_level_failures_nonexistent_check(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create(Report, dataset=dataset, type="resource_level_check", data={"coherent.dates": {}})
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.get(f"/api/datasets/{dataset.pk}/compiled_release_level/nonexistent/failures/")
+
+            self.assertEqual(response.status_code, 404)
 
     def test_datasets_field_level_report_no_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):

@@ -63,6 +63,12 @@ paths:
       responses:
         "202":
           description: No response body
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ""
   /api/datasets/{id}/:
     get:
       operationId: datasets_retrieve
@@ -131,6 +137,36 @@ paths:
             application/json:
               schema:
                 type: object
+          description: ""
+  /api/datasets/{id}/compiled_release_level/{name}/failures/:
+    get:
+      operationId: datasets_compiled_release_level_failures_retrieve
+      description:
+        Return, one OCID per line, the compiled releases failing one compiled
+        release-level check.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+      tags:
+        - datasets
+      security:
+        - cookieAuth: []
+        - basicAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
           description: ""
   /api/datasets/{id}/compiled_release_level_report/:
     get:
@@ -205,6 +241,45 @@ paths:
             application/json:
               schema:
                 type: object
+          description: ""
+  /api/datasets/{id}/field_level/{name}/failures/:
+    get:
+      operationId: datasets_field_level_failures_retrieve
+      description:
+        Return, one OCID per line, the compiled releases failing one field-level
+        check.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - coverage
+              - quality
+            default: quality
+          description: The type of check
+      tags:
+        - datasets
+      security:
+        - cookieAuth: []
+        - basicAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
           description: ""
   /api/datasets/{id}/field_level_report/:
     get:
@@ -328,8 +403,9 @@ paths:
     get:
       operationId: datasets_find_by_name_retrieve
       description: |-
-        Return the ID of the dataset with the name given in the `name` query string parameter, as an object like
-        `{"id": 123}`, or `{}` if no name matches.
+        Return the ID of the dataset with the name given in the `name` query string parameter, as an object.
+
+        ``{"id": 123}`` for example, or ``{}`` if no name matches.
       tags:
         - datasets
       security:

@@ -4,10 +4,10 @@ import simplejson as json
 from django.conf import settings
 from django.db import connections
 from django.db.models import Count, F, OuterRef, Subquery
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
@@ -379,3 +379,69 @@ class ResourceLevelDetail(views.APIView):
         detail["time"] = time.time() - start_time
 
         return Response(detail)
+
+
+def failures_response(filename, statement, variables):
+    def rows():
+        with connections["pelican_backend"].cursor() as cursor:
+            cursor.execute(statement, variables)
+            while batch := cursor.fetchmany(1000):
+                for row in batch:
+                    yield f"{row[0]}\n"
+
+    return StreamingHttpResponse(
+        rows(),
+        content_type="text/plain",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+class FieldLevelFailures(views.APIView):
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("type", description="The type of check", enum=["coverage", "quality"], default="quality"),
+        ],
+        responses={(200, "text/plain"): {"type": "string"}},
+    )
+    def get(self, request, pk, name, format=None):
+        """Return, one OCID per line, the compiled releases failing the field-level check."""
+        get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name)
+
+        type = request.query_params.get("type", "quality")
+        if type not in {"coverage", "quality"}:
+            return HttpResponseBadRequest(reason="type must be either 'coverage' or 'quality'.")
+
+        return failures_response(
+            f"dataset_{pk}_{name}_{type}_failures.txt",
+            """
+            SELECT result->'meta'->>'ocid'
+            FROM field_level_check
+            WHERE dataset_id = %(dataset_id)s
+                AND EXISTS (
+                    SELECT 1
+                    FROM jsonb_array_elements(result->'checks'->%(path)s) AS occurrence
+                    WHERE (occurrence->%(type)s->>'overall_result')::boolean IS FALSE
+                )
+            ORDER BY 1
+            """,
+            {"dataset_id": pk, "path": name, "type": type},
+        )
+
+
+class ResourceLevelFailures(views.APIView):
+    @extend_schema(responses={(200, "text/plain"): {"type": "string"}})
+    def get(self, request, pk, name, format=None):
+        """Return, one OCID per line, the compiled releases failing the compiled release-level check."""
+        get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name)
+
+        return failures_response(
+            f"dataset_{pk}_{name}_failures.txt",
+            """
+            SELECT result->'meta'->>'ocid'
+            FROM resource_level_check
+            WHERE dataset_id = %(dataset_id)s
+                AND (result->'checks'->%(name)s->>'result')::boolean IS FALSE
+            ORDER BY 1
+            """,
+            {"dataset_id": pk, "name": name},
+        )
