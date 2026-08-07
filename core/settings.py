@@ -275,7 +275,9 @@ RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
 
 # The path to a service account JSON file, for writing exports to Google Drive.
 # https://developers.google.com/workspace/guides/create-credentials#service-account
-SERVICE_ACCOUNT_JSON_FILE = os.getenv("SERVICE_ACCOUNT_JSON_FILE", "credentials.json")
+SERVICE_ACCOUNT_JSON_FILE = os.getenv(
+    "SERVICE_ACCOUNT_JSON_FILE", "/data/credentials.json" if production else BASE_DIR / "credentials.json"
+)
 
 # The Google Docs IDs for templates, when writing exports to Google Drive.
 GDOCS_TEMPLATES = {
