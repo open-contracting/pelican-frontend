@@ -19,7 +19,6 @@ from lxml import etree
 from exporter.exceptions import GoogleDriveError
 
 ROOT = Path("google_drive_cache")
-MAX_ATTEMPTS = 5
 
 
 class Gdocs:
@@ -89,7 +88,7 @@ class Gdocs:
         except ResumableUploadError:
             raise GoogleDriveError(
                 f"The final report could not be uploaded to folder ID '{folder_id}'. "
-                "Possible reasons are a non-existing folder or insufficient permission settings."
+                "Possible reasons are a non-existing folder or insufficient permission settings. "
             ) from None
 
         return file.get("id")
@@ -132,34 +131,28 @@ class GoogleDriveCache:
     def get_file_path(self, file_id: str):
         self.refresh()
 
-        for attempt in range(1, MAX_ATTEMPTS + 1):
-            try:
-                response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
-                break
-            except HttpError:
-                if attempt >= MAX_ATTEMPTS:
-                    raise GoogleDriveError(
-                        f"Template ID '{file_id}' could not be accessed. "
-                        "Possible reasons are a non-existing file or insufficient permission settings."
-                    ) from None
+        try:
+            response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
+        except HttpError:
+            raise GoogleDriveError(
+                f"Template ID '{file_id}' could not be accessed. "
+                "Possible reasons are a non-existing file or insufficient permission settings. "
+            ) from None
 
         version = int(response["version"])
 
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
-            for attempt in range(1, MAX_ATTEMPTS + 1):
-                try:
-                    response = (
-                        self.drive_service.files()
-                        .export(fileId=file_id, mimeType="application/vnd.oasis.opendocument.text")
-                        .execute()
-                    )
-                    break
-                except HttpError:
-                    if attempt >= MAX_ATTEMPTS:
-                        raise GoogleDriveError(
-                            f"Template ID '{file_id}' could not be downloaded. "
-                            "Possible reasons are a non-existing file or insufficient permission settings."
-                        ) from None
+            try:
+                response = (
+                    self.drive_service.files()
+                    .export(fileId=file_id, mimeType="application/vnd.oasis.opendocument.text")
+                    .execute()
+                )
+            except HttpError:
+                raise GoogleDriveError(
+                    f"Template ID '{file_id}' could not be downloaded. "
+                    "Possible reasons are a non-existing file or insufficient permission settings. "
+                ) from None
 
             return default_storage.path(default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(response)))
         return self.files[file_id]["path"]
