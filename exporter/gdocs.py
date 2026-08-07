@@ -19,6 +19,7 @@ from lxml import etree
 from exporter.exceptions import GoogleDriveError
 
 ROOT = Path("google_drive_cache")
+MIME_TYPE = "application/vnd.oasis.opendocument.text"
 
 
 class Gdocs:
@@ -79,12 +80,12 @@ class Gdocs:
         with ZipFile(self.output_file, mode="a") as zipfile:
             zipfile.writestr("content.xml", etree.tostring(content))
 
-        file_metadata = {"name": file_name, "mimeType": "application/vnd.google-apps.document", "parents": [folder_id]}
+        body = {"name": file_name, "mimeType": "application/vnd.google-apps.document", "parents": [folder_id]}
 
         media = MediaFileUpload(self.output_file, mimetype="application/vnd.oasis.opendocument.text", resumable=True)
 
         try:
-            file = self.drive_service.files().create(body=file_metadata, media_body=media).execute()
+            file = self.drive_service.files().create(body=body, media_body=media, supportsAllDrives=True).execute()
         except HttpError as e:
             raise GoogleDriveError(
                 f"The final report could not be uploaded to folder ID '{folder_id}'. "
@@ -133,7 +134,7 @@ class GoogleDriveCache:
         self.refresh()
 
         try:
-            response = self.drive_service.files().get(fileId=file_id, fields="version").execute()
+            file = self.drive_service.files().get(fileId=file_id, fields="version", supportsAllDrives=True).execute()
         except HttpError as e:
             raise GoogleDriveError(
                 f"Template ID '{file_id}' could not be accessed. "
@@ -141,15 +142,11 @@ class GoogleDriveCache:
                 f"Google Drive responded: {e.status_code} {e.reason}"
             ) from e
 
-        version = int(response["version"])
+        version = int(file["version"])
 
         if (file_id in self.files and version > self.files[file_id]["version"]) or (file_id not in self.files):
             try:
-                response = (
-                    self.drive_service.files()
-                    .export(fileId=file_id, mimeType="application/vnd.oasis.opendocument.text")
-                    .execute()
-                )
+                content = self.drive_service.files().export(fileId=file_id, mimeType=MIME_TYPE).execute()
             except HttpError as e:
                 raise GoogleDriveError(
                     f"Template ID '{file_id}' could not be downloaded. "
@@ -157,5 +154,5 @@ class GoogleDriveCache:
                     f"Google Drive responded: {e.status_code} {e.reason}"
                 ) from e
 
-            return default_storage.path(default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(response)))
+            return default_storage.path(default_storage.save(ROOT / f"{version}_{file_id}", ContentFile(content)))
         return self.files[file_id]["path"]
