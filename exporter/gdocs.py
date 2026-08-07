@@ -12,7 +12,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError, ResumableUploadError
+from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from lxml import etree
 
@@ -85,7 +85,7 @@ class Gdocs:
 
         try:
             file = self.drive_service.files().create(body=file_metadata, media_body=media).execute()
-        except ResumableUploadError as e:
+        except HttpError as e:
             raise GoogleDriveError(
                 f"The final report could not be uploaded to folder ID '{folder_id}'. "
                 "Possible reasons are a non-existing folder or insufficient permission settings. "
