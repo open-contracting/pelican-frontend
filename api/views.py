@@ -396,7 +396,7 @@ class ResourceLevelDetail(views.APIView):
         return Response(detail)
 
 
-class FieldLevelFailedOcids(views.APIView):
+class FieldLevelFailures(views.APIView):
     @extend_schema(
         parameters=[
             OpenApiParameter(
@@ -433,7 +433,7 @@ class FieldLevelFailedOcids(views.APIView):
         )
 
 
-class ResourceLevelFailedOcids(views.APIView):
+class ResourceLevelFailures(views.APIView):
     @extend_schema(responses={(200, "text/plain"): {"type": "string"}})
     def get(self, request, pk, name, format=None):
         """Return, one OCID per line, the compiled releases failing one compiled release-level check."""

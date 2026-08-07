@@ -138,9 +138,9 @@ paths:
               schema:
                 type: object
           description: ""
-  /api/datasets/{id}/compiled_release_level/{name}/failed_ocids/:
+  /api/datasets/{id}/compiled_release_level/{name}/failures/:
     get:
-      operationId: datasets_compiled_release_level_failed_ocids_retrieve
+      operationId: datasets_compiled_release_level_failures_retrieve
       description:
         Return, one OCID per line, the compiled releases failing one compiled
         release-level check.
@@ -242,9 +242,9 @@ paths:
               schema:
                 type: object
           description: ""
-  /api/datasets/{id}/field_level/{name}/failed_ocids/:
+  /api/datasets/{id}/field_level/{name}/failures/:
     get:
-      operationId: datasets_field_level_failed_ocids_retrieve
+      operationId: datasets_field_level_failures_retrieve
       description:
         Return, one OCID per line, the compiled releases failing one field-level
         check.
