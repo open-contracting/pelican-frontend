@@ -501,7 +501,7 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.headers["Content-Type"], "text/plain")
             self.assertEqual(
                 response.headers["Content-Disposition"],
-                f'attachment; filename="dataset_{dataset.pk}_date_quality_failed_ocids.txt"',
+                f'attachment; filename="dataset_{dataset.pk}_date_quality_failures.txt"',
             )
             self.assertEqual(content, b"ocds-213czf-2\n")
 
@@ -517,9 +517,10 @@ class ViewsTests(PelicanTestCase):
             content = b"".join(response.streaming_content)
 
             self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.headers["Content-Type"], "text/plain")
             self.assertEqual(
                 response.headers["Content-Disposition"],
-                f'attachment; filename="dataset_{dataset.pk}_date_coverage_failed_ocids.txt"',
+                f'attachment; filename="dataset_{dataset.pk}_date_coverage_failures.txt"',
             )
             self.assertEqual(content, b"ocds-213czf-3\n")
 
@@ -532,7 +533,7 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 400)
 
-    def test_field_level_failures_nonexistent_check(self):
+    def test_field_level_failures_nonexistent_path(self):
         dataset = self.create(Dataset, name="anything")
         self.create(Report, dataset=dataset, type="field_level_check", data={"date": {}})
 
@@ -571,7 +572,7 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.headers["Content-Type"], "text/plain")
             self.assertEqual(
                 response.headers["Content-Disposition"],
-                f'attachment; filename="dataset_{dataset.pk}_coherent.dates_failed_ocids.txt"',
+                f'attachment; filename="dataset_{dataset.pk}_coherent.dates_failures.txt"',
             )
             self.assertEqual(content, b"ocds-213czf-2\nocds-213czf-4\n")
 

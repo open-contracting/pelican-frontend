@@ -344,7 +344,7 @@ class DatasetViewSet(viewsets.ViewSet):
         return Response(meta or {})
 
 
-def failed_ocids_response(filename, statement, variables):
+def failures_response(filename, statement, variables):
     def rows():
         with connections["pelican_backend"].cursor() as cursor:
             cursor.execute(statement, variables)
@@ -399,25 +399,20 @@ class ResourceLevelDetail(views.APIView):
 class FieldLevelFailures(views.APIView):
     @extend_schema(
         parameters=[
-            OpenApiParameter(
-                "type",
-                description="The type of check",
-                enum=["coverage", "quality"],
-                default="quality",
-            ),
+            OpenApiParameter("type", description="The type of check", enum=["coverage", "quality"], default="quality"),
         ],
         responses={(200, "text/plain"): {"type": "string"}},
     )
     def get(self, request, pk, name, format=None):
-        """Return, one OCID per line, the compiled releases failing one field-level check."""
+        """Return, one OCID per line, the compiled releases failing the field-level check."""
         get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name)
 
         type = request.query_params.get("type", "quality")
         if type not in {"coverage", "quality"}:
             return HttpResponseBadRequest(reason="type must be either 'coverage' or 'quality'.")
 
-        return failed_ocids_response(
-            f"dataset_{pk}_{name}_{type}_failed_ocids.txt",
+        return failures_response(
+            f"dataset_{pk}_{name}_{type}_failures.txt",
             """
             SELECT result->'meta'->>'ocid'
             FROM field_level_check
@@ -436,11 +431,11 @@ class FieldLevelFailures(views.APIView):
 class ResourceLevelFailures(views.APIView):
     @extend_schema(responses={(200, "text/plain"): {"type": "string"}})
     def get(self, request, pk, name, format=None):
-        """Return, one OCID per line, the compiled releases failing one compiled release-level check."""
+        """Return, one OCID per line, the compiled releases failing the compiled release-level check."""
         get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name)
 
-        return failed_ocids_response(
-            f"dataset_{pk}_{name}_failed_ocids.txt",
+        return failures_response(
+            f"dataset_{pk}_{name}_failures.txt",
             """
             SELECT result->'meta'->>'ocid'
             FROM resource_level_check
