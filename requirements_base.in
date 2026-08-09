@@ -1,6 +1,6 @@
 dj-database-url
 django-cors-headers
-django<5
+django<6
 djangorestframework
 drf-spectacular
 jsonref
