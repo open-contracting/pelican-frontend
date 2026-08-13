@@ -9,8 +9,8 @@
           :label="$t('field.table.head.object')"
           :active="sortedBy == 'path'"
           :asc="isAscendingSorted"
-          :on-asc="() => sortByPath(tableData)"
-          :on-desc="() => sortByPath(tableData, false)"
+          @asc="sortByPath(tableData)"
+          @desc="sortByPath(tableData, false)"
         />
       </div>
       <div
@@ -21,8 +21,8 @@
           :label="$t('field.table.head.coverage')"
           :active="sortedBy == 'coverage'"
           :asc="isAscendingSorted"
-          :on-asc="() => sortByCoverage(tableData)"
-          :on-desc="() => sortByCoverage(tableData, false)"
+          @asc="sortByCoverage(tableData)"
+          @desc="sortByCoverage(tableData, false)"
         />
       </div>
       <div
@@ -33,8 +33,8 @@
           :label="$t('field.table.head.quality')"
           :active="sortedBy == 'quality'"
           :asc="isAscendingSorted"
-          :on-asc="() => sortByQuality(tableData)"
-          :on-desc="() => sortByQuality(tableData, false)"
+          @asc="sortByQuality(tableData)"
+          @desc="sortByQuality(tableData, false)"
         />
       </div>
     </div>

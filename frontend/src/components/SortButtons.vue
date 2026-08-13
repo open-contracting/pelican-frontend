@@ -6,27 +6,24 @@
     <div class="sort_buttons">
       <div
         :class="['asc', { active: active && asc }]"
-        @click.stop="onAsc()"
+        @click.stop="emit('asc')"
       />
       <div
         :class="['desc', { active: active && !asc }]"
-        @click.stop="onDesc()"
+        @click.stop="emit('desc')"
       />
     </div>
   </div>
 </template>
 
-<script>
-export default {
-    props: {
-        label: String,
-        asc: Boolean,
-        active: Boolean,
-        onAsc: Function,
-        onDesc: Function,
-    },
-    data: () => ({}),
-};
+<script setup>
+defineProps({
+    label: String,
+    asc: Boolean,
+    active: Boolean,
+});
+
+const emit = defineEmits(["asc", "desc"]);
 </script>
 
 <style scoped lang="scss">

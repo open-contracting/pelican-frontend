@@ -19,8 +19,8 @@
             :label="$t('dataset.name')"
             :active="sortedBy == 'name'"
             :asc="isAscendingSorted"
-            :on-asc="() => sortBy('name')"
-            :on-desc="() => sortBy('name', false)"
+            @asc="sortBy('name')"
+            @desc="sortBy('name', false)"
           />
         </div>
         <div
@@ -31,8 +31,8 @@
             :label="$t('dataset.size')"
             :active="sortedBy == 'size'"
             :asc="isAscendingSorted"
-            :on-asc="() => sortBy('size')"
-            :on-desc="() => sortBy('size', false)"
+            @asc="sortBy('size')"
+            @desc="sortBy('size', false)"
           />
         </div>
         <div
@@ -43,8 +43,8 @@
             :label="$t('kingfisherId')"
             :active="sortedBy == 'collection_id'"
             :asc="isAscendingSorted"
-            :on-asc="() => sortBy('collection_id')"
-            :on-desc="() => sortBy('collection_id', false)"
+            @asc="sortBy('collection_id')"
+            @desc="sortBy('collection_id', false)"
           />
         </div>
         <div
@@ -55,8 +55,8 @@
             :label="$t('dataset.phase')"
             :active="sortedBy == 'phase'"
             :asc="isAscendingSorted"
-            :on-asc="() => sortBy('phase')"
-            :on-desc="() => sortBy('phase', false)"
+            @asc="sortBy('phase')"
+            @desc="sortBy('phase', false)"
           />
         </div>
         <div
@@ -66,8 +66,8 @@
           <SortButtons
             :active="sortedBy == 'created'"
             :asc="isAscendingSorted"
-            :on-asc="() => sortBy('created')"
-            :on-desc="() => sortBy('created', false)"
+            @asc="sortBy('created')"
+            @desc="sortBy('created', false)"
           >
             <span class="created">{{ $t("created") }}</span>
             <br>
