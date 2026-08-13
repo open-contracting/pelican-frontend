@@ -121,8 +121,8 @@ class ProgressMonitorDataset(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     dataset = models.OneToOneField(Dataset, on_delete=models.CASCADE, related_name="progress")
-    state = models.CharField(max_length=255, blank=True, null=True, choices=State.choices)  # noqa: DJ001
-    phase = models.CharField(max_length=255, blank=True, null=True, choices=Phase.choices)  # noqa: DJ001
+    state = models.CharField(max_length=255, blank=True, null=True, choices=State)  # noqa: DJ001
+    phase = models.CharField(max_length=255, blank=True, null=True, choices=Phase)  # noqa: DJ001
     size = models.IntegerField(blank=True, null=True)
     created = models.DateTimeField(blank=True, null=True)
     modified = models.DateTimeField(blank=True, null=True)
