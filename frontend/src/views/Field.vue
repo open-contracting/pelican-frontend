@@ -83,68 +83,52 @@
   </dashboard>
 </template>
 
-<script>
+<script setup>
 import { BButtonGroup, BCol, BRow } from "bootstrap-vue-next";
+import { computed, onBeforeMount, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useStore } from "vuex";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import Dashboard from "./layouts/Dashboard.vue";
 
-export default {
-    name: "Field",
-    components: {
-        BButtonGroup,
-        BCol,
-        BRow,
-        Dashboard,
-        FieldCheckTable,
-        FieldCheckTree,
-        SearchInput,
-        FilterDropdown,
-    },
-    data: function () {
-        return {
-            filterIndex: 0,
-            filterNames: [
-                this.$t("field.filterDropdown.all"),
-                this.$t("field.filterDropdown.coverageFailedOnly"),
-                this.$t("field.filterDropdown.qualityFailedOnly"),
-                this.$t("field.filterDropdown.passedOnly"),
-            ],
-            filters: [
-                () => true,
-                (item) => item.coverage.failed_count > 0,
-                (item) => item.quality.failed_count > 0,
-                (item) =>
-                    item.coverage.failed_count === 0 &&
-                    item.quality.failed_count === 0 &&
-                    item.coverage.passed_count > 0,
-            ],
-        };
-    },
-    computed: {
-        layout: function () {
-            return this.$store.getters.fieldCheckLayout;
-        },
-        search: function () {
-            return this.$store.getters.fieldCheckSearch;
-        },
-    },
-    watch: {
-        filterIndex: function (newFilterIndex) {
-            this.$store.commit("setFieldLevelFilterIndex", newFilterIndex);
-        },
-    },
-    created() {
-        this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
-    },
-    methods: {
-        resetTableSorting: function () {
-            this.$refs["field-check-table"].resetSorting();
-        },
-    },
-};
+const store = useStore();
+const { t } = useI18n();
+
+const fieldCheckTableRef = useTemplateRef("field-check-table");
+
+const filterIndex = ref(0);
+
+const filterNames = [
+    t("field.filterDropdown.all"),
+    t("field.filterDropdown.coverageFailedOnly"),
+    t("field.filterDropdown.qualityFailedOnly"),
+    t("field.filterDropdown.passedOnly"),
+];
+
+const filters = [
+    () => true,
+    (item) => item.coverage.failed_count > 0,
+    (item) => item.quality.failed_count > 0,
+    (item) => item.coverage.failed_count === 0 && item.quality.failed_count === 0 && item.coverage.passed_count > 0,
+];
+
+const layout = computed(() => store.getters.fieldCheckLayout);
+const search = computed(() => store.getters.fieldCheckSearch);
+
+watch(filterIndex, (newFilterIndex) => {
+    store.commit("setFieldLevelFilterIndex", newFilterIndex);
+});
+
+onBeforeMount(() => {
+    filterIndex.value = store.getters.fieldLevelFilterIndex;
+});
+
+function resetTableSorting() {
+    fieldCheckTableRef.value.resetSorting();
+}
 </script>
 
 <style lang="scss">

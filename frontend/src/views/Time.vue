@@ -36,59 +36,58 @@
   </dashboard>
 </template>
 
-<script>
+<script setup>
 import { BCol, BRow } from "bootstrap-vue-next";
+import { computed, onBeforeMount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
 import Dashboard from "./layouts/Dashboard.vue";
 
-export default {
-    name: "TimeLevel",
-    components: { BCol, BRow, Dashboard, TimeVarianceLevelCheck, FilterDropdown, Loader },
-    data: function () {
-        return {
-            filterIndex: 0,
-            filterNames: [
-                this.$t("timeLevel.filterDropdown.all"),
-                this.$t("timeLevel.filterDropdown.failedOnly"),
-                this.$t("timeLevel.filterDropdown.passedOnly"),
-            ],
-            filters: [
-                () => true,
-                (item) => item.coverage_result !== true || item.check_result !== true,
-                (item) => item.coverage_result === true && item.check_result === true,
-            ],
-        };
-    },
-    computed: {
-        loaded() {
-            return this.$store.getters.datasetLevelStats != null;
+const router = useRouter();
+const store = useStore();
+const { t } = useI18n();
+
+const filterIndex = ref(0);
+
+const filterNames = [
+    t("timeLevel.filterDropdown.all"),
+    t("timeLevel.filterDropdown.failedOnly"),
+    t("timeLevel.filterDropdown.passedOnly"),
+];
+
+const filters = [
+    () => true,
+    (item) => item.coverage_result !== true || item.check_result !== true,
+    (item) => item.coverage_result === true && item.check_result === true,
+];
+
+const loaded = computed(() => store.getters.datasetLevelStats != null);
+
+const timeVarianceLevelStats = computed(() => {
+    return store.getters.timeVarianceLevelStats.filter(filters[filterIndex.value]);
+});
+
+watch(filterIndex, (newFilterIndex) => {
+    store.commit("setTimeLevelFilterIndex", newFilterIndex);
+});
+
+onBeforeMount(() => {
+    filterIndex.value = store.getters.timeLevelFilterIndex;
+});
+
+function detail(name) {
+    router.push({
+        name: "timeVarianceCheckDetail",
+        params: {
+            check: name,
+            datasetId: store.getters.datasetId,
         },
-        timeVarianceLevelStats() {
-            return this.$store.getters.timeVarianceLevelStats.filter(this.filters[this.filterIndex]);
-        },
-    },
-    watch: {
-        filterIndex: function (newFilterIndex) {
-            this.$store.commit("setTimeLevelFilterIndex", newFilterIndex);
-        },
-    },
-    created() {
-        this.filterIndex = this.$store.getters.timeLevelFilterIndex;
-    },
-    methods: {
-        detail: function (name) {
-            this.$router.push({
-                name: "timeVarianceCheckDetail",
-                params: {
-                    check: name,
-                    datasetId: this.$store.getters.datasetId,
-                },
-            });
-        },
-    },
-};
+    });
+}
 </script>
 
 <style lang="scss">

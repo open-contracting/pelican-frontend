@@ -308,58 +308,41 @@
   </dashboard>
 </template>
 
-<script>
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
 import Tooltip from "@/components/Tooltip.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import Dashboard from "./layouts/Dashboard.vue";
 
-export default {
-    name: "Overview",
-    components: { Dashboard, Tooltip },
-    setup() {
-        const { formatNumber } = useFormatters();
-        return { formatNumber };
-    },
-    computed: {
-        dataset: function () {
-            return this.$store.getters.dataset;
-        },
-        collection: function () {
-            return this.getMetaData("collection_metadata");
-        },
-        kingfisher: function () {
-            return this.getMetaData("kingfisher_metadata");
-        },
-        data_quality: function () {
-            return this.getMetaData("data_quality_tool_metadata");
-        },
-        compiled_releases: function () {
-            return this.getMetaData("compiled_releases");
-        },
-        lifecycle: function () {
-            return this.getMetaData("tender_lifecycle");
-        },
-        filtered_procuring_entity: function () {
-            if (this.dataset.filter_message.procuring_entity) {
-                return this.dataset.filter_message.procuring_entity;
-            }
+const store = useStore();
+const { formatNumber } = useFormatters();
 
-            return [];
-        },
-        filtered_buyer: function () {
-            if (this.dataset.filter_message.buyer) {
-                return this.dataset.filter_message.buyer;
-            }
+const dataset = computed(() => store.getters.dataset);
 
-            return [];
-        },
-    },
-    methods: {
-        getMetaData: function (type) {
-            return this.dataset?.meta?.[type];
-        },
-    },
-};
+function getMetaData(type) {
+    return dataset.value?.meta?.[type];
+}
+
+const collection = computed(() => getMetaData("collection_metadata"));
+const kingfisher = computed(() => getMetaData("kingfisher_metadata"));
+const data_quality = computed(() => getMetaData("data_quality_tool_metadata"));
+const compiled_releases = computed(() => getMetaData("compiled_releases"));
+const lifecycle = computed(() => getMetaData("tender_lifecycle"));
+
+const filtered_procuring_entity = computed(() => {
+    if (dataset.value.filter_message.procuring_entity) {
+        return dataset.value.filter_message.procuring_entity;
+    }
+    return [];
+});
+
+const filtered_buyer = computed(() => {
+    if (dataset.value.filter_message.buyer) {
+        return dataset.value.filter_message.buyer;
+    }
+    return [];
+});
 </script>
 
 <style lang="scss">

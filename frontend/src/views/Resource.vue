@@ -58,55 +58,45 @@
   </dashboard>
 </template>
 
-<script>
+<script setup>
 import { BCol, BRow } from "bootstrap-vue-next";
+import { computed, onBeforeMount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import ResourceLevelList from "@/components/ResourceLevelList.vue";
 import Dashboard from "./layouts/Dashboard.vue";
 
-export default {
-    name: "Resource",
-    components: {
-        BCol,
-        BRow,
-        ResourceLevelList,
-        Loader,
-        FilterDropdown,
-        Dashboard,
-    },
-    data: function () {
-        return {
-            sections: ["reference", "consistent", "coherent"],
-            filterIndex: 0,
-            filterNames: [
-                this.$t("resourceLevel.filterDropdown.all"),
-                this.$t("resourceLevel.filterDropdown.failedOnly"),
-                this.$t("resourceLevel.filterDropdown.passedOnly"),
-                this.$t("resourceLevel.filterDropdown.calculatedOnly"),
-            ],
-            filters: [
-                () => true,
-                (item) => item.failed_count > 0,
-                (item) => item.failed_count === 0 && item.passed_count > 0,
-                (item) => item.passed_count > 0 || item.failed_count > 0,
-            ],
-        };
-    },
-    computed: {
-        loaded() {
-            return this.$store.getters.resourceLevelStats != null;
-        },
-    },
-    watch: {
-        filterIndex: function (newFilterIndex) {
-            this.$store.commit("setResourceLevelFilterIndex", newFilterIndex);
-        },
-    },
-    created() {
-        this.filterIndex = this.$store.getters.resourceLevelFilterIndex;
-    },
-};
+const store = useStore();
+const { t } = useI18n();
+
+const sections = ["reference", "consistent", "coherent"];
+const filterIndex = ref(0);
+
+const filterNames = [
+    t("resourceLevel.filterDropdown.all"),
+    t("resourceLevel.filterDropdown.failedOnly"),
+    t("resourceLevel.filterDropdown.passedOnly"),
+    t("resourceLevel.filterDropdown.calculatedOnly"),
+];
+
+const filters = [
+    () => true,
+    (item) => item.failed_count > 0,
+    (item) => item.failed_count === 0 && item.passed_count > 0,
+    (item) => item.passed_count > 0 || item.failed_count > 0,
+];
+
+const loaded = computed(() => store.getters.resourceLevelStats != null);
+
+watch(filterIndex, (newFilterIndex) => {
+    store.commit("setResourceLevelFilterIndex", newFilterIndex);
+});
+
+onBeforeMount(() => {
+    filterIndex.value = store.getters.resourceLevelFilterIndex;
+});
 </script>
 
 <style lang="scss">

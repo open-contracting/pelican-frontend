@@ -29,42 +29,42 @@
   </dashboard>
 </template>
 
-<script>
+<script setup>
 import { BCol, BRow } from "bootstrap-vue-next";
+import { onBeforeMount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useStore } from "vuex";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Dashboard from "./layouts/Dashboard.vue";
 
-export default {
-    name: "Dataset",
-    components: { BCol, BRow, Dashboard, DatasetLevelSection, FilterDropdown },
-    data: function () {
-        return {
-            sections: ["status_distribution", "value_distribution", "other_distribution", "repetition", "other"],
-            filterIndex: 0,
-            filterNames: [
-                this.$t("datasetLevel.filterDropdown.all"),
-                this.$t("datasetLevel.filterDropdown.failedOnly"),
-                this.$t("datasetLevel.filterDropdown.passedOnly"),
-                this.$t("datasetLevel.filterDropdown.calculatedOnly"),
-            ],
-            filters: [
-                () => true,
-                (item) => item.result === false,
-                (item) => item.result === true,
-                (item) => item.result != null,
-            ],
-        };
-    },
-    watch: {
-        filterIndex: function (newFilterIndex) {
-            this.$store.commit("setDatasetLevelFilterIndex", newFilterIndex);
-        },
-    },
-    created() {
-        this.filterIndex = this.$store.getters.datasetLevelFilterIndex;
-    },
-};
+const store = useStore();
+const { t } = useI18n();
+
+const sections = ["status_distribution", "value_distribution", "other_distribution", "repetition", "other"];
+const filterIndex = ref(0);
+
+const filterNames = [
+    t("datasetLevel.filterDropdown.all"),
+    t("datasetLevel.filterDropdown.failedOnly"),
+    t("datasetLevel.filterDropdown.passedOnly"),
+    t("datasetLevel.filterDropdown.calculatedOnly"),
+];
+
+const filters = [
+    () => true,
+    (item) => item.result === false,
+    (item) => item.result === true,
+    (item) => item.result != null,
+];
+
+watch(filterIndex, (newFilterIndex) => {
+    store.commit("setDatasetLevelFilterIndex", newFilterIndex);
+});
+
+onBeforeMount(() => {
+    filterIndex.value = store.getters.datasetLevelFilterIndex;
+});
 </script>
 
 <style lang="scss">
