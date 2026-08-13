@@ -97,7 +97,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/data_items/{data_item.pk}/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"data": {"parties": {"id": 1}}, "id": 1})
+            self.assertJSONEqual(response.text, {"data": {"parties": {"id": 1}}, "id": 1})
 
     def test_datasets_list(self):
         dataset = self.create(Dataset, name="parent")
@@ -110,7 +110,7 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
-                response.content,
+                response.text,
                 [
                     {
                         "id": dataset.pk,
@@ -152,7 +152,7 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
-                response.content,
+                response.text,
                 {
                     "id": filtered.pk,
                     "name": "child",
@@ -231,7 +231,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get("/api/datasets/find_by_name/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {})
+            self.assertJSONEqual(response.text, {})
 
     def test_datasets_find_by_name_no_match(self):
         self.create(Dataset, name="anything")
@@ -240,7 +240,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get("/api/datasets/find_by_name/?name=other")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {})
+            self.assertJSONEqual(response.text, {})
 
     def test_datasets_find_by_name(self):
         dataset = self.create(Dataset, name="anything")
@@ -249,7 +249,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get("/api/datasets/find_by_name/?name=anything")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"id": dataset.pk})
+            self.assertJSONEqual(response.text, {"id": dataset.pk})
 
     def test_datasets_field_level_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -259,7 +259,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/field_level_report/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"ocid": {}})
+            self.assertJSONEqual(response.text, {"ocid": {}})
 
     def test_datasets_compiled_release_level_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -269,7 +269,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/compiled_release_level_report/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"coherent.dates": {}})
+            self.assertJSONEqual(response.text, {"coherent.dates": {}})
 
     def test_datasets_dataset_level_report(self):
         dataset = self.create(Dataset, name="anything")
@@ -295,7 +295,7 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
-                response.content,
+                response.text,
                 {
                     "distribution.awards_value": {"meta": {"total_failed": 1}, "result": False, "value": 0},
                     "distribution.tender_value": {"meta": {"total_passed": 1}, "result": True, "value": 100},
@@ -330,7 +330,7 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertJSONEqual(
-                response.content,
+                response.text,
                 {
                     "phase_stable": {
                         "check_result": True,
@@ -356,7 +356,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {})
+            self.assertJSONEqual(response.text, {})
 
     def test_datasets_status_no_values(self):
         dataset = self.create(Dataset, name="anything")
@@ -366,7 +366,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"phase": None, "state": None})
+            self.assertJSONEqual(response.text, {"phase": None, "state": None})
 
     def test_datasets_status(self):
         dataset = self.create(Dataset, name="anything")
@@ -376,7 +376,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"phase": "CHECKED", "state": "OK"})
+            self.assertJSONEqual(response.text, {"phase": "CHECKED", "state": "OK"})
 
     def test_datasets_metadata_no_values(self):
         dataset = self.create(Dataset, name="anything")
@@ -385,7 +385,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/metadata/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {})
+            self.assertJSONEqual(response.text, {})
 
     def test_datasets_metadata(self):
         dataset = self.create(Dataset, name="anything", meta={"collection_metadata": {"ocid_prefix": "ocds-213czf"}})
@@ -394,7 +394,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/metadata/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {"ocid_prefix": "ocds-213czf"})
+            self.assertJSONEqual(response.text, {"ocid_prefix": "ocds-213czf"})
 
     def test_field_level_detail(self):
         dataset = self.create(Dataset, name="anything")
@@ -433,7 +433,7 @@ class ViewsTests(PelicanTestCase):
 
         with self.assertNumQueries(2, using="pelican_backend"):
             response = self.client.get(f"/api/datasets/{dataset.pk}/field_level/ocid/")
-            detail = json.loads(response.content)
+            detail = json.loads(response.text)
             detail.pop("time")
 
             self.assertEqual(response.status_code, 200)
@@ -460,7 +460,7 @@ class ViewsTests(PelicanTestCase):
 
         with self.assertNumQueries(2, using="pelican_backend"):
             response = self.client.get(f"/api/datasets/{dataset.pk}/compiled_release_level/coherent.dates/")
-            detail = json.loads(response.content)
+            detail = json.loads(response.text)
             detail.pop("time")
 
             self.assertEqual(response.status_code, 200)
