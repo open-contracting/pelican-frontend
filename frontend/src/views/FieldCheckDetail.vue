@@ -86,8 +86,12 @@
   </dashboard-detail>
 </template>
 
-<script>
+<script setup>
 import { BSpinner, useToast } from "bootstrap-vue-next";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import "vue-json-pretty/lib/styles.css";
 import VueJsonPretty from "vue-json-pretty";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
@@ -96,140 +100,122 @@ import Tooltip from "@/components/Tooltip.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
-export default {
-    name: "FieldCheckDetail",
-    components: {
-        BSpinner,
-        VueJsonPretty,
-        DashboardDetail,
-        ExampleBoxes,
-        CheckDetailResultBox,
-        Tooltip,
-    },
-    setup() {
-        const { create: showToast } = useToast();
-        const { formatNumber } = useFormatters();
-        return { showToast, formatNumber };
-    },
-    data: () => ({
-        previewMetaData: null,
-        previewDataItemId: null,
-        loadingPreviewData: false,
-    }),
-    computed: {
-        allExamples() {
-            if (!this.check) {
-                return [];
+const route = useRoute();
+const store = useStore();
+const { t } = useI18n();
+const { create: showToast } = useToast();
+const { formatNumber } = useFormatters();
+
+const previewMetaData = ref(null);
+const previewDataItemId = ref(null);
+const loadingPreviewData = ref(false);
+
+const check = computed(() => store.getters.fieldLevelCheckByPath(route.params.path));
+
+const allExamples = computed(() => {
+    if (!check.value) {
+        return [];
+    }
+
+    const result = { coverage: [], quality: [] };
+    if (check.value.coverage) {
+        for (const value of Object.values(check.value.coverage.checks)) {
+            result.coverage = result.coverage.concat(value.failed_examples);
+        }
+        result.coverage = result.coverage.concat(check.value.coverage.passed_examples);
+    }
+    if (check.value.quality) {
+        for (const value of Object.values(check.value.quality.checks)) {
+            result.quality = result.quality.concat(value.failed_examples);
+        }
+        result.quality = result.quality.concat(check.value.quality.passed_examples);
+    }
+    return result;
+});
+
+const exampleSections = computed(() => {
+    const sections = [];
+    let failed;
+    if (check.value !== [] && check.value.path !== undefined) {
+        for (const key of Object.keys(check.value.coverage.checks)) {
+            failed = check.value.coverage.checks[key].failed_examples;
+            if (failed !== undefined && failed.length > 0) {
+                sections.push({
+                    id: `coverage_${key}`,
+                    prefix: t("fieldDetail.coverage.failureSamplesPrefix"),
+                    header: t(`fieldDetail.coverage.${key}.count_header`),
+                    examples: failed.map((val) => val.meta),
+                    group: "coverage",
+                });
             }
+        }
 
-            const allExamples = { coverage: [], quality: [] };
-            if (this.check.coverage) {
-                for (const value of Object.values(this.check.coverage.checks)) {
-                    allExamples.coverage = allExamples.coverage.concat(value.failed_examples);
-                }
-                allExamples.coverage = allExamples.coverage.concat(this.check.coverage.passed_examples);
+        for (const key of Object.keys(check.value.quality.checks)) {
+            failed = check.value.quality.checks[key].failed_examples;
+            if (failed !== undefined && failed.length > 0) {
+                sections.push({
+                    id: `quality_${key}`,
+                    prefix: t("fieldDetail.quality.failureSamplesPrefix"),
+                    header: t(`fieldDetail.quality.${key}.count_header`),
+                    examples: failed.map((val) => val.meta),
+                    group: "quality",
+                });
             }
-            if (this.check.quality) {
-                for (const value of Object.values(this.check.quality.checks)) {
-                    allExamples.quality = allExamples.quality.concat(value.failed_examples);
-                }
-                allExamples.quality = allExamples.quality.concat(this.check.quality.passed_examples);
-            }
-            return allExamples;
-        },
-        check() {
-            return this.$store.getters.fieldLevelCheckByPath(this.$route.params.path);
-        },
-        exampleSections() {
-            const exampleSections = [];
-            let failed;
-            if (this.check !== [] && this.check.path !== undefined) {
-                for (const key of Object.keys(this.check.coverage.checks)) {
-                    failed = this.check.coverage.checks[key].failed_examples;
-                    if (failed !== undefined && failed.length > 0) {
-                        exampleSections.push({
-                            id: `coverage_${key}`,
-                            prefix: this.$t("fieldDetail.coverage.failureSamplesPrefix"),
-                            header: this.$t(`fieldDetail.coverage.${key}.count_header`),
-                            examples: failed.map((val) => val.meta),
-                            group: "coverage",
-                        });
-                    }
-                }
+        }
 
-                for (const key of Object.keys(this.check.quality.checks)) {
-                    failed = this.check.quality.checks[key].failed_examples;
-                    if (failed !== undefined && failed.length > 0) {
-                        exampleSections.push({
-                            id: `quality_${key}`,
-                            prefix: this.$t("fieldDetail.quality.failureSamplesPrefix"),
-                            header: this.$t(`fieldDetail.quality.${key}.count_header`),
-                            examples: failed.map((val) => val.meta),
-                            group: "quality",
-                        });
-                    }
-                }
+        const passedSection = {
+            id: "passed",
+            header: t("core.passedExamples"),
+            examples: [],
+        };
+        if (check.value.quality.passed_examples !== undefined && check.value.quality.passed_examples.length > 0) {
+            passedSection.examples = check.value.quality.passed_examples.map((val) => val.meta);
+        } else if (
+            check.value.coverage.passed_examples !== undefined &&
+            check.value.coverage.passed_examples.length > 0
+        ) {
+            passedSection.examples = check.value.coverage.passed_examples.map((val) => val.meta);
+        }
+        if (passedSection.examples.length > 0) {
+            sections.push(passedSection);
+        }
+    }
 
-                const passedSection = {
-                    id: "passed",
-                    header: this.$t("core.passedExamples"),
-                    examples: [],
-                };
-                if (
-                    this.check.quality.passed_examples !== undefined &&
-                    this.check.quality.passed_examples.length > 0
-                ) {
-                    passedSection.examples = this.check.quality.passed_examples.map((val) => val.meta);
-                } else if (
-                    this.check.coverage.passed_examples !== undefined &&
-                    this.check.coverage.passed_examples.length > 0
-                ) {
-                    passedSection.examples = this.check.coverage.passed_examples.map((val) => val.meta);
-                }
-                if (passedSection.examples.length > 0) {
-                    exampleSections.push(passedSection);
-                }
-            }
+    return sections;
+});
 
-            return exampleSections;
-        },
-        previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
-        },
-    },
-    methods: {
-        preview: function (itemId, group) {
-            this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    this.previewDataItemId = itemId;
-                } else {
-                    this.showToast({
-                        body: this.$t("preview.cannotDisplay"),
-                        variant: "danger",
-                        pos: "middle-center",
-                    });
-                    this.previewDataItemId = null;
-                }
+const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 
-                this.loadingPreviewData = false;
+function preview(itemId, group) {
+    loadingPreviewData.value = true;
+    store.dispatch("loadDataItem", itemId).finally(() => {
+        if (store.getters.dataItemJSONLines(itemId) < 3000) {
+            previewDataItemId.value = itemId;
+        } else {
+            showToast({
+                body: t("preview.cannotDisplay"),
+                variant: "danger",
+                pos: "middle-center",
             });
+            previewDataItemId.value = null;
+        }
 
-            let result;
-            if (group) {
-                result = this.allExamples[group].find((e) => e.meta.item_id === itemId);
-            } else {
-                result = Object.values(this.allExamples)
-                    .flat()
-                    .find((e) => e.meta.item_id === itemId);
-            }
+        loadingPreviewData.value = false;
+    });
 
-            if (result) {
-                this.previewMetaData = result.result;
-            }
-        },
-    },
-};
+    let result;
+    if (group) {
+        result = allExamples.value[group].find((e) => e.meta.item_id === itemId);
+    } else {
+        result = Object.values(allExamples.value)
+            .flat()
+            .find((e) => e.meta.item_id === itemId);
+    }
+
+    if (result) {
+        previewMetaData.value = result.result;
+    }
+}
 </script>
 
 <style scoped lang="scss">
