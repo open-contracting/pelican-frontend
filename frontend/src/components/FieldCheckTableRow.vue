@@ -69,41 +69,33 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
 import ProgressBar from "./ProgressBar.vue";
 
-export default {
-    name: "FieldCheckTableRow",
-    components: { ProgressBar },
-    setup() {
-        const { formatNumber, formatPercentage } = useFormatters();
-        return { formatNumber, formatPercentage };
+const props = defineProps({
+    check: Object,
+    showStats: { type: Boolean, default: true },
+});
+
+const router = useRouter();
+const store = useStore();
+const { formatNumber, formatPercentage } = useFormatters();
+
+const detailRouterArguments = computed(() => ({
+    name: "fieldCheckDetail",
+    params: {
+        path: props.check.path,
+        datasetId: store.getters.datasetId,
     },
-    props: {
-        check: Object,
-        showStats: {
-            type: Boolean,
-            default: true,
-        },
-    },
-    data: function () {
-        return {
-            detailRouterArguments: {
-                name: "fieldCheckDetail",
-                params: {
-                    path: this.check.path,
-                    datasetId: this.$store.getters.datasetId,
-                },
-            },
-        };
-    },
-    methods: {
-        detail: function () {
-            this.$router.push(this.detailRouterArguments);
-        },
-    },
-};
+}));
+
+function detail() {
+    router.push(detailRouterArguments.value);
+}
 </script>
 
 <style scoped lang="scss">
