@@ -106,180 +106,180 @@
   </span>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
+import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useFormatters } from "@/composables/useFormatters";
 import { CONFIG } from "@/config.js";
 import DatasetValuesMultiselect from "./DatasetValuesMultiselect.vue";
 import Loader from "./Loader.vue";
 
-export default {
-    components: { BAlert, BSpinner, DatasetValuesMultiselect, Loader },
-    props: ["dataset"],
-    emits: ["close"],
-    setup() {
-        const { formatNumber } = useFormatters();
-        return { formatNumber };
-    },
-    data: () => ({
-        isSubmitting: false,
-        gettingCountsToken: null,
-        filteredItemsTimeout: null,
-        filteredItemsTimeoutLimit: 400,
-        releaseDateFrom: null,
-        releaseDateTo: null,
-        buyerName: [],
-        procuringEntityName: [],
-        buyerNameRegex: "",
-        procuringEntityNameRegex: "",
-        submitResult: null,
-        items: null,
-    }),
-    computed: {
-        firstDate: function () {
-            const publishedFrom = this.dataset.meta.collection_metadata.published_from;
-            if (publishedFrom) {
-                return publishedFrom.substring(0, 10);
-            }
-            return "1970-01-01";
-        },
-        lastDate: function () {
-            const publishedTo = this.dataset.meta.collection_metadata.published_to;
-            if (publishedTo) {
-                return publishedTo.substring(0, 10);
-            }
-            return new Date().toISOString().split("T")[0];
-        },
-    },
-    mounted() {
-        this.$watch(
-            (vm) => [
-                vm.releaseDateFrom,
-                vm.releaseDateTo,
-                vm.buyerName,
-                vm.procuringEntityName,
-                vm.buyerNameRegex,
-                vm.procuringEntityNameRegex,
-            ],
-            () => {
-                if (this.filteredItemsTimeout) {
-                    clearTimeout(this.filteredItemsTimeout);
-                }
+const props = defineProps(["dataset"]);
+const emit = defineEmits(["close"]);
 
-                this.filteredItemsTimeout = setTimeout(
-                    () => this.datasetFilterItems(),
-                    this.filteredItemsTimeoutLimit,
-                );
+const router = useRouter();
+const { t } = useI18n();
+const { formatNumber } = useFormatters();
+
+const isSubmitting = ref(false);
+const submitResult = ref(null);
+const items = ref(null);
+const releaseDateFrom = ref(null);
+const releaseDateTo = ref(null);
+const buyerName = ref([]);
+const procuringEntityName = ref([]);
+const buyerNameRegex = ref("");
+const procuringEntityNameRegex = ref("");
+
+let gettingCountsToken = null;
+let filteredItemsTimeout = null;
+const filteredItemsTimeoutLimit = 400;
+
+const firstDate = computed(() => {
+    const publishedFrom = props.dataset.meta.collection_metadata.published_from;
+    if (publishedFrom) {
+        return publishedFrom.substring(0, 10);
+    }
+    return "1970-01-01";
+});
+
+const lastDate = computed(() => {
+    const publishedTo = props.dataset.meta.collection_metadata.published_to;
+    if (publishedTo) {
+        return publishedTo.substring(0, 10);
+    }
+    return new Date().toISOString().split("T")[0];
+});
+
+function datasetFilterMessage() {
+    if (props.dataset == null) {
+        return null;
+    }
+
+    const data = {};
+
+    if (releaseDateFrom.value > firstDate.value) {
+        data.release_date_from = releaseDateFrom.value;
+    }
+    if (releaseDateTo.value < lastDate.value) {
+        data.release_date_to = releaseDateTo.value;
+    }
+    if (buyerName.value.length > 0) {
+        data.buyer = buyerName.value;
+    }
+    if (buyerNameRegex.value.trim() !== "") {
+        data.buyer_regex = buyerNameRegex.value.trim();
+    }
+    if (procuringEntityName.value.length > 0) {
+        data.procuring_entity = procuringEntityName.value;
+    }
+    if (procuringEntityNameRegex.value.trim() !== "") {
+        data.procuring_entity_regex = procuringEntityNameRegex.value.trim();
+    }
+
+    return data;
+}
+
+function datasetFilterItems() {
+    if (props.dataset == null) {
+        return;
+    }
+
+    // https://axios-http.com/docs/cancellation
+    if (gettingCountsToken != null) {
+        gettingCountsToken.cancel();
+    }
+
+    gettingCountsToken = axios.CancelToken.source();
+
+    axios
+        .post(
+            `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
+            {
+                dataset_id_original: Number.parseInt(props.dataset.id, 10),
+                filter_message: datasetFilterMessage(),
             },
             {
-                immediate: true,
-                deep: true,
+                cancelToken: gettingCountsToken.token,
             },
-        );
+        )
+        .then((response) => {
+            if (response.status === 200) {
+                items.value = response.data.items;
+            } else {
+                items.value = null;
+            }
 
-        this.releaseDateFrom = this.firstDate;
-        this.releaseDateTo = this.lastDate;
-        this.datasetFilterItems();
+            gettingCountsToken = null;
+        })
+        .catch((error) => {
+            if (!axios.isCancel(error)) {
+                throw new Error(error);
+            }
+        });
+}
+
+function createDatasetFilter() {
+    isSubmitting.value = true;
+    axios
+        .post(
+            `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, props.dataset.id)}`,
+            datasetFilterMessage(),
+        )
+        .then((response) => {
+            if (response.status === 200) {
+                submitResult.value = t("datasetFilter.submitResultOk");
+            } else {
+                submitResult.value = t("datasetFilter.submitResultFailed");
+            }
+
+            setTimeout(() => {
+                emit("close");
+                router.go();
+            }, 2000);
+        })
+        .catch((error) => {
+            throw new Error(error);
+        });
+}
+
+function updateBuyerName(value) {
+    buyerName.value = value;
+}
+
+function updateProcuringEntityName(value) {
+    procuringEntityName.value = value;
+}
+
+watch(
+    () => [
+        releaseDateFrom.value,
+        releaseDateTo.value,
+        buyerName.value,
+        procuringEntityName.value,
+        buyerNameRegex.value,
+        procuringEntityNameRegex.value,
+    ],
+    () => {
+        if (filteredItemsTimeout) {
+            clearTimeout(filteredItemsTimeout);
+        }
+
+        filteredItemsTimeout = setTimeout(() => datasetFilterItems(), filteredItemsTimeoutLimit);
     },
-    methods: {
-        createDatasetFilter() {
-            this.isSubmitting = true;
-            axios
-                .post(
-                    `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, this.dataset.id)}`,
-                    this.datasetFilterMessage(),
-                )
-                .then((response) => {
-                    if (response.status === 200) {
-                        this.submitResult = this.$t("datasetFilter.submitResultOk");
-                    } else {
-                        this.submitResult = this.$t("datasetFilter.submitResultFailed");
-                    }
-
-                    setTimeout(() => {
-                        this.$emit("close");
-                        this.$router.go();
-                    }, 2000);
-                })
-                .catch((error) => {
-                    throw new Error(error);
-                });
-        },
-        datasetFilterItems() {
-            if (this.dataset == null) {
-                return;
-            }
-
-            // https://axios-http.com/docs/cancellation
-            if (this.gettingCountsToken != null) {
-                this.gettingCountsToken.cancel();
-            }
-
-            this.gettingCountsToken = axios.CancelToken.source();
-
-            axios
-                .post(
-                    `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
-                    {
-                        dataset_id_original: Number.parseInt(this.dataset.id, 10),
-                        filter_message: this.datasetFilterMessage(),
-                    },
-                    {
-                        cancelToken: this.gettingCountsToken.token,
-                    },
-                )
-                .then((response) => {
-                    if (response.status === 200) {
-                        this.items = response.data.items;
-                    } else {
-                        this.items = null;
-                    }
-
-                    this.gettingCountsToken = null;
-                })
-                .catch((error) => {
-                    if (!axios.isCancel(error)) {
-                        throw new Error(error);
-                    }
-                });
-        },
-        datasetFilterMessage() {
-            if (this.dataset == null) {
-                return null;
-            }
-
-            const data = {};
-
-            if (this.releaseDateFrom > this.firstDate) {
-                data.release_date_from = this.releaseDateFrom;
-            }
-            if (this.releaseDateTo < this.lastDate) {
-                data.release_date_to = this.releaseDateTo;
-            }
-            if (this.buyerName.length > 0) {
-                data.buyer = this.buyerName;
-            }
-            if (this.buyerNameRegex.trim() !== "") {
-                data.buyer_regex = this.buyerNameRegex.trim();
-            }
-            if (this.procuringEntityName.length > 0) {
-                data.procuring_entity = this.procuringEntityName;
-            }
-            if (this.procuringEntityNameRegex.trim() !== "") {
-                data.procuring_entity_regex = this.procuringEntityNameRegex.trim();
-            }
-
-            return data;
-        },
-        updateBuyerName(value) {
-            this.buyerName = value;
-        },
-        updateProcuringEntityName(value) {
-            this.procuringEntityName = value;
-        },
+    {
+        deep: true,
     },
-};
+);
+
+onMounted(() => {
+    releaseDateFrom.value = firstDate.value;
+    releaseDateTo.value = lastDate.value;
+    datasetFilterItems();
+});
 </script>
 
 <style lang="scss">
