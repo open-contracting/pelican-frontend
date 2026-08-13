@@ -14,21 +14,13 @@
   </span>
 </template>
 
-<script>
+<script setup>
 import { BTooltip } from "bootstrap-vue-next";
+import { useId } from "vue";
 
-export default {
-    components: { BTooltip },
-    props: ["text"],
-    data: () => ({}),
-    computed: {
-        tooltipId: () => {
-            const id = `id-${Math.floor(Math.random() * 10000000000)}`;
+defineProps(["text"]);
 
-            return id;
-        },
-    },
-};
+const tooltipId = useId();
 </script>
 
 <style scoped lang="scss">
