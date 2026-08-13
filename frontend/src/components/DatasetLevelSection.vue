@@ -18,63 +18,55 @@
   </span>
 </template>
 
-<script>
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
 import DatasetLevelCheck from "./DatasetLevelCheck.vue";
 import Loader from "./Loader.vue";
 
-export default {
-    components: { DatasetLevelCheck, Loader },
-    props: ["section", "filter"],
-    data: () => ({
-        sections: {
-            status_distribution: [
-                "distribution.tender_status",
-                "distribution.awards_status",
-                "distribution.contracts_status",
-                "distribution.milestone_status",
-            ],
-            value_distribution: [
-                "distribution.tender_value",
-                "distribution.awards_value",
-                "distribution.contracts_value",
-            ],
-            other_distribution: [
-                "distribution.value_currency",
-                "distribution.main_procurement_category",
-                "distribution.tender_procurement_method",
-                "distribution.tender_submission_method",
-                "distribution.tender_award_criteria",
-                "distribution.buyer",
-                "distribution.document_document_type",
-                "distribution.milestone_type",
-                "distribution.related_process_relation",
-            ],
-            repetition: [
-                "distribution.tender_value_repetition",
-                "distribution.awards_value_repetition",
-                "distribution.contracts_value_repetition",
-                "distribution.buyer_repetition",
-            ],
-            other: [
-                "misc.url_availability",
-                "consistent.related_process_title",
-                "reference.related_process_identifier",
-                "unique.tender_id",
-            ],
-        },
-    }),
-    computed: {
-        loaded() {
-            return this.$store.getters.datasetLevelStats != null;
-        },
-        datasetLevelStats() {
-            if (!(this.section in this.sections)) {
-                return [];
-            }
-            return this.sections[this.section]
-                .map((item) => this.$store.getters.datasetLevelCheckByName(item))
-                .filter(this.filter);
-        },
-    },
+const props = defineProps(["section", "filter"]);
+
+const store = useStore();
+
+const sections = {
+    status_distribution: [
+        "distribution.tender_status",
+        "distribution.awards_status",
+        "distribution.contracts_status",
+        "distribution.milestone_status",
+    ],
+    value_distribution: ["distribution.tender_value", "distribution.awards_value", "distribution.contracts_value"],
+    other_distribution: [
+        "distribution.value_currency",
+        "distribution.main_procurement_category",
+        "distribution.tender_procurement_method",
+        "distribution.tender_submission_method",
+        "distribution.tender_award_criteria",
+        "distribution.buyer",
+        "distribution.document_document_type",
+        "distribution.milestone_type",
+        "distribution.related_process_relation",
+    ],
+    repetition: [
+        "distribution.tender_value_repetition",
+        "distribution.awards_value_repetition",
+        "distribution.contracts_value_repetition",
+        "distribution.buyer_repetition",
+    ],
+    other: [
+        "misc.url_availability",
+        "consistent.related_process_title",
+        "reference.related_process_identifier",
+        "unique.tender_id",
+    ],
 };
+
+const loaded = computed(() => store.getters.datasetLevelStats != null);
+
+const datasetLevelStats = computed(() => {
+    if (!(props.section in sections)) {
+        return [];
+    }
+    return sections[props.section].map((item) => store.getters.datasetLevelCheckByName(item)).filter(props.filter);
+});
 </script>

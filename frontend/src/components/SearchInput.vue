@@ -21,34 +21,31 @@
   </BInputGroup>
 </template>
 
-<script>
+<script setup>
 import { BButton, BFormInput, BInputGroup, BInputGroupText } from "bootstrap-vue-next";
+import { onMounted, ref, watch } from "vue";
 
-export default {
-    components: { BButton, BFormInput, BInputGroup, BInputGroupText },
-    props: {
-        placeholder: String,
-        onUpdate: Function,
-        preset: String,
-        submitTimeLimit: { type: Number, default: 400 },
-    },
-    data: () => ({
-        search: null,
-        submitTimeout: null,
-    }),
-    watch: {
-        search: function (value) {
-            if (this.submitTimeout) {
-                clearTimeout(this.submitTimeout);
-            }
+const props = defineProps({
+    placeholder: String,
+    onUpdate: Function,
+    preset: String,
+    submitTimeLimit: { type: Number, default: 400 },
+});
 
-            this.submitTimeout = setTimeout(() => this.onUpdate(value), this.submitTimeLimit);
-        },
-    },
-    mounted: function () {
-        this.search = this.preset;
-    },
-};
+const search = ref(null);
+let submitTimeout = null;
+
+watch(search, (value) => {
+    if (submitTimeout) {
+        clearTimeout(submitTimeout);
+    }
+
+    submitTimeout = setTimeout(() => props.onUpdate(value), props.submitTimeLimit);
+});
+
+onMounted(() => {
+    search.value = props.preset;
+});
 </script>
 
 <style scoped lang="scss">

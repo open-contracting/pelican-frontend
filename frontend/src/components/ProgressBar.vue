@@ -12,31 +12,29 @@
   </div>
 </template>
 
-<script>
-export default {
-    name: "ProgressBar",
-    props: ["bars", "value", "ok", "failed"],
-    computed: {
-        allBars: function () {
-            const result = [];
+<script setup>
+import { computed } from "vue";
 
-            if (this.value) {
-                result.push({ value: this.value });
-            }
-            if (this.ok) {
-                result.push({ value: this.ok, class: "ok" });
-            }
-            if (this.failed) {
-                result.push({ value: this.failed, class: "failed" });
-            }
-            if (this.bars) {
-                result.concat(this.bars);
-            }
+const props = defineProps(["bars", "value", "ok", "failed"]);
 
-            return result;
-        },
-    },
-};
+const allBars = computed(() => {
+    const result = [];
+
+    if (props.value) {
+        result.push({ value: props.value });
+    }
+    if (props.ok) {
+        result.push({ value: props.ok, class: "ok" });
+    }
+    if (props.failed) {
+        result.push({ value: props.failed, class: "failed" });
+    }
+    if (props.bars) {
+        result.concat(props.bars);
+    }
+
+    return result;
+});
 </script>
 
 <style scoped lang="scss">

@@ -19,33 +19,27 @@
   </BDropdown>
 </template>
 
-<script>
+<script setup>
 import { BDropdown, BDropdownItemButton } from "bootstrap-vue-next";
+import { onMounted, ref } from "vue";
 
-export default {
-    components: { BDropdown, BDropdownItemButton },
-    props: {
-        filterNames: Array,
-        startIndex: {
-            type: Number,
-            default: 0,
-        },
-    },
-    emits: ["newSelectedIndex"],
-    data: () => ({
-        selectedIndex: 0,
-    }),
-    mounted: function () {
-        this.selectedIndex = this.startIndex;
-        this.clickItem(this.startIndex);
-    },
-    methods: {
-        clickItem: function (index) {
-            this.selectedIndex = index;
-            this.$emit("newSelectedIndex", index);
-        },
-    },
-};
+const props = defineProps({
+    filterNames: Array,
+    startIndex: { type: Number, default: 0 },
+});
+
+const emit = defineEmits(["newSelectedIndex"]);
+
+const selectedIndex = ref(0);
+
+function clickItem(index) {
+    selectedIndex.value = index;
+    emit("newSelectedIndex", index);
+}
+
+onMounted(() => {
+    clickItem(props.startIndex);
+});
 </script>
 
 <style lang="scss">
