@@ -7,26 +7,20 @@
   </h1>
 </template>
 
-<script>
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
 
-export default {
-    setup() {
-        const { formatNumber } = useFormatters();
-        return { formatNumber };
-    },
-    data: () => ({
-        showHidden: {},
-    }),
-    computed: {
-        dataset() {
-            if (this.$store.getters.dataset?.meta !== undefined) {
-                return this.$store.getters.dataset;
-            }
-            return undefined;
-        },
-    },
-};
+const store = useStore();
+const { formatNumber } = useFormatters();
+
+const dataset = computed(() => {
+    if (store.getters.dataset?.meta !== undefined) {
+        return store.getters.dataset;
+    }
+    return undefined;
+});
 </script>
 
 <style scoped lang="scss">

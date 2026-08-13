@@ -7,15 +7,7 @@
   </plain>
 </template>
 
-<script>
+<script setup>
 import DatasetPicker from "@/components/DatasetPicker.vue";
 import Plain from "./layouts/Plain.vue";
-
-export default {
-    name: "Home",
-    components: {
-        DatasetPicker,
-        Plain,
-    },
-};
 </script>

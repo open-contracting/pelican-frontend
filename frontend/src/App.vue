@@ -9,11 +9,6 @@
   </BApp>
 </template>
 
-<script>
+<script setup>
 import { BApp } from "bootstrap-vue-next";
-
-export default {
-    components: { BApp },
-    data: () => ({}),
-};
 </script>

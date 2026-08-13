@@ -25,23 +25,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import DatasetHeader from "@/components/DatasetHeader.vue";
 import MainMenu from "./MainMenu.vue";
-
-export default {
-    name: "Dashboard",
-    components: { MainMenu, DatasetHeader },
-    data: () => ({}),
-    computed: {
-        dataset() {
-            if (this.$store.getters.dataset != null) {
-                return this.$store.getters.dataset;
-            }
-            return [];
-        },
-    },
-};
 </script>
 
 <style lang="scss">

@@ -12,13 +12,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { BSpinner } from "bootstrap-vue-next";
-
-export default {
-    components: { BSpinner },
-    data: () => ({}),
-};
 </script>
 
 <style scoped lang="scss">
