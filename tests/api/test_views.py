@@ -83,6 +83,113 @@ class ViewsTests(PelicanTestCase):
 
         self.assertEqual(response.status_code, 200)
 
+    def test_settings(self):
+        response = self.client.get("/api/settings/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            response.text,
+            {
+                "user": "",
+                "template": {
+                    "en": "1jSGZKNJP6wBVPwi3JsvdkZ9FSpUwrK2SJxZoQQuJdnM",
+                    "es": "1DOxUeeUUjNPxAKu04etMBWyRbKkn8C1ZCskpeXUKJSg",
+                },
+                "folder": "1ZVwf9cr29E4uCuWaVRiQLJI7_ejE00h3",
+            },
+        )
+
+    def test_dataset_filter_items_get(self):
+        with self.assertNumQueries(0, using="pelican_backend"):
+            response = self.client.get("/api/dataset-filter-items/")
+
+            self.assertEqual(response.status_code, 400)
+
+    def test_dataset_filter_items_malformed(self):
+        for input_message in (
+            {},
+            {"dataset_id_original": 1},
+            {"filter_message": {}},
+            {"dataset_id_original": "1", "filter_message": {}},
+            {"dataset_id_original": 1, "filter_message": []},
+        ):
+            with (
+                self.subTest(input_message=input_message),
+                self.assertNumQueries(0, using="pelican_backend"),
+            ):
+                response = self.client.post("/api/dataset-filter-items/", input_message, "application/json")
+
+                self.assertEqual(response.status_code, 400)
+
+    def create_filterable_data_item(self, dataset, date, buyer, procuring_entity):
+        return self.create(
+            DataItem,
+            dataset=dataset,
+            data={
+                "date": date,
+                "buyer": {"name": buyer},
+                "tender": {"procuringEntity": {"name": procuring_entity}},
+            },
+        )
+
+    def test_dataset_filter_items(self):
+        dataset = self.create(Dataset, name="anything")
+        self.create_filterable_data_item(dataset, "2020-01-01", "MOF", "PE1")
+        self.create_filterable_data_item(dataset, "2021-01-01", "MOH", "PE2")
+        self.create_filterable_data_item(dataset, "2022-01-01", "MOF", "PE1")
+        # A different dataset's items are excluded.
+        other = self.create(Dataset, name="other")
+        self.create_filterable_data_item(other, "2020-01-01", "MOF", "PE1")
+
+        for filter_message, expected in (
+            ({}, 3),
+            ({"release_date_from": "2021-01-01"}, 2),
+            ({"release_date_to": "2021-01-01"}, 2),
+            ({"buyer": ["MOF"]}, 2),
+            ({"buyer": ["MOF", "MOH"]}, 3),
+            # An empty array is a valid right-hand side for ANY().
+            ({"buyer": []}, 0),
+            ({"buyer_regex": "mo%"}, 3),
+            ({"procuring_entity": ["PE2"]}, 1),
+            ({"procuring_entity_regex": "pe1"}, 2),
+            # Conditions are joined with AND.
+            ({"release_date_from": "2021-01-01", "buyer": ["MOF"]}, 1),
+        ):
+            with (
+                self.subTest(filter_message=filter_message),
+                self.assertNumQueries(1, using="pelican_backend"),
+            ):
+                response = self.client.post(
+                    "/api/dataset-filter-items/",
+                    {"dataset_id_original": dataset.pk, "filter_message": filter_message},
+                    "application/json",
+                )
+
+                self.assertEqual(response.status_code, 200)
+                self.assertJSONEqual(response.text, {"items": expected})
+
+    def test_dataset_distinct_values(self):
+        dataset = self.create(Dataset, name="anything")
+        for name in ("MOF", "MOF", "MOH"):
+            self.create(DataItem, dataset=dataset, data={"tender": {"procuringEntity": {"name": name}}})
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.get(f"/api/dataset-distinct-values/{dataset.pk}/tender.procuringEntity.name/")
+
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.text, [{"value": "MOF", "count": 2}, {"value": "MOH", "count": 1}])
+
+    def test_dataset_distinct_values_query(self):
+        dataset = self.create(Dataset, name="anything")
+        for name in ("MOF", "MOF", "MOH"):
+            self.create(DataItem, dataset=dataset, data={"tender": {"procuringEntity": {"name": name}}})
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.get(f"/api/dataset-distinct-values/{dataset.pk}/tender.procuringEntity.name/moh/")
+
+            self.assertEqual(response.status_code, 200)
+            self.assertJSONEqual(response.text, [{"value": "MOH", "count": 1}])
+
     def test_data_items_list_not_implemented(self):
         with self.assertNumQueries(0, using="pelican_backend"):
             response = self.client.get("/api/data_items/")
