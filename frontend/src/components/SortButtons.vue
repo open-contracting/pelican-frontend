@@ -6,11 +6,11 @@
     <div class="sort_buttons">
       <div
         :class="['asc', { active: active && asc }]"
-        @click.stop="emit('asc')"
+        @click.stop="$emit('asc')"
       />
       <div
         :class="['desc', { active: active && !asc }]"
-        @click.stop="emit('desc')"
+        @click.stop="$emit('desc')"
       />
     </div>
   </div>
@@ -23,7 +23,7 @@ defineProps({
     active: Boolean,
 });
 
-const emit = defineEmits(["asc", "desc"]);
+defineEmits(["asc", "desc"]);
 </script>
 
 <style scoped lang="scss">

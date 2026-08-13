@@ -119,6 +119,8 @@ Frontend
 
 Use ``$t`` in templates and ``useI18n()`` in ``<script setup>``. `vue-i18n documents both <https://vue-i18n.intlify.dev/guide/advanced/composition.html>`__.
 
+Likewise, use ``$emit`` in templates, and assign ``defineEmits()`` only to emit from ``<script setup>``.
+
 Learning
 ~~~~~~~~
 
