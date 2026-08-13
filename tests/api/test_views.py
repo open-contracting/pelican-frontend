@@ -105,13 +105,13 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 400)
 
-    def test_dataset_filter_items_malformed(self):
+    def test_dataset_filter_items_invalid(self):
         for input_message in (
             {},
-            {"dataset_id_original": 1},
-            {"filter_message": {}},
-            {"dataset_id_original": "1", "filter_message": {}},
-            {"dataset_id_original": 1, "filter_message": []},
+            {"dataset_id_original": 1},  # missing filter_message key
+            {"filter_message": {}},  # missing dataset_id_original key
+            {"dataset_id_original": "1", "filter_message": {}},  # incorrect dataset_id_original type
+            {"dataset_id_original": 1, "filter_message": []},  # incorrect filter_message type
         ):
             with (
                 self.subTest(input_message=input_message),
@@ -121,7 +121,7 @@ class ViewsTests(PelicanTestCase):
 
                 self.assertEqual(response.status_code, 400)
 
-    def create_filterable_data_item(self, dataset, date, buyer, procuring_entity):
+    def create_data_item(self, dataset, date, buyer, procuring_entity):
         return self.create(
             DataItem,
             dataset=dataset,
@@ -134,12 +134,12 @@ class ViewsTests(PelicanTestCase):
 
     def test_dataset_filter_items(self):
         dataset = self.create(Dataset, name="anything")
-        self.create_filterable_data_item(dataset, "2020-01-01", "MOF", "PE1")
-        self.create_filterable_data_item(dataset, "2021-01-01", "MOH", "PE2")
-        self.create_filterable_data_item(dataset, "2022-01-01", "MOF", "PE1")
+        self.create_data_item(dataset, "2020-01-01", "MOF", "PE1")
+        self.create_data_item(dataset, "2021-01-01", "MOH", "PE2")
+        self.create_data_item(dataset, "2022-01-01", "MOF", "PE1")
         # A different dataset's items are excluded.
         other = self.create(Dataset, name="other")
-        self.create_filterable_data_item(other, "2020-01-01", "MOF", "PE1")
+        self.create_data_item(other, "2020-01-01", "MOF", "PE1")
 
         for filter_message, expected in (
             ({}, 3),
@@ -149,7 +149,7 @@ class ViewsTests(PelicanTestCase):
             ({"buyer": ["MOF", "MOH"]}, 3),
             # An empty array is a valid right-hand side for ANY().
             ({"buyer": []}, 0),
-            ({"buyer_regex": "mo%"}, 3),
+            ({"buyer_regex": "%of"}, 2),
             ({"procuring_entity": ["PE2"]}, 1),
             ({"procuring_entity_regex": "pe1"}, 2),
             # Conditions are joined with AND.
