@@ -114,6 +114,11 @@ To update ``api/models.py`` following changes to Pelican backend's database sche
 -  ``ProgressMonitorItem.item``: Rename to ``data_item``
 -  ``Report.type``: Change ``TextField`` to ``CharField``, add ``max_length=255``, and remove ``# This field type is a guess.``
 
+Frontend
+~~~~~~~~
+
+Use ``$t`` in templates and ``useI18n()`` in ``<script setup>``. `vue-i18n documents both <https://vue-i18n.intlify.dev/guide/advanced/composition.html>`__.
+
 Learning
 ~~~~~~~~
 
