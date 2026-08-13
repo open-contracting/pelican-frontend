@@ -77,7 +77,6 @@
       />
       <FieldCheckTree
         v-else-if="layout == 'tree'"
-        ref="field-check-tree"
         :filter="filters[filterIndex]"
       />
     </div>

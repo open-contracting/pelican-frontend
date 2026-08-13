@@ -137,6 +137,9 @@ function isSearched(check) {
 onMounted(() => {
     sortBy(tableData.value, sortedBy.value, isAscendingSorted.value);
 });
+
+// Field.vue calls resetSorting() through a template ref.
+defineExpose({ resetSorting });
 </script>
 
 <style scoped lang="scss">
