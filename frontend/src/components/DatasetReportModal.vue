@@ -356,106 +356,95 @@
   </span>
 </template>
 
-<script>
+<script setup>
 import axios from "axios";
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
+import { ref } from "vue";
+import { useStore } from "vuex";
 import { CONFIG } from "@/config.js";
 import Loader from "./Loader.vue";
 
-export default {
-    components: { BAlert, BCol, BFormInput, BFormRadio, BRow, Loader },
-    props: ["dataset"],
-    emits: ["close"],
-    data: function () {
-        return {
-            isSubmitting: false,
-            documentId: this.$store.getters.settings.template.en,
-            folderId: this.$store.getters.settings.folder,
-            reportName: "",
-            submitStatus: null,
-            submitData: null,
-            documentLink: null,
-            errorMessage: null,
-            failedTags: null,
-            options: [
-                { value: "en", text: "English" },
-                { value: "es", text: "Español" },
-            ],
-            reportLanguage: "en",
-        };
-    },
-    methods: {
-        setDocumentId(value) {
-            // Only change the template if it is one of the default values.
-            if (Object.values(this.$store.getters.settings.template).includes(this.documentId)) {
-                this.documentId = this.$store.getters.settings.template[value];
-            }
-        },
-        createDatasetReport() {
-            if (this.dataset == null) {
-                return;
-            }
-            this.errorMessage = null;
-            this.isSubmitting = true;
+const props = defineProps(["dataset"]);
+defineEmits(["close"]);
 
-            const data = {
-                dataset_id: Number.parseInt(this.dataset.id, 10),
-                document_id: this.documentId,
-                folder_id: this.folderId,
-                language: this.reportLanguage,
-            };
-            if (this.reportName.trim() !== "") {
-                data.report_name = this.reportName.trim();
+const store = useStore();
+
+const isSubmitting = ref(false);
+const documentId = ref(store.getters.settings.template.en);
+const folderId = ref(store.getters.settings.folder);
+const reportName = ref("");
+const submitStatus = ref(null);
+const submitData = ref(null);
+const errorMessage = ref(null);
+const failedTags = ref(null);
+const options = [
+    { value: "en", text: "English" },
+    { value: "es", text: "Español" },
+];
+const reportLanguage = ref("en");
+
+function setDocumentId(value) {
+    // Only change the template if it is one of the default values.
+    if (Object.values(store.getters.settings.template).includes(documentId.value)) {
+        documentId.value = store.getters.settings.template[value];
+    }
+}
+
+function createDatasetReport() {
+    if (props.dataset == null) {
+        return;
+    }
+    errorMessage.value = null;
+    isSubmitting.value = true;
+
+    const data = {
+        dataset_id: Number.parseInt(props.dataset.id, 10),
+        document_id: documentId.value,
+        folder_id: folderId.value,
+        language: reportLanguage.value,
+    };
+    if (reportName.value.trim() !== "") {
+        data.report_name = reportName.value.trim();
+    }
+
+    axios
+        .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
+        .then((response) => {
+            if (response.data.failed_tags && response.data.failed_tags.length === 0) {
+                failedTags.value = null;
+            } else {
+                failedTags.value = response.data.failed_tags;
             }
 
-            axios
-                .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
-                .then((response) => {
-                    if (response.data.failed_tags && response.data.failed_tags.length === 0) {
-                        this.failedTags = null;
-                    } else {
-                        this.failedTags = response.data.failed_tags;
-                    }
-
-                    if (response.status === 200) {
-                        this.submitStatus = response.data.status;
-                        this.submitData = response.data.data;
-                    } else {
-                        this.submitStatus = "server_error";
-                        this.errorMessage = response.statusText;
-                    }
-                })
-                .catch((error) => {
-                    this.submitStatus = "server_error";
-                    this.errorMessage = error;
-                })
-                .finally(() => {
-                    this.isSubmitting = false;
-                });
-        },
-        reset() {
-            this.isSubmitting = false;
-            this.documentId = "";
-            this.folderId = "";
-            this.reportName = "";
-            this.submitStatus = null;
-            this.submitData = null;
-            this.documentLink = null;
-            this.errorMessage = null;
-        },
-        retry() {
-            this.submitStatus = null;
-            this.createDatasetReport();
-        },
-        fileIdFormatter(value) {
-            let valueMatch = value.match(/\/d\/([^/]+)/);
-            if (valueMatch == null) {
-                valueMatch = value.match(/\/folders\/([^/]+)/);
+            if (response.status === 200) {
+                submitStatus.value = response.data.status;
+                submitData.value = response.data.data;
+            } else {
+                submitStatus.value = "server_error";
+                errorMessage.value = response.statusText;
             }
-            return valueMatch != null ? valueMatch[1] : value;
-        },
-    },
-};
+        })
+        .catch((error) => {
+            submitStatus.value = "server_error";
+            errorMessage.value = error;
+        })
+        .finally(() => {
+            isSubmitting.value = false;
+        });
+}
+
+function retry() {
+    submitStatus.value = null;
+    createDatasetReport();
+}
+
+function fileIdFormatter(value) {
+    let valueMatch = value.match(/\/d\/([^/]+)/);
+    if (valueMatch == null) {
+        valueMatch = value.match(/\/folders\/([^/]+)/);
+    }
+    return valueMatch != null ? valueMatch[1] : value;
+}
 </script>
 
 <style lang="scss">
