@@ -383,7 +383,7 @@ class ResourceLevelDetail(views.APIView):
 
 def failures_response(filename, statement, variables):
     def rows():
-        with connections["pelican_backend"].cursor() as cursor:
+        with connections["pelican_backend"].chunked_cursor() as cursor:
             cursor.execute(statement, variables)
             while batch := cursor.fetchmany(1000):
                 for row in batch:
