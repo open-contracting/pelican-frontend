@@ -55,7 +55,7 @@ const chartData = computed(() => [
 ]);
 </script>
 
-<style>
+<style scoped>
 .table td.label {
     width: 80px;
     padding-top: 7px;
