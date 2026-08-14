@@ -1,6 +1,7 @@
 <template>
   <BDropdown
     id="filter_dropdown"
+    class="filter_dropdown"
     placement="bottom-end"
     split
     split-button-type="button"
@@ -44,6 +45,11 @@ onMounted(() => {
 
 <style lang="scss">
 @import "@/scss/variables";
+
+.filter_dropdown {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
 
 #filter_dropdown {
     border: none;
