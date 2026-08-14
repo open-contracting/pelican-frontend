@@ -447,8 +447,7 @@ function fileIdFormatter(value) {
 }
 </script>
 
-<style lang="scss">
-
+<style scoped lang="scss">
 .submit-result {
     display: flex;
     justify-content: space-between;
@@ -462,32 +461,12 @@ function fileIdFormatter(value) {
     color: #6c010e;
 }
 
-.modal_box {
-    padding: 30px;
-}
-
-.modal_headline {
-    padding-bottom: 30px;
-}
-
 .margin_bottom {
     margin-bottom: 1em;
 }
 
-.base_input,
-.base_input:-internal-autofill-selected {
-    width: 100%;
-    height: 100%;
-    padding-right: 0px;
-    font-size: 13px;
+.base_input {
     font-family: $font-family-mono;
-    background-color: transparent;
-}
-
-.modal_input {
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
 }
 
 .icon {
@@ -509,25 +488,6 @@ function fileIdFormatter(value) {
     border-radius: 5px;
     border: 1px solid $na_color;
     padding: 1em;
-}
-
-.procuring_row {
-    padding-top: 15px;
-}
-
-.section_row {
-    padding-top: 30px;
-}
-
-.multiselect__tag-icon:after {
-    content: "×";
-    color: white;
-    font-size: 16px;
-}
-
-.multiselect__tag-icon:focus,
-.multiselect__tag-icon:hover {
-    background: $gray-800;
 }
 
 .info_prefix {

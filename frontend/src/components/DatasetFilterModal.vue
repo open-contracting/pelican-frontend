@@ -288,16 +288,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss">
-
-.modal_box {
-    padding: 30px;
-}
-
-.modal_headline {
-    padding-bottom: 30px;
-}
-
+<style scoped lang="scss">
 .regex_input {
     width: 100%;
     height: 100%;
@@ -314,20 +305,5 @@ onMounted(() => {
 
 .procuring_row {
     padding-top: 15px;
-}
-
-.section_row {
-    padding-top: 30px;
-}
-
-.multiselect__tag-icon:after {
-    content: "×";
-    color: white;
-    font-size: 16px;
-}
-
-.multiselect__tag-icon:focus,
-.multiselect__tag-icon:hover {
-    background: $gray-800;
 }
 </style>

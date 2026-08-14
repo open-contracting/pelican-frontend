@@ -115,6 +115,17 @@ onMounted(() => {
 
 <style lang="scss">
 
+.multiselect__tag-icon:after {
+    content: "×";
+    color: white;
+    font-size: 16px;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+    background: $gray-800;
+}
+
 .multiselect__tag {
     background: $primary;
 }
