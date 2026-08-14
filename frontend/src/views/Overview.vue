@@ -12,68 +12,54 @@
           <Tooltip :text="$t('overview.filtered.info')" />
         </h4>
         <div class="result_box">
-          <div
+          <dl
             v-if="data_quality"
-            class="table_hl"
+            class="table_hl row"
           >
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("overview.filtered.original") }}
-              </div>
-              <div class="td col col-6">
-                {{ dataset.parent_name }}
-                <span class="dataset_id">(Id {{ dataset.parent_id }})</span>
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("datasetFilter.releaseDateFrom") }}
-              </div>
-              <div class="td col col-6">
-                {{ dataset.filter_message.release_date_from }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("datasetFilter.releaseDateTo") }}
-              </div>
-              <div class="td col col-6">
-                {{ dataset.filter_message.release_date_to }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("datasetFilter.buyerNameRegex") }}
-              </div>
-              <div class="td col col-6">
-                {{ dataset.filter_message.buyer_regex }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("datasetFilter.procuringEntityNameRegex") }}
-              </div>
-              <div class="td col col-6">
-                {{ dataset.filter_message.procuring_entity_regex }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("datasetFilter.buyerName") }}
-              </div>
-              <div class="td col col-6">
-                {{ filtered_buyer.join(", ") }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-6">
-                {{ $t("datasetFilter.procuringEntityName") }}
-              </div>
-              <div class="td col col-6">
-                {{ filtered_procuring_entity.join(", ") }}
-              </div>
-            </div>
-          </div>
+            <dt class="col-6">
+              {{ $t("overview.filtered.original") }}
+            </dt>
+            <dd class="col-6">
+              {{ dataset.parent_name }}
+              <span class="dataset_id">(Id {{ dataset.parent_id }})</span>
+            </dd>
+            <dt class="col-6">
+              {{ $t("datasetFilter.releaseDateFrom") }}
+            </dt>
+            <dd class="col-6">
+              {{ dataset.filter_message.release_date_from }}
+            </dd>
+            <dt class="col-6">
+              {{ $t("datasetFilter.releaseDateTo") }}
+            </dt>
+            <dd class="col-6">
+              {{ dataset.filter_message.release_date_to }}
+            </dd>
+            <dt class="col-6">
+              {{ $t("datasetFilter.buyerNameRegex") }}
+            </dt>
+            <dd class="col-6">
+              {{ dataset.filter_message.buyer_regex }}
+            </dd>
+            <dt class="col-6">
+              {{ $t("datasetFilter.procuringEntityNameRegex") }}
+            </dt>
+            <dd class="col-6">
+              {{ dataset.filter_message.procuring_entity_regex }}
+            </dd>
+            <dt class="col-6">
+              {{ $t("datasetFilter.buyerName") }}
+            </dt>
+            <dd class="col-6">
+              {{ filtered_buyer.join(", ") }}
+            </dd>
+            <dt class="col-6">
+              {{ $t("datasetFilter.procuringEntityName") }}
+            </dt>
+            <dd class="col-6">
+              {{ filtered_procuring_entity.join(", ") }}
+            </dd>
+          </dl>
         </div>
       </div>
     </div>
@@ -85,120 +71,101 @@
           <Tooltip :text="$t('overview.collection_metadata_tooltip')" />
         </h4>
         <div class="result_box collection_metadata col col-12">
-          <div
+          <dl
             v-if="collection"
-            class="table_hl"
+            class="table_hl row"
           >
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.compiled_releases.value_label") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center break_word">
-                <span class="ocid_count bold">{{
-                  formatNumber(compiled_releases.total_unique_ocids)
-                }}</span>
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.publisher") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center break_word">
-                {{ collection.publisher }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.ocidPrefix") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center">
-                {{ collection.ocid_prefix }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.dataLicense") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center break_word">
-                <a
-                  v-if="collection.data_license"
-                  :href="collection.data_license"
-                  target="_blank"
-                >{{
-                  collection.data_license
-                }}</a>
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.publicationPolicy") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center break_word">
-                <a
-                  v-if="collection.publication_policy"
-                  :href="collection.publication_policy"
-                  target="_blank"
-                >{{ collection.publication_policy }}</a>
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.extensions") }}
-              </div>
-              <div
-                v-if="collection.extensions"
-                class="td col col-8"
-              >
-                <template v-for="(e, i) in collection.extensions" :key="i">
-                  <span
-                    v-if="e.hasOwnProperty('name')"
-                  >
-                    <a
-                      v-if="
-                        e.hasOwnProperty('documentationUrl') &&
-                          (e.documentationUrl.hasOwnProperty('en')
-                            ? e.documentationUrl['en'] != ''
-                            : e.documentationUrl != '')
-                      "
-                      :href="
-                        e.documentationUrl.hasOwnProperty('en')
-                          ? e.documentationUrl['en']
-                          : e.documentationUrl
-                      "
-                      target="_blank"
-                    >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
-                    <a
-                      v-else-if="e.hasOwnProperty('repositoryUrl')"
-                      :href="e.repositoryUrl"
-                      target="_blank"
-                    >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
-                    <a
-                      v-else
-                      target="_blank"
-                    >{{
-                      e.name.hasOwnProperty("en") ? e.name["en"] : e.name
-                    }}</a><template v-if="i + 1 < collection.extensions.length">, </template>
-                  </span>
-                </template>
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.publishedFrom") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center">
-                {{ collection.published_from }}
-              </div>
-            </div>
-            <div class="tr row">
-              <div class="td col col-4 d-flex align-items-center">
-                {{ $t("overview.publishedTo") }}
-              </div>
-              <div class="td col col-8 d-flex align-items-center">
-                {{ collection.published_to }}
-              </div>
-            </div>
-          </div>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.compiled_releases.value_label") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center break_word">
+              <span class="ocid_count bold">{{
+                formatNumber(compiled_releases.total_unique_ocids)
+              }}</span>
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.publisher") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center break_word">
+              {{ collection.publisher }}
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.ocidPrefix") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center">
+              {{ collection.ocid_prefix }}
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.dataLicense") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center break_word">
+              <a
+                v-if="collection.data_license"
+                :href="collection.data_license"
+                target="_blank"
+              >{{
+                collection.data_license
+              }}</a>
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.publicationPolicy") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center break_word">
+              <a
+                v-if="collection.publication_policy"
+                :href="collection.publication_policy"
+                target="_blank"
+              >{{ collection.publication_policy }}</a>
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.extensions") }}
+            </dt>
+            <dd class="col-8">
+              <template v-for="(e, i) in collection.extensions" :key="i">
+                <span
+                  v-if="e.hasOwnProperty('name')"
+                >
+                  <a
+                    v-if="
+                      e.hasOwnProperty('documentationUrl') &&
+                        (e.documentationUrl.hasOwnProperty('en')
+                          ? e.documentationUrl['en'] != ''
+                          : e.documentationUrl != '')
+                    "
+                    :href="
+                      e.documentationUrl.hasOwnProperty('en')
+                        ? e.documentationUrl['en']
+                        : e.documentationUrl
+                    "
+                    target="_blank"
+                  >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
+                  <a
+                    v-else-if="e.hasOwnProperty('repositoryUrl')"
+                    :href="e.repositoryUrl"
+                    target="_blank"
+                  >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
+                  <a
+                    v-else
+                    target="_blank"
+                  >{{
+                    e.name.hasOwnProperty("en") ? e.name["en"] : e.name
+                  }}</a><template v-if="i + 1 < collection.extensions.length">, </template>
+                </span>
+              </template>
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.publishedFrom") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center">
+              {{ collection.published_from }}
+            </dd>
+            <dt class="col-4 d-flex align-items-center">
+              {{ $t("overview.publishedTo") }}
+            </dt>
+            <dd class="col-8 d-flex align-items-center">
+              {{ collection.published_to }}
+            </dd>
+          </dl>
         </div>
       </div>
       <div class="col-12 col-xl-6">
@@ -206,62 +173,52 @@
           <div class="col-12 col-md-6 col-xl-12">
             <h4>{{ $t("overview.kingfisher_metadata") }}</h4>
             <div class="result_box collection_metadata kingfisher_metadata">
-              <div
+              <dl
                 v-if="kingfisher"
-                class="table_hl"
+                class="table_hl row"
               >
-                <div class="tr row">
-                  <div class="td col col-6">
-                    {{ $t("overview.collectionId") }}
-                  </div>
-                  <div class="td col col-6">
-                    {{ kingfisher.collection_id }}
-                  </div>
-                </div>
-                <div class="tr row">
-                  <div class="td col col-6">
-                    {{ $t("overview.kingfisher_processingFrom") }}
-                  </div>
-                  <div class="td col col-6">
-                    {{ kingfisher.processing_start }}
-                  </div>
-                </div>
-                <div class="tr row">
-                  <div class="td col col-6">
-                    {{ $t("overview.kingfisher_processingTo") }}
-                  </div>
-                  <div class="td col col-6">
-                    {{ kingfisher.processing_end }}
-                  </div>
-                </div>
-              </div>
+                <dt class="col-6">
+                  {{ $t("overview.collectionId") }}
+                </dt>
+                <dd class="col-6">
+                  {{ kingfisher.collection_id }}
+                </dd>
+                <dt class="col-6">
+                  {{ $t("overview.kingfisher_processingFrom") }}
+                </dt>
+                <dd class="col-6">
+                  {{ kingfisher.processing_start }}
+                </dd>
+                <dt class="col-6">
+                  {{ $t("overview.kingfisher_processingTo") }}
+                </dt>
+                <dd class="col-6">
+                  {{ kingfisher.processing_end }}
+                </dd>
+              </dl>
             </div>
           </div>
 
           <div class="col-12 col-md-6 col-xl-12">
             <h4>{{ $t("overview.dqt_metadata") }}</h4>
             <div class="result_box collection_metadata kingfisher_metadata dqt_metadata">
-              <div
+              <dl
                 v-if="data_quality"
-                class="table_hl"
+                class="table_hl row"
               >
-                <div class="tr row">
-                  <div class="td col col-6">
-                    {{ $t("overview.processingFrom") }}
-                  </div>
-                  <div class="td col col-6">
-                    {{ data_quality.processing_start }}
-                  </div>
-                </div>
-                <div class="tr row">
-                  <div class="td col col-6">
-                    {{ $t("overview.processingTo") }}
-                  </div>
-                  <div class="td col col-6">
-                    {{ data_quality.processing_end }}
-                  </div>
-                </div>
-              </div>
+                <dt class="col-6">
+                  {{ $t("overview.processingFrom") }}
+                </dt>
+                <dd class="col-6">
+                  {{ data_quality.processing_start }}
+                </dd>
+                <dt class="col-6">
+                  {{ $t("overview.processingTo") }}
+                </dt>
+                <dd class="col-6">
+                  {{ data_quality.processing_end }}
+                </dd>
+              </dl>
             </div>
           </div>
         </div>
