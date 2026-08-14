@@ -2,34 +2,34 @@
   <table class="data_table">
     <thead>
       <tr>
-        <th @click="sortByPath(tableData)">
+        <th @click="setSorting('path')">
           <SortButtons
             :label="$t('field.table.head.object')"
             :active="sortedBy == 'path'"
             :asc="isAscendingSorted"
-            @asc="sortByPath(tableData)"
-            @desc="sortByPath(tableData, false)"
+            @asc="setSorting('path')"
+            @desc="setSorting('path', false)"
           />
         </th>
-        <th @click="sortByCoverage(tableData)">
+        <th @click="setSorting('coverage')">
           <div class="d-flex justify-content-center">
             <SortButtons
               :label="$t('field.table.head.coverage')"
               :active="sortedBy == 'coverage'"
               :asc="isAscendingSorted"
-              @asc="sortByCoverage(tableData)"
-              @desc="sortByCoverage(tableData, false)"
+              @asc="setSorting('coverage')"
+              @desc="setSorting('coverage', false)"
             />
           </div>
         </th>
-        <th @click="sortByQuality(tableData)">
+        <th @click="setSorting('quality')">
           <div class="d-flex justify-content-center">
             <SortButtons
               :label="$t('field.table.head.quality')"
               :active="sortedBy == 'quality'"
               :asc="isAscendingSorted"
-              @asc="sortByQuality(tableData)"
-              @desc="sortByQuality(tableData, false)"
+              @asc="setSorting('quality')"
+              @desc="setSorting('quality', false)"
             />
           </div>
         </th>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
@@ -59,8 +59,7 @@ import SortButtons from "./SortButtons.vue";
 const props = defineProps(["filter"]);
 const store = useStore();
 
-const { sortBy, sortByPath, sortByCoverage, sortByQuality, sortByProcessingOrder, highlightSearch, isPathSearched } =
-    useFieldCheckSearch();
+const { sorted, setSorting, highlightSearch, isPathSearched } = useFieldCheckSearch();
 
 const stats = computed(() => store.getters.fieldLevelStats);
 const sortedBy = computed(() => {
@@ -75,30 +74,21 @@ const tableData = computed(() => {
     if (!stats.value) {
         return [];
     }
-    const data = [];
 
-    sortBy(stats.value, "path");
-
-    for (const n of stats.value) {
-        if (n.coverage.total_count && props.filter(n)) {
-            data.push(n);
-        }
-    }
-
-    return data;
+    return sorted(
+        stats.value.filter((n) => n.coverage.total_count && props.filter(n)),
+        sortedBy.value,
+        isAscendingSorted.value,
+    );
 });
 
 function resetSorting() {
-    sortByProcessingOrder(tableData.value);
+    setSorting("processingOrder");
 }
 
 function isSearched(check) {
     return check && isPathSearched(check.path);
 }
-
-onMounted(() => {
-    sortBy(tableData.value, sortedBy.value, isAscendingSorted.value);
-});
 
 // Field.vue calls resetSorting() through a template ref.
 defineExpose({ resetSorting });

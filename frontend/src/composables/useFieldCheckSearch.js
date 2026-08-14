@@ -7,33 +7,13 @@ export function useFieldCheckSearch() {
     const searchRaw = computed(() => store.getters.fieldCheckSearch);
     const search = computed(() => searchRaw.value?.toLowerCase());
 
-    function _sort(checks, comparator, sortedBy, asc = true) {
-        if (checks != null) {
-            checks.sort((a, b) => (asc ? comparator(a, b) : comparator(b, a)));
-            store.commit("setFieldCheckSorting", { by: sortedBy, asc: asc });
-        }
-    }
-
-    function sortBy(checks, by, asc) {
+    function comparator(by, asc) {
         if (by === "path") {
-            sortByPath(checks, asc);
-        } else if (by === "coverage") {
-            sortByCoverage(checks, asc);
-        } else if (by === "quality") {
-            sortByQuality(checks, asc);
-        } else if (by === "processingOrder") {
-            sortByProcessingOrder(checks, asc);
+            return (a, b) => a.path.localeCompare(b.path);
         }
-    }
 
-    function sortByPath(checks, asc = true) {
-        _sort(checks, (a, b) => a.path.localeCompare(b.path), "path", asc);
-    }
-
-    function sortByCoverage(checks, asc = true) {
-        _sort(
-            checks,
-            (a, b) => {
+        if (by === "coverage") {
+            return (a, b) => {
                 let comparison = a.coverageOkRatio - b.coverageOkRatio;
                 if (comparison === 0) {
                     comparison = a.coverage.total_count - b.coverage.total_count;
@@ -42,16 +22,12 @@ export function useFieldCheckSearch() {
                     comparison = a.path.localeCompare(b.path);
                 }
                 return comparison;
-            },
-            "coverage",
-            asc,
-        );
-    }
+            };
+        }
 
-    function sortByQuality(checks, asc = true) {
-        _sort(
-            checks,
-            (a, b) => {
+        if (by === "quality") {
+            // Checks without a quality score sort last, whichever direction the rest sort in.
+            return (a, b) => {
                 if (a.quality.total_count === 0) {
                     if (b.quality.total_count === 0) {
                         return a.path.localeCompare(b.path);
@@ -70,14 +46,23 @@ export function useFieldCheckSearch() {
                     comparison = a.path.localeCompare(b.path);
                 }
                 return comparison;
-            },
-            "quality",
-            asc,
-        );
+            };
+        }
+
+        return (a, b) => a.processing_order - b.processing_order;
     }
 
-    function sortByProcessingOrder(checks, asc = true) {
-        _sort(checks, (a, b) => a.processing_order - b.processing_order, "processingOrder", asc);
+    function sorted(checks, by, asc = true) {
+        if (checks == null) {
+            return [];
+        }
+
+        const compare = comparator(by, asc);
+        return [...checks].sort((a, b) => (asc ? compare(a, b) : compare(b, a)));
+    }
+
+    function setSorting(by, asc = true) {
+        store.commit("setFieldCheckSorting", { by, asc });
     }
 
     function highlightSearch(path) {
@@ -112,11 +97,8 @@ export function useFieldCheckSearch() {
     return {
         search,
         searchRaw,
-        sortBy,
-        sortByPath,
-        sortByCoverage,
-        sortByQuality,
-        sortByProcessingOrder,
+        sorted,
+        setSorting,
         highlightSearch,
         highlightSearchLast,
         isPathSearched,

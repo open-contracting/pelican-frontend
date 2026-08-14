@@ -7,12 +7,12 @@
             <div>{{ $t("field.table.head.object") }}</div>
           </div>
         </th>
-        <th @click="sortByCoverage()">
+        <th>
           <div class="d-flex justify-content-center align-items-center">
             <span>{{ $t("field.table.head.coverage") }}</span>
           </div>
         </th>
-        <th @click="sortByQuality()">
+        <th>
           <div class="d-flex justify-content-center align-items-center">
             <span>{{ $t("field.table.head.quality") }}</span>
           </div>
@@ -39,15 +39,14 @@ import FieldCheckTreeNode from "./FieldCheckTreeNode.vue";
 const props = defineProps(["filter"]);
 const store = useStore();
 
-const { search, sortByProcessingOrder, sortByCoverage, sortByQuality } = useFieldCheckSearch();
+const { search, sorted } = useFieldCheckSearch();
 
 const stats = computed(() => store.getters.fieldLevelStats);
 const tree = computed(() => {
     const root = {};
 
-    sortByProcessingOrder(stats.value);
-
-    for (const n of stats.value) {
+    // Insertion order determines the order in which the nodes render.
+    for (const n of sorted(stats.value, "processingOrder")) {
         let node = root;
         for (const p of n.path.split(".")) {
             if (!(p in node)) {
