@@ -16,11 +16,11 @@
       <div class="result_box">
         <table class="table table-borderless table-sm">
           <tbody>
-            <tr class="d-flex">
-              <td class="col-4 text-end label">
+            <tr>
+              <td class="text-end label">
                 <span class="check_name">{{ $t("timeLevel.coverage.ok") }}</span>
               </td>
-              <td class="col-8">
+              <td>
                 <InlineBar
                   :numerator="check.meta.coverage_count"
                   :denominator="check.meta.total_count"
@@ -30,11 +30,11 @@
                 />
               </td>
             </tr>
-            <tr class="d-flex">
-              <td class="col-4 text-end label">
+            <tr>
+              <td class="text-end label">
                 <span class="check_name">{{ $t("timeLevel.coverage.failed") }}</span>
               </td>
-              <td class="col-8">
+              <td>
                 <InlineBar
                   :numerator="check.meta.total_count - check.meta.coverage_count"
                   :denominator="check.meta.total_count"
@@ -57,11 +57,11 @@
       <div class="result_box">
         <table class="table table-borderless table-sm">
           <tbody>
-            <tr class="d-flex">
-              <td class="col-4 text-end label">
+            <tr>
+              <td class="text-end label">
                 <span class="check_name">{{ $t("timeLevel.check.ok") }}</span>
               </td>
-              <td class="col-8">
+              <td>
                 <InlineBar
                   :numerator="check.meta.ok_count"
                   :denominator="check.meta.coverage_count"
@@ -71,11 +71,11 @@
                 />
               </td>
             </tr>
-            <tr class="d-flex">
-              <td class="col-4 text-end label">
+            <tr>
+              <td class="text-end label">
                 <span class="check_name">{{ $t("timeLevel.check.failed") }}</span>
               </td>
-              <td class="col-8">
+              <td>
                 <InlineBar
                   :numerator="check.meta.failed_count"
                   :denominator="check.meta.coverage_count"
@@ -492,8 +492,16 @@ onBeforeMount(() => {
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "@/scss/variables";
+
+.result_box .table {
+    table-layout: fixed;
+}
+
+.result_box .table td.label {
+    width: 33%;
+}
 
 .examples_button {
     padding: 0;
