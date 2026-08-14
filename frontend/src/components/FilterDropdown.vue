@@ -1,21 +1,24 @@
 <template>
-  <BDropdown
-    id="filter_dropdown"
-    class="filter_dropdown"
-    placement="bottom-end"
-    variant="primary"
-  >
-    <template #button-content>
-      <span id="show_prefix">Show: </span>{{ filterNames[selectedIndex] }}
-    </template>
-    <BDropdownItemButton
-      v-for="(name, index) in filterNames"
-      :key="index"
-      @click="clickItem(index)"
+  <span class="filter_dropdown_group">
+    <span id="show_prefix">Show:</span>
+    <BDropdown
+      id="filter_dropdown"
+      class="filter_dropdown"
+      placement="bottom-end"
+      variant="primary"
     >
-      {{ name }}
-    </BDropdownItemButton>
-  </BDropdown>
+      <template #button-content>
+        {{ filterNames[selectedIndex] }}
+      </template>
+      <BDropdownItemButton
+        v-for="(name, index) in filterNames"
+        :key="index"
+        @click="clickItem(index)"
+      >
+        {{ name }}
+      </BDropdownItemButton>
+    </BDropdown>
+  </span>
 </template>
 
 <script setup>
@@ -44,17 +47,22 @@ onMounted(() => {
 <style lang="scss">
 @import "@/scss/variables";
 
+.filter_dropdown_group {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 .filter_dropdown {
     // Bootstrap renders a block-level wrapper, unlike the .btn-group of a split dropdown.
     display: inline-flex;
-    margin-top: 8px;
-    margin-bottom: 8px;
 }
 
 #filter_dropdown {
     background-color: transparent;
     color: $headings-color;
-    padding-left: 0px;
+    padding-left: 7px;
     padding-right: 7px;
     padding-top: 7px;
     padding-bottom: 5px;
@@ -89,5 +97,6 @@ onMounted(() => {
 #show_prefix {
     color: $headings-light-color;
     font-family: $font-family-thin;
+    margin-right: 4px;
 }
 </style>
