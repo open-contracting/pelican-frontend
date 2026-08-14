@@ -147,10 +147,44 @@ h5 {
   padding: 12px;
 }
 
-// FieldCheckTree builds a table from divs. Bootstrap's ".table > :not(caption) > * > *" is structural,
-// so it pads their contents, unlike Bootstrap 4's ".table th, .table td". Real tables keep the padding.
-div.table > :not(caption) > * > * {
-  padding: 0;
+.field_check_table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse; // so that the borders on the rows are drawn
+  color: $text-color;
+
+  th {
+    padding: 12px;
+    font-family: $font-family-bold;
+    text-transform: lowercase;
+    color: #656565;
+  }
+
+  thead tr {
+    border-bottom: solid 2px #e8ecef;
+  }
+
+  td {
+    padding: 12px;
+  }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 0; // align the outer columns with the surrounding text
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+  }
+
+  tbody tr {
+    border-top: solid 1px #e8ecef;
+  }
+
+  tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
 }
 
 .th {

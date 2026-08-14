@@ -1,76 +1,75 @@
 <template>
-  <div>
-    <div class="thr row">
-      <div
-        class="th col col-4"
-        @click="sortByPath(tableData)"
-      >
-        <SortButtons
-          :label="$t('field.table.head.object')"
-          :active="sortedBy == 'path'"
-          :asc="isAscendingSorted"
-          @asc="sortByPath(tableData)"
-          @desc="sortByPath(tableData, false)"
-        />
-      </div>
-      <div
-        class="th col col-4 justify-content-center d-flex"
-        @click="sortByCoverage(tableData)"
-      >
-        <SortButtons
-          :label="$t('field.table.head.coverage')"
-          :active="sortedBy == 'coverage'"
-          :asc="isAscendingSorted"
-          @asc="sortByCoverage(tableData)"
-          @desc="sortByCoverage(tableData, false)"
-        />
-      </div>
-      <div
-        class="th col col-4 justify-content-center d-flex"
-        @click="sortByQuality(tableData)"
-      >
-        <SortButtons
-          :label="$t('field.table.head.quality')"
-          :active="sortedBy == 'quality'"
-          :asc="isAscendingSorted"
-          @asc="sortByQuality(tableData)"
-          @desc="sortByQuality(tableData, false)"
-        />
-      </div>
-    </div>
-
-    <template v-for="n in tableData" :key="n.path">
-      <FieldCheckTableRow
-        v-if="isSearched(n)"
-        :check="n"
-      >
-        <span v-html="highlightSearch(n.path)" />
-        <template v-if="hasHidden(n)">
-          <div>
-            <span
-              class="hide_button"
-              @click.stop="switchHidden(n)"
-            >
-              <FontAwesomeIcon
-                icon="eye-slash"
-                class="hidden_icon"
-              />
-              <i>{{ $t("field.hidden", { n: n._hidden.length }) }}</i>
-            </span>
+  <table class="field_check_table">
+    <thead>
+      <tr>
+        <th @click="sortByPath(tableData)">
+          <SortButtons
+            :label="$t('field.table.head.object')"
+            :active="sortedBy == 'path'"
+            :asc="isAscendingSorted"
+            @asc="sortByPath(tableData)"
+            @desc="sortByPath(tableData, false)"
+          />
+        </th>
+        <th @click="sortByCoverage(tableData)">
+          <div class="d-flex justify-content-center">
+            <SortButtons
+              :label="$t('field.table.head.coverage')"
+              :active="sortedBy == 'coverage'"
+              :asc="isAscendingSorted"
+              @asc="sortByCoverage(tableData)"
+              @desc="sortByCoverage(tableData, false)"
+            />
           </div>
-        </template>
-      </FieldCheckTableRow>
-      <template v-for="h in n._hidden" :key="h.path">
+        </th>
+        <th @click="sortByQuality(tableData)">
+          <div class="d-flex justify-content-center">
+            <SortButtons
+              :label="$t('field.table.head.quality')"
+              :active="sortedBy == 'quality'"
+              :asc="isAscendingSorted"
+              @asc="sortByQuality(tableData)"
+              @desc="sortByQuality(tableData, false)"
+            />
+          </div>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <template v-for="n in tableData" :key="n.path">
         <FieldCheckTableRow
-          v-if="isSearched(h)"
-          :check="h"
-          :class="['hidden_row', { hidden: isHidden(n) }]"
+          v-if="isSearched(n)"
+          :check="n"
         >
-          <span v-html="highlightSearch(h.path)" />
+          <span v-html="highlightSearch(n.path)" />
+          <template v-if="hasHidden(n)">
+            <div>
+              <span
+                class="hide_button"
+                @click.stop="switchHidden(n)"
+              >
+                <FontAwesomeIcon
+                  icon="eye-slash"
+                  class="hidden_icon"
+                />
+                <i>{{ $t("field.hidden", { n: n._hidden.length }) }}</i>
+              </span>
+            </div>
+          </template>
         </FieldCheckTableRow>
+        <template v-for="h in n._hidden" :key="h.path">
+          <FieldCheckTableRow
+            v-if="isSearched(h)"
+            :check="h"
+            :class="['hidden_row', { hidden: isHidden(n) }]"
+          >
+            <span v-html="highlightSearch(h.path)" />
+          </FieldCheckTableRow>
+        </template>
       </template>
-    </template>
-  </div>
+    </tbody>
+  </table>
 </template>
 
 <script setup>

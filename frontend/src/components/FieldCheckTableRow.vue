@@ -1,14 +1,14 @@
 <template>
-  <div
+  <tr
     v-if="check"
-    class="tr row clickable"
+    class="clickable"
     @click="detail()"
   >
-    <div class="td col col-4 break_word">
+    <td class="break_word">
       <slot>{{ check.path }}</slot>
-    </div>
+    </td>
 
-    <div class="td col col-4">
+    <td>
       <div
         v-if="showStats"
         class="row h-100 g-0 align-items-center"
@@ -32,10 +32,10 @@
           </span>
         </div>
       </div>
-    </div>
+    </td>
 
     <template v-if="check.quality.total_count">
-      <div class="td col col-4">
+      <td>
         <div
           v-if="showStats"
           class="row h-100 g-0 align-items-center"
@@ -60,13 +60,10 @@
             </span>
           </div>
         </div>
-      </div>
+      </td>
     </template>
-    <div
-      v-else
-      class="td col col-4"
-    />
-  </div>
+    <td v-else />
+  </tr>
 </template>
 
 <script setup>
