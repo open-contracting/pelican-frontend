@@ -204,7 +204,7 @@
           </BCol>
         </BRow>
       </span>
-      <span v-if="failedTags != [] && failedTags != null">
+      <span v-if="failedTags != null">
         <span class="info_prefix">{{ $t("datasetReport.warningList") }}:&nbsp;</span>
         <ul>
           <li

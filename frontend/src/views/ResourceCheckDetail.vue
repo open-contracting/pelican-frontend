@@ -125,7 +125,7 @@ const allExamples = computed(() => {
 });
 const exampleSections = computed(() => {
     const sections = [];
-    if (check.value !== [] && check.value.name !== undefined) {
+    if (check.value) {
         const failed = check.value.failed_examples;
         const passed = check.value.passed_examples;
         const undefineds = check.value.undefined_examples;

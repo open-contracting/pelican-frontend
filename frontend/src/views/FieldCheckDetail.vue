@@ -114,7 +114,7 @@ const check = computed(() => store.getters.fieldLevelCheckByPath(route.params.pa
 
 const allExamples = computed(() => {
     if (!check.value) {
-        return [];
+        return { coverage: [], quality: [] };
     }
 
     const result = { coverage: [], quality: [] };
@@ -136,7 +136,7 @@ const allExamples = computed(() => {
 const exampleSections = computed(() => {
     const sections = [];
     let failed;
-    if (check.value !== [] && check.value.path !== undefined) {
+    if (check.value) {
         for (const key of Object.keys(check.value.coverage.checks)) {
             failed = check.value.coverage.checks[key].failed_examples;
             if (failed !== undefined && failed.length > 0) {
