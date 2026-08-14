@@ -144,7 +144,6 @@
       <ExampleBoxes
         :example-sections="exampleSections"
         :loaded="true"
-        :preview-disabled="loadingPreviewData"
         @preview="preview"
       />
     </template>

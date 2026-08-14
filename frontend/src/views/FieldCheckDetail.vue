@@ -46,7 +46,6 @@
       <ExampleBoxes
         :example-sections="exampleSections"
         :loaded="check.examples_filled"
-        :preview-disabled="loadingPreviewData"
         @preview="preview"
       />
     </template>
