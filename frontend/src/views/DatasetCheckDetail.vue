@@ -24,7 +24,10 @@
         v-html="$t('datasetLevel.' + check.name + '.description_long')"
       />
 
-      <div class="result_box">
+      <div
+        v-if="check.meta.reason == null"
+        class="result_box"
+      >
         <div v-if="checkType == 'bar'">
           <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
