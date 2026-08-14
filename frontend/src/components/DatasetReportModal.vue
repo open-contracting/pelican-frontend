@@ -279,7 +279,7 @@
           <BRow>
             <BCol class="col-12">
               <small class="form-text text-body-secondary">
-                {{ $t("datasetReport.reportLanguageTooltip") }}
+                <p>{{ $t("datasetReport.reportLanguageTooltip") }}</p>
               </small>
             </BCol>
           </BRow>
@@ -338,7 +338,7 @@
             class="base_input"
           />
           <small class="form-text text-body-secondary">
-            {{ $t("datasetReport.reportNameTooltip") }}
+            <p>{{ $t("datasetReport.reportNameTooltip") }}</p>
           </small>
         </div>
       </div>
