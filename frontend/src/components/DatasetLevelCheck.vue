@@ -143,7 +143,7 @@
               class="single_value_share"
             >
               <div class="chart_envelope">
-                <BarChartSingleValue :check="check" />
+                <FrequencyChart :check="check" />
               </div>
             </div>
           </div>
@@ -162,8 +162,8 @@ import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } f
 
 const { formatNumber, formatPercentage2D } = useFormatters();
 
-import BarChartSingleValue from "./BarChartSingleValue.vue";
 import CodeChart from "./CodeChart.vue";
+import FrequencyChart from "./FrequencyChart.vue";
 import PercentileChart from "./PercentileChart.vue";
 import Tooltip from "./Tooltip.vue";
 

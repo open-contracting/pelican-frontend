@@ -133,7 +133,7 @@
           class="single_value_share"
         >
           <div class="row text-center">
-            <BarChartSingleValue
+            <FrequencyChart
               :check="check"
               :show-count="true"
             />
@@ -193,9 +193,9 @@ import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import "vue-json-pretty/lib/styles.css";
-import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import CodeChart from "@/components/CodeChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
+import FrequencyChart from "@/components/FrequencyChart.vue";
 import PercentileChart from "@/components/PercentileChart.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
