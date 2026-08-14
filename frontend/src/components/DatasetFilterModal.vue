@@ -315,17 +315,8 @@ onMounted(() => {
 .submit_button {
     font-size: 18px;
     font-weight: 700;
-    color: $text-color;
     font-family: $font-family-sans-serif;
-    background-color: transparent;
-    border: 1px solid $na_color;
     margin-top: 20px;
-}
-
-.submit_button:hover {
-    background-color: $na_color;
-    color: white;
-    border: 1px solid $na_color;
 }
 
 .procuring_row {

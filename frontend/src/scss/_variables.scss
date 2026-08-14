@@ -1,3 +1,6 @@
+// $primary contrasts with white at 3.99:1, and Bootstrap otherwise labels it in black.
+$min-contrast-ratio: 3;
+
 $ok_color: #919c03;
 $ok_bright_color: #b9c504;
 $failed_color: #d0021b;
