@@ -12,10 +12,10 @@ import { GChart } from "vue-google-charts";
 import { useI18n } from "vue-i18n";
 import { useFormatters } from "@/composables/useFormatters";
 
-const props = defineProps(["check", "ticks"]);
+const props = defineProps(["check", "ticks", "showCount"]);
 
 const { t } = useI18n();
-const { formatPercentage } = useFormatters();
+const { formatNumber, formatPercentage } = useFormatters();
 
 const chartData = ref([
     [t("datasetLevel.charts.group"), t("datasetLevel.charts.share"), { role: "annotation" }, { role: "style" }],
@@ -73,7 +73,9 @@ onMounted(() => {
             return [
                 t(key),
                 share,
-                formatPercentage(share),
+                props.showCount
+                    ? `${formatPercentage(share)} (${formatNumber(props.check.meta.counts[range])})`
+                    : formatPercentage(share),
                 // Only the first bar is colored, by whether its share is within the check's thresholds.
                 index === 0
                     ? props.ticks[0] <= share && share <= props.ticks[1]

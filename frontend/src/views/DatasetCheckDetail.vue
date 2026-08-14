@@ -26,7 +26,7 @@
 
       <div class="result_box">
         <div v-if="checkType == 'bar'">
-          <BarChartBig :check="check" :ticks="ticks" />
+          <BarChart :check="check" :ticks="ticks" show-count />
         </div>
 
         <div v-if="checkType == 'unique'">
@@ -193,7 +193,7 @@ import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import "vue-json-pretty/lib/styles.css";
-import BarChartBig from "@/components/BarChartBig.vue";
+import BarChart from "@/components/BarChart.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
