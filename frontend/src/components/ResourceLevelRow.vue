@@ -1,12 +1,12 @@
 <template>
-  <div
-    class="tr row clickable align-items-center"
+  <tr
+    class="clickable"
     @click="detail()"
   >
-    <div class="col-9 col-lg-5 break_word check_name">
+    <td class="col-9 col-lg-5 break_word check_name">
       <span>{{ $t("resourceLevel." + name + ".name") }}</span>
-    </div>
-    <div class="td col-1 col-lg-1 text-end">
+    </td>
+    <td class="col-1 col-lg-1 text-end">
       <span
         v-if="okRatio"
         class="value_ok"
@@ -15,8 +15,8 @@
         v-else
         class="value_na opacity"
       >{{ formatPercentage(okRatio) }}</span>
-    </div>
-    <div class="td col-1 col-lg-1 text-end">
+    </td>
+    <td class="col-1 col-lg-1 text-end">
       <span
         v-if="failedRatio"
         class="value_failed"
@@ -25,8 +25,8 @@
         v-else
         class="value_na opacity"
       >{{ formatPercentage(failedRatio) }}</span>
-    </div>
-    <div class="td col-1 col-lg-1 text-end">
+    </td>
+    <td class="col-1 col-lg-1 text-end">
       <span
         v-if="naRatio"
         class="value_na"
@@ -35,14 +35,14 @@
         v-else
         class="value_na opacity"
       >{{ formatPercentage(naRatio) }}</span>
-    </div>
-    <div class="td col-4 d-none d-lg-block progress_column">
+    </td>
+    <td class="col-4 d-none d-lg-table-cell progress_column">
       <ProgressBar
         :ok="okRatio * 100"
         :failed="failedRatio * 100"
       />
-    </div>
-  </div>
+    </td>
+  </tr>
 </template>
 
 <script setup>

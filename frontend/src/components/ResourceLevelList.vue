@@ -1,48 +1,42 @@
 <template>
-  <span>
-    <div
-      class="tr row clickable"
-      @click="showChecks = !showChecks"
-    >
-      <div
-        class="td col-4 col-lg-5 category"
-        scope="col"
-      >
-        <div class="switcher text-center">
-          <span v-if="resourceLevelStats.length > 0">
-            <FontAwesomeIcon
-              v-if="!showChecks"
-              icon="chevron-right"
-            />
-            <FontAwesomeIcon
-              v-if="showChecks"
-              icon="chevron-down"
-            />
-          </span>
+  <tr
+    class="clickable"
+    @click="showChecks = !showChecks"
+  >
+    <!-- The split does not line up with the columns below lg, so the row spans them. -->
+    <td colspan="5">
+      <div class="row">
+        <div class="col-4 col-lg-5 category">
+          <div class="switcher text-center">
+            <span v-if="resourceLevelStats.length > 0">
+              <FontAwesomeIcon
+                v-if="!showChecks"
+                icon="chevron-right"
+              />
+              <FontAwesomeIcon
+                v-if="showChecks"
+                icon="chevron-down"
+              />
+            </span>
+          </div>
+          {{ $t("resourceLevel." + section + ".categoryName") }}
         </div>
-        {{ $t("resourceLevel." + section + ".categoryName") }}
+        <div class="col-8 col-lg-7 text-end text-lg-start info_message">
+          {{ $t("resourceLevel.averageScore.description", { applicable: applicableChecks, total: resourceLevelStats.length, average_score: formattedAvgScore }) }}
+          <Tooltip :text="$t('resourceLevel.averageScore.tooltip')" />
+        </div>
       </div>
-      <div
-        class="td col-8 col-lg-7 text-end text-lg-start info_message"
-        scope="col"
-      >
-        {{ $t("resourceLevel.averageScore.description", { applicable: applicableChecks, total: resourceLevelStats.length, average_score: formattedAvgScore }) }}
-        <Tooltip :text="$t('resourceLevel.averageScore.tooltip')" />
-      </div>
-    </div>
-    <span
-      v-if="showChecks"
-      class="checks"
-    >
-      <ResourceLevelRow
-        v-for="(value, name, index) in resourceLevelStats"
-        :key="name"
-        :check="value"
-        :name="value.name"
-        :index="index"
-      />
-    </span>
-  </span>
+    </td>
+  </tr>
+  <template v-if="showChecks">
+    <ResourceLevelRow
+      v-for="(value, name, index) in resourceLevelStats"
+      :key="name"
+      :check="value"
+      :name="value.name"
+      :index="index"
+    />
+  </template>
 </template>
 
 <script setup>
