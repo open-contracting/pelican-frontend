@@ -108,6 +108,7 @@
     :title="$t('datasetFilter.headline')"
     teleport-disabled
     lazy
+    unmount-lazy
   >
     <DatasetFilterModal
       :dataset="filteredDataset"
@@ -122,6 +123,7 @@
     :title="$t('datasetReport.headline')"
     teleport-disabled
     lazy
+    unmount-lazy
   >
     <DatasetReportModal
       :dataset="reportDataset"
