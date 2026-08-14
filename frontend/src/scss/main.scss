@@ -147,15 +147,15 @@ h5 {
   padding: 12px;
 }
 
-.field_check_table {
+.data_table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse; // so that the borders on the rows are drawn
-  color: $text-color;
 
   th {
     padding: 12px;
     font-family: $font-family-bold;
+    font-weight: normal; // th is bold by default, but the font file provides the weight
     text-transform: lowercase;
     color: #656565;
   }

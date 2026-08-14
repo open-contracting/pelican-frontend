@@ -1,107 +1,103 @@
 <template>
-  <div>
-    <div
-      :class="['row', 'tr', 'align-items-center']"
-    >
-      <div class="td col-4">
-        <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
-          <FontAwesomeIcon :icon="['fas', 'long-arrow-alt-right']" />
+  <tr>
+    <td>
+      <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
+        <FontAwesomeIcon :icon="['fas', 'long-arrow-alt-right']" />
+      </span>
+      <BLink :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
+        {{ dataset.name }}
+      </BLink>
+      <span class="dataset_id">(Id {{ dataset.id }})</span>
+      <a
+        v-if="isDatasetImported(dataset) && depth == 0"
+        href="#"
+        @click.stop.prevent="$emit('dataset-filter', dataset)"
+      >
+        <FontAwesomeIcon :icon="['fas', 'filter']" />
+      </a>
+      <a
+        v-if="isDatasetImported(dataset)"
+        href="#"
+        @click.stop.prevent="$emit('dataset-report', dataset)"
+      >
+        <FontAwesomeIcon :icon="['fas', 'file']" />
+      </a>
+    </td>
+    <td class="numeric text-end">
+      {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
+    </td>
+    <td class="numeric text-end">
+      {{ dataset.meta.kingfisher_metadata?.collection_id }}
+    </td>
+    <td class="phase_cell align-middle">
+      <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
+        <span class="small_icon">
+          <FontAwesomeIcon
+            :icon="['far', 'check-circle']"
+            class="text-success"
+          />
         </span>
-        <BLink :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
-          {{ dataset.name }}
-        </BLink>
-        <span class="dataset_id">(Id {{ dataset.id }})</span>
-        <a
-          v-if="isDatasetImported(dataset) && depth == 0"
-          href="#"
-          @click.stop.prevent="$emit('dataset-filter', dataset)"
-        >
-          <FontAwesomeIcon :icon="['fas', 'filter']" />
-        </a>
-        <a
-          v-if="isDatasetImported(dataset)"
-          href="#"
-          @click.stop.prevent="$emit('dataset-report', dataset)"
-        >
-          <FontAwesomeIcon :icon="['fas', 'file']" />
-        </a>
-      </div>
-      <div class="td col-1 numeric text-end">
-        {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
-      </div>
-      <div class="td col-1 numeric text-end">
-        {{ dataset.meta.kingfisher_metadata?.collection_id }}
-      </div>
-      <div class="td col-1 phase_cell align-items-center align-middle">
-        <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
-          <span class="small_icon">
-            <FontAwesomeIcon
-              :icon="['far', 'check-circle']"
-              class="text-success"
-            />
-          </span>
-          {{ dataset.phase }}
-        </template>
-        <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
-          <span class="small_icon">
-            <FontAwesomeIcon
-              :icon="['fas', 'ban']"
-              class="text-danger"
-            />
-          </span>
-          {{ dataset.phase }}
-        </template>
-        <template v-else-if="dataset.state == 'FAILED'">
-          <span class="small_icon">
-            <FontAwesomeIcon
-              :icon="['far', 'times-circle']"
-              class="text-danger"
-            />
-          </span>
-          {{ dataset.phase }}
-        </template>
-        <template v-else>
-          <BRow class="progress_label g-0">
-            <BCol
-              v-for="p in PHASES"
-              :key="p"
-            >
-              <template v-if="p == dataset.phase">
-                {{ p }}
-              </template>
-            </BCol>
-          </BRow>
+        {{ dataset.phase }}
+      </template>
+      <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
+        <span class="small_icon">
+          <FontAwesomeIcon
+            :icon="['fas', 'ban']"
+            class="text-danger"
+          />
+        </span>
+        {{ dataset.phase }}
+      </template>
+      <template v-else-if="dataset.state == 'FAILED'">
+        <span class="small_icon">
+          <FontAwesomeIcon
+            :icon="['far', 'times-circle']"
+            class="text-danger"
+          />
+        </span>
+        {{ dataset.phase }}
+      </template>
+      <template v-else>
+        <BRow class="progress_label g-0">
+          <BCol
+            v-for="p in PHASES"
+            :key="p"
+          >
+            <template v-if="p == dataset.phase">
+              {{ p }}
+            </template>
+          </BCol>
+        </BRow>
 
-          <ProgressBar :value="getDatasetProgress(dataset)" />
-        </template>
-      </div>
-      <div class="td col numeric">
-        <span class="created">{{ dataset.created }}</span>
-        <br>
-        <span class="modified">{{ dataset.modified }}</span>
-      </div>
-      <div class="td col">
-        <BLink
-          v-if="dataset.ancestor_id"
-          class="time_variance break_word"
-          :to="{ name: 'time', params: { datasetId: dataset.id } }"
-        >
-          <span class="small_icon">
-            <FontAwesomeIcon icon="history" />
-          </span>
-          {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
-        </BLink>
-      </div>
-    </div>
-    <template v-for="(item, index) in dataset.filtered_children" :key="index">
-      <DatasetPickerRow
-        :dataset="item"
-        :depth="depth + 1"
-        @dataset-filter="$emit('dataset-filter', $event)"
-        @dataset-report="$emit('dataset-report', $event)"
-      />
-    </template>
-  </div>
+        <ProgressBar :value="getDatasetProgress(dataset)" />
+      </template>
+    </td>
+    <td class="numeric">
+      <span class="created">{{ dataset.created }}</span>
+      <br>
+      <span class="modified">{{ dataset.modified }}</span>
+    </td>
+    <td>
+      <BLink
+        v-if="dataset.ancestor_id"
+        class="time_variance break_word"
+        :to="{ name: 'time', params: { datasetId: dataset.id } }"
+      >
+        <span class="small_icon">
+          <FontAwesomeIcon icon="history" />
+        </span>
+        {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
+      </BLink>
+    </td>
+  </tr>
+  <template v-for="(item, index) in dataset.filtered_children" :key="index">
+    <DatasetPickerRow
+      :dataset="item"
+      :depth="depth + 1"
+      @dataset-filter="$emit('dataset-filter', $event)"
+      @dataset-report="$emit('dataset-report', $event)"
+    />
+  </template>
 </template>
 
 <script setup>
@@ -152,7 +148,7 @@ function isDatasetImported(dataset) {
     margin-bottom: 20px;
 }
 
-.tr {
+tr {
     a.disabled {
         pointer-events: none;
         color: $gray-600;
@@ -163,14 +159,14 @@ function isDatasetImported(dataset) {
     }
 }
 
-.th {
+th {
     .modified {
         font-family: $font-family-thin;
         color: $headings_light_color;
     }
 }
 
-.td {
+td {
     .created {
         font-weight: 700;
     }

@@ -9,82 +9,96 @@
         />
       </div>
     </div>
-    <div class="thr row">
-      <div
-        class="th col-4 align-self-center clickable"
-        @click="sortBy('name')"
-      >
-        <SortButtons
-          :label="$t('dataset.name')"
-          :active="sortedBy == 'name'"
-          :asc="isAscendingSorted"
-          @asc="sortBy('name')"
-          @desc="sortBy('name', false)"
-        />
-      </div>
-      <div
-        class="th col-1 align-self-center clickable"
-        @click="sortBy('size')"
-      >
-        <SortButtons
-          :label="$t('dataset.size')"
-          :active="sortedBy == 'size'"
-          :asc="isAscendingSorted"
-          @asc="sortBy('size')"
-          @desc="sortBy('size', false)"
-        />
-      </div>
-      <div
-        class="th col-1 align-self-center clickable"
-        @click="sortBy('collection_id')"
-      >
-        <SortButtons
-          :label="$t('kingfisherId')"
-          :active="sortedBy == 'collection_id'"
-          :asc="isAscendingSorted"
-          @asc="sortBy('collection_id')"
-          @desc="sortBy('collection_id', false)"
-        />
-      </div>
-      <div
-        class="th col-1 align-self-center clickable"
-        @click="sortBy('phase')"
-      >
-        <SortButtons
-          :label="$t('dataset.phase')"
-          :active="sortedBy == 'phase'"
-          :asc="isAscendingSorted"
-          @asc="sortBy('phase')"
-          @desc="sortBy('phase', false)"
-        />
-      </div>
-      <div
-        class="th col align-self-center clickable"
-        @click="sortBy('created')"
-      >
-        <SortButtons
-          :active="sortedBy == 'created'"
-          :asc="isAscendingSorted"
-          @asc="sortBy('created')"
-          @desc="sortBy('created', false)"
-        >
-          <span class="created">{{ $t("created") }}</span>
-          <br>
-          <span class="modified">{{ $t("modified") }}</span>
-        </SortButtons>
-      </div>
-      <div class="th col align-self-center text-start">{{ $t("dataset.timeVariance") }}</div>
-    </div>
+    <table class="data_table">
+      <colgroup>
+        <col style="width: 33.3333%">
+        <col style="width: 8.3333%">
+        <col style="width: 8.3333%">
+        <col style="width: 8.3333%">
+        <col style="width: 20.8333%">
+        <col style="width: 20.8333%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th
+            class="clickable"
+            @click="sortBy('name')"
+          >
+            <SortButtons
+              :label="$t('dataset.name')"
+              :active="sortedBy == 'name'"
+              :asc="isAscendingSorted"
+              @asc="sortBy('name')"
+              @desc="sortBy('name', false)"
+            />
+          </th>
+          <th
+            class="clickable"
+            @click="sortBy('size')"
+          >
+            <SortButtons
+              :label="$t('dataset.size')"
+              :active="sortedBy == 'size'"
+              :asc="isAscendingSorted"
+              @asc="sortBy('size')"
+              @desc="sortBy('size', false)"
+            />
+          </th>
+          <th
+            class="clickable"
+            @click="sortBy('collection_id')"
+          >
+            <SortButtons
+              :label="$t('kingfisherId')"
+              :active="sortedBy == 'collection_id'"
+              :asc="isAscendingSorted"
+              @asc="sortBy('collection_id')"
+              @desc="sortBy('collection_id', false)"
+            />
+          </th>
+          <th
+            class="clickable"
+            @click="sortBy('phase')"
+          >
+            <SortButtons
+              :label="$t('dataset.phase')"
+              :active="sortedBy == 'phase'"
+              :asc="isAscendingSorted"
+              @asc="sortBy('phase')"
+              @desc="sortBy('phase', false)"
+            />
+          </th>
+          <th
+            class="clickable"
+            @click="sortBy('created')"
+          >
+            <SortButtons
+              :active="sortedBy == 'created'"
+              :asc="isAscendingSorted"
+              @asc="sortBy('created')"
+              @desc="sortBy('created', false)"
+            >
+              <span class="created">{{ $t("created") }}</span>
+              <br>
+              <span class="modified">{{ $t("modified") }}</span>
+            </SortButtons>
+          </th>
+          <th class="text-start">{{ $t("dataset.timeVariance") }}</th>
+        </tr>
+      </thead>
 
-    <template v-for="(item, index) in datasets" :key="index">
-      <DatasetPickerRow
-        v-if="isSearched(item.name)"
-        :dataset="item"
-        :depth="0"
-        @dataset-filter="showFilter($event)"
-        @dataset-report="showReport($event)"
-      />
-    </template>
+      <tbody>
+        <template v-for="(item, index) in datasets" :key="index">
+          <DatasetPickerRow
+            v-if="isSearched(item.name)"
+            :dataset="item"
+            :depth="0"
+            @dataset-filter="showFilter($event)"
+            @dataset-report="showReport($event)"
+          />
+        </template>
+      </tbody>
+    </table>
   </div>
   <BModal
     id="filter-modal"
@@ -250,14 +264,14 @@ onMounted(() => {
     margin-bottom: 20px;
 }
 
-.th {
+th {
     .modified {
         font-family: $font-family-thin;
         color: $headings_light_color;
     }
 }
 
-.td {
+td {
     .created {
         font-weight: 700;
     }

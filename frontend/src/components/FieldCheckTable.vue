@@ -1,5 +1,5 @@
 <template>
-  <table class="field_check_table">
+  <table class="data_table">
     <thead>
       <tr>
         <th @click="sortByPath(tableData)">
