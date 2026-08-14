@@ -26,7 +26,7 @@
 
       <div class="result_box">
         <div v-if="checkType == 'bar'">
-          <BarChart :check="check" :ticks="ticks" show-count />
+          <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
 
         <div v-if="checkType == 'unique'">
@@ -34,7 +34,7 @@
         </div>
 
         <div v-if="checkType == 'donut'">
-          <DonutChart :check="check" :limit="false" />
+          <CodeChart :check="check" :limit="false" />
         </div>
 
         <div v-if="checkType == 'top3'">
@@ -193,10 +193,10 @@ import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import "vue-json-pretty/lib/styles.css";
-import BarChart from "@/components/BarChart.vue";
 import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
-import DonutChart from "@/components/DonutChart.vue";
+import CodeChart from "@/components/CodeChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
+import PercentileChart from "@/components/PercentileChart.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 import { orderedShares } from "@/util.js";

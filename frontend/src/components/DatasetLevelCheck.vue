@@ -76,13 +76,13 @@
           <div v-else>
             <div v-if="checkType == 'donut'">
               <div class="chart_envelope">
-                <DonutChart :check="check" :limit="true" />
+                <CodeChart :check="check" :limit="true" />
               </div>
             </div>
 
             <div v-if="checkType == 'bar'">
               <div class="chart_envelope">
-                <BarChart :check="check" :ticks="ticks" />
+                <PercentileChart :check="check" :ticks="ticks" />
               </div>
             </div>
 
@@ -162,9 +162,9 @@ import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } f
 
 const { formatNumber, formatPercentage2D } = useFormatters();
 
-import BarChart from "./BarChart.vue";
 import BarChartSingleValue from "./BarChartSingleValue.vue";
-import DonutChart from "./DonutChart.vue";
+import CodeChart from "./CodeChart.vue";
+import PercentileChart from "./PercentileChart.vue";
 import Tooltip from "./Tooltip.vue";
 
 const props = defineProps(["check"]);
