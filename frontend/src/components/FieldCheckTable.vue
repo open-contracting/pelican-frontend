@@ -43,37 +43,14 @@
           :check="n"
         >
           <span v-html="highlightSearch(n.path)" />
-          <template v-if="hasHidden(n)">
-            <div>
-              <span
-                class="hide_button"
-                @click.stop="switchHidden(n)"
-              >
-                <FontAwesomeIcon
-                  icon="eye-slash"
-                  class="hidden_icon"
-                />
-                <i>{{ $t("field.hidden", { n: n._hidden.length }) }}</i>
-              </span>
-            </div>
-          </template>
         </FieldCheckTableRow>
-        <template v-for="h in n._hidden" :key="h.path">
-          <FieldCheckTableRow
-            v-if="isSearched(h)"
-            :check="h"
-            :class="['hidden_row', { hidden: isHidden(n) }]"
-          >
-            <span v-html="highlightSearch(h.path)" />
-          </FieldCheckTableRow>
-        </template>
       </template>
     </tbody>
   </table>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
@@ -84,8 +61,6 @@ const store = useStore();
 
 const { sortBy, sortByPath, sortByCoverage, sortByQuality, sortByProcessingOrder, highlightSearch, isPathSearched } =
     useFieldCheckSearch();
-
-const showHidden = ref({});
 
 const stats = computed(() => store.getters.fieldLevelStats);
 const sortedBy = computed(() => {
@@ -113,18 +88,6 @@ const tableData = computed(() => {
     return data;
 });
 
-function hasHidden(check) {
-    return "_hidden" in check && check._hidden.length > 0;
-}
-
-function switchHidden(check) {
-    showHidden.value[check.path] = !showHidden.value[check.path];
-}
-
-function isHidden(check) {
-    return !showHidden.value[check.path];
-}
-
 function resetSorting() {
     sortByProcessingOrder(tableData.value);
 }
@@ -141,28 +104,3 @@ onMounted(() => {
 defineExpose({ resetSorting });
 </script>
 
-<style scoped lang="scss">
-.hide_button {
-    color: $na_color;
-    font-size: 10px;
-}
-
-.hide_button:hover {
-    color: $text-color;
-}
-
-.hidden_icon {
-    position: relative;
-    top: -1px;
-}
-
-.hidden {
-    display: none !important;
-}
-
-.hidden_row {
-    color: $na_color;
-    border-left: 2px solid $na_light_color;
-    background-color: #f9f9f9;
-}
-</style>
