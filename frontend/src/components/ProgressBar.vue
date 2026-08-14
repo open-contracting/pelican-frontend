@@ -15,7 +15,7 @@
 <script setup>
 import { computed } from "vue";
 
-const props = defineProps(["bars", "value", "ok", "failed"]);
+const props = defineProps(["value", "ok", "failed"]);
 
 const allBars = computed(() => {
     const result = [];
@@ -28,9 +28,6 @@ const allBars = computed(() => {
     }
     if (props.failed) {
         result.push({ value: props.failed, class: "failed" });
-    }
-    if (props.bars) {
-        result.concat(props.bars);
     }
 
     return result;

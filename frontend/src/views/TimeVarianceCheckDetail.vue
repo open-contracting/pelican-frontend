@@ -413,7 +413,6 @@ const check = ref(null);
 const previewDataItemId = ref(null);
 const previewMetadata = ref(null);
 const loadingPreviewData = ref(false);
-const examples = ref(null);
 const showMore = ref(false);
 const selectedKey = ref(null);
 

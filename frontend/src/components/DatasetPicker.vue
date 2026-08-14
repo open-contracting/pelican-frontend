@@ -1,12 +1,12 @@
 <template>
-  <span v-if="!loading">
+  <span>
     <div class="picker_table">
       <div class="row">
         <div class="search_input col col-12 col-md-4">
           <SearchInput
             :placeholder="$t('dataset.search')"
             :preset="search"
-            :on-update="search => $store.commit('setDatasetSearch', search)"
+            @search="$store.commit('setDatasetSearch', $event)"
           />
         </div>
       </div>
@@ -116,9 +116,6 @@
       />
     </BModal>
   </span>
-  <span v-else>
-    <Loader />
-  </span>
 </template>
 
 <script setup>
@@ -130,14 +127,12 @@ import { CONFIG, PHASES, STATES } from "@/config.js";
 import DatasetFilterModal from "./DatasetFilterModal.vue";
 import DatasetPickerRow from "./DatasetPickerRow.vue";
 import DatasetReportModal from "./DatasetReportModal.vue";
-import Loader from "./Loader.vue";
 import SearchInput from "./SearchInput.vue";
 import SortButtons from "./SortButtons.vue";
 
 const store = useStore();
 
 const datasets = ref([]);
-const loading = ref(false);
 const filteredDataset = ref(null);
 const reportDataset = ref(null);
 

@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
@@ -56,7 +56,6 @@ defineOptions({ name: "TreeNode" });
 
 const props = defineProps({
     data: Object,
-    expand: Boolean,
     depth: { type: Number, default: 0 },
     hide: { type: Boolean, default: false },
 });
@@ -93,12 +92,6 @@ const expanded = computed({
             store.commit("removeFieldCheckExpandedNode", path.value);
         }
     },
-});
-
-onMounted(() => {
-    if (props.expand) {
-        expanded.value = true;
-    }
 });
 </script>
 
