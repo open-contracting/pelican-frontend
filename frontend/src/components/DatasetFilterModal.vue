@@ -312,13 +312,6 @@ onMounted(() => {
     color: #212529;
 }
 
-.submit_button {
-    font-size: 18px;
-    font-weight: 700;
-    font-family: $font-family-sans-serif;
-    margin-top: 20px;
-}
-
 .procuring_row {
     padding-top: 15px;
 }

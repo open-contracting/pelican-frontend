@@ -490,16 +490,6 @@ function fileIdFormatter(value) {
     color: #212529;
 }
 
-.submit_button {
-    font-size: 18px;
-    font-weight: 700;
-    color: $text-color;
-    font-family: $font-family-sans-serif;
-    background-color: transparent;
-    border: 1px solid $na_color;
-    margin-top: 20px;
-}
-
 .icon {
     margin-right: 0.5em;
 }
@@ -519,12 +509,6 @@ function fileIdFormatter(value) {
     border-radius: 5px;
     border: 1px solid $na_color;
     padding: 1em;
-}
-
-.submit_button:hover {
-    background-color: $na_color;
-    color: white;
-    border: 1px solid $na_color;
 }
 
 .procuring_row {
