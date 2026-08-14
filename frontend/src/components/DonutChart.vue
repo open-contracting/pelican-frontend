@@ -11,7 +11,7 @@ import { onMounted, reactive } from "vue";
 import { GChart } from "vue-google-charts";
 import { useI18n } from "vue-i18n";
 import { useFormatters } from "@/composables/useFormatters.js";
-import { CHECK_STYLES, CHECK_TICKS } from "@/config.js";
+import { DATASET_CHECK_STYLES, DATASET_CHECK_TICKS } from "@/config.js";
 import { orderedShares } from "@/util.js";
 
 const props = defineProps(["check", "limit"]);
@@ -68,8 +68,8 @@ const chartOptions = reactive({
 
 onMounted(() => {
     const shares = orderedShares(props.check.meta.shares);
-    const ticks = CHECK_TICKS[props.check.name];
-    const styles = CHECK_STYLES[props.check.name];
+    const ticks = DATASET_CHECK_TICKS[props.check.name];
+    const styles = DATASET_CHECK_STYLES[props.check.name];
     let labelLength = 0;
 
     // Index 0 of chartData is the header.

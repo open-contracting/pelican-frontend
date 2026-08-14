@@ -198,7 +198,7 @@ import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import { useFormatters } from "@/composables/useFormatters";
-import { CHECK_TICKS, CHECK_TYPES, REPORT_ONLY_CHECKS } from "@/config.js";
+import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 import { orderedShares } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
@@ -215,9 +215,9 @@ const previewMetadata = ref(null);
 const exampleSections = ref(null);
 const loadingPreviewData = ref(false);
 
-const checkType = computed(() => CHECK_TYPES[check.value?.name]);
-const reportOnly = computed(() => REPORT_ONLY_CHECKS[check.value?.name]);
-const ticks = computed(() => CHECK_TICKS[check.value?.name]);
+const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);
+const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
+const ticks = computed(() => DATASET_CHECK_TICKS[check.value?.name]);
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 const loaded = computed(() => {
     loadCheck();

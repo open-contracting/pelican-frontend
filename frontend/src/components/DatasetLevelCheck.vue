@@ -158,7 +158,7 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
-import { CHECK_TICKS, CHECK_TYPES, REPORT_ONLY_CHECKS } from "@/config.js";
+import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 
 const { formatNumber, formatPercentage2D } = useFormatters();
 
@@ -171,9 +171,9 @@ const props = defineProps(["check"]);
 const router = useRouter();
 const store = useStore();
 
-const checkType = computed(() => CHECK_TYPES[props.check.name]);
-const reportOnly = computed(() => REPORT_ONLY_CHECKS[props.check.name]);
-const ticks = computed(() => CHECK_TICKS[props.check.name]);
+const checkType = computed(() => DATASET_CHECK_TYPES[props.check.name]);
+const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[props.check.name]);
+const ticks = computed(() => DATASET_CHECK_TICKS[props.check.name]);
 
 function detail() {
     if (props.check.result !== undefined && checkType.value != null) {
