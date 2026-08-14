@@ -109,7 +109,7 @@
 <script setup>
 import axios from "axios";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, shallowRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useFormatters } from "@/composables/useFormatters";
@@ -134,7 +134,8 @@ const procuringEntityName = ref([]);
 const buyerNameRegex = ref("");
 const procuringEntityNameRegex = ref("");
 
-let gettingCountsToken = null;
+// shallowRef, so that the identity check below compares the source rather than a reactive proxy of it.
+const gettingCountsToken = shallowRef(null);
 let filteredItemsTimeout = null;
 const filteredItemsTimeoutLimit = 400;
 
@@ -189,11 +190,12 @@ function datasetFilterItems() {
     }
 
     // https://axios-http.com/docs/cancellation
-    if (gettingCountsToken != null) {
-        gettingCountsToken.cancel();
+    if (gettingCountsToken.value != null) {
+        gettingCountsToken.value.cancel();
     }
 
-    gettingCountsToken = axios.CancelToken.source();
+    const source = axios.CancelToken.source();
+    gettingCountsToken.value = source;
 
     axios
         .post(
@@ -203,7 +205,7 @@ function datasetFilterItems() {
                 filter_message: datasetFilterMessage(),
             },
             {
-                cancelToken: gettingCountsToken.token,
+                cancelToken: source.token,
             },
         )
         .then((response) => {
@@ -212,12 +214,16 @@ function datasetFilterItems() {
             } else {
                 items.value = null;
             }
-
-            gettingCountsToken = null;
         })
         .catch((error) => {
             if (!axios.isCancel(error)) {
                 throw new Error(error);
+            }
+        })
+        .finally(() => {
+            // A cancelled request has been replaced, and the newer one owns the token.
+            if (gettingCountsToken.value === source) {
+                gettingCountsToken.value = null;
             }
         });
 }
