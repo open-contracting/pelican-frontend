@@ -417,8 +417,6 @@ const showMore = ref(false);
 const selectedKey = ref(null);
 
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
-const coverageState = computed(() => (check.value?.coverage_result ? "ok" : "failed"));
-const checkState = computed(() => (check.value?.check_result ? "ok" : "failed"));
 const loaded = computed(() => {
     loadCheck();
     return check.value != null;

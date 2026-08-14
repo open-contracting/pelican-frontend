@@ -40,14 +40,12 @@
 import { BCol, BRow } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
 import Dashboard from "./layouts/Dashboard.vue";
 
-const router = useRouter();
 const store = useStore();
 const { t } = useI18n();
 
@@ -78,16 +76,6 @@ watch(filterIndex, (newFilterIndex) => {
 onBeforeMount(() => {
     filterIndex.value = store.getters.timeLevelFilterIndex;
 });
-
-function detail(name) {
-    router.push({
-        name: "timeVarianceCheckDetail",
-        params: {
-            check: name,
-            datasetId: store.getters.datasetId,
-        },
-    });
-}
 </script>
 
 <style lang="scss">
