@@ -147,7 +147,6 @@ const showTimeVariance = computed(
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 #logo {
     width: 80%;

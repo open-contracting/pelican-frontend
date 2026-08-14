@@ -283,7 +283,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 .modal_box {
     padding: 30px;

@@ -20,7 +20,10 @@ export default defineConfig({
     css: {
         preprocessorOptions: {
             scss: {
-                additionalData: '@import "@/scss/_variables.scss"; @import "@/scss/_breakpoints.scss";',
+                // Variables only, so that components can use them without emitting Bootstrap's CSS.
+                // Ours come first, so Bootstrap's !default values do not override them.
+                additionalData:
+                    '@import "@/scss/_variables.scss"; @import "@/scss/_breakpoints.scss"; @import "bootstrap/scss/functions"; @import "bootstrap/scss/variables";',
                 // @use depends on Bootstrap 6. https://github.com/twbs/bootstrap/issues/29853
                 silenceDeprecations: ["import"],
                 quietDeps: true,

@@ -143,7 +143,6 @@ defineExpose({ resetSorting });
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 .hide_button {
     color: $na_color;
     font-size: 10px;

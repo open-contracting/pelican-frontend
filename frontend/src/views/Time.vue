@@ -91,7 +91,6 @@ function detail(name) {
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 .collection_header {
     margin-bottom: 5px;

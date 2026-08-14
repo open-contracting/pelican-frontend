@@ -99,7 +99,6 @@ function detail() {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 tbody tr {
     cursor: pointer;

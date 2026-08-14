@@ -239,7 +239,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 .form-control::placeholder {
     color: red;

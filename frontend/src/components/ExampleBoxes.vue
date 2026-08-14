@@ -211,7 +211,6 @@ function visibleSections(section) {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 @import "@/scss/variables";
 
 .moreLess {

@@ -110,7 +110,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 .multiselect__tag {
     background: $primary;

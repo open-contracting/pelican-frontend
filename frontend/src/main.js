@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import App from "./App.vue";
+import "./scss/main.scss";
 import { messages as en } from "./messages/en.js";
 import { FontAwesomeIcon } from "./plugins/fontawesome";
 import router from "./router";

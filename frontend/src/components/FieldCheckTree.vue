@@ -83,7 +83,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 .table {
     thead {

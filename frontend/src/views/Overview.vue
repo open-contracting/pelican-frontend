@@ -346,7 +346,6 @@ const filtered_buyer = computed(() => {
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 .ocid_count {
     font-size: 24px;

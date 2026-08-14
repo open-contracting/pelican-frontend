@@ -20,7 +20,6 @@ import MainMenu from "./MainMenu.vue";
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 @media (max-width: 1199.98px) {
     .main_envelope {

@@ -49,7 +49,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 .search_input {
     .input-group-text {

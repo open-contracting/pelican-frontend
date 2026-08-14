@@ -127,7 +127,6 @@ function isDatasetImported(dataset) {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 .switcher {
     display: inline-block;

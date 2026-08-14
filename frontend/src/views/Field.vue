@@ -133,7 +133,6 @@ function resetTableSorting() {
 
 <style lang="scss">
 @import "@/scss/_variables";
-@import "@/scss/main";
 
 .sub_headline {
     margin-bottom: 0px;

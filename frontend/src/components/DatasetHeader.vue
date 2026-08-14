@@ -24,7 +24,6 @@ const dataset = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 h1 {
     font-size: 13px;

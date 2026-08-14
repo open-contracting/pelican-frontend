@@ -38,7 +38,6 @@ const allBars = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@import "@/scss/main";
 
 .progress_bar {
     width: 100%;

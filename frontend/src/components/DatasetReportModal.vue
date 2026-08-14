@@ -448,7 +448,6 @@ function fileIdFormatter(value) {
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 
 .submit-result {
     display: flex;

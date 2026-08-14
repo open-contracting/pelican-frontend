@@ -31,7 +31,6 @@ import MainMenu from "./MainMenu.vue";
 </script>
 
 <style lang="scss">
-@import "@/scss/main";
 .preview {
     background-color: white;
     position: relative;
