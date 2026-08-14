@@ -131,21 +131,9 @@ h5 {
   overflow-wrap: break-word;
 }
 
-.thr {
-  border-bottom: solid 2px #e8ecef;
-}
 
-.tr {
-  border-top: solid 1px #e8ecef;
-}
 
-.tr:hover {
-  background-color: rgba(0, 0, 0, 0.06);
-}
 
-.td {
-  padding: 12px;
-}
 
 .data_table {
   width: 100%;
@@ -187,12 +175,6 @@ h5 {
   }
 }
 
-.th {
-  padding: 12px;
-  font-family: $font-family-bold;
-  text-transform: lowercase;
-  color: #656565;
-}
 
 .form-control::-webkit-input-placeholder,
 input::placeholder,
