@@ -27,10 +27,10 @@ import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
     placeholder: String,
-    onUpdate: Function,
     preset: String,
-    submitTimeLimit: { type: Number, default: 400 },
 });
+
+const emit = defineEmits(["search"]);
 
 const search = ref(null);
 let submitTimeout = null;
@@ -40,7 +40,7 @@ watch(search, (value) => {
         clearTimeout(submitTimeout);
     }
 
-    submitTimeout = setTimeout(() => props.onUpdate(value), props.submitTimeLimit);
+    submitTimeout = setTimeout(() => emit("search", value), 400);
 });
 
 onMounted(() => {

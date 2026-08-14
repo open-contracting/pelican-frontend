@@ -58,7 +58,8 @@ import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import { CONFIG } from "@/config.js";
 
-const props = defineProps(["datasetId", "jsonPath", "updateSelected"]);
+const props = defineProps(["datasetId", "jsonPath"]);
+const emit = defineEmits(["selected"]);
 
 const { t } = useI18n();
 
@@ -68,7 +69,10 @@ const isLoading = ref(false);
 let cancelToken = null;
 
 watch(selected, (value) => {
-    props.updateSelected(value.map((el) => el.value));
+    emit(
+        "selected",
+        value.map((el) => el.value),
+    );
 });
 
 function asyncFind(query) {

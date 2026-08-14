@@ -41,7 +41,7 @@
         <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
         <div class="col-8">
           <DatasetValuesMultiselect
-            :update-selected="updateBuyerName"
+            @selected="updateBuyerName"
             :dataset-id="dataset?.id"
             json-path="buyer.name"
           />
@@ -51,7 +51,7 @@
         <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
         <div class="col-8">
           <DatasetValuesMultiselect
-            :update-selected="updateProcuringEntityName"
+            @selected="updateProcuringEntityName"
             :dataset-id="dataset?.id"
             json-path="tender.procuringEntity.name"
           />

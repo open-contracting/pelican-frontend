@@ -31,7 +31,7 @@
         <SearchInput
           :placeholder="$t('field.search')"
           :preset="search"
-          :on-update="search => $store.commit('setFieldCheckSearch', search)"
+          @search="$store.commit('setFieldCheckSearch', $event)"
         />
       </BCol>
       <BCol class="text-end">
