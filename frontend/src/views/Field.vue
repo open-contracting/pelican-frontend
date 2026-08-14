@@ -131,7 +131,7 @@ function resetTableSorting() {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import "@/scss/_variables";
 
 .sub_headline {
@@ -176,10 +176,6 @@ function resetTableSorting() {
     padding: 40px;
     box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
     border: 0;
-}
-
-mark {
-    background-color: $primary !important;
 }
 
 .action_bar {

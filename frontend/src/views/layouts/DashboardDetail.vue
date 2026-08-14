@@ -30,23 +30,11 @@ import DatasetHeader from "@/components/DatasetHeader.vue";
 import MainMenu from "./MainMenu.vue";
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .preview {
     background-color: white;
     position: relative;
     font-size: 12px;
-}
-
-.vjs-tree {
-    font-family: $font-family-mono;
-    font-size: 13px;
-}
-
-.examples .divider {
-    border-top: solid 1px $na_light_color;
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom: 20px;
 }
 
 .preview_envelope {
@@ -59,18 +47,8 @@ import MainMenu from "./MainMenu.vue";
 }
 
 @media (max-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 80px;
-    }
-
     .preview_envelope {
         padding-left: 50px;
-    }
-}
-
-@media (min-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 215px;
     }
 }
 </style>

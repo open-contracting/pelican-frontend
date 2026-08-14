@@ -213,6 +213,44 @@ input::placeholder,
   }
 }
 
+// vue-json-pretty's own .vjs-tree rule is loaded after this one.
+.preview .vjs-tree {
+  font-family: $font-family-mono;
+  font-size: 13px;
+}
+
+// Both dashboard layouts leave room for the menu.
+@media (max-width: 1199.98px) {
+  .main_envelope {
+    padding-left: 80px;
+  }
+}
+
+@media (min-width: 1199.98px) {
+  .main_envelope {
+    padding-left: 215px;
+  }
+}
+
+.collection_header {
+  margin-bottom: 5px;
+  position: relative;
+
+  h4 {
+    position: absolute;
+    bottom: 0px;
+    margin-bottom: 5px;
+  }
+}
+
+.ocid_count {
+  font-size: 24px;
+}
+
+mark {
+  background-color: $primary !important;
+}
+
 .modal_box {
   padding: 30px;
 }

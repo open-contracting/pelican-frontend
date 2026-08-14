@@ -302,16 +302,7 @@ const filtered_buyer = computed(() => {
 });
 </script>
 
-<style lang="scss">
-
-.ocid_count {
-    font-size: 24px;
-}
-
-.tr:first-of-type .td {
-    border-top: none;
-}
-
+<style scoped lang="scss">
 .lifecycle_phase {
     margin-bottom: 20px;
 }

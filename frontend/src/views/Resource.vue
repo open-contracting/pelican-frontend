@@ -6,7 +6,7 @@
       v-html="$t('resourceLevel.description')"
     />
     <span v-if="loaded">
-      <BRow class="action_bar">
+      <BRow class="collection_header">
         <BCol class="text-start">
           <h4>{{ $t("resourceLevel.subheadline") }}</h4>
         </BCol>
@@ -106,18 +106,7 @@ onBeforeMount(() => {
 });
 </script>
 
-<style lang="scss">
-.action_bar {
-    margin-bottom: 5px;
-    position: relative;
-
-    h4 {
-        position: absolute;
-        bottom: 0px;
-        margin-bottom: 5px;
-    }
-}
-
+<style scoped lang="scss">
 .resource_result_box {
     background-color: white;
     border-radius: 10px;

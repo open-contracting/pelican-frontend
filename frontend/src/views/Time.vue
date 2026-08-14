@@ -77,17 +77,3 @@ onBeforeMount(() => {
     filterIndex.value = store.getters.timeLevelFilterIndex;
 });
 </script>
-
-<style lang="scss">
-
-.collection_header {
-    margin-bottom: 5px;
-    position: relative;
-
-    h4 {
-        position: absolute;
-        bottom: 0px;
-        margin-bottom: 5px;
-    }
-}
-</style>

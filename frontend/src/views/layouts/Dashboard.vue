@@ -18,18 +18,3 @@
 import DatasetHeader from "@/components/DatasetHeader.vue";
 import MainMenu from "./MainMenu.vue";
 </script>
-
-<style lang="scss">
-
-@media (max-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 80px;
-    }
-}
-
-@media (min-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 215px;
-    }
-}
-</style>
