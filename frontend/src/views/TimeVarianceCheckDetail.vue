@@ -95,35 +95,28 @@
       >
         <table class="table table-sm">
           <thead>
-            <tr class="d-flex">
+            <tr>
               <th
-                class="col-9"
+                style="width: 75%"
                 scope="col"
               >
                 {{ $t("examples.ocid") }}
               </th>
               <th
-                class="col-1 text-start"
+                colspan="3"
+                class="text-start"
                 scope="col"
               >
                 {{ $t("examples.actions") }}
               </th>
-              <th
-                class="col-1 text-center"
-                scope="col"
-              />
-              <th
-                class="col-1 text-center"
-                scope="col"
-              />
             </tr>
           </thead>
           <tbody>
             <template v-for="(item, index) in check.meta.examples.slice(0, 5)" :key="index">
               <tr
-                class="d-flex new_row"
+                class="new_row"
               >
-                <td class="col-9 text-start numeric d-flex align-items-center">
+                <td class="text-start numeric">
                   <span class="check_name">{{ item.new_item_ocid }}</span>
                                     &nbsp;
                   <span class="example_version">[{{ $t("examples.new") }}]</span>
@@ -172,9 +165,9 @@
                 </td>
               </tr>
               <tr
-                class="d-flex old_row"
+                class="old_row"
               >
-                <td class="col-9 text-start numeric d-flex align-items-center">
+                <td class="text-start numeric">
                   <span class="check_name">{{ item.ocid }}</span>
                                     &nbsp;
                   <span class="example_version">[{{ $t("examples.old") }}]</span>
@@ -225,7 +218,7 @@
             </template>
             <tr v-if="!showMore && check.meta.examples.length > 5">
               <td
-                colspan="2"
+                colspan="4"
                 class="text-center bold clickable moreLess"
                 @click.stop="showMore = true"
               >
@@ -235,12 +228,12 @@
                 </a>
               </td>
             </tr>
-            <span v-if="showMore">
+            <template v-if="showMore">
               <template v-for="(item, index) in check.meta.examples.slice(5)" :key="index + 5">
                 <tr
-                  class="d-flex new_row"
+                  class="new_row"
                 >
-                  <td class="col-9 text-start numeric d-flex align-items-center">
+                  <td class="text-start numeric">
                     <span class="check_name">{{ item.new_item_ocid }}</span>
                                         &nbsp;
                     <span class="example_version">[{{ $t("examples.new") }}]</span>
@@ -289,9 +282,9 @@
                   </td>
                 </tr>
                 <tr
-                  class="d-flex old_row"
+                  class="old_row"
                 >
-                  <td class="col-9 text-start numeric d-flex align-items-center">
+                  <td class="text-start numeric">
                     <span class="check_name">{{ item.ocid }}</span>
                                         &nbsp;
                     <span class="example_version">[{{ $t("examples.old") }}]</span>
@@ -340,10 +333,10 @@
                   </td>
                 </tr>
               </template>
-            </span>
+            </template>
             <tr v-if="showMore">
               <td
-                colspan="2"
+                colspan="4"
                 class="text-center bold clickable moreLess"
                 @click.stop="showMore = false"
               >

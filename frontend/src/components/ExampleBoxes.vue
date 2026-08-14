@@ -30,32 +30,24 @@
       <div class="result_box" :class="section.group">
         <table class="table table-sm">
           <thead>
-            <tr class="d-flex">
+            <tr>
               <th
-                class="col-9"
+                style="width: 75%"
                 scope="col"
               >{{ $t("examples.ocid") }}</th>
               <th
-                class="col-1 text-start"
+                colspan="3"
+                class="text-start"
                 scope="col"
               >{{ $t("examples.actions") }}</th>
-              <th
-                class="col-1 text-center"
-                scope="col"
-              />
-              <th
-                class="col-1 text-center"
-                scope="col"
-              />
             </tr>
           </thead>
           <tbody>
             <tr
               v-for="(item, index) in section.examples.slice(0, 5)"
               :key="index"
-              class="d-flex"
             >
-              <td class="col-9 text-start numeric">
+              <td class="text-start numeric">
                 <span class="check_name">{{ item.ocid }}</span>
               </td>
               <td class="clickable">
@@ -97,7 +89,7 @@
             </tr>
             <tr v-if="!visibleSections(section.header) && section.examples.length > 5">
               <td
-                colspan="2"
+                colspan="4"
                 class="text-center bold clickable moreLess"
                 @click.stop="showMore(section.header)"
               >
@@ -107,13 +99,12 @@
                 </a>
               </td>
             </tr>
-            <span v-if="visibleSections(section.header)">
+            <template v-if="visibleSections(section.header)">
               <tr
                 v-for="(item, index) in section.examples.slice(5)"
                 :key="index"
-                class="d-flex"
               >
-                <td class="col-9 text-start numeric">
+                <td class="text-start numeric">
                   <span class="check_name">{{ item.ocid }}</span>
                 </td>
                 <td class="clickable">
@@ -153,10 +144,10 @@
                   </span>
                 </td>
               </tr>
-            </span>
+            </template>
             <tr v-if="visibleSections(section.header)">
               <td
-                colspan="2"
+                colspan="4"
                 class="text-center bold clickable moreLess"
                 @click.stop="showLess(section.header)"
               >
