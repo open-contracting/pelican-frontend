@@ -139,8 +139,7 @@ Emit events instead of accepting callbacks as props:
    <!-- No -->
    <SearchInput :on-update="search => $store.commit('setDatasetSearch', search)" />
 
-Pass a function as a prop only as data, never as an event callback. The ``filter`` predicates are the
-only such props: a component applies one to its rows, rather than calling it to notify its parent.
+Pass a function as a prop only as data, never as an event callback. The ``filter`` predicates are the only such props: a component applies one to its rows, rather than calling it to notify its parent.
 
 Access template refs with `useTemplateRef() <https://vuejs.org/api/composition-api-helpers#usetemplateref>`__, not by declaring a ``ref()`` whose name matches the attribute:
 
