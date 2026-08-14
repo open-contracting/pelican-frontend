@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useFormatters } from "@/composables/useFormatters.js";
 
 const props = defineProps({
@@ -49,7 +49,7 @@ const props = defineProps({
 
 const { formatPercentage, formatNumber } = useFormatters();
 
-const bar = ref(null);
+const bar = useTemplateRef("bar");
 const barWidth = ref(1);
 
 const ratio = computed(() => {
