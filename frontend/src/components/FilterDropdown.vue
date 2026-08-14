@@ -3,8 +3,6 @@
     id="filter_dropdown"
     class="filter_dropdown"
     placement="bottom-end"
-    split
-    split-button-type="button"
     variant="primary"
   >
     <template #button-content>
@@ -47,25 +45,17 @@ onMounted(() => {
 @import "@/scss/variables";
 
 .filter_dropdown {
+    // Bootstrap renders a block-level wrapper, unlike the .btn-group of a split dropdown.
+    display: inline-flex;
     margin-top: 8px;
     margin-bottom: 8px;
 }
 
 #filter_dropdown {
-    border: none;
     background-color: transparent;
     color: $headings-color;
-    pointer-events: none;
     padding-left: 0px;
     padding-right: 7px;
-    padding-top: 7px;
-    padding-bottom: 5px;
-}
-
-#filter_dropdown-split {
-    border: none;
-    background-color: transparent;
-    color: $headings-color;
     padding-top: 7px;
     padding-bottom: 5px;
     border-radius: 4px;
