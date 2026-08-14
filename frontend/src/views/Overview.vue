@@ -296,7 +296,7 @@
               <div
                 v-if="n != 'implementation'"
                 :key="n + '-arrow'"
-                class="lifecycle_arrow"
+                class="col-auto px-0 lifecycle_arrow"
               >
                 <FontAwesomeIcon icon="long-arrow-alt-right" />
               </div>
