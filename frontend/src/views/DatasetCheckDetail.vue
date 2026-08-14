@@ -250,7 +250,7 @@ function loadCheck() {
 
         if (checkType.value === "donut") {
             exampleSections.value = [];
-            const shares = orderedShares(check.value.meta.shares);
+            const shares = orderedShares(check.value.meta.shares ?? {});
             for (const key in shares) {
                 if (shares[key][1].examples.length > 0) {
                     exampleSections.value.push({
@@ -291,14 +291,14 @@ function loadCheck() {
             const failed = check.value.meta.failed_examples;
             const passed = check.value.meta.passed_examples;
 
-            if (failed.length > 0) {
+            if (failed?.length > 0) {
                 exampleSections.value.push({
                     header: t("datasetLevel.numeric.failedExamples"),
                     examples: failed,
                 });
             }
 
-            if (passed.length > 0) {
+            if (passed?.length > 0) {
                 exampleSections.value.push({
                     header: t("datasetLevel.numeric.passedExamples"),
                     examples: passed,
@@ -308,7 +308,7 @@ function loadCheck() {
 
         if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
             exampleSections.value = [];
-            if (check.value.meta.examples.length > 0) {
+            if (check.value.meta.examples?.length > 0) {
                 exampleSections.value.push({
                     header: t("datasetLevel.examples"),
                     examples: check.value.meta.examples,
