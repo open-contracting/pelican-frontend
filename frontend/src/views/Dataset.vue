@@ -36,12 +36,13 @@ import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
+import { DATASET_CHECK_SECTIONS } from "@/config.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const store = useStore();
 const { t } = useI18n();
 
-const sections = ["status_distribution", "value_distribution", "other_distribution", "repetition", "other"];
+const sections = Object.keys(DATASET_CHECK_SECTIONS);
 const filterIndex = ref(0);
 
 const filterNames = [

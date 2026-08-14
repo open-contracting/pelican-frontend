@@ -50,6 +50,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
+import { RESOURCE_CHECK_ORDER } from "@/config.js";
 import ResourceLevelRow from "./ResourceLevelRow.vue";
 import Tooltip from "./Tooltip.vue";
 
@@ -64,65 +65,25 @@ const showChecks = ref(false);
 const resourceLevelStats = computed(() => {
     const result = store.getters.resourceLevelStatsBySection(props.section);
 
-    const order = [
-        "reference.buyer_in_parties",
-        "reference.procuring_entity_in_parties",
-        "reference.tenderer_in_parties",
-        "reference.supplier_in_parties",
-        "reference.payer_in_parties",
-        "reference.payee_in_parties",
-        "reference.contract_in_awards",
-        "consistent.tender_value",
-        "consistent.contracts_value",
-        "consistent.contracts_implementation_transactions_value",
-        "consistent.parties_roles",
-        "consistent.period_duration_in_days",
-        "consistent.number_of_tenderers",
-        "consistent.buyer_in_parties_roles",
-        "consistent.tenderer_in_parties_roles",
-        "consistent.procuring_entity_in_parties_roles",
-        "consistent.supplier_in_parties_roles",
-        "consistent.payer_in_parties_roles",
-        "consistent.payee_in_parties_roles",
-        "consistent.buyer_name_in_parties",
-        "consistent.tenderer_name_in_parties",
-        "consistent.procuring_entity_name_in_parties",
-        "consistent.supplier_name_in_parties",
-        "consistent.payer_name_in_parties",
-        "consistent.payee_name_in_parties",
-        "coherent.tender_status",
-        "coherent.awards_status",
-        "coherent.contracts_status",
-        "coherent.milestone_status",
-        "coherent.dates",
-        "coherent.release_date",
-        "coherent.milestones_dates",
-        "coherent.amendments_dates",
-        "coherent.documents_dates",
-        "coherent.value_realistic",
-        "coherent.period",
-        "coherent.procurement_method_vs_number_of_tenderers",
-    ];
-
     return result
         .sort((a, b) => {
             const nameA = a.name;
             const nameB = b.name;
-            if (order.indexOf(nameA) < 0 && order.indexOf(nameB) < 0) {
+            if (RESOURCE_CHECK_ORDER.indexOf(nameA) < 0 && RESOURCE_CHECK_ORDER.indexOf(nameB) < 0) {
                 if (nameA < nameB) {
                     return -1;
                 }
 
                 return 1;
             }
-            if (order.indexOf(nameA) < 0) {
+            if (RESOURCE_CHECK_ORDER.indexOf(nameA) < 0) {
                 return 1;
             }
-            if (order.indexOf(nameB) < 0) {
+            if (RESOURCE_CHECK_ORDER.indexOf(nameB) < 0) {
                 return -1;
             }
 
-            return order.indexOf(nameA) - order.indexOf(nameB);
+            return RESOURCE_CHECK_ORDER.indexOf(nameA) - RESOURCE_CHECK_ORDER.indexOf(nameB);
         })
         .filter(props.filter);
 });

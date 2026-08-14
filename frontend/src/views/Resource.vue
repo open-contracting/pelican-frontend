@@ -42,7 +42,7 @@
           >&nbsp;</div>
         </div>
         <span
-          v-for="(name, index) in sections"
+          v-for="(name, index) in RESOURCE_CHECK_SECTIONS"
           :key="index"
         >
           <ResourceLevelList
@@ -66,12 +66,12 @@ import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import ResourceLevelList from "@/components/ResourceLevelList.vue";
+import { RESOURCE_CHECK_SECTIONS } from "@/config.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const store = useStore();
 const { t } = useI18n();
 
-const sections = ["reference", "consistent", "coherent"];
 const filterIndex = ref(0);
 
 const filterNames = [

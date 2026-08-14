@@ -85,6 +85,84 @@ export const DATASET_CHECK_TICKS = {
     "distribution.buyer": [0, 0.5],
 };
 
+// Key order determines the order of the sections in the dataset-level view.
+export const DATASET_CHECK_SECTIONS = {
+    status_distribution: [
+        "distribution.tender_status",
+        "distribution.awards_status",
+        "distribution.contracts_status",
+        "distribution.milestone_status",
+    ],
+    value_distribution: ["distribution.tender_value", "distribution.awards_value", "distribution.contracts_value"],
+    other_distribution: [
+        "distribution.value_currency",
+        "distribution.main_procurement_category",
+        "distribution.tender_procurement_method",
+        "distribution.tender_submission_method",
+        "distribution.tender_award_criteria",
+        "distribution.buyer",
+        "distribution.document_document_type",
+        "distribution.milestone_type",
+        "distribution.related_process_relation",
+    ],
+    repetition: [
+        "distribution.tender_value_repetition",
+        "distribution.awards_value_repetition",
+        "distribution.contracts_value_repetition",
+        "distribution.buyer_repetition",
+    ],
+    other: [
+        "misc.url_availability",
+        "consistent.related_process_title",
+        "reference.related_process_identifier",
+        "unique.tender_id",
+    ],
+};
+
+// Checks are assigned to a section by name prefix, in this order.
+export const RESOURCE_CHECK_SECTIONS = ["reference", "consistent", "coherent"];
+
+// Checks absent from this list sort after it, alphabetically.
+export const RESOURCE_CHECK_ORDER = [
+    "reference.buyer_in_parties",
+    "reference.procuring_entity_in_parties",
+    "reference.tenderer_in_parties",
+    "reference.supplier_in_parties",
+    "reference.payer_in_parties",
+    "reference.payee_in_parties",
+    "reference.contract_in_awards",
+    "consistent.tender_value",
+    "consistent.contracts_value",
+    "consistent.contracts_implementation_transactions_value",
+    "consistent.parties_roles",
+    "consistent.period_duration_in_days",
+    "consistent.number_of_tenderers",
+    "consistent.buyer_in_parties_roles",
+    "consistent.tenderer_in_parties_roles",
+    "consistent.procuring_entity_in_parties_roles",
+    "consistent.supplier_in_parties_roles",
+    "consistent.payer_in_parties_roles",
+    "consistent.payee_in_parties_roles",
+    "consistent.buyer_name_in_parties",
+    "consistent.tenderer_name_in_parties",
+    "consistent.procuring_entity_name_in_parties",
+    "consistent.supplier_name_in_parties",
+    "consistent.payer_name_in_parties",
+    "consistent.payee_name_in_parties",
+    "coherent.tender_status",
+    "coherent.awards_status",
+    "coherent.contracts_status",
+    "coherent.milestone_status",
+    "coherent.dates",
+    "coherent.release_date",
+    "coherent.milestones_dates",
+    "coherent.amendments_dates",
+    "coherent.documents_dates",
+    "coherent.value_realistic",
+    "coherent.period",
+    "coherent.procurement_method_vs_number_of_tenderers",
+];
+
 // Sync with check descriptions.
 export const DATASET_CHECK_STYLES = {
     // donut
