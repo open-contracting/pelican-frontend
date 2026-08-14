@@ -10,6 +10,9 @@ export function useDataItem() {
     const { t } = useI18n();
     const { create: showToast } = useToast();
 
+    let fileLink;
+    let previousFileURL;
+
     function toast(body, variant) {
         showToast({ body, variant, pos: "middle-center" });
     }
@@ -22,13 +25,23 @@ export function useDataItem() {
                 const fileURL = window.URL.createObjectURL(
                     new Blob([JSON.stringify(result.data, null, 2)], { type: "application/json" }),
                 );
-                const fileLink = document.createElement("a");
+
+                // Safari needs the link in the document to follow it. Reuse it, rather than leaving one per file.
+                if (!fileLink) {
+                    fileLink = document.createElement("a");
+                    document.body.appendChild(fileLink);
+                }
 
                 fileLink.href = fileURL;
                 fileLink.setAttribute("download", `data_item_${itemId}.json`);
-                document.body.appendChild(fileLink);
 
                 fileLink.click();
+
+                // Revoke the previous URL, whose download has started, rather than this one, which might not have.
+                if (previousFileURL) {
+                    window.URL.revokeObjectURL(previousFileURL);
+                }
+                previousFileURL = fileURL;
 
                 toast(t("examples.download.success"), "primary");
             })
