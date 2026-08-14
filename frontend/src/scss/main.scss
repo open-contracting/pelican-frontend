@@ -214,18 +214,17 @@ input::placeholder,
   font-family: $font-family-bold;
 }
 
-.table_hl {
-  margin-bottom: 0; // dl is given one by Bootstrap's reboot
+.metadata_list {
+  margin-bottom: 0;
 
   > dt,
   > dd {
     padding: 12px;
     border-top: solid 1px #e8ecef;
-    margin-bottom: 0; // as is dd
-    font-weight: normal; // and dt is bold
+    margin-bottom: 0;
+    font-weight: normal;
   }
 
-  // The first pair opens the box, so it needs no rule above it.
   > dt:first-child,
   > dt:first-child + dd {
     border-top: none;

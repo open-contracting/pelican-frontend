@@ -14,7 +14,7 @@
         <div class="result_box">
           <dl
             v-if="data_quality"
-            class="table_hl row"
+            class="metadata_list row"
           >
             <dt class="col-6">
               {{ $t("overview.filtered.original") }}
@@ -73,7 +73,7 @@
         <div class="result_box collection_metadata col col-12">
           <dl
             v-if="collection"
-            class="table_hl row"
+            class="metadata_list row"
           >
             <dt class="col-4 d-flex align-items-center">
               {{ $t("overview.compiled_releases.value_label") }}
@@ -175,7 +175,7 @@
             <div class="result_box collection_metadata kingfisher_metadata">
               <dl
                 v-if="kingfisher"
-                class="table_hl row"
+                class="metadata_list row"
               >
                 <dt class="col-6">
                   {{ $t("overview.collectionId") }}
@@ -204,7 +204,7 @@
             <div class="result_box collection_metadata kingfisher_metadata dqt_metadata">
               <dl
                 v-if="data_quality"
-                class="table_hl row"
+                class="metadata_list row"
               >
                 <dt class="col-6">
                   {{ $t("overview.processingFrom") }}
