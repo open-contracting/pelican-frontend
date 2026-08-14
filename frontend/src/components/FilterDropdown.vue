@@ -52,6 +52,7 @@ onMounted(() => {
     align-items: center;
     margin-top: 8px;
     margin-bottom: 8px;
+    margin-left: 15px;
 }
 
 .filter_dropdown {
@@ -68,6 +69,10 @@ onMounted(() => {
     padding-bottom: 5px;
     border-radius: 4px;
     border: 1px solid transparent;
+
+    &::after {
+        margin-left: 0.5em;
+    }
 
     &:hover,
     &:active,
@@ -97,6 +102,7 @@ onMounted(() => {
 #show_prefix {
     color: $headings-light-color;
     font-family: $font-family-thin;
+    font-size: 1rem;
     margin-right: 4px;
 }
 </style>
