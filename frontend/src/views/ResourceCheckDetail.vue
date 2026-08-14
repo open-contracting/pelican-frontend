@@ -108,6 +108,7 @@ const { create: showToast } = useToast();
 const previewMetaData = ref(null);
 const previewDataItemId = ref(null);
 const loadingPreviewData = ref(false);
+let previewRequest = 0;
 
 const check = computed(() => store.getters.resourceLevelStats?.find((item) => item.name === route.params.check));
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
@@ -158,8 +159,13 @@ const exampleSections = computed(() => {
 });
 
 function preview(itemId) {
+    // A later click supersedes this one, whose response is then ignored.
+    const request = ++previewRequest;
     loadingPreviewData.value = true;
     store.dispatch("loadDataItem", itemId).finally(() => {
+        if (request !== previewRequest) {
+            return;
+        }
         if (store.getters.dataItemJSONLines(itemId) < 3000) {
             previewDataItemId.value = itemId;
         } else {

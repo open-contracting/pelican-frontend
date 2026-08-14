@@ -433,6 +433,7 @@ const check = ref(null);
 const previewDataItemId = ref(null);
 const previewMetadata = ref(null);
 const loadingPreviewData = ref(false);
+let previewRequest = 0;
 const showMore = ref(false);
 const selectedKey = ref(null);
 
@@ -452,10 +453,15 @@ function loadCheck() {
 }
 
 function preview(key, itemId) {
+    // A later click supersedes this one, whose response is then ignored.
+    const request = ++previewRequest;
     loadingPreviewData.value = true;
     store
         .dispatch("loadDataItem", itemId)
         .then(() => {
+            if (request !== previewRequest) {
+                return;
+            }
             if (store.getters.dataItemJSONLines(itemId) < 3000) {
                 previewDataItemId.value = itemId;
                 selectedKey.value = key;
@@ -466,11 +472,17 @@ function preview(key, itemId) {
             }
         })
         .catch(() => {
+            if (request !== previewRequest) {
+                return;
+            }
             showToast({ body: t("preview.nonExisting"), variant: "danger", pos: "middle-center" });
             previewDataItemId.value = null;
             selectedKey.value = null;
         })
         .finally(() => {
+            if (request !== previewRequest) {
+                return;
+            }
             loadingPreviewData.value = false;
         });
 }

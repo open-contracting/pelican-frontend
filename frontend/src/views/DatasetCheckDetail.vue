@@ -213,6 +213,7 @@ const previewDataItemId = ref(null);
 const previewMetadata = ref(null);
 const exampleSections = ref(null);
 const loadingPreviewData = ref(false);
+let previewRequest = 0;
 
 const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);
 const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
@@ -224,8 +225,13 @@ const loaded = computed(() => {
 });
 
 function preview(itemId) {
+    // A later click supersedes this one, whose response is then ignored.
+    const request = ++previewRequest;
     loadingPreviewData.value = true;
     store.dispatch("loadDataItem", itemId).finally(() => {
+        if (request !== previewRequest) {
+            return;
+        }
         if (store.getters.dataItemJSONLines(itemId) < 3000) {
             previewDataItemId.value = itemId;
         } else {
