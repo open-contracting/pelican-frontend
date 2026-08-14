@@ -51,16 +51,18 @@
                 <span class="check_name">{{ item.ocid }}</span>
               </td>
               <td class="clickable">
-                <span
+                <button
                   v-if="index != selectedKey || selectedSection != section.header"
+                  type="button"
+                  class="examples_button"
                   :title="$t('examples.preview.tooltip')"
+                  @click.stop.prevent="preview(index, section.header, item.item_id, section.group)"
                 >
                   <FontAwesomeIcon
                     class="examples_icon"
                     :icon="['far', 'eye']"
-                    @click.stop.prevent="preview(index, section.header, item.item_id, section.group)"
                   />
-                </span>
+                </button>
                 <span v-if="index == selectedKey && selectedSection == section.header">
                   <FontAwesomeIcon
                     class="examples_icon"
@@ -69,22 +71,30 @@
                 </span>
               </td>
               <td class="clickable">
-                <span :title="$t('examples.download.tooltip')">
+                <button
+                  type="button"
+                  class="examples_button"
+                  :title="$t('examples.download.tooltip')"
+                  @click.stop.prevent="download(item.item_id)"
+                >
                   <FontAwesomeIcon
                     class="examples_icon"
                     :icon="['fas', 'cloud-download-alt']"
-                    @click.stop.prevent="download(item.item_id)"
                   />
-                </span>
+                </button>
               </td>
               <td class="clickable">
-                <span :title="$t('examples.copyToClipboard.tooltip')">
+                <button
+                  type="button"
+                  class="examples_button"
+                  :title="$t('examples.copyToClipboard.tooltip')"
+                  @click.stop.prevent="copyToClipboard(item.item_id)"
+                >
                   <FontAwesomeIcon
                     class="examples_icon"
                     :icon="['fas', 'clipboard']"
-                    @click.stop.prevent="copyToClipboard(item.item_id)"
                   />
-                </span>
+                </button>
               </td>
             </tr>
             <tr v-if="!visibleSections(section.header) && section.examples.length > 5">
@@ -108,16 +118,18 @@
                   <span class="check_name">{{ item.ocid }}</span>
                 </td>
                 <td class="clickable">
-                  <span
+                  <button
                     v-if="index + 5 != selectedKey || selectedSection != section.header"
+                    type="button"
+                    class="examples_button"
                     :title="$t('examples.preview.tooltip')"
+                    @click.stop.prevent="preview(index + 5, section.header, item.item_id, section.group)"
                   >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['far', 'eye']"
-                      @click.stop.prevent="preview(index + 5, section.header, item.item_id, section.group)"
                     />
-                  </span>
+                  </button>
                   <span v-if="index + 5 == selectedKey && selectedSection == section.header">
                     <FontAwesomeIcon
                       class="examples_icon"
@@ -126,22 +138,30 @@
                   </span>
                 </td>
                 <td class="clickable">
-                  <span :title="$t('examples.download.tooltip')">
+                  <button
+                    type="button"
+                    class="examples_button"
+                    :title="$t('examples.download.tooltip')"
+                    @click.stop.prevent="download(item.item_id)"
+                  >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
-                      @click.stop.prevent="download(item.item_id)"
                     />
-                  </span>
+                  </button>
                 </td>
                 <td class="clickable">
-                  <span :title="$t('examples.copyToClipboard.tooltip')">
+                  <button
+                    type="button"
+                    class="examples_button"
+                    :title="$t('examples.copyToClipboard.tooltip')"
+                    @click.stop.prevent="copyToClipboard(item.item_id)"
+                  >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
-                      @click.stop.prevent="copyToClipboard(item.item_id)"
                     />
-                  </span>
+                  </button>
                 </td>
               </tr>
             </template>
@@ -221,6 +241,12 @@ function visibleSections(section) {
 
 .disabled {
     cursor: not-allowed;
+}
+
+.examples_button {
+    padding: 0;
+    border: none;
+    background: none;
 }
 
 .examples_icon {

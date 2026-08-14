@@ -122,22 +122,19 @@
                   <span class="example_version">[{{ $t("examples.new") }}]</span>
                 </td>
                 <td class="clickable">
-                  <span
+                  <button
                     v-if="'new_' + index != selectedKey"
+                    type="button"
+                    class="examples_button"
                     :title="$t('examples.preview.tooltip')"
+                    :disabled="loadingPreviewData"
+                    @click.stop.prevent="preview('new_' + index, item.new_item_id)"
                   >
                     <FontAwesomeIcon
-                      v-if="!loadingPreviewData"
-                      class="examples_icon"
-                      :icon="['far', 'eye']"
-                      @click.stop.prevent="preview('new_' + index, item.new_item_id)"
-                    />
-                    <FontAwesomeIcon
-                      v-else
                       class="examples_icon"
                       :icon="['far', 'eye']"
                     />
-                  </span>
+                  </button>
                   <span v-if="'new_' + index == selectedKey">
                     <FontAwesomeIcon
                       class="examples_icon"
@@ -146,22 +143,30 @@
                   </span>
                 </td>
                 <td class="clickable">
-                  <span :title="$t('examples.download.tooltip')">
+                  <button
+                    type="button"
+                    class="examples_button"
+                    :title="$t('examples.download.tooltip')"
+                    @click.stop.prevent="download(item.new_item_id)"
+                  >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
-                      @click.stop.prevent="download(item.new_item_id)"
                     />
-                  </span>
+                  </button>
                 </td>
                 <td class="clickable">
-                  <span :title="$t('examples.copyToClipboard.tooltip')">
+                  <button
+                    type="button"
+                    class="examples_button"
+                    :title="$t('examples.copyToClipboard.tooltip')"
+                    @click.stop.prevent="copyToClipboard(item.new_item_id)"
+                  >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
-                      @click.stop.prevent="copyToClipboard(item.new_item_id)"
                     />
-                  </span>
+                  </button>
                 </td>
               </tr>
               <tr
@@ -173,22 +178,19 @@
                   <span class="example_version">[{{ $t("examples.old") }}]</span>
                 </td>
                 <td class="clickable">
-                  <span
+                  <button
                     v-if="'old_' + index != selectedKey"
+                    type="button"
+                    class="examples_button"
                     :title="$t('examples.preview.tooltip')"
+                    :disabled="loadingPreviewData"
+                    @click.stop.prevent="preview('old_' + index, item.item_id)"
                   >
                     <FontAwesomeIcon
-                      v-if="!loadingPreviewData"
-                      class="examples_icon"
-                      :icon="['far', 'eye']"
-                      @click.stop.prevent="preview('old_' + index, item.item_id)"
-                    />
-                    <FontAwesomeIcon
-                      v-else
                       class="examples_icon"
                       :icon="['far', 'eye']"
                     />
-                  </span>
+                  </button>
                   <span v-if="'old_' + index == selectedKey">
                     <FontAwesomeIcon
                       class="examples_icon"
@@ -197,22 +199,30 @@
                   </span>
                 </td>
                 <td class="clickable">
-                  <span :title="$t('examples.download.tooltip')">
+                  <button
+                    type="button"
+                    class="examples_button"
+                    :title="$t('examples.download.tooltip')"
+                    @click.stop.prevent="download(item.item_id)"
+                  >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'cloud-download-alt']"
-                      @click.stop.prevent="download(item.item_id)"
                     />
-                  </span>
+                  </button>
                 </td>
                 <td class="clickable">
-                  <span :title="$t('examples.copyToClipboard.tooltip')">
+                  <button
+                    type="button"
+                    class="examples_button"
+                    :title="$t('examples.copyToClipboard.tooltip')"
+                    @click.stop.prevent="copyToClipboard(item.item_id)"
+                  >
                     <FontAwesomeIcon
                       class="examples_icon"
                       :icon="['fas', 'clipboard']"
-                      @click.stop.prevent="copyToClipboard(item.item_id)"
                     />
-                  </span>
+                  </button>
                 </td>
               </tr>
             </template>
@@ -239,22 +249,19 @@
                     <span class="example_version">[{{ $t("examples.new") }}]</span>
                   </td>
                   <td class="clickable">
-                    <span
+                    <button
                       v-if="'new_' + (index + 5) != selectedKey"
+                      type="button"
+                      class="examples_button"
                       :title="$t('examples.preview.tooltip')"
+                      :disabled="loadingPreviewData"
+                      @click.stop.prevent="preview('new_' + (index + 5), item.new_item_id)"
                     >
                       <FontAwesomeIcon
-                        v-if="!loadingPreviewData"
-                        class="examples_icon"
-                        :icon="['far', 'eye']"
-                        @click.stop.prevent="preview('new_' + (index + 5), item.new_item_id)"
-                      />
-                      <FontAwesomeIcon
-                        v-else
                         class="examples_icon"
                         :icon="['far', 'eye']"
                       />
-                    </span>
+                    </button>
                     <span v-if="'new_' + (index + 5) == selectedKey">
                       <FontAwesomeIcon
                         class="examples_icon"
@@ -263,22 +270,30 @@
                     </span>
                   </td>
                   <td class="clickable">
-                    <span :title="$t('examples.download.tooltip')">
+                    <button
+                      type="button"
+                      class="examples_button"
+                      :title="$t('examples.download.tooltip')"
+                      @click.stop.prevent="download(item.new_item_id)"
+                    >
                       <FontAwesomeIcon
                         class="examples_icon"
                         :icon="['fas', 'cloud-download-alt']"
-                        @click.stop.prevent="download(item.new_item_id)"
                       />
-                    </span>
+                    </button>
                   </td>
                   <td class="clickable">
-                    <span :title="$t('examples.copyToClipboard.tooltip')">
+                    <button
+                      type="button"
+                      class="examples_button"
+                      :title="$t('examples.copyToClipboard.tooltip')"
+                      @click.stop.prevent="copyToClipboard(item.new_item_id)"
+                    >
                       <FontAwesomeIcon
                         class="examples_icon"
                         :icon="['fas', 'clipboard']"
-                        @click.stop.prevent="copyToClipboard(item.new_item_id)"
                       />
-                    </span>
+                    </button>
                   </td>
                 </tr>
                 <tr
@@ -290,22 +305,19 @@
                     <span class="example_version">[{{ $t("examples.old") }}]</span>
                   </td>
                   <td class="clickable">
-                    <span
+                    <button
                       v-if="'old_' + (index + 5) != selectedKey"
+                      type="button"
+                      class="examples_button"
                       :title="$t('examples.preview.tooltip')"
+                      :disabled="loadingPreviewData"
+                      @click.stop.prevent="preview('old_' + (index + 5), item.item_id)"
                     >
                       <FontAwesomeIcon
-                        v-if="!loadingPreviewData"
-                        class="examples_icon"
-                        :icon="['far', 'eye']"
-                        @click.stop.prevent="preview('old_' + (index + 5), item.item_id)"
-                      />
-                      <FontAwesomeIcon
-                        v-else
                         class="examples_icon"
                         :icon="['far', 'eye']"
                       />
-                    </span>
+                    </button>
                     <span v-if="'old_' + (index + 5) == selectedKey">
                       <FontAwesomeIcon
                         class="examples_icon"
@@ -314,22 +326,30 @@
                     </span>
                   </td>
                   <td class="clickable">
-                    <span :title="$t('examples.download.tooltip')">
+                    <button
+                      type="button"
+                      class="examples_button"
+                      :title="$t('examples.download.tooltip')"
+                      @click.stop.prevent="download(item.item_id)"
+                    >
                       <FontAwesomeIcon
                         class="examples_icon"
                         :icon="['fas', 'cloud-download-alt']"
-                        @click.stop.prevent="download(item.item_id)"
                       />
-                    </span>
+                    </button>
                   </td>
                   <td class="clickable">
-                    <span :title="$t('examples.copyToClipboard.tooltip')">
+                    <button
+                      type="button"
+                      class="examples_button"
+                      :title="$t('examples.copyToClipboard.tooltip')"
+                      @click.stop.prevent="copyToClipboard(item.item_id)"
+                    >
                       <FontAwesomeIcon
                         class="examples_icon"
                         :icon="['fas', 'clipboard']"
-                        @click.stop.prevent="copyToClipboard(item.item_id)"
                       />
-                    </span>
+                    </button>
                   </td>
                 </tr>
               </template>
@@ -462,6 +482,12 @@ onBeforeMount(() => {
 
 <style lang="scss">
 @import "@/scss/variables";
+
+.examples_button {
+    padding: 0;
+    border: none;
+    background: none;
+}
 
 .examples_icon {
     color: $primary;
