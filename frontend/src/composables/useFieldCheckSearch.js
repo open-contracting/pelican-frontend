@@ -34,7 +34,7 @@ export function useFieldCheckSearch() {
         _sort(
             checks,
             (a, b) => {
-                let comparison = a.coverageOkShare - b.coverageOkShare;
+                let comparison = a.coverageOkRatio - b.coverageOkRatio;
                 if (comparison === 0) {
                     comparison = a.coverage.total_count - b.coverage.total_count;
                 }
@@ -62,7 +62,7 @@ export function useFieldCheckSearch() {
                     return asc ? -1 : 1;
                 }
 
-                let comparison = a.qualityOkShare - b.qualityOkShare;
+                let comparison = a.qualityOkRatio - b.qualityOkRatio;
                 if (comparison === 0) {
                     comparison = a.quality.total_count - b.quality.total_count;
                 }

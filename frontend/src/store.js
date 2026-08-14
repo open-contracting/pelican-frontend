@@ -352,13 +352,13 @@ export default createStore({
             return new Promise((resolve) => {
                 commit("setFieldLevelStats", null);
 
-                const okShare = (item) => {
-                    const result = (item.passed_count / item.total_count) * 100;
+                const okRatio = (item) => {
+                    const result = item.passed_count / item.total_count;
                     return Number.isNaN(result) ? 0 : result;
                 };
 
-                const failedShare = (item) => {
-                    const result = (item.failed_count / item.total_count) * 100;
+                const failedRatio = (item) => {
+                    const result = item.failed_count / item.total_count;
                     return Number.isNaN(result) ? 0 : result;
                 };
 
@@ -372,10 +372,10 @@ export default createStore({
                             data.push({
                                 ...item,
                                 path: key,
-                                coverageOkShare: okShare(item.coverage),
-                                coverageFailedShare: failedShare(item.coverage),
-                                qualityOkShare: okShare(item.quality),
-                                qualityFailedShare: failedShare(item.quality),
+                                coverageOkRatio: okRatio(item.coverage),
+                                coverageFailedRatio: failedRatio(item.coverage),
+                                qualityOkRatio: okRatio(item.quality),
+                                qualityFailedRatio: failedRatio(item.quality),
                             });
                             resolve();
                         }

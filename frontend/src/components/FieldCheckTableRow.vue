@@ -16,7 +16,7 @@
         <div
           class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end"
         >
-          <span class="field_check_result_value">{{ formatPercentage(check.coverageOkShare) }}</span>
+          <span class="field_check_result_value">{{ formatPercentage(check.coverageOkRatio) }}</span>
         </div>
         <div
           class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
@@ -26,8 +26,8 @@
         >
           <span class="field_check_bar_envelope">
             <ProgressBar
-              :ok="check.coverageOkShare"
-              :failed="check.coverageFailedShare"
+              :ok="check.coverageOkRatio * 100"
+              :failed="check.coverageFailedRatio * 100"
             />
           </span>
         </div>
@@ -43,7 +43,7 @@
           <div
             class="col col-3 col-lg-2 col-xl-2 field_check_result d-flex align-items-center justify-content-end"
           >
-            <span class="field_check_result_value">{{ formatPercentage(check.qualityOkShare) }}</span>
+            <span class="field_check_result_value">{{ formatPercentage(check.qualityOkRatio) }}</span>
           </div>
           <div
             class="col col-9 col-lg-7 col-xl-5 col-xxl-4 col-xxxxl-3 numeric field_check_count d-flex align-items-center justify-content-end"
@@ -54,8 +54,8 @@
             <span class="field_check_bar_envelope">
               <ProgressBar
                 v-if="check.quality.total_count"
-                :ok="check.qualityOkShare"
-                :failed="check.qualityFailedShare"
+                :ok="check.qualityOkRatio * 100"
+                :failed="check.qualityFailedRatio * 100"
               />
             </span>
           </div>
