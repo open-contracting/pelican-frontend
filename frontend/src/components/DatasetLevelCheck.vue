@@ -103,15 +103,17 @@
                   id="top3_table"
                   class="table table-sm"
                 >
-                  <tr
-                    v-for="(item, index) in check.meta.most_frequent"
-                    :key="index"
-                  >
-                    <td>{{ item.value_str }}</td>
-                    <td class="text-end numeric">
-                      {{ formatPercentage2D(item.share) }}
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr
+                      v-for="(item, index) in check.meta.most_frequent"
+                      :key="index"
+                    >
+                      <td>{{ item.value_str }}</td>
+                      <td class="text-end numeric">
+                        {{ formatPercentage2D(item.share) }}
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -258,8 +260,8 @@ function detail() {
     font-weight: 700;
 }
 
-#top3_table > tr:nth-child(1) > td {
-    border-top: none;
+#top3_table > tbody > tr:last-child > td {
+    border-bottom: none;
 }
 
 .biggest_share .total_share {
