@@ -473,7 +473,7 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
 
             self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {"phase": None, "state": None})
+            self.assertJSONEqual(response.text, {"phase": "", "state": ""})
 
     def test_datasets_status(self):
         dataset = self.create(Dataset, name="anything")
