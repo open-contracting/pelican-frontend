@@ -76,7 +76,7 @@ googleapis-common-protos==1.65.0
     # via
     #   -r requirements_base.txt
     #   google-api-core
-gunicorn[setproctitle]==26.0.0
+gunicorn==26.0.0
     # via -r requirements_base.txt
 httplib2==0.32.0
     # via
@@ -115,9 +115,7 @@ numpy==2.3.1
     #   contourpy
     #   matplotlib
 orjson==3.11.6
-    # via
-    #   -r requirements_base.txt
-    #   yapw
+    # via -r requirements_base.txt
 packaging==23.1
     # via
     #   -r requirements_base.txt
@@ -141,7 +139,7 @@ protobuf==5.29.6
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
-psycopg[c]==3.3.4
+psycopg==3.3.4
     # via
     #   -r requirements.in
     #   -r requirements_base.txt
@@ -189,9 +187,7 @@ rpds-py==0.18.0
 sentry-sdk==2.8.0
     # via -r requirements_base.txt
 setproctitle==1.3.7
-    # via
-    #   -r requirements_base.txt
-    #   gunicorn
+    # via -r requirements_base.txt
 shortuuid==1.0.1
     # via -r requirements_base.txt
 simplejson==3.16.0
@@ -219,5 +215,5 @@ urllib3==2.7.0
     #   -r requirements_base.txt
     #   requests
     #   sentry-sdk
-yapw[perf]==0.1.4
+yapw==0.1.4
     # via -r requirements_base.txt
