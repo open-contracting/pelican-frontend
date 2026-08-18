@@ -7,14 +7,8 @@
   },
   "formatter": {
     "indentStyle": "space",
-    "indentWidth": 4,
     "lineWidth": 119,
     "includes": ["**", "!release-schema.json"]
-  },
-  "json": {
-    "formatter": {
-      "indentWidth": 2
-    }
   },
   "overrides": [
     {
