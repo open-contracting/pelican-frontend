@@ -1,0 +1,17 @@
+dj-database-url
+django-cors-headers
+django<5.3
+djangorestframework
+drf-spectacular
+jsonref
+google-api-python-client
+google-auth
+gunicorn[setproctitle]
+lxml
+matplotlib
+pillow
+psycopg
+sentry-sdk
+shortuuid
+simplejson
+yapw[perf]

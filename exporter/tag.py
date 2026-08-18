@@ -170,8 +170,8 @@ class TemplateTag(Tag):
         for full_tag in full_tags:
             try:
                 expression = TagExpression.parse(full_tag)
-            except TagSyntaxError as er:
-                raise er.fill(full_tag, self.arguments["template"]) from er
+            except TagSyntaxError as e:
+                raise e.fill(full_tag, self.arguments["template"]) from e
 
             tag_class = tags_lookup.get(expression.name)
             if tag_class is None:
@@ -186,17 +186,17 @@ class TemplateTag(Tag):
             for name, value in expression.arguments.items():
                 try:
                     tag.set_argument(name, value)
-                except TagArgumentError as er:
-                    raise er.fill(full_tag, self.arguments["template"]) from er
+                except TagArgumentError as e:
+                    raise e.fill(full_tag, self.arguments["template"]) from e
 
             try:
                 tag.finalize_arguments()
-            except CheckNotComputedError as er:
+            except CheckNotComputedError as e:
                 tag = generate_error_template_tag(
-                    f"WARNING: Check {er!s} was not computed. Please check your dataset.",
+                    f"WARNING: Check {e!s} was not computed. Please check your dataset.",
                 )(self.gdocs, self.dataset_id)
                 tag.finalize_arguments()
-                failed_tags.append(str(er))
+                failed_tags.append(str(e))
 
             tags_mapping[full_tag] = tag
 
@@ -222,18 +222,18 @@ class TemplateTag(Tag):
                 try:
                     result, sub_failed_tags = tag.validate_and_render(new_data)
                     failed_tags += sub_failed_tags
-                except TagError as er:
-                    raise er.fill(full_tag, self.arguments["template"]) from er
-                except CheckNotComputedError as er:
+                except TagError as e:
+                    raise e.fill(full_tag, self.arguments["template"]) from e
+                except CheckNotComputedError as e:
                     document.set_text("Element could not be computed", full_tag)
-                    failed_tags.append(str(er))
+                    failed_tags.append(str(e))
                     continue
                 document.merge(result, full_tag)
             else:
                 try:
                     result = tag.validate_and_render(new_data)
-                except MissingArgumentError as er:
-                    raise er.fill(full_tag, self.arguments["template"]) from er
+                except MissingArgumentError as e:
+                    raise e.fill(full_tag, self.arguments["template"]) from e
 
                 if isinstance(result, list) and all(isinstance(el, etree._Element) for el in result):
                     document.set_elements(result, full_tag)

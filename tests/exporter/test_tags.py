@@ -1,4 +1,5 @@
 from django.test import SimpleTestCase
+from django.utils import translation
 
 from exporter.exceptions import TagError
 from exporter.leaf_tags.field import name
@@ -40,6 +41,7 @@ class Tests(SimpleTestCase):
             "'coverageEmpty', 'coverageSet', 'quality'.",
         )
 
+    @translation.override(None)
     def test_success(self):
         for level, infix in (
             ("coverageEmpty", "non_empty"),

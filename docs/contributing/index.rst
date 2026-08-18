@@ -100,7 +100,7 @@ If you edit ``views.py``, regenerate the OpenAPI document by running the server 
 Pelican backend integration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__'s database is treated as a read-only `legacy database <https://docs.djangoproject.com/en/4.2/howto/legacy-databases/>`__, with ``managed = False`` in all model's ``Meta`` class, and with a ``DATABASE_ROUTERS`` setting that routes queries to its database.
+`Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__'s database is treated as a read-only `legacy database <https://docs.djangoproject.com/en/stable/howto/legacy-databases/>`__, with ``managed = False`` in all model's ``Meta`` class, and with a ``DATABASE_ROUTERS`` setting that routes queries to its database.
 
 To update ``api/models.py`` following changes to Pelican backend's database schema:
 

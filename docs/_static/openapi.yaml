@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: ""
+  title: ''
   version: 0.0.0
 paths:
   /api/data_items/{id}/:
@@ -8,336 +8,409 @@ paths:
       operationId: data_items_retrieve
       description: Return OCDS data that passed or failed a check.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - data_items
+      - data_items
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DataItem"
-          description: ""
+                $ref: '#/components/schemas/DataItem'
+          description: ''
   /api/datasets/:
     get:
       operationId: datasets_list
       description: Return all datasets with their status and filter metadata.
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Dataset"
-          description: ""
+                  $ref: '#/components/schemas/Dataset'
+          description: ''
     post:
       operationId: datasets_create
       description: Publish a message to RabbitMQ to create a dataset.
       tags:
-        - datasets
+      - datasets
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateDataset"
+              $ref: '#/components/schemas/CreateDataset'
         required: true
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "202":
+        '202':
           description: No response body
+        '404':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
   /api/datasets/{id}/:
     get:
       operationId: datasets_retrieve
       description: Return the dataset with its status and filter metadata.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Dataset"
-          description: ""
+                $ref: '#/components/schemas/Dataset'
+          description: ''
     delete:
       operationId: datasets_destroy
       description: Publish a message to RabbitMQ to wipe the dataset.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "202":
+        '202':
           description: No response body
   /api/datasets/{id}/compiled_release_level/{name}/:
     get:
       operationId: datasets_compiled_release_level_retrieve
       description: Return a report and examples of one compiled release-level check.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-        - in: path
-          name: name
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
+  /api/datasets/{id}/compiled_release_level/{name}/failures/:
+    get:
+      operationId: datasets_compiled_release_level_failures_retrieve
+      description: Return, one OCID per line, the compiled releases failing the compiled
+        release-level check.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+      tags:
+      - datasets
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: ''
   /api/datasets/{id}/compiled_release_level_report/:
     get:
       operationId: datasets_compiled_release_level_report_retrieve
       description: Return a report of the dataset's compiled release-level checks.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
   /api/datasets/{id}/dataset_level_report/:
     get:
       operationId: datasets_dataset_level_report_retrieve
       description: Return a report of the dataset's dataset-level checks.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
   /api/datasets/{id}/field_level/{name}/:
     get:
       operationId: datasets_field_level_retrieve
       description: Return a report and examples of one field-level check.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-        - in: path
-          name: name
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
+  /api/datasets/{id}/field_level/{name}/failures/:
+    get:
+      operationId: datasets_field_level_failures_retrieve
+      description: Return, one OCID per line, the compiled releases failing the field-level
+        check.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - coverage
+          - quality
+          default: quality
+        description: The type of check
+      tags:
+      - datasets
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: ''
   /api/datasets/{id}/field_level_report/:
     get:
       operationId: datasets_field_level_report_retrieve
       description: Return a report of the dataset's field-level checks.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
   /api/datasets/{id}/filter/:
     post:
       operationId: datasets_filter_create
       description: Publish a message to RabbitMQ to create a filtered dataset.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FilterDataset"
+              $ref: '#/components/schemas/FilterDataset'
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "202":
+        '202':
           description: No response body
   /api/datasets/{id}/metadata/:
     get:
       operationId: datasets_metadata_retrieve
       description: Return the dataset's collection metadata.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
   /api/datasets/{id}/status/:
     get:
       operationId: datasets_status_retrieve
-      description:
-        'Return the dataset''s status, as an object like `{"phase": "CHECKED",
+      description: 'Return the dataset''s status, as an object like `{"phase": "CHECKED",
         "state": "OK"}`, or `{}` if not set.'
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Status"
-          description: ""
+                $ref: '#/components/schemas/Status'
+          description: ''
   /api/datasets/{id}/time_based_report/:
     get:
       operationId: datasets_time_based_report_retrieve
       description: Return a report of the dataset's time-based checks.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
-          description: ""
+          description: ''
   /api/datasets/find_by_name/:
     get:
       operationId: datasets_find_by_name_retrieve
       description: |-
-        Return the ID of the dataset with the name given in the `name` query string parameter, as an object like
-        `{"id": 123}`, or `{}` if no name matches.
+        Return the ID of the dataset with the name given in the `name` query string parameter, as an object.
+
+        ``{"id": 123}`` for example, or ``{}`` if no name matches.
       tags:
-        - datasets
+      - datasets
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
@@ -345,7 +418,7 @@ paths:
                 properties:
                   id:
                     type: integer
-          description: ""
+          description: ''
   /api/schema/:
     get:
       operationId: schema_retrieve
@@ -355,28 +428,28 @@ paths:
         - YAML: application/vnd.oai.openapi
         - JSON: application/vnd.oai.openapi+json
       parameters:
-        - in: query
-          name: format
-          schema:
-            type: string
-            enum:
-              - json
-              - yaml
-        - in: query
-          name: lang
-          schema:
-            type: string
-            enum:
-              - en
-              - es
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - en
+          - es
       tags:
-        - schema
+      - schema
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/vnd.oai.openapi:
               schema:
@@ -394,7 +467,7 @@ paths:
               schema:
                 type: object
                 additionalProperties: {}
-          description: ""
+          description: ''
 components:
   schemas:
     CreateDataset:
@@ -413,8 +486,8 @@ components:
           type: integer
           description: The number of compiled releases to import from Kingfisher Process
       required:
-        - collection_id
-        - name
+      - collection_id
+      - name
     DataItem:
       type: object
       properties:
@@ -423,8 +496,8 @@ components:
           readOnly: true
         data: {}
       required:
-        - data
-        - id
+      - data
+      - id
     Dataset:
       type: object
       properties:
@@ -459,13 +532,13 @@ components:
           type: string
         filter_message: {}
       required:
-        - filter_message
-        - id
-        - name
-        - parent_id
-        - parent_name
-        - phase
-        - state
+      - filter_message
+      - id
+      - name
+      - parent_id
+      - parent_name
+      - phase
+      - state
     FilterDataset:
       type: object
       properties:
@@ -493,11 +566,11 @@ components:
           description: A SQL ILIKE pattern for the procuring entity's name
     PhaseEnum:
       enum:
-        - CONTRACTING_PROCESS
-        - DATASET
-        - TIME_VARIANCE
-        - CHECKED
-        - DELETED
+      - CONTRACTING_PROCESS
+      - DATASET
+      - TIME_VARIANCE
+      - CHECKED
+      - DELETED
       type: string
       description: |-
         * `CONTRACTING_PROCESS` - Contracting Process
@@ -507,8 +580,8 @@ components:
         * `DELETED` - Deleted
     StateEnum:
       enum:
-        - IN_PROGRESS
-        - OK
+      - IN_PROGRESS
+      - OK
       type: string
       description: |-
         * `IN_PROGRESS` - In Progress
@@ -517,12 +590,12 @@ components:
       type: object
       properties:
         state:
-          $ref: "#/components/schemas/StateEnum"
+          $ref: '#/components/schemas/StateEnum'
         phase:
-          $ref: "#/components/schemas/PhaseEnum"
+          $ref: '#/components/schemas/PhaseEnum'
       required:
-        - phase
-        - state
+      - phase
+      - state
   securitySchemes:
     basicAuth:
       type: http
