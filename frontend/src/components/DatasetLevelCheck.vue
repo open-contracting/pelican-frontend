@@ -54,7 +54,7 @@
             <br>
             <div class="undefined_title">
               {{ $t("insufficientData.title") }}
-              <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')" />
+              <Tooltip :text="$t('datasetLevel.' + check.name + '.descriptionLong')" />
             </div>
             <p v-html="$t('insufficientData.description')" />
           </div>
@@ -69,7 +69,7 @@
             <br>
             <div class="undefined_title">
               {{ $t("incompatibleCheckVersion.title") }}
-              <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')" />
+              <Tooltip :text="$t('datasetLevel.' + check.name + '.descriptionLong')" />
             </div>
             <p v-html="$t('incompatibleCheckVersion.description')" />
           </div>

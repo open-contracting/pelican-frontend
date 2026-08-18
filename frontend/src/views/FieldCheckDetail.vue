@@ -9,12 +9,12 @@
       <template v-for="(c, k) in check.coverage.checks" :key="k">
         <h5>
           <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
-          &ldquo;{{ $t("fieldDetail.coverage." + k + ".count_header") }}&rdquo; &nbsp;
+          &ldquo;{{ $t("fieldDetail.coverage." + k + ".name") }}&rdquo; &nbsp;
           <span class="bold">
             {{ formatNumber(c.passed_count + c.failed_count) }}
           </span>
                     &nbsp;
-          <Tooltip :text="$t('fieldDetail.coverage.' + k + '.count_header_tooltip')" />
+          <Tooltip :text="$t('fieldDetail.coverage.' + k + '.description')" />
         </h5>
         <CheckDetailResultBox
           :check="c"
@@ -28,12 +28,12 @@
       <template v-for="(c, k) in check.quality.checks" :key="k">
         <h5>
           <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
-          &ldquo;{{ $t("fieldDetail.quality." + k + ".count_header") }}&rdquo; &nbsp;
+          &ldquo;{{ $t("fieldDetail.quality." + k + ".name") }}&rdquo; &nbsp;
           <span class="bold">
             {{ formatNumber(c.passed_count + c.failed_count) }}
           </span>
                     &nbsp;
-          <Tooltip :text="$t('fieldDetail.quality.' + k + '.count_header_tooltip')" />
+          <Tooltip :text="$t('fieldDetail.quality.' + k + '.description')" />
         </h5>
         <CheckDetailResultBox
           :check="c"
@@ -143,7 +143,7 @@ const exampleSections = computed(() => {
                 sections.push({
                     id: `coverage_${key}`,
                     prefix: t("fieldDetail.coverage.failureSamplesPrefix"),
-                    header: t(`fieldDetail.coverage.${key}.count_header`),
+                    header: t(`fieldDetail.coverage.${key}.name`),
                     examples: failed.map((val) => val.meta),
                     group: "coverage",
                 });
@@ -156,7 +156,7 @@ const exampleSections = computed(() => {
                 sections.push({
                     id: `quality_${key}`,
                     prefix: t("fieldDetail.quality.failureSamplesPrefix"),
-                    header: t(`fieldDetail.quality.${key}.count_header`),
+                    header: t(`fieldDetail.quality.${key}.name`),
                     examples: failed.map((val) => val.meta),
                     group: "quality",
                 });

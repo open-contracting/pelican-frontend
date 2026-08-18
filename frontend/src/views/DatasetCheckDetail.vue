@@ -21,7 +21,7 @@
       </div>
       <p
         class="description"
-        v-html="$t('datasetLevel.' + check.name + '.description_long')"
+        v-html="$t('datasetLevel.' + check.name + '.descriptionLong')"
       />
 
       <div
