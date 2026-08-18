@@ -12,6 +12,7 @@ from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.validators import UniqueValidator
 
 from api.models import (
     DataItem,
@@ -143,7 +144,10 @@ class StatusSerializer(serializers.Serializer):
 
 
 class CreateDatasetSerializer(serializers.Serializer):
-    name = serializers.CharField(help_text="The name to assign to the dataset")
+    name = serializers.CharField(
+        help_text="The name to assign to the dataset",
+        validators=[UniqueValidator(queryset=Dataset.objects.all())],
+    )
     collection_id = serializers.IntegerField(help_text="The compiled collection ID in Kingfisher Process")
     ancestor_id = serializers.IntegerField(
         required=False, help_text="The ID of the previous report in Pelican, for time-based checks"

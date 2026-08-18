@@ -38,7 +38,7 @@ class CreateTests(PelicanTestCase):
 
     @patch("api.views.publish")
     def test_datasets_create(self, publish):
-        with self.assertNumQueries(0, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
+        with self.assertNumQueries(1, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
             response = self.client.post(
                 "/api/datasets/", {"name": "anything", "collection_id": 123, "xxx": "xxx"}, "application/json"
             )
@@ -51,7 +51,7 @@ class CreateTests(PelicanTestCase):
 
     @patch("api.views.publish")
     def test_datasets_create_nonexistent_collection(self, publish):
-        with self.assertNumQueries(0, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
+        with self.assertNumQueries(1, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
             response = self.client.post(
                 "/api/datasets/", {"name": "anything", "collection_id": 999}, "application/json"
             )
@@ -62,13 +62,26 @@ class CreateTests(PelicanTestCase):
 
     @patch("api.views.publish")
     def test_datasets_create_nonexistent_ancestor(self, publish):
-        with self.assertNumQueries(1, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
+        with self.assertNumQueries(2, using="pelican_backend"), self.assertNumQueries(1, using="kingfisher_process"):
             response = self.client.post(
                 "/api/datasets/", {"name": "anything", "collection_id": 123, "ancestor_id": 1}, "application/json"
             )
 
             self.assertEqual(response.status_code, 404)
             self.assertEqual(response.json(), "ancestor_id 1 matches no Pelican reports")
+            publish.assert_not_called()
+
+    @patch("api.views.publish")
+    def test_datasets_create_duplicate_name(self, publish):
+        self.create(Dataset, name="anything")
+
+        with self.assertNumQueries(1, using="pelican_backend"), self.assertNumQueries(0, using="kingfisher_process"):
+            response = self.client.post(
+                "/api/datasets/", {"name": "anything", "collection_id": 123}, "application/json"
+            )
+
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.json(), {"name": ["This field must be unique."]})
             publish.assert_not_called()
 
 
@@ -277,7 +290,7 @@ class ViewsTests(PelicanTestCase):
 
     @patch("api.views.publish")
     def test_datasets_create_invalid(self, publish):
-        with self.assertNumQueries(0, using="pelican_backend"):
+        with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.post(
                 "/api/datasets/", {"name": "anything", "collection_id": "xxx"}, "application/json"
             )
