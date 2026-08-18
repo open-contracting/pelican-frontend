@@ -25,43 +25,16 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import DatasetHeader from "@/components/DatasetHeader.vue";
-import MainMenu from "@/views/layouts/MainMenu.vue";
-
-export default {
-    name: "Dashboard",
-    components: { MainMenu, DatasetHeader },
-    data: () => ({}),
-    computed: {
-        dataset() {
-            if (this.$store.getters.dataset != null) {
-                return this.$store.getters.dataset;
-            }
-            return [];
-        },
-    },
-};
+import MainMenu from "./MainMenu.vue";
 </script>
 
-<style lang="scss">
-@import "src/scss/main";
+<style scoped lang="scss">
 .preview {
     background-color: white;
     position: relative;
     font-size: 12px;
-}
-
-.vjs-tree {
-    font-family: $font-family-mono;
-    font-size: 13px;
-}
-
-.examples .divider {
-    border-top: solid 1px $na_light_color;
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom: 20px;
 }
 
 .preview_envelope {
@@ -73,19 +46,9 @@ export default {
     padding: 30px;
 }
 
-@media (max-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 80px;
-    }
-
+@include media-breakpoint-down(xl) {
     .preview_envelope {
         padding-left: 50px;
-    }
-}
-
-@media (min-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 215px;
     }
 }
 </style>

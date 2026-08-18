@@ -45,3 +45,6 @@ ignore-variadic-names = true
 
 [tool.coverage.run]
 omit = ["*/translations.py"]
+
+[tool.uv.pip]
+exclude-newer = "1 week"

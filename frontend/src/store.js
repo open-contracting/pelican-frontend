@@ -1,13 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
-
-const axios = require("axios");
-
+import axios from "axios";
+import { createStore } from "vuex";
 import { CONFIG } from "./config.js";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
     state: {
         dataset: null,
         resourceLevelStats: null,
@@ -357,13 +352,13 @@ export default new Vuex.Store({
             return new Promise((resolve) => {
                 commit("setFieldLevelStats", null);
 
-                const okShare = (item) => {
-                    const result = (item.passed_count / item.total_count) * 100;
+                const okRatio = (item) => {
+                    const result = item.passed_count / item.total_count;
                     return Number.isNaN(result) ? 0 : result;
                 };
 
-                const failedShare = (item) => {
-                    const result = (item.failed_count / item.total_count) * 100;
+                const failedRatio = (item) => {
+                    const result = item.failed_count / item.total_count;
                     return Number.isNaN(result) ? 0 : result;
                 };
 
@@ -374,15 +369,14 @@ export default new Vuex.Store({
                         const data = [];
                         for (const key in response.data) {
                             const item = response.data[key];
-                            data.push(
-                                Object.assign({}, item, {
-                                    path: key,
-                                    coverageOkShare: okShare(item.coverage),
-                                    coverageFailedShare: failedShare(item.coverage),
-                                    qualityOkShare: okShare(item.quality),
-                                    qualityFailedShare: failedShare(item.quality),
-                                }),
-                            );
+                            data.push({
+                                ...item,
+                                path: key,
+                                coverageOkRatio: okRatio(item.coverage),
+                                coverageFailedRatio: failedRatio(item.coverage),
+                                qualityOkRatio: okRatio(item.quality),
+                                qualityFailedRatio: failedRatio(item.quality),
+                            });
                             resolve();
                         }
 

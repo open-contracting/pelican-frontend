@@ -9,7 +9,7 @@
 
     <div class="checked_fields_box">
       <div class="checked_fields_icon">
-        <font-awesome-icon
+        <FontAwesomeIcon
           :icon="['fas', 'hand-point-right']"
           :style="{ color: '#FDC926' }"
         />
@@ -23,53 +23,53 @@
       {{ $t("field.all") }}
     </h4>
 
-    <b-row
+    <BRow
       class="action_bar"
       align-v="center"
     >
-      <b-col class="text-left">
+      <BCol class="text-start">
         <SearchInput
           :placeholder="$t('field.search')"
           :preset="search"
-          :on-update="search => $store.commit('setFieldCheckSearch', search)"
+          @search="$store.commit('setFieldCheckSearch', $event)"
         />
-      </b-col>
-      <b-col class="text-right">
-        <b-button-group v-if="layout == 'table'">
+      </BCol>
+      <BCol class="text-end">
+        <BButtonGroup v-if="layout == 'table'">
           <button
             :class="['btn', 'reset-table-sorting']"
             :title="$t('field.resetTableSorting')"
             @click="resetTableSorting()"
           >
-            <font-awesome-icon icon="sort-numeric-down" />
+            <FontAwesomeIcon icon="sort-numeric-down" />
           </button>
-        </b-button-group>
+        </BButtonGroup>
 
-        <b-button-group>
+        <BButtonGroup>
           <button
             :class="['btn', { active: layout == 'table' }]"
             :title="$t('field.tableLayout')"
             @click="$store.commit('setFieldCheckLayout', 'table')"
           >
-            <font-awesome-icon icon="bars" />
+            <FontAwesomeIcon icon="bars" />
           </button>
           <button
             :class="['btn', { active: layout == 'tree' }]"
             :title="$t('field.treeLayout')"
             @click="$store.commit('setFieldCheckLayout', 'tree')"
           >
-            <font-awesome-icon icon="align-right" />
+            <FontAwesomeIcon icon="align-right" />
           </button>
-        </b-button-group>
+        </BButtonGroup>
         <FilterDropdown
           :filter-names="filterNames"
           :start-index="filterIndex"
           @newSelectedIndex="newSelectedIndex => (filterIndex = newSelectedIndex)"
         />
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
 
-    <div class="field_result_box">
+    <div class="check_list_box">
       <FieldCheckTable
         v-if="layout == 'table'"
         ref="field-check-table"
@@ -77,76 +77,62 @@
       />
       <FieldCheckTree
         v-else-if="layout == 'tree'"
-        ref="field-check-tree"
         :filter="filters[filterIndex]"
       />
     </div>
   </dashboard>
 </template>
 
-<script>
+<script setup>
+import { BButtonGroup, BCol, BRow } from "bootstrap-vue-next";
+import { computed, onBeforeMount, ref, useTemplateRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useStore } from "vuex";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import SearchInput from "@/components/SearchInput.vue";
-import Dashboard from "@/views/layouts/Dashboard.vue";
+import Dashboard from "./layouts/Dashboard.vue";
 
-export default {
-    name: "Field",
-    components: {
-        Dashboard,
-        FieldCheckTable,
-        FieldCheckTree,
-        SearchInput,
-        FilterDropdown,
-    },
-    data: function () {
-        return {
-            filterIndex: 0,
-            filterNames: [
-                this.$t("field.filterDropdown.all"),
-                this.$t("field.filterDropdown.coverageFailedOnly"),
-                this.$t("field.filterDropdown.qualityFailedOnly"),
-                this.$t("field.filterDropdown.passedOnly"),
-            ],
-            filters: [
-                () => true,
-                (item) => item.coverage.failed_count > 0,
-                (item) => item.quality.failed_count > 0,
-                (item) =>
-                    item.coverage.failed_count === 0 &&
-                    item.quality.failed_count === 0 &&
-                    item.coverage.passed_count > 0,
-            ],
-        };
-    },
-    computed: {
-        layout: function () {
-            return this.$store.getters.fieldCheckLayout;
-        },
-        search: function () {
-            return this.$store.getters.fieldCheckSearch;
-        },
-    },
-    watch: {
-        filterIndex: function (newFilterIndex) {
-            this.$store.commit("setFieldLevelFilterIndex", newFilterIndex);
-        },
-    },
-    created() {
-        this.filterIndex = this.$store.getters.fieldLevelFilterIndex;
-    },
-    methods: {
-        resetTableSorting: function () {
-            this.$refs["field-check-table"].resetSorting();
-        },
-    },
-};
+const store = useStore();
+const { t } = useI18n();
+
+const fieldCheckTableRef = useTemplateRef("field-check-table");
+
+const filterIndex = ref(0);
+
+const filterNames = [
+    t("field.filterDropdown.all"),
+    t("field.filterDropdown.coverageFailedOnly"),
+    t("field.filterDropdown.qualityFailedOnly"),
+    t("field.filterDropdown.passedOnly"),
+];
+
+const filters = [
+    () => true,
+    (item) => item.coverage.failed_count > 0,
+    (item) => item.quality.failed_count > 0,
+    (item) => item.coverage.failed_count === 0 && item.quality.failed_count === 0 && item.coverage.passed_count > 0,
+];
+
+const layout = computed(() => store.getters.fieldCheckLayout);
+const search = computed(() => store.getters.fieldCheckSearch);
+
+watch(filterIndex, (newFilterIndex) => {
+    store.commit("setFieldLevelFilterIndex", newFilterIndex);
+});
+
+onBeforeMount(() => {
+    filterIndex.value = store.getters.fieldLevelFilterIndex;
+});
+
+function resetTableSorting() {
+    fieldCheckTableRef.value.resetSorting();
+}
 </script>
 
-<style lang="scss">
-@import "src/scss/_variables";
-@import "src/scss/main";
+<style scoped lang="scss">
+@import "@/scss/_variables";
 
 .sub_headline {
     margin-bottom: 0px;
@@ -182,18 +168,6 @@ export default {
     vertical-align: -1px;
     color: $text-color;
     overflow: auto;
-}
-
-.field_result_box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
-    border: 0;
-}
-
-mark {
-    background-color: $primary !important;
 }
 
 .action_bar {

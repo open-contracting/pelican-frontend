@@ -8,25 +8,28 @@
         <div class="col col-10">
           <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
         </div>
-        <div class="col col-2">
+        <div class="col col-2 text-end">
           <span
             v-if="!reportOnly && check.result == true"
-            class="badge badge-pill ok_status"
+            class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
             v-if="!reportOnly && check.result == false"
-            class="badge badge-pill failed_status"
+            class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
       </div>
       <p
         class="description"
-        v-html="$t('datasetLevel.' + check.name + '.description_long')"
+        v-html="$t('datasetLevel.' + check.name + '.descriptionLong')"
       />
 
-      <div class="result_box">
+      <div
+        v-if="check.meta.reason == null"
+        class="result_box"
+      >
         <div v-if="checkType == 'bar'">
-          <BarChartBig :check="check" :ticks="ticks" />
+          <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
 
         <div v-if="checkType == 'unique'">
@@ -34,7 +37,7 @@
         </div>
 
         <div v-if="checkType == 'donut'">
-          <DonutChart :check="check" :limit="false" />
+          <CodeChart :check="check" :limit="false" />
         </div>
 
         <div v-if="checkType == 'top3'">
@@ -56,11 +59,11 @@
                 :key="index"
               >
                 <td>{{ item.value_str }}</td>
-                <td class="text-right numeric">
-                  {{ (item.share * 100) | formatPercentage2D }}
+                <td class="text-end numeric">
+                  {{ formatPercentage2D(item.share) }}
                 </td>
-                <td class="text-right numeric">
-                  {{ item.count | formatNumber }}
+                <td class="text-end numeric">
+                  {{ formatNumber(item.count) }}
                 </td>
               </tr>
             </tbody>
@@ -71,21 +74,21 @@
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_passed | formatNumber }}
+                {{ formatNumber(check.meta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.passed") }}
             </div>
 
             <div class="numeric_result color_failed col-4">
               <div class="check_numeric_value">
-                {{ (check.meta.total_processed - check.meta.total_passed) | formatNumber }}
+                {{ formatNumber(check.meta.total_processed - check.meta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.failed") }}
             </div>
 
             <div class="numeric_result color_na col-4">
               <div class="check_numeric_value">
-                {{ check.meta.total_processed | formatNumber }}
+                {{ formatNumber(check.meta.total_processed) }}
               </div>
               {{ $t("datasetLevel.numeric.processed") }}
             </div>
@@ -96,7 +99,7 @@
           v-if="checkType == 'biggest_share'"
           class="biggest_share"
         >
-          <div class="row text-left">
+          <div class="row text-start">
             <div class="col-7 specifics">
               <span
                 v-for="(item, index) in check.meta.specifics"
@@ -116,7 +119,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ (check.meta.ocid_share * 100) | formatPercentage2D }}
+                  {{ formatPercentage2D(check.meta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
@@ -133,7 +136,7 @@
           class="single_value_share"
         >
           <div class="row text-center">
-            <BarChartSingleValue
+            <FrequencyChart
               :check="check"
               :show-count="true"
             />
@@ -144,7 +147,6 @@
       <ExampleBoxes
         :example-sections="exampleSections"
         :loaded="true"
-        :preview-disabled="loadingPreviewData"
         @preview="preview"
       />
     </template>
@@ -152,7 +154,6 @@
     <template #preview>
       <h5>{{ $t("preview.metadata") }}</h5>
       <vue-json-pretty
-        :highlight-mouseover-node="true"
         :deep="3"
         :data="previewMetadata"
       />
@@ -164,7 +165,7 @@
       <span v-if="loadingPreviewData">
         <div class="result_box loader text-center">
           <div class="spinner">
-            <b-spinner
+            <BSpinner
               variant="primary"
               style="width: 4rem; height: 4rem"
               type="grow"
@@ -178,7 +179,6 @@
       <span v-else-if="previewData">
         <h5>{{ $t("preview.ocdsData") }}</h5>
         <vue-json-pretty
-          :highlight-mouseover-node="true"
           :deep="2"
           :data="previewData"
         />
@@ -187,141 +187,147 @@
   </dashboard-detail>
 </template>
 
-<script>
-import "vue-json-pretty/lib/styles.css";
+<script setup>
+import { BSpinner, useToast } from "bootstrap-vue-next";
+import { computed, onBeforeMount, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
-import BarChartBig from "@/components/BarChartBig.vue";
-import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
-import DonutChart from "@/components/DonutChart.vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
+import "vue-json-pretty/lib/styles.css";
+import CodeChart from "@/components/CodeChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
-import datasetMixin from "@/plugins/datasetMixins.js";
-import DashboardDetail from "@/views/layouts/DashboardDetail.vue";
+import FrequencyChart from "@/components/FrequencyChart.vue";
+import PercentileChart from "@/components/PercentileChart.vue";
+import { useFormatters } from "@/composables/useFormatters";
+import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
+import { orderedShares } from "@/util.js";
+import DashboardDetail from "./layouts/DashboardDetail.vue";
 
-export default {
-    name: "DatasetCheckDetail",
-    components: {
-        DonutChart,
-        BarChartBig,
-        VueJsonPretty,
-        DashboardDetail,
-        ExampleBoxes,
-        BarChartSingleValue,
-    },
-    mixins: [datasetMixin],
-    data: () => ({
-        check: null,
-        previewDataItemId: null,
-        previewMetadata: null,
-        exampleSections: null,
-        loadingPreviewData: false,
-    }),
-    computed: {
-        previewData() {
-            return this.$store.getters.dataItemById(this.previewDataItemId)?.data;
-        },
-        loaded() {
-            this.loadCheck();
+const { formatNumber, formatPercentage2D } = useFormatters();
 
-            return this.check != null;
-        },
-    },
-    created() {
-        this.loadCheck();
-    },
-    methods: {
-        preview: function (itemId) {
-            this.loadingPreviewData = true;
-            this.$store.dispatch("loadDataItem", itemId).finally(() => {
-                if (this.$store.getters.dataItemJSONLines(itemId) < 3000) {
-                    this.previewDataItemId = itemId;
-                } else {
-                    this.$alert(this.$t("preview.cannotDisplay"), null, "error");
-                    this.previewDataItemId = null;
-                }
+const route = useRoute();
+const store = useStore();
+const { t } = useI18n();
+const { create: showToast } = useToast();
 
-                this.loadingPreviewData = false;
-            });
-        },
-        loadCheck: function () {
-            this.check = this.$store.getters.datasetLevelCheckByName(this.$route.params.check);
+const check = ref(null);
+const previewDataItemId = ref(null);
+const previewMetadata = ref(null);
+const exampleSections = ref(null);
+const loadingPreviewData = ref(false);
+let previewRequest = 0;
 
-            if (this.check != null) {
-                this.previewMetadata = this.check.meta;
+const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);
+const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
+const ticks = computed(() => DATASET_CHECK_TICKS[check.value?.name]);
+const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
+const loaded = computed(() => {
+    loadCheck();
+    return check.value != null;
+});
 
-                if (this.checkType === "donut") {
-                    this.exampleSections = [];
-                    for (const key in this.shares) {
-                        if (this.shares[key][1].examples.length > 0) {
-                            this.exampleSections.push({
-                                header: this.shares[key][0],
-                                examples: this.shares[key][1].examples,
-                            });
-                        }
-                    }
-                }
+function preview(itemId) {
+    // A later click supersedes this one, whose response is then ignored.
+    const request = ++previewRequest;
+    loadingPreviewData.value = true;
+    store.dispatch("loadDataItem", itemId).finally(() => {
+        if (request !== previewRequest) {
+            return;
+        }
+        if (store.getters.dataItemJSONLines(itemId) < 3000) {
+            previewDataItemId.value = itemId;
+        } else {
+            showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
+            previewDataItemId.value = null;
+        }
+        loadingPreviewData.value = false;
+    });
+}
 
-                if (this.checkType === "bar") {
-                    this.exampleSections = [];
-                    for (const barKey in this.check.meta.examples) {
-                        if (this.check.meta.examples[barKey].length > 0) {
-                            this.exampleSections.push({
-                                header: this.$t(`datasetLevel.charts.label_${barKey}`),
-                                examples: this.check.meta.examples[barKey],
-                            });
-                        }
-                    }
-                }
+function loadCheck() {
+    check.value = store.getters.datasetLevelCheckByName(route.params.check);
 
-                if (this.checkType === "top3") {
-                    this.exampleSections = [];
-                    const mostFrequent = this.check.meta.most_frequent;
-                    for (const topKey in mostFrequent) {
-                        if (mostFrequent[topKey].examples.length > 0) {
-                            this.exampleSections.push({
-                                header: mostFrequent[topKey].value_str,
-                                examples: mostFrequent[topKey].examples,
-                            });
-                        }
-                    }
-                }
+    if (check.value != null) {
+        previewMetadata.value = check.value.meta;
 
-                if (this.checkType === "numeric") {
-                    this.exampleSections = [];
-                    const failed = this.check.meta.failed_examples;
-                    const passed = this.check.meta.passed_examples;
-
-                    if (failed.length > 0) {
-                        this.exampleSections.push({
-                            header: this.$t("datasetLevel.numeric.failedExamples"),
-                            examples: failed,
-                        });
-                    }
-
-                    if (passed.length > 0) {
-                        this.exampleSections.push({
-                            header: this.$t("datasetLevel.numeric.passedExamples"),
-                            examples: passed,
-                        });
-                    }
-                }
-
-                if (this.checkType === "biggest_share" || this.checkType === "single_value_share") {
-                    this.exampleSections = [];
-                    if (this.check.meta.examples.length > 0) {
-                        this.exampleSections.push({
-                            header: this.$t("datasetLevel.examples"),
-                            examples: this.check.meta.examples,
-                        });
-                    }
+        if (checkType.value === "donut") {
+            exampleSections.value = [];
+            const shares = orderedShares(check.value.meta.shares ?? {});
+            for (const key in shares) {
+                if (shares[key][1].examples.length > 0) {
+                    exampleSections.value.push({
+                        header: shares[key][0],
+                        examples: shares[key][1].examples,
+                    });
                 }
             }
-        },
-    },
-};
+        }
+
+        if (checkType.value === "bar") {
+            exampleSections.value = [];
+            for (const barKey in check.value.meta.examples) {
+                if (check.value.meta.examples[barKey].length > 0) {
+                    exampleSections.value.push({
+                        header: t(`datasetLevel.charts.label_${barKey}`),
+                        examples: check.value.meta.examples[barKey],
+                    });
+                }
+            }
+        }
+
+        if (checkType.value === "top3") {
+            exampleSections.value = [];
+            const mostFrequent = check.value.meta.most_frequent;
+            for (const topKey in mostFrequent) {
+                if (mostFrequent[topKey].examples.length > 0) {
+                    exampleSections.value.push({
+                        header: mostFrequent[topKey].value_str,
+                        examples: mostFrequent[topKey].examples,
+                    });
+                }
+            }
+        }
+
+        if (checkType.value === "numeric") {
+            exampleSections.value = [];
+            const failed = check.value.meta.failed_examples;
+            const passed = check.value.meta.passed_examples;
+
+            if (failed?.length > 0) {
+                exampleSections.value.push({
+                    header: t("datasetLevel.numeric.failedExamples"),
+                    examples: failed,
+                });
+            }
+
+            if (passed?.length > 0) {
+                exampleSections.value.push({
+                    header: t("datasetLevel.numeric.passedExamples"),
+                    examples: passed,
+                });
+            }
+        }
+
+        if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
+            exampleSections.value = [];
+            if (check.value.meta.examples?.length > 0) {
+                exampleSections.value.push({
+                    header: t("datasetLevel.examples"),
+                    examples: check.value.meta.examples,
+                });
+            }
+        }
+    }
+}
+
+onBeforeMount(() => {
+    loadCheck();
+});
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .ok_status {
     background-color: $ok_color;

@@ -4,6 +4,15 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    ignore:
-      - dependency-name: "vue"
-        update-types: ["version-update:semver-major"]
+    cooldown:
+      default-days: 7
+  - package-ecosystem: "npm"
+    directories:
+      - "/"
+      - "**/*"
+    schedule:
+      interval: "yearly"
+    allow:
+      - dependency-name: "knip"
+    cooldown:
+      default-days: 7

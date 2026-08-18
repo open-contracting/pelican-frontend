@@ -58,15 +58,15 @@ export const messages = {
         link: "Link",
         reason: "Reason",
         documentId: "Main template ID",
-        documentIdTooltip:
-            "<p>ID or URL of the main template in Google Docs</p><p>The template and sub-templates must be editable by {user}.</p>",
+        documentIdTooltip: "ID or URL of the main template in Google Docs",
+        documentIdPermissions: "The template and sub-templates must be editable by {user}.",
         folderId: "Export folder ID",
-        folderIdTooltip:
-            "<p>ID or URL of the folder to which to write the exported document in Google Drive</p><p>The folder must be writable by {user}.</p>",
+        folderIdTooltip: "ID or URL of the folder to which to write the exported document in Google Drive",
+        folderIdPermissions: "The folder must be writable by {user}.",
         reportName: "Export name",
-        reportNameTooltip: "<p>(optional) Name of the exported document in Google Docs</p>",
+        reportNameTooltip: "(optional) Name of the exported document in Google Docs",
         reportLanguage: "Export language",
-        reportLanguageTooltip: "<p>Language of the generated content in the exported document</p>",
+        reportLanguageTooltip: "Language of the generated content in the exported document",
         submit: "Export",
         errorReport: "Errors",
         warningList: "These checks were not calculated, and might yield empty sections in the template:",
@@ -124,7 +124,7 @@ export const messages = {
     },
     datasetLevel: {
         description:
-            "<p>These checks operate on a collection: all compiled releases from a given source at a single point in time. There are five types of checks:</p><ul><li><p><b>Distribution</b>: The distribution of a field's values suggests no omissions or inaccuracies. <i>Examples</i>: If all <code>procurementMethod</code> fields have a value of 'open', then the collection either omits or misreports non-open methods; if all <code>tender.status</code> fields have a value of 'active', then the collection either omits or misreports non-active statuses.</p></li><li><p><b>Repetition</b>: The repetition of a field's values suggests no data entry or mapping issues. <i>Examples</i>: If the contract value is zero 10% of the time, there might be a data mapping issue; if the award value is $25,000 10% of the time, there might be a data entry issue.</p></li><li><p><b>Uniqueness</b>: A field's values are unique across the collection.</p></li><li><p><b>Availability</b>: A random sample of URL values return no responses with HTTP error codes.</p></li><li><p><b>Related processes</b>: A related process reference field has a valid target within the collection, and its <code>title</code> is consistent with the target's <code>tender.title</code>.</p></li></ul><p>Some checks report distributions, but don't pass or fail; for example, the distribution of document types has no pass-fail criterion.</p><p>Some of these checks might, in principle, serve as red flags. The difference is that red flags are more sensitive. These checks have higher thresholds for failure; i.e. the data needs to be not only suspect (mild outliers) but <i>bad</i> (extreme outlier).</p>",
+            "<p>These checks operate on a collection: all compiled releases from a given source at a single point in time. There are five types of checks:</p><ul><li><p><b>Distribution</b>: The distribution of a field's values suggests no omissions or inaccuracies. <i>Examples</i>: If all <code>procurementMethod</code> fields have a value of 'open', then the collection either omits or misreports non-open methods; if all <code>tender.status</code> fields have a value of 'active', then the collection either omits or misreports non-active statuses.</p></li><li><p><b>Repetition</b>: The repetition of a field's values suggests no data entry or mapping issues. <i>Examples</i>: If the contract value is zero 10% of the time, there might be a data mapping issue; if the award value is {'$'}25,000 10% of the time, there might be a data entry issue.</p></li><li><p><b>Uniqueness</b>: A field's values are unique across the collection.</p></li><li><p><b>Availability</b>: A random sample of URL values return no responses with HTTP error codes.</p></li><li><p><b>Related processes</b>: A related process reference field has a valid target within the collection, and its <code>title</code> is consistent with the target's <code>tender.title</code>.</p></li></ul><p>Some checks report distributions, but don't pass or fail; for example, the distribution of document types has no pass-fail criterion.</p><p>Some of these checks might, in principle, serve as red flags. The difference is that red flags are more sensitive. These checks have higher thresholds for failure; i.e. the data needs to be not only suspect (mild outliers) but <i>bad</i> (extreme outlier).</p>",
         subheadline: "All Collection-Level Checks",
         examples: "Examples",
         ocid_share: "{share} from {total} ocids",
@@ -163,139 +163,139 @@ export const messages = {
                 name: "Tender status distribution",
                 description:
                     "Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 0.1% and 99% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>tender.status</code> values. The 'active' and 'complete' codes each occur in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             contracts_value_repetition: {
                 name: "Contracts value repetition",
                 description:
                     "Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Lists the 5 most frequent pairs of <code>contracts.value.amount</code> and <code>contracts.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if there are no pairs.</p>",
             },
             awards_value_repetition: {
                 name: "Awards value repetition",
                 description:
                     "Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Lists the 5 most frequent pairs of <code>awards.value.amount</code> and <code>awards.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if there are no pairs.</p>",
             },
             tender_value_repetition: {
                 name: "Tender value repetition",
                 description:
                     "Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Lists the 5 most frequent pairs of <code>tender.value.amount</code> and <code>tender.value.currency</code>. The 3 most frequent pairs appear in fewer than 10% of cases.</p><p>The test is skipped if there are no pairs.</p>",
             },
             buyer: {
                 name: "Buyer distribution",
                 description:
                     "Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification.",
-                description_long:
-                    "<p>Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>. For illustration purposes, the share of all buyers identified in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both present in fewer than 1,000 compiled releases.</p>",
+                descriptionLong:
+                    "<p>Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.id</code>. For illustration purposes, the share of all buyers identified in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.id</code> field is present in fewer than 1,000 compiled releases.</p>",
             },
             buyer_repetition: {
                 name: "Buyer repetition",
                 description:
                     "The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation.",
-                description_long:
-                    "<p>The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both present in fewer than 1,000 compiled releases.</p>",
+                descriptionLong:
+                    "<p>The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.id</code>.</p><p>The test is skipped if the <code>buyer.id</code> field is present in fewer than 1,000 compiled releases.</p>",
             },
             tender_value: {
                 name: "Tender value distribution",
                 description:
                     "The total value of the top 1% of tenders is less than the total value of the remaining tenders. Failure indicates extreme outliers in the top 1%.",
-                description_long:
+                descriptionLong:
                     "<p>The total value of the top 1% of tenders is less than the total value of the remaining tenders. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>",
             },
             awards_value: {
                 name: "Awards value distribution",
                 description:
                     "The total value of the top 1% of award values is less than the total value of the remaining award values. Failure indicates extreme outliers in the top 1%.",
-                description_long:
+                descriptionLong:
                     "<p>The total value of the top 1% of award values is less than the total value of the remaining award values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>",
             },
             contracts_value: {
                 name: "Contracts value distribution",
                 description:
                     "The total value of the top 1% of contract values is less than the total value of the remaining contract values. Failure indicates extreme outliers in the top 1%.",
-                description_long:
+                descriptionLong:
                     "<p>The total value of the top 1% of contract values is less than the total value of the remaining contract values. Failure indicates extreme outliers in the top 1%. All values are converted to USD as of the compiled release's <code>date</code>. For illustration purposes, the shares of other ranges of values are shown.</p><p>The test is skipped if fewer than 100 values are included. A value is excluded if an amount is missing or non-numeric, if a currency is missing or unknown, or if currency conversion is necessary and the release date is invalid, before 1999, or in the future.</p>",
             },
             main_procurement_category: {
                 name: "Main procurement category distribution",
                 description:
                     "Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>tender.mainProcurementCategory</code> values. No code occurs in more than 95% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             tender_procurement_method: {
                 name: "Procurement method distribution",
                 description:
                     "Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 0.1% and 99% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>tender.procurementMethod</code> values. The 'open' code occurs in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             tender_award_criteria: {
                 name: "Award criteria distribution",
                 description:
                     "Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>tender.awardCriteria</code> values. No test is performed.</p><p>The codelist is open.</p>",
             },
             tender_submission_method: {
                 name: "Submission method distribution",
                 description:
                     "Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>tender.submissionMethod</code> values. No test is performed.</p><p>The codelist is open.</p>",
             },
             awards_status: {
                 name: "Award status distribution",
                 description:
                     "Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 0.1% and 99% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>awards.status</code> values. The 'active' code occurs in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             contracts_status: {
                 name: "Contract status distribution",
                 description:
                     "Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 0.1% and 99% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>contracts.status</code> values. The 'active' and 'terminated' codes each occur in between 0.1% and 99% of cases.</p><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             milestone_status: {
                 name: "Milestone status distribution",
                 description:
                     "Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 0.1% and 99% of cases.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of milestone <code>status</code> values. The 'met' code occurs in between 0.1% and 99% of cases. The milestone fields are:</p><ul><li><code>planning.milestones.status</code></li><li><code>tender.milestones.status</code></li><li><code>awards.milestones.status</code></li><li><code>contracts.implementation.milestones.status</code></li></ul><p>The test is skipped if the field is never present. The codelist is closed.</p>",
             },
             milestone_type: {
                 name: "Milestone type distribution",
                 description:
                     "Visualizes the distribution of milestone <code>type</code> values. No test is performed.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of milestone <code>type</code> values. No test is performed. The milestone fields are:</p><ul><li><code>planning.milestones.type</code></li><li><code>tender.milestones.type</code></li><li><code>awards.milestones.type</code></li><li><code>contracts.implementation.milestones.type</code></li></ul><p>The codelist is open.</p>",
             },
             value_currency: {
                 name: "Currency distribution",
                 description: "Visualizes the distribution of <code>currency</code> values. No test is performed.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>currency</code> values. No test is performed. The fields are:</p><ul><li><code>planning.budget.value.currency</code></li><li><code>tender.value.currency</code></li><li><code>tender.minValue.currency</code></li><li><code>awards.value.currency</code></li><li><code>contracts.value.currency</code></li><li><code>contracts.implementation.transactions.value.currency</code></li></ul><p>The codelist is closed.</p>",
             },
             related_process_relation: {
                 name: "Related process relation distribution",
                 description:
                     "Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of <code>relatedProcesses.relationship</code> values. No test is performed.</p><p>The codelist is open.</p>",
             },
             document_document_type: {
                 name: "Document type distribution",
                 description:
                     "Visualizes the distribution of document <code>documentType</code> values. No test is performed.",
-                description_long:
+                descriptionLong:
                     "<p>Visualizes the distribution of document <code>documentType</code> values. No test is performed. The document fields are:</p><ul><li><code>planning.documents.documentType</code></li><li><code>tender.documents.documentType</code></li><li><code>awards.documents.documentType</code></li><li><code>contracts.documents.documentType</code></li><li><code>contracts.implementation.documents.documentType</code></li></ul><p>The codelist is open.</p>",
             },
         },
@@ -305,7 +305,7 @@ export const messages = {
             tender_id: {
                 name: "Tender ID is unique",
                 description: "Each <code>tender.id</code> is unique across the collection.",
-                description_long:
+                descriptionLong:
                     "<p>Each <code>tender.id</code> is across within the collection.</p><p>The test is skipped if the field is never present.</p>",
             },
         },
@@ -313,7 +313,7 @@ export const messages = {
             url_availability: {
                 name: "URL availability",
                 description: "A random sample of 100 URL values return no responses with HTTP error codes.",
-                description_long:
+                descriptionLong:
                     "<p>A random sample of 100 URL values return responses without HTTP error codes. The URL fields are:</p><ul><li><code>planning.documents.url</code></li><li><code>tender.documents.url</code></li><li><code>awards.documents.url</code></li><li><code>contracts.documents.url</code></li><li><code>contracts.implementation.documents.url</code></li></ul><p>The test is skipped if fewer than 100 URL values are present.</p>",
             },
         },
@@ -322,7 +322,7 @@ export const messages = {
                 name: "Tender's title is consistent",
                 description:
                     "A related process object has the same value for its <code>title</code> field as the <code>tender.title</code> field of the compiled release it references.",
-                description_long:
+                descriptionLong:
                     "A related process object has the same value for its <code>title</code> field as the <code>tender.title</code> field of the compiled release it references. The related process fields are: <ul><li><code>contracts.relatedProcesses</code></li><li><code>relatedProcesses</code></li></ul>",
             },
         },
@@ -331,7 +331,7 @@ export const messages = {
                 name: "Related process reference",
                 description:
                     "If a related process has a <code>scheme</code> of 'ocid' and its <code>identifier</code> is present, then its <code>identifier</code> matches the <code>ocid</code> of a compiled release.",
-                description_long:
+                descriptionLong:
                     "If a related process has a <code>scheme</code> of 'ocid' and its <code>identifier</code> is present, then its <code>identifier</code> matches the <code>ocid</code> of a compiled release. The related process fields are: <ul><li><code>contracts.relatedProcesses</code></li><li><code>relatedProcesses</code></li></ul>",
             },
         },
@@ -627,7 +627,6 @@ export const messages = {
             },
         },
         search: "Search field by name",
-        hidden: "{n} hidden",
         checkedFields: "Checks are not performed on fields in extensions or on additional fields.",
         resetTableSorting: "Use schema sort order",
         tableLayout: "Use table layout",
@@ -648,13 +647,13 @@ export const messages = {
             label: "Coverage",
             failureSamplesPrefix: "Coverage failure samples",
             exists: {
-                count_header: "Field is set",
-                count_header_tooltip:
+                name: "Field is set",
+                description:
                     "There is one test per <i>possible</i> occurrence of the field. <i>Example</i>: If the parent <code>tender</code> field is set in 10 compiled releases, then the child <code>tender.id</code> field is reported out of 10. If there are 100 entries across all <code>awards</code> arrays in all compiled releases, then the <code>awards.id</code> field is reported out of 100.",
             },
             non_empty: {
-                count_header: "Field isn't null or empty",
-                count_header_tooltip:
+                name: "Field isn't null or empty",
+                description:
                     "There is one test per <i>actual</i> occurrence of the field. The test passes if the field value is neither null nor empty (i.e. it is not an empty string, empty array or empty object). See the above check for other details.",
             },
         },
@@ -662,48 +661,48 @@ export const messages = {
             label: "Quality",
             failureSamplesPrefix: "Quality failure samples",
             ocid_prefix_check: {
-                count_header: "OCID prefix is registered",
-                count_header_tooltip: "The value is a string and starts with a registered OCID prefix.",
+                name: "OCID prefix is registered",
+                description: "The value is a string and starts with a registered OCID prefix.",
             },
             date_time: {
-                count_header: "Date is realistic",
-                count_header_tooltip:
+                name: "Date is realistic",
+                description:
                     "The value is a string, starts in YYYY-MM-DD format, isn't before 1990 and isn't after 2050.",
             },
             email: {
-                count_header: "Email address is valid",
-                count_header_tooltip: "The value is a valid address according to RFC 2822.",
+                name: "Email address is valid",
+                description: "The value is a valid address according to RFC 2822.",
             },
             identifier_scheme: {
-                count_header: "Identifier scheme is recognized",
-                count_header_tooltip: "The value is a string and is an org-id.guide code. (The codelist is open.)",
+                name: "Identifier scheme is recognized",
+                description: "The value is a string and is an org-id.guide code. (The codelist is open.)",
             },
             telephone: {
-                count_header: "Phone number is possible",
-                count_header_tooltip: "The value is a possible number according to Google's libphonenumber.",
+                name: "Phone number is possible",
+                description: "The value is a possible number according to Google's libphonenumber.",
             },
             document_description_length: {
-                count_header: "Has 250 characters or less",
-                count_header_tooltip: "The length of the value is less than or equal to 250.",
+                name: "Has 250 characters or less",
+                description: "The length of the value is less than or equal to 250.",
             },
             document_type: {
-                count_header: "Document type is coherent",
-                count_header_tooltip:
+                name: "Document type is coherent",
+                description:
                     "The document type is appropriate to the field path. Specifically, the value is a documentType code, and the code's 'Section' corresponds to the field's path. (The codelist is open.)",
             },
             document_format_codelist: {
-                count_header: "Document format is recognized",
-                count_header_tooltip:
+                name: "Document format is recognized",
+                description:
                     "The value is a string and is either an IANA Media Type or the 'offline/print' code. (The codelist is open.)",
             },
             number_checks: {
-                count_header: "Number is non-negative",
-                count_header_tooltip:
+                name: "Number is non-negative",
+                description:
                     "The value isn't a complex number, can be parsed as a floating-point number, and is non-negative.",
             },
             language: {
-                count_header: "Language code is recognized",
-                count_header_tooltip:
+                name: "Language code is recognized",
+                description:
                     "The value is a string and is a two-letter, lowercase, ISO 639-1 code. (The codelist is open.)",
             },
         },

@@ -1,80 +1,80 @@
 <template>
   <span class="just_holder">
     <Loader v-if="isSubmitting && submitResult == null" />
-    <b-alert
+    <BAlert
       v-if="isSubmitting && submitResult != null"
       variant="success"
-      show
+      :model-value="true"
     >{{
       $t("datasetFilter.statusOk")
-    }}</b-alert>
+    }}</BAlert>
     <form
       v-if="!isSubmitting"
       class="modal_box align-items-center"
     >
-      <div class="form-group row">
+      <div class="row mb-3">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.releaseDateFromTo") }}</label>
         <div class="col-8 modal_input">
           <div class="row">
             <div class="col">
-              <b-form-datepicker
+              <input
                 v-model="releaseDateFrom"
+                type="date"
                 :min="firstDate"
                 :max="lastDate"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                class="date_picker"
-              />
+                class="form-control"
+              >
             </div>
             <div class="col">
-              <b-form-datepicker
+              <input
                 v-model="releaseDateTo"
+                type="date"
                 :min="firstDate"
                 :max="lastDate"
-                :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                class="date_picker"
-              />
+                class="form-control"
+              >
             </div>
           </div>
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerName") }}</label>
         <div class="col-8">
           <DatasetValuesMultiselect
-            :update-selected="updateBuyerName"
+            @selected="updateBuyerName"
             :dataset-id="dataset?.id"
             json-path="buyer.name"
           />
         </div>
       </div>
-      <div class="form-group row">
+      <div class="row mb-3">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityName") }}</label>
         <div class="col-8">
           <DatasetValuesMultiselect
-            :update-selected="updateProcuringEntityName"
+            @selected="updateProcuringEntityName"
             :dataset-id="dataset?.id"
             json-path="tender.procuringEntity.name"
           />
         </div>
       </div>
-      <div class="form-group row section_row">
+      <div class="row mb-3 section_row">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.buyerNameRegex") }}</label>
         <div class="col-8">
           <input
             v-model="buyerNameRegex"
             class="regex_input"
           >
-          <small class="form-text text-muted">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
+          <small class="form-text text-body-secondary">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
         </div>
       </div>
-      <div class="form-group row procuring_row">
+      <div class="row mb-3 procuring_row">
         <label class="col-4 col-form-label">{{ $t("datasetFilter.procuringEntityNameRegex") }}</label>
         <div class="col-8">
           <input
             v-model="procuringEntityNameRegex"
             class="regex_input"
           >
-          <small class="form-text text-muted">{{
+          <small class="form-text text-body-secondary">{{
             $t("datasetFilter.procuringEntityNameRegexTooltip")
           }}</small>
         </div>
@@ -90,15 +90,14 @@
           <span v-if="gettingCountsToken == null">
             <span
               v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases?.total_unique_ocids"
-            >({{ items | formatNumber }} from {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
+            >({{ formatNumber(items) }} from {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
               {{ $t("datasetFilter.items") }})</span>
             <span
               v-if="dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids"
             >({{ $t("datasetFilter.itemsAll") }})</span>
           </span>
-          <b-spinner
+          <BSpinner
             v-if="gettingCountsToken != null"
-            variant="default"
             style="width: 1.2rem; height: 1.2rem"
           />
         </button>
@@ -107,188 +106,189 @@
   </span>
 </template>
 
-<script>
-const axios = require("axios");
-
-import DatasetValuesMultiselect from "@/components/DatasetValuesMultiselect.vue";
-import Loader from "@/components/Loader.vue";
+<script setup>
+import axios from "axios";
+import { BAlert, BSpinner } from "bootstrap-vue-next";
+import { computed, onMounted, ref, shallowRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { useFormatters } from "@/composables/useFormatters";
 import { CONFIG } from "@/config.js";
+import DatasetValuesMultiselect from "./DatasetValuesMultiselect.vue";
+import Loader from "./Loader.vue";
 
-export default {
-    components: { DatasetValuesMultiselect, Loader },
-    props: ["dataset"],
-    data: () => ({
-        isSubmitting: false,
-        gettingCountsToken: null,
-        filteredItemsTimeout: null,
-        filteredItemsTimeoutLimit: 400,
-        releaseDateFrom: null,
-        releaseDateTo: null,
-        buyerName: [],
-        procuringEntityName: [],
-        buyerNameRegex: "",
-        procuringEntityNameRegex: "",
-        submitResult: null,
-        items: null,
-    }),
-    computed: {
-        firstDate: function () {
-            const publishedFrom = this.dataset.meta.collection_metadata.published_from;
-            if (publishedFrom) {
-                return publishedFrom.substring(0, 10);
-            }
-            return "1970-01-01";
-        },
-        lastDate: function () {
-            const publishedTo = this.dataset.meta.collection_metadata.published_to;
-            if (publishedTo) {
-                return publishedTo.substring(0, 10);
-            }
-            return new Date().toISOString().split("T")[0];
-        },
-    },
-    mounted() {
-        this.$watch(
-            (vm) => [
-                vm.releaseDateFrom,
-                vm.releaseDateTo,
-                vm.buyerName,
-                vm.procuringEntityName,
-                vm.buyerNameRegex,
-                vm.procuringEntityNameRegex,
-            ],
-            () => {
-                if (this.filteredItemsTimeout) {
-                    clearTimeout(this.filteredItemsTimeout);
-                }
+const props = defineProps(["dataset"]);
+const emit = defineEmits(["close"]);
 
-                this.filteredItemsTimeout = setTimeout(
-                    () => this.datasetFilterItems(),
-                    this.filteredItemsTimeoutLimit,
-                );
+const router = useRouter();
+const { t } = useI18n();
+const { formatNumber } = useFormatters();
+
+const isSubmitting = ref(false);
+const submitResult = ref(null);
+const items = ref(null);
+const releaseDateFrom = ref(null);
+const releaseDateTo = ref(null);
+const buyerName = ref([]);
+const procuringEntityName = ref([]);
+const buyerNameRegex = ref("");
+const procuringEntityNameRegex = ref("");
+
+// shallowRef, so that the identity check below compares the source rather than a reactive proxy of it.
+const gettingCountsToken = shallowRef(null);
+let filteredItemsTimeout = null;
+const filteredItemsTimeoutLimit = 400;
+
+const firstDate = computed(() => {
+    const publishedFrom = props.dataset.meta.collection_metadata.published_from;
+    if (publishedFrom) {
+        return publishedFrom.substring(0, 10);
+    }
+    return "1970-01-01";
+});
+
+const lastDate = computed(() => {
+    const publishedTo = props.dataset.meta.collection_metadata.published_to;
+    if (publishedTo) {
+        return publishedTo.substring(0, 10);
+    }
+    return new Date().toISOString().split("T")[0];
+});
+
+function datasetFilterMessage() {
+    if (props.dataset == null) {
+        return null;
+    }
+
+    const data = {};
+
+    if (releaseDateFrom.value > firstDate.value) {
+        data.release_date_from = releaseDateFrom.value;
+    }
+    if (releaseDateTo.value < lastDate.value) {
+        data.release_date_to = releaseDateTo.value;
+    }
+    if (buyerName.value.length > 0) {
+        data.buyer = buyerName.value;
+    }
+    if (buyerNameRegex.value.trim() !== "") {
+        data.buyer_regex = buyerNameRegex.value.trim();
+    }
+    if (procuringEntityName.value.length > 0) {
+        data.procuring_entity = procuringEntityName.value;
+    }
+    if (procuringEntityNameRegex.value.trim() !== "") {
+        data.procuring_entity_regex = procuringEntityNameRegex.value.trim();
+    }
+
+    return data;
+}
+
+function datasetFilterItems() {
+    if (props.dataset == null) {
+        return;
+    }
+
+    // https://axios-http.com/docs/cancellation
+    if (gettingCountsToken.value != null) {
+        gettingCountsToken.value.cancel();
+    }
+
+    const source = axios.CancelToken.source();
+    gettingCountsToken.value = source;
+
+    axios
+        .post(
+            `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
+            {
+                dataset_id_original: Number.parseInt(props.dataset.id, 10),
+                filter_message: datasetFilterMessage(),
             },
             {
-                immediate: true,
-                deep: true,
+                cancelToken: source.token,
             },
-        );
+        )
+        .then((response) => {
+            if (response.status === 200) {
+                items.value = response.data.items;
+            } else {
+                items.value = null;
+            }
+        })
+        .catch((error) => {
+            if (!axios.isCancel(error)) {
+                throw new Error(error);
+            }
+        })
+        .finally(() => {
+            // A cancelled request has been replaced, and the newer one owns the token.
+            if (gettingCountsToken.value === source) {
+                gettingCountsToken.value = null;
+            }
+        });
+}
 
-        this.releaseDateFrom = this.firstDate;
-        this.releaseDateTo = this.lastDate;
-        this.datasetFilterItems();
+function createDatasetFilter() {
+    isSubmitting.value = true;
+    axios
+        .post(
+            `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, props.dataset.id)}`,
+            datasetFilterMessage(),
+        )
+        .then((response) => {
+            if (response.status === 200) {
+                submitResult.value = t("datasetFilter.submitResultOk");
+            } else {
+                submitResult.value = t("datasetFilter.submitResultFailed");
+            }
+
+            setTimeout(() => {
+                emit("close");
+                router.go();
+            }, 2000);
+        })
+        .catch((error) => {
+            throw new Error(error);
+        });
+}
+
+function updateBuyerName(value) {
+    buyerName.value = value;
+}
+
+function updateProcuringEntityName(value) {
+    procuringEntityName.value = value;
+}
+
+watch(
+    () => [
+        releaseDateFrom.value,
+        releaseDateTo.value,
+        buyerName.value,
+        procuringEntityName.value,
+        buyerNameRegex.value,
+        procuringEntityNameRegex.value,
+    ],
+    () => {
+        if (filteredItemsTimeout) {
+            clearTimeout(filteredItemsTimeout);
+        }
+
+        filteredItemsTimeout = setTimeout(() => datasetFilterItems(), filteredItemsTimeoutLimit);
     },
-    methods: {
-        createDatasetFilter() {
-            this.isSubmitting = true;
-            axios
-                .post(
-                    `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, this.dataset.id)}`,
-                    this.datasetFilterMessage(),
-                )
-                .then((response) => {
-                    if (response.status === 200) {
-                        this.submitResult = this.$t("datasetFilter.submitResultOk");
-                    } else {
-                        this.submitResult = this.$t("datasetFilter.submitResultFailed");
-                    }
-
-                    setTimeout(() => {
-                        this.$bvModal.hide();
-                        this.$router.go();
-                    }, 2000);
-                })
-                .catch((error) => {
-                    // TODO
-                    throw new Error(error);
-                });
-        },
-        datasetFilterItems() {
-            if (this.dataset == null) {
-                return;
-            }
-
-            // https://axios-http.com/docs/cancellation
-            if (this.gettingCountsToken != null) {
-                this.gettingCountsToken.cancel();
-            }
-
-            this.gettingCountsToken = axios.CancelToken.source();
-
-            axios
-                .post(
-                    `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
-                    {
-                        dataset_id_original: Number.parseInt(this.dataset.id, 10),
-                        filter_message: this.datasetFilterMessage(),
-                    },
-                    {
-                        cancelToken: this.gettingCountsToken.token,
-                    },
-                )
-                .then((response) => {
-                    if (response.status === 200) {
-                        this.items = response.data.items;
-                    } else {
-                        this.items = null;
-                    }
-
-                    this.gettingCountsToken = null;
-                })
-                .catch((error) => {
-                    if (!axios.isCancel(error)) {
-                        throw new Error(error);
-                    }
-                });
-        },
-        datasetFilterMessage() {
-            if (this.dataset == null) {
-                return null;
-            }
-
-            const data = {};
-
-            if (this.releaseDateFrom > this.firstDate) {
-                data.release_date_from = this.releaseDateFrom;
-            }
-            if (this.releaseDateTo < this.lastDate) {
-                data.release_date_to = this.releaseDateTo;
-            }
-            if (this.buyerName.length > 0) {
-                data.buyer = this.buyerName;
-            }
-            if (this.buyerNameRegex.trim() !== "") {
-                data.buyer_regex = this.buyerNameRegex.trim();
-            }
-            if (this.procuringEntityName.length > 0) {
-                data.procuring_entity = this.procuringEntityName;
-            }
-            if (this.procuringEntityNameRegex.trim() !== "") {
-                data.procuring_entity_regex = this.procuringEntityNameRegex.trim();
-            }
-
-            return data;
-        },
-        updateBuyerName(value) {
-            this.buyerName = value;
-        },
-        updateProcuringEntityName(value) {
-            this.procuringEntityName = value;
-        },
+    {
+        deep: true,
     },
-};
+);
+
+onMounted(() => {
+    releaseDateFrom.value = firstDate.value;
+    releaseDateTo.value = lastDate.value;
+    datasetFilterItems();
+});
 </script>
 
-<style lang="scss">
-@import "src/scss/main";
-
-.modal_box {
-    padding: 30px;
-}
-
-.modal_headline {
-    padding-bottom: 30px;
-}
-
+<style scoped lang="scss">
 .regex_input {
     width: 100%;
     height: 100%;
@@ -303,42 +303,7 @@ export default {
     color: #212529;
 }
 
-.submit_button {
-    font-size: 18px;
-    font-weight: 700;
-    color: $text-color;
-    font-family: $font-family-sans-serif;
-    background-color: transparent;
-    border: 1px solid $na_color;
-    margin-top: 20px;
-}
-
-.submit_button:hover {
-    background-color: $na_color;
-    color: white;
-    border: 1px solid $na_color;
-}
-
 .procuring_row {
     padding-top: 15px;
-}
-
-.section_row {
-    padding-top: 30px;
-}
-
-.date_picker label {
-    text-align: left !important;
-}
-
-.multiselect__tag-icon:after {
-    content: "×";
-    color: white;
-    font-size: 16px;
-}
-
-.multiselect__tag-icon:focus,
-.multiselect__tag-icon:hover {
-    background: $gray-800;
 }
 </style>

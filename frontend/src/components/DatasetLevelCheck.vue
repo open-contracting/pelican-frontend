@@ -8,7 +8,7 @@
     @click="check.result != undefined && checkType != null && detail()"
   >
     <div class="card-body">
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
             {{ $t("datasetLevel." + check.name + ".name") }}
@@ -17,20 +17,20 @@
 
         <div
           v-if="check.result != undefined && checkType != null"
-          class="col col-2 col-sm-2 col-lg-2 text-right"
+          class="col col-2 col-sm-2 col-lg-2 text-end"
         >
           <span
             v-if="!reportOnly && check.result == true"
-            class="badge badge-pill ok_status"
+            class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
             v-if="!reportOnly && check.result == false"
-            class="badge badge-pill failed_status"
+            class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
       </div>
 
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-12">
           <p
             class="check_description"
@@ -41,7 +41,7 @@
     </div>
 
     <div class="card-body">
-      <div class="row no-gutters justify-content-end">
+      <div class="row g-0 justify-content-end">
         <div class="col col-12">
           <div
             v-if="check.result == undefined"
@@ -54,7 +54,7 @@
             <br>
             <div class="undefined_title">
               {{ $t("insufficientData.title") }}
-              <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')" />
+              <Tooltip :text="$t('datasetLevel.' + check.name + '.descriptionLong')" />
             </div>
             <p v-html="$t('insufficientData.description')" />
           </div>
@@ -69,20 +69,20 @@
             <br>
             <div class="undefined_title">
               {{ $t("incompatibleCheckVersion.title") }}
-              <Tooltip :text="$t('datasetLevel.' + check.name + '.description_long')" />
+              <Tooltip :text="$t('datasetLevel.' + check.name + '.descriptionLong')" />
             </div>
             <p v-html="$t('incompatibleCheckVersion.description')" />
           </div>
           <div v-else>
             <div v-if="checkType == 'donut'">
               <div class="chart_envelope">
-                <DonutChart :check="check" :limit="true" />
+                <CodeChart :check="check" :limit="true" />
               </div>
             </div>
 
             <div v-if="checkType == 'bar'">
               <div class="chart_envelope">
-                <BarChart :check="check" :ticks="ticks" />
+                <PercentileChart :check="check" :ticks="ticks" />
               </div>
             </div>
 
@@ -90,8 +90,8 @@
               v-if="checkType == 'numeric'"
               class="text-center"
             >
-              <span class="check_numeric_value">{{ check.meta.total_passed | formatNumber }}</span>
-              <span class="check_numeric_count">&nbsp;/&nbsp;{{ check.meta.total_processed | formatNumber }}</span>
+              <span class="check_numeric_value">{{ formatNumber(check.meta.total_passed) }}</span>
+              <span class="check_numeric_count">&nbsp;/&nbsp;{{ formatNumber(check.meta.total_processed) }}</span>
             </div>
 
             <div
@@ -103,15 +103,17 @@
                   id="top3_table"
                   class="table table-sm"
                 >
-                  <tr
-                    v-for="(item, index) in check.meta.most_frequent"
-                    :key="index"
-                  >
-                    <td>{{ item.value_str }}</td>
-                    <td class="text-right numeric">
-                      {{ (item.share * 100) | formatPercentage2D }}
-                    </td>
-                  </tr>
+                  <tbody>
+                    <tr
+                      v-for="(item, index) in check.meta.most_frequent"
+                      :key="index"
+                    >
+                      <td>{{ item.value_str }}</td>
+                      <td class="text-end numeric">
+                        {{ formatPercentage2D(item.share) }}
+                      </td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -128,7 +130,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ (check.meta.ocid_share * 100) | formatPercentage2D }}
+                  {{ formatPercentage2D(check.meta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
@@ -143,7 +145,7 @@
               class="single_value_share"
             >
               <div class="chart_envelope">
-                <BarChartSingleValue :check="check" />
+                <FrequencyChart :check="check" />
               </div>
             </div>
           </div>
@@ -153,43 +155,43 @@
   </div>
 </template>
 
-<script>
-import BarChart from "@/components/BarChart.vue";
-import BarChartSingleValue from "@/components/BarChartSingleValue.vue";
-import DonutChart from "@/components/DonutChart.vue";
-import Tooltip from "@/components/Tooltip.vue";
-import datasetMixin from "@/plugins/datasetMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { useFormatters } from "@/composables/useFormatters";
+import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 
-export default {
-    components: { DonutChart, BarChart, BarChartSingleValue, Tooltip },
-    mixins: [datasetMixin],
-    props: ["check"],
-    data: function () {
-        return {
-            detailRouterArguments: {
-                name: "datasetCheckDetail",
-                params: {
-                    check: this.check.name,
-                    datasetId: this.$store.getters.datasetId,
-                },
+const { formatNumber, formatPercentage2D } = useFormatters();
+
+import CodeChart from "./CodeChart.vue";
+import FrequencyChart from "./FrequencyChart.vue";
+import PercentileChart from "./PercentileChart.vue";
+import Tooltip from "./Tooltip.vue";
+
+const props = defineProps(["check"]);
+const router = useRouter();
+const store = useStore();
+
+const checkType = computed(() => DATASET_CHECK_TYPES[props.check.name]);
+const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[props.check.name]);
+const ticks = computed(() => DATASET_CHECK_TICKS[props.check.name]);
+
+function detail() {
+    if (props.check.result !== undefined && checkType.value != null) {
+        router.push({
+            name: "datasetCheckDetail",
+            params: {
+                check: props.check.name,
+                datasetId: store.getters.datasetId,
             },
-        };
-    },
-    methods: {
-        onePercent: function () {
-            return (this.check.ok + this.check.failed + this.check.na) / 100;
-        },
-        detail: function () {
-            if (this.check.result !== undefined && this.checkType != null) {
-                this.$router.push(this.detailRouterArguments);
-            }
-        },
-    },
-};
+        });
+    }
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .chart_envelope {
     margin-bottom: 10px;
@@ -258,8 +260,8 @@ export default {
     font-weight: 700;
 }
 
-#top3_table > tr:nth-child(1) > td {
-    border-top: none;
+#top3_table > tbody > tr:last-child > td {
+    border-bottom: none;
 }
 
 .biggest_share .total_share {

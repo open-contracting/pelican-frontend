@@ -1,82 +1,83 @@
 <template>
-  <div
-    class="tr row clickable align-items-center"
+  <tr
+    class="clickable"
     @click="detail()"
   >
-    <div class="col-9 col-lg-5 break_word check_name">
+    <td class="col-9 col-lg-5 break_word check_name">
       <span>{{ $t("resourceLevel." + name + ".name") }}</span>
-    </div>
-    <div class="td col-1 col-lg-1 text-right">
+    </td>
+    <td class="col-1 col-lg-1 text-end">
       <span
-        v-if="okPercentage"
+        v-if="okRatio"
         class="value_ok"
-      >{{ okPercentage | formatPercentage }}</span>
+      >{{ formatPercentage(okRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ okPercentage | formatPercentage }}</span>
-    </div>
-    <div class="td col-1 col-lg-1 text-right">
+      >{{ formatPercentage(okRatio) }}</span>
+    </td>
+    <td class="col-1 col-lg-1 text-end">
       <span
-        v-if="failedPercentage"
+        v-if="failedRatio"
         class="value_failed"
-      >{{ failedPercentage | formatPercentage }}</span>
+      >{{ formatPercentage(failedRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ failedPercentage | formatPercentage }}</span>
-    </div>
-    <div class="td col-1 col-lg-1 text-right">
+      >{{ formatPercentage(failedRatio) }}</span>
+    </td>
+    <td class="col-1 col-lg-1 text-end">
       <span
-        v-if="naPercentage"
+        v-if="naRatio"
         class="value_na"
-      >{{ naPercentage | formatPercentage }}</span>
+      >{{ formatPercentage(naRatio) }}</span>
       <span
         v-else
         class="value_na opacity"
-      >{{ naPercentage | formatPercentage }}</span>
-    </div>
-    <div class="td col-4 d-none d-lg-block progress_column">
+      >{{ formatPercentage(naRatio) }}</span>
+    </td>
+    <td class="col-4 d-none d-lg-table-cell progress_column">
       <ProgressBar
-        :ok="okPercentage"
-        :failed="failedPercentage"
+        :ok="okRatio * 100"
+        :failed="failedRatio * 100"
       />
-    </div>
-  </div>
+    </td>
+  </tr>
 </template>
 
-<script>
-import ProgressBar from "@/components/ProgressBar.vue";
-import resourceCheckMixin from "@/plugins/resourceCheckMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { useFormatters } from "@/composables/useFormatters";
+import ProgressBar from "./ProgressBar.vue";
 
-export default {
-    components: { ProgressBar },
-    mixins: [resourceCheckMixin],
-    props: ["check", "name"],
-    data: function () {
-        return {
-            detailRouterArguments: {
-                name: "resourceCheckDetail",
-                params: {
-                    check: this.name,
-                    datasetId: this.$store.getters.datasetId,
-                },
-            },
-        };
-    },
-    methods: {
-        detail: function () {
-            this.$router.push(this.detailRouterArguments);
+const { formatPercentage } = useFormatters();
+
+const props = defineProps(["check", "name"]);
+const router = useRouter();
+const store = useStore();
+
+const okRatio = computed(() => props.check.passed_count / props.check.total_count);
+const failedRatio = computed(() => props.check.failed_count / props.check.total_count);
+const naRatio = computed(() => props.check.undefined_count / props.check.total_count);
+
+function detail() {
+    router.push({
+        name: "resourceCheckDetail",
+        params: {
+            check: props.name,
+            datasetId: store.getters.datasetId,
         },
-    },
-};
+    });
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
-.check_name {
-    padding-left: 65px;
+td.check_name {
+    padding-left: 35px;
 }
 
 .progress_column {

@@ -20,19 +20,13 @@
     :hide-selected="true"
     @search-change="asyncFind"
   >
-    <template
-      slot="option"
-      slot-scope="props"
-    >
+    <template #option="props">
       <div class="option__desc">
         <span class="option__title">{{ props.option.value }}</span>
         <span class="option__small">&nbsp;({{ props.option.count }} items)</span>
       </div>
     </template>
-    <template
-      slot="tag"
-      slot-scope="{ option, remove }"
-    >
+    <template #tag="{ option, remove }">
       <div class="multiselect__tag">
         <div>
           <span>{{ option.value }}</span>
@@ -45,78 +39,92 @@
         </div>
       </div>
     </template>
-    <template
-      slot="clear"
-      slot-scope="props"
-    >
+    <template #clear="props">
       <div
         v-if="selected.length"
         class="multiselect__clear"
         @mousedown.prevent.stop="clearAll(props.search)"
       />
     </template>
-    <span slot="noResult">{{ $t("datasetValuesMultiselect.noResult") }}</span>
+    <template #noResult>{{ $t("datasetValuesMultiselect.noResult") }}</template>
   </multiselect>
 </template>
 
-<script>
-const axios = require("axios");
-
+<script setup>
+import axios from "axios";
+import { onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import Multiselect from "vue-multiselect";
+import "vue-multiselect/dist/vue-multiselect.css";
 import { CONFIG } from "@/config.js";
 
-export default {
-    props: ["datasetId", "jsonPath", "updateSelected"],
-    data: () => ({
-        options: [],
-        selected: [],
-        isLoading: false,
-        cancelToken: null,
-    }),
-    watch: {
-        selected(value) {
-            this.updateSelected(value.map((el) => el.value));
-        },
-    },
-    mounted() {
-        this.asyncFind("");
-    },
-    methods: {
-        asyncFind(query) {
-            if (this.cancelToken != null) {
-                this.cancelToken.cancel();
-                this.cancelToken = null;
-            }
-            this.isLoading = true;
-            this.options = [];
-            let url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}${this.datasetId}/${this.jsonPath}/`;
-            if (query) {
-                url += `${query}/`;
-            }
+const props = defineProps(["datasetId", "jsonPath"]);
+const emit = defineEmits(["selected"]);
 
-            this.cancelToken = axios.CancelToken.source();
-            axios
-                .get(url, { cancelToken: this.cancelToken.token })
-                .then((response) => {
-                    this.options = response.data;
-                    this.isLoading = false;
-                })
-                .catch((error) => {
-                    this.isLoading = false;
-                    throw new Error(error);
-                });
-        },
-        clearAll() {
-            this.selected = [];
-        },
-        limitText(count) {
-            return this.$t("datasetValuesMultiselect.limitText", { n: count });
-        },
-    },
-};
+const { t } = useI18n();
+
+const options = ref([]);
+const selected = ref([]);
+const isLoading = ref(false);
+let cancelToken = null;
+
+watch(selected, (value) => {
+    emit(
+        "selected",
+        value.map((el) => el.value),
+    );
+});
+
+function asyncFind(query) {
+    if (cancelToken != null) {
+        cancelToken.cancel();
+        cancelToken = null;
+    }
+    isLoading.value = true;
+    options.value = [];
+    let url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}${props.datasetId}/${props.jsonPath}/`;
+    if (query) {
+        url += `${query}/`;
+    }
+
+    cancelToken = axios.CancelToken.source();
+    axios
+        .get(url, { cancelToken: cancelToken.token })
+        .then((response) => {
+            options.value = response.data;
+            isLoading.value = false;
+        })
+        .catch((error) => {
+            isLoading.value = false;
+            throw new Error(error);
+        });
+}
+
+function clearAll() {
+    selected.value = [];
+}
+
+function limitText(count) {
+    return t("datasetValuesMultiselect.limitText", { n: count });
+}
+
+onMounted(() => {
+    asyncFind("");
+});
 </script>
 
 <style lang="scss">
-@import "src/scss/main";
+
+.multiselect__tag-icon:after {
+    content: "×";
+    color: white;
+    font-size: 16px;
+}
+
+.multiselect__tag-icon:focus,
+.multiselect__tag-icon:hover {
+    background: $gray-800;
+}
 
 .multiselect__tag {
     background: $primary;

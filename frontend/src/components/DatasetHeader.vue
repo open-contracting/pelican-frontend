@@ -2,29 +2,28 @@
   <h1 v-if="dataset">
     <span class="name">{{ dataset.name }}</span>
     ({{ $t("dataset.id") }} {{ dataset.id }})
-    | {{ $t("dataset.size") }} {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
+    | {{ $t("dataset.size") }} {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
     | {{ $t("created") }} {{ dataset.meta.data_quality_tool_metadata.processing_start }}
   </h1>
 </template>
 
-<script>
-export default {
-    data: () => ({
-        showHidden: {},
-    }),
-    computed: {
-        dataset() {
-            if (this.$store.getters.dataset?.meta !== undefined) {
-                return this.$store.getters.dataset;
-            }
-            return undefined;
-        },
-    },
-};
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useFormatters } from "@/composables/useFormatters";
+
+const store = useStore();
+const { formatNumber } = useFormatters();
+
+const dataset = computed(() => {
+    if (store.getters.dataset?.meta !== undefined) {
+        return store.getters.dataset;
+    }
+    return undefined;
+});
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
 
 h1 {
     font-size: 13px;

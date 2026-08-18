@@ -1,55 +1,54 @@
 <template>
-  <b-input-group class="search_input">
+  <BInputGroup class="search_input">
     <template #prepend>
-      <b-input-group-text>
-        <font-awesome-icon icon="search" />
-      </b-input-group-text>
+      <BInputGroupText>
+        <FontAwesomeIcon icon="search" />
+      </BInputGroupText>
     </template>
-    <b-form-input
+    <BFormInput
       v-model="search"
       :placeholder="placeholder"
     />
     <template #append>
-      <b-button
+      <BButton
         v-if="search"
         :disabled="!search"
         @click="search = null"
       >
-        <font-awesome-icon :icon="['fas', 'times']" />
-      </b-button>
+        <FontAwesomeIcon :icon="['fas', 'times']" />
+      </BButton>
     </template>
-  </b-input-group>
+  </BInputGroup>
 </template>
 
-<script>
-export default {
-    props: {
-        placeholder: String,
-        onUpdate: Function,
-        preset: String,
-        submitTimeLimit: { type: Number, default: 400 },
-    },
-    data: () => ({
-        search: null,
-        submitTimeout: null,
-    }),
-    watch: {
-        search: function (value) {
-            if (this.submitTimeout) {
-                clearTimeout(this.submitTimeout);
-            }
+<script setup>
+import { BButton, BFormInput, BInputGroup, BInputGroupText } from "bootstrap-vue-next";
+import { onMounted, ref, watch } from "vue";
 
-            this.submitTimeout = setTimeout(() => this.onUpdate(value), this.submitTimeLimit);
-        },
-    },
-    mounted: function () {
-        this.search = this.preset;
-    },
-};
+const props = defineProps({
+    placeholder: String,
+    preset: String,
+});
+
+const emit = defineEmits(["search"]);
+
+const search = ref(null);
+let submitTimeout = null;
+
+watch(search, (value) => {
+    if (submitTimeout) {
+        clearTimeout(submitTimeout);
+    }
+
+    submitTimeout = setTimeout(() => emit("search", value), 400);
+});
+
+onMounted(() => {
+    search.value = props.preset;
+});
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
 
 .search_input {
     .input-group-text {

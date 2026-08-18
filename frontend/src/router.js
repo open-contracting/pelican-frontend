@@ -1,6 +1,5 @@
 // biome-ignore assist/source/organizeImports: Import order affects preview pane sizing.
-import Vue from "vue";
-import Router from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 import store from "./store";
 import Dataset from "./views/Dataset.vue";
 import Field from "./views/Field.vue";
@@ -15,14 +14,12 @@ import FieldCheckDetail from "./views/FieldCheckDetail.vue";
 import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
 import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
 
-Vue.use(Router);
-
-export default new Router({
-    mode: "history",
+export default createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
     scrollBehavior() {
         return {
-            x: 0,
-            y: 0,
+            top: 0,
+            left: 0,
         };
     },
     routes: [

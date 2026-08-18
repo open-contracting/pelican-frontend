@@ -1,32 +1,26 @@
 <template>
   <span>
     <span :id="tooltipId">
-      <font-awesome-icon icon="info-circle" />
+      <FontAwesomeIcon icon="info-circle" />
     </span>
-    <b-tooltip
+    <BTooltip
       :target="tooltipId"
-      triggers="hover"
     >
       <span
         class="tooltip_text"
         v-html="text"
       />
-    </b-tooltip>
+    </BTooltip>
   </span>
 </template>
 
-<script>
-export default {
-    props: ["text"],
-    data: () => ({}),
-    computed: {
-        tooltipId: () => {
-            const id = `id-${Math.floor(Math.random() * 10000000000)}`;
+<script setup>
+import { BTooltip } from "bootstrap-vue-next";
+import { useId } from "vue";
 
-            return id;
-        },
-    },
-};
+defineProps(["text"]);
+
+const tooltipId = useId();
 </script>
 
 <style scoped lang="scss">

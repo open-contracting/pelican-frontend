@@ -56,7 +56,7 @@ Install development dependencies:
 
 .. code-block:: bash
 
-   npm install
+   pnpm install
 
 .. _development:
 
@@ -74,7 +74,7 @@ In another terminal, start the frontend server:
 .. code-block:: bash
 
    cd frontend
-   npx vue-cli-service serve
+   pnpm exec vite
 
 Backend
 ~~~~~~~
@@ -114,47 +114,109 @@ To update ``api/models.py`` following changes to Pelican backend's database sche
 -  ``ProgressMonitorItem.item``: Rename to ``data_item``
 -  ``Report.type``: Change ``TextField`` to ``CharField``, add ``max_length=255``, and remove ``# This field type is a guess.``
 
+Frontend
+~~~~~~~~
+
+Use ``$t`` in templates and ``useI18n()`` in ``<script setup>``. `vue-i18n documents both <https://vue-i18n.intlify.dev/guide/advanced/composition.html>`__.
+
+Likewise, use ``$emit`` in templates, and assign ``defineEmits()`` only to emit from ``<script setup>``:
+
+.. code-block:: vue
+
+   <!-- Yes -->
+   <div @click.stop="$emit('asc')" />
+
+   <!-- No -->
+   <div @click.stop="emit('asc')" />
+
+Emit events instead of accepting callbacks as props:
+
+.. code-block:: vue
+
+   <!-- Yes -->
+   <SearchInput @search="$store.commit('setDatasetSearch', $event)" />
+
+   <!-- No -->
+   <SearchInput :on-update="search => $store.commit('setDatasetSearch', search)" />
+
+Pass a function as a prop only as data, never as an event callback. The ``filter`` predicates are the only such props: a component applies one to its rows, rather than calling it to notify its parent.
+
+Access template refs with `useTemplateRef() <https://vuejs.org/api/composition-api-helpers#usetemplateref>`__, not by declaring a ``ref()`` whose name matches the attribute:
+
+.. code-block:: javascript
+
+   // Yes
+   const bar = useTemplateRef("bar");
+
+   // No
+   const bar = ref(null);
+
+Styles
+^^^^^^
+
+Write styles in a ``<style scoped>`` block. A scoped style reaches the component's own markup and the root element of a component it renders, which covers most cases:
+
+.. code-block:: vue
+
+   <template>
+     <BCol class="right-align" />
+   </template>
+
+   <style scoped lang="scss">
+   .right-align {
+       text-align: right;
+   }
+   </style>
+
+Leave a block unscoped only to reach markup that the component does not render, like a third-party component's internals:
+
+.. code-block:: scss
+
+   // vue-multiselect renders this, so a scoped style would not match it.
+   .multiselect__option--highlight {
+       outline: none;
+   }
+
+Write a rule once, in ``src/scss/main.scss``, if more than one component uses the class. Element selectors belong there, too, being global wherever they are written:
+
+.. code-block:: scss
+
+   // Yes, in main.scss
+   .collection_header { ... }
+
+   // No, in each component that uses it, where whichever loads last wins
+   .collection_header { ... }
+
+Do not rely on the order in which stylesheets load, which is the bundler's business. To override Bootstrap, write a more specific selector, rather than an equally specific one:
+
+.. code-block:: scss
+
+   // Yes
+   .preview .vjs-tree {
+       font-size: 13px;
+   }
+
+   // No
+   .vjs-tree {
+       font-size: 13px;
+   }
+
 Learning
 ~~~~~~~~
 
--  `Vue v2 <https://v2.vuejs.org>`__
--  `Vue CLI <https://cli.vuejs.org>`__
--  `Vue Router <https://v3.router.vuejs.org>`__
+-  `Vue <https://vuejs.org>`__
+-  `Vue Router <https://router.vuejs.org>`__
 
 Testing
 -------
-
-Backend
-~~~~~~~
 
 .. code-block:: bash
 
    ./manage.py test
 
-Frontend
-~~~~~~~~
-
-.. code-block:: bash
-
-   npm run test
-
-Run linters:
-
-.. code-block:: bash
-
-   npx vue-cli-service lint
-
 Production
 ----------
 
-Prepare a production build:
-
 .. code-block:: bash
 
-   npx vue-cli-service build
-
-This sets the ``NODE_ENV`` environment variable to ``"production"``. To `override this default <https://cli.vuejs.org/guide/mode-and-env.html>`__, use:
-
-.. code-block:: bash
-
-   npx vue-cli-service build --mode development
+   pnpm exec vite build

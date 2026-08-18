@@ -1,14 +1,14 @@
 <template>
-  <div
-    id="app"
-    class="container-fluid"
-  >
-    <router-view />
-  </div>
+  <BApp>
+    <div
+      id="app"
+      class="container-fluid"
+    >
+      <router-view />
+    </div>
+  </BApp>
 </template>
 
-<script>
-export default {
-    data: () => ({}),
-};
+<script setup>
+import { BApp } from "bootstrap-vue-next";
 </script>

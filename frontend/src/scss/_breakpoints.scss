@@ -1,7 +1,7 @@
 /* example taken from https://stackoverflow.com/a/48976550/3466464 */
 /* import what we need to override */
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
 
 /* set the overriding variables */
 $grid-breakpoints: (

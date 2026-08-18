@@ -14,37 +14,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import DatasetHeader from "@/components/DatasetHeader.vue";
-import MainMenu from "@/views/layouts/MainMenu.vue";
-
-export default {
-    name: "Dashboard",
-    components: { MainMenu, DatasetHeader },
-    data: () => ({}),
-    computed: {
-        dataset() {
-            if (this.$store.getters.dataset != null) {
-                return this.$store.getters.dataset;
-            }
-            return [];
-        },
-    },
-};
+import MainMenu from "./MainMenu.vue";
 </script>
-
-<style lang="scss">
-@import "src/scss/main";
-
-@media (max-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 80px;
-    }
-}
-
-@media (min-width: 1199.98px) {
-    .main_envelope {
-        padding-left: 215px;
-    }
-}
-</style>

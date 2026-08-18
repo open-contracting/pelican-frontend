@@ -9,6 +9,3 @@
   </div>
 </template>
 
-<style lang="scss">
-@import "src/scss/main";
-</style>

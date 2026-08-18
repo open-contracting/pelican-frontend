@@ -1,137 +1,128 @@
 <template>
-  <div>
-    <div
-      :class="['row', 'tr', 'align-items-center']"
-    >
-      <div class="td col-4">
-        <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
-          <font-awesome-icon :icon="['fas', 'long-arrow-alt-right']" />
+  <tr>
+    <td>
+      <span v-if="depth > 0" :style="{'padding-left': depth / 2 + 'rem'}">
+        <FontAwesomeIcon :icon="['fas', 'long-arrow-alt-right']" />
+      </span>
+      <BLink :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
+        {{ dataset.name }}
+      </BLink>
+      <span class="dataset_id">(Id {{ dataset.id }})</span>
+      <a
+        v-if="isDatasetImported(dataset) && depth == 0"
+        href="#"
+        @click.stop.prevent="$emit('dataset-filter', dataset)"
+      >
+        <FontAwesomeIcon :icon="['fas', 'filter']" />
+      </a>
+      <a
+        v-if="isDatasetImported(dataset)"
+        href="#"
+        @click.stop.prevent="$emit('dataset-report', dataset)"
+      >
+        <FontAwesomeIcon :icon="['fas', 'file']" />
+      </a>
+    </td>
+    <td class="numeric text-end">
+      {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
+    </td>
+    <td class="numeric text-end">
+      {{ dataset.meta.kingfisher_metadata?.collection_id }}
+    </td>
+    <td class="phase_cell align-middle">
+      <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
+        <span class="small_icon">
+          <FontAwesomeIcon
+            :icon="['far', 'check-circle']"
+            class="text-success"
+          />
         </span>
-        <b-link :to="{ name: 'overview', params: { datasetId: dataset.id } }" :disabled="!isDatasetImported(dataset)">
-          {{ dataset.name }}
-        </b-link>
-        <span class="dataset_id">(Id {{ dataset.id }})</span>
-        <a
-          v-if="isDatasetImported(dataset) && depth == 0"
-          href="#"
-          @click.stop.prevent="$emit('dataset-filter', dataset)"
-        >
-          <font-awesome-icon :icon="['fas', 'filter']" />
-        </a>
-        <a
-          v-if="isDatasetImported(dataset)"
-          href="#"
-          @click.stop.prevent="$emit('dataset-report', dataset)"
-        >
-          <font-awesome-icon :icon="['fas', 'file']" />
-        </a>
-      </div>
-      <div class="td col-1 numeric text-right">
-        {{ dataset.meta.compiled_releases?.total_unique_ocids | formatNumber }}
-      </div>
-      <div class="td col-1 numeric text-right">
-        {{ dataset.meta.kingfisher_metadata?.collection_id }}
-      </div>
-      <div class="td col-1 phase_cell align-items-center align-middle">
-        <template v-if="dataset.phase == 'CHECKED' && dataset.state == 'OK'">
-          <span class="small_icon">
-            <font-awesome-icon
-              :icon="['far', 'check-circle']"
-              class="text-success"
-            />
-          </span>
-          {{ dataset.phase }}
-        </template>
-        <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
-          <span class="small_icon">
-            <font-awesome-icon
-              :icon="['fas', 'ban']"
-              class="text-danger"
-            />
-          </span>
-          {{ dataset.phase }}
-        </template>
-        <template v-else-if="dataset.state == 'FAILED'">
-          <span class="small_icon">
-            <font-awesome-icon
-              :icon="['far', 'times-circle']"
-              class="text-danger"
-            />
-          </span>
-          {{ dataset.phase }}
-        </template>
-        <template v-else>
-          <b-row class="progress_label no-gutters">
-            <b-col
-              v-for="p in phases"
-              :key="p"
-            >
-              <template v-if="p == dataset.phase">
-                {{ p }}
-              </template>
-            </b-col>
-          </b-row>
+        {{ dataset.phase }}
+      </template>
+      <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
+        <span class="small_icon">
+          <FontAwesomeIcon
+            :icon="['fas', 'ban']"
+            class="text-danger"
+          />
+        </span>
+        {{ dataset.phase }}
+      </template>
+      <template v-else-if="dataset.state == 'FAILED'">
+        <span class="small_icon">
+          <FontAwesomeIcon
+            :icon="['far', 'times-circle']"
+            class="text-danger"
+          />
+        </span>
+        {{ dataset.phase }}
+      </template>
+      <template v-else>
+        <BRow class="progress_label g-0">
+          <BCol
+            v-for="p in PHASES"
+            :key="p"
+          >
+            <template v-if="p == dataset.phase">
+              {{ p }}
+            </template>
+          </BCol>
+        </BRow>
 
-          <ProgressBar :value="getDatasetProgress(dataset)" />
-        </template>
-      </div>
-      <div class="td col numeric">
-        <span class="created">{{ dataset.created }}</span>
-        <br>
-        <span class="modified">{{ dataset.modified }}</span>
-      </div>
-      <div class="td col">
-        <b-link
-          v-if="dataset.ancestor_id"
-          class="time_variance break_word"
-          :to="{ name: 'time', params: { datasetId: dataset.id } }"
-        >
-          <span class="small_icon">
-            <font-awesome-icon icon="history" />
-          </span>
-          {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
-        </b-link>
-      </div>
-    </div>
-    <template v-for="(item, index) in dataset.filtered_children">
-      <DatasetPickerRow
-        :key="index"
-        :dataset="item"
-        :depth="depth + 1"
-        @dataset-filter="$emit('dataset-filter', $event)"
-        @dataset-report="$emit('dataset-report', $event)"
-      />
-    </template>
-  </div>
+        <ProgressBar :value="getDatasetProgress(dataset)" />
+      </template>
+    </td>
+    <td class="numeric">
+      <span class="created">{{ dataset.created }}</span>
+      <br>
+      <span class="modified">{{ dataset.modified }}</span>
+    </td>
+    <td>
+      <BLink
+        v-if="dataset.ancestor_id"
+        class="time_variance break_word"
+        :to="{ name: 'time', params: { datasetId: dataset.id } }"
+      >
+        <span class="small_icon">
+          <FontAwesomeIcon icon="history" />
+        </span>
+        {{ dataset.ancestor_name }} (Id {{ dataset.ancestor_id }})
+      </BLink>
+    </td>
+  </tr>
+  <template v-for="(item, index) in dataset.filtered_children" :key="index">
+    <DatasetPickerRow
+      :dataset="item"
+      :depth="depth + 1"
+      @dataset-filter="$emit('dataset-filter', $event)"
+      @dataset-report="$emit('dataset-report', $event)"
+    />
+  </template>
 </template>
 
-<script>
-import ProgressBar from "@/components/ProgressBar.vue";
-import sortMixins from "@/plugins/sortMixins.js";
-import stateMixin from "@/plugins/stateMixins.js";
+<script setup>
+import { BCol, BLink, BRow } from "bootstrap-vue-next";
+import { useFormatters } from "@/composables/useFormatters";
+import { PHASES } from "@/config";
+import ProgressBar from "./ProgressBar.vue";
 
-export default {
-    name: "DatasetPickerRow",
-    components: { ProgressBar },
-    mixins: [stateMixin, sortMixins],
-    props: ["dataset", "depth"],
-    data: () => ({
-        showFilteredChildren: false,
-    }),
-    computed: {
-        phases: () => ["PLANNED", "CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECKED"],
-    },
-    methods: {
-        getDatasetProgress: function (dataset) {
-            return (this.phases.indexOf(dataset.phase) + 1) * 20;
-        },
-        isDatasetImported: (dataset) => dataset.phase === "CHECKED" && dataset.state === "OK",
-    },
-};
+const { formatNumber } = useFormatters();
+
+defineOptions({ name: "DatasetPickerRow" });
+
+defineProps(["dataset", "depth"]);
+defineEmits(["dataset-filter", "dataset-report"]);
+
+function getDatasetProgress(dataset) {
+    return (PHASES.indexOf(dataset.phase) + 1) * 25;
+}
+
+function isDatasetImported(dataset) {
+    return dataset.phase === "CHECKED" && dataset.state === "OK";
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
 
 .switcher {
     display: inline-block;
@@ -157,7 +148,7 @@ export default {
     margin-bottom: 20px;
 }
 
-.tr {
+tr {
     a.disabled {
         pointer-events: none;
         color: $gray-600;
@@ -168,14 +159,14 @@ export default {
     }
 }
 
-.th {
+th {
     .modified {
         font-family: $font-family-thin;
         color: $headings_light_color;
     }
 }
 
-.td {
+td {
     .created {
         font-weight: 700;
     }

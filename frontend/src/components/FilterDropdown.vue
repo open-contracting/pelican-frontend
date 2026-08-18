@@ -1,104 +1,108 @@
 <template>
-  <b-dropdown
-    id="filter_dropdown"
-    right
-    split
-    split-button-type="button"
-    :html="'<span id=\'show_prefix\'>Show: </span>' + filterNames[selectedIndex]"
-    variant="primary"
-  >
-    <b-dropdown-item-button
-      v-for="(name, index) in filterNames"
-      :key="index"
-      variant="bg-transparent border-transparent"
-      @click="clickItem(index)"
+  <span class="filter_dropdown_group">
+    <span id="show_prefix">Show:</span>
+    <BDropdown
+      id="filter_dropdown"
+      class="filter_dropdown"
+      placement="bottom-end"
+      variant="primary"
     >
-      {{ name }}
-    </b-dropdown-item-button>
-  </b-dropdown>
+      <template #button-content>
+        {{ filterNames[selectedIndex] }}
+      </template>
+      <BDropdownItemButton
+        v-for="(name, index) in filterNames"
+        :key="index"
+        @click="clickItem(index)"
+      >
+        {{ name }}
+      </BDropdownItemButton>
+    </BDropdown>
+  </span>
 </template>
 
-<script>
-export default {
-    props: {
-        filterNames: Array,
-        startIndex: {
-            type: Number,
-            default: 0,
-        },
-    },
-    data: () => ({
-        selectedIndex: 0,
-    }),
-    mounted: function () {
-        this.selectedIndex = this.startIndex;
-        this.clickItem(this.startIndex);
-    },
-    methods: {
-        clickItem: function (index) {
-            this.selectedIndex = index;
-            this.$emit("newSelectedIndex", index);
-        },
-    },
-};
+<script setup>
+import { BDropdown, BDropdownItemButton } from "bootstrap-vue-next";
+import { onMounted, ref } from "vue";
+
+const props = defineProps({
+    filterNames: Array,
+    startIndex: { type: Number, default: 0 },
+});
+
+const emit = defineEmits(["newSelectedIndex"]);
+
+const selectedIndex = ref(0);
+
+function clickItem(index) {
+    selectedIndex.value = index;
+    emit("newSelectedIndex", index);
+}
+
+onMounted(() => {
+    clickItem(props.startIndex);
+});
 </script>
 
 <style lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
+
+.filter_dropdown_group {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 15px;
+}
+
+.filter_dropdown {
+    // Bootstrap renders a block-level wrapper, unlike the .btn-group of a split dropdown.
+    display: inline-flex;
+}
 
 #filter_dropdown {
-    margin: 0.5rem;
-    margin-left: 15px;
-    margin-right: 0px;
+    background-color: transparent;
+    color: $headings-color;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 7px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+    border: 1px solid transparent;
 
-    .dropdown-menu {
-        padding: 0px;
-        border-radius: 4px;
+    &::after {
+        margin-left: 0.5em;
     }
 
-    .btn-primary {
-        border: none;
-        background-color: transparent;
-        color: $headings-color;
-    }
-
-    .btn-primary:first-of-type {
-        pointer-events: none;
-        padding-left: 0px;
-        padding-right: 7px;
-        padding-top: 7px;
-        padding-bottom: 5px;
-    }
-
-    .dropdown-toggle {
-        padding-top: 9px;
-        padding-bottom: 3px;
-    }
-
-    .dropdown-toggle,
-    .dropdown-item {
-        border-radius: 4px;
-        border: 1px solid transparent;
-    }
-
-    .dropdown-toggle:hover,
-    .dropdown-toggle:active,
-    .dropdown-toggle[aria-expanded="true"],
-    .dropdown-item:hover {
+    &:hover,
+    &:active,
+    &[aria-expanded="true"] {
         color: $primary;
         background-color: transparent;
         border-color: $primary;
     }
+}
 
-    .dropdown-toggle:focus,
-    .dropdown-item:focus {
-        box-shadow: none;
-        outline: none;
+#filter_dropdown-menu {
+    padding: 0px;
+    border-radius: 4px;
+
+    .dropdown-item {
+        border-radius: 4px;
+        border: 1px solid transparent;
+
+        &:hover {
+            color: $primary;
+            background-color: transparent;
+            border-color: $primary;
+        }
     }
 }
 
 #show_prefix {
     color: $headings-light-color;
     font-family: $font-family-thin;
+    font-size: 1rem;
+    margin-right: 4px;
 }
 </style>

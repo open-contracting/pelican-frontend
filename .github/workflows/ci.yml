@@ -64,10 +64,11 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6.0.10
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: "**/package-lock.json"
-      - run: npm ci --ignore-scripts
-      - run: npx vue-cli-service build
+          cache: pnpm
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec vite build

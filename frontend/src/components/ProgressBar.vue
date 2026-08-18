@@ -1,9 +1,8 @@
 <template>
   <div class="progress_bar">
-    <template v-for="(b, i) in allBars">
+    <template v-for="(b, i) in allBars" :key="i">
       <div
         v-if="b.value"
-        :key="i"
         :class="['inner', b.class]"
         :style="{ width: b.value + '%', 'background-color': b.color }"
       >
@@ -13,35 +12,29 @@
   </div>
 </template>
 
-<script>
-export default {
-    name: "ProgressBar",
-    props: ["bars", "value", "ok", "failed"],
-    computed: {
-        allBars: function () {
-            const result = [];
+<script setup>
+import { computed } from "vue";
 
-            if (this.value) {
-                result.push({ value: this.value });
-            }
-            if (this.ok) {
-                result.push({ value: this.ok, class: "ok" });
-            }
-            if (this.failed) {
-                result.push({ value: this.failed, class: "failed" });
-            }
-            if (this.bars) {
-                result.concat(this.bars);
-            }
+const props = defineProps(["value", "ok", "failed"]);
 
-            return result;
-        },
-    },
-};
+const allBars = computed(() => {
+    const result = [];
+
+    if (props.value) {
+        result.push({ value: props.value });
+    }
+    if (props.ok) {
+        result.push({ value: props.ok, class: "ok" });
+    }
+    if (props.failed) {
+        result.push({ value: props.failed, class: "failed" });
+    }
+
+    return result;
+});
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/main";
 
 .progress_bar {
     width: 100%;

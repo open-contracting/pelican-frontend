@@ -1,0 +1,7 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
+  "entry": ["src/scss/main.scss"],
+  "ignoreDependencies": [
+    "bootstrap" // imported in src/scss/main.scss (knip doesn't resolve package SCSS @imports)
+  ]
+}

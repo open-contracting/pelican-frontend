@@ -12,146 +12,151 @@
           id="logo"
           src="@/assets/ocp_logo.svg"
         >
-        <b-nav class="main_nav text-left">
-          <b-nav-item
+        <BNav class="main_nav text-start">
+          <BNavItem
             id="home_link"
             to="/"
           >
             <span class="menu_icon_small">
-              <font-awesome-icon icon="cogs" />
+              <FontAwesomeIcon icon="cogs" fixed-width />
             </span>
             {{ $t("sections.home").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'overview', params: { datasetId: datasetId } }"
+            :active="isSection('overview')"
           >
             <span class="menu_icon_small">
-              <font-awesome-icon icon="home" />
+              <FontAwesomeIcon icon="home" fixed-width />
             </span>
             {{ $t("sections.overview").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'field', params: { datasetId: datasetId } }"
+            :active="isSection('field')"
             :disabled="!fieldLoaded"
           >
             <span
               v-if="fieldLoaded"
               class="menu_icon_small"
             >
-              <font-awesome-icon icon="sliders-h" />
+              <FontAwesomeIcon icon="sliders-h" fixed-width />
             </span>
             <span
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
-                variant="default"
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.field").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'resource', params: { datasetId: datasetId } }"
+            :active="isSection('resource')"
             :disabled="!resourceLoaded"
           >
             <span
               v-if="resourceLoaded"
               class="menu_icon_small"
             >
-              <font-awesome-icon icon="list-alt" />
+              <FontAwesomeIcon icon="list-alt" fixed-width />
             </span>
             <span
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
-                variant="default"
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.resource").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             :to="{ name: 'dataset', params: { datasetId: datasetId } }"
+            :active="isSection('dataset')"
             :disabled="!datasetLoaded"
           >
             <span
               v-if="datasetLoaded"
               class="menu_icon_small"
             >
-              <font-awesome-icon icon="tasks" />
+              <FontAwesomeIcon icon="tasks" fixed-width />
             </span>
             <span
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
-                variant="default"
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.dataset").toUpperCase() }}
-          </b-nav-item>
+          </BNavItem>
 
-          <b-nav-item
+          <BNavItem
             v-if="showTimeVariance"
             :to="{ name: 'time', params: { datasetId: datasetId } }"
+            :active="isSection('time')"
           >
             <span
               v-if="timeVarianceLoaded"
               class="menu_icon_small"
             >
-              <font-awesome-icon icon="history" />
+              <FontAwesomeIcon icon="history" fixed-width />
             </span>
             <span
               v-else
               class="menu_icon_spinner"
             >
-              <b-spinner
-                variant="default"
+              <BSpinner
                 small
                 type="grow"
                 class="spinner"
               />
             </span>
             {{ $t("sections.time").toUpperCase() }}
-          </b-nav-item>
-        </b-nav>
+          </BNavItem>
+        </BNav>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import stateMixin from "@/plugins/stateMixins.js";
+<script setup>
+import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 
-export default {
-    mixins: [stateMixin],
-    data: () => ({}),
-    computed: {
-        showTimeVariance() {
-            return (
-                this.$store.getters.timeVarianceLevelStats != null &&
-                this.$store.getters.timeVarianceLevelStats.length > 0
-            );
-        },
-    },
-};
+const route = useRoute();
+const store = useStore();
+
+// A check detail page is a sibling route, not a child, so vue-router marks no link active.
+const isSection = (name) => route.path.startsWith(`/${name}/`);
+
+const datasetId = computed(() => store.getters.datasetId);
+const fieldLoaded = computed(() => store.getters.fieldLevelStats != null);
+const resourceLoaded = computed(() => store.getters.resourceLevelStats != null);
+const datasetLoaded = computed(() => store.getters.datasetLevelStats != null);
+const timeVarianceLoaded = computed(() => store.getters.timeVarianceLevelStats != null);
+const showTimeVariance = computed(
+    () => store.getters.timeVarianceLevelStats != null && store.getters.timeVarianceLevelStats.length > 0,
+);
 </script>
 
 <style lang="scss">
-@import "src/scss/main";
 
 #logo {
     width: 80%;
@@ -160,7 +165,6 @@ export default {
 
 .main_nav {
     margin-top: 50px;
-    display: inline-block;
 }
 
 .main_nav > li {
@@ -203,7 +207,6 @@ export default {
 #sidebar {
     background-color: white;
     position: relative;
-    position: relative;
     width: 210px;
 }
 
@@ -212,14 +215,14 @@ export default {
     top: 0px;
     left: 0px;
     bottom: 0px;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 50px 5px 30px 5px;
     width: 210px;
     background-color: white;
     z-index: 1000;
 }
 
-#sidebar_envelope .main_nav .nav-item .router-link-active {
+#sidebar_envelope .main_nav .nav-item .nav-link.active {
     color: $primary;
 }
 
@@ -248,7 +251,7 @@ export default {
         top: 0px;
         left: 0px;
         bottom: 0px;
-        overflow-y: scroll;
+        overflow-y: auto;
         padding: 60px 0px 0px 0px;
         z-index: 100;
         border-right: 1px solid $na_light_color;
@@ -264,7 +267,7 @@ export default {
     }
 
     #sidebar_envelope .nav-item :hover,
-    #sidebar_envelope .main_nav .nav-item .router-link-active:hover,
+    #sidebar_envelope .main_nav .nav-item .nav-link.active:hover,
     #sidebar_envelope .main_nav #home_link .nav-link:hover {
         background-color: $na_color;
         color: white;

@@ -1,7 +1,7 @@
 <template>
   <div class="result_box loader text-center">
     <div class="spinner">
-      <b-spinner
+      <BSpinner
         variant="primary"
         style="width: 4rem; height: 4rem"
         type="grow"
@@ -12,10 +12,8 @@
   </div>
 </template>
 
-<script>
-export default {
-    data: () => ({}),
-};
+<script setup>
+import { BSpinner } from "bootstrap-vue-next";
 </script>
 
 <style scoped lang="scss">

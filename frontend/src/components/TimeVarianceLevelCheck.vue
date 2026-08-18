@@ -5,26 +5,26 @@
     @click="detail(check.name)"
   >
     <div class="card-body">
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
             {{ $t("timeLevel." + check.name + ".name") }}
           </h5>
         </div>
 
-        <div class="col col-2 col-sm-2 col-lg-2 text-right">
+        <div class="col col-2 col-sm-2 col-lg-2 text-end">
           <span
             v-if="result == true"
-            class="badge badge-pill ok_status"
+            class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
             v-if="result == false"
-            class="badge badge-pill failed_status"
+            class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
       </div>
 
-      <div class="row no-gutters">
+      <div class="row g-0">
         <div class="col col-12">
           <p
             class="check_description"
@@ -35,7 +35,7 @@
     </div>
 
     <div class="card-body">
-      <div class="row no-gutters justify-content-end">
+      <div class="row g-0 justify-content-end">
         <div class="col col-12">
           <template v-if="check.coverage_result != null">
             <div class="row">
@@ -52,7 +52,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.coverage_result }"
                 >
-                  {{ coveragePercentage | formatPercentage }}
+                  {{ formatPercentage(coverageRatio) }}
                 </span>
               </div>
               <div class="col col-6 text-center">
@@ -60,7 +60,7 @@
                   class="result_percentage"
                   :class="{ color_failed: !check.check_result }"
                 >
-                  {{ checkPercentage | formatPercentage }}
+                  {{ formatPercentage(checkRatio) }}
                 </span>
               </div>
             </div>
@@ -87,31 +87,35 @@
   </div>
 </template>
 
-<script>
-import timeMixins from "@/plugins/timeMixins.js";
+<script setup>
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useFormatters } from "@/composables/useFormatters";
 
-export default {
-    mixins: [timeMixins],
-    props: ["check"],
-    data: () => ({}),
-    computed: {
-        result() {
-            return this.check.coverage_result && this.check.check_result;
-        },
-    },
-    methods: {
-        detail: function (name) {
-            this.$router.push({
-                name: "timeVarianceCheckDetail",
-                params: { check: name },
-            });
-        },
-    },
-};
+const props = defineProps(["check"]);
+const { formatPercentage } = useFormatters();
+const router = useRouter();
+
+const result = computed(() => props.check.coverage_result && props.check.check_result);
+const coverageRatio = computed(() => {
+    if (props.check.meta.total_count === 0) return 0;
+    return props.check.meta.coverage_count / props.check.meta.total_count;
+});
+const checkRatio = computed(() => {
+    if (props.check.meta.coverage_count === 0) return 0;
+    return props.check.meta.ok_count / props.check.meta.coverage_count;
+});
+
+function detail(name) {
+    router.push({
+        name: "timeVarianceCheckDetail",
+        params: { check: name },
+    });
+}
 </script>
 
 <style scoped lang="scss">
-@import "src/scss/variables";
+@import "@/scss/variables";
 
 .ok_status {
     background-color: $ok_color;
