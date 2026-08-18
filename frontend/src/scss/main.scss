@@ -219,7 +219,7 @@ input::placeholder,
   font-size: 13px;
 }
 
-// Both dashboard layouts leave room for the menu.
+// #sidebar_envelope is fixed, so the content is indented past it.
 @media (max-width: 1199.98px) {
   .main_envelope {
     padding-left: 80px;
