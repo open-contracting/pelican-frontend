@@ -30,27 +30,27 @@ import InlineBar from "./InlineBar.vue";
 const props = defineProps(["check", "showCount"]);
 const { t } = useI18n();
 
-const denominator = computed(() => props.check.meta.total_buyer_count);
+const denominator = computed(() => props.check.meta.total_unique_count);
 const chartData = computed(() => [
     {
         label: t("datasetLevel.charts.label_1"),
-        count: props.check.meta.counts["1"].total_buyer_count,
+        count: props.check.meta.counts["1"].total_unique_count,
     },
     {
         label: t("datasetLevel.charts.label_2_20"),
-        count: props.check.meta.counts["2_20"].total_buyer_count,
+        count: props.check.meta.counts["2_20"].total_unique_count,
     },
     {
         label: t("datasetLevel.charts.label_21_50"),
-        count: props.check.meta.counts["21_50"].total_buyer_count,
+        count: props.check.meta.counts["21_50"].total_unique_count,
     },
     {
         label: t("datasetLevel.charts.label_51_100"),
-        count: props.check.meta.counts["51_100"].total_buyer_count,
+        count: props.check.meta.counts["51_100"].total_unique_count,
     },
     {
         label: t("datasetLevel.charts.label_100"),
-        count: props.check.meta.counts["100+"].total_buyer_count,
+        count: props.check.meta.counts["100+"].total_unique_count,
     },
 ]);
 </script>

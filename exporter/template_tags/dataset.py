@@ -206,10 +206,10 @@ class Dataset(TemplateTag):
                     key.replace("_", "-"): value["total_ocid_count"] for key, value in check.meta["counts"].items()
                 }
                 data["buyerCounts"] = {
-                    key.replace("_", "-"): value["total_buyer_count"] for key, value in check.meta["counts"].items()
+                    key.replace("_", "-"): value["total_unique_count"] for key, value in check.meta["counts"].items()
                 }
                 data["totalOcidCount"] = check.meta["total_ocid_count"]
-                data["totalBuyerCount"] = check.meta["total_buyer_count"]
+                data["totalBuyerCount"] = check.meta["total_unique_count"]
                 data["examples"] = [example["ocid"] for example in check.meta["examples"]]
 
         return data
