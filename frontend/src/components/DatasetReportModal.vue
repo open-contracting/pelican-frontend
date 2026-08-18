@@ -278,9 +278,9 @@
           </BRow>
           <BRow>
             <BCol class="col-12">
-              <small class="form-text text-body-secondary">
+              <div class="form-text text-body-secondary">
                 <p>{{ $t("datasetReport.reportLanguageTooltip") }}</p>
-              </small>
+              </div>
             </BCol>
           </BRow>
         </div>
@@ -299,10 +299,10 @@
             lazy-formatter
             :formatter="fileIdFormatter"
           />
-          <small class="form-text text-body-secondary">
+          <div class="form-text text-body-secondary">
             <p>{{ $t("datasetReport.documentIdTooltip") }}</p>
             <p>{{ $t("datasetReport.documentIdPermissions", {user: $store.getters.settings.user}) }}</p>
-          </small>
+          </div>
         </div>
       </div>
       <div class="row mb-3 section_row">
@@ -319,10 +319,10 @@
             lazy-formatter
             :formatter="fileIdFormatter"
           />
-          <small class="form-text text-body-secondary">
+          <div class="form-text text-body-secondary">
             <p>{{ $t("datasetReport.folderIdTooltip") }}</p>
             <p>{{ $t("datasetReport.folderIdPermissions", {user: $store.getters.settings.user}) }}</p>
-          </small>
+          </div>
         </div>
       </div>
       <div class="row mb-3 section_row">
@@ -337,9 +337,9 @@
             autocomplete="off"
             class="base_input"
           />
-          <small class="form-text text-body-secondary">
+          <div class="form-text text-body-secondary">
             <p>{{ $t("datasetReport.reportNameTooltip") }}</p>
-          </small>
+          </div>
         </div>
       </div>
       <div class="text-center">
