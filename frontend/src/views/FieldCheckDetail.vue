@@ -45,15 +45,15 @@
 
       <ExampleBoxes
         :example-sections="exampleSections"
-        :loaded="check.examples_filled"
+        :loading="!check.examples_filled"
         @preview="preview"
       />
     </template>
 
     <template #preview>
-      <span v-if="previewMetaData">
+      <span v-if="previewMetadata">
         <h5>{{ $t("preview.metadata") }}</h5>
-        <vue-json-pretty :data="previewMetaData" />
+        <vue-json-pretty :data="previewMetadata" />
       </span>
 
       <div class="divider">
@@ -106,7 +106,7 @@ const { t } = useI18n();
 const { formatNumber } = useFormatters();
 const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const previewMetaData = ref(null);
+const previewMetadata = ref(null);
 
 const check = computed(() => store.getters.fieldLevelCheckByPath(route.params.path));
 
@@ -192,7 +192,7 @@ function preview(itemId, group) {
   }
 
   if (result) {
-    previewMetaData.value = result.result;
+    previewMetadata.value = result.result;
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <span>
-    <span v-if="!loaded">
+    <span v-if="loading">
       <div class="result_box loader text-center">
         <div class="spinner">
           <BSpinner
@@ -97,7 +97,7 @@
                 </button>
               </td>
             </tr>
-            <tr v-if="!visibleSections(section.header) && section.examples.length > 5">
+            <tr v-if="!isExpanded(section.header) && section.examples.length > 5">
               <td
                 colspan="4"
                 class="text-center bold clickable moreLess"
@@ -109,7 +109,7 @@
                 </a>
               </td>
             </tr>
-            <template v-if="visibleSections(section.header)">
+            <template v-if="isExpanded(section.header)">
               <tr
                 v-for="(item, index) in section.examples.slice(5)"
                 :key="index"
@@ -165,7 +165,7 @@
                 </td>
               </tr>
             </template>
-            <tr v-if="visibleSections(section.header)">
+            <tr v-if="isExpanded(section.header)">
               <td
                 colspan="4"
                 class="text-center bold clickable moreLess"
@@ -191,7 +191,7 @@ import { useDataItem } from "@/composables/useDataItem.js";
 
 defineProps({
   exampleSections: Array,
-  loaded: Boolean,
+  loading: Boolean,
 });
 
 const emit = defineEmits(["preview"]);
@@ -216,7 +216,7 @@ function showLess(section) {
   openSections.value = openSections.value.filter((item) => item !== section);
 }
 
-function visibleSections(section) {
+function isExpanded(section) {
   return openSections.value.includes(section);
 }
 </script>

@@ -10,11 +10,11 @@
         </div>
         <div class="col col-2 text-end">
           <span
-            v-if="!reportOnly && check.result == true"
+            v-if="!reportOnly && check.result === true"
             class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
-            v-if="!reportOnly && check.result == false"
+            v-if="!reportOnly && check.result === false"
             class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
@@ -28,15 +28,15 @@
         v-if="check.meta.reason == null"
         class="result_box"
       >
-        <div v-if="checkType == 'bar'">
+        <div v-if="checkType === 'bar'">
           <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
 
-        <div v-if="checkType == 'donut'">
+        <div v-else-if="checkType === 'donut'">
           <CodeChart :check="check" :limit="false" />
         </div>
 
-        <div v-if="checkType == 'top3'">
+        <div v-else-if="checkType === 'top3'">
           <table class="table table-sm">
             <thead>
               <tr>
@@ -66,7 +66,7 @@
           </table>
         </div>
 
-        <div v-if="checkType == 'numeric'">
+        <div v-else-if="checkType === 'numeric'">
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
@@ -92,7 +92,7 @@
         </div>
 
         <div
-          v-if="checkType == 'biggest_share'"
+          v-else-if="checkType === 'biggest_share'"
           class="biggest_share"
         >
           <div class="row text-start">
@@ -111,8 +111,8 @@
                 <div
                   class="col col-12 text-center total_share"
                   :class="{
-                    color_failed: check.result == false,
-                    color_ok: check.result == true
+                    color_failed: check.result === false,
+                    color_ok: check.result === true
                   }"
                 >
                   {{ formatPercentage2D(check.meta.ocid_share) }}
@@ -128,7 +128,7 @@
         </div>
 
         <div
-          v-if="checkType == 'single_value_share'"
+          v-else-if="checkType === 'single_value_share'"
           class="single_value_share"
         >
           <div class="row text-center">
@@ -142,7 +142,6 @@
 
       <ExampleBoxes
         :example-sections="exampleSections"
-        :loaded="true"
         @preview="previewDataItem"
       />
     </template>
