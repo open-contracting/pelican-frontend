@@ -25,6 +25,9 @@ export const PHASES = ["CONTRACTING_PROCESS", "DATASET", "TIME_VARIANCE", "CHECK
 // Sync with State in services.py
 export const STATES = ["IN_PROGRESS", "OK"];
 
+// Sync with the example keys in the dataset-level and time-based checks.
+export const EXAMPLE_KEYS = new Set(["examples", "failed_examples", "passed_examples"]);
+
 export const DATASET_CHECK_REPORT_ONLY = {
   "distribution.tender_award_criteria": true,
   "distribution.tender_submission_method": true,

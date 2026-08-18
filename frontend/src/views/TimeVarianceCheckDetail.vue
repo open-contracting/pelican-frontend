@@ -417,7 +417,7 @@
 
 <script setup>
 import { BSpinner, useToast } from "bootstrap-vue-next";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
@@ -427,6 +427,7 @@ import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
+import { withoutExamples } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 const { formatNumber } = useFormatters();
@@ -437,28 +438,16 @@ const { t } = useI18n();
 const { create: showToast } = useToast();
 const { download, copyToClipboard } = useDataItem();
 
-const check = ref(null);
 const previewDataItemId = ref(null);
-const previewMetadata = ref(null);
 const loadingPreviewData = ref(false);
 let previewRequest = 0;
 const showMore = ref(false);
 const selectedKey = ref(null);
 
+const check = computed(() => store.getters.timeVarianceLevelCheckByName(route.params.check));
+const loaded = computed(() => check.value != null);
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
-const loaded = computed(() => {
-  loadCheck();
-  return check.value != null;
-});
-
-function loadCheck() {
-  check.value = store.getters.timeVarianceLevelCheckByName(route.params.check);
-
-  if (check.value != null) {
-    previewMetadata.value = { ...check.value.meta };
-    previewMetadata.value.examples = undefined;
-  }
-}
+const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
 
 function preview(key, itemId) {
   // A later click supersedes this one, whose response is then ignored.
@@ -494,10 +483,6 @@ function preview(key, itemId) {
       loadingPreviewData.value = false;
     });
 }
-
-onBeforeMount(() => {
-  loadCheck();
-});
 </script>
 
 <style scoped lang="scss">
