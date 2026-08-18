@@ -273,7 +273,7 @@ mark {
 }
 
 .table thead th {
-  border-top: none;
+  border-bottom: solid 2px $table-border-color;
 }
 
 .undef {
