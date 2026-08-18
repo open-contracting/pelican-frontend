@@ -198,7 +198,6 @@ const showTimeVariance = computed(
 #sidebar {
     background-color: white;
     position: relative;
-    position: relative;
     width: 210px;
 }
 

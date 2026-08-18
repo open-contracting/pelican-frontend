@@ -151,6 +151,9 @@ Access template refs with `useTemplateRef() <https://vuejs.org/api/composition-a
    // No
    const bar = ref(null);
 
+Styles
+^^^^^^
+
 Write styles in a ``<style scoped>`` block. A scoped style reaches the component's own markup and the root element of a component it renders, which covers most cases:
 
 .. code-block:: vue
@@ -181,10 +184,10 @@ Write a rule once, in ``src/scss/main.scss``, if more than one component uses th
    // Yes, in main.scss
    .collection_header { ... }
 
-   // No, in each of Dataset.vue and Time.vue, where whichever loads last wins
+   // No, in each component that uses it, where whichever loads last wins
    .collection_header { ... }
 
-Do not rely on the order in which stylesheets load. Bootstrap's followed the components' under the previous build tool and precedes them under Vite, which turned declarations that had never applied into effective ones. To override Bootstrap, write a more specific selector, rather than an equally specific one:
+Do not rely on the order in which stylesheets load, which is the bundler's business. To override Bootstrap, write a more specific selector, rather than an equally specific one:
 
 .. code-block:: scss
 
