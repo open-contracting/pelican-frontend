@@ -60,7 +60,7 @@
               >
                 <td>{{ item.value_str }}</td>
                 <td class="text-end numeric">
-                  {{ formatPercentage2D(item.share * 100) }}
+                  {{ formatPercentage2D(item.share) }}
                 </td>
                 <td class="text-end numeric">
                   {{ formatNumber(item.count) }}
@@ -119,7 +119,7 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ formatPercentage2D(check.meta.ocid_share * 100) }}
+                  {{ formatPercentage2D(check.meta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
