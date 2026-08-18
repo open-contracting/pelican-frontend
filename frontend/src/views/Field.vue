@@ -69,7 +69,7 @@
       </BCol>
     </BRow>
 
-    <div class="field_result_box">
+    <div class="check_list_box">
       <FieldCheckTable
         v-if="layout == 'table'"
         ref="field-check-table"
@@ -168,14 +168,6 @@ function resetTableSorting() {
     vertical-align: -1px;
     color: $text-color;
     overflow: auto;
-}
-
-.field_result_box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
-    border: 0;
 }
 
 .action_bar {

@@ -68,6 +68,16 @@ h5 {
   background-color: white;
   border-radius: 10px;
   padding: 35px;
+  margin-bottom: 50px;
+  box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
+  border: 0;
+}
+
+// Holds a whole table of checks, rather than one check's results.
+.check_list_box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 40px;
   box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
   border: 0;
 }
@@ -113,10 +123,6 @@ h5 {
 
 .clickable {
   cursor: pointer;
-}
-
-.result_box {
-  margin-bottom: 50px;
 }
 
 .vjs-tree .vjs-value__string {

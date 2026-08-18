@@ -18,7 +18,7 @@
           />
         </BCol>
       </BRow>
-      <div class="resource_result_box">
+      <div class="check_list_box">
         <table class="data_table">
           <thead>
             <tr>
@@ -105,13 +105,3 @@ onBeforeMount(() => {
     filterIndex.value = store.getters.resourceLevelFilterIndex;
 });
 </script>
-
-<style scoped lang="scss">
-.resource_result_box {
-    background-color: white;
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 2px 18px 6px rgba(0, 0, 0, 0.06);
-    border: 0;
-}
-</style>
