@@ -78,7 +78,7 @@ function detail() {
 
 // .data_table resets the first column's padding, at a higher specificity than a bare class.
 td.check_name {
-    padding-left: 65px;
+    padding-left: 35px;
 }
 
 .progress_column {
