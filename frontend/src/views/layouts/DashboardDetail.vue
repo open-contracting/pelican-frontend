@@ -46,7 +46,7 @@ import MainMenu from "./MainMenu.vue";
     padding: 30px;
 }
 
-@media (max-width: 1199.98px) {
+@include media-breakpoint-down(xl) {
     .preview_envelope {
         padding-left: 50px;
     }
