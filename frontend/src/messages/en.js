@@ -192,14 +192,14 @@ export const messages = {
                 description:
                     "Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification.",
                 descriptionLong:
-                    "<p>Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>. For illustration purposes, the share of all buyers identified in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both present in fewer than 1,000 compiled releases.</p>",
+                    "<p>Fewer than 50% of all buyers are identified in only one compiled release. Failure indicates issues in buyer identification. Buyers are identified by <code>buyer.id</code>. For illustration purposes, the share of all buyers identified in other numbers of compiled releases is shown.</p><p>The test is skipped if the <code>buyer.id</code> field is present in fewer than 1,000 compiled releases.</p>",
             },
             buyer_repetition: {
                 name: "Buyer repetition",
                 description:
                     "The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation.",
                 descriptionLong:
-                    "<p>The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code>.</p><p>The test is skipped if the <code>buyer.identifier.scheme</code> and <code>buyer.identifier.id</code> fields are both present in fewer than 1,000 compiled releases.</p>",
+                    "<p>The most common buyer is identified in 1% to 50% of compiled releases. Failure indicates issues in buyer identification or buyer over-representation. Buyers are identified by <code>buyer.id</code>.</p><p>The test is skipped if the <code>buyer.id</code> field is present in fewer than 1,000 compiled releases.</p>",
             },
             tender_value: {
                 name: "Tender value distribution",

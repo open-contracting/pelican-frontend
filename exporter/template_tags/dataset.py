@@ -113,8 +113,7 @@ class Dataset(TemplateTag):
                 )
             elif check_type == "biggest_share":
                 self.tags += (
-                    generate_key_leaf_tag("buyerIdentifierId"),
-                    generate_key_leaf_tag("buyerIdentifierScheme"),
+                    generate_key_leaf_tag("buyerId"),
                     generate_key_leaf_tag("ocidCount"),
                     generate_key_leaf_tag("ocidShare"),
                     generate_key_leaf_tag("totalOcidCount"),
@@ -195,8 +194,7 @@ class Dataset(TemplateTag):
                 data["passedExamples"] = [example["ocid"] for example in check.meta["passed_examples"]]
                 data["failedExamples"] = [example["ocid"] for example in check.meta["failed_examples"]]
             elif check_type == "biggest_share":
-                data["buyerIdentifierId"] = check.meta["specifics"]["buyer.identifier.id"]
-                data["buyerIdentifierScheme"] = check.meta["specifics"]["buyer.identifier.scheme"]
+                data["buyerId"] = check.meta["specifics"]["buyer.id"]
                 data["ocidCount"] = check.meta["ocid_count"]
                 data["ocidShare"] = check.meta["ocid_share"]
                 data["totalOcidCount"] = check.meta["total_ocid_count"]

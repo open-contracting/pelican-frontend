@@ -728,10 +728,8 @@ These include simple and sample leaf tags.
 
    * - Tag
      - Renders
-   * - ``{% buyerIdentifierId %}``
-     - the most common buyer's ``.identifier.id``
-   * - ``{% buyerIdentifierScheme %}``
-     - the most common buyer's ``.identifier.scheme``
+   * - ``{% buyerId %}``
+     - the most common buyer's ``.id``
    * - ``{% ocidCount %}``
      - the number of OCIDs in which the most common buyer occurs
    * - ``{% ocidShare %}``
