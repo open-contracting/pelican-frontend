@@ -222,7 +222,7 @@ input::placeholder,
 // #sidebar_envelope is fixed, so the content is indented past it.
 @include media-breakpoint-down(xl) {
   .main_envelope {
-    padding-left: 80px;
+    padding-left: 75px;
   }
 }
 
