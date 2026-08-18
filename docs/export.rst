@@ -712,9 +712,9 @@ Simple leaf tags
    * - Tag
      - Renders
    * - ``{% totalBuyerCount %}``
-     - the number of unique buyers for which the ``identifier`` is set
+     - the number of unique buyers for which the ``id`` is set
    * - ``{% totalOcidCount %}``
-     - the number of OCIDs in which the buyer's ``identifier`` is set
+     - the number of OCIDs in which the buyer's ``id`` is set
    * - ``{% examples %}``
      - a sample list of OCIDs in which the buyer occurs in only that OCID
 
@@ -735,7 +735,7 @@ These include simple and sample leaf tags.
    * - ``{% ocidShare %}``
      - the percentage of OCIDs in which the most common buyer occurs
    * - ``{% totalOcidCount %}``
-     - the number of OCIDs in which the buyer's ``identifier`` is set
+     - the number of OCIDs in which the buyer's ``id`` is set
    * - ``{% examples max:|5| %}``
      - a sample list of OCIDs in which the most common buyer occurs
 
