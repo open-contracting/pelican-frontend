@@ -76,7 +76,6 @@ function detail() {
 <style scoped lang="scss">
 @import "@/scss/variables";
 
-// .data_table resets the first column's padding, at a higher specificity than a bare class.
 td.check_name {
     padding-left: 35px;
 }

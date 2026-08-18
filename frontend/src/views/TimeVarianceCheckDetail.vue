@@ -117,9 +117,11 @@
                 class="new_row"
               >
                 <td class="text-start numeric">
-                  <span class="check_name">{{ item.new_item_ocid }}</span>
-                                    &nbsp;
-                  <span class="example_version">[{{ $t("examples.new") }}]</span>
+                  <div class="d-flex align-items-center">
+                    <span class="check_name">{{ item.new_item_ocid }}</span>
+                                      &nbsp;
+                    <span class="example_version">[{{ $t("examples.new") }}]</span>
+                  </div>
                 </td>
                 <td class="clickable">
                   <button
@@ -173,9 +175,11 @@
                 class="old_row"
               >
                 <td class="text-start numeric">
-                  <span class="check_name">{{ item.ocid }}</span>
-                                    &nbsp;
-                  <span class="example_version">[{{ $t("examples.old") }}]</span>
+                  <div class="d-flex align-items-center">
+                    <span class="check_name">{{ item.ocid }}</span>
+                                      &nbsp;
+                    <span class="example_version">[{{ $t("examples.old") }}]</span>
+                  </div>
                 </td>
                 <td class="clickable">
                   <button
@@ -244,9 +248,11 @@
                   class="new_row"
                 >
                   <td class="text-start numeric">
-                    <span class="check_name">{{ item.new_item_ocid }}</span>
+                    <div class="d-flex align-items-center">
+                      <span class="check_name">{{ item.new_item_ocid }}</span>
                                         &nbsp;
-                    <span class="example_version">[{{ $t("examples.new") }}]</span>
+                      <span class="example_version">[{{ $t("examples.new") }}]</span>
+                    </div>
                   </td>
                   <td class="clickable">
                     <button
@@ -300,9 +306,11 @@
                   class="old_row"
                 >
                   <td class="text-start numeric">
-                    <span class="check_name">{{ item.ocid }}</span>
+                    <div class="d-flex align-items-center">
+                      <span class="check_name">{{ item.ocid }}</span>
                                         &nbsp;
-                    <span class="example_version">[{{ $t("examples.old") }}]</span>
+                      <span class="example_version">[{{ $t("examples.old") }}]</span>
+                    </div>
                   </td>
                   <td class="clickable">
                     <button
