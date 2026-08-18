@@ -521,7 +521,7 @@ onBeforeMount(() => {
     color: $primary;
 }
 
-.old_row > td {
+.new_row > td {
     border: none;
 }
 
