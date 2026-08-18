@@ -297,8 +297,6 @@ export const messages = {
       },
     },
     unique: {
-      ok: "All values are unique.",
-      failed: "Not all values are unique.", // not sure if used
       tender_id: {
         name: "Tender ID is unique",
         description: "Each <code>tender.id</code> is unique across the collection.",

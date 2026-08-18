@@ -32,10 +32,6 @@
           <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
 
-        <div v-if="checkType == 'unique'">
-          {{ $t("datasetLevel.unique.ok") }}
-        </div>
-
         <div v-if="checkType == 'donut'">
           <CodeChart :check="check" :limit="false" />
         </div>
