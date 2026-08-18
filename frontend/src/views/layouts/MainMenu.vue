@@ -155,7 +155,6 @@ const showTimeVariance = computed(
 
 .main_nav {
     margin-top: 50px;
-    display: inline-block;
 }
 
 .main_nav > li {
