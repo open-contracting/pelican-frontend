@@ -25,6 +25,7 @@
 
           <BNavItem
             :to="{ name: 'overview', params: { datasetId: datasetId } }"
+            :active="isSection('overview')"
           >
             <span class="menu_icon_small">
               <FontAwesomeIcon icon="home" fixed-width />
@@ -34,6 +35,7 @@
 
           <BNavItem
             :to="{ name: 'field', params: { datasetId: datasetId } }"
+            :active="isSection('field')"
             :disabled="!fieldLoaded"
           >
             <span
@@ -57,6 +59,7 @@
 
           <BNavItem
             :to="{ name: 'resource', params: { datasetId: datasetId } }"
+            :active="isSection('resource')"
             :disabled="!resourceLoaded"
           >
             <span
@@ -80,6 +83,7 @@
 
           <BNavItem
             :to="{ name: 'dataset', params: { datasetId: datasetId } }"
+            :active="isSection('dataset')"
             :disabled="!datasetLoaded"
           >
             <span
@@ -104,6 +108,7 @@
           <BNavItem
             v-if="showTimeVariance"
             :to="{ name: 'time', params: { datasetId: datasetId } }"
+            :active="isSection('time')"
           >
             <span
               v-if="timeVarianceLoaded"
@@ -132,9 +137,14 @@
 <script setup>
 import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
 import { computed } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 
+const route = useRoute();
 const store = useStore();
+
+// A check detail page is a sibling route, not a child, so vue-router marks no link active.
+const isSection = (name) => route.path.startsWith(`/${name}/`);
 
 const datasetId = computed(() => store.getters.datasetId);
 const fieldLoaded = computed(() => store.getters.fieldLevelStats != null);
