@@ -16,10 +16,10 @@ const store = useStore();
 const { formatNumber } = useFormatters();
 
 const dataset = computed(() => {
-    if (store.getters.dataset?.meta !== undefined) {
-        return store.getters.dataset;
-    }
-    return undefined;
+  if (store.getters.dataset?.meta !== undefined) {
+    return store.getters.dataset;
+  }
+  return undefined;
 });
 </script>
 

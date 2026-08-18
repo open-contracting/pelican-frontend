@@ -18,19 +18,19 @@ import { computed } from "vue";
 const props = defineProps(["value", "ok", "failed"]);
 
 const allBars = computed(() => {
-    const result = [];
+  const result = [];
 
-    if (props.value) {
-        result.push({ value: props.value });
-    }
-    if (props.ok) {
-        result.push({ value: props.ok, class: "ok" });
-    }
-    if (props.failed) {
-        result.push({ value: props.failed, class: "failed" });
-    }
+  if (props.value) {
+    result.push({ value: props.value });
+  }
+  if (props.ok) {
+    result.push({ value: props.ok, class: "ok" });
+  }
+  if (props.failed) {
+    result.push({ value: props.failed, class: "failed" });
+  }
 
-    return result;
+  return result;
 });
 </script>
 

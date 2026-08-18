@@ -113,73 +113,73 @@ let previewRequest = 0;
 const check = computed(() => store.getters.resourceLevelStats?.find((item) => item.name === route.params.check));
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 const allExamples = computed(() => {
-    if (!check.value) {
-        return [];
-    }
+  if (!check.value) {
+    return [];
+  }
 
-    let examples = [];
-    examples = examples.concat(check.value.failed_examples);
-    examples = examples.concat(check.value.passed_examples);
-    examples = examples.concat(check.value.undefined_examples);
-    return examples;
+  let examples = [];
+  examples = examples.concat(check.value.failed_examples);
+  examples = examples.concat(check.value.passed_examples);
+  examples = examples.concat(check.value.undefined_examples);
+  return examples;
 });
 const exampleSections = computed(() => {
-    const sections = [];
-    if (check.value) {
-        const failed = check.value.failed_examples;
-        const passed = check.value.passed_examples;
-        const undefineds = check.value.undefined_examples;
+  const sections = [];
+  if (check.value) {
+    const failed = check.value.failed_examples;
+    const passed = check.value.passed_examples;
+    const undefineds = check.value.undefined_examples;
 
-        if (failed.length > 0) {
-            sections.push({
-                id: "failed",
-                header: t("core.failedExamples"),
-                examples: failed.map((val) => val.meta),
-            });
-        }
-
-        if (passed.length > 0) {
-            sections.push({
-                id: "passed",
-                header: t("core.passedExamples"),
-                examples: passed.map((val) => val.meta),
-            });
-        }
-
-        if (undefineds.length > 0) {
-            sections.push({
-                id: "undefined",
-                header: t("core.undefinedExamples"),
-                examples: undefineds.map((val) => val.meta),
-            });
-        }
+    if (failed.length > 0) {
+      sections.push({
+        id: "failed",
+        header: t("core.failedExamples"),
+        examples: failed.map((val) => val.meta),
+      });
     }
 
-    return sections;
+    if (passed.length > 0) {
+      sections.push({
+        id: "passed",
+        header: t("core.passedExamples"),
+        examples: passed.map((val) => val.meta),
+      });
+    }
+
+    if (undefineds.length > 0) {
+      sections.push({
+        id: "undefined",
+        header: t("core.undefinedExamples"),
+        examples: undefineds.map((val) => val.meta),
+      });
+    }
+  }
+
+  return sections;
 });
 
 function preview(itemId) {
-    // A later click supersedes this one, whose response is then ignored.
-    const request = ++previewRequest;
-    loadingPreviewData.value = true;
-    store.dispatch("loadDataItem", itemId).finally(() => {
-        if (request !== previewRequest) {
-            return;
-        }
-        if (store.getters.dataItemJSONLines(itemId) < 3000) {
-            previewDataItemId.value = itemId;
-        } else {
-            showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-            previewDataItemId.value = null;
-        }
-
-        loadingPreviewData.value = false;
-    });
-
-    const result = allExamples.value.find((element) => element.meta.item_id === itemId);
-    if (result) {
-        previewMetaData.value = result.result;
+  // A later click supersedes this one, whose response is then ignored.
+  const request = ++previewRequest;
+  loadingPreviewData.value = true;
+  store.dispatch("loadDataItem", itemId).finally(() => {
+    if (request !== previewRequest) {
+      return;
     }
+    if (store.getters.dataItemJSONLines(itemId) < 3000) {
+      previewDataItemId.value = itemId;
+    } else {
+      showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
+      previewDataItemId.value = null;
+    }
+
+    loadingPreviewData.value = false;
+  });
+
+  const result = allExamples.value.find((element) => element.meta.item_id === itemId);
+  if (result) {
+    previewMetaData.value = result.result;
+  }
 }
 </script>
 

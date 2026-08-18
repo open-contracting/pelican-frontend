@@ -152,7 +152,7 @@ const resourceLoaded = computed(() => store.getters.resourceLevelStats != null);
 const datasetLoaded = computed(() => store.getters.datasetLevelStats != null);
 const timeVarianceLoaded = computed(() => store.getters.timeVarianceLevelStats != null);
 const showTimeVariance = computed(
-    () => store.getters.timeVarianceLevelStats != null && store.getters.timeVarianceLevelStats.length > 0,
+  () => store.getters.timeVarianceLevelStats != null && store.getters.timeVarianceLevelStats.length > 0,
 );
 </script>
 

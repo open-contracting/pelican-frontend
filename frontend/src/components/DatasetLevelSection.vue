@@ -32,11 +32,11 @@ const store = useStore();
 const loaded = computed(() => store.getters.datasetLevelStats != null);
 
 const datasetLevelStats = computed(() => {
-    if (!(props.section in DATASET_CHECK_SECTIONS)) {
-        return [];
-    }
-    return DATASET_CHECK_SECTIONS[props.section]
-        .map((item) => store.getters.datasetLevelCheckByName(item))
-        .filter(props.filter);
+  if (!(props.section in DATASET_CHECK_SECTIONS)) {
+    return [];
+  }
+  return DATASET_CHECK_SECTIONS[props.section]
+    .map((item) => store.getters.datasetLevelCheckByName(item))
+    .filter(props.filter);
 });
 </script>

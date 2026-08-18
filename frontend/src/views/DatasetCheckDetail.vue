@@ -223,106 +223,106 @@ const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
 const ticks = computed(() => DATASET_CHECK_TICKS[check.value?.name]);
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 const loaded = computed(() => {
-    loadCheck();
-    return check.value != null;
+  loadCheck();
+  return check.value != null;
 });
 
 function preview(itemId) {
-    // A later click supersedes this one, whose response is then ignored.
-    const request = ++previewRequest;
-    loadingPreviewData.value = true;
-    store.dispatch("loadDataItem", itemId).finally(() => {
-        if (request !== previewRequest) {
-            return;
-        }
-        if (store.getters.dataItemJSONLines(itemId) < 3000) {
-            previewDataItemId.value = itemId;
-        } else {
-            showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-            previewDataItemId.value = null;
-        }
-        loadingPreviewData.value = false;
-    });
+  // A later click supersedes this one, whose response is then ignored.
+  const request = ++previewRequest;
+  loadingPreviewData.value = true;
+  store.dispatch("loadDataItem", itemId).finally(() => {
+    if (request !== previewRequest) {
+      return;
+    }
+    if (store.getters.dataItemJSONLines(itemId) < 3000) {
+      previewDataItemId.value = itemId;
+    } else {
+      showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
+      previewDataItemId.value = null;
+    }
+    loadingPreviewData.value = false;
+  });
 }
 
 function loadCheck() {
-    check.value = store.getters.datasetLevelCheckByName(route.params.check);
+  check.value = store.getters.datasetLevelCheckByName(route.params.check);
 
-    if (check.value != null) {
-        previewMetadata.value = check.value.meta;
+  if (check.value != null) {
+    previewMetadata.value = check.value.meta;
 
-        if (checkType.value === "donut") {
-            exampleSections.value = [];
-            const shares = orderedShares(check.value.meta.shares ?? {});
-            for (const key in shares) {
-                if (shares[key][1].examples.length > 0) {
-                    exampleSections.value.push({
-                        header: shares[key][0],
-                        examples: shares[key][1].examples,
-                    });
-                }
-            }
+    if (checkType.value === "donut") {
+      exampleSections.value = [];
+      const shares = orderedShares(check.value.meta.shares ?? {});
+      for (const key in shares) {
+        if (shares[key][1].examples.length > 0) {
+          exampleSections.value.push({
+            header: shares[key][0],
+            examples: shares[key][1].examples,
+          });
         }
-
-        if (checkType.value === "bar") {
-            exampleSections.value = [];
-            for (const barKey in check.value.meta.examples) {
-                if (check.value.meta.examples[barKey].length > 0) {
-                    exampleSections.value.push({
-                        header: t(`datasetLevel.charts.label_${barKey}`),
-                        examples: check.value.meta.examples[barKey],
-                    });
-                }
-            }
-        }
-
-        if (checkType.value === "top3") {
-            exampleSections.value = [];
-            const mostFrequent = check.value.meta.most_frequent;
-            for (const topKey in mostFrequent) {
-                if (mostFrequent[topKey].examples.length > 0) {
-                    exampleSections.value.push({
-                        header: mostFrequent[topKey].value_str,
-                        examples: mostFrequent[topKey].examples,
-                    });
-                }
-            }
-        }
-
-        if (checkType.value === "numeric") {
-            exampleSections.value = [];
-            const failed = check.value.meta.failed_examples;
-            const passed = check.value.meta.passed_examples;
-
-            if (failed?.length > 0) {
-                exampleSections.value.push({
-                    header: t("datasetLevel.numeric.failedExamples"),
-                    examples: failed,
-                });
-            }
-
-            if (passed?.length > 0) {
-                exampleSections.value.push({
-                    header: t("datasetLevel.numeric.passedExamples"),
-                    examples: passed,
-                });
-            }
-        }
-
-        if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
-            exampleSections.value = [];
-            if (check.value.meta.examples?.length > 0) {
-                exampleSections.value.push({
-                    header: t("datasetLevel.examples"),
-                    examples: check.value.meta.examples,
-                });
-            }
-        }
+      }
     }
+
+    if (checkType.value === "bar") {
+      exampleSections.value = [];
+      for (const barKey in check.value.meta.examples) {
+        if (check.value.meta.examples[barKey].length > 0) {
+          exampleSections.value.push({
+            header: t(`datasetLevel.charts.label_${barKey}`),
+            examples: check.value.meta.examples[barKey],
+          });
+        }
+      }
+    }
+
+    if (checkType.value === "top3") {
+      exampleSections.value = [];
+      const mostFrequent = check.value.meta.most_frequent;
+      for (const topKey in mostFrequent) {
+        if (mostFrequent[topKey].examples.length > 0) {
+          exampleSections.value.push({
+            header: mostFrequent[topKey].value_str,
+            examples: mostFrequent[topKey].examples,
+          });
+        }
+      }
+    }
+
+    if (checkType.value === "numeric") {
+      exampleSections.value = [];
+      const failed = check.value.meta.failed_examples;
+      const passed = check.value.meta.passed_examples;
+
+      if (failed?.length > 0) {
+        exampleSections.value.push({
+          header: t("datasetLevel.numeric.failedExamples"),
+          examples: failed,
+        });
+      }
+
+      if (passed?.length > 0) {
+        exampleSections.value.push({
+          header: t("datasetLevel.numeric.passedExamples"),
+          examples: passed,
+        });
+      }
+    }
+
+    if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
+      exampleSections.value = [];
+      if (check.value.meta.examples?.length > 0) {
+        exampleSections.value.push({
+          header: t("datasetLevel.examples"),
+          examples: check.value.meta.examples,
+        });
+      }
+    }
+  }
 }
 
 onBeforeMount(() => {
-    loadCheck();
+  loadCheck();
 });
 </script>
 

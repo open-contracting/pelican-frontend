@@ -74,8 +74,8 @@ import { useFormatters } from "@/composables/useFormatters";
 import ProgressBar from "./ProgressBar.vue";
 
 const props = defineProps({
-    check: Object,
-    showStats: { type: Boolean, default: true },
+  check: Object,
+  showStats: { type: Boolean, default: true },
 });
 
 const router = useRouter();
@@ -83,15 +83,15 @@ const store = useStore();
 const { formatNumber, formatPercentage } = useFormatters();
 
 const detailRouterArguments = computed(() => ({
-    name: "fieldCheckDetail",
-    params: {
-        path: props.check.path,
-        datasetId: store.getters.datasetId,
-    },
+  name: "fieldCheckDetail",
+  params: {
+    path: props.check.path,
+    datasetId: store.getters.datasetId,
+  },
 }));
 
 function detail() {
-    router.push(detailRouterArguments.value);
+  router.push(detailRouterArguments.value);
 }
 </script>
 

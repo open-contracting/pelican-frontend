@@ -81,21 +81,21 @@
 import InlineBar from "./InlineBar.vue";
 
 defineProps({
-    check: Object,
-    ok: Boolean,
-    failed: Boolean,
-    na: Boolean,
-    individualPass: Boolean,
-    individualNonPass: Boolean,
-    passedLabel: {
-        type: String,
-        default: "passed",
-    },
-    failedLabel: {
-        type: String,
-        default: "failed",
-    },
-    classes: String,
+  check: Object,
+  ok: Boolean,
+  failed: Boolean,
+  na: Boolean,
+  individualPass: Boolean,
+  individualNonPass: Boolean,
+  passedLabel: {
+    type: String,
+    default: "passed",
+  },
+  failedLabel: {
+    type: String,
+    default: "failed",
+  },
+  classes: String,
 });
 </script>
 

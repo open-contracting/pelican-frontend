@@ -63,31 +63,31 @@ const { sorted, setSorting, highlightSearch, isPathSearched } = useFieldCheckSea
 
 const stats = computed(() => store.getters.fieldLevelStats);
 const sortedBy = computed(() => {
-    const value = store.getters.fieldCheckSortedBy;
-    return value == null ? "processingOrder" : value;
+  const value = store.getters.fieldCheckSortedBy;
+  return value == null ? "processingOrder" : value;
 });
 const isAscendingSorted = computed(() => {
-    const value = store.getters.fieldCheckSortedAscending;
-    return value == null ? true : value;
+  const value = store.getters.fieldCheckSortedAscending;
+  return value == null ? true : value;
 });
 const tableData = computed(() => {
-    if (!stats.value) {
-        return [];
-    }
+  if (!stats.value) {
+    return [];
+  }
 
-    return sorted(
-        stats.value.filter((n) => n.coverage.total_count && props.filter(n)),
-        sortedBy.value,
-        isAscendingSorted.value,
-    );
+  return sorted(
+    stats.value.filter((n) => n.coverage.total_count && props.filter(n)),
+    sortedBy.value,
+    isAscendingSorted.value,
+  );
 });
 
 function resetSorting() {
-    setSorting("processingOrder");
+  setSorting("processingOrder");
 }
 
 function isSearched(check) {
-    return check && isPathSearched(check.path);
+  return check && isPathSearched(check.path);
 }
 
 // Field.vue calls resetSorting() through a template ref.

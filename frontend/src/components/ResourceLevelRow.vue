@@ -63,13 +63,13 @@ const failedRatio = computed(() => props.check.failed_count / props.check.total_
 const naRatio = computed(() => props.check.undefined_count / props.check.total_count);
 
 function detail() {
-    router.push({
-        name: "resourceCheckDetail",
-        params: {
-            check: props.name,
-            datasetId: store.getters.datasetId,
-        },
-    });
+  router.push({
+    name: "resourceCheckDetail",
+    params: {
+      check: props.name,
+      datasetId: store.getters.datasetId,
+    },
+  });
 }
 </script>
 

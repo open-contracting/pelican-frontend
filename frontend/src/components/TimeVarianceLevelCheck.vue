@@ -98,19 +98,19 @@ const router = useRouter();
 
 const result = computed(() => props.check.coverage_result && props.check.check_result);
 const coverageRatio = computed(() => {
-    if (props.check.meta.total_count === 0) return 0;
-    return props.check.meta.coverage_count / props.check.meta.total_count;
+  if (props.check.meta.total_count === 0) return 0;
+  return props.check.meta.coverage_count / props.check.meta.total_count;
 });
 const checkRatio = computed(() => {
-    if (props.check.meta.coverage_count === 0) return 0;
-    return props.check.meta.ok_count / props.check.meta.coverage_count;
+  if (props.check.meta.coverage_count === 0) return 0;
+  return props.check.meta.ok_count / props.check.meta.coverage_count;
 });
 
 function detail(name) {
-    router.push({
-        name: "timeVarianceCheckDetail",
-        params: { check: name },
-    });
+  router.push({
+    name: "timeVarianceCheckDetail",
+    params: { check: name },
+  });
 }
 </script>
 

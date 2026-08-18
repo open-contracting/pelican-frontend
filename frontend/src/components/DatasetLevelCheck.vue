@@ -178,15 +178,15 @@ const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[props.check.name]);
 const ticks = computed(() => DATASET_CHECK_TICKS[props.check.name]);
 
 function detail() {
-    if (props.check.result !== undefined && checkType.value != null) {
-        router.push({
-            name: "datasetCheckDetail",
-            params: {
-                check: props.check.name,
-                datasetId: store.getters.datasetId,
-            },
-        });
-    }
+  if (props.check.result !== undefined && checkType.value != null) {
+    router.push({
+      name: "datasetCheckDetail",
+      params: {
+        check: props.check.name,
+        datasetId: store.getters.datasetId,
+      },
+    });
+  }
 }
 </script>
 

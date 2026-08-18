@@ -26,8 +26,8 @@ import { BButton, BFormInput, BInputGroup, BInputGroupText } from "bootstrap-vue
 import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
-    placeholder: String,
-    preset: String,
+  placeholder: String,
+  preset: String,
 });
 
 const emit = defineEmits(["search"]);
@@ -36,15 +36,15 @@ const search = ref(null);
 let submitTimeout = null;
 
 watch(search, (value) => {
-    if (submitTimeout) {
-        clearTimeout(submitTimeout);
-    }
+  if (submitTimeout) {
+    clearTimeout(submitTimeout);
+  }
 
-    submitTimeout = setTimeout(() => emit("search", value), 400);
+  submitTimeout = setTimeout(() => emit("search", value), 400);
 });
 
 onMounted(() => {
-    search.value = props.preset;
+  search.value = props.preset;
 });
 </script>
 

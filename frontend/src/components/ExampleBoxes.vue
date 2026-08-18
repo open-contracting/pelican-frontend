@@ -190,8 +190,8 @@ import { ref } from "vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 
 defineProps({
-    exampleSections: Array,
-    loaded: Boolean,
+  exampleSections: Array,
+  loaded: Boolean,
 });
 
 const emit = defineEmits(["preview"]);
@@ -203,21 +203,21 @@ const selectedKey = ref(null);
 const selectedSection = ref(null);
 
 function preview(key, section, itemId, group) {
-    selectedKey.value = key;
-    selectedSection.value = section;
-    emit("preview", itemId, group);
+  selectedKey.value = key;
+  selectedSection.value = section;
+  emit("preview", itemId, group);
 }
 
 function showMore(section) {
-    openSections.value.push(section);
+  openSections.value.push(section);
 }
 
 function showLess(section) {
-    openSections.value = openSections.value.filter((item) => item !== section);
+  openSections.value = openSections.value.filter((item) => item !== section);
 }
 
 function visibleSections(section) {
-    return openSections.value.includes(section);
+  return openSections.value.includes(section);
 }
 </script>
 

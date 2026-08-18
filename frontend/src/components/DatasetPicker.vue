@@ -155,95 +155,94 @@ const reportModal = useTemplateRef("report-modal");
 
 const search = computed(() => store.getters.datasetSearch);
 const sortedBy = computed(() => {
-    const value = store.getters.datasetSortedBy;
-    return value == null ? "created" : value;
+  const value = store.getters.datasetSortedBy;
+  return value == null ? "created" : value;
 });
 const isAscendingSorted = computed(() => {
-    const value = store.getters.datasetSortedAscending;
-    return value == null ? false : value;
+  const value = store.getters.datasetSortedAscending;
+  return value == null ? false : value;
 });
 
 function showFilter(dataset) {
-    filteredDataset.value = dataset;
-    filterModal.value.show();
+  filteredDataset.value = dataset;
+  filterModal.value.show();
 }
 
 function showReport(dataset) {
-    reportDataset.value = dataset;
-    reportModal.value.show();
+  reportDataset.value = dataset;
+  reportModal.value.show();
 }
 
 function hideFilterModal() {
-    filterModal.value.hide();
+  filterModal.value.hide();
 }
 
 function hideReportModal() {
-    reportModal.value.hide();
+  reportModal.value.hide();
 }
 
 function isSearched(name) {
-    return !search.value || name.toLowerCase().includes(search.value.toLowerCase());
+  return !search.value || name.toLowerCase().includes(search.value.toLowerCase());
 }
 
 function sortBy(by, asc = true) {
-    if (!datasets.value) {
-        return;
-    }
+  if (!datasets.value) {
+    return;
+  }
 
-    let comp;
-    if (by === "created") {
-        comp = (a, b) => a.created.localeCompare(b.created);
-    } else if (by === "name") {
-        comp = (a, b) => a.name.localeCompare(b.name);
-    } else if (by === "size") {
-        comp = (a, b) =>
-            (a.meta.compiled_releases?.total_unique_ocids || -1) -
-            (b.meta.compiled_releases?.total_unique_ocids || -1);
-    } else if (by === "collection_id") {
-        comp = (a, b) =>
-            (a.meta.kingfisher_metadata?.collection_id || -1) - (b.meta.kingfisher_metadata?.collection_id || -1);
-    } else if (by === "phase") {
-        comp = (a, b) => {
-            if (a.phase === b.phase) {
-                if (a.state === b.state) {
-                    return a.id - b.id;
-                }
-                return STATES.indexOf(a.state) - STATES.indexOf(b.state);
-            }
-            return PHASES.indexOf(a.phase) - PHASES.indexOf(b.phase);
-        };
-    } else {
-        throw new Error(`Unknown sorting method ${by}`);
-    }
+  let comp;
+  if (by === "created") {
+    comp = (a, b) => a.created.localeCompare(b.created);
+  } else if (by === "name") {
+    comp = (a, b) => a.name.localeCompare(b.name);
+  } else if (by === "size") {
+    comp = (a, b) =>
+      (a.meta.compiled_releases?.total_unique_ocids || -1) - (b.meta.compiled_releases?.total_unique_ocids || -1);
+  } else if (by === "collection_id") {
+    comp = (a, b) =>
+      (a.meta.kingfisher_metadata?.collection_id || -1) - (b.meta.kingfisher_metadata?.collection_id || -1);
+  } else if (by === "phase") {
+    comp = (a, b) => {
+      if (a.phase === b.phase) {
+        if (a.state === b.state) {
+          return a.id - b.id;
+        }
+        return STATES.indexOf(a.state) - STATES.indexOf(b.state);
+      }
+      return PHASES.indexOf(a.phase) - PHASES.indexOf(b.phase);
+    };
+  } else {
+    throw new Error(`Unknown sorting method ${by}`);
+  }
 
-    datasets.value.sort((a, b) => (asc ? comp(a, b) : comp(b, a)));
-    store.commit("setDatasetSorting", { by: by, asc: asc });
+  datasets.value.sort((a, b) => (asc ? comp(a, b) : comp(b, a)));
+  store.commit("setDatasetSorting", { by: by, asc: asc });
 }
 
 onMounted(() => {
-    const buildDatasetsTree = (allDatasets, parent_id) => {
-        const result = [];
-        for (const item of allDatasets) {
-            if (item.parent_id === parent_id) {
-                item.filtered_children = buildDatasetsTree(allDatasets, item.id);
-                result.push(item);
-            }
-        }
-        return result;
-    };
+  const buildDatasetsTree = (allDatasets, parent_id) => {
+    const result = [];
+    for (const item of allDatasets) {
+      if (item.parent_id === parent_id) {
+        item.filtered_children = buildDatasetsTree(allDatasets, item.id);
+        result.push(item);
+      }
+    }
+    return result;
+  };
 
-    axios
-        .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
-        .then((response) => {
-            datasets.value = buildDatasetsTree(response.data, null);
-            for (const item of datasets.value) {
-                item.ancestor_name = item.ancestor_id && datasets.value.find((e) => e.id === item.ancestor_id)?.name;
-            }
-            sortBy(sortedBy.value, isAscendingSorted.value);
-        })
-        .catch((error) => {
-            throw new Error(error);
-        });
+  axios
+    .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
+    .then((response) => {
+      datasets.value = buildDatasetsTree(response.data, null);
+      for (const item of datasets.value) {
+        item.ancestor_name = item.ancestor_id && datasets.value.find((e) => e.id === item.ancestor_id)?.name;
+      }
+      sortBy(sortedBy.value, isAscendingSorted.value);
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
 });
 </script>
 

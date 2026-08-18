@@ -52,28 +52,28 @@ const { t } = useI18n();
 const filterIndex = ref(0);
 
 const filterNames = [
-    t("timeLevel.filterDropdown.all"),
-    t("timeLevel.filterDropdown.failedOnly"),
-    t("timeLevel.filterDropdown.passedOnly"),
+  t("timeLevel.filterDropdown.all"),
+  t("timeLevel.filterDropdown.failedOnly"),
+  t("timeLevel.filterDropdown.passedOnly"),
 ];
 
 const filters = [
-    () => true,
-    (item) => item.coverage_result !== true || item.check_result !== true,
-    (item) => item.coverage_result === true && item.check_result === true,
+  () => true,
+  (item) => item.coverage_result !== true || item.check_result !== true,
+  (item) => item.coverage_result === true && item.check_result === true,
 ];
 
 const loaded = computed(() => store.getters.datasetLevelStats != null);
 
 const timeVarianceLevelStats = computed(() => {
-    return store.getters.timeVarianceLevelStats.filter(filters[filterIndex.value]);
+  return store.getters.timeVarianceLevelStats.filter(filters[filterIndex.value]);
 });
 
 watch(filterIndex, (newFilterIndex) => {
-    store.commit("setTimeLevelFilterIndex", newFilterIndex);
+  store.commit("setTimeLevelFilterIndex", newFilterIndex);
 });
 
 onBeforeMount(() => {
-    filterIndex.value = store.getters.timeLevelFilterIndex;
+  filterIndex.value = store.getters.timeLevelFilterIndex;
 });
 </script>

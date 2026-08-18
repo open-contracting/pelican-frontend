@@ -114,11 +114,11 @@ defineProps(["dataset", "depth"]);
 defineEmits(["dataset-filter", "dataset-report"]);
 
 function getDatasetProgress(dataset) {
-    return (PHASES.indexOf(dataset.phase) + 1) * 25;
+  return (PHASES.indexOf(dataset.phase) + 1) * 25;
 }
 
 function isDatasetImported(dataset) {
-    return dataset.phase === "CHECKED" && dataset.state === "OK";
+  return dataset.phase === "CHECKED" && dataset.state === "OK";
 }
 </script>
 

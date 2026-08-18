@@ -82,26 +82,26 @@ const { t } = useI18n();
 const filterIndex = ref(0);
 
 const filterNames = [
-    t("resourceLevel.filterDropdown.all"),
-    t("resourceLevel.filterDropdown.failedOnly"),
-    t("resourceLevel.filterDropdown.passedOnly"),
-    t("resourceLevel.filterDropdown.calculatedOnly"),
+  t("resourceLevel.filterDropdown.all"),
+  t("resourceLevel.filterDropdown.failedOnly"),
+  t("resourceLevel.filterDropdown.passedOnly"),
+  t("resourceLevel.filterDropdown.calculatedOnly"),
 ];
 
 const filters = [
-    () => true,
-    (item) => item.failed_count > 0,
-    (item) => item.failed_count === 0 && item.passed_count > 0,
-    (item) => item.passed_count > 0 || item.failed_count > 0,
+  () => true,
+  (item) => item.failed_count > 0,
+  (item) => item.failed_count === 0 && item.passed_count > 0,
+  (item) => item.passed_count > 0 || item.failed_count > 0,
 ];
 
 const loaded = computed(() => store.getters.resourceLevelStats != null);
 
 watch(filterIndex, (newFilterIndex) => {
-    store.commit("setResourceLevelFilterIndex", newFilterIndex);
+  store.commit("setResourceLevelFilterIndex", newFilterIndex);
 });
 
 onBeforeMount(() => {
-    filterIndex.value = store.getters.resourceLevelFilterIndex;
+  filterIndex.value = store.getters.resourceLevelFilterIndex;
 });
 </script>

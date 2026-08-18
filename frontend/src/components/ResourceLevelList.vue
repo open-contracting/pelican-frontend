@@ -57,66 +57,66 @@ const { formatPercentage } = useFormatters();
 const showChecks = ref(false);
 
 const resourceLevelStats = computed(() => {
-    const result = store.getters.resourceLevelStatsBySection(props.section);
+  const result = store.getters.resourceLevelStatsBySection(props.section);
 
-    return result
-        .sort((a, b) => {
-            const nameA = a.name;
-            const nameB = b.name;
-            if (RESOURCE_CHECK_ORDER.indexOf(nameA) < 0 && RESOURCE_CHECK_ORDER.indexOf(nameB) < 0) {
-                if (nameA < nameB) {
-                    return -1;
-                }
+  return result
+    .sort((a, b) => {
+      const nameA = a.name;
+      const nameB = b.name;
+      if (RESOURCE_CHECK_ORDER.indexOf(nameA) < 0 && RESOURCE_CHECK_ORDER.indexOf(nameB) < 0) {
+        if (nameA < nameB) {
+          return -1;
+        }
 
-                return 1;
-            }
-            if (RESOURCE_CHECK_ORDER.indexOf(nameA) < 0) {
-                return 1;
-            }
-            if (RESOURCE_CHECK_ORDER.indexOf(nameB) < 0) {
-                return -1;
-            }
+        return 1;
+      }
+      if (RESOURCE_CHECK_ORDER.indexOf(nameA) < 0) {
+        return 1;
+      }
+      if (RESOURCE_CHECK_ORDER.indexOf(nameB) < 0) {
+        return -1;
+      }
 
-            return RESOURCE_CHECK_ORDER.indexOf(nameA) - RESOURCE_CHECK_ORDER.indexOf(nameB);
-        })
-        .filter(props.filter);
+      return RESOURCE_CHECK_ORDER.indexOf(nameA) - RESOURCE_CHECK_ORDER.indexOf(nameB);
+    })
+    .filter(props.filter);
 });
 
 const applicableChecks = computed(() => {
-    let applicableCount = 0;
-    for (const check of resourceLevelStats.value) {
-        if (check.undefined_count < check.total_count) {
-            applicableCount += 1;
-        }
+  let applicableCount = 0;
+  for (const check of resourceLevelStats.value) {
+    if (check.undefined_count < check.total_count) {
+      applicableCount += 1;
     }
-    return applicableCount;
+  }
+  return applicableCount;
 });
 
 const formattedAvgScore = computed(() => {
-    let passedCount = 0;
-    let failedCount = 0;
-    for (const check of resourceLevelStats.value) {
-        passedCount += check.passed_count;
-        failedCount += check.failed_count;
-    }
+  let passedCount = 0;
+  let failedCount = 0;
+  for (const check of resourceLevelStats.value) {
+    passedCount += check.passed_count;
+    failedCount += check.failed_count;
+  }
 
-    if (passedCount + failedCount === 0) {
-        return t("resourceLevel.averageScore.undefined");
-    }
+  if (passedCount + failedCount === 0) {
+    return t("resourceLevel.averageScore.undefined");
+  }
 
-    return formatPercentage(passedCount / (passedCount + failedCount));
+  return formatPercentage(passedCount / (passedCount + failedCount));
 });
 
 watch(showChecks, (newShowChecks) => {
-    if (newShowChecks) {
-        store.commit("addResourceCheckExpandedNode", props.section);
-    } else {
-        store.commit("removeResourceCheckExpandedNode", props.section);
-    }
+  if (newShowChecks) {
+    store.commit("addResourceCheckExpandedNode", props.section);
+  } else {
+    store.commit("removeResourceCheckExpandedNode", props.section);
+  }
 });
 
 onMounted(() => {
-    showChecks.value = store.getters.isResourceCheckExpanded(props.section);
+  showChecks.value = store.getters.isResourceCheckExpanded(props.section);
 });
 </script>
 

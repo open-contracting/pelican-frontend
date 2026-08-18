@@ -40,11 +40,11 @@ import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { useFormatters } from "@/composables/useFormatters.js";
 
 const props = defineProps({
-    numerator: { type: Number, required: true },
-    denominator: { type: Number, required: true },
-    count: Number,
-    state: String,
-    showCount: Boolean,
+  numerator: { type: Number, required: true },
+  denominator: { type: Number, required: true },
+  count: Number,
+  state: String,
+  showCount: Boolean,
 });
 
 const { formatPercentage, formatNumber } = useFormatters();
@@ -53,18 +53,18 @@ const bar = useTemplateRef("bar");
 const barWidth = ref(1);
 
 const ratio = computed(() => {
-    if (!props.denominator) return 0;
-    return props.numerator / props.denominator;
+  if (!props.denominator) return 0;
+  return props.numerator / props.denominator;
 });
 
 onMounted(() => {
-    if (ratio.value > 0) {
-        if (props.showCount) {
-            barWidth.value = (bar.value.clientWidth - 100) * ratio.value;
-        } else {
-            barWidth.value = bar.value.clientWidth * ratio.value;
-        }
+  if (ratio.value > 0) {
+    if (props.showCount) {
+      barWidth.value = (bar.value.clientWidth - 100) * ratio.value;
+    } else {
+      barWidth.value = bar.value.clientWidth * ratio.value;
     }
+  }
 });
 </script>
 

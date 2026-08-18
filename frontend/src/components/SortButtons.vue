@@ -18,9 +18,9 @@
 
 <script setup>
 defineProps({
-    label: String,
-    asc: Boolean,
-    active: Boolean,
+  label: String,
+  asc: Boolean,
+  active: Boolean,
 });
 
 defineEmits(["asc", "desc"]);

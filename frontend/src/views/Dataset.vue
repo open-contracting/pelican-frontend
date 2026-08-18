@@ -46,24 +46,24 @@ const sections = Object.keys(DATASET_CHECK_SECTIONS);
 const filterIndex = ref(0);
 
 const filterNames = [
-    t("datasetLevel.filterDropdown.all"),
-    t("datasetLevel.filterDropdown.failedOnly"),
-    t("datasetLevel.filterDropdown.passedOnly"),
-    t("datasetLevel.filterDropdown.calculatedOnly"),
+  t("datasetLevel.filterDropdown.all"),
+  t("datasetLevel.filterDropdown.failedOnly"),
+  t("datasetLevel.filterDropdown.passedOnly"),
+  t("datasetLevel.filterDropdown.calculatedOnly"),
 ];
 
 const filters = [
-    () => true,
-    (item) => item.result === false,
-    (item) => item.result === true,
-    (item) => item.result != null,
+  () => true,
+  (item) => item.result === false,
+  (item) => item.result === true,
+  (item) => item.result != null,
 ];
 
 watch(filterIndex, (newFilterIndex) => {
-    store.commit("setDatasetLevelFilterIndex", newFilterIndex);
+  store.commit("setDatasetLevelFilterIndex", newFilterIndex);
 });
 
 onBeforeMount(() => {
-    filterIndex.value = store.getters.datasetLevelFilterIndex;
+  filterIndex.value = store.getters.datasetLevelFilterIndex;
 });
 </script>

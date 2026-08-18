@@ -102,32 +102,32 @@ const fieldCheckTableRef = useTemplateRef("field-check-table");
 const filterIndex = ref(0);
 
 const filterNames = [
-    t("field.filterDropdown.all"),
-    t("field.filterDropdown.coverageFailedOnly"),
-    t("field.filterDropdown.qualityFailedOnly"),
-    t("field.filterDropdown.passedOnly"),
+  t("field.filterDropdown.all"),
+  t("field.filterDropdown.coverageFailedOnly"),
+  t("field.filterDropdown.qualityFailedOnly"),
+  t("field.filterDropdown.passedOnly"),
 ];
 
 const filters = [
-    () => true,
-    (item) => item.coverage.failed_count > 0,
-    (item) => item.quality.failed_count > 0,
-    (item) => item.coverage.failed_count === 0 && item.quality.failed_count === 0 && item.coverage.passed_count > 0,
+  () => true,
+  (item) => item.coverage.failed_count > 0,
+  (item) => item.quality.failed_count > 0,
+  (item) => item.coverage.failed_count === 0 && item.quality.failed_count === 0 && item.coverage.passed_count > 0,
 ];
 
 const layout = computed(() => store.getters.fieldCheckLayout);
 const search = computed(() => store.getters.fieldCheckSearch);
 
 watch(filterIndex, (newFilterIndex) => {
-    store.commit("setFieldLevelFilterIndex", newFilterIndex);
+  store.commit("setFieldLevelFilterIndex", newFilterIndex);
 });
 
 onBeforeMount(() => {
-    filterIndex.value = store.getters.fieldLevelFilterIndex;
+  filterIndex.value = store.getters.fieldLevelFilterIndex;
 });
 
 function resetTableSorting() {
-    fieldCheckTableRef.value.resetSorting();
+  fieldCheckTableRef.value.resetSorting();
 }
 </script>
 

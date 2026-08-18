@@ -55,26 +55,26 @@ import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 defineOptions({ name: "TreeNode" });
 
 const props = defineProps({
-    data: Object,
-    depth: { type: Number, default: 0 },
-    hide: { type: Boolean, default: false },
+  data: Object,
+  depth: { type: Number, default: 0 },
+  hide: { type: Boolean, default: false },
 });
 
 const store = useStore();
 const { highlightSearchLast, isPathSearched } = useFieldCheckSearch();
 
 function getChildren(node) {
-    const result = { ...node };
-    delete result._check;
-    return result;
+  const result = { ...node };
+  delete result._check;
+  return result;
 }
 
 function isSearched(node) {
-    return (isPathSearched(node._check.path) && filter.value(node._check)) || isSearchedSubTree(node);
+  return (isPathSearched(node._check.path) && filter.value(node._check)) || isSearchedSubTree(node);
 }
 
 function isSearchedSubTree(node) {
-    return Object.values(getChildren(node)).some((n) => isSearched(n));
+  return Object.values(getChildren(node)).some((n) => isSearched(n));
 }
 
 const check = computed(() => props.data._check);
@@ -84,14 +84,14 @@ const children = computed(() => getChildren(props.data));
 const hasChildren = computed(() => Object.keys(children.value).length > 0);
 const isExpandable = computed(() => hasChildren.value && isSearchedSubTree(props.data));
 const expanded = computed({
-    get: () => store.getters.isFieldCheckExpanded(path.value),
-    set: (value) => {
-        if (value) {
-            store.commit("addFieldCheckExpandedNode", path.value);
-        } else {
-            store.commit("removeFieldCheckExpandedNode", path.value);
-        }
-    },
+  get: () => store.getters.isFieldCheckExpanded(path.value),
+  set: (value) => {
+    if (value) {
+      store.commit("addFieldCheckExpandedNode", path.value);
+    } else {
+      store.commit("removeFieldCheckExpandedNode", path.value);
+    }
+  },
 });
 </script>
 

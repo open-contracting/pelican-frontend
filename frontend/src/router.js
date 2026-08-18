@@ -15,125 +15,125 @@ import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
 import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
 
 export default createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    scrollBehavior() {
-        return {
-            top: 0,
-            left: 0,
-        };
+  history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    return {
+      top: 0,
+      left: 0,
+    };
+  },
+  routes: [
+    {
+      path: "/",
+      name: "home",
+      component: Home,
     },
-    routes: [
-        {
-            path: "/",
-            name: "home",
-            component: Home,
-        },
-        {
-            path: "/overview/:datasetId",
-            name: "overview",
-            component: Overview,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/field/:datasetId",
-            name: "field",
-            component: Field,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/resource/:datasetId",
-            name: "resource",
-            component: Resource,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/dataset/:datasetId",
-            name: "dataset",
-            component: Dataset,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/time/:datasetId",
-            name: "time",
-            component: Time,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/resource/:datasetId/detail/:check",
-            name: "resourceCheckDetail",
-            component: ResourceCheckDetail,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId).then(() => {
-                        store.dispatch("loadResourceLevelCheckDetail", to.params.check);
-                    });
-                } else {
-                    store.dispatch("loadResourceLevelCheckDetail", to.params.check);
-                }
-                next();
-            },
-        },
-        {
-            path: "/dataset/:datasetId/detail/:check",
-            name: "datasetCheckDetail",
-            component: DatasetCheckDetail,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-        {
-            path: "/field/:datasetId/detail/:path",
-            name: "fieldCheckDetail",
-            component: FieldCheckDetail,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId).then(() => {
-                        store.dispatch("loadFieldLevelCheckDetail", to.params.path);
-                    });
-                } else {
-                    store.dispatch("loadFieldLevelCheckDetail", to.params.path);
-                }
-                next();
-            },
-        },
-        {
-            path: "/time/:datasetId/detail/:check",
-            name: "timeVarianceCheckDetail",
-            component: TimeVarianceCheckDetail,
-            beforeEnter: (to, _from, next) => {
-                if (store.getters.datasetId !== to.params.datasetId) {
-                    store.dispatch("loadDataset", to.params.datasetId);
-                }
-                next();
-            },
-        },
-    ],
+    {
+      path: "/overview/:datasetId",
+      name: "overview",
+      component: Overview,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+    {
+      path: "/field/:datasetId",
+      name: "field",
+      component: Field,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+    {
+      path: "/resource/:datasetId",
+      name: "resource",
+      component: Resource,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+    {
+      path: "/dataset/:datasetId",
+      name: "dataset",
+      component: Dataset,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+    {
+      path: "/time/:datasetId",
+      name: "time",
+      component: Time,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+    {
+      path: "/resource/:datasetId/detail/:check",
+      name: "resourceCheckDetail",
+      component: ResourceCheckDetail,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId).then(() => {
+            store.dispatch("loadResourceLevelCheckDetail", to.params.check);
+          });
+        } else {
+          store.dispatch("loadResourceLevelCheckDetail", to.params.check);
+        }
+        next();
+      },
+    },
+    {
+      path: "/dataset/:datasetId/detail/:check",
+      name: "datasetCheckDetail",
+      component: DatasetCheckDetail,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+    {
+      path: "/field/:datasetId/detail/:path",
+      name: "fieldCheckDetail",
+      component: FieldCheckDetail,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId).then(() => {
+            store.dispatch("loadFieldLevelCheckDetail", to.params.path);
+          });
+        } else {
+          store.dispatch("loadFieldLevelCheckDetail", to.params.path);
+        }
+        next();
+      },
+    },
+    {
+      path: "/time/:datasetId/detail/:check",
+      name: "timeVarianceCheckDetail",
+      component: TimeVarianceCheckDetail,
+      beforeEnter: (to, _from, next) => {
+        if (store.getters.datasetId !== to.params.datasetId) {
+          store.dispatch("loadDataset", to.params.datasetId);
+        }
+        next();
+      },
+    },
+  ],
 });

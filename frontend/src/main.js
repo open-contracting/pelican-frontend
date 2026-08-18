@@ -8,12 +8,12 @@ import router from "./router";
 import store from "./store";
 
 const i18n = createI18n({
-    legacy: false,
-    locale: "en",
-    warnHtmlMessage: false,
-    messages: {
-        en: en,
-    },
+  legacy: false,
+  locale: "en",
+  warnHtmlMessage: false,
+  messages: {
+    en: en,
+  },
 });
 
 const app = createApp(App);

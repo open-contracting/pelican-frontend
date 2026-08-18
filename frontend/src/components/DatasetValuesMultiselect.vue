@@ -69,47 +69,47 @@ const isLoading = ref(false);
 let cancelToken = null;
 
 watch(selected, (value) => {
-    emit(
-        "selected",
-        value.map((el) => el.value),
-    );
+  emit(
+    "selected",
+    value.map((el) => el.value),
+  );
 });
 
 function asyncFind(query) {
-    if (cancelToken != null) {
-        cancelToken.cancel();
-        cancelToken = null;
-    }
-    isLoading.value = true;
-    options.value = [];
-    let url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}${props.datasetId}/${props.jsonPath}/`;
-    if (query) {
-        url += `${query}/`;
-    }
+  if (cancelToken != null) {
+    cancelToken.cancel();
+    cancelToken = null;
+  }
+  isLoading.value = true;
+  options.value = [];
+  let url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}${props.datasetId}/${props.jsonPath}/`;
+  if (query) {
+    url += `${query}/`;
+  }
 
-    cancelToken = axios.CancelToken.source();
-    axios
-        .get(url, { cancelToken: cancelToken.token })
-        .then((response) => {
-            options.value = response.data;
-            isLoading.value = false;
-        })
-        .catch((error) => {
-            isLoading.value = false;
-            throw new Error(error);
-        });
+  cancelToken = axios.CancelToken.source();
+  axios
+    .get(url, { cancelToken: cancelToken.token })
+    .then((response) => {
+      options.value = response.data;
+      isLoading.value = false;
+    })
+    .catch((error) => {
+      isLoading.value = false;
+      throw new Error(error);
+    });
 }
 
 function clearAll() {
-    selected.value = [];
+  selected.value = [];
 }
 
 function limitText(count) {
-    return t("datasetValuesMultiselect.limitText", { n: count });
+  return t("datasetValuesMultiselect.limitText", { n: count });
 }
 
 onMounted(() => {
-    asyncFind("");
+  asyncFind("");
 });
 </script>
 

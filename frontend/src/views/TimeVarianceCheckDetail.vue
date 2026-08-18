@@ -447,56 +447,56 @@ const selectedKey = ref(null);
 
 const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 const loaded = computed(() => {
-    loadCheck();
-    return check.value != null;
+  loadCheck();
+  return check.value != null;
 });
 
 function loadCheck() {
-    check.value = store.getters.timeVarianceLevelCheckByName(route.params.check);
+  check.value = store.getters.timeVarianceLevelCheckByName(route.params.check);
 
-    if (check.value != null) {
-        previewMetadata.value = { ...check.value.meta };
-        previewMetadata.value.examples = undefined;
-    }
+  if (check.value != null) {
+    previewMetadata.value = { ...check.value.meta };
+    previewMetadata.value.examples = undefined;
+  }
 }
 
 function preview(key, itemId) {
-    // A later click supersedes this one, whose response is then ignored.
-    const request = ++previewRequest;
-    loadingPreviewData.value = true;
-    store
-        .dispatch("loadDataItem", itemId)
-        .then(() => {
-            if (request !== previewRequest) {
-                return;
-            }
-            if (store.getters.dataItemJSONLines(itemId) < 3000) {
-                previewDataItemId.value = itemId;
-                selectedKey.value = key;
-            } else {
-                showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-                previewDataItemId.value = null;
-                selectedKey.value = null;
-            }
-        })
-        .catch(() => {
-            if (request !== previewRequest) {
-                return;
-            }
-            showToast({ body: t("preview.nonExisting"), variant: "danger", pos: "middle-center" });
-            previewDataItemId.value = null;
-            selectedKey.value = null;
-        })
-        .finally(() => {
-            if (request !== previewRequest) {
-                return;
-            }
-            loadingPreviewData.value = false;
-        });
+  // A later click supersedes this one, whose response is then ignored.
+  const request = ++previewRequest;
+  loadingPreviewData.value = true;
+  store
+    .dispatch("loadDataItem", itemId)
+    .then(() => {
+      if (request !== previewRequest) {
+        return;
+      }
+      if (store.getters.dataItemJSONLines(itemId) < 3000) {
+        previewDataItemId.value = itemId;
+        selectedKey.value = key;
+      } else {
+        showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
+        previewDataItemId.value = null;
+        selectedKey.value = null;
+      }
+    })
+    .catch(() => {
+      if (request !== previewRequest) {
+        return;
+      }
+      showToast({ body: t("preview.nonExisting"), variant: "danger", pos: "middle-center" });
+      previewDataItemId.value = null;
+      selectedKey.value = null;
+    })
+    .finally(() => {
+      if (request !== previewRequest) {
+        return;
+      }
+      loadingPreviewData.value = false;
+    });
 }
 
 onBeforeMount(() => {
-    loadCheck();
+  loadCheck();
 });
 </script>
 

@@ -26,8 +26,8 @@ import { BDropdown, BDropdownItemButton } from "bootstrap-vue-next";
 import { onMounted, ref } from "vue";
 
 const props = defineProps({
-    filterNames: Array,
-    startIndex: { type: Number, default: 0 },
+  filterNames: Array,
+  startIndex: { type: Number, default: 0 },
 });
 
 const emit = defineEmits(["newSelectedIndex"]);
@@ -35,12 +35,12 @@ const emit = defineEmits(["newSelectedIndex"]);
 const selectedIndex = ref(0);
 
 function clickItem(index) {
-    selectedIndex.value = index;
-    emit("newSelectedIndex", index);
+  selectedIndex.value = index;
+  emit("newSelectedIndex", index);
 }
 
 onMounted(() => {
-    clickItem(props.startIndex);
+  clickItem(props.startIndex);
 });
 </script>
 

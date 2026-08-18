@@ -278,7 +278,7 @@ const { formatNumber } = useFormatters();
 const dataset = computed(() => store.getters.dataset);
 
 function getMetaData(type) {
-    return dataset.value?.meta?.[type];
+  return dataset.value?.meta?.[type];
 }
 
 const collection = computed(() => getMetaData("collection_metadata"));
@@ -288,17 +288,17 @@ const compiled_releases = computed(() => getMetaData("compiled_releases"));
 const lifecycle = computed(() => getMetaData("tender_lifecycle"));
 
 const filtered_procuring_entity = computed(() => {
-    if (dataset.value.filter_message.procuring_entity) {
-        return dataset.value.filter_message.procuring_entity;
-    }
-    return [];
+  if (dataset.value.filter_message.procuring_entity) {
+    return dataset.value.filter_message.procuring_entity;
+  }
+  return [];
 });
 
 const filtered_buyer = computed(() => {
-    if (dataset.value.filter_message.buyer) {
-        return dataset.value.filter_message.buyer;
-    }
-    return [];
+  if (dataset.value.filter_message.buyer) {
+    return dataset.value.filter_message.buyer;
+  }
+  return [];
 });
 </script>
 

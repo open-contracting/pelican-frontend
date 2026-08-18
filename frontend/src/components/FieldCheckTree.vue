@@ -43,39 +43,39 @@ const { search, sorted } = useFieldCheckSearch();
 
 const stats = computed(() => store.getters.fieldLevelStats);
 const tree = computed(() => {
-    const root = {};
+  const root = {};
 
-    // Insertion order determines the order in which the nodes render.
-    for (const n of sorted(stats.value, "processingOrder")) {
-        let node = root;
-        for (const p of n.path.split(".")) {
-            if (!(p in node)) {
-                node[p] = {};
-            }
-            node = node[p];
-        }
-
-        node._check = n;
+  // Insertion order determines the order in which the nodes render.
+  for (const n of sorted(stats.value, "processingOrder")) {
+    let node = root;
+    for (const p of n.path.split(".")) {
+      if (!(p in node)) {
+        node[p] = {};
+      }
+      node = node[p];
     }
 
-    return root;
+    node._check = n;
+  }
+
+  return root;
 });
 
 watch(search, () => {
-    store.dispatch("setExpandedNodesForSearch");
+  store.dispatch("setExpandedNodesForSearch");
 });
 
 watch(
-    () => props.filter,
-    () => {
-        store.commit("setFieldLevelFilter", props.filter);
-    },
+  () => props.filter,
+  () => {
+    store.commit("setFieldLevelFilter", props.filter);
+  },
 );
 
 onMounted(() => {
-    if (search.value) {
-        store.dispatch("setExpandedNodesForSearch");
-    }
+  if (search.value) {
+    store.dispatch("setExpandedNodesForSearch");
+  }
 });
 </script>
 
