@@ -147,7 +147,7 @@
       <ExampleBoxes
         :example-sections="exampleSections"
         :loaded="true"
-        @preview="preview"
+        @preview="previewDataItem"
       />
     </template>
 
@@ -188,8 +188,8 @@
 </template>
 
 <script setup>
-import { BSpinner, useToast } from "bootstrap-vue-next";
-import { computed, ref } from "vue";
+import { BSpinner } from "bootstrap-vue-next";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
@@ -199,6 +199,7 @@ import CodeChart from "@/components/CodeChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import FrequencyChart from "@/components/FrequencyChart.vue";
 import PercentileChart from "@/components/PercentileChart.vue";
+import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 import { orderedShares, withoutExamples } from "@/util.js";
@@ -209,15 +210,10 @@ const { formatNumber, formatPercentage2D } = useFormatters();
 const route = useRoute();
 const store = useStore();
 const { t } = useI18n();
-const { create: showToast } = useToast();
-
-const previewDataItemId = ref(null);
-const loadingPreviewData = ref(false);
-let previewRequest = 0;
+const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
 const check = computed(() => store.getters.datasetLevelCheckByName(route.params.check));
 const loaded = computed(() => check.value != null);
-const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
 const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);
 const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
@@ -283,24 +279,6 @@ const exampleSections = computed(() => {
 
   return sections;
 });
-
-function preview(itemId) {
-  // A later click supersedes this one, whose response is then ignored.
-  const request = ++previewRequest;
-  loadingPreviewData.value = true;
-  store.dispatch("loadDataItem", itemId).finally(() => {
-    if (request !== previewRequest) {
-      return;
-    }
-    if (store.getters.dataItemJSONLines(itemId) < 3000) {
-      previewDataItemId.value = itemId;
-    } else {
-      showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-      previewDataItemId.value = null;
-    }
-    loadingPreviewData.value = false;
-  });
-}
 </script>
 
 <style scoped lang="scss">
