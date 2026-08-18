@@ -8,7 +8,7 @@
         <div class="col col-10">
           <h2>{{ $t("datasetLevel." + check.name + ".name") }}</h2>
         </div>
-        <div class="col col-2">
+        <div class="col col-2 text-end">
           <span
             v-if="!reportOnly && check.result == true"
             class="badge rounded-pill ok_status"
