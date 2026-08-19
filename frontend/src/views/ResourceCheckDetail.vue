@@ -54,9 +54,7 @@
         <vue-json-pretty :data="previewMetadata" />
       </span>
 
-      <div class="divider">
-&nbsp;
-      </div>
+      <div class="spacer" />
 
       <span v-if="loadingPreviewData">
         <div class="result_box loader text-center">

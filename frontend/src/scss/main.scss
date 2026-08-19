@@ -219,6 +219,10 @@ input::placeholder,
   }
 }
 
+.spacer {
+  height: $line-height-base * 1em;
+}
+
 // vue-json-pretty's own .vjs-tree rule is loaded after this one.
 .preview .vjs-tree {
   font-family: $font-family-mono;
