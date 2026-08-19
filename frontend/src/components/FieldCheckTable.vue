@@ -40,9 +40,14 @@
       <template v-for="n in tableData" :key="n.path">
         <FieldCheckTableRow
           v-if="isSearched(n)"
+          v-slot="{ to }"
           :check="n"
         >
-          <span v-html="highlightSearch(n.path)" />
+          <RouterLink
+            class="check_link"
+            :to="to"
+            v-html="highlightSearch(n.path)"
+          />
         </FieldCheckTableRow>
       </template>
     </tbody>

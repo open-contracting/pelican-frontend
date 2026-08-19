@@ -2,13 +2,16 @@
   <div
     class="card mb-4 h-100 time_variance_result_box result_box"
     :class="{ clickable: check.coverage_result != undefined, undef: check.coverage_result == undefined }"
-    @click="detail(check.name)"
+    @click="navigate($event, detailRouterArguments)"
   >
     <div class="card-body">
       <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
-            {{ $t("timeLevel." + check.name + ".name") }}
+            <RouterLink
+              class="check_link"
+              :to="detailRouterArguments"
+            >{{ $t("timeLevel." + check.name + ".name") }}</RouterLink>
           </h5>
         </div>
 
@@ -89,12 +92,12 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 
 const props = defineProps(["check"]);
 const { formatPercentage } = useFormatters();
-const router = useRouter();
+const { navigate } = useClickable();
 
 const result = computed(() => props.check.coverage_result && props.check.check_result);
 const coverageRatio = computed(() => {
@@ -106,12 +109,10 @@ const checkRatio = computed(() => {
   return props.check.meta.ok_count / props.check.meta.coverage_count;
 });
 
-function detail(name) {
-  router.push({
-    name: "timeVarianceCheckDetail",
-    params: { check: name },
-  });
-}
+const detailRouterArguments = computed(() => ({
+  name: "timeVarianceCheckDetail",
+  params: { check: props.check.name },
+}));
 </script>
 
 <style scoped lang="scss">

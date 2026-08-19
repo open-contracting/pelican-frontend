@@ -1,22 +1,24 @@
 <template>
   <div
     class="card mb-4 h-100 dataset_result_box result_box"
-    :class="{
-      clickable: check.result != undefined && checkType != null,
-      undef: check.result == undefined || checkType == null
-    }"
-    @click="check.result != undefined && checkType != null && detail()"
+    :class="{ clickable, undef: !clickable }"
+    @click="clickable && navigate($event, detailRouterArguments)"
   >
     <div class="card-body">
       <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
-            {{ $t("datasetLevel." + check.name + ".name") }}
+            <RouterLink
+              v-if="clickable"
+              class="check_link"
+              :to="detailRouterArguments"
+            >{{ $t("datasetLevel." + check.name + ".name") }}</RouterLink>
+            <template v-else>{{ $t("datasetLevel." + check.name + ".name") }}</template>
           </h5>
         </div>
 
         <div
-          v-if="check.result != undefined && checkType != null"
+          v-if="clickable"
           class="col col-2 col-sm-2 col-lg-2 text-end"
         >
           <span
@@ -157,8 +159,8 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 
@@ -170,24 +172,22 @@ import PercentileChart from "./PercentileChart.vue";
 import Tooltip from "./Tooltip.vue";
 
 const props = defineProps(["check"]);
-const router = useRouter();
 const store = useStore();
+const { navigate } = useClickable();
 
 const checkType = computed(() => DATASET_CHECK_TYPES[props.check.name]);
 const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[props.check.name]);
 const ticks = computed(() => DATASET_CHECK_TICKS[props.check.name]);
 
-function detail() {
-  if (props.check.result !== undefined && checkType.value != null) {
-    router.push({
-      name: "datasetCheckDetail",
-      params: {
-        check: props.check.name,
-        datasetId: store.getters.datasetId,
-      },
-    });
-  }
-}
+const clickable = computed(() => props.check.result !== undefined && checkType.value !== undefined);
+
+const detailRouterArguments = computed(() => ({
+  name: "datasetCheckDetail",
+  params: {
+    check: props.check.name,
+    datasetId: store.getters.datasetId,
+  },
+}));
 </script>
 
 <style scoped lang="scss">

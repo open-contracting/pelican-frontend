@@ -1,6 +1,7 @@
 <template>
   <FieldCheckTableRow
     :key="path"
+    v-slot="{ to }"
     :check="check"
     :show-stats="filter(data._check)"
     :class="{ hidden: hide || !isSearched(data) }"
@@ -27,8 +28,9 @@
         v-else
         class="switcher"
       />
-      <div
-        class="name flex-fill"
+      <RouterLink
+        class="check_link name flex-fill"
+        :to="to"
         :title="path"
         v-html="highlightSearchLast(path)"
       />
