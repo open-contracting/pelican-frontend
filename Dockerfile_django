@@ -4,7 +4,6 @@ FROM python:3.11
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libxml2-dev \
         libxslt-dev \
-        gettext \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r runner && useradd --no-log-init -r -g runner runner
@@ -21,8 +20,6 @@ COPY --chown=runner:runner . .
 
 ENV DJANGO_ENV=production
 ENV WEB_CONCURRENCY=2
-
-RUN python manage.py compilemessages
 
 EXPOSE 8000
 CMD ["gunicorn", "core.wsgi", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--no-control-socket", "--threads", "2", "--name", "pelican-frontend"]

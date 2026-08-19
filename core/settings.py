@@ -15,7 +15,6 @@ from pathlib import Path
 
 import dj_database_url
 import sentry_sdk
-from django.utils.translation import gettext_lazy as _
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import ignore_logger
 
@@ -59,7 +58,6 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -128,11 +126,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/stable/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "UTC"
 
-USE_I18N = True
+USE_I18N = False
 
 USE_TZ = True
 
@@ -149,8 +147,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Project-specific Django configuration
-
-LOCALE_PATHS = [BASE_DIR / "locale"]
 
 STATIC_ROOT = BASE_DIR / "static"
 
@@ -218,11 +214,6 @@ if production and not local_access:
 if "DJANGO_PROXY" in os.environ:
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-LANGUAGES = [
-    ("en", _("English")),
-    ("es", _("Spanish")),
-]
 
 DATABASE_ROUTERS = ["api.routers.DbRouter"]
 

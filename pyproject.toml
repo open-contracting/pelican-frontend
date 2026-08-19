@@ -43,8 +43,5 @@ ignore-variadic-names = true
     "TRY003",  # errors
 ]
 
-[tool.coverage.run]
-omit = ["*/translations.py"]
-
 [tool.uv.pip]
 exclude-newer = "1 week"

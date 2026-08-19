@@ -13,7 +13,6 @@ jobs:
           python-version-file: .python-version
           cache: pip
           cache-dependency-path: "**/requirements*.txt"
-      - run: sudo apt install gettext
       - run: pip install -r requirements.txt
       # Check requirements.txt contains production requirements.
       - run: ./manage.py --help
@@ -38,7 +37,6 @@ jobs:
           ./manage.py migrate
           ./manage.py makemigrations --check --dry-run
           ./manage.py check --fail-level WARNING
-          ./manage.py compilemessages
           coverage run --source api,core,exporter manage.py test
       - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
