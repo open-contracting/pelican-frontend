@@ -1,17 +1,19 @@
 <template>
   <div
     class="card mb-4 h-100 time_variance_result_box result_box"
-    :class="{ clickable: check.coverage_result != undefined, undef: check.coverage_result == undefined }"
-    @click="navigate($event, detailRouterArguments)"
+    :class="{ clickable, undef: !clickable }"
+    @click="clickable && navigate($event, detailRouterArguments)"
   >
     <div class="card-body">
       <div class="row g-0">
         <div class="col col-10 col-sm-10 col-lg-10">
           <h5 class="check_headline">
             <RouterLink
+              v-if="clickable"
               class="check_link"
               :to="detailRouterArguments"
             >{{ $t("timeLevel." + check.name + ".name") }}</RouterLink>
+            <template v-else>{{ $t("timeLevel." + check.name + ".name") }}</template>
           </h5>
         </div>
 
@@ -98,6 +100,9 @@ import { useFormatters } from "@/composables/useFormatters";
 const props = defineProps(["check"]);
 const { formatPercentage } = useFormatters();
 const { navigate } = useClickable();
+
+// pelican-backend sets coverage_result only if total_count is non-zero, leaving nothing to show otherwise.
+const clickable = computed(() => props.check.coverage_result != null);
 
 const result = computed(() => props.check.coverage_result && props.check.check_result);
 const coverageRatio = computed(() => {
