@@ -41,7 +41,7 @@
               <th
                 class="col-4 d-none d-lg-table-cell"
                 scope="col"
-              >&nbsp;</th>
+              />
             </tr>
           </thead>
 

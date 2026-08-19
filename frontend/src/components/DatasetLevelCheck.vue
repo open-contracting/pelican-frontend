@@ -90,8 +90,9 @@
               v-if="checkType == 'numeric'"
               class="text-center"
             >
-              <span class="check_numeric_value">{{ formatNumber(check.meta.total_passed) }}</span>
-              <span class="check_numeric_count">&nbsp;/&nbsp;{{ formatNumber(check.meta.total_processed) }}</span>
+              <span class="check_numeric_value">{{ formatNumber(check.meta.total_passed) }}</span><span
+                class="check_numeric_count"
+              > / {{ formatNumber(check.meta.total_processed) }}</span>
             </div>
 
             <div
