@@ -3,259 +3,259 @@
     "distribution": {
       "tender_status": {
         "name": "Distribución del estado de licitación",
-        "description": "Visualiza la distribución de los valores de tender.status. Los códigos 'active' y 'complete' aparecen cada uno entre el 0,1% y el 99% de los casos."
+        "description": "Visualiza la distribución de los valores de <code>tender.status</code>. Los códigos 'active' y 'complete' aparecen cada uno entre el 0,1% y el 99% de los casos."
       },
       "contracts_value_repetition": {
         "name": "Repetición del valor de los contratos",
-        "description": "Lista los 5 pares más frecuentes de contracts.value.amount y contracts.value.currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de los casos."
+        "description": "Lista los 5 pares más frecuentes de <code>contracts.value.amount</code> y <code>contracts.value.currency</code>. Los 3 pares más frecuentes aparecen en menos del 10% de los casos."
       },
       "awards_value_repetition": {
         "name": "Repetición del valor de las adjudicaciones",
-        "description": "Lista los 5 pares más frecuentes de awards.value.amount y awards.value.currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de los casos."
+        "description": "Lista los 5 pares más frecuentes de <code>awards.value.amount</code> y <code>awards.value.currency</code>. Los 3 pares más frecuentes aparecen en menos del 10% de los casos."
       },
       "tender_value_repetition": {
         "name": "Repetición del valor de licitación",
-        "description": "Lista los 5 pares más frecuentes de tender.value.amount y tender.value.currency. Los 3 pares más frecuentes aparecen en un poco menos que el 10% de los casos."
+        "description": "Lista los 5 pares más frecuentes de <code>tender.value.amount</code> y <code>tender.value.currency</code>. Los 3 pares más frecuentes aparecen en menos del 10% de los casos."
       },
       "buyer": {
         "name": "Distribución de comprador",
-        "description": "Poco más del 50% de todos los compradores son identificados solo en un compiled release. El fallo indica problemas en la identificación del comprador."
+        "description": "Menos del 50% de todos los compradores se identifican en un solo compiled release. El fallo indica problemas en la identificación del comprador."
       },
       "buyer_repetition": {
         "name": "Repetición de comprador",
-        "description": "El comprador más común es identificado en el 1% al 50% de los compiled releases. El fallo indica problemas en el identificador del comprador o sobre-representación del comprador."
+        "description": "El comprador más común se identifica en entre el 1% y el 50% de los compiled releases. El fallo indica problemas en la identificación del comprador o una sobrerrepresentación del comprador."
       },
       "tender_value": {
         "name": "Distribución del valor de licitación",
-        "description": "La suma del 1% superior de valores de licitaciones no excede el 50% de la suma de todos los valores de licitaciones. El fallo indica valores atípicos extremos."
+        "description": "El valor total del 1% superior de las licitaciones es menor que el valor total de las licitaciones restantes. El fallo indica valores atípicos extremos en el 1% superior."
       },
       "awards_value": {
         "name": "Distribución del valor de las adjudicaciones",
-        "description": "La suma del 1% superior de los valores de las adjudicaciones no excede el 50% de la suma de todos los valores de las adjudicaciones. El fallo indica valores atípicos extremos."
+        "description": "El valor total del 1% superior de los valores de las adjudicaciones es menor que el valor total de los valores de las adjudicaciones restantes. El fallo indica valores atípicos extremos en el 1% superior."
       },
       "contracts_value": {
         "name": "Distribución del valor de los contratos",
-        "description": "La suma del 1% superior de valores de contratos no excede el 50% de la suma de todos los valores de contrato. El fallo indica valores atípicos extremos."
+        "description": "El valor total del 1% superior de los valores de los contratos es menor que el valor total de los valores de los contratos restantes. El fallo indica valores atípicos extremos en el 1% superior."
       },
       "main_procurement_category": {
         "name": "Distribución de la categoría principal de contratación",
-        "description": "Visualiza la distribución de los valores de tender.mainProcurementCategory. Ningún código aparece en más del 95% de los casos."
+        "description": "Visualiza la distribución de los valores de <code>tender.mainProcurementCategory</code>. Ningún código aparece en más del 95% de los casos."
       },
       "tender_procurement_method": {
         "name": "Distribución del método de contratación",
-        "description": "Visualiza la distribución de los valores de tender.procurementMethod. El código 'open' aparece entre el 0,1% y el 99% de los casos."
+        "description": "Visualiza la distribución de los valores de <code>tender.procurementMethod</code>. El código 'open' aparece entre el 0,1% y el 99% de los casos."
       },
       "tender_award_criteria": {
         "name": "Distribución del criterio de adjudicación",
-        "description": "Visualiza la distribución de los valores de tender.awardCriteria. No se realiza ninguna prueba."
+        "description": "Visualiza la distribución de los valores de <code>tender.awardCriteria</code>. No se realiza ninguna prueba."
       },
       "tender_submission_method": {
         "name": "Distribución del método de presentación",
-        "description": "Visualiza la distribución de los valores de tender.submissionMethod. No se realiza ninguna prueba."
+        "description": "Visualiza la distribución de los valores de <code>tender.submissionMethod</code>. No se realiza ninguna prueba."
       },
       "awards_status": {
         "name": "Distribución del estado de adjudicación",
-        "description": "Visualiza la distribución del valor de awards.status. El código 'active' aparece entre el 0,1% y el 99% de los casos."
+        "description": "Visualiza la distribución de los valores de <code>awards.status</code>. El código 'active' aparece entre el 0,1% y el 99% de los casos."
       },
       "contracts_status": {
         "name": "Distribución del estado del contrato",
-        "description": "Visualiza la distribución de los valores de contracts.status. Los códigos 'active' y 'terminated' cada uno aparecen entre el 0,1% y el 99% de los casos."
+        "description": "Visualiza la distribución de los valores de <code>contracts.status</code>. Los códigos 'active' y 'terminated' aparecen cada uno entre el 0,1% y el 99% de los casos."
       },
       "milestone_status": {
         "name": "Distribución del estado del hito",
-        "description": "Visualiza la distribución de los valores de status de los hitos. El código 'met' aparecen entre el 0,1% y el 99% de los casos."
+        "description": "Visualiza la distribución de los valores de <code>status</code> de los hitos. El código 'met' aparece entre el 0,1% y el 99% de los casos."
       },
       "milestone_type": {
         "name": "Distribución del tipo de hito",
-        "description": "Visualiza la distribución de los valores de type de los hitos. No se realiza ninguna prueba."
+        "description": "Visualiza la distribución de los valores de <code>type</code> de los hitos. No se realiza ninguna prueba."
       },
       "value_currency": {
         "name": "Distribución de la moneda",
-        "description": "Visualiza la distribución de los valores de currency. No se realiza ninguna prueba."
+        "description": "Visualiza la distribución de los valores de <code>currency</code>. No se realiza ninguna prueba."
       },
       "related_process_relation": {
         "name": "Distribución de la relación de los procesos relacionados",
-        "description": "Visualiza la distribución de los valores de relatedProcesses.relationship. No se realiza ninguna prueba."
+        "description": "Visualiza la distribución de los valores de <code>relatedProcesses.relationship</code>. No se realiza ninguna prueba."
       },
       "document_document_type": {
         "name": "Distribución del tipo de documento",
-        "description": "Visualiza la distribución de los valores de documentType de documento. No se realiza ninguna prueba."
+        "description": "Visualiza la distribución de los valores de <code>documentType</code> de los documentos. No se realiza ninguna prueba."
       }
     },
     "unique": {
       "tender_id": {
-        "name": "Identificación única de licitación",
-        "description": "tender.id es único dentro de todo el conjunto de datos"
+        "name": "El ID de licitación es único",
+        "description": "Cada <code>tender.id</code> es único en toda la colección."
       }
     },
     "misc": {
       "url_availability": {
         "name": "Disponibilidad de la URL",
-        "description": "Una muestra aleatoria de 100 valores de URL no retornan respuestas con códigos de error HTTP."
+        "description": "Una muestra aleatoria de 100 valores de URL no devuelve respuestas con códigos de error HTTP."
       }
     },
     "consistent": {
       "related_process_title": {
         "name": "El título de la licitación es consistente",
-        "description": "Un objeto de un proceso relacionado tiene el mismo valor en su campo título que en su campo tender.title en el compiled release al que referencia."
+        "description": "Un objeto de proceso relacionado tiene en su campo <code>title</code> el mismo valor que el campo <code>tender.title</code> del compiled release al que hace referencia."
       }
     },
     "reference": {
       "related_process_identifier": {
         "name": "Referencia al proceso relacionado",
-        "description": "Si un proceso relacionado tiene un esquema de 'ocid' y su identificador está presente, entonces su identificador coincide con el ocid de un compiled release."
+        "description": "Si un proceso relacionado tiene un <code>scheme</code> de 'ocid' y su <code>identifier</code> está presente, entonces su <code>identifier</code> coincide con el <code>ocid</code> de un compiled release."
       }
     }
   },
   "resourceLevel": {
     "coherent": {
       "period": {
-        "name": "Las fechas de inicio no son posteriores a la fechas de fin",
-        "description": "<p>Para cada período, startDate es menor o igual que endDate.</p><p>Dado que la prueba opera en todos los objetos de período, silenciosamente ignora cualquier fecha que no pueda ser analizada.</p>"
+        "name": "Las fechas de inicio no son posteriores a las fechas de fin",
+        "description": "<p>Para cada período, <code>startDate</code> es menor o igual que <code>endDate</code>.</p><p>Dado que la prueba opera en todos los objetos de período, ignora silenciosamente cualquier fecha que no pueda analizarse.</p>"
       },
       "procurement_method_vs_number_of_tenderers": {
-        "name": "Como máximo un licitador para la contratación de una sola fuente",
-        "description": "Si tender.procurementMethod es 'direct', entonces tender.numberOfTenderers es como máximo 1."
+        "name": "Como máximo un oferente en la contratación directa",
+        "description": "Si <code>tender.procurementMethod</code> es 'direct', entonces <code>tender.numberOfTenderers</code> es como máximo 1."
       },
       "tender_status": {
-        "name": "Sin adjudicaciones o contratos en licitaciones incompletas",
-        "description": "Si tender.status está incompleto ('planning', 'planned', 'active', 'cancelled', 'unsuccessful' or 'withdrawn'), entonces las adjudicaciones y los contratos están en blanco."
+        "name": "Sin adjudicaciones ni contratos en licitaciones incompletas",
+        "description": "Si <code>tender.status</code> es incompleto ('planning', 'planned', 'active', 'cancelled', 'unsuccessful' o 'withdrawn'), entonces <code>awards</code> y <code>contracts</code> están en blanco."
       },
       "awards_status": {
         "name": "Sin contratos en adjudicaciones inactivas",
-        "description": "Si el estado de una adjudicación es inactivo ('pending', 'cancelled', 'unsuccessful'), entonces ningún awardID de contratos coincide con el id de la adjudicación."
+        "description": "Si el <code>status</code> de una adjudicación es inactivo ('pending', 'cancelled', 'unsuccessful'), entonces ningún <code>awardID</code> de un contrato coincide con el <code>id</code> de la adjudicación."
       },
       "contracts_status": {
         "name": "Sin transacciones en contratos no firmados",
-        "description": "Si el estado de un contrato no está firmado ('pending' o 'cancelled'), entonces su implementation.transactions está en blanco."
+        "description": "Si el <code>status</code> de un contrato es no firmado ('pending' o 'cancelled'), entonces su <code>implementation.transactions</code> está en blanco."
       },
       "milestone_status": {
         "name": "Sin fecha de cumplimiento en hitos no cumplidos",
-        "description": "Si el estado de un hito es unmet ('scheduled' o 'notMet'), entonces su dateMet está en blanco."
+        "description": "Si el <code>status</code> de un hito es no cumplido ('scheduled' o 'notMet'), entonces su <code>dateMet</code> está en blanco."
       },
       "value_realistic": {
         "name": "Los valores monetarios son realistas",
-        "description": "<p>Cada valor monetario está entre -5 mil millones de USD y +5 mil millones de USD.</p><p>Dado que la prueba opera en todos los objetos del tipo valor, la prueba ignora cualquier monto faltante o no numérico y cualquier moneda faltante o desconocida. Si es necesaria la conversión de moneda, pero la fecha de publicación no es válida, antes de 1999 o en el futuro, la prueba ignora el valor.</p>"
+        "description": "<p>Cada valor monetario está entre -5 mil millones de USD y +5 mil millones de USD.</p><p>Dado que la prueba opera en todos los objetos de valor, ignora silenciosamente cualquier monto faltante o no numérico y cualquier moneda faltante o desconocida. Si es necesaria la conversión de moneda, pero la fecha del release no es válida, es anterior a 1999 o está en el futuro, la prueba ignora silenciosamente el valor.</p>"
       },
       "dates": {
         "name": "Línea de tiempo del proceso de contratación",
-        "description": "<p>Todas las fechas relacionadas a las etapas del proceso de contratación siguen una línea de tiempo coherente.</p><ul><li>tender.tenderPeriod.endDate <= tender.contractPeriod.startDate: El último día para las presentaciones no es posterior al inicio anticipado del contrato.</li><li>tender.tenderPeriod.endDate <= awards[].date:  El último día para las presentaciones no es posterior a la fecha de adjudicación.</li><li>tender.tenderPeriod.endDate <= contracts[].dateSigned: El último día para las presentaciones no es posterior a la fecha de firma de contrato.</li><li>awards[i].date <= contracts[].dateSigned: La fecha de adjudicación no es posterior a ninguna de las fechas de firma de los contratos relacionados.</li><li>contracts[].dateSigned <= contracts[].implementation.transactions[].date: La fecha de la firma de un contrato no es posterior ninguna de las fechas de las transacciones relacionadas.</li></ul><p>También, cada date de adjudicación y cada dateSigned del contrato no es posterior a la fecha del release.</p><p>Dado que la prueba opera en múltiples fechas, silenciosamente ignora cualquier fecha que no pueda ser analizada.</p>"
+        "description": "<p>Todas las fechas relacionadas con las etapas del proceso de contratación siguen una línea de tiempo coherente.</p><ul><li><code>tender.tenderPeriod.endDate <= tender.contractPeriod.startDate</code>: El último día para las presentaciones no es posterior a la fecha de inicio prevista del contrato.</li><li><code>tender.tenderPeriod.endDate <= awards[].date</code>: El último día para las presentaciones no es posterior a la fecha de una adjudicación.</li><li><code>tender.tenderPeriod.endDate <= contracts[].dateSigned</code>: El último día para las presentaciones no es posterior a la fecha de firma de un contrato.</li><li><code>awards[i].date <= contracts[].dateSigned</code>: La fecha de una adjudicación no es posterior a la fecha de firma de ninguno de sus contratos relacionados.</li><li><code>contracts[].dateSigned <= contracts[].implementation.transactions[].date</code>: La fecha de firma de un contrato no es posterior a la fecha de ninguna de sus transacciones relacionadas.</li></ul><p>Además, el <code>date</code> de cada adjudicación y el <code>dateSigned</code> de cada contrato no son posteriores a la fecha del release.</p><p>Dado que la prueba opera en múltiples fechas, ignora silenciosamente cualquier fecha que no pueda analizarse.</p>"
       },
       "milestones_dates": {
         "name": "Fechas de hito",
-        "description": "<p>Para cada hito, dateModified y dateMet no son posteriores a la fecha del release.</p><p>Dado que la prueba opera en todos los objetos hito, ignora silenciosamente cualquier fecha que no pueda ser analizada.</p>"
+        "description": "<p>Para cada hito, <code>dateModified</code> y <code>dateMet</code> no son posteriores a la fecha del release.</p><p>Dado que la prueba opera en todos los objetos de hito, ignora silenciosamente cualquier fecha que no pueda analizarse.</p>"
       },
       "amendments_dates": {
         "name": "Fechas de enmienda",
-        "description": "<p>Para cada enmienda, date no es posterior a la fecha de release, y: date de enmienda de la licitación no es anterior a tenderPeriod; date de enmienda de la adjudicación no es anterior a date de adjudicación; date de enmienda del contrato no es anterior a dateSigned del contrato.</p><p>Dado que la prueba opera en todos los objetos enmienda, ignora silenciosamente cualquier fecha que no puede ser analizada.</p>"
+        "description": "<p>Para cada enmienda, <code>date</code> no es posterior a la fecha del release, y: el <code>date</code> de una enmienda de la licitación no es anterior al <code>tenderPeriod</code>; el <code>date</code> de una enmienda de una adjudicación no es anterior al <code>date</code> de la adjudicación; el <code>date</code> de una enmienda de un contrato no es anterior al <code>dateSigned</code> del contrato.</p><p>Dado que la prueba opera en todos los objetos de enmienda, ignora silenciosamente cualquier fecha que no pueda analizarse.</p>"
       },
       "documents_dates": {
         "name": "Fechas de documento",
-        "description": "<p>Para cada documento, datePublished y dateModified no son posteriores a la fecha de release, y datePublished no es posterior a dateModified.</p><p>Dado que la prueba opera en todos los objetos documento, ignora silenciosamente todas las fechas que no pueden ser analizadas.</p>"
+        "description": "<p>Para cada documento, <code>datePublished</code> y <code>dateModified</code> no son posteriores a la fecha del release, y <code>datePublished</code> no es posterior a <code>dateModified</code>.</p><p>Dado que la prueba opera en todos los objetos de documento, ignora silenciosamente cualquier fecha que no pueda analizarse.</p>"
       }
     },
     "consistent": {
       "number_of_tenderers": {
         "name": "El número de oferentes es consistente",
-        "description": "<p>El valor del campo numberOfTenderers es igual al número de entradas en en el array de tenderers.</p><p>La prueba se omite si el campo tenderers no es un array.</p>"
+        "description": "<p>El valor del campo <code>numberOfTenderers</code> es igual al número de entradas del array <code>tenderers</code>.</p><p>La prueba se omite si el campo <code>tenderers</code> no es un array.</p>"
       },
       "tender_value": {
-        "name": "El presupuesto de la planificación está acorde con el valor de la licitación",
-        "description": "<p>planning.budget.amount no es menos que el 50%, o más que el 150%, de tender.value, después de la conversión a USD si es necesario.</p><p>La prueba es omitida si un monto no se encuentra, es cero o no numérico, si la moneda no se encuentra o es desconocida, si los dos montos no son ambos positivos o ambos negativos, si es necesaria la conversión de la moneda y si la fecha de release es inválida, anterior a 1999 o en el futuro.</p>"
+        "name": "El presupuesto de la planificación es acorde con el valor de la licitación",
+        "description": "<p><code>planning.budget.amount</code> no es menor que el 50%, ni mayor que el 150%, de <code>tender.value</code>, después de la conversión a USD si es necesaria.</p><p>La prueba se omite si falta un monto, es cero o no es numérico, si falta una moneda o es desconocida, si los dos montos no son ambos positivos o ambos negativos, o si es necesaria la conversión de moneda y la fecha del release no es válida, es anterior a 1999 o está en el futuro.</p>"
       },
       "contracts_value": {
-        "name": "Los valores del contrato están acordes al valor de la adjudicación",
-        "description": "<p>Para cada adjudicación, la suma de los valores de sus contratos no puede ser menor al 50% o mayor al 150% del valor de la adjudicación, después de la conversión a USD si es necesario.</p><p>Dado que la prueba opera en todas las adjudicaciones y valores de contrato, silenciosamente ignora todos los awardID que no coinciden con exactamente un id de una adjudicación, si el monto no se encuentra, es cero o no numérico, si la moneda no se encuentra o es desconocida, si los dos montos no son ambos positivos o ambos negativos, si es necesaria la conversión de la moneda y si la fecha del release es invalida, anterior a 1999 o en el futuro.</p>"
+        "name": "Los valores de los contratos son acordes con el valor de la adjudicación",
+        "description": "<p>Para cada adjudicación, la suma de los valores de sus contratos no es menor que el 50%, ni mayor que el 150%, del valor de la adjudicación, después de la conversión a USD si es necesaria.</p><p>Dado que la prueba opera en todos los valores de adjudicaciones y contratos, ignora silenciosamente cualquier contrato cuyo <code>awardID</code> no coincida con el <code>id</code> de exactamente una adjudicación, si falta un monto, es cero o no es numérico, si falta una moneda o es desconocida, si los dos montos no son ambos positivos o ambos negativos, o si es necesaria la conversión de moneda y la fecha del release no es válida, es anterior a 1999 o está en el futuro.</p>"
       },
       "contracts_implementation_transactions_value": {
-        "name": "Los valores de transacción son proporcionales al valor del contrato",
-        "description": "<p>Para cada contrato, la suma de los valores de las transacciones es menor o igual al valor del contrato, después de la conversión a USD si es necesario.</p><p>Dado que la prueba opera en todos los objetos contrato y transacción, silenciosamente ignora cualquier monto no encontrado, no numérico y cualquier moneda no encontrada o desconocida. Si es necesaria la conversión de la moneda, pero la fecha de release es inválida, antes de 1999 o en el futuro, la prueba ignora silenciosamente los contratos y sus transacciones.</p>"
+        "name": "Los valores de las transacciones son acordes con el valor del contrato",
+        "description": "<p>Para cada contrato, la suma de los valores de sus transacciones es menor o igual que el valor del contrato, después de la conversión a USD si es necesaria.</p><p>Dado que la prueba opera en todos los objetos de contrato y de transacción, ignora silenciosamente cualquier monto faltante o no numérico y cualquier moneda faltante o desconocida. Si es necesaria la conversión de moneda, pero la fecha del release no es válida, es anterior a 1999 o está en el futuro, la prueba ignora silenciosamente el contrato y sus transacciones.</p>"
       },
       "parties_roles": {
         "name": "Las partes son referenciadas",
-        "description": "<p>Para cada rol de cada parte involucrada, hay un objeto de referencia. Por ejemplo: Si una parte tiene los roles 'supplier' y 'payee', es referenciada por al menos una entrada en suppliers de una adjudicación y al menos un campo payee de una transacción. Los roles a probarse son:</p><p>- procuringEntity - tenderer - supplier - payer - payee El rol 'buyer' no se prueba porque pueden haber múltiples compradores en el array de parties, pero hay un solo campo buyer para el comprador primario.</p><p>Dado que la prueba opera en todos los objetos organización, silenciosamente ignora cualquier parte involucrada en la cual no se encuentre el campo id, ya que no puede ser referenciado.</p>"
+        "description": "<p>Para cada rol de cada parte, hay una referencia a la organización. <i>Ejemplo</i>: Si una parte tiene los roles 'supplier' y 'payee', se la referencia desde al menos una entrada <code>suppliers</code> de una adjudicación y desde al menos un campo <code>payee</code> de una transacción. Los roles que se prueban son:</p><ul><li>procuringEntity</li><li>tenderer</li><li>supplier</li><li>payer</li><li>payee</li></ul><p>El rol 'buyer' no se prueba, porque puede haber varios compradores en el array <code>parties</code>, pero solo hay un campo <code>buyer</code> para el comprador principal.</p><p>Dado que la prueba opera en todos los objetos de organización, ignora silenciosamente cualquier parte a la que le falte el campo <code>id</code>, ya que no puede ser referenciada.</p>"
       },
       "period_duration_in_days": {
-        "name": "La duración del periodo es consistente con la fecha de inicio y fin",
-        "description": "<p>Para cada periodo, durationInDays es igual a la diferencia entre startDate y endDate. Si endDate está en blanco o no se puede analizar, entonces durationInDatys es igual a la diferencia entre startDate and maxExtentDate.</p><p>Dado que la prueba opera en todos los objetos periodo, silenciosamente  ignora cualquier fecha que no pueda ser analizada.</p>"
+        "name": "La duración del período es consistente con las fechas de inicio y de fin",
+        "description": "<p>Para cada período, <code>durationInDays</code> es igual a la diferencia entre <code>startDate</code> y <code>endDate</code>. Si <code>endDate</code> está en blanco o no puede analizarse, entonces <code>durationInDays</code> es igual a la diferencia entre <code>startDate</code> y <code>maxExtentDate</code>.</p><p>Dado que la prueba opera en todos los objetos de período, ignora silenciosamente cualquier fecha que no pueda analizarse.</p>"
       },
       "buyer_in_parties_roles": {
         "name": "El rol del comprador está establecido",
-        "description": "La parte involucrada referenciada por el campo buyer tiene 'buyer' en su array de roles."
+        "description": "<p>La parte referenciada por el campo <code>buyer</code> tiene 'buyer' en su array <code>roles</code>.</p><p>La prueba se omite si falta el <code>id</code> de referencia o si no coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "supplier_in_parties_roles": {
         "name": "El rol del proveedor está establecido",
-        "description": "Cada parte involucrada referenciada en awards[].suppliers tiene 'supplier' en su array de roles."
+        "description": "<p>Cada parte referenciada por una entrada <code>awards[].suppliers</code> tiene 'supplier' en su array <code>roles</code>.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "tenderer_in_parties_roles": {
         "name": "El rol del oferente está establecido",
-        "description": "Cada parte involucrada referenciada en tender.tenderers tiene 'tenderer' en su array de roles."
+        "description": "<p>Cada parte referenciada por una entrada <code>tender.tenderers</code> tiene 'tenderer' en su array <code>roles</code>.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "procuring_entity_in_parties_roles": {
         "name": "El rol de la entidad contratante está establecido",
-        "description": "La parte involucrada referenciada por el campo tender.procuringEntity tiene el rol 'procuringEntity' en su array de roles."
+        "description": "<p>La parte referenciada por el campo <code>tender.procuringEntity</code> tiene 'procuringEntity' en su array <code>roles</code>.</p><p>La prueba se omite si falta el <code>id</code> de referencia o si no coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "payer_in_parties_roles": {
         "name": "El rol del pagador está establecido",
-        "description": "Cada parte involucrada referenciada por un campo contracts[].implementation.transactions[].payer tiene 'payer' en su array de roles."
+        "description": "<p>Cada parte referenciada por un campo <code>contracts[].implementation.transactions[].payer</code> tiene 'payer' en su array <code>roles</code>.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "payee_in_parties_roles": {
         "name": "El rol del beneficiario está establecido",
-        "description": "Cada parte referenciada por el campo contracts[].implementation.transactions[].payee tiene 'payee' en su array de roles."
+        "description": "<p>Cada parte referenciada por un campo <code>contracts[].implementation.transactions[].payee</code> tiene 'payee' en su array <code>roles</code>.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "buyer_name_in_parties": {
         "name": "El nombre del comprador es consistente",
-        "description": "<p>El campo buyer tiene en su campo name el mismo valor que la parte a la que referencia.</p><p>La prueba es omitida si el id de referencia no se encuentra o si no coincide exactamente con el id de una parte involucrada.</p>"
+        "description": "<p>El campo <code>buyer</code> tiene en su campo <code>name</code> el mismo valor que la parte a la que hace referencia.</p><p>La prueba se omite si falta el <code>id</code> de referencia o si no coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "payee_name_in_parties": {
         "name": "El nombre del beneficiario es consistente",
-        "description": "<p>Cada campo contracts[].implementation.transactions[].payee tiene en el campo name el mismo valor que la parte a la que referencia.</p><p>La prueba se omite si no se encuentran todos los id referenciados o si el id no coincide exactamente con el de una parte involucrada.</p>"
+        "description": "<p>Cada campo <code>contracts[].implementation.transactions[].payee</code> tiene en su campo <code>name</code> el mismo valor que la parte a la que hace referencia.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "payer_name_in_parties": {
         "name": "El nombre del pagador es consistente",
-        "description": "<p>Cada campo contracts[].implementation.transactions[].payer tiene en el campo name el mismo valor que la parte a la que referencia.</p><p>La prueba se omite si no se encuentran todos los id referenciados o si ninguno coincide exactamente con una parte involucrada.</p>"
+        "description": "<p>Cada campo <code>contracts[].implementation.transactions[].payer</code> tiene en su campo <code>name</code> el mismo valor que la parte a la que hace referencia.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "procuring_entity_name_in_parties": {
         "name": "El nombre de la entidad contratante es consistente",
-        "description": "<p>El campo tender.procuringEntity tiene en el campo name el mismo valor que la parte a la que referencia.</p><p>La prueba se omite si el id referenciado no se encuentra o si el id no coincide exactamente con el de una parte involucrada.</p>"
+        "description": "<p>El campo <code>tender.procuringEntity</code> tiene en su campo <code>name</code> el mismo valor que la parte a la que hace referencia.</p><p>La prueba se omite si falta el <code>id</code> de referencia o si no coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "supplier_name_in_parties": {
         "name": "El nombre del proveedor es consistente",
-        "description": "<p>Cada entrada en awards[].suppliers tiene en el campo name el mismo valor que la parte a la que referencia.</p><p>La prueba se omite si no se encuentran todos los id referenciados o si ninguno coincide exactamente con una parte involucrada.</p>"
+        "description": "<p>Cada entrada <code>awards[].suppliers</code> tiene en su campo <code>name</code> el mismo valor que la parte a la que hace referencia.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       },
       "tenderer_name_in_parties": {
         "name": "El nombre del oferente es consistente",
-        "description": "<p>Cada entrada en tender.tenderers tiene en su campo name el mismo valor que la parte a la que referencia.</p><p>La prueba se omite si no se encuentran todos los id referenciados o si ninguno coincide exactamente con una parte involucrada.</p>"
+        "description": "<p>Cada entrada <code>tender.tenderers</code> tiene en su campo <code>name</code> el mismo valor que la parte a la que hace referencia.</p><p>La prueba se omite si falta todo <code>id</code> de referencia o si ninguno coincide con el <code>id</code> de exactamente una parte.</p>"
       }
     },
     "reference": {
       "buyer_in_parties": {
         "name": "Referencia a la organización del comprador",
-        "description": "buyer.id está presente y coincide con el id de exactamente una parte involucrada."
+        "description": "<code>buyer.id</code> está presente y coincide con el <code>id</code> de exactamente una parte."
       },
       "payee_in_parties": {
         "name": "Referencia a la organización del beneficiario",
-        "description": "Cada contracts[].implementation.transactions[].payee.id está presente y coincide con el id de exactamente una parte involucrada."
+        "description": "Cada <code>contracts[].implementation.transactions[].payee.id</code> está presente y coincide con el <code>id</code> de exactamente una parte."
       },
       "payer_in_parties": {
         "name": "Referencia a la organización del pagador",
-        "description": "Cada contracts[].implementation.transactions[].payer.id está presente y coincide con el id de exactamente una parte involucrada."
+        "description": "Cada <code>contracts[].implementation.transactions[].payer.id</code> está presente y coincide con el <code>id</code> de exactamente una parte."
       },
       "procuring_entity_in_parties": {
         "name": "Referencia a la organización de la entidad contratante",
-        "description": "tender.procuringEntity.id está presente y coincide con el id de exactamente una parte involucrada."
+        "description": "<code>tender.procuringEntity.id</code> está presente y coincide con el <code>id</code> de exactamente una parte."
       },
       "supplier_in_parties": {
         "name": "Referencias a la organización del proveedor",
-        "description": "Cada awards[].suppliers[].id está presente y coincide con el id de exactamente una parte involucrada."
+        "description": "Cada <code>awards[].suppliers[].id</code> está presente y coincide con el <code>id</code> de exactamente una parte."
       },
       "tenderer_in_parties": {
         "name": "Referencias a la organización del oferente",
-        "description": "Cada tender.tenderers[].id está presente y coincide con el id de exactamente una parte involucrada."
+        "description": "Cada <code>tender.tenderers[].id</code> está presente y coincide con el <code>id</code> de exactamente una parte."
       },
       "contract_in_awards": {
         "name": "Referencia a la adjudicación",
-        "description": "<p>Cada contracts[].awardID está presente y coincide con el awardID de exactamente una adjudicación.</p><p>Esta prueba se omite si no hay adjudicaciones.</p>"
+        "description": "Cada <code>contracts[].awardID</code> está presente y coincide con el <code>id</code> de exactamente una adjudicación."
       }
     }
   },
@@ -263,11 +263,11 @@
     "coverage": {
       "exists": {
         "name": "El campo está establecido",
-        "description": "Hay una prueba por posible aparición del campo. Ejemplo: si el campo padre  licitación se establece en 10 compiled releases, el campo hijo tender.id se reporta sobre 10. Si hay 100 entradas en todos los arrays de adjudicación en todos los compiled releases, entonces se reporta el campo awards.id sobre 100."
+        "description": "Hay una prueba por cada aparición <i>posible</i> del campo. <i>Ejemplo</i>: Si el campo padre <code>tender</code> está establecido en 10 compiled releases, entonces el campo hijo <code>tender.id</code> se reporta sobre 10. Si hay 100 entradas en todos los arrays <code>awards</code> de todos los compiled releases, entonces el campo <code>awards.id</code> se reporta sobre 100."
       },
       "non_empty": {
         "name": "El campo no es nulo ni está vacío",
-        "description": "Hay una prueba por ocurrencia real del campo. La prueba pasa si el valor del campo no es nulo ni está vacío (es decir, no es una cadena vacía, un array vacío o un objeto vacío). Vea la comprobación de arriba para obtener más detalles."
+        "description": "Hay una prueba por cada aparición <i>real</i> del campo. La prueba pasa si el valor del campo no es nulo ni está vacío (es decir, no es una cadena vacía, un array vacío ni un objeto vacío). Vea la comprobación anterior para otros detalles."
       }
     },
     "quality": {
@@ -277,7 +277,7 @@
       },
       "date_time": {
         "name": "La fecha es realista",
-        "description": "El valor es una cadena, comienza en formato AAAA-MM-DD  y no es anterior a 1990 ni posterior a 2050."
+        "description": "El valor es una cadena, comienza en formato AAAA-MM-DD, no es anterior a 1990 ni posterior a 2050."
       },
       "email": {
         "name": "La dirección de correo electrónico es válida",
@@ -285,11 +285,11 @@
       },
       "identifier_scheme": {
         "name": "El esquema del identificador es reconocido",
-        "description": "El valor es una cadena y es un código org-id.guide. (La lista de códigos es abierta.)"
+        "description": "El valor es una cadena y es un código de org-id.guide. (La lista de códigos es abierta.)"
       },
       "telephone": {
         "name": "El número de teléfono es posible",
-        "description": "El valor es un número posible según la libreria libphonenumber de Google."
+        "description": "El valor es un número posible según libphonenumber de Google."
       },
       "document_description_length": {
         "name": "Tiene 250 caracteres o menos",
@@ -297,19 +297,19 @@
       },
       "document_type": {
         "name": "El tipo de documento es coherente",
-        "description": "El tipo de documento es apropiado para la ruta del campo. Específicamente, el valor es un código de documentType y la 'Sección' del código corresponde a la ruta del campo. (La lista de códigos es abierta.)"
+        "description": "El tipo de documento es apropiado para la ruta del campo. Específicamente, el valor es un código de documentType y la 'Section' del código corresponde a la ruta del campo. (La lista de códigos es abierta.)"
       },
       "document_format_codelist": {
         "name": "El formato del documento es reconocido",
-        "description": "El valor es una cadena y o es un tipo de medio IANA o es el código 'offline/print'. (La lista de códigos es abierta.)"
+        "description": "El valor es una cadena y es un tipo de medio de IANA o el código 'offline/print'. (La lista de códigos es abierta.)"
       },
       "number_checks": {
         "name": "El número no es negativo",
-        "description": "El valor no es un número complejo, puede ser analizado como un número de punto flotante y no es negativo."
+        "description": "El valor no es un número complejo, puede analizarse como un número de punto flotante y no es negativo."
       },
       "language": {
-        "name": "El código del idioma es reconocido",
-        "description": "El valor es una cadena y es un código ISO 639-1 de dos letras minúsculas. (La lista de códigos es abierta.)"
+        "name": "El código de idioma es reconocido",
+        "description": "El valor es una cadena y es un código ISO 639-1 de dos letras en minúsculas. (La lista de códigos es abierta.)"
       }
     }
   }
