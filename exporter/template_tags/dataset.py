@@ -1,7 +1,6 @@
 from typing import Any
 
 from django.conf import settings
-from django.utils.translation import gettext as _
 
 from api.models import DatasetLevelCheck
 from exporter.exceptions import CheckNotComputedError
@@ -28,6 +27,7 @@ from exporter.leaf_tags.dataset import (
 )
 from exporter.leaf_tags.dataset import value as value_tag
 from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_sample_leaf_tag
+from exporter.messages import message
 from exporter.tag import Tag, TemplateTag
 from exporter.util import quote_list
 
@@ -83,8 +83,8 @@ class Dataset(TemplateTag):
         value_tag,
     )
 
-    def __init__(self, gdocs: Gdocs, dataset_id: int):
-        super().__init__(gdocs, dataset_id)
+    def __init__(self, gdocs: Gdocs, dataset_id: int, language: str):
+        super().__init__(gdocs, dataset_id, language)
         self.argument_names.add("check")
         self.argument_required.add("check")
         self.argument_validators["check"] = lambda v: v in CHECK_TYPES
@@ -138,8 +138,8 @@ class Dataset(TemplateTag):
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
 
         data = {
-            "name": _(str("dataset." + check_name + ".name")),
-            "description": _(str("dataset." + check_name + ".description")),
+            "name": message(self.language, "datasetLevel", *check_name.split("."), "name"),
+            "description": message(self.language, "datasetLevel", *check_name.split("."), "description"),
             "result": check.result,
             "value": check.value,
         }

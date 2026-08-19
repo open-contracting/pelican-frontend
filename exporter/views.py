@@ -2,13 +2,12 @@ import datetime
 import logging
 
 import simplejson as json
-from django.conf import settings
 from django.http import JsonResponse
-from django.utils import translation
 from django.views.decorators.csrf import csrf_exempt
 
 from exporter.exceptions import GoogleDriveError, TagError
 from exporter.gdocs import Gdocs
+from exporter.messages import DEFAULT_LANGUAGE, MESSAGES
 from exporter.template_tags.base import base as base_tag
 
 logger = logging.getLogger(__name__)
@@ -32,10 +31,10 @@ def generate_report(request) -> JsonResponse:
             {"status": "report_error", "data": {"reason": "Input message is malformed, will be dropped."}}
         )
 
-    if "language" in input_message and input_message["language"] in dict(settings.LANGUAGES):
-        translation.activate(input_message["language"])
+    if "language" in input_message and input_message["language"] in MESSAGES:
+        language = input_message["language"]
     else:
-        translation.activate("en")
+        language = DEFAULT_LANGUAGE
 
     document_id = input_message["document_id"].strip()
     folder_id = input_message["folder_id"].strip()
@@ -45,7 +44,7 @@ def generate_report(request) -> JsonResponse:
     failed_tags = []
     try:
         gdocs = Gdocs(document_id)
-        base = base_tag(gdocs, input_message["dataset_id"])
+        base = base_tag(gdocs, input_message["dataset_id"], language)
         base.set_argument("template", document_id)
         base.finalize_arguments()
         content, failed_tags = base.validate_and_render({})
@@ -73,6 +72,4 @@ def generate_report(request) -> JsonResponse:
         if gdocs is not None:
             gdocs.close()
 
-    # restores default english translations
-    translation.activate("en")
     return response

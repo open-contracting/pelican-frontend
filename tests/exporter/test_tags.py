@@ -1,5 +1,4 @@
 from django.test import SimpleTestCase
-from django.utils import translation
 
 from exporter.exceptions import TagError
 from exporter.leaf_tags.field import name
@@ -7,8 +6,8 @@ from exporter.leaf_tags.field import name
 data = {"path": "ocid", "qualityCheck": "ocid_prefix_check"}
 
 
-def get_tag(arguments):
-    tag = name("Gdocs", 1)
+def get_tag(arguments, language="en"):
+    tag = name("Gdocs", 1, language)
     for key, value in arguments.items():
         tag.set_argument(key, value)
     tag.finalize_arguments()
@@ -41,12 +40,15 @@ class Tests(SimpleTestCase):
             "'coverageEmpty', 'coverageSet', 'quality'.",
         )
 
-    @translation.override(None)
     def test_success(self):
-        for level, infix in (
-            ("coverageEmpty", "non_empty"),
-            ("coverageSet", "exists"),
-            ("quality", "ocid_prefix_check"),
+        for level, expected in (
+            ("coverageEmpty", "Field isn't null or empty"),
+            ("coverageSet", "Field is set"),
+            ("quality", "OCID prefix is registered"),
         ):
             with self.subTest(level=level):
-                self.assertEqual(get_tag({"level": level}).validate_and_render(data), f"field.{infix}.name")
+                self.assertEqual(get_tag({"level": level}).validate_and_render(data), expected)
+
+    def test_success_translated(self):
+        tag = get_tag({"level": "coverageSet"}, language="es")
+        self.assertEqual(tag.validate_and_render(data), "El campo está establecido")

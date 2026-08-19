@@ -1,9 +1,9 @@
 from typing import Any
 
-from django.utils.translation import gettext as _
 from lxml import etree
 
 from exporter import graphs
+from exporter.messages import message
 from exporter.tag import LeafTag, argument, leaf
 from exporter.util import LEVELS, MODES, box_image, sample_and_format
 
@@ -14,10 +14,10 @@ def name(tag: LeafTag, data: dict[str, Any]) -> str:
     if tag.arguments["level"] == "quality" and data["qualityCheck"] is None:
         return ""
     if tag.arguments["level"] == "coverageSet":
-        return _("field.exists.name")
+        return message(tag.language, "fieldDetail", "coverage", "exists", "name")
     if tag.arguments["level"] == "coverageEmpty":
-        return _("field.non_empty.name")
-    return _(str("field." + data["qualityCheck"] + ".name"))
+        return message(tag.language, "fieldDetail", "coverage", "non_empty", "name")
+    return message(tag.language, "fieldDetail", "quality", data["qualityCheck"], "name")
 
 
 @argument("level", required=True, choices={"coverageSet", "coverageEmpty", "quality"})
@@ -26,10 +26,10 @@ def description(tag: LeafTag, data: dict[str, Any]) -> str:
     if tag.arguments["level"] == "quality" and data["qualityCheck"] is None:
         return ""
     if tag.arguments["level"] == "coverageSet":
-        return _("field.exists.description")
+        return message(tag.language, "fieldDetail", "coverage", "exists", "description")
     if tag.arguments["level"] == "coverageEmpty":
-        return _("field.non_empty.description")
-    return _(str("field." + data["qualityCheck"] + ".description"))
+        return message(tag.language, "fieldDetail", "coverage", "non_empty", "description")
+    return message(tag.language, "fieldDetail", "quality", data["qualityCheck"], "description")
 
 
 @argument("level", required=True, choices=LEVELS)
