@@ -26,6 +26,17 @@ export const BAR_CHART_OPTIONS = {
   fontSize: 14,
 };
 
+// The annotations are bold and monospace, unlike the labels.
+export const ANNOTATION_FONT = `bold ${BAR_CHART_OPTIONS.fontSize}px ${BAR_CHART_OPTIONS.annotations.textStyle.fontName}`;
+
+const context = document.createElement("canvas").getContext("2d");
+
+/** The width in pixels of the widest text, as the chart draws it. */
+export function textWidth(texts, font = `${BAR_CHART_OPTIONS.fontSize}px ${BAR_CHART_OPTIONS.fontName}`) {
+  context.font = font;
+  return Math.max(...texts.map((text) => context.measureText(text).width));
+}
+
 /** Color a bar by whether its share is within the check's thresholds. */
 export function shareStyle(share, ticks) {
   return ticks[0] <= share && share <= ticks[1] ? "color: #919C03" : "color: #d0021b";
