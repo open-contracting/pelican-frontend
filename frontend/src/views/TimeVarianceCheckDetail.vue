@@ -130,7 +130,7 @@
                     class="examples_button"
                     :title="$t('examples.preview.tooltip')"
                     :disabled="loadingPreviewData"
-                    @click.stop.prevent="preview('new_' + index, item.new_item_id)"
+                    @click.stop.prevent="previewDataItem(item.new_item_id, 'new_' + index)"
                   >
                     <FontAwesomeIcon
                       class="examples_icon"
@@ -188,7 +188,7 @@
                     class="examples_button"
                     :title="$t('examples.preview.tooltip')"
                     :disabled="loadingPreviewData"
-                    @click.stop.prevent="preview('old_' + index, item.item_id)"
+                    @click.stop.prevent="previewDataItem(item.item_id, 'old_' + index)"
                   >
                     <FontAwesomeIcon
                       class="examples_icon"
@@ -261,7 +261,7 @@
                       class="examples_button"
                       :title="$t('examples.preview.tooltip')"
                       :disabled="loadingPreviewData"
-                      @click.stop.prevent="preview('new_' + (index + 5), item.new_item_id)"
+                      @click.stop.prevent="previewDataItem(item.new_item_id, 'new_' + (index + 5))"
                     >
                       <FontAwesomeIcon
                         class="examples_icon"
@@ -319,7 +319,7 @@
                       class="examples_button"
                       :title="$t('examples.preview.tooltip')"
                       :disabled="loadingPreviewData"
-                      @click.stop.prevent="preview('old_' + (index + 5), item.item_id)"
+                      @click.stop.prevent="previewDataItem(item.item_id, 'old_' + (index + 5))"
                     >
                       <FontAwesomeIcon
                         class="examples_icon"
@@ -416,9 +416,8 @@
 </template>
 
 <script setup>
-import { BSpinner, useToast } from "bootstrap-vue-next";
-import { computed, onBeforeMount, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { BSpinner } from "bootstrap-vue-next";
+import { computed, ref } from "vue";
 import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -427,77 +426,20 @@ import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
+import { withoutExamples } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 const { formatNumber } = useFormatters();
 
 const route = useRoute();
 const store = useStore();
-const { t } = useI18n();
-const { create: showToast } = useToast();
-const { download, copyToClipboard } = useDataItem();
+const { previewDataItem, previewData, loadingPreviewData, selectedKey, download, copyToClipboard } = useDataItem();
 
-const check = ref(null);
-const previewDataItemId = ref(null);
-const previewMetadata = ref(null);
-const loadingPreviewData = ref(false);
-let previewRequest = 0;
 const showMore = ref(false);
-const selectedKey = ref(null);
 
-const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
-const loaded = computed(() => {
-  loadCheck();
-  return check.value != null;
-});
-
-function loadCheck() {
-  check.value = store.getters.timeVarianceLevelCheckByName(route.params.check);
-
-  if (check.value != null) {
-    previewMetadata.value = { ...check.value.meta };
-    previewMetadata.value.examples = undefined;
-  }
-}
-
-function preview(key, itemId) {
-  // A later click supersedes this one, whose response is then ignored.
-  const request = ++previewRequest;
-  loadingPreviewData.value = true;
-  store
-    .dispatch("loadDataItem", itemId)
-    .then(() => {
-      if (request !== previewRequest) {
-        return;
-      }
-      if (store.getters.dataItemJSONLines(itemId) < 3000) {
-        previewDataItemId.value = itemId;
-        selectedKey.value = key;
-      } else {
-        showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-        previewDataItemId.value = null;
-        selectedKey.value = null;
-      }
-    })
-    .catch(() => {
-      if (request !== previewRequest) {
-        return;
-      }
-      showToast({ body: t("preview.nonExisting"), variant: "danger", pos: "middle-center" });
-      previewDataItemId.value = null;
-      selectedKey.value = null;
-    })
-    .finally(() => {
-      if (request !== previewRequest) {
-        return;
-      }
-      loadingPreviewData.value = false;
-    });
-}
-
-onBeforeMount(() => {
-  loadCheck();
-});
+const check = computed(() => store.getters.timeVarianceLevelCheckByName(route.params.check));
+const loaded = computed(() => check.value != null);
+const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
 </script>
 
 <style scoped lang="scss">

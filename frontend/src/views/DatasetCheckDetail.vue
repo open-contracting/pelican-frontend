@@ -10,11 +10,11 @@
         </div>
         <div class="col col-2 text-end">
           <span
-            v-if="!reportOnly && check.result == true"
+            v-if="!reportOnly && check.result === true"
             class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
-            v-if="!reportOnly && check.result == false"
+            v-if="!reportOnly && check.result === false"
             class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
@@ -28,19 +28,15 @@
         v-if="check.meta.reason == null"
         class="result_box"
       >
-        <div v-if="checkType == 'bar'">
+        <div v-if="checkType === 'bar'">
           <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
 
-        <div v-if="checkType == 'unique'">
-          {{ $t("datasetLevel.unique.ok") }}
-        </div>
-
-        <div v-if="checkType == 'donut'">
+        <div v-else-if="checkType === 'donut'">
           <CodeChart :check="check" :limit="false" />
         </div>
 
-        <div v-if="checkType == 'top3'">
+        <div v-else-if="checkType === 'top3'">
           <table class="table table-sm">
             <thead>
               <tr>
@@ -70,7 +66,7 @@
           </table>
         </div>
 
-        <div v-if="checkType == 'numeric'">
+        <div v-else-if="checkType === 'numeric'">
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
@@ -96,7 +92,7 @@
         </div>
 
         <div
-          v-if="checkType == 'biggest_share'"
+          v-else-if="checkType === 'biggest_share'"
           class="biggest_share"
         >
           <div class="row text-start">
@@ -115,8 +111,8 @@
                 <div
                   class="col col-12 text-center total_share"
                   :class="{
-                    color_failed: check.result == false,
-                    color_ok: check.result == true
+                    color_failed: check.result === false,
+                    color_ok: check.result === true
                   }"
                 >
                   {{ formatPercentage2D(check.meta.ocid_share) }}
@@ -132,7 +128,7 @@
         </div>
 
         <div
-          v-if="checkType == 'single_value_share'"
+          v-else-if="checkType === 'single_value_share'"
           class="single_value_share"
         >
           <div class="row text-center">
@@ -146,8 +142,7 @@
 
       <ExampleBoxes
         :example-sections="exampleSections"
-        :loaded="true"
-        @preview="preview"
+        @preview="previewDataItem"
       />
     </template>
 
@@ -188,8 +183,8 @@
 </template>
 
 <script setup>
-import { BSpinner, useToast } from "bootstrap-vue-next";
-import { computed, onBeforeMount, ref } from "vue";
+import { BSpinner } from "bootstrap-vue-next";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
@@ -199,9 +194,10 @@ import CodeChart from "@/components/CodeChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import FrequencyChart from "@/components/FrequencyChart.vue";
 import PercentileChart from "@/components/PercentileChart.vue";
+import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
-import { orderedShares } from "@/util.js";
+import { orderedShares, withoutExamples } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 const { formatNumber, formatPercentage2D } = useFormatters();
@@ -209,120 +205,74 @@ const { formatNumber, formatPercentage2D } = useFormatters();
 const route = useRoute();
 const store = useStore();
 const { t } = useI18n();
-const { create: showToast } = useToast();
+const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const check = ref(null);
-const previewDataItemId = ref(null);
-const previewMetadata = ref(null);
-const exampleSections = ref(null);
-const loadingPreviewData = ref(false);
-let previewRequest = 0;
-
+const check = computed(() => store.getters.datasetLevelCheckByName(route.params.check));
+const loaded = computed(() => check.value != null);
+const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
 const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);
 const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
 const ticks = computed(() => DATASET_CHECK_TICKS[check.value?.name]);
-const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
-const loaded = computed(() => {
-  loadCheck();
-  return check.value != null;
-});
+const exampleSections = computed(() => {
+  const sections = [];
 
-function preview(itemId) {
-  // A later click supersedes this one, whose response is then ignored.
-  const request = ++previewRequest;
-  loadingPreviewData.value = true;
-  store.dispatch("loadDataItem", itemId).finally(() => {
-    if (request !== previewRequest) {
-      return;
-    }
-    if (store.getters.dataItemJSONLines(itemId) < 3000) {
-      previewDataItemId.value = itemId;
-    } else {
-      showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-      previewDataItemId.value = null;
-    }
-    loadingPreviewData.value = false;
-  });
-}
+  if (!check.value) {
+    return sections;
+  }
 
-function loadCheck() {
-  check.value = store.getters.datasetLevelCheckByName(route.params.check);
+  const meta = check.value.meta;
 
-  if (check.value != null) {
-    previewMetadata.value = check.value.meta;
-
-    if (checkType.value === "donut") {
-      exampleSections.value = [];
-      const shares = orderedShares(check.value.meta.shares ?? {});
-      for (const key in shares) {
-        if (shares[key][1].examples.length > 0) {
-          exampleSections.value.push({
-            header: shares[key][0],
-            examples: shares[key][1].examples,
-          });
-        }
-      }
-    }
-
-    if (checkType.value === "bar") {
-      exampleSections.value = [];
-      for (const barKey in check.value.meta.examples) {
-        if (check.value.meta.examples[barKey].length > 0) {
-          exampleSections.value.push({
-            header: t(`datasetLevel.charts.label_${barKey}`),
-            examples: check.value.meta.examples[barKey],
-          });
-        }
-      }
-    }
-
-    if (checkType.value === "top3") {
-      exampleSections.value = [];
-      const mostFrequent = check.value.meta.most_frequent;
-      for (const topKey in mostFrequent) {
-        if (mostFrequent[topKey].examples.length > 0) {
-          exampleSections.value.push({
-            header: mostFrequent[topKey].value_str,
-            examples: mostFrequent[topKey].examples,
-          });
-        }
-      }
-    }
-
-    if (checkType.value === "numeric") {
-      exampleSections.value = [];
-      const failed = check.value.meta.failed_examples;
-      const passed = check.value.meta.passed_examples;
-
-      if (failed?.length > 0) {
-        exampleSections.value.push({
-          header: t("datasetLevel.numeric.failedExamples"),
-          examples: failed,
-        });
-      }
-
-      if (passed?.length > 0) {
-        exampleSections.value.push({
-          header: t("datasetLevel.numeric.passedExamples"),
-          examples: passed,
+  if (checkType.value === "donut") {
+    for (const [code, share] of orderedShares(meta.shares ?? {})) {
+      if (share.examples.length > 0) {
+        sections.push({
+          header: code,
+          examples: share.examples,
         });
       }
     }
-
-    if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
-      exampleSections.value = [];
-      if (check.value.meta.examples?.length > 0) {
-        exampleSections.value.push({
-          header: t("datasetLevel.examples"),
-          examples: check.value.meta.examples,
+  } else if (checkType.value === "bar") {
+    for (const [barKey, examples] of Object.entries(meta.examples ?? {})) {
+      if (examples.length > 0) {
+        sections.push({
+          header: t(`datasetLevel.charts.label_${barKey}`),
+          examples,
         });
       }
+    }
+  } else if (checkType.value === "top3") {
+    for (const value of meta.most_frequent ?? []) {
+      if (value.examples.length > 0) {
+        sections.push({
+          header: value.value_str,
+          examples: value.examples,
+        });
+      }
+    }
+  } else if (checkType.value === "numeric") {
+    if (meta.failed_examples?.length > 0) {
+      sections.push({
+        header: t("datasetLevel.numeric.failedExamples"),
+        examples: meta.failed_examples,
+      });
+    }
+
+    if (meta.passed_examples?.length > 0) {
+      sections.push({
+        header: t("datasetLevel.numeric.passedExamples"),
+        examples: meta.passed_examples,
+      });
+    }
+  } else if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
+    if (meta.examples?.length > 0) {
+      sections.push({
+        header: t("datasetLevel.examples"),
+        examples: meta.examples,
+      });
     }
   }
-}
 
-onBeforeMount(() => {
-  loadCheck();
+  return sections;
 });
 </script>
 

@@ -14,9 +14,18 @@ import FieldCheckDetail from "./views/FieldCheckDetail.vue";
 import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
 import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
 
+// The ID is a number in the store and a string in the route. A strict comparison always differs, which would reload
+// the dataset on every navigation, resetting each page's search, sorting, filter and expansion.
+function isDatasetLoaded(datasetId) {
+  return String(store.getters.datasetId) === datasetId;
+}
+
 export default createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior() {
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
     return {
       top: 0,
       left: 0,
@@ -33,7 +42,7 @@ export default createRouter({
       name: "overview",
       component: Overview,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();
@@ -44,7 +53,7 @@ export default createRouter({
       name: "field",
       component: Field,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();
@@ -55,7 +64,7 @@ export default createRouter({
       name: "resource",
       component: Resource,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();
@@ -66,7 +75,7 @@ export default createRouter({
       name: "dataset",
       component: Dataset,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();
@@ -77,7 +86,7 @@ export default createRouter({
       name: "time",
       component: Time,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();
@@ -88,7 +97,7 @@ export default createRouter({
       name: "resourceCheckDetail",
       component: ResourceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId).then(() => {
             store.dispatch("loadResourceLevelCheckDetail", to.params.check);
           });
@@ -103,7 +112,7 @@ export default createRouter({
       name: "datasetCheckDetail",
       component: DatasetCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();
@@ -114,7 +123,7 @@ export default createRouter({
       name: "fieldCheckDetail",
       component: FieldCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId).then(() => {
             store.dispatch("loadFieldLevelCheckDetail", to.params.path);
           });
@@ -129,7 +138,7 @@ export default createRouter({
       name: "timeVarianceCheckDetail",
       component: TimeVarianceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (store.getters.datasetId !== to.params.datasetId) {
+        if (!isDatasetLoaded(to.params.datasetId)) {
           store.dispatch("loadDataset", to.params.datasetId);
         }
         next();

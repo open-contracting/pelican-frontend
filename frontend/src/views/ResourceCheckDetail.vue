@@ -44,15 +44,15 @@
 
       <ExampleBoxes
         :example-sections="exampleSections"
-        :loaded="check.examples_filled"
+        :loading="!check.examples_filled"
         @preview="preview"
       />
     </template>
 
     <template #preview>
-      <span v-if="previewMetaData">
+      <span v-if="previewMetadata">
         <h5>{{ $t("preview.metadata") }}</h5>
-        <vue-json-pretty :data="previewMetaData" />
+        <vue-json-pretty :data="previewMetadata" />
       </span>
 
       <div class="divider">
@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { BSpinner, useToast } from "bootstrap-vue-next";
+import { BSpinner } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
@@ -95,6 +95,7 @@ import "vue-json-pretty/lib/styles.css";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import Tooltip from "@/components/Tooltip.vue";
+import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
@@ -103,15 +104,11 @@ const { formatNumber } = useFormatters();
 const route = useRoute();
 const store = useStore();
 const { t } = useI18n();
-const { create: showToast } = useToast();
+const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const previewMetaData = ref(null);
-const previewDataItemId = ref(null);
-const loadingPreviewData = ref(false);
-let previewRequest = 0;
+const previewMetadata = ref(null);
 
 const check = computed(() => store.getters.resourceLevelStats?.find((item) => item.name === route.params.check));
-const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
 const allExamples = computed(() => {
   if (!check.value) {
     return [];
@@ -159,26 +156,11 @@ const exampleSections = computed(() => {
 });
 
 function preview(itemId) {
-  // A later click supersedes this one, whose response is then ignored.
-  const request = ++previewRequest;
-  loadingPreviewData.value = true;
-  store.dispatch("loadDataItem", itemId).finally(() => {
-    if (request !== previewRequest) {
-      return;
-    }
-    if (store.getters.dataItemJSONLines(itemId) < 3000) {
-      previewDataItemId.value = itemId;
-    } else {
-      showToast({ body: t("preview.cannotDisplay"), variant: "danger", pos: "middle-center" });
-      previewDataItemId.value = null;
-    }
-
-    loadingPreviewData.value = false;
-  });
+  previewDataItem(itemId);
 
   const result = allExamples.value.find((element) => element.meta.item_id === itemId);
   if (result) {
-    previewMetaData.value = result.result;
+    previewMetadata.value = result.result;
   }
 }
 </script>

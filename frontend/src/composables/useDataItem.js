@@ -1,6 +1,10 @@
 import { useToast } from "bootstrap-vue-next";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
+
+// Above this, some browsers can crash while rendering the JSON data.
+const maxJSONLines = 3000;
 
 class DataItemNotFound extends Error {}
 class DataItemTooLarge extends Error {}
@@ -10,11 +14,54 @@ export function useDataItem() {
   const { t } = useI18n();
   const { create: showToast } = useToast();
 
+  const previewDataItemId = ref(null);
+  const loadingPreviewData = ref(false);
+  const selectedKey = ref(null);
+
+  const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
+
   let fileLink;
   let previousFileURL;
+  let previewRequest = 0;
 
   function toast(body, variant) {
     showToast({ body, variant, pos: "middle-center" });
+  }
+
+  // `key` identifies the control that requested the preview, for the caller to highlight it.
+  function previewDataItem(itemId, key = null) {
+    // A later click supersedes this one, whose response is then ignored.
+    const request = ++previewRequest;
+    loadingPreviewData.value = true;
+    store
+      .dispatch("loadDataItem", itemId)
+      .then(() => {
+        if (request !== previewRequest) {
+          return;
+        }
+        if (store.getters.dataItemJSONLines(itemId) < maxJSONLines) {
+          previewDataItemId.value = itemId;
+          selectedKey.value = key;
+        } else {
+          toast(t("preview.cannotDisplay"), "danger");
+          previewDataItemId.value = null;
+          selectedKey.value = null;
+        }
+      })
+      .catch(() => {
+        if (request !== previewRequest) {
+          return;
+        }
+        toast(t("preview.nonExisting"), "danger");
+        previewDataItemId.value = null;
+        selectedKey.value = null;
+      })
+      .finally(() => {
+        if (request !== previewRequest) {
+          return;
+        }
+        loadingPreviewData.value = false;
+      });
   }
 
   function download(itemId) {
@@ -56,7 +103,7 @@ export function useDataItem() {
     // write() must be called during the click, so pass the data as a promise instead of awaiting it here.
     const blob = store.dispatch("loadDataItem", itemId).then(
       () => {
-        if (store.getters.dataItemJSONLines(itemId) >= 3000) {
+        if (store.getters.dataItemJSONLines(itemId) >= maxJSONLines) {
           reason = new DataItemTooLarge();
           throw reason;
         }
@@ -85,5 +132,5 @@ export function useDataItem() {
     }
   }
 
-  return { download, copyToClipboard };
+  return { previewDataItem, previewData, loadingPreviewData, selectedKey, download, copyToClipboard };
 }
