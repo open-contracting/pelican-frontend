@@ -17,11 +17,19 @@ Comparing to production
 Configuration
 -------------
 
-Copy ``.env.example`` to ``.env`` and fill in the connection strings and the production credentials. Git ignores ``.env``. Load it when starting the backend, rather than exporting the variables into a shell, so that the credentials stay out of shell history:
+Copy ``.env.example`` to ``.env`` and fill in ``PELICAN_BACKEND_DATABASE_URL`` and ``PELICAN_PRODUCTION_URL``. Git ignores ``.env``. Load it when starting the backend, rather than exporting the variables into a shell, so that the credentials stay out of shell history:
 
 .. code-block:: bash
 
    uv run --env-file .env manage.py runserver
+
+Set nothing else. Pelican backend's database is the only one this procedure needs to read from production, and leaving the other settings at their defaults is what keeps the session read-only in practice:
+
+-  ``DATABASE_URL`` selects this project's own database, where the ``exporter`` app records a report. Unset, an export is recorded locally.
+-  ``RABBIT_URL`` and ``RABBIT_EXCHANGE_NAME`` are read only when publishing, which only the endpoints in the warning above do. Unset, a message would go to a local broker.
+-  ``KINGFISHER_PROCESS_DATABASE_URL`` is read only by ``DatasetViewSet.create``, which no page reaches.
+
+Without ``--env-file``, the backend reads whichever local databases the defaults name, which is a useful way to check that a change works before pointing anything at production.
 
 Start the frontend server as usual (see :ref:`development`). Do not use ``vite preview``: it does not proxy ``/api``, so a build served that way gets no data, and every page looks broken for the wrong reason.
 
