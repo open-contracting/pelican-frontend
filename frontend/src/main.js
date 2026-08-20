@@ -8,6 +8,7 @@ import es from "./messages/es.json";
 import { FontAwesomeIcon } from "./plugins/fontawesome";
 import router from "./router";
 import store from "./store";
+import { useSettingsStore } from "./stores/settings.js";
 
 const i18n = createI18n({
   legacy: false,
@@ -28,4 +29,4 @@ app.component("FontAwesomeIcon", FontAwesomeIcon);
 
 app.mount("#app");
 
-store.dispatch("loadSettings");
+useSettingsStore().load();

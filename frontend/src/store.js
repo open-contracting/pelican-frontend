@@ -41,9 +41,6 @@ export default createStore({
     timeLevelFilterIndex: (state) => {
       return state.timeLevelFilterIndex;
     },
-    settings: (state) => {
-      return state.settings;
-    },
     dataset: (state) => {
       return state.dataset;
     },
@@ -142,9 +139,6 @@ export default createStore({
     setTimeLevelFilterIndex(state, newTimeLevelFilterIndex) {
       state.timeLevelFilterIndex = newTimeLevelFilterIndex;
     },
-    setSettings(state, settings) {
-      state.settings = settings;
-    },
     setDataset(state, newDataset) {
       state.dataset = newDataset;
     },
@@ -226,19 +220,6 @@ export default createStore({
     },
   },
   actions: {
-    loadSettings({ commit }) {
-      return new Promise((resolve) => {
-        axios
-          .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.settings}`)
-          .then((response) => {
-            commit("setSettings", response.data);
-            resolve();
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-      });
-    },
     loadDataset({ dispatch, commit }, datasetId) {
       return new Promise((resolve) => {
         axios
