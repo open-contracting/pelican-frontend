@@ -5,48 +5,52 @@ export const useUiStore = defineStore("ui", () => {
   const datasetSearch = ref(null);
   const datasetSorting = ref(null);
   const datasetLevelFilterIndex = ref(0);
-  const fieldCheckExpandedNodes = ref([]);
+  const fieldCheckExpandedNodes = ref(new Set());
   const fieldCheckLayout = ref("table");
   const fieldCheckSearch = ref(null);
   const fieldCheckSorting = ref(null);
   // A predicate, not a value, so it must not be made reactive.
   const fieldLevelFilter = shallowRef(() => true);
   const fieldLevelFilterIndex = ref(0);
-  const resourceCheckExpandedNodes = ref([]);
+  const resourceCheckExpandedNodes = ref(new Set());
   const resourceLevelFilterIndex = ref(0);
   const timeLevelFilterIndex = ref(0);
 
   function isFieldCheckExpanded(path) {
-    return fieldCheckExpandedNodes.value.includes(path);
+    return fieldCheckExpandedNodes.value.has(path);
   }
 
   function expandFieldCheck(path) {
-    if (!isFieldCheckExpanded(path)) {
-      fieldCheckExpandedNodes.value.push(path);
-    }
+    fieldCheckExpandedNodes.value.add(path);
   }
 
   function collapseFieldCheck(path) {
-    fieldCheckExpandedNodes.value = fieldCheckExpandedNodes.value.filter((v) => !v.startsWith(path));
-  }
-
-  function isResourceCheckExpanded(section) {
-    return resourceCheckExpandedNodes.value.includes(section);
-  }
-
-  function expandResourceCheck(section) {
-    if (!isResourceCheckExpanded(section)) {
-      resourceCheckExpandedNodes.value.push(section);
+    for (const node of [...fieldCheckExpandedNodes.value]) {
+      if (node.startsWith(path)) {
+        fieldCheckExpandedNodes.value.delete(node);
+      }
     }
   }
 
+  function isResourceCheckExpanded(section) {
+    return resourceCheckExpandedNodes.value.has(section);
+  }
+
+  function expandResourceCheck(section) {
+    resourceCheckExpandedNodes.value.add(section);
+  }
+
   function collapseResourceCheck(section) {
-    resourceCheckExpandedNodes.value = resourceCheckExpandedNodes.value.filter((v) => !v.startsWith(section));
+    for (const node of [...resourceCheckExpandedNodes.value]) {
+      if (node.startsWith(section)) {
+        resourceCheckExpandedNodes.value.delete(node);
+      }
+    }
   }
 
   /** Restore the field check page's defaults, for a newly loaded dataset. */
   function resetForDataset() {
-    fieldCheckExpandedNodes.value = [];
+    fieldCheckExpandedNodes.value = new Set();
     fieldCheckLayout.value = "table";
     fieldCheckSearch.value = null;
     fieldCheckSorting.value = null;
@@ -59,7 +63,7 @@ export const useUiStore = defineStore("ui", () => {
     };
 
     if (stats) {
-      fieldCheckExpandedNodes.value = [];
+      fieldCheckExpandedNodes.value = new Set();
 
       if (fieldCheckSearch.value) {
         let nodes = [];
@@ -92,7 +96,7 @@ export const useUiStore = defineStore("ui", () => {
           );
         });
 
-        fieldCheckExpandedNodes.value = nodes;
+        fieldCheckExpandedNodes.value = new Set(nodes);
       }
     }
   }
