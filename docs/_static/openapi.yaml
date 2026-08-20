@@ -492,6 +492,33 @@ paths:
               schema:
                 type: object
           description: ''
+  /api/generate-report:
+    post:
+      operationId: generate_report_create
+      description: |-
+        Create a report in Google Docs, and return its file ID.
+
+        The response is 200 whether or not the report was created. Its ``status`` is ``ok``, ``report_error`` if
+        the report could not be created, or ``template_error`` if the template could not be rendered.
+      tags:
+      - generate-report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateReport'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateReportResponse'
+          description: ''
   /api/schema/:
     get:
       operationId: schema_retrieve
@@ -673,6 +700,54 @@ components:
         procuring_entity_regex:
           type: string
           description: A SQL ILIKE pattern for the procuring entity's name
+    GenerateReport:
+      type: object
+      properties:
+        dataset_id:
+          type: integer
+          description: The dataset's ID
+        document_id:
+          type: string
+          description: The ID of the Google Docs template
+        folder_id:
+          type: string
+          description: The ID of the Google Drive folder in which to create the report
+        language:
+          type: string
+          description: The report's language, defaulting to English
+        report_name:
+          type: string
+          description: The report's filename, defaulting to a generated name
+      required:
+      - dataset_id
+      - document_id
+      - folder_id
+    GenerateReportResponse:
+      oneOf:
+      - $ref: '#/components/schemas/GeneratedReport'
+      - $ref: '#/components/schemas/ReportError'
+      - $ref: '#/components/schemas/TemplateError'
+    GeneratedReport:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GeneratedReportStatusEnum'
+        data:
+          $ref: '#/components/schemas/ReportFile'
+        failed_tags:
+          type: array
+          items:
+            type: string
+          description: The tags that could not be rendered
+      required:
+      - data
+      - failed_tags
+      - status
+    GeneratedReportStatusEnum:
+      enum:
+      - ok
+      type: string
+      description: '* `ok` - ok'
     PhaseEnum:
       enum:
       - CONTRACTING_PROCESS
@@ -687,6 +762,37 @@ components:
         * `TIME_VARIANCE` - Time Variance
         * `CHECKED` - Checked
         * `DELETED` - Deleted
+    ReportError:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ReportErrorStatusEnum'
+        data:
+          $ref: '#/components/schemas/ReportReason'
+      required:
+      - data
+      - status
+    ReportErrorStatusEnum:
+      enum:
+      - report_error
+      type: string
+      description: '* `report_error` - report_error'
+    ReportFile:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The ID of the Google Docs report
+      required:
+      - file_id
+    ReportReason:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: The reason the report could not be created
+      required:
+      - reason
     Settings:
       type: object
       properties:
@@ -725,6 +831,47 @@ components:
       required:
       - phase
       - state
+    TagError:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: The reason the tag could not be rendered
+        full_tag:
+          type: string
+          nullable: true
+          description: The tag as extracted from the template
+        template_id:
+          type: string
+          nullable: true
+          description: The ID of the Google Docs template
+      required:
+      - full_tag
+      - reason
+      - template_id
+    TemplateError:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/TemplateErrorStatusEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagError'
+        failed_tags:
+          type: array
+          items:
+            type: string
+          description: The tags that could not be rendered
+      required:
+      - data
+      - failed_tags
+      - status
+    TemplateErrorStatusEnum:
+      enum:
+      - template_error
+      type: string
+      description: '* `template_error` - template_error'
   securitySchemes:
     basicAuth:
       type: http

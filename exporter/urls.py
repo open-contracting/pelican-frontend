@@ -1,7 +1,7 @@
 from django.urls import path
 
-from exporter.views import generate_report
+from exporter.views import GenerateReport
 
 urlpatterns = [
-    path("generate-report", generate_report, name="generate-report"),
+    path("generate-report", GenerateReport.as_view(), name="generate-report"),
 ]
