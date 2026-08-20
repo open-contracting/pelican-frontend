@@ -60,202 +60,145 @@ export const useDatasetStore = defineStore("dataset", () => {
     useUiStore().resetForDataset();
   }
 
-  function loadDataset(id) {
-    return new Promise((resolve) => {
-      axios
-        .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${id}`)
-        .then((response) => {
-          reset();
-          dataset.value = response.data;
-          Promise.all([
-            loadResourceLevelStats(),
-            loadDatasetLevelStats(),
-            loadTimeVarianceLevelStats(),
-            loadFieldLevelStats(),
-          ]).then(() => {
-            resolve();
-          });
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    });
+  async function loadDataset(id) {
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${id}`);
+
+    reset();
+    dataset.value = response.data;
+
+    await Promise.all([
+      loadResourceLevelStats(),
+      loadDatasetLevelStats(),
+      loadTimeVarianceLevelStats(),
+      loadFieldLevelStats(),
+    ]);
   }
 
-  function loadResourceLevelStats() {
-    return new Promise((resolve) => {
-      resourceLevelStats.value = null;
-      const formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, dataset.value.id);
-      axios
-        .get(`${CONFIG.apiBaseUrl}${formatted}`)
-        .then((response) => {
-          const data = [];
-          for (const key in response.data) {
-            response.data[key].name = key;
-            data.push(response.data[key]);
-          }
-          resourceLevelStats.value = data;
-          resolve();
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    });
-  }
+  async function loadResourceLevelStats() {
+    resourceLevelStats.value = null;
 
-  function loadResourceLevelCheckDetail(checkName) {
-    return new Promise((resolve) => {
-      const checkDetail = resourceLevelCheckByName(checkName);
+    const formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, dataset.value.id);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
-      if (checkDetail != null && !checkDetail.examplesLoaded) {
-        if (dataset.value != null && checkName != null) {
-          const formatted = CONFIG.apiEndpoints.resourceLevelDetail
-            .replace(/{id}/g, dataset.value.id)
-            .replace(/{name}/g, checkName);
-          axios
-            .get(`${CONFIG.apiBaseUrl}${formatted}`)
-            .then((response) => {
-              response.data.examples_filled = true;
-              const updatedStats = [].concat(resourceLevelStats.value);
-              updatedStats.forEach((item, i) => {
-                if (item.name === checkName) Object.assign(updatedStats[i], response.data);
-              });
-              resourceLevelStats.value = updatedStats;
-              resolve();
-            })
-            .catch((error) => {
-              throw new Error(error);
-            });
-        }
-      }
-    });
-  }
-
-  function loadDatasetLevelStats() {
-    return new Promise((resolve) => {
-      datasetLevelStats.value = null;
-      const formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, dataset.value.id);
-      axios
-        .get(`${CONFIG.apiBaseUrl}${formatted}`)
-        .then((response) => {
-          const data = [];
-          for (const key in response.data) {
-            response.data[key].name = key;
-            data.push(response.data[key]);
-          }
-          datasetLevelStats.value = data;
-          resolve();
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    });
-  }
-
-  function loadDataItem(itemId) {
-    return new Promise((resolve, reject) => {
-      if (dataItemById(itemId) == null) {
-        const formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
-        axios
-          .get(`${CONFIG.apiBaseUrl}${formatted}`)
-          .then((response) => {
-            dataItems.value.push(response.data);
-            resolve();
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      } else {
-        resolve();
-      }
-    });
-  }
-
-  function loadFieldLevelStats() {
-    return new Promise((resolve) => {
-      fieldLevelStats.value = null;
-
-      const okRatio = (item) => {
-        const result = item.passed_count / item.total_count;
-        return Number.isNaN(result) ? 0 : result;
-      };
-
-      const failedRatio = (item) => {
-        const result = item.failed_count / item.total_count;
-        return Number.isNaN(result) ? 0 : result;
-      };
-
-      const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, dataset.value.id);
-      axios
-        .get(`${CONFIG.apiBaseUrl}${formatted}`)
-        .then((response) => {
-          const data = [];
-          for (const key in response.data) {
-            const item = response.data[key];
-            data.push({
-              ...item,
-              path: key,
-              coverageOkRatio: okRatio(item.coverage),
-              coverageFailedRatio: failedRatio(item.coverage),
-              qualityOkRatio: okRatio(item.quality),
-              qualityFailedRatio: failedRatio(item.quality),
-            });
-            resolve();
-          }
-
-          fieldLevelStats.value = data;
-          useUiStore().fieldCheckSorting = null;
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
-    });
-  }
-
-  function loadFieldLevelCheckDetail(path) {
-    const checkDetail = fieldLevelCheckByPath(path);
-
-    if (checkDetail == null || (checkDetail != null && !checkDetail.examplesLoaded)) {
-      if (dataset.value != null && path != null) {
-        const formatted = CONFIG.apiEndpoints.fieldLevelDetail
-          .replace(/{id}/g, dataset.value.id)
-          .replace(/{name}/g, path);
-        axios
-          .get(`${CONFIG.apiBaseUrl}${formatted}`)
-          .then((response) => {
-            response.data.examples_filled = true;
-            const updatedStats = [].concat(fieldLevelStats.value);
-            updatedStats.forEach((item, i) => {
-              if (item.path === path) Object.assign(updatedStats[i], response.data);
-            });
-            fieldLevelStats.value = updatedStats;
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-      }
+    const data = [];
+    for (const key in response.data) {
+      response.data[key].name = key;
+      data.push(response.data[key]);
     }
+
+    resourceLevelStats.value = data;
   }
 
-  function loadTimeVarianceLevelStats() {
-    return new Promise((resolve) => {
-      timeVarianceLevelStats.value = null;
-      const formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, dataset.value.id);
-      axios
-        .get(`${CONFIG.apiBaseUrl}${formatted}`)
-        .then((response) => {
-          const data = [];
-          for (const key in response.data) {
-            response.data[key].name = key;
-            data.push(response.data[key]);
-          }
-          timeVarianceLevelStats.value = data;
-          resolve();
-        })
-        .catch((error) => {
-          throw new Error(error);
-        });
+  async function loadResourceLevelCheckDetail(checkName) {
+    const checkDetail = resourceLevelCheckByName(checkName);
+
+    if (checkDetail == null || checkDetail.examplesLoaded || dataset.value == null || checkName == null) {
+      return;
+    }
+
+    const formatted = CONFIG.apiEndpoints.resourceLevelDetail
+      .replace(/{id}/g, dataset.value.id)
+      .replace(/{name}/g, checkName);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+
+    response.data.examples_filled = true;
+    const updatedStats = [].concat(resourceLevelStats.value);
+    updatedStats.forEach((item, i) => {
+      if (item.name === checkName) Object.assign(updatedStats[i], response.data);
     });
+
+    resourceLevelStats.value = updatedStats;
+  }
+
+  async function loadDatasetLevelStats() {
+    datasetLevelStats.value = null;
+
+    const formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, dataset.value.id);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+
+    const data = [];
+    for (const key in response.data) {
+      response.data[key].name = key;
+      data.push(response.data[key]);
+    }
+
+    datasetLevelStats.value = data;
+  }
+
+  async function loadDataItem(itemId) {
+    if (dataItemById(itemId) != null) {
+      return;
+    }
+
+    const formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+
+    dataItems.value.push(response.data);
+  }
+
+  async function loadFieldLevelStats() {
+    fieldLevelStats.value = null;
+
+    const okRatio = (item) => {
+      const result = item.passed_count / item.total_count;
+      return Number.isNaN(result) ? 0 : result;
+    };
+
+    const failedRatio = (item) => {
+      const result = item.failed_count / item.total_count;
+      return Number.isNaN(result) ? 0 : result;
+    };
+
+    const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, dataset.value.id);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+
+    const data = [];
+    for (const key in response.data) {
+      const item = response.data[key];
+      data.push({
+        ...item,
+        path: key,
+        coverageOkRatio: okRatio(item.coverage),
+        coverageFailedRatio: failedRatio(item.coverage),
+        qualityOkRatio: okRatio(item.quality),
+        qualityFailedRatio: failedRatio(item.quality),
+      });
+    }
+
+    fieldLevelStats.value = data;
+    useUiStore().fieldCheckSorting = null;
+  }
+
+  async function loadFieldLevelCheckDetail(path) {
+    if (fieldLevelCheckByPath(path)?.examplesLoaded || dataset.value == null || path == null) {
+      return;
+    }
+
+    const formatted = CONFIG.apiEndpoints.fieldLevelDetail.replace(/{id}/g, dataset.value.id).replace(/{name}/g, path);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+
+    response.data.examples_filled = true;
+    const updatedStats = [].concat(fieldLevelStats.value);
+    updatedStats.forEach((item, i) => {
+      if (item.path === path) Object.assign(updatedStats[i], response.data);
+    });
+
+    fieldLevelStats.value = updatedStats;
+  }
+
+  async function loadTimeVarianceLevelStats() {
+    timeVarianceLevelStats.value = null;
+
+    const formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, dataset.value.id);
+    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+
+    const data = [];
+    for (const key in response.data) {
+      response.data[key].name = key;
+      data.push(response.data[key]);
+    }
+
+    timeVarianceLevelStats.value = data;
   }
 
   return {
