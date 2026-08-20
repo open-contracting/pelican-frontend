@@ -1,11 +1,11 @@
 from typing import Any
 
 from django.conf import settings
-from django.utils.translation import gettext as _
 
 from api.models import Report, ResourceLevelCheckExamples
 from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_sample_leaf_tag
 from exporter.leaf_tags.resource import result_box_image
+from exporter.messages import message
 from exporter.tag import TemplateTag, argument, template
 
 CHECKS = {
@@ -75,8 +75,8 @@ def resource(tag: TemplateTag) -> dict[str, Any]:
     result.update(examples)
 
     return {
-        "name": _(str("resource." + name + ".name")),
-        "description": _(str("resource." + name + ".description")),
+        "name": message(tag.language, "resourceLevel", *name.split("."), "name"),
+        "description": message(tag.language, "resourceLevel", *name.split("."), "description"),
         "checkedCount": result["total_count"],
         "passedCount": result["passed_count"],
         "failedCount": result["failed_count"],

@@ -26,6 +26,7 @@ class Tag:
 
     :param gdocs: a Google API client
     :param dataset_id: the dataset's ID
+    :param language: the language of the messages to render
     """
 
     #: The tag's name.
@@ -43,9 +44,10 @@ class Tag:
     # . A mapping of argument names to default values.
     argument_defaults: dict[str, Any] = {}
 
-    def __init__(self, gdocs: Gdocs, dataset_id: int):
+    def __init__(self, gdocs: Gdocs, dataset_id: int, language: str):
         self.gdocs = gdocs
         self.dataset_id = dataset_id
+        self.language = language
         self.arguments: dict[str, Any] = {}
 
     # Do not call after `finalize_arguments`.
@@ -129,6 +131,7 @@ class TemplateTag(Tag):
 
     :param gdocs: a Google API client
     :param dataset_id: the dataset's ID
+    :param language: the language of the messages to render
     """
 
     #: The default value of the ``template`` argument.
@@ -136,8 +139,8 @@ class TemplateTag(Tag):
     #: The sub-tags supported by the template tag.
     tags: tuple[type[Tag], ...] = ()
 
-    def __init__(self, gdocs: Gdocs, dataset_id: int):
-        super().__init__(gdocs, dataset_id)
+    def __init__(self, gdocs: Gdocs, dataset_id: int, language: str):
+        super().__init__(gdocs, dataset_id, language)
         self.argument_names.add("template")
         self.argument_required.add("template")
         self.argument_defaults["template"] = self.default_template
@@ -181,7 +184,7 @@ class TemplateTag(Tag):
                     self.arguments["template"],
                 )
 
-            tag = tag_class(self.gdocs, self.dataset_id)
+            tag = tag_class(self.gdocs, self.dataset_id, self.language)
 
             for name, value in expression.arguments.items():
                 try:
@@ -194,7 +197,7 @@ class TemplateTag(Tag):
             except CheckNotComputedError as e:
                 tag = generate_error_template_tag(
                     f"WARNING: Check {e!s} was not computed. Please check your dataset.",
-                )(self.gdocs, self.dataset_id)
+                )(self.gdocs, self.dataset_id, self.language)
                 tag.finalize_arguments()
                 failed_tags.append(str(e))
 
