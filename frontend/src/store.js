@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createStore } from "vuex";
 import { CONFIG } from "./config.js";
+import { useUiStore } from "./stores/ui.js";
 
 export default createStore({
   state: {
@@ -11,36 +12,8 @@ export default createStore({
     dataItems: [],
     fieldLevelStats: null,
     timeVarianceLevelStats: null,
-    fieldCheckLayout: "table",
-    fieldCheckExpandedNodes: [],
-    fieldCheckSorting: null,
-    fieldCheckSearch: null,
-    datasetSearch: null,
-    datasetSorting: null,
-
-    resourceCheckExpandedNodes: [],
-    fieldLevelFilterIndex: 0,
-    fieldLevelFilter: () => true,
-    resourceLevelFilterIndex: 0,
-    datasetLevelFilterIndex: 0,
-    timeLevelFilterIndex: 0,
   },
   getters: {
-    fieldLevelFilterIndex: (state) => {
-      return state.fieldLevelFilterIndex;
-    },
-    fieldLevelFilter: (state) => {
-      return state.fieldLevelFilter;
-    },
-    resourceLevelFilterIndex: (state) => {
-      return state.resourceLevelFilterIndex;
-    },
-    datasetLevelFilterIndex: (state) => {
-      return state.datasetLevelFilterIndex;
-    },
-    timeLevelFilterIndex: (state) => {
-      return state.timeLevelFilterIndex;
-    },
     dataset: (state) => {
       return state.dataset;
     },
@@ -94,51 +67,11 @@ export default createStore({
     fieldLevelCheckByPath: (state) => (path) => {
       return state.fieldLevelStats?.find((item) => item.path === path);
     },
-    fieldCheckLayout: (state) => state.fieldCheckLayout,
-    isFieldCheckExpanded: (state) => (path) => {
-      return !!state.fieldCheckExpandedNodes?.includes(path);
-    },
     timeVarianceLevelCheckByName: (state) => (checkName) => {
       return state.timeVarianceLevelStats?.find((item) => item.name === checkName);
     },
-    fieldCheckSortedBy: (state) => {
-      return state.fieldCheckSorting?.by;
-    },
-    fieldCheckSortedAscending: (state) => {
-      return state.fieldCheckSorting?.asc;
-    },
-    fieldCheckSearch: (state) => {
-      return state.fieldCheckSearch;
-    },
-    datasetSearch: (state) => {
-      return state.datasetSearch;
-    },
-    datasetSortedBy: (state) => {
-      return state.datasetSorting?.by;
-    },
-    datasetSortedAscending: (state) => {
-      return state.datasetSorting?.asc;
-    },
-    isResourceCheckExpanded: (state) => (section) => {
-      return !!state.resourceCheckExpandedNodes?.includes(section);
-    },
   },
   mutations: {
-    setFieldLevelFilterIndex(state, newFieldLevelFilterIndex) {
-      state.fieldLevelFilterIndex = newFieldLevelFilterIndex;
-    },
-    setFieldLevelFilter(state, newFieldLevelFilter) {
-      state.fieldLevelFilter = newFieldLevelFilter;
-    },
-    setResourceLevelFilterIndex(state, newResourceLevelFilterIndex) {
-      state.resourceLevelFilterIndex = newResourceLevelFilterIndex;
-    },
-    setDatasetLevelFilterIndex(state, newDatasetLevelFilterIndex) {
-      state.datasetLevelFilterIndex = newDatasetLevelFilterIndex;
-    },
-    setTimeLevelFilterIndex(state, newTimeLevelFilterIndex) {
-      state.timeLevelFilterIndex = newTimeLevelFilterIndex;
-    },
     setDataset(state, newDataset) {
       state.dataset = newDataset;
     },
@@ -172,51 +105,8 @@ export default createStore({
 
       state.fieldLevelStats = updatedStats;
     },
-    setFieldCheckLayout(state, layout) {
-      state.fieldCheckLayout = layout;
-    },
-    addFieldCheckExpandedNode(state, path) {
-      if (!state.fieldCheckExpandedNodes.includes(path)) {
-        state.fieldCheckExpandedNodes.push(path);
-      }
-    },
-    setFieldCheckExpandedNodes(state, nodes) {
-      state.fieldCheckExpandedNodes = nodes;
-    },
-    removeFieldCheckExpandedNode(state, path) {
-      state.fieldCheckExpandedNodes = state.fieldCheckExpandedNodes.filter((v) => !v.startsWith(path));
-    },
     setTimeVarianceLevelStats(state, stats) {
       state.timeVarianceLevelStats = stats;
-    },
-    collapseAllFieldCheckExpandedNodes(state) {
-      state.fieldCheckExpandedNodes = [];
-    },
-    setFieldCheckSorting(state, sorting) {
-      state.fieldCheckSorting = sorting;
-    },
-    resetFieldCheckSorting(state) {
-      state.fieldCheckSorting = null;
-    },
-    setFieldCheckSearch(state, search) {
-      state.fieldCheckSearch = search;
-    },
-    setDatasetSearch(state, search) {
-      state.datasetSearch = search;
-    },
-    setDatasetSorting(state, sorting) {
-      state.datasetSorting = sorting;
-    },
-    resetDatasetSorting(state) {
-      state.datasetSorting = null;
-    },
-    addResourceCheckExpandedNode(state, section) {
-      if (!state.resourceCheckExpandedNodes.includes(section)) {
-        state.resourceCheckExpandedNodes.push(section);
-      }
-    },
-    removeResourceCheckExpandedNode(state, section) {
-      state.resourceCheckExpandedNodes = state.resourceCheckExpandedNodes.filter((v) => !v.startsWith(section));
     },
   },
   actions: {
@@ -362,7 +252,7 @@ export default createStore({
             }
 
             commit("setFieldLevelStats", data);
-            commit("resetFieldCheckSorting");
+            useUiStore().fieldCheckSorting = null;
           })
           .catch((error) => {
             throw new Error(error);
@@ -416,20 +306,19 @@ export default createStore({
       commit("setFieldLevelStats", null);
       commit("setDatasetLevelStats", null);
       commit("setResourceLevelStats", null);
-      commit("resetFieldCheckSorting");
-      commit("setFieldCheckSearch", null);
-      commit("collapseAllFieldCheckExpandedNodes");
-      commit("setFieldCheckLayout", "table");
+      useUiStore().resetForDataset();
     },
-    setExpandedNodesForSearch({ getters, commit }) {
+    setExpandedNodesForSearch({ getters }) {
+      const ui = useUiStore();
+
       const isPathSearched = (path) => {
-        return !!path?.toLowerCase().includes(getters.fieldCheckSearch.toLowerCase());
+        return !!path?.toLowerCase().includes(ui.fieldCheckSearch.toLowerCase());
       };
 
       if (getters.fieldLevelStats) {
-        commit("collapseAllFieldCheckExpandedNodes");
+        ui.fieldCheckExpandedNodes = [];
 
-        if (getters.fieldCheckSearch) {
+        if (ui.fieldCheckSearch) {
           let nodes = [];
           const remaining = [];
           // select paths that match the search
@@ -460,7 +349,7 @@ export default createStore({
             );
           });
 
-          commit("setFieldCheckExpandedNodes", nodes);
+          ui.fieldCheckExpandedNodes = nodes;
         }
       }
     },

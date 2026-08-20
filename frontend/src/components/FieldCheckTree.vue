@@ -34,10 +34,12 @@
 import { computed, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import { useUiStore } from "@/stores/ui.js";
 import FieldCheckTreeNode from "./FieldCheckTreeNode.vue";
 
 const props = defineProps(["filter"]);
 const store = useStore();
+const ui = useUiStore();
 
 const { search, sorted } = useFieldCheckSearch();
 
@@ -68,7 +70,7 @@ watch(search, () => {
 watch(
   () => props.filter,
   () => {
-    store.commit("setFieldLevelFilter", props.filter);
+    ui.fieldLevelFilter = props.filter;
   },
 );
 

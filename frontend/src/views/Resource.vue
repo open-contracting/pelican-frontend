@@ -74,9 +74,11 @@ import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import ResourceLevelList from "@/components/ResourceLevelList.vue";
 import { RESOURCE_CHECK_SECTIONS } from "@/config.js";
+import { useUiStore } from "@/stores/ui.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const store = useStore();
+const ui = useUiStore();
 const { t } = useI18n();
 
 const filterIndex = ref(0);
@@ -98,10 +100,10 @@ const filters = [
 const loaded = computed(() => store.getters.resourceLevelStats != null);
 
 watch(filterIndex, (newFilterIndex) => {
-  store.commit("setResourceLevelFilterIndex", newFilterIndex);
+  ui.resourceLevelFilterIndex = newFilterIndex;
 });
 
 onBeforeMount(() => {
-  filterIndex.value = store.getters.resourceLevelFilterIndex;
+  filterIndex.value = ui.resourceLevelFilterIndex;
 });
 </script>

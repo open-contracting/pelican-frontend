@@ -44,9 +44,11 @@ import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
+import { useUiStore } from "@/stores/ui.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const store = useStore();
+const ui = useUiStore();
 const { t } = useI18n();
 
 const filterIndex = ref(0);
@@ -70,10 +72,10 @@ const timeVarianceLevelStats = computed(() => {
 });
 
 watch(filterIndex, (newFilterIndex) => {
-  store.commit("setTimeLevelFilterIndex", newFilterIndex);
+  ui.timeLevelFilterIndex = newFilterIndex;
 });
 
 onBeforeMount(() => {
-  filterIndex.value = store.getters.timeLevelFilterIndex;
+  filterIndex.value = ui.timeLevelFilterIndex;
 });
 </script>

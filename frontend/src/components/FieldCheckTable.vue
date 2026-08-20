@@ -58,21 +58,23 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import { useUiStore } from "@/stores/ui.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 import SortButtons from "./SortButtons.vue";
 
 const props = defineProps(["filter"]);
 const store = useStore();
+const ui = useUiStore();
 
 const { sorted, setSorting, highlightSearch, isPathSearched } = useFieldCheckSearch();
 
 const stats = computed(() => store.getters.fieldLevelStats);
 const sortedBy = computed(() => {
-  const value = store.getters.fieldCheckSortedBy;
+  const value = ui.fieldCheckSorting?.by;
   return value == null ? "processingOrder" : value;
 });
 const isAscendingSorted = computed(() => {
-  const value = store.getters.fieldCheckSortedAscending;
+  const value = ui.fieldCheckSorting?.asc;
   return value == null ? true : value;
 });
 const tableData = computed(() => {

@@ -45,12 +45,14 @@ import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
 import { RESOURCE_CHECK_ORDER } from "@/config.js";
+import { useUiStore } from "@/stores/ui.js";
 import ResourceLevelRow from "./ResourceLevelRow.vue";
 import Tooltip from "./Tooltip.vue";
 
 const props = defineProps(["section", "filter"]);
 
 const store = useStore();
+const ui = useUiStore();
 const { t } = useI18n();
 const { formatPercentage } = useFormatters();
 
@@ -109,14 +111,14 @@ const formattedAvgScore = computed(() => {
 
 watch(showChecks, (newShowChecks) => {
   if (newShowChecks) {
-    store.commit("addResourceCheckExpandedNode", props.section);
+    ui.expandResourceCheck(props.section);
   } else {
-    store.commit("removeResourceCheckExpandedNode", props.section);
+    ui.collapseResourceCheck(props.section);
   }
 });
 
 onMounted(() => {
-  showChecks.value = store.getters.isResourceCheckExpanded(props.section);
+  showChecks.value = ui.isResourceCheckExpanded(props.section);
 });
 </script>
 

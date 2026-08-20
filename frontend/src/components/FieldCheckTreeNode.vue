@@ -50,8 +50,8 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import { useUiStore } from "@/stores/ui.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 
 defineOptions({ name: "TreeNode" });
@@ -62,7 +62,7 @@ const props = defineProps({
   hide: { type: Boolean, default: false },
 });
 
-const store = useStore();
+const ui = useUiStore();
 const { highlightSearchLast, isPathSearched } = useFieldCheckSearch();
 
 function getChildren(node) {
@@ -81,17 +81,17 @@ function isSearchedSubTree(node) {
 
 const check = computed(() => props.data._check);
 const path = computed(() => props.data._check.path);
-const filter = computed(() => store.getters.fieldLevelFilter);
+const filter = computed(() => ui.fieldLevelFilter);
 const children = computed(() => getChildren(props.data));
 const hasChildren = computed(() => Object.keys(children.value).length > 0);
 const isExpandable = computed(() => hasChildren.value && isSearchedSubTree(props.data));
 const expanded = computed({
-  get: () => store.getters.isFieldCheckExpanded(path.value),
+  get: () => ui.isFieldCheckExpanded(path.value),
   set: (value) => {
     if (value) {
-      store.commit("addFieldCheckExpandedNode", path.value);
+      ui.expandFieldCheck(path.value);
     } else {
-      store.commit("removeFieldCheckExpandedNode", path.value);
+      ui.collapseFieldCheck(path.value);
     }
   },
 });
