@@ -13,5 +13,4 @@ pillow
 psycopg
 sentry-sdk
 shortuuid
-simplejson
 yapw[perf]
