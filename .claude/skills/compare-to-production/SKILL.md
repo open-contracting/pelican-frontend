@@ -361,6 +361,13 @@ and note that a component throwing in the slot you are *not* watching is easy to
 
 ## Gotchas
 
+- **A worktree-isolated session cannot run `agent-browser eval` at all** — the harness refuses any
+  command that runs a string through eval, in both the quoted and `--stdin` forms, because it
+  cannot verify the string stays inside the worktree. Nearly every probe above depends on it. Work
+  from the main checkout, or leave the worktree first (`ExitWorktree` with `keep`): the directory
+  and branch stay on disk, so the dev server still runs from there. `open`, `snapshot`,
+  `screenshot`, `diff`, `find` and `get` are unaffected, which is enough for a smoke test but not
+  for measuring anything.
 - `agent-browser open` is a full page load, so it clears anything installed with `eval`.
 - The agent-browser daemon returns `Resource temporarily unavailable` when busy. Re-run, or use a
   separate `--session`.
