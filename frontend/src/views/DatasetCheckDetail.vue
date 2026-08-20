@@ -186,7 +186,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useDatasetStore } from "@/stores/dataset.js";
 import "vue-json-pretty/lib/styles.css";
 import CodeChart from "@/components/CodeChart.vue";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
@@ -201,11 +201,11 @@ import DashboardDetail from "./layouts/DashboardDetail.vue";
 const { formatNumber, formatPercentage2D } = useFormatters();
 
 const route = useRoute();
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { t } = useI18n();
 const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const check = computed(() => store.getters.datasetLevelCheckByName(route.params.check));
+const check = computed(() => datasetStore.datasetLevelCheckByName(route.params.check));
 const loaded = computed(() => check.value != null);
 const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
 const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);

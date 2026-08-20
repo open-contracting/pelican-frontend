@@ -20,23 +20,23 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { DATASET_CHECK_SECTIONS } from "@/config.js";
+import { useDatasetStore } from "@/stores/dataset.js";
 import DatasetLevelCheck from "./DatasetLevelCheck.vue";
 import Loader from "./Loader.vue";
 
 const props = defineProps(["section", "filter"]);
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 
-const loaded = computed(() => store.getters.datasetLevelStats != null);
+const loaded = computed(() => datasetStore.datasetLevelStats != null);
 
 const datasetLevelStats = computed(() => {
   if (!(props.section in DATASET_CHECK_SECTIONS)) {
     return [];
   }
   return DATASET_CHECK_SECTIONS[props.section]
-    .map((item) => store.getters.datasetLevelCheckByName(item))
+    .map((item) => datasetStore.datasetLevelCheckByName(item))
     .filter(props.filter);
 });
 </script>

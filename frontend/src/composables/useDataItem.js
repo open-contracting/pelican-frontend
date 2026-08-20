@@ -1,7 +1,7 @@
 import { useToast } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
+import { useDatasetStore } from "@/stores/dataset.js";
 
 // Above this, some browsers can crash while rendering the JSON data.
 const maxJSONLines = 3000;
@@ -10,7 +10,7 @@ class DataItemNotFound extends Error {}
 class DataItemTooLarge extends Error {}
 
 export function useDataItem() {
-  const store = useStore();
+  const datasetStore = useDatasetStore();
   const { t } = useI18n();
   const { create: showToast } = useToast();
 
@@ -18,7 +18,7 @@ export function useDataItem() {
   const loadingPreviewData = ref(false);
   const selectedKey = ref(null);
 
-  const previewData = computed(() => store.getters.dataItemById(previewDataItemId.value)?.data);
+  const previewData = computed(() => datasetStore.dataItemById(previewDataItemId.value)?.data);
 
   let fileLink;
   let previousFileURL;
@@ -33,13 +33,13 @@ export function useDataItem() {
     // A later click supersedes this one, whose response is then ignored.
     const request = ++previewRequest;
     loadingPreviewData.value = true;
-    store
-      .dispatch("loadDataItem", itemId)
+    datasetStore
+      .loadDataItem(itemId)
       .then(() => {
         if (request !== previewRequest) {
           return;
         }
-        if (store.getters.dataItemJSONLines(itemId) < maxJSONLines) {
+        if (datasetStore.dataItemJSONLines(itemId) < maxJSONLines) {
           previewDataItemId.value = itemId;
           selectedKey.value = key;
         } else {
@@ -65,10 +65,10 @@ export function useDataItem() {
   }
 
   function download(itemId) {
-    store
-      .dispatch("loadDataItem", itemId)
+    datasetStore
+      .loadDataItem(itemId)
       .then(() => {
-        const result = store.getters.dataItemById(itemId);
+        const result = datasetStore.dataItemById(itemId);
         const fileURL = window.URL.createObjectURL(
           new Blob([JSON.stringify(result.data, null, 2)], { type: "application/json" }),
         );
@@ -101,14 +101,14 @@ export function useDataItem() {
     // WebKit rejects write() with a DOMException rather than the error below, so keep our own reference to it.
     let reason;
     // write() must be called during the click, so pass the data as a promise instead of awaiting it here.
-    const blob = store.dispatch("loadDataItem", itemId).then(
+    const blob = datasetStore.loadDataItem(itemId).then(
       () => {
-        if (store.getters.dataItemJSONLines(itemId) >= maxJSONLines) {
+        if (datasetStore.dataItemJSONLines(itemId) >= maxJSONLines) {
           reason = new DataItemTooLarge();
           throw reason;
         }
         // Chromium rejects a blob whose type differs from the item's, and a blob has none unless given one.
-        return new Blob([store.getters.dataItemJSON(itemId)], { type: "text/plain" });
+        return new Blob([datasetStore.dataItemJSON(itemId)], { type: "text/plain" });
       },
       () => {
         reason = new DataItemNotFound();

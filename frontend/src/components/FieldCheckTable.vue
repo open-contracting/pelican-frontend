@@ -56,19 +56,19 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 import SortButtons from "./SortButtons.vue";
 
 const props = defineProps(["filter"]);
-const store = useStore();
+const datasetStore = useDatasetStore();
 const ui = useUiStore();
 
 const { sorted, setSorting, highlightSearch, isPathSearched } = useFieldCheckSearch();
 
-const stats = computed(() => store.getters.fieldLevelStats);
+const stats = computed(() => datasetStore.fieldLevelStats);
 const sortedBy = computed(() => {
   const value = ui.fieldCheckSorting?.by;
   return value == null ? "processingOrder" : value;

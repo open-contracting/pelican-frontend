@@ -42,16 +42,16 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
 import { RESOURCE_CHECK_ORDER } from "@/config.js";
+import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import ResourceLevelRow from "./ResourceLevelRow.vue";
 import Tooltip from "./Tooltip.vue";
 
 const props = defineProps(["section", "filter"]);
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 const ui = useUiStore();
 const { t } = useI18n();
 const { formatPercentage } = useFormatters();
@@ -59,7 +59,7 @@ const { formatPercentage } = useFormatters();
 const showChecks = ref(false);
 
 const resourceLevelStats = computed(() => {
-  const result = store.getters.resourceLevelStatsBySection(props.section);
+  const result = datasetStore.resourceLevelStatsBySection(props.section);
 
   return result
     .sort((a, b) => {

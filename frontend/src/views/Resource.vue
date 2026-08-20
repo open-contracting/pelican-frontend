@@ -69,15 +69,15 @@
 import { BCol, BRow } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import ResourceLevelList from "@/components/ResourceLevelList.vue";
 import { RESOURCE_CHECK_SECTIONS } from "@/config.js";
+import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 const ui = useUiStore();
 const { t } = useI18n();
 
@@ -97,7 +97,7 @@ const filters = [
   (item) => item.passed_count > 0 || item.failed_count > 0,
 ];
 
-const loaded = computed(() => store.getters.resourceLevelStats != null);
+const loaded = computed(() => datasetStore.resourceLevelStats != null);
 
 watch(filterIndex, (newFilterIndex) => {
   ui.resourceLevelFilterIndex = newFilterIndex;

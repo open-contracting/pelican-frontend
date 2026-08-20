@@ -52,6 +52,51 @@ export const useUiStore = defineStore("ui", () => {
     fieldCheckSorting.value = null;
   }
 
+  /** Expand the field checks that the search matches, and their ancestors. */
+  function setExpandedNodesForSearch(stats) {
+    const isPathSearched = (path) => {
+      return !!path?.toLowerCase().includes(fieldCheckSearch.value.toLowerCase());
+    };
+
+    if (stats) {
+      fieldCheckExpandedNodes.value = [];
+
+      if (fieldCheckSearch.value) {
+        let nodes = [];
+        const remaining = [];
+        // select paths that match the search
+        for (const n of stats) {
+          if (isPathSearched(n.path)) {
+            nodes.push(n.path);
+          } else {
+            remaining.push(n.path);
+          }
+        }
+
+        // add parents
+        for (const n of remaining) {
+          if (nodes.some((m) => m.startsWith(`${n}.`))) {
+            nodes.push(n);
+          }
+        }
+
+        // collapse matched nodes without matching child
+        const matched = [...nodes];
+        nodes = nodes.filter((n) => {
+          return (
+            // keep parent without match
+            !isPathSearched(n) ||
+            matched.some((m) => {
+              return m.startsWith(`${n}.`) && isPathSearched(m.substr(n.length));
+            })
+          );
+        });
+
+        fieldCheckExpandedNodes.value = nodes;
+      }
+    }
+  }
+
   return {
     datasetSearch,
     datasetSorting,
@@ -72,5 +117,6 @@ export const useUiStore = defineStore("ui", () => {
     expandResourceCheck,
     collapseResourceCheck,
     resetForDataset,
+    setExpandedNodesForSearch,
   };
 });

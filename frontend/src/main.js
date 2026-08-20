@@ -7,7 +7,6 @@ import en from "./messages/en.json";
 import es from "./messages/es.json";
 import { FontAwesomeIcon } from "./plugins/fontawesome";
 import router from "./router";
-import store from "./store";
 import { useSettingsStore } from "./stores/settings.js";
 
 const i18n = createI18n({
@@ -23,7 +22,6 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(i18n);
 app.use(router);
-app.use(store);
 
 app.component("FontAwesomeIcon", FontAwesomeIcon);
 

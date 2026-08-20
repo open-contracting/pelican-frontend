@@ -50,15 +50,15 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
+import { useDatasetStore } from "@/stores/dataset.js";
 import ProgressBar from "./ProgressBar.vue";
 
 const { formatPercentage } = useFormatters();
 
 const props = defineProps(["check", "name"]);
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { navigate } = useClickable();
 
 const okRatio = computed(() => props.check.passed_count / props.check.total_count);
@@ -69,7 +69,7 @@ const detailRouterArguments = computed(() => ({
   name: "resourceCheckDetail",
   params: {
     check: props.name,
-    datasetId: store.getters.datasetId,
+    datasetId: datasetStore.datasetId,
   },
 }));
 </script>

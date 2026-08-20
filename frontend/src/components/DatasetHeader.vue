@@ -9,15 +9,15 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useFormatters } from "@/composables/useFormatters";
+import { useDatasetStore } from "@/stores/dataset.js";
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { formatNumber } = useFormatters();
 
 const dataset = computed(() => {
-  if (store.getters.dataset?.meta !== undefined) {
-    return store.getters.dataset;
+  if (datasetStore.dataset?.meta !== undefined) {
+    return datasetStore.dataset;
   }
   return undefined;
 });

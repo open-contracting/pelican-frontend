@@ -40,14 +40,14 @@
 import { BCol, BRow } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
+import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 const ui = useUiStore();
 const { t } = useI18n();
 
@@ -65,10 +65,10 @@ const filters = [
   (item) => item.coverage_result === true && item.check_result === true,
 ];
 
-const loaded = computed(() => store.getters.datasetLevelStats != null);
+const loaded = computed(() => datasetStore.datasetLevelStats != null);
 
 const timeVarianceLevelStats = computed(() => {
-  return store.getters.timeVarianceLevelStats.filter(filters[filterIndex.value]);
+  return datasetStore.timeVarianceLevelStats.filter(filters[filterIndex.value]);
 });
 
 watch(filterIndex, (newFilterIndex) => {

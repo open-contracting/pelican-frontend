@@ -53,9 +53,6 @@ importers:
       vue-router:
         specifier: ^4.6.3
         version: 4.6.3(vue@3.5.25)
-      vuex:
-        specifier: ^4.1.0
-        version: 4.1.0(vue@3.5.25)
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.4
@@ -1327,11 +1324,6 @@ packages:
       typescript:
         optional: true
 
-  vuex@4.1.0:
-    resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
-    peerDependencies:
-      vue: ^3.2.0
-
   walk-up-path@4.0.0:
     resolution: {integrity: sha512-3hu+tD8YzSLGuFYtPRb48vdhKMi0KQV5sn+uWr8+7dMEq/2G/dtLrdDinkLjqq5TIbIBjYJ4Ax/n3YiaW7QM8A==}
     engines: {node: 20 || >=22}
@@ -2344,11 +2336,6 @@ snapshots:
       '@vue/runtime-dom': 3.5.25
       '@vue/server-renderer': 3.5.25(vue@3.5.25)
       '@vue/shared': 3.5.25
-
-  vuex@4.1.0(vue@3.5.25):
-    dependencies:
-      '@vue/devtools-api': 6.6.4
-      vue: 3.5.25
 
   walk-up-path@4.0.0: {}
 
