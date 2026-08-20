@@ -133,9 +133,9 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { BModal } from "bootstrap-vue-next";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
+import api from "@/api.js";
 import { CONFIG, PHASES, STATES } from "@/config.js";
 import { useUiStore } from "@/stores/ui.js";
 import DatasetFilterModal from "./DatasetFilterModal.vue";
@@ -231,7 +231,7 @@ onMounted(() => {
     return result;
   };
 
-  axios
+  api
     .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
     .then((response) => {
       datasets.value = buildDatasetsTree(response.data, null);
@@ -240,9 +240,7 @@ onMounted(() => {
       }
       sortBy(sortedBy.value, isAscendingSorted.value);
     })
-    .catch((error) => {
-      throw new Error(error);
-    });
+    .catch(() => {});
 });
 </script>
 

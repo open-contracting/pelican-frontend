@@ -27,4 +27,6 @@ app.component("FontAwesomeIcon", FontAwesomeIcon);
 
 app.mount("#app");
 
-useSettingsStore().load();
+useSettingsStore()
+  .load()
+  .catch(() => {});

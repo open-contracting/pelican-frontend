@@ -1,6 +1,6 @@
-import axios from "axios";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import api from "@/api.js";
 import { CONFIG } from "@/config.js";
 import { useUiStore } from "@/stores/ui.js";
 
@@ -63,7 +63,7 @@ export const useDatasetStore = defineStore("dataset", () => {
   }
 
   async function loadDataset(id) {
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${id}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${id}`);
 
     reset();
     dataset.value = response.data;
@@ -80,7 +80,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     resourceLevelStats.value = null;
 
     const formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
     for (const key in response.data) {
@@ -101,7 +101,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     const formatted = CONFIG.apiEndpoints.resourceLevelDetail
       .replace(/{id}/g, dataset.value.id)
       .replace(/{name}/g, checkName);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     response.data.examples_filled = true;
     const updatedStats = [].concat(resourceLevelStats.value);
@@ -116,7 +116,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     datasetLevelStats.value = null;
 
     const formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
     for (const key in response.data) {
@@ -133,7 +133,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     }
 
     const formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     dataItems.value.push(response.data);
   }
@@ -152,7 +152,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     };
 
     const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
     for (const key in response.data) {
@@ -178,7 +178,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     }
 
     const formatted = CONFIG.apiEndpoints.fieldLevelDetail.replace(/{id}/g, dataset.value.id).replace(/{name}/g, path);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     response.data.examples_filled = true;
     const updatedStats = [].concat(fieldLevelStats.value);
@@ -193,7 +193,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     timeVarianceLevelStats.value = null;
 
     const formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await axios.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
     for (const key in response.data) {

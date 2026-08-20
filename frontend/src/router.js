@@ -1,6 +1,7 @@
 // biome-ignore assist/source/organizeImports: Import order affects preview pane sizing.
 import { createRouter, createWebHistory } from "vue-router";
 import { useDatasetStore } from "./stores/dataset.js";
+import { useErrorStore } from "./stores/error.js";
 import Dataset from "./views/Dataset.vue";
 import Field from "./views/Field.vue";
 import Home from "./views/Home.vue";
@@ -14,17 +15,22 @@ import FieldCheckDetail from "./views/FieldCheckDetail.vue";
 import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
 import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
 
-// The ID is a number in the store and a string in the route. A strict comparison always differs, which would reload
-// the dataset on every navigation, resetting each page's search, sorting, filter and expansion.
-async function loadDatasetIfNeeded(datasetId) {
+async function load(datasetId, after) {
   const datasetStore = useDatasetStore();
 
-  if (String(datasetStore.datasetId) !== datasetId) {
-    await datasetStore.loadDataset(datasetId);
+  try {
+    // The ID is a number in the store and a string in the route. A strict comparison always differs, which would
+    // reload the dataset on every navigation, resetting each page's search, sorting, filter and expansion.
+    if (String(datasetStore.datasetId) !== datasetId) {
+      await datasetStore.loadDataset(datasetId);
+    }
+    await after?.();
+  } catch {
+    // `beforeEnter` doesn't await this, so the rejection must be caught. api.js reported it, so this catch is empty.
   }
 }
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(_to, _from, savedPosition) {
     if (savedPosition) {
@@ -46,7 +52,7 @@ export default createRouter({
       name: "overview",
       component: Overview,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
@@ -55,7 +61,7 @@ export default createRouter({
       name: "field",
       component: Field,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
@@ -64,7 +70,7 @@ export default createRouter({
       name: "resource",
       component: Resource,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
@@ -73,7 +79,7 @@ export default createRouter({
       name: "dataset",
       component: Dataset,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
@@ -82,7 +88,7 @@ export default createRouter({
       name: "time",
       component: Time,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
@@ -91,9 +97,7 @@ export default createRouter({
       name: "resourceCheckDetail",
       component: ResourceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId).then(() => {
-          useDatasetStore().loadResourceLevelCheckDetail(to.params.check);
-        });
+        load(to.params.datasetId, () => useDatasetStore().loadResourceLevelCheckDetail(to.params.check));
         next();
       },
     },
@@ -102,7 +106,7 @@ export default createRouter({
       name: "datasetCheckDetail",
       component: DatasetCheckDetail,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
@@ -111,9 +115,7 @@ export default createRouter({
       name: "fieldCheckDetail",
       component: FieldCheckDetail,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId).then(() => {
-          useDatasetStore().loadFieldLevelCheckDetail(to.params.path);
-        });
+        load(to.params.datasetId, () => useDatasetStore().loadFieldLevelCheckDetail(to.params.path));
         next();
       },
     },
@@ -122,9 +124,15 @@ export default createRouter({
       name: "timeVarianceCheckDetail",
       component: TimeVarianceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        loadDatasetIfNeeded(to.params.datasetId);
+        load(to.params.datasetId);
         next();
       },
     },
   ],
 });
+
+router.beforeEach(() => {
+  useErrorStore().clear();
+});
+
+export default router;
