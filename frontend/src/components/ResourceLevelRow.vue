@@ -1,10 +1,13 @@
 <template>
   <tr
     class="clickable"
-    @click="detail()"
+    @click="navigate($event, detailRouterArguments)"
   >
     <td class="col-9 col-lg-5 break_word check_name">
-      <span>{{ $t("resourceLevel." + name + ".name") }}</span>
+      <RouterLink
+        class="check_link"
+        :to="detailRouterArguments"
+      >{{ $t("resourceLevel." + name + ".name") }}</RouterLink>
     </td>
     <td class="col-1 col-lg-1 text-end">
       <span
@@ -47,30 +50,28 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 import ProgressBar from "./ProgressBar.vue";
 
 const { formatPercentage } = useFormatters();
 
 const props = defineProps(["check", "name"]);
-const router = useRouter();
 const store = useStore();
+const { navigate } = useClickable();
 
 const okRatio = computed(() => props.check.passed_count / props.check.total_count);
 const failedRatio = computed(() => props.check.failed_count / props.check.total_count);
 const naRatio = computed(() => props.check.undefined_count / props.check.total_count);
 
-function detail() {
-  router.push({
-    name: "resourceCheckDetail",
-    params: {
-      check: props.name,
-      datasetId: store.getters.datasetId,
-    },
-  });
-}
+const detailRouterArguments = computed(() => ({
+  name: "resourceCheckDetail",
+  params: {
+    check: props.name,
+    datasetId: store.getters.datasetId,
+  },
+}));
 </script>
 
 <style scoped lang="scss">

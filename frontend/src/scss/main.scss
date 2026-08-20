@@ -125,6 +125,16 @@ h5 {
   cursor: pointer;
 }
 
+// The whole row or card is clickable, so its link is styled as text.
+.check_link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.check_link:hover {
+  color: inherit;
+}
+
 .vjs-tree .vjs-value__string {
   color: #6c75e1 !important;
 }

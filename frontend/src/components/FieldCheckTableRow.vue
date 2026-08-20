@@ -2,10 +2,15 @@
   <tr
     v-if="check"
     class="clickable"
-    @click="detail()"
+    @click="navigate($event, detailRouterArguments)"
   >
     <td class="break_word">
-      <slot>{{ check.path }}</slot>
+      <slot :to="detailRouterArguments">
+        <RouterLink
+          class="check_link"
+          :to="detailRouterArguments"
+        >{{ check.path }}</RouterLink>
+      </slot>
     </td>
 
     <td>
@@ -68,8 +73,8 @@
 
 <script setup>
 import { computed } from "vue";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 import ProgressBar from "./ProgressBar.vue";
 
@@ -78,8 +83,8 @@ const props = defineProps({
   showStats: { type: Boolean, default: true },
 });
 
-const router = useRouter();
 const store = useStore();
+const { navigate } = useClickable();
 const { formatNumber, formatPercentage } = useFormatters();
 
 const detailRouterArguments = computed(() => ({
@@ -89,10 +94,6 @@ const detailRouterArguments = computed(() => ({
     datasetId: store.getters.datasetId,
   },
 }));
-
-function detail() {
-  router.push(detailRouterArguments.value);
-}
 </script>
 
 <style scoped lang="scss">
