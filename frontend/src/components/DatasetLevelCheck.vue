@@ -143,12 +143,9 @@
               </div>
             </div>
 
-            <div
-              v-if="checkType == 'single_value_share'"
-              class="single_value_share"
-            >
+            <div v-if="checkType == 'single_value_share'">
               <div class="chart_envelope">
-                <FrequencyChart :check="check" />
+                <FrequencyChart :check="check" :ticks="ticks" />
               </div>
             </div>
           </div>

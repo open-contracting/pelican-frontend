@@ -127,16 +127,8 @@
           </div>
         </div>
 
-        <div
-          v-else-if="checkType === 'single_value_share'"
-          class="single_value_share"
-        >
-          <div class="row text-center">
-            <FrequencyChart
-              :check="check"
-              :show-count="true"
-            />
-          </div>
+        <div v-else-if="checkType === 'single_value_share'">
+          <FrequencyChart :check="check" :ticks="ticks" show-count />
         </div>
       </div>
 

@@ -1,63 +1,33 @@
 <template>
-  <table class="table table-borderless table-sm">
-    <tbody>
-      <tr
-        v-for="item in chartData"
-        :key="item.label"
-      >
-        <td class="text-end label">
-          <span class="check_name">{{ item.label }}</span>
-        </td>
-        <td class="text-end">
-          <InlineBar
-            :numerator="item.count"
-            :denominator="denominator"
-            :count="item.count"
-            :show-count="showCount"
-            state="reg"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <GChart
+    type="BarChart"
+    :data="chartData"
+    :options="chartOptions"
+  />
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
-import InlineBar from "./InlineBar.vue";
+import { GChart } from "vue-google-charts";
+import { useBarChart } from "@/composables/useBarChart";
 
-const props = defineProps(["check", "showCount"]);
-const { t } = useI18n();
+const props = defineProps({
+  check: { type: Object, required: true },
+  ticks: { type: Array, required: true },
+  showCount: Boolean,
+});
 
-const denominator = computed(() => props.check.meta.total_unique_count);
-const chartData = computed(() => [
-  {
-    label: t("datasetLevel.charts.label_1"),
-    count: props.check.meta.counts["1"].total_unique_count,
-  },
-  {
-    label: t("datasetLevel.charts.label_2_20"),
-    count: props.check.meta.counts["2_20"].total_unique_count,
-  },
-  {
-    label: t("datasetLevel.charts.label_21_50"),
-    count: props.check.meta.counts["21_50"].total_unique_count,
-  },
-  {
-    label: t("datasetLevel.charts.label_51_100"),
-    count: props.check.meta.counts["51_100"].total_unique_count,
-  },
-  {
-    label: t("datasetLevel.charts.label_100"),
-    count: props.check.meta.counts["100+"].total_unique_count,
-  },
-]);
+const ranges = [
+  ["1", "datasetLevel.charts.label_1"],
+  ["2_20", "datasetLevel.charts.label_2_20"],
+  ["21_50", "datasetLevel.charts.label_21_50"],
+  ["51_100", "datasetLevel.charts.label_51_100"],
+  ["100+", "datasetLevel.charts.label_100"],
+];
+
+const { chartData, chartOptions } = useBarChart(props, () =>
+  ranges.map(([range, key]) => {
+    const count = props.check.meta.counts[range].total_unique_count;
+    return { key, share: count / props.check.meta.total_unique_count, count };
+  }),
+);
 </script>
-
-<style scoped>
-.table td.label {
-    width: 80px;
-    padding-top: 7px;
-}
-</style>

@@ -10,6 +10,7 @@
 import { onMounted, reactive } from "vue";
 import { GChart } from "vue-google-charts";
 import { useI18n } from "vue-i18n";
+import { BAR_CHART_OPTIONS, shareStyle } from "@/composables/useBarChart.js";
 import { useFormatters } from "@/composables/useFormatters.js";
 import { DATASET_CHECK_STYLES, DATASET_CHECK_TICKS } from "@/config.js";
 import { orderedShares } from "@/util.js";
@@ -28,18 +29,13 @@ const chartData = reactive([
   ],
 ]);
 
-// https://developers.google.com/chart/interactive/docs/gallery/barchart
 const chartOptions = reactive({
-  enableInteractivity: false,
+  ...BAR_CHART_OPTIONS,
   height: 250,
   chartArea: {
     top: 0,
     height: 230,
   },
-  legend: {
-    position: "none",
-  },
-  baselineColor: "transparent",
   hAxis: {
     viewWindow: {
       min: 0,
@@ -50,20 +46,6 @@ const chartOptions = reactive({
     },
     format: "#,###.#%",
   },
-  annotations: {
-    alwaysOutside: true,
-    stem: {
-      color: "transparent",
-    },
-    textStyle: {
-      color: "#4a4a4a",
-      fontName: "'Ubuntu Mono', monospace",
-      bold: true,
-    },
-  },
-  colors: ["#555cb3"],
-  fontName: "GTEestiProDisplay-Regular",
-  fontSize: 14,
 });
 
 onMounted(() => {
@@ -82,8 +64,7 @@ onMounted(() => {
     } else {
       let chartStyles = "";
       if (ticks && (!styles?.length || styles.includes(shares[key][0]))) {
-        chartStyles =
-          ticks[0] <= shares[key][1].share && shares[key][1].share <= ticks[1] ? "color: #919C03" : "color: #d0021b";
+        chartStyles = shareStyle(shares[key][1].share, ticks);
       }
       chartData.push([shares[key][0], shares[key][1].share, shares[key][1].share, chartStyles, shares[key][1].count]);
     }
