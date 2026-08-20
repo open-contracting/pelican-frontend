@@ -134,10 +134,10 @@ Emit events instead of accepting callbacks as props:
 .. code-block:: vue
 
    <!-- Yes -->
-   <SearchInput @search="$store.commit('setDatasetSearch', $event)" />
+   <SearchInput @search="ui.datasetSearch = $event" />
 
    <!-- No -->
-   <SearchInput :on-update="search => $store.commit('setDatasetSearch', search)" />
+   <SearchInput :on-update="search => (ui.datasetSearch = search)" />
 
 Pass a function as a prop only as data, never as an event callback. The ``filter`` predicates are the only such props: a component applies one to its rows, rather than calling it to notify its parent.
 

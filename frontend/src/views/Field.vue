@@ -31,7 +31,7 @@
         <SearchInput
           :placeholder="$t('field.search')"
           :preset="search"
-          @search="$store.commit('setFieldCheckSearch', $event)"
+          @search="ui.fieldCheckSearch = $event"
         />
       </BCol>
       <BCol class="text-end">
@@ -49,14 +49,14 @@
           <button
             :class="['btn', { active: layout == 'table' }]"
             :title="$t('field.tableLayout')"
-            @click="$store.commit('setFieldCheckLayout', 'table')"
+            @click="ui.fieldCheckLayout = 'table'"
           >
             <FontAwesomeIcon icon="bars" />
           </button>
           <button
             :class="['btn', { active: layout == 'tree' }]"
             :title="$t('field.treeLayout')"
-            @click="$store.commit('setFieldCheckLayout', 'tree')"
+            @click="ui.fieldCheckLayout = 'tree'"
           >
             <FontAwesomeIcon icon="align-right" />
           </button>
@@ -87,14 +87,14 @@
 import { BButtonGroup, BCol, BRow } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import { useUiStore } from "@/stores/ui.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
-const store = useStore();
+const ui = useUiStore();
 const { t } = useI18n();
 
 const fieldCheckTableRef = useTemplateRef("field-check-table");
@@ -115,15 +115,15 @@ const filters = [
   (item) => item.coverage.failed_count === 0 && item.quality.failed_count === 0 && item.coverage.passed_count > 0,
 ];
 
-const layout = computed(() => store.getters.fieldCheckLayout);
-const search = computed(() => store.getters.fieldCheckSearch);
+const layout = computed(() => ui.fieldCheckLayout);
+const search = computed(() => ui.fieldCheckSearch);
 
 watch(filterIndex, (newFilterIndex) => {
-  store.commit("setFieldLevelFilterIndex", newFilterIndex);
+  ui.fieldLevelFilterIndex = newFilterIndex;
 });
 
 onBeforeMount(() => {
-  filterIndex.value = store.getters.fieldLevelFilterIndex;
+  filterIndex.value = ui.fieldLevelFilterIndex;
 });
 
 function resetTableSorting() {

@@ -301,7 +301,7 @@
           />
           <div class="form-text text-body-secondary">
             <p>{{ $t("datasetReport.documentIdTooltip") }}</p>
-            <p>{{ $t("datasetReport.documentIdPermissions", {user: $store.getters.settings.user}) }}</p>
+            <p>{{ $t("datasetReport.documentIdPermissions", {user: settingsStore.settings.user}) }}</p>
           </div>
         </div>
       </div>
@@ -321,7 +321,7 @@
           />
           <div class="form-text text-body-secondary">
             <p>{{ $t("datasetReport.folderIdTooltip") }}</p>
-            <p>{{ $t("datasetReport.folderIdPermissions", {user: $store.getters.settings.user}) }}</p>
+            <p>{{ $t("datasetReport.folderIdPermissions", {user: settingsStore.settings.user}) }}</p>
           </div>
         </div>
       </div>
@@ -360,18 +360,18 @@
 import axios from "axios";
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
 import { ref } from "vue";
-import { useStore } from "vuex";
 import { CONFIG } from "@/config.js";
+import { useSettingsStore } from "@/stores/settings.js";
 import Loader from "./Loader.vue";
 
 const props = defineProps(["dataset"]);
 defineEmits(["close"]);
 
-const store = useStore();
+const settingsStore = useSettingsStore();
 
 const isSubmitting = ref(false);
-const documentId = ref(store.getters.settings.template.en);
-const folderId = ref(store.getters.settings.folder);
+const documentId = ref(settingsStore.settings.template.en);
+const folderId = ref(settingsStore.settings.folder);
 const reportName = ref("");
 const submitStatus = ref(null);
 const submitData = ref(null);
@@ -385,8 +385,8 @@ const reportLanguage = ref("en");
 
 function setDocumentId(value) {
   // Only change the template if it is one of the default values.
-  if (Object.values(store.getters.settings.template).includes(documentId.value)) {
-    documentId.value = store.getters.settings.template[value];
+  if (Object.values(settingsStore.settings.template).includes(documentId.value)) {
+    documentId.value = settingsStore.settings.template[value];
   }
 }
 

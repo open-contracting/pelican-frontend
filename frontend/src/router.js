@@ -1,6 +1,6 @@
 // biome-ignore assist/source/organizeImports: Import order affects preview pane sizing.
 import { createRouter, createWebHistory } from "vue-router";
-import store from "./store";
+import { useDatasetStore } from "./stores/dataset.js";
 import Dataset from "./views/Dataset.vue";
 import Field from "./views/Field.vue";
 import Home from "./views/Home.vue";
@@ -16,8 +16,12 @@ import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
 
 // The ID is a number in the store and a string in the route. A strict comparison always differs, which would reload
 // the dataset on every navigation, resetting each page's search, sorting, filter and expansion.
-function isDatasetLoaded(datasetId) {
-  return String(store.getters.datasetId) === datasetId;
+async function loadDatasetIfNeeded(datasetId) {
+  const datasetStore = useDatasetStore();
+
+  if (String(datasetStore.datasetId) !== datasetId) {
+    await datasetStore.loadDataset(datasetId);
+  }
 }
 
 export default createRouter({
@@ -42,9 +46,7 @@ export default createRouter({
       name: "overview",
       component: Overview,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },
@@ -53,9 +55,7 @@ export default createRouter({
       name: "field",
       component: Field,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },
@@ -64,9 +64,7 @@ export default createRouter({
       name: "resource",
       component: Resource,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },
@@ -75,9 +73,7 @@ export default createRouter({
       name: "dataset",
       component: Dataset,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },
@@ -86,9 +82,7 @@ export default createRouter({
       name: "time",
       component: Time,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },
@@ -97,13 +91,9 @@ export default createRouter({
       name: "resourceCheckDetail",
       component: ResourceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId).then(() => {
-            store.dispatch("loadResourceLevelCheckDetail", to.params.check);
-          });
-        } else {
-          store.dispatch("loadResourceLevelCheckDetail", to.params.check);
-        }
+        loadDatasetIfNeeded(to.params.datasetId).then(() => {
+          useDatasetStore().loadResourceLevelCheckDetail(to.params.check);
+        });
         next();
       },
     },
@@ -112,9 +102,7 @@ export default createRouter({
       name: "datasetCheckDetail",
       component: DatasetCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },
@@ -123,13 +111,9 @@ export default createRouter({
       name: "fieldCheckDetail",
       component: FieldCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId).then(() => {
-            store.dispatch("loadFieldLevelCheckDetail", to.params.path);
-          });
-        } else {
-          store.dispatch("loadFieldLevelCheckDetail", to.params.path);
-        }
+        loadDatasetIfNeeded(to.params.datasetId).then(() => {
+          useDatasetStore().loadFieldLevelCheckDetail(to.params.path);
+        });
         next();
       },
     },
@@ -138,9 +122,7 @@ export default createRouter({
       name: "timeVarianceCheckDetail",
       component: TimeVarianceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        if (!isDatasetLoaded(to.params.datasetId)) {
-          store.dispatch("loadDataset", to.params.datasetId);
-        }
+        loadDatasetIfNeeded(to.params.datasetId);
         next();
       },
     },

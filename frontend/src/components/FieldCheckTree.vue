@@ -32,16 +32,18 @@
 
 <script setup>
 import { computed, onMounted, watch } from "vue";
-import { useStore } from "vuex";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
+import { useDatasetStore } from "@/stores/dataset.js";
+import { useUiStore } from "@/stores/ui.js";
 import FieldCheckTreeNode from "./FieldCheckTreeNode.vue";
 
 const props = defineProps(["filter"]);
-const store = useStore();
+const datasetStore = useDatasetStore();
+const ui = useUiStore();
 
 const { search, sorted } = useFieldCheckSearch();
 
-const stats = computed(() => store.getters.fieldLevelStats);
+const stats = computed(() => datasetStore.fieldLevelStats);
 const tree = computed(() => {
   const root = {};
 
@@ -62,19 +64,19 @@ const tree = computed(() => {
 });
 
 watch(search, () => {
-  store.dispatch("setExpandedNodesForSearch");
+  ui.setExpandedNodesForSearch(stats.value);
 });
 
 watch(
   () => props.filter,
   () => {
-    store.commit("setFieldLevelFilter", props.filter);
+    ui.fieldLevelFilter = props.filter;
   },
 );
 
 onMounted(() => {
   if (search.value) {
-    store.dispatch("setExpandedNodesForSearch");
+    ui.setExpandedNodesForSearch(stats.value);
   }
 });
 </script>

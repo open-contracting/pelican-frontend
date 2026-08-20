@@ -412,7 +412,7 @@ import { BSpinner } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import VueJsonPretty from "vue-json-pretty";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useDatasetStore } from "@/stores/dataset.js";
 import "vue-json-pretty/lib/styles.css";
 import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
@@ -424,12 +424,12 @@ import DashboardDetail from "./layouts/DashboardDetail.vue";
 const { formatNumber } = useFormatters();
 
 const route = useRoute();
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { previewDataItem, previewData, loadingPreviewData, selectedKey, download, copyToClipboard } = useDataItem();
 
 const showMore = ref(false);
 
-const check = computed(() => store.getters.timeVarianceLevelCheckByName(route.params.check));
+const check = computed(() => datasetStore.timeVarianceLevelCheckByName(route.params.check));
 const loaded = computed(() => check.value != null);
 const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
 </script>

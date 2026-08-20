@@ -32,6 +32,9 @@ importers:
       numeral:
         specifier: ^2.0.6
         version: 2.0.6
+      pinia:
+        specifier: ^4.0.3
+        version: 4.0.3(@vue/devtools-api@6.6.4)(vue@3.5.25)
       vue:
         specifier: ^3.5.25
         version: 3.5.25
@@ -50,9 +53,6 @@ importers:
       vue-router:
         specifier: ^4.6.3
         version: 4.6.3(vue@3.5.25)
-      vuex:
-        specifier: ^4.1.0
-        version: 4.1.0(vue@3.5.25)
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^6.0.4
@@ -1033,6 +1033,9 @@ packages:
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
+  nostics@1.2.0:
+    resolution: {integrity: sha512-FGqEfhQjrvo1lL8KFifdTQiNwwQHJxC1jtYE1Rc54qF/jxONUNL+kC9gS1krX8Q65PgrQ5fCqH/I4NhWBvdSqg==}
+
   numeral@2.0.6:
     resolution: {integrity: sha512-qaKRmtYPZ5qdw4jWJD6bxEf1FJEqllJrwxCLIm0sQU/A7v2/czigzOb+C2uSiFsa9lBUzeH7M1oK+Q+OLxL3kA==}
 
@@ -1049,6 +1052,16 @@ packages:
   picomatch@4.0.5:
     resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
+
+  pinia@4.0.3:
+    resolution: {integrity: sha512-XMQqpvjgG7LMqVhhFUzKLT4KEbsYbfZZ0CZU9PgdFm1O2VKBmIkykL8+SfNhOaT7sR0wT6BEgKT0YNDYWgmVRA==}
+    peerDependencies:
+      '@vue/devtools-api': ^8.1.5
+      typescript: '>=5.6.0'
+      vue: ^3.5.11
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   postcss@8.5.26:
     resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
@@ -1310,11 +1323,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  vuex@4.1.0:
-    resolution: {integrity: sha512-hmV6UerDrPcgbSy9ORAtNXDr9M4wlNP4pEFKye4ujJF8oqgFFuxDCdOLS3eNoRTtq5O3hoBDh9Doj1bQMYHRbQ==}
-    peerDependencies:
-      vue: ^3.2.0
 
   walk-up-path@4.0.0:
     resolution: {integrity: sha512-3hu+tD8YzSLGuFYtPRb48vdhKMi0KQV5sn+uWr8+7dMEq/2G/dtLrdDinkLjqq5TIbIBjYJ4Ax/n3YiaW7QM8A==}
@@ -2046,6 +2054,8 @@ snapshots:
   node-addon-api@7.1.1:
     optional: true
 
+  nostics@1.2.0: {}
+
   numeral@2.0.6: {}
 
   oxc-parser@0.142.0:
@@ -2098,6 +2108,12 @@ snapshots:
   picocolors@1.1.1: {}
 
   picomatch@4.0.5: {}
+
+  pinia@4.0.3(@vue/devtools-api@6.6.4)(vue@3.5.25):
+    dependencies:
+      '@vue/devtools-api': 6.6.4
+      nostics: 1.2.0
+      vue: 3.5.25
 
   postcss@8.5.26:
     dependencies:
@@ -2320,11 +2336,6 @@ snapshots:
       '@vue/runtime-dom': 3.5.25
       '@vue/server-renderer': 3.5.25(vue@3.5.25)
       '@vue/shared': 3.5.25
-
-  vuex@4.1.0(vue@3.5.25):
-    dependencies:
-      '@vue/devtools-api': 6.6.4
-      vue: 3.5.25
 
   walk-up-path@4.0.0: {}
 

@@ -138,21 +138,21 @@
 import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useDatasetStore } from "@/stores/dataset.js";
 
 const route = useRoute();
-const store = useStore();
+const datasetStore = useDatasetStore();
 
 // A check detail page is a sibling route, not a child, so vue-router marks no link active.
 const isSection = (name) => route.path.startsWith(`/${name}/`);
 
-const datasetId = computed(() => store.getters.datasetId);
-const fieldLoaded = computed(() => store.getters.fieldLevelStats != null);
-const resourceLoaded = computed(() => store.getters.resourceLevelStats != null);
-const datasetLoaded = computed(() => store.getters.datasetLevelStats != null);
-const timeVarianceLoaded = computed(() => store.getters.timeVarianceLevelStats != null);
+const datasetId = computed(() => datasetStore.datasetId);
+const fieldLoaded = computed(() => datasetStore.fieldLevelStats != null);
+const resourceLoaded = computed(() => datasetStore.resourceLevelStats != null);
+const datasetLoaded = computed(() => datasetStore.datasetLevelStats != null);
+const timeVarianceLoaded = computed(() => datasetStore.timeVarianceLevelStats != null);
 const showTimeVariance = computed(
-  () => store.getters.timeVarianceLevelStats != null && store.getters.timeVarianceLevelStats.length > 0,
+  () => datasetStore.timeVarianceLevelStats != null && datasetStore.timeVarianceLevelStats.length > 0,
 );
 </script>
 

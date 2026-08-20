@@ -73,9 +73,9 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
+import { useDatasetStore } from "@/stores/dataset.js";
 import ProgressBar from "./ProgressBar.vue";
 
 const props = defineProps({
@@ -83,7 +83,7 @@ const props = defineProps({
   showStats: { type: Boolean, default: true },
 });
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { navigate } = useClickable();
 const { formatNumber, formatPercentage } = useFormatters();
 
@@ -91,7 +91,7 @@ const detailRouterArguments = computed(() => ({
   name: "fieldCheckDetail",
   params: {
     path: props.check.path,
-    datasetId: store.getters.datasetId,
+    datasetId: datasetStore.datasetId,
   },
 }));
 </script>
