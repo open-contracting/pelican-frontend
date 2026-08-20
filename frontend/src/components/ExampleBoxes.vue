@@ -21,7 +21,7 @@
         <span
           v-if="section.prefix"
           class="prefix"
-        >{{ section.prefix }}:&nbsp;"</span>{{ section.header
+        >{{ section.prefix }}: "</span>{{ section.header
         }}<span
           v-if="section.prefix"
           class="prefix"

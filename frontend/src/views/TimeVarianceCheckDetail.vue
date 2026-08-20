@@ -10,7 +10,6 @@
       <h5>
         {{ $t("timeLevel.coverage.header") }}
         <span class="bold">{{ formatNumber(check.meta.total_count) }}</span>
-                &nbsp;
         <Tooltip :text="$t('timeLevel.coverage.header_tooltip')" />
       </h5>
       <div class="result_box">
@@ -51,7 +50,6 @@
       <h5>
         {{ $t("timeLevel.check.header") }}
         <span class="bold">{{ formatNumber(check.meta.coverage_count) }}</span>
-                &nbsp;
         <Tooltip :text="$t('timeLevel.check.header_tooltip')" />
       </h5>
       <div class="result_box">
@@ -117,9 +115,8 @@
                 class="new_row"
               >
                 <td class="text-start numeric">
-                  <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center example_ocid">
                     <span class="check_name">{{ item.new_item_ocid }}</span>
-                                      &nbsp;
                     <span class="example_version">[{{ $t("examples.new") }}]</span>
                   </div>
                 </td>
@@ -175,9 +172,8 @@
                 class="old_row"
               >
                 <td class="text-start numeric">
-                  <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center example_ocid">
                     <span class="check_name">{{ item.ocid }}</span>
-                                      &nbsp;
                     <span class="example_version">[{{ $t("examples.old") }}]</span>
                   </div>
                 </td>
@@ -248,9 +244,8 @@
                   class="new_row"
                 >
                   <td class="text-start numeric">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center example_ocid">
                       <span class="check_name">{{ item.new_item_ocid }}</span>
-                                        &nbsp;
                       <span class="example_version">[{{ $t("examples.new") }}]</span>
                     </div>
                   </td>
@@ -306,9 +301,8 @@
                   class="old_row"
                 >
                   <td class="text-start numeric">
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center example_ocid">
                       <span class="check_name">{{ item.ocid }}</span>
-                                        &nbsp;
                       <span class="example_version">[{{ $t("examples.old") }}]</span>
                     </div>
                   </td>
@@ -386,9 +380,7 @@
         :data="previewMetadata"
       />
 
-      <div class="divider">
-&nbsp;
-      </div>
+      <div class="spacer" />
 
       <span v-if="loadingPreviewData">
         <div class="result_box loader text-center">
@@ -469,5 +461,10 @@ const previewMetadata = computed(() => (check.value == null ? null : withoutExam
 
 .example_version {
     color: $headings_light_color;
+}
+
+// A flex container drops whitespace-only text; 1ch is a space in the monospace font.
+.example_ocid {
+    column-gap: 1ch;
 }
 </style>

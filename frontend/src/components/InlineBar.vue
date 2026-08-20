@@ -9,7 +9,6 @@
       :style="{ width: barWidth + 'px' }"
     >
       <span v-if="barWidth > 30">{{ formatPercentage(ratio) }}</span>
-      <span v-else>&nbsp;</span>
     </div>
     <div
       v-if="barWidth <= 30"
@@ -77,12 +76,19 @@ onMounted(() => {
     position: relative;
 }
 
+// The bar has no content at 30px or narrower, so the default vertical-align: baseline would
+// position it lower than the .count. Top alignment is independent of content.
+.bar,
 .count {
     display: inline-block;
+    vertical-align: top;
     height: 25px;
-    color: $na_color;
     font-size: 14px;
     padding-top: 4px;
+}
+
+.count {
+    color: $na_color;
 }
 
 .count_holder {
@@ -90,10 +96,6 @@ onMounted(() => {
 }
 
 .bar {
-    display: inline-block;
-    height: 25px;
-    font-size: 14px;
-    padding-top: 3px;
     padding-left: 5px;
     font-weight: 700;
     border-radius: 8px;

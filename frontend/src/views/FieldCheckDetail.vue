@@ -9,11 +9,10 @@
       <template v-for="(c, k) in check.coverage.checks" :key="k">
         <h5>
           <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
-          &ldquo;{{ $t("fieldDetail.coverage." + k + ".name") }}&rdquo; &nbsp;
+          &ldquo;{{ $t("fieldDetail.coverage." + k + ".name") }}&rdquo;
           <span class="bold">
             {{ formatNumber(c.passed_count + c.failed_count) }}
           </span>
-                    &nbsp;
           <Tooltip :text="$t('fieldDetail.coverage.' + k + '.description')" />
         </h5>
         <CheckDetailResultBox
@@ -28,11 +27,10 @@
       <template v-for="(c, k) in check.quality.checks" :key="k">
         <h5>
           <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
-          &ldquo;{{ $t("fieldDetail.quality." + k + ".name") }}&rdquo; &nbsp;
+          &ldquo;{{ $t("fieldDetail.quality." + k + ".name") }}&rdquo;
           <span class="bold">
             {{ formatNumber(c.passed_count + c.failed_count) }}
           </span>
-                    &nbsp;
           <Tooltip :text="$t('fieldDetail.quality.' + k + '.description')" />
         </h5>
         <CheckDetailResultBox
@@ -56,9 +54,7 @@
         <vue-json-pretty :data="previewMetadata" />
       </span>
 
-      <div class="divider">
-&nbsp;
-      </div>
+      <div class="spacer" />
 
       <span v-if="loadingPreviewData">
         <div class="result_box loader text-center">

@@ -5,9 +5,7 @@
         v-if="b.value"
         :class="['inner', b.class]"
         :style="{ width: b.value + '%', 'background-color': b.color }"
-      >
-                &nbsp;
-      </div>
+      />
     </template>
   </div>
 </template>
@@ -49,6 +47,9 @@ const allBars = computed(() => {
         background-color: $primary;
         height: 4px;
         display: inline-block;
+        // A .inner has no content, so the default vertical-align: baseline would position it below
+        // the 4px height, in the overflow, which is hidden. Top alignment is independent of content.
+        vertical-align: top;
 
         &.ok {
             background-color: $ok_bright_color;

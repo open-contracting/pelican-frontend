@@ -12,7 +12,7 @@
             {{ $t("datasetReport.status.ok") }}
           </span>
         </BAlert>
-        <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:&nbsp;</span>
+        <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:</span>
         <a
           :href="'https://docs.google.com/document/d/' + submitData.file_id"
           target="_blank"
@@ -60,12 +60,12 @@
         </BAlert>
 
         <div class="margin_bottom">
-          <span class="info_prefix">{{ $t("datasetReport.link") }}:&nbsp;</span>
+          <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
           <a
             :href="'https://docs.google.com/document/d/' + submitData.file_id"
             target="_blank"
           >
-            {{ "https://docs.google.com/document/d/" + submitData.file_id }}&nbsp;
+            {{ "https://docs.google.com/document/d/" + submitData.file_id }}
           </a>
         </div>
       </span>
@@ -132,7 +132,7 @@
           <span>{{ $t("datasetReport.status.reportError") }}</span>
         </BAlert>
 
-        <span class="info_prefix">{{ $t("datasetReport.reason") }}:&nbsp;</span>{{ submitData.reason }}
+        <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ submitData.reason }}
         <BRow class="buttons">
           <BCol>
             <button
@@ -205,7 +205,7 @@
         </BRow>
       </span>
       <span v-if="failedTags != null">
-        <span class="info_prefix">{{ $t("datasetReport.warningList") }}:&nbsp;</span>
+        <span class="info_prefix">{{ $t("datasetReport.warningList") }}:</span>
         <ul>
           <li
             v-for="(tag, index) in failedTags"
@@ -214,7 +214,7 @@
             {{ tag }}
           </li>
         </ul>
-        <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}&nbsp;</span>
+        <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}</span>
         <BRow class="buttons">
           <BCol>
             <button
