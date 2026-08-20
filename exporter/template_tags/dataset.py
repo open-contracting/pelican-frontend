@@ -6,17 +6,17 @@ from api.models import DatasetLevelCheck
 from exporter.exceptions import CheckNotComputedError
 from exporter.gdocs import Gdocs
 from exporter.leaf_tags.dataset import (
-    bar_count,
-    bar_examples,
-    bar_share,
-    bar_sum,
     buyer_count,
+    code_count,
+    code_examples,
+    code_share,
     counts_result_box_image,
-    donut_count,
-    donut_examples,
-    donut_share,
     ocid_count,
     passed_result_box_image,
+    percentile_count,
+    percentile_examples,
+    percentile_share,
+    percentile_sum,
     result,
     sums_result_box_image,
     table_result_box_image,
@@ -31,25 +31,25 @@ from exporter.messages import message
 from exporter.tag import Tag, TemplateTag
 from exporter.util import quote_list
 
-# Keep in sync with checkTypes in datasetMixins.js
+# Keep in sync with DATASET_CHECK_TYPES in config.js
 CHECK_TYPES = {
-    # donut
-    "distribution.main_procurement_category": "donut",
-    "distribution.tender_status": "donut",
-    "distribution.tender_procurement_method": "donut",
-    "distribution.tender_award_criteria": "donut",
-    "distribution.tender_submission_method": "donut",
-    "distribution.awards_status": "donut",
-    "distribution.contracts_status": "donut",
-    "distribution.milestone_status": "donut",
-    "distribution.milestone_type": "donut",
-    "distribution.document_document_type": "donut",
-    "distribution.value_currency": "donut",
-    "distribution.related_process_relation": "donut",
-    # bar
-    "distribution.tender_value": "bar",
-    "distribution.contracts_value": "bar",
-    "distribution.awards_value": "bar",
+    # code
+    "distribution.main_procurement_category": "code",
+    "distribution.tender_status": "code",
+    "distribution.tender_procurement_method": "code",
+    "distribution.tender_award_criteria": "code",
+    "distribution.tender_submission_method": "code",
+    "distribution.awards_status": "code",
+    "distribution.contracts_status": "code",
+    "distribution.milestone_status": "code",
+    "distribution.milestone_type": "code",
+    "distribution.document_document_type": "code",
+    "distribution.value_currency": "code",
+    "distribution.related_process_relation": "code",
+    # percentile
+    "distribution.tender_value": "percentile",
+    "distribution.contracts_value": "percentile",
+    "distribution.awards_value": "percentile",
     # numeric
     "misc.url_availability": "numeric",
     "unique.tender_id": "numeric",
@@ -96,10 +96,16 @@ class Dataset(TemplateTag):
         check = DatasetLevelCheck.objects.filter(dataset=self.dataset_id, check_name=check_name).first()
 
         if check.result is not None:
-            if check_type == "donut":
-                self.tags += (donut_share, donut_count, donut_examples, counts_result_box_image)
-            elif check_type == "bar":
-                self.tags += (bar_share, bar_count, bar_examples, bar_sum, sums_result_box_image)
+            if check_type == "code":
+                self.tags += (code_share, code_count, code_examples, counts_result_box_image)
+            elif check_type == "percentile":
+                self.tags += (
+                    percentile_share,
+                    percentile_count,
+                    percentile_examples,
+                    percentile_sum,
+                    sums_result_box_image,
+                )
             elif check_type == "top3":
                 self.tags += (top3_share, top3_count, top3_examples, top3_amount, table_result_box_image)
             elif check_type == "numeric":
@@ -145,7 +151,7 @@ class Dataset(TemplateTag):
         }
 
         if check.result is not None:
-            if check_type == "donut":
+            if check_type == "code":
                 if check.result is not None:
                     data["shares"] = {key: value["share"] for key, value in check.meta["shares"].items()}
                     data["counts"] = {key: value["count"] for key, value in check.meta["shares"].items()}
@@ -159,7 +165,7 @@ class Dataset(TemplateTag):
                     data["counts"] = {}
                     data["counts_pairs"] = []
                     data["examples"] = {}
-            elif check_type == "bar":
+            elif check_type == "percentile":
                 if check.result is not None:
                     data["shares"] = {key.replace("_", "-"): value for key, value in check.meta["shares"].items()}
                     data["counts"] = {key.replace("_", "-"): value for key, value in check.meta["counts"].items()}

@@ -48,7 +48,7 @@ def buyer_count(tag: LeafTag, data: dict[str, Any]) -> str:
 
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
 @leaf("count")
-def bar_count(tag: LeafTag, data: dict[str, Any]) -> str:
+def percentile_count(tag: LeafTag, data: dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:
         return str(data["counts"][tag.arguments["percentageRange"]])
     return str(sum(data["counts"].values()))
@@ -56,7 +56,7 @@ def bar_count(tag: LeafTag, data: dict[str, Any]) -> str:
 
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
 @leaf("sum")
-def bar_sum(tag: LeafTag, data: dict[str, Any]) -> str:
+def percentile_sum(tag: LeafTag, data: dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:
         return str(data["sums"][tag.arguments["percentageRange"]])
     return str(sum(data["sums"].values()))
@@ -65,7 +65,7 @@ def bar_sum(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
 @argument("decimals", type=int, default=0)
 @leaf("share")
-def bar_share(tag: LeafTag, data: dict[str, Any]) -> str:
+def percentile_share(tag: LeafTag, data: dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:  # noqa: SIM108 # consistency
         share = 100 * data["shares"][tag.arguments["percentageRange"]]
     else:
@@ -77,7 +77,7 @@ def bar_share(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def bar_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
+def percentile_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     if "percentageRange" in tag.arguments:
         examples = data["examples"][tag.arguments["percentageRange"]]
     else:
@@ -87,7 +87,7 @@ def bar_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Elemen
 
 @argument("value")
 @leaf("count")
-def donut_count(tag: LeafTag, data: dict[str, Any]) -> str:
+def code_count(tag: LeafTag, data: dict[str, Any]) -> str:
     if "value" not in tag.arguments:
         return str(sum(data["counts"].values()))
     if tag.arguments["value"] in data["counts"]:
@@ -98,7 +98,7 @@ def donut_count(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("value")
 @argument("decimals", type=int, default=0)
 @leaf("share")
-def donut_share(tag: LeafTag, data: dict[str, Any]) -> str:
+def code_share(tag: LeafTag, data: dict[str, Any]) -> str:
     if "value" not in tag.arguments:
         share = 100.0
     elif tag.arguments["value"] in data["shares"]:
@@ -112,7 +112,7 @@ def donut_share(tag: LeafTag, data: dict[str, Any]) -> str:
 @argument("mode", choices=MODES, default="oneLine")
 @argument("max", type=int, nonzero=True)
 @leaf("examples")
-def donut_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
+def code_examples(tag: LeafTag, data: dict[str, Any]) -> str | list[etree._Element]:
     if "value" not in tag.arguments:
         examples = [example for examples in data["examples"].values() for example in examples]
     elif tag.arguments["value"] in data["examples"]:

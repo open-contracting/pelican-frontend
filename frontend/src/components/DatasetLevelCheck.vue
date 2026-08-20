@@ -76,13 +76,13 @@
             <p v-html="$t('incompatibleCheckVersion.description')" />
           </div>
           <div v-else>
-            <div v-if="checkType == 'donut'">
+            <div v-if="checkType == 'code'">
               <div class="chart_envelope">
                 <CodeChart :check="check" :limit="true" />
               </div>
             </div>
 
-            <div v-if="checkType == 'bar'">
+            <div v-if="checkType == 'percentile'">
               <div class="chart_envelope">
                 <PercentileChart :check="check" :ticks="ticks" />
               </div>

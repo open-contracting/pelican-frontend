@@ -28,11 +28,11 @@
         v-if="check.meta.reason == null"
         class="result_box"
       >
-        <div v-if="checkType === 'bar'">
+        <div v-if="checkType === 'percentile'">
           <PercentileChart :check="check" :ticks="ticks" show-count />
         </div>
 
-        <div v-else-if="checkType === 'donut'">
+        <div v-else-if="checkType === 'code'">
           <CodeChart :check="check" :limit="false" />
         </div>
 
@@ -220,7 +220,7 @@ const exampleSections = computed(() => {
 
   const meta = check.value.meta;
 
-  if (checkType.value === "donut") {
+  if (checkType.value === "code") {
     for (const [code, share] of orderedShares(meta.shares ?? {})) {
       if (share.examples.length > 0) {
         sections.push({
@@ -229,11 +229,11 @@ const exampleSections = computed(() => {
         });
       }
     }
-  } else if (checkType.value === "bar") {
-    for (const [barKey, examples] of Object.entries(meta.examples ?? {})) {
+  } else if (checkType.value === "percentile") {
+    for (const [range, examples] of Object.entries(meta.examples ?? {})) {
       if (examples.length > 0) {
         sections.push({
-          header: t(`datasetLevel.charts.label_${barKey}`),
+          header: t(`datasetLevel.charts.label_${range}`),
           examples,
         });
       }

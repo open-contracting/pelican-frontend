@@ -39,23 +39,23 @@ export const DATASET_CHECK_REPORT_ONLY = {
 
 // Sync with CHECK_TYPES in dataset.py
 export const DATASET_CHECK_TYPES = {
-  // donut
-  "distribution.main_procurement_category": "donut",
-  "distribution.tender_status": "donut",
-  "distribution.tender_procurement_method": "donut",
-  "distribution.tender_award_criteria": "donut",
-  "distribution.tender_submission_method": "donut",
-  "distribution.awards_status": "donut",
-  "distribution.contracts_status": "donut",
-  "distribution.milestone_status": "donut",
-  "distribution.milestone_type": "donut",
-  "distribution.document_document_type": "donut",
-  "distribution.value_currency": "donut",
-  "distribution.related_process_relation": "donut",
-  // bar
-  "distribution.tender_value": "bar",
-  "distribution.contracts_value": "bar",
-  "distribution.awards_value": "bar",
+  // code
+  "distribution.main_procurement_category": "code",
+  "distribution.tender_status": "code",
+  "distribution.tender_procurement_method": "code",
+  "distribution.tender_award_criteria": "code",
+  "distribution.tender_submission_method": "code",
+  "distribution.awards_status": "code",
+  "distribution.contracts_status": "code",
+  "distribution.milestone_status": "code",
+  "distribution.milestone_type": "code",
+  "distribution.document_document_type": "code",
+  "distribution.value_currency": "code",
+  "distribution.related_process_relation": "code",
+  // percentile
+  "distribution.tender_value": "percentile",
+  "distribution.contracts_value": "percentile",
+  "distribution.awards_value": "percentile",
   // numeric
   "misc.url_availability": "numeric",
   "unique.tender_id": "numeric",
@@ -73,14 +73,14 @@ export const DATASET_CHECK_TYPES = {
 
 // Sync with check descriptions.
 export const DATASET_CHECK_TICKS = {
-  // donut
+  // code
   "distribution.main_procurement_category": [0, 0.95],
   "distribution.tender_status": [0.001, 0.99],
   "distribution.awards_status": [0.001, 0.99],
   "distribution.contracts_status": [0.001, 0.99],
   "distribution.milestone_status": [0.001, 0.99],
   "distribution.tender_procurement_method": [0.001, 0.99],
-  // bar
+  // percentile
   "distribution.tender_value": [0, 0.5],
   "distribution.contracts_value": [0, 0.5],
   "distribution.awards_value": [0, 0.5],
@@ -168,7 +168,7 @@ export const RESOURCE_CHECK_ORDER = [
 
 // Sync with check descriptions.
 export const DATASET_CHECK_STYLES = {
-  // donut
+  // code
   "distribution.main_procurement_category": [],
   "distribution.tender_status": ["active", "complete"],
   "distribution.awards_status": ["active"],
