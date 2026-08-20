@@ -94,7 +94,7 @@ export const useDatasetStore = defineStore("dataset", () => {
   async function loadResourceLevelCheckDetail(checkName) {
     const checkDetail = resourceLevelCheckByName(checkName);
 
-    if (checkDetail == null || checkDetail.examplesLoaded || dataset.value == null || checkName == null) {
+    if (checkDetail == null || checkDetail.examplesLoaded) {
       return;
     }
 
@@ -171,7 +171,9 @@ export const useDatasetStore = defineStore("dataset", () => {
   }
 
   async function loadFieldLevelCheckDetail(path) {
-    if (fieldLevelCheckByPath(path)?.examplesLoaded || dataset.value == null || path == null) {
+    const checkDetail = fieldLevelCheckByPath(path);
+
+    if (checkDetail == null || checkDetail.examplesLoaded) {
       return;
     }
 
