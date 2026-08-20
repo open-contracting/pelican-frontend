@@ -8,6 +8,7 @@ Contributing
    add-metadata
    add-check
    update-check
+   compare-to-production
 
 Setup
 -----
@@ -29,6 +30,12 @@ Install development dependencies:
 .. code-block:: bash
 
    pip install -r requirements_dev.txt
+
+Copy ``.env.example`` to ``.env``, and fill in any connection strings that differ from the defaults. Git ignores ``.env``. Pass it to any command that needs it, rather than exporting its variables into a shell:
+
+.. code-block:: bash
+
+   uv run --env-file .env manage.py runserver
 
 Run database migrations:
 
