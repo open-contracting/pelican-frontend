@@ -1,5 +1,3 @@
-"""The messages that the frontend displays, which the exporter renders as plain text."""
-
 import json
 import re
 from typing import Any
@@ -7,8 +5,10 @@ from typing import Any
 from django.conf import settings
 
 DEFAULT_LANGUAGE = "en"
-MESSAGES_DIR = settings.BASE_DIR / "frontend" / "src" / "messages"
-MESSAGES: dict[str, Any] = {path.stem: json.loads(path.read_text()) for path in MESSAGES_DIR.glob("*.json")}
+MESSAGES: dict[str, Any] = {
+    path.stem: json.loads(path.read_text())
+    for path in (settings.BASE_DIR / "frontend" / "src" / "messages").glob("*.json")
+}
 
 SUBSTITUTIONS = {"</p>": "\n\n", "<li>": "- ", "</li>": "\n", "</ul>": "\n", "{'$'}": "$"}
 DISCARDED_TAGS = re.compile(r"</?(?:b|code|i|p|ul)>")
