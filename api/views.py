@@ -276,20 +276,6 @@ class DatasetViewSet(viewsets.ViewSet):
         publish({"dataset_id": pk}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
-    @extend_schema(responses={200: {"type": "object", "properties": {"id": {"type": "integer"}}}})
-    @action(detail=False)
-    def find_by_name(self, request):
-        """
-        Return the ID of the dataset with the name given in the `name` query string parameter, as an object.
-
-        ``{"id": 123}`` for example, or ``{}`` if no name matches.
-        """
-        try:
-            dataset = self.get_queryset().get(name=request.query_params.get("name"))
-            return Response({"id": dataset.pk})
-        except Dataset.DoesNotExist:
-            return Response({})
-
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
     def field_level_report(self, request, pk=None):

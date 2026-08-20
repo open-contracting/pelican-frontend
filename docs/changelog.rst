@@ -3,6 +3,11 @@ Changelog
 
 This changelog only notes major changes, to notify other developers.
 
+2026-08-20
+----------
+
+-  refactor: Remove the ``GET api/datasets/find_by_name/`` endpoint. Its only caller was the Data Registry, which no longer uses Pelican.
+
 2023-01-26
 ----------
 

@@ -344,33 +344,6 @@ class ViewsTests(PelicanTestCase):
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with({"dataset_id": 123}, "wiper_init")
 
-    def test_datasets_find_by_name_no_name(self):
-        self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/find_by_name/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {})
-
-    def test_datasets_find_by_name_no_match(self):
-        self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/find_by_name/?name=other")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {})
-
-    def test_datasets_find_by_name(self):
-        dataset = self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/find_by_name/?name=anything")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {"id": dataset.pk})
-
     def test_datasets_field_level_report(self):
         dataset = self.create(Dataset, name="anything")
         self.create(Report, dataset=dataset, type="field_level_check", data={"ocid": {}})
