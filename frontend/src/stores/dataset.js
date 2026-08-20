@@ -5,6 +5,8 @@ import { CONFIG } from "@/config.js";
 import { useUiStore } from "@/stores/ui.js";
 
 export const useDatasetStore = defineStore("dataset", () => {
+  const ui = useUiStore();
+
   const dataItems = ref([]);
   const dataset = ref(null);
   const datasetLevelStats = ref(null);
@@ -57,7 +59,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     fieldLevelStats.value = null;
     datasetLevelStats.value = null;
     resourceLevelStats.value = null;
-    useUiStore().resetForDataset();
+    ui.resetForDataset();
   }
 
   async function loadDataset(id) {
@@ -166,7 +168,6 @@ export const useDatasetStore = defineStore("dataset", () => {
     }
 
     fieldLevelStats.value = data;
-    useUiStore().fieldCheckSorting = null;
   }
 
   async function loadFieldLevelCheckDetail(path) {
@@ -219,11 +220,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     timeVarianceLevelCheckByName,
     loadDataItem,
     loadDataset,
-    loadDatasetLevelStats,
     loadFieldLevelCheckDetail,
-    loadFieldLevelStats,
     loadResourceLevelCheckDetail,
-    loadResourceLevelStats,
-    loadTimeVarianceLevelStats,
   };
 });
