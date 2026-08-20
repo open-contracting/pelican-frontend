@@ -28,7 +28,6 @@ from api.models import (
 from api.rabbitmq import publish
 
 
-@csrf_exempt
 def app_settings(request):
     return JsonResponse(
         {
