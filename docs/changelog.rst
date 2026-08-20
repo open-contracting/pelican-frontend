@@ -7,6 +7,7 @@ This changelog only notes major changes, to notify other developers.
 ----------
 
 -  refactor: Remove the ``GET api/datasets/find_by_name/`` endpoint. Its only caller was the Data Registry, which no longer uses Pelican.
+-  feat: Describe the ``api/settings/``, ``api/dataset-filter-items/`` and ``api/dataset-distinct-values/`` endpoints in the OpenAPI document. ``POST api/dataset-filter-items/`` accepts a numeric string as ``dataset_id_original``, and a GET returns 405 instead of 400.
 
 2023-01-26
 ----------

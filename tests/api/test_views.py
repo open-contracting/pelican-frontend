@@ -116,15 +116,16 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(0, using="pelican_backend"):
             response = self.client.get("/api/dataset-filter-items/")
 
-            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, 405)
 
     def test_dataset_filter_items_invalid(self):
         for input_message in (
             {},
             {"dataset_id_original": 1},  # missing filter_message key
             {"filter_message": {}},  # missing dataset_id_original key
-            {"dataset_id_original": "1", "filter_message": {}},  # incorrect dataset_id_original type
+            {"dataset_id_original": "anything", "filter_message": {}},  # incorrect dataset_id_original type
             {"dataset_id_original": 1, "filter_message": []},  # incorrect filter_message type
+            {"dataset_id_original": 1, "filter_message": {"buyer": "MOF"}},  # incorrect buyer type
         ):
             with (
                 self.subTest(input_message=input_message),

@@ -26,6 +26,102 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataItem'
           description: ''
+  /api/dataset-distinct-values/{dataset_id}/{field}/:
+    get:
+      operationId: dataset_distinct_values
+      description: Return the field's 200 most common values, with their counts, in
+        descending order.
+      parameters:
+      - in: path
+        name: dataset_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: field
+        schema:
+          type: string
+        required: true
+      tags:
+      - dataset-distinct-values
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DistinctValue'
+          description: ''
+  /api/dataset-distinct-values/{dataset_id}/{field}/{query}/:
+    get:
+      operationId: dataset_distinct_values_search
+      description: Return the field's 200 most common values containing the query,
+        with their counts, in descending order.
+      parameters:
+      - in: path
+        name: dataset_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: field
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: query
+        schema:
+          type: string
+        required: true
+      tags:
+      - dataset-distinct-values
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DistinctValue'
+          description: ''
+  /api/dataset-filter-items/:
+    post:
+      operationId: dataset_filter_items_create
+      description: |-
+        Return the number of data items that the filter matches, as an object.
+
+        ``{"items": 123}`` for example.
+      tags:
+      - dataset-filter-items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountDatasetFilterItems'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: integer
+          description: ''
   /api/datasets/:
     get:
       operationId: datasets_list
@@ -438,8 +534,39 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
+  /api/settings/:
+    get:
+      operationId: settings_retrieve
+      description: Return the settings that the frontend needs in order to generate
+        a report.
+      tags:
+      - settings
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+          description: ''
 components:
   schemas:
+    CountDatasetFilterItems:
+      type: object
+      properties:
+        dataset_id_original:
+          type: integer
+          description: The ID of the dataset to filter
+        filter_message:
+          allOf:
+          - $ref: '#/components/schemas/FilterDataset'
+          description: The filter to apply
+      required:
+      - dataset_id_original
+      - filter_message
     CreateDataset:
       type: object
       properties:
@@ -509,6 +636,18 @@ components:
       - parent_name
       - phase
       - state
+    DistinctValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The field's value
+        count:
+          type: integer
+          description: The number of data items with this value
+      required:
+      - count
+      - value
     FilterDataset:
       type: object
       properties:
@@ -548,6 +687,26 @@ components:
         * `TIME_VARIANCE` - Time Variance
         * `CHECKED` - Checked
         * `DELETED` - Deleted
+    Settings:
+      type: object
+      properties:
+        user:
+          type: string
+          description: The service account that the template and folder must be shared
+            with
+        template:
+          type: object
+          additionalProperties:
+            type: string
+          description: The ID of the default Google Docs template, by language
+        folder:
+          type: string
+          description: The ID of the default Google Drive folder in which to create
+            reports
+      required:
+      - folder
+      - template
+      - user
     StateEnum:
       enum:
       - IN_PROGRESS
