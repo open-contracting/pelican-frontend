@@ -1,0 +1,46 @@
+import json
+from pathlib import Path
+
+from django.test import SimpleTestCase
+
+from api.views import (
+    FieldLevelCheckDetailSerializer,
+    FieldLevelCheckSerializer,
+    ResourceLevelCheckDetailSerializer,
+    ResourceLevelCheckSerializer,
+)
+
+# Entries from tests/fixtures/pelican-backend.sql.gz, with the example arrays cut to one entry each.
+with (Path(__file__).parent.parent / "fixtures" / "reports.json").open() as f:
+    REPORTS = json.load(f)
+
+
+class SerializerTests(SimpleTestCase):
+    """
+    The report views return the ``report`` table's JSON verbatim, so the serializers document the responses without
+    validating them. These tests are what keeps the two in agreement.
+    """
+
+    def test_field_level_report(self):
+        for path, check in REPORTS["field_level_report"].items():
+            with self.subTest(path=path):
+                serializer = FieldLevelCheckSerializer(data=check)
+
+                self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_field_level_detail(self):
+        serializer = FieldLevelCheckDetailSerializer(data=REPORTS["field_level_detail"])
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_compiled_release_level_report(self):
+        for name, check in REPORTS["compiled_release_level_report"].items():
+            with self.subTest(name=name):
+                serializer = ResourceLevelCheckSerializer(data=check)
+
+                self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_compiled_release_level_detail(self):
+        serializer = ResourceLevelCheckDetailSerializer(data=REPORTS["compiled_release_level_detail"])
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)

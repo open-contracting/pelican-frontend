@@ -232,7 +232,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ResourceLevelCheckDetail'
           description: ''
   /api/datasets/{id}/compiled_release_level/{name}/failures/:
     get:
@@ -266,7 +266,8 @@ paths:
   /api/datasets/{id}/compiled_release_level_report/:
     get:
       operationId: datasets_compiled_release_level_report_retrieve
-      description: Return a report of the dataset's compiled release-level checks.
+      description: Return a report of the dataset's compiled release-level checks,
+        by check name.
       parameters:
       - in: path
         name: id
@@ -284,7 +285,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ResourceLevelReport'
           description: ''
   /api/datasets/{id}/dataset_level_report/:
     get:
@@ -335,7 +336,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/FieldLevelCheckDetail'
           description: ''
   /api/datasets/{id}/field_level/{name}/failures/:
     get:
@@ -378,7 +379,7 @@ paths:
   /api/datasets/{id}/field_level_report/:
     get:
       operationId: datasets_field_level_report_retrieve
-      description: Return a report of the dataset's field-level checks.
+      description: Return a report of the dataset's field-level checks, by field path.
       parameters:
       - in: path
         name: id
@@ -396,7 +397,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/FieldLevelReport'
           description: ''
   /api/datasets/{id}/filter/:
     post:
@@ -675,6 +676,223 @@ components:
       required:
       - count
       - value
+    ExampleMeta:
+      type: object
+      properties:
+        ocid:
+          type: string
+          description: The compiled release's OCID
+        item_id:
+          type: integer
+          description: The data item's ID
+      required:
+      - item_id
+      - ocid
+    FieldLevelCheck:
+      type: object
+      properties:
+        coverage:
+          $ref: '#/components/schemas/FieldLevelGroup'
+        quality:
+          $ref: '#/components/schemas/FieldLevelGroup'
+        examples_filled:
+          type: boolean
+          description: Whether the examples are in the database
+        processing_order:
+          type: integer
+          description: The order in which to display the field
+      required:
+      - coverage
+      - examples_filled
+      - processing_order
+      - quality
+    FieldLevelCheckDetail:
+      type: object
+      properties:
+        coverage:
+          $ref: '#/components/schemas/FieldLevelGroupDetail'
+        quality:
+          $ref: '#/components/schemas/FieldLevelGroupDetail'
+        examples_filled:
+          type: boolean
+          description: Whether the examples are in the database
+        processing_order:
+          type: integer
+          description: The order in which to display the field
+        time:
+          type: number
+          format: double
+          description: The number of seconds the request took
+      required:
+      - coverage
+      - examples_filled
+      - processing_order
+      - quality
+      - time
+    FieldLevelCounts:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          description: The number of times the check was applied
+        passed_count:
+          type: integer
+          description: The number of times the check passed
+        failed_count:
+          type: integer
+          description: The number of times the check failed
+        passed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+          nullable: true
+        failed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+          nullable: true
+      required:
+      - failed_count
+      - failed_examples
+      - passed_count
+      - passed_examples
+      - total_count
+    FieldLevelCountsDetail:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          description: The number of times the check was applied
+        passed_count:
+          type: integer
+          description: The number of times the check passed
+        failed_count:
+          type: integer
+          description: The number of times the check failed
+        passed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+        failed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+      required:
+      - failed_count
+      - failed_examples
+      - passed_count
+      - passed_examples
+      - total_count
+    FieldLevelExample:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ExampleMeta'
+        path:
+          type: string
+          description: The field's path
+        result:
+          $ref: '#/components/schemas/FieldLevelExampleResult'
+      required:
+      - meta
+      - path
+      - result
+    FieldLevelExampleResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The check's name
+        result:
+          type: boolean
+          description: Whether the check passed
+        reason:
+          type: string
+          nullable: true
+          description: The reason the check failed
+        value:
+          nullable: true
+          description: The field's value, if the check failed
+        version:
+          type: number
+          format: double
+          description: The check's version
+      required:
+      - name
+      - reason
+      - result
+      - value
+      - version
+    FieldLevelGroup:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          description: The number of times the check was applied
+        passed_count:
+          type: integer
+          description: The number of times the check passed
+        failed_count:
+          type: integer
+          description: The number of times the check failed
+        passed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+          nullable: true
+        failed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+          nullable: true
+        checks:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/FieldLevelCounts'
+          description: The checks, by name
+      required:
+      - checks
+      - failed_count
+      - failed_examples
+      - passed_count
+      - passed_examples
+      - total_count
+    FieldLevelGroupDetail:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          description: The number of times the check was applied
+        passed_count:
+          type: integer
+          description: The number of times the check passed
+        failed_count:
+          type: integer
+          description: The number of times the check failed
+        passed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+        failed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldLevelExample'
+        checks:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/FieldLevelCountsDetail'
+          description: The checks, by name
+      required:
+      - checks
+      - failed_count
+      - failed_examples
+      - passed_count
+      - passed_examples
+      - total_count
+    FieldLevelReport:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/FieldLevelCheck'
     FilterDataset:
       type: object
       properties:
@@ -793,6 +1011,163 @@ components:
           description: The reason the report could not be created
       required:
       - reason
+    ResourceLevelCheck:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The check's name
+        total_count:
+          type: integer
+          description: The number of compiled releases the check was applied to
+        passed_count:
+          type: integer
+          description: The number of compiled releases that passed
+        failed_count:
+          type: integer
+          description: The number of compiled releases that failed
+        undefined_count:
+          type: integer
+          description: The number of compiled releases the check did not apply to
+        individual_application_count:
+          type: integer
+          description: The number of times the check was applied
+        individual_passed_count:
+          type: integer
+          description: The number of times the check passed
+        individual_failed_count:
+          type: integer
+          description: The number of times the check failed
+        examples_filled:
+          type: boolean
+          description: Whether the examples are in the database
+        passed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLevelExample'
+        failed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLevelExample'
+        undefined_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLevelExample'
+      required:
+      - examples_filled
+      - failed_count
+      - failed_examples
+      - individual_application_count
+      - individual_failed_count
+      - individual_passed_count
+      - name
+      - passed_count
+      - passed_examples
+      - total_count
+      - undefined_count
+      - undefined_examples
+    ResourceLevelCheckDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The check's name
+        total_count:
+          type: integer
+          description: The number of compiled releases the check was applied to
+        passed_count:
+          type: integer
+          description: The number of compiled releases that passed
+        failed_count:
+          type: integer
+          description: The number of compiled releases that failed
+        undefined_count:
+          type: integer
+          description: The number of compiled releases the check did not apply to
+        individual_application_count:
+          type: integer
+          description: The number of times the check was applied
+        individual_passed_count:
+          type: integer
+          description: The number of times the check passed
+        individual_failed_count:
+          type: integer
+          description: The number of times the check failed
+        examples_filled:
+          type: boolean
+          description: Whether the examples are in the database
+        passed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLevelExample'
+        failed_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLevelExample'
+        undefined_examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLevelExample'
+        time:
+          type: number
+          format: double
+          description: The number of seconds the request took
+      required:
+      - examples_filled
+      - failed_count
+      - failed_examples
+      - individual_application_count
+      - individual_failed_count
+      - individual_passed_count
+      - name
+      - passed_count
+      - passed_examples
+      - time
+      - total_count
+      - undefined_count
+      - undefined_examples
+    ResourceLevelExample:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/ExampleMeta'
+        result:
+          $ref: '#/components/schemas/ResourceLevelExampleResult'
+      required:
+      - meta
+      - result
+    ResourceLevelExampleResult:
+      type: object
+      properties:
+        result:
+          type: boolean
+          nullable: true
+          description: Whether the check passed
+        meta:
+          nullable: true
+          description: Any additional data to help interpret the result
+        pass_count:
+          type: integer
+          nullable: true
+          description: The number of times the check passed
+        application_count:
+          type: integer
+          nullable: true
+          description: The number of times the check was applied
+        version:
+          type: number
+          format: double
+          description: The check's version
+      required:
+      - application_count
+      - meta
+      - pass_count
+      - result
+      - version
+    ResourceLevelReport:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/ResourceLevelCheck'
     Settings:
       type: object
       properties:

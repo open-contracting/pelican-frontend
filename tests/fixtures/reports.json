@@ -1,0 +1,306 @@
+{
+  "compiled_release_level_detail": {
+    "examples_filled": false,
+    "failed_count": 67,
+    "failed_examples": [
+      {
+        "meta": {
+          "item_id": 1,
+          "ocid": "Exc"
+        },
+        "result": {
+          "application_count": 1,
+          "meta": {
+            "processed_awards": [
+              {
+                "id": "officiaoccaecat exercitation en",
+                "path": "awards[0]",
+                "result": false
+              }
+            ]
+          },
+          "pass_count": 0,
+          "result": false,
+          "version": 1.0
+        }
+      }
+    ],
+    "individual_application_count": 176,
+    "individual_failed_count": 80,
+    "individual_passed_count": 96,
+    "name": "coherent.awards_status",
+    "passed_count": 14,
+    "passed_examples": [
+      {
+        "meta": {
+          "item_id": 12,
+          "ocid": "aliqua consequat labore commodo esse"
+        },
+        "result": {
+          "application_count": 1,
+          "meta": {
+            "processed_awards": [
+              {
+                "id": "enim consequat velit dolore mollit",
+                "path": "awards[4]",
+                "result": true
+              }
+            ]
+          },
+          "pass_count": 1,
+          "result": true,
+          "version": 1.0
+        }
+      }
+    ],
+    "time": 0.05,
+    "total_count": 97,
+    "undefined_count": 16,
+    "undefined_examples": [
+      {
+        "meta": {
+          "item_id": 4,
+          "ocid": "Excepteur pariatur"
+        },
+        "result": {
+          "application_count": null,
+          "meta": {
+            "reason": "no award with an id is inactive"
+          },
+          "pass_count": null,
+          "result": null,
+          "version": 1.0
+        }
+      }
+    ]
+  },
+  "compiled_release_level_report": {
+    "coherent.awards_status": {
+      "examples_filled": false,
+      "failed_count": 67,
+      "failed_examples": [],
+      "individual_application_count": 176,
+      "individual_failed_count": 80,
+      "individual_passed_count": 96,
+      "name": "coherent.awards_status",
+      "passed_count": 14,
+      "passed_examples": [],
+      "total_count": 97,
+      "undefined_count": 16,
+      "undefined_examples": []
+    },
+    "coherent.dates": {
+      "examples_filled": false,
+      "failed_count": 97,
+      "failed_examples": [],
+      "individual_application_count": 2279,
+      "individual_failed_count": 1128,
+      "individual_passed_count": 1151,
+      "name": "coherent.dates",
+      "passed_count": 0,
+      "passed_examples": [],
+      "total_count": 97,
+      "undefined_count": 0,
+      "undefined_examples": []
+    }
+  },
+  "field_level_detail": {
+    "coverage": {
+      "checks": {
+        "exists": {
+          "failed_count": 0,
+          "failed_examples": [],
+          "passed_count": 97,
+          "passed_examples": [
+            {
+              "meta": {
+                "item_id": 78,
+                "ocid": "pariatur ipsum id in sint"
+              },
+              "path": "ocid",
+              "result": {
+                "name": "exists",
+                "reason": null,
+                "result": true,
+                "value": null,
+                "version": 1.0
+              }
+            }
+          ],
+          "total_count": 97
+        },
+        "non_empty": {
+          "failed_count": 0,
+          "failed_examples": [],
+          "passed_count": 97,
+          "passed_examples": [
+            {
+              "meta": {
+                "item_id": 82,
+                "ocid": "sint culpa et eu"
+              },
+              "path": "ocid",
+              "result": {
+                "name": "non_empty",
+                "reason": null,
+                "result": true,
+                "value": null,
+                "version": 1.0
+              }
+            }
+          ],
+          "total_count": 97
+        }
+      },
+      "failed_count": 0,
+      "failed_examples": [],
+      "passed_count": 97,
+      "passed_examples": [
+        {
+          "meta": {
+            "item_id": 22,
+            "ocid": "consectetur dolor enim ut"
+          },
+          "path": "ocid",
+          "result": {
+            "name": "exists",
+            "reason": null,
+            "result": true,
+            "value": null,
+            "version": 1.0
+          }
+        }
+      ],
+      "total_count": 97
+    },
+    "examples_filled": false,
+    "processing_order": 0,
+    "quality": {
+      "checks": {
+        "ocid_prefix_check": {
+          "failed_count": 97,
+          "failed_examples": [
+            {
+              "meta": {
+                "item_id": 48,
+                "ocid": "et adipisicing"
+              },
+              "path": "ocid",
+              "result": {
+                "name": "ocid_prefix_check",
+                "reason": "ocid prefix not in codelist",
+                "result": false,
+                "value": "et adipisicing",
+                "version": 1.0
+              }
+            }
+          ],
+          "passed_count": 0,
+          "passed_examples": [],
+          "total_count": 97
+        }
+      },
+      "failed_count": 97,
+      "failed_examples": [
+        {
+          "meta": {
+            "item_id": 93,
+            "ocid": "velit pariatur adipisicing nulla"
+          },
+          "path": "ocid",
+          "result": {
+            "name": "ocid_prefix_check",
+            "reason": "ocid prefix not in codelist",
+            "result": false,
+            "value": "velit pariatur adipisicing nulla",
+            "version": 1.0
+          }
+        }
+      ],
+      "passed_count": 0,
+      "passed_examples": [],
+      "total_count": 97
+    },
+    "time": 0.05
+  },
+  "field_level_report": {
+    "id": {
+      "coverage": {
+        "checks": {
+          "exists": {
+            "failed_count": 0,
+            "failed_examples": null,
+            "passed_count": 97,
+            "passed_examples": null,
+            "total_count": 97
+          },
+          "non_empty": {
+            "failed_count": 0,
+            "failed_examples": null,
+            "passed_count": 97,
+            "passed_examples": null,
+            "total_count": 97
+          }
+        },
+        "failed_count": 0,
+        "failed_examples": null,
+        "passed_count": 97,
+        "passed_examples": null,
+        "total_count": 97
+      },
+      "examples_filled": false,
+      "processing_order": 1,
+      "quality": {
+        "checks": {},
+        "failed_count": 0,
+        "failed_examples": null,
+        "passed_count": 0,
+        "passed_examples": null,
+        "total_count": 0
+      }
+    },
+    "ocid": {
+      "coverage": {
+        "checks": {
+          "exists": {
+            "failed_count": 0,
+            "failed_examples": null,
+            "passed_count": 97,
+            "passed_examples": null,
+            "total_count": 97
+          },
+          "non_empty": {
+            "failed_count": 0,
+            "failed_examples": null,
+            "passed_count": 97,
+            "passed_examples": null,
+            "total_count": 97
+          }
+        },
+        "failed_count": 0,
+        "failed_examples": null,
+        "passed_count": 97,
+        "passed_examples": null,
+        "total_count": 97
+      },
+      "examples_filled": false,
+      "processing_order": 0,
+      "quality": {
+        "checks": {
+          "ocid_prefix_check": {
+            "failed_count": 97,
+            "failed_examples": null,
+            "passed_count": 0,
+            "passed_examples": null,
+            "total_count": 97
+          }
+        },
+        "failed_count": 97,
+        "failed_examples": null,
+        "passed_count": 0,
+        "passed_examples": null,
+        "total_count": 97
+      }
+    }
+  }
+}

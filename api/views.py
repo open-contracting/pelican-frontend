@@ -5,6 +5,7 @@ from django.db import connections
 from django.db.models import Count, F, OuterRef, Subquery
 from django.http import HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
+from drf_spectacular.extensions import OpenApiSerializerExtension
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
@@ -104,6 +105,119 @@ class SettingsSerializer(serializers.Serializer):
         child=serializers.CharField(), help_text="The ID of the default Google Docs template, by language"
     )
     folder = serializers.CharField(help_text="The ID of the default Google Drive folder in which to create reports")
+
+
+class ExampleMetaSerializer(serializers.Serializer):
+    ocid = serializers.CharField(help_text="The compiled release's OCID")
+    item_id = serializers.IntegerField(help_text="The data item's ID")
+
+
+class FieldLevelExampleResultSerializer(serializers.Serializer):
+    name = serializers.CharField(help_text="The check's name")
+    result = serializers.BooleanField(help_text="Whether the check passed")
+    reason = serializers.CharField(allow_null=True, help_text="The reason the check failed")
+    value = serializers.JSONField(allow_null=True, help_text="The field's value, if the check failed")
+    version = serializers.FloatField(help_text="The check's version")
+
+
+class FieldLevelExampleSerializer(serializers.Serializer):
+    meta = ExampleMetaSerializer()
+    path = serializers.CharField(help_text="The field's path")
+    result = FieldLevelExampleResultSerializer()
+
+
+class ResourceLevelExampleResultSerializer(serializers.Serializer):
+    result = serializers.BooleanField(allow_null=True, help_text="Whether the check passed")
+    meta = serializers.JSONField(allow_null=True, help_text="Any additional data to help interpret the result")
+    pass_count = serializers.IntegerField(allow_null=True, help_text="The number of times the check passed")
+    application_count = serializers.IntegerField(
+        allow_null=True, help_text="The number of times the check was applied"
+    )
+    version = serializers.FloatField(help_text="The check's version")
+
+
+class ResourceLevelExampleSerializer(serializers.Serializer):
+    meta = ExampleMetaSerializer()
+    result = ResourceLevelExampleResultSerializer()
+
+
+class ReportSerializer(serializers.Serializer):
+    """A report, as an object keyed by check name. Subclasses set ``check_serializer``."""
+
+    check_serializer = None
+
+
+class ReportSerializerExtension(OpenApiSerializerExtension):
+    target_class = ReportSerializer
+    match_subclasses = True
+
+    def map_serializer(self, auto_schema, direction):
+        component = auto_schema.resolve_serializer(self.target.check_serializer(), direction)
+        return {"type": "object", "additionalProperties": component.ref}
+
+
+# The counts are per occurrence of the field, which can exceed the number of compiled releases.
+# The examples are null until the field_level/{name}/ endpoint fills them.
+class FieldLevelCountsSerializer(serializers.Serializer):
+    total_count = serializers.IntegerField(help_text="The number of times the check was applied")
+    passed_count = serializers.IntegerField(help_text="The number of times the check passed")
+    failed_count = serializers.IntegerField(help_text="The number of times the check failed")
+    passed_examples = FieldLevelExampleSerializer(many=True, allow_null=True)
+    failed_examples = FieldLevelExampleSerializer(many=True, allow_null=True)
+
+
+class FieldLevelGroupSerializer(FieldLevelCountsSerializer):
+    checks = serializers.DictField(child=FieldLevelCountsSerializer(), help_text="The checks, by name")
+
+
+class FieldLevelCheckSerializer(serializers.Serializer):
+    coverage = FieldLevelGroupSerializer()
+    quality = FieldLevelGroupSerializer()
+    examples_filled = serializers.BooleanField(help_text="Whether the examples are in the database")
+    processing_order = serializers.IntegerField(help_text="The order in which to display the field")
+
+
+class FieldLevelReportSerializer(ReportSerializer):
+    check_serializer = FieldLevelCheckSerializer
+
+
+class FieldLevelCountsDetailSerializer(FieldLevelCountsSerializer):
+    passed_examples = FieldLevelExampleSerializer(many=True)
+    failed_examples = FieldLevelExampleSerializer(many=True)
+
+
+class FieldLevelGroupDetailSerializer(FieldLevelCountsDetailSerializer):
+    checks = serializers.DictField(child=FieldLevelCountsDetailSerializer(), help_text="The checks, by name")
+
+
+class FieldLevelCheckDetailSerializer(FieldLevelCheckSerializer):
+    coverage = FieldLevelGroupDetailSerializer()
+    quality = FieldLevelGroupDetailSerializer()
+    time = serializers.FloatField(help_text="The number of seconds the request took")
+
+
+# The examples are empty until the compiled_release_level/{name}/ endpoint fills them.
+class ResourceLevelCheckSerializer(serializers.Serializer):
+    name = serializers.CharField(help_text="The check's name")
+    total_count = serializers.IntegerField(help_text="The number of compiled releases the check was applied to")
+    passed_count = serializers.IntegerField(help_text="The number of compiled releases that passed")
+    failed_count = serializers.IntegerField(help_text="The number of compiled releases that failed")
+    undefined_count = serializers.IntegerField(help_text="The number of compiled releases the check did not apply to")
+    individual_application_count = serializers.IntegerField(help_text="The number of times the check was applied")
+    individual_passed_count = serializers.IntegerField(help_text="The number of times the check passed")
+    individual_failed_count = serializers.IntegerField(help_text="The number of times the check failed")
+    examples_filled = serializers.BooleanField(help_text="Whether the examples are in the database")
+    passed_examples = ResourceLevelExampleSerializer(many=True)
+    failed_examples = ResourceLevelExampleSerializer(many=True)
+    undefined_examples = ResourceLevelExampleSerializer(many=True)
+
+
+class ResourceLevelReportSerializer(ReportSerializer):
+    check_serializer = ResourceLevelCheckSerializer
+
+
+class ResourceLevelCheckDetailSerializer(ResourceLevelCheckSerializer):
+    time = serializers.FloatField(help_text="The number of seconds the request took")
 
 
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -212,16 +326,16 @@ class DatasetViewSet(viewsets.ViewSet):
         publish({"dataset_id": pk}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
 
-    @extend_schema(responses={200: {"type": "object"}})
+    @extend_schema(responses=FieldLevelReportSerializer)
     @action(detail=True)
     def field_level_report(self, request, pk=None):
-        """Return a report of the dataset's field-level checks."""
+        """Return a report of the dataset's field-level checks, by field path."""
         return Response(get_object_or_404(Report, dataset=pk, type="field_level_check").data)
 
-    @extend_schema(responses={200: {"type": "object"}})
+    @extend_schema(responses=ResourceLevelReportSerializer)
     @action(detail=True)
     def compiled_release_level_report(self, request, pk=None):
-        """Return a report of the dataset's compiled release-level checks."""
+        """Return a report of the dataset's compiled release-level checks, by check name."""
         return Response(get_object_or_404(Report, dataset=pk, type="resource_level_check").data)
 
     @extend_schema(responses={200: {"type": "object"}})
@@ -271,7 +385,7 @@ class DatasetViewSet(viewsets.ViewSet):
 
 
 class FieldLevelDetail(views.APIView):
-    @extend_schema(responses={200: {"type": "object"}})
+    @extend_schema(responses=FieldLevelCheckDetailSerializer)
     def get(self, request, pk, name, format=None):
         """Return a report and examples of one field-level check."""
         start_time = time.time()
@@ -292,7 +406,7 @@ class FieldLevelDetail(views.APIView):
 
 
 class ResourceLevelDetail(views.APIView):
-    @extend_schema(responses={200: {"type": "object"}})
+    @extend_schema(responses=ResourceLevelCheckDetailSerializer)
     def get(self, request, pk, name, format=None):
         """Return a report and examples of one compiled release-level check."""
         start_time = time.time()
