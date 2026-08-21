@@ -1,6 +1,6 @@
 import { useErrorStore } from "@/stores/error.js";
 
-// Requests through get() report their failure via ErrorAlert, so callers can ignore the rejection.
+// Report a failure via ErrorAlert, so that a caller can ignore it.
 async function get(url) {
   let response;
 
@@ -12,7 +12,6 @@ async function get(url) {
     throw error;
   }
 
-  // fetch resolves whatever the status, so a failure has to be raised here.
   if (!response.ok) {
     useErrorStore().record(response.status);
     throw new Error(`${response.status} ${response.statusText}`);
@@ -21,7 +20,7 @@ async function get(url) {
   return response.json();
 }
 
-// postJSON() reports nothing and returns the response, for a caller that renders its own errors.
+// Return the response without reporting a failure, for a caller that renders its own errors.
 function postJSON(url, body, signal) {
   return fetch(url, {
     method: "POST",

@@ -178,7 +178,9 @@ class FieldLevelExampleSerializer(serializers.Serializer):
 
 class ResourceLevelExampleResultSerializer(serializers.Serializer):
     result = serializers.BooleanField(allow_null=True, help_text="Whether the check passed")
-    meta = serializers.JSONField(allow_null=True, help_text="Any additional data to help interpret the result")
+    meta = serializers.JSONField(
+        allow_null=True, help_text="Any additional data to help interpret the result. Its properties vary by check."
+    )
     pass_count = serializers.IntegerField(allow_null=True, help_text="The number of times the check passed")
     application_count = serializers.IntegerField(
         allow_null=True, help_text="The number of times the check was applied"
@@ -272,11 +274,12 @@ class ResourceLevelCheckDetailSerializer(ResourceLevelCheckSerializer):
     time = serializers.FloatField(help_text="The duration of the request, in seconds")
 
 
-# The meta of these two checks varies by check. See docs/browse.rst for its semantics.
 class DatasetLevelCheckSerializer(serializers.Serializer):
     result = serializers.BooleanField(allow_null=True, help_text="Whether the check passed, or null if not applicable")
     value = serializers.IntegerField(allow_null=True)
-    meta = serializers.JSONField(help_text="Any additional data to help interpret the result")
+    meta = serializers.JSONField(
+        help_text="Any additional data to help interpret the result. Its properties vary by check."
+    )
 
 
 class DatasetLevelReportSerializer(ReportSerializer):
@@ -292,7 +295,9 @@ class TimeVarianceLevelCheckSerializer(serializers.Serializer):
         allow_null=True, help_text="Whether the check passed, or null if not applicable"
     )
     check_value = serializers.IntegerField(allow_null=True)
-    meta = serializers.JSONField(help_text="Any additional data to help interpret the result")
+    meta = serializers.JSONField(
+        help_text="Any additional data to help interpret the result. Its properties vary by check."
+    )
 
 
 class TimeVarianceLevelReportSerializer(ReportSerializer):

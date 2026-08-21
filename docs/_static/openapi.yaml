@@ -678,7 +678,8 @@ components:
           type: integer
           nullable: true
         meta:
-          description: Any additional data to help interpret the result
+          description: Any additional data to help interpret the result. Its properties
+            vary by check.
       required:
       - meta
       - result
@@ -1198,7 +1199,8 @@ components:
           description: Whether the check passed
         meta:
           nullable: true
-          description: Any additional data to help interpret the result
+          description: Any additional data to help interpret the result. Its properties
+            vary by check.
         pass_count:
           type: integer
           nullable: true
@@ -1319,7 +1321,8 @@ components:
           type: integer
           nullable: true
         meta:
-          description: Any additional data to help interpret the result
+          description: Any additional data to help interpret the result. Its properties
+            vary by check.
       required:
       - check_result
       - check_value

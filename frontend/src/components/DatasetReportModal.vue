@@ -416,7 +416,7 @@ function createDatasetReport() {
         return;
       }
 
-      // The endpoint reports its own failures as a status in a 200 response.
+      // The endpoint returns 200 even when the export fails, reporting it in the body's status property.
       const body = await response.json();
 
       failedTags.value = body.failed_tags?.length ? body.failed_tags : null;
