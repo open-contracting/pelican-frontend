@@ -81,7 +81,7 @@ import ProgressBar from "./ProgressBar.vue";
 
 const props = withDefaults(
   defineProps<{
-    check: FieldLevelCheck;
+    check?: FieldLevelCheck;
     showStats?: boolean;
   }>(),
   { showStats: true },
@@ -94,7 +94,7 @@ const { formatNumber, formatPercentage } = useFormatters();
 const detailRouterArguments = computed(() => ({
   name: "fieldCheckDetail",
   params: {
-    path: props.check.path,
+    path: props.check?.path,
     datasetId: datasetStore.datasetId,
   },
 }));

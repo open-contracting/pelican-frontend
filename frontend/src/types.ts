@@ -105,10 +105,10 @@ export interface SingleValueShareMeta extends DatasetLevelMeta {
   examples: ExampleMeta[];
 }
 
-/** A node in the field-level check tree: the check at this path, and a child node per following path segment. */
+/** A node in the field-level check tree: the check at this path, if any, and a child node per following segment. */
 export interface FieldCheckTreeNode {
-  _check?: FieldLevelCheck;
-  [segment: string]: FieldCheckTreeNode | FieldLevelCheck | undefined;
+  check?: FieldLevelCheck;
+  children: Map<string, FieldCheckTreeNode>;
 }
 
 /** A JSON value, as VueJsonPretty renders it. */

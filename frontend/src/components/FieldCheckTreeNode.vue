@@ -3,7 +3,7 @@
     :key="path"
     v-slot="{ to }"
     :check="check"
-    :show-stats="filter(data._check)"
+    :show-stats="check != null && filter(check)"
     :class="{ hidden: hide || !isSearched(data) }"
   >
     <div class="d-flex flex-row align-items-center">
@@ -37,54 +37,50 @@
     </div>
   </FieldCheckTableRow>
 
-  <template v-if="hasChildren">
-    <template v-for="n in children" :key="n._path">
-      <tree-node
-        :data="n"
-        :depth="depth + 1"
-        :hide="!expanded"
-      />
-    </template>
+  <template v-for="[segment, n] in data.children" :key="segment">
+    <tree-node
+      :data="n"
+      :depth="depth + 1"
+      :hide="!expanded"
+    />
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import { useUiStore } from "@/stores/ui.js";
+import type { FieldCheckTreeNode as Node } from "@/types.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 
 defineOptions({ name: "TreeNode" });
 
-const props = defineProps({
-  data: Object,
-  depth: { type: Number, default: 0 },
-  hide: { type: Boolean, default: false },
-});
+const props = withDefaults(
+  defineProps<{
+    data: Node;
+    depth?: number;
+    hide?: boolean;
+  }>(),
+  { depth: 0, hide: false },
+);
 
 const ui = useUiStore();
 const { highlightSearchLast, isPathSearched } = useFieldCheckSearch();
 
-function getChildren(node) {
-  const result = { ...node };
-  delete result._check;
-  return result;
+function isSearched(node: Node): boolean {
+  return (
+    (node.check != null && isPathSearched(node.check.path) && filter.value(node.check)) || isSearchedSubTree(node)
+  );
 }
 
-function isSearched(node) {
-  return (isPathSearched(node._check.path) && filter.value(node._check)) || isSearchedSubTree(node);
+function isSearchedSubTree(node: Node) {
+  return [...node.children.values()].some((n) => isSearched(n));
 }
 
-function isSearchedSubTree(node) {
-  return Object.values(getChildren(node)).some((n) => isSearched(n));
-}
-
-const check = computed(() => props.data._check);
-const path = computed(() => props.data._check.path);
+const check = computed(() => props.data.check);
+const path = computed(() => props.data.check?.path ?? "");
 const filter = computed(() => ui.fieldLevelFilter);
-const children = computed(() => getChildren(props.data));
-const hasChildren = computed(() => Object.keys(children.value).length > 0);
-const isExpandable = computed(() => hasChildren.value && isSearchedSubTree(props.data));
+const isExpandable = computed(() => props.data.children.size > 0 && isSearchedSubTree(props.data));
 const expanded = computed({
   get: () => ui.isFieldCheckExpanded(path.value),
   set: (value) => {
