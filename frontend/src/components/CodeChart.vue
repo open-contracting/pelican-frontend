@@ -7,28 +7,44 @@
   />
 </template>
 
-<script setup>
-import { onMounted, reactive, useTemplateRef } from "vue";
+<script setup lang="ts">
+import { onMounted, ref, useTemplateRef } from "vue";
 import { GChart } from "vue-google-charts";
+import type { GoogleChartOptions } from "vue-google-charts/dist/types";
 import { useI18n } from "vue-i18n";
+import type { ChartRow } from "@/composables/useBarChart.js";
 import { ANNOTATION_FONT, BAR_CHART_OPTIONS, shareStyle, textWidth } from "@/composables/useBarChart.js";
 import { useFormatters } from "@/composables/useFormatters.js";
 import { DATASET_CHECK_STYLES, DATASET_CHECK_TICKS } from "@/config.js";
+import type { CodeMeta, DatasetLevelCheck } from "@/types.js";
 import { orderedShares } from "@/util.js";
 
-const props = defineProps(["check", "limit"]);
+/** A bar, before it becomes a row: the chart formats the share and the count into one annotation. */
+interface Bar {
+  code: string;
+  share: number;
+  count: number;
+  style: string;
+}
+
+const props = defineProps<{
+  check: DatasetLevelCheck;
+  limit?: boolean;
+}>();
 const { t } = useI18n();
 const { formatPercentage, formatNumber } = useFormatters();
 
-const chart = useTemplateRef("chart");
+const chart = useTemplateRef<InstanceType<typeof GChart>>("chart");
 
 const ROW_HEIGHT = 30;
 // Google Charts draws an annotation this far after its bar. Reserving less clips it.
 const GAP = 12;
 // Elide long labels instead of crowding the bars.
 const MAX_LABEL_WIDTH = 0.5;
+// Beyond this many bars, a limited chart merges the remaining shares into the last one.
+const MAX_BARS = 10;
 
-const chartData = reactive([
+const chartData = ref<ChartRow[]>([
   [
     t("datasetLevel.charts.code"),
     t("datasetLevel.charts.share"),
@@ -38,70 +54,65 @@ const chartData = reactive([
   ],
 ]);
 
-const chartOptions = reactive({
-  ...BAR_CHART_OPTIONS,
-  chartArea: {
-    top: 0,
-  },
-  hAxis: {
-    viewWindow: {
-      min: 0,
-      max: 1,
-    },
-    gridlines: {
-      count: 0,
-    },
-    format: "#,###.#%",
-  },
-});
+// The rest of the options depend on the bars, which are only known once the chart can be measured.
+const chartOptions = ref<GoogleChartOptions>({ ...BAR_CHART_OPTIONS });
 
 onMounted(() => {
-  const shares = orderedShares(props.check.meta.shares);
+  const meta = props.check.meta as CodeMeta;
   const ticks = DATASET_CHECK_TICKS[props.check.name];
   const styles = DATASET_CHECK_STYLES[props.check.name];
+  const bars: Bar[] = [];
 
-  // Index 0 of chartData is the header.
-  for (const key in shares) {
-    if (props.limit && chartData.length > 10) {
-      chartData[10][0] = t("datasetLevel.charts.other");
-      chartData[10][1] += shares[key][1].share;
-      chartData[10][2] += shares[key][1].share;
-      chartData[10][4] += shares[key][1].count;
+  for (const [code, share] of orderedShares(meta.shares)) {
+    if (props.limit && bars.length === MAX_BARS) {
+      const other = bars[MAX_BARS - 1];
+      other.code = t("datasetLevel.charts.other");
+      other.share += share.share;
+      other.count += share.count;
     } else {
-      let chartStyles = "";
-      if (ticks && (!styles?.length || styles.includes(shares[key][0]))) {
-        chartStyles = shareStyle(shares[key][1].share, ticks);
-      }
-      chartData.push([shares[key][0], shares[key][1].share, shares[key][1].share, chartStyles, shares[key][1].count]);
+      bars.push({
+        code,
+        share: share.share,
+        count: share.count,
+        style: ticks && (!styles?.length || styles.includes(code)) ? shareStyle(share.share, ticks) : "",
+      });
     }
   }
 
-  for (let i = 1; i < chartData.length; i++) {
-    if (props.limit) {
-      chartData[i][2] = formatPercentage(chartData[i][2]);
-    } else {
-      chartData[i][2] = `${formatPercentage(chartData[i][2])} (${formatNumber(chartData[i][4])})`;
-    }
-  }
+  const annotation = (bar: Bar) =>
+    props.limit ? formatPercentage(bar.share) : `${formatPercentage(bar.share)} (${formatNumber(bar.count)})`;
+
+  chartData.value.push(...bars.map((bar): ChartRow => [bar.code, bar.share, annotation(bar), bar.style, bar.count]));
 
   // Size the chart to its bars, so that they are as thick here as in the other charts.
-  chartOptions.chartArea.height = (chartData.length - 1) * ROW_HEIGHT;
-  chartOptions.height = chartOptions.chartArea.height + (ticks ? ROW_HEIGHT : 0);
-
-  if (ticks) {
-    chartOptions.hAxis.ticks = ticks.slice(1);
-  } else {
-    chartOptions.hAxis.textPosition = "none";
-  }
+  const height = bars.length * ROW_HEIGHT;
 
   // Reserve room for the widest label and annotation, which Google Charts otherwise elides.
-  const width = chart.value.$el.clientWidth;
-  const labelWidth = Math.min(textWidth(chartData.slice(1).map((row) => row[0])) + GAP, width * MAX_LABEL_WIDTH);
-  const annotationWidth = textWidth(
-    chartData.slice(1).map((row) => row[2]),
-    ANNOTATION_FONT,
-  );
-  chartOptions.chartArea.left = `${(labelWidth / width) * 100}%`;
-  chartOptions.chartArea.width = `${((width - labelWidth - annotationWidth - GAP) / width) * 100}%`;
+  const width = chart.value?.$el.clientWidth ?? 0;
+  const labelWidth = Math.min(textWidth(bars.map((bar) => bar.code)) + GAP, width * MAX_LABEL_WIDTH);
+  const annotationWidth = textWidth(bars.map(annotation), ANNOTATION_FONT);
+
+  chartOptions.value = {
+    ...BAR_CHART_OPTIONS,
+    height: height + (ticks ? ROW_HEIGHT : 0),
+    chartArea: {
+      top: 0,
+      height,
+      left: `${(labelWidth / width) * 100}%`,
+      width: `${((width - labelWidth - annotationWidth - GAP) / width) * 100}%`,
+    },
+    hAxis: {
+      viewWindow: {
+        min: 0,
+        max: 1,
+      },
+      gridlines: {
+        count: 0,
+      },
+      format: "#,###.#%",
+      // Without thresholds to mark, the axis has nothing to label.
+      ...(ticks ? { ticks: ticks.slice(1) } : { textPosition: "none" }),
+    },
+  };
 });
 </script>
