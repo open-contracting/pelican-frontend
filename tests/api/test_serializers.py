@@ -10,6 +10,7 @@ from api.views import (
     FieldLevelCheckSerializer,
     ResourceLevelCheckDetailSerializer,
     ResourceLevelCheckSerializer,
+    TimeVarianceLevelCheckSerializer,
 )
 
 # Entries from tests/fixtures/pelican-backend.sql.gz, with the example arrays cut to one entry each.
@@ -51,6 +52,13 @@ class SerializerTests(SimpleTestCase):
         for name, check in REPORTS["dataset_level_report"].items():
             with self.subTest(name=name):
                 serializer = DatasetLevelCheckSerializer(data=check)
+
+                self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_time_based_report(self):
+        for name, check in REPORTS["time_based_report"].items():
+            with self.subTest(name=name):
+                serializer = TimeVarianceLevelCheckSerializer(data=check)
 
                 self.assertTrue(serializer.is_valid(), serializer.errors)
 

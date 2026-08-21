@@ -434,5 +434,42 @@
         "total_count": 97
       }
     }
+  },
+  "time_based_report": {
+    "coherent.dates": {
+      "check_result": true,
+      "check_value": 97,
+      "coverage_result": true,
+      "coverage_value": 100,
+      "meta": {
+        "coverage_count": 97,
+        "examples": [
+          {
+            "item_id": 1,
+            "new_item_id": 98,
+            "new_item_ocid": "ocds-213czf-1",
+            "ocid": "ocds-213czf-1"
+          }
+        ],
+        "failed_count": 3,
+        "ok_count": 94,
+        "total_count": 97,
+        "version": 1.0
+      }
+    },
+    "coherent.tender_status": {
+      "check_result": null,
+      "check_value": null,
+      "coverage_result": null,
+      "coverage_value": null,
+      "meta": {
+        "coverage_count": 0,
+        "examples": [],
+        "failed_count": 0,
+        "ok_count": 0,
+        "total_count": 0,
+        "version": 1.0
+      }
+    }
   }
 }

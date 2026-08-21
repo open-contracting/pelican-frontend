@@ -1303,26 +1303,48 @@ components:
       - implementation
       - planning
       - tender
+    TimeVarianceExample:
+      type: object
+      properties:
+        ocid:
+          type: string
+          description: The pair's OCID
+        item_id:
+          type: integer
+          description: The data item's ID in the ancestor dataset
+        new_item_ocid:
+          type: string
+          description: The pair's OCID, as set in this dataset
+        new_item_id:
+          type: integer
+          description: The data item's ID in this dataset
+      required:
+      - item_id
+      - new_item_id
+      - new_item_ocid
+      - ocid
     TimeVarianceLevelCheck:
       type: object
       properties:
-        coverage_result:
-          type: boolean
-          nullable: true
-          description: Whether the coverage check passed, or null if not applicable
         coverage_value:
           type: integer
           nullable: true
-        check_result:
+          description: The percentage of the check's compiled releases that are also
+            in this dataset, or null if it applied to none
+        coverage_result:
           type: boolean
           nullable: true
-          description: Whether the check passed, or null if not applicable
+          description: Whether coverage_value exceeds 95
         check_value:
           type: integer
           nullable: true
+          description: The percentage of pairs that passed, or null if none were found
+        check_result:
+          type: boolean
+          nullable: true
+          description: Whether check_value exceeds 95
         meta:
-          description: Any additional data to help interpret the result. Its properties
-            vary by check.
+          $ref: '#/components/schemas/TimeVarianceMeta'
       required:
       - check_result
       - check_value
@@ -1333,6 +1355,37 @@ components:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/TimeVarianceLevelCheck'
+    TimeVarianceMeta:
+      type: object
+      properties:
+        total_count:
+          type: integer
+          description: The number of compiled releases to which the check applied
+        coverage_count:
+          type: integer
+          description: The number of pairs found among them
+        ok_count:
+          type: integer
+          description: The number of pairs that passed
+        failed_count:
+          type: integer
+          description: The number of pairs that failed
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeVarianceExample'
+          description: A sample of up to 50 pairs that failed
+        version:
+          type: number
+          format: double
+          description: The check's version
+      required:
+      - coverage_count
+      - examples
+      - failed_count
+      - ok_count
+      - total_count
+      - version
   securitySchemes:
     basicAuth:
       type: http

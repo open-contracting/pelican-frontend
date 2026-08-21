@@ -286,18 +286,35 @@ class DatasetLevelReportSerializer(ReportSerializer):
     check_serializer = DatasetLevelCheckSerializer
 
 
+# A pair is a compiled release in the ancestor dataset and the compiled release with the same OCID in this dataset.
+class TimeVarianceExampleSerializer(serializers.Serializer):
+    ocid = serializers.CharField(help_text="The pair's OCID")
+    item_id = serializers.IntegerField(help_text="The data item's ID in the ancestor dataset")
+    new_item_ocid = serializers.CharField(help_text="The pair's OCID, as set in this dataset")
+    new_item_id = serializers.IntegerField(help_text="The data item's ID in this dataset")
+
+
+class TimeVarianceMetaSerializer(serializers.Serializer):
+    total_count = serializers.IntegerField(help_text="The number of compiled releases to which the check applied")
+    coverage_count = serializers.IntegerField(help_text="The number of pairs found among them")
+    ok_count = serializers.IntegerField(help_text="The number of pairs that passed")
+    failed_count = serializers.IntegerField(help_text="The number of pairs that failed")
+    examples = TimeVarianceExampleSerializer(many=True, help_text="A sample of up to 50 pairs that failed")
+    version = serializers.FloatField(help_text="The check's version")
+
+
 class TimeVarianceLevelCheckSerializer(serializers.Serializer):
-    coverage_result = serializers.BooleanField(
-        allow_null=True, help_text="Whether the coverage check passed, or null if not applicable"
+    coverage_value = serializers.IntegerField(
+        allow_null=True,
+        help_text="The percentage of the check's compiled releases that are also in this dataset, or null if it "
+        "applied to none",
     )
-    coverage_value = serializers.IntegerField(allow_null=True)
-    check_result = serializers.BooleanField(
-        allow_null=True, help_text="Whether the check passed, or null if not applicable"
+    coverage_result = serializers.BooleanField(allow_null=True, help_text="Whether coverage_value exceeds 95")
+    check_value = serializers.IntegerField(
+        allow_null=True, help_text="The percentage of pairs that passed, or null if none were found"
     )
-    check_value = serializers.IntegerField(allow_null=True)
-    meta = serializers.JSONField(
-        help_text="Any additional data to help interpret the result. Its properties vary by check."
-    )
+    check_result = serializers.BooleanField(allow_null=True, help_text="Whether check_value exceeds 95")
+    meta = TimeVarianceMetaSerializer()
 
 
 class TimeVarianceLevelReportSerializer(ReportSerializer):
