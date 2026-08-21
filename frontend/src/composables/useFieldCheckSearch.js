@@ -1,10 +1,10 @@
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useUiStore } from "@/stores/ui.js";
 
 export function useFieldCheckSearch() {
-  const store = useStore();
+  const ui = useUiStore();
 
-  const searchRaw = computed(() => store.getters.fieldCheckSearch);
+  const searchRaw = computed(() => ui.fieldCheckSearch);
   const search = computed(() => searchRaw.value?.toLowerCase());
 
   function comparator(by, asc) {
@@ -62,7 +62,7 @@ export function useFieldCheckSearch() {
   }
 
   function setSorting(by, asc = true) {
-    store.commit("setFieldCheckSorting", { by, asc });
+    ui.fieldCheckSorting = { by, asc };
   }
 
   function highlightSearch(path) {

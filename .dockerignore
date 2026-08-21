@@ -20,8 +20,10 @@ pyproject.toml
 
 # Testing
 **/tests
-pytest.ini
 
 # Generated files
 **/node_modules
 **/dist
+
+# Credentials
+/credentials.json

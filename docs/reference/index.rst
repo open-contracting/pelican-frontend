@@ -13,7 +13,7 @@ API
 
 To view the API's documentation in development, :ref:`run the server<development>` and open http://127.0.0.1:8000/api/schema/swagger-ui/ or http://127.0.0.1:8000/api/schema/redoc/.
 
-The API is used by the Vue frontend (see the endpoints in ``frontend/src/config.js``) and for managing datasets in Pelican backend (see ``PELICAN_FRONTEND_URL`` in the `Data Registry <https://ocp-data-registry.readthedocs.io/en/latest/reference/>`__).
+The API is used by the Vue frontend (see the endpoints in ``frontend/src/config.js``) and for managing datasets in Pelican backend (see the `deploy documentation <https://ocdsdeploy.readthedocs.io/en/latest/use/pelican.html>`__).
 
 .. _environment-variables:
 

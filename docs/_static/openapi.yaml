@@ -26,6 +26,102 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataItem'
           description: ''
+  /api/dataset-distinct-values/{dataset_id}/{field}/:
+    get:
+      operationId: dataset_distinct_values
+      description: Return the field's 200 most common values, with their counts, in
+        descending order.
+      parameters:
+      - in: path
+        name: dataset_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: field
+        schema:
+          type: string
+        required: true
+      tags:
+      - dataset-distinct-values
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DistinctValue'
+          description: ''
+  /api/dataset-distinct-values/{dataset_id}/{field}/{query}/:
+    get:
+      operationId: dataset_distinct_values_search
+      description: Return the field's 200 most common values containing the query,
+        with their counts, in descending order.
+      parameters:
+      - in: path
+        name: dataset_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: field
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: query
+        schema:
+          type: string
+        required: true
+      tags:
+      - dataset-distinct-values
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DistinctValue'
+          description: ''
+  /api/dataset-filter-items/:
+    post:
+      operationId: dataset_filter_items_create
+      description: |-
+        Return the number of data items that the filter matches, as an object.
+
+        ``{"items": 123}`` for example.
+      tags:
+      - dataset-filter-items
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountDatasetFilterItems'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: integer
+          description: ''
   /api/datasets/:
     get:
       operationId: datasets_list
@@ -396,15 +492,22 @@ paths:
               schema:
                 type: object
           description: ''
-  /api/datasets/find_by_name/:
-    get:
-      operationId: datasets_find_by_name_retrieve
+  /api/generate-report:
+    post:
+      operationId: generate_report_create
       description: |-
-        Return the ID of the dataset with the name given in the `name` query string parameter, as an object.
+        Create a report in Google Docs, and return its file ID.
 
-        ``{"id": 123}`` for example, or ``{}`` if no name matches.
+        The response is 200 whether or not the report was created. Its ``status`` is ``ok``, ``report_error`` if
+        the report could not be created, or ``template_error`` if the template could not be rendered.
       tags:
-      - datasets
+      - generate-report
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateReport'
+        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -414,10 +517,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
+                $ref: '#/components/schemas/GenerateReportResponse'
           description: ''
   /api/schema/:
     get:
@@ -435,13 +535,6 @@ paths:
           enum:
           - json
           - yaml
-      - in: query
-        name: lang
-        schema:
-          type: string
-          enum:
-          - en
-          - es
       tags:
       - schema
       security:
@@ -468,8 +561,39 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
+  /api/settings/:
+    get:
+      operationId: settings_retrieve
+      description: Return the settings that the frontend needs in order to generate
+        a report.
+      tags:
+      - settings
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+          description: ''
 components:
   schemas:
+    CountDatasetFilterItems:
+      type: object
+      properties:
+        dataset_id_original:
+          type: integer
+          description: The ID of the dataset to filter
+        filter_message:
+          allOf:
+          - $ref: '#/components/schemas/FilterDataset'
+          description: The filter to apply
+      required:
+      - dataset_id_original
+      - filter_message
     CreateDataset:
       type: object
       properties:
@@ -539,6 +663,18 @@ components:
       - parent_name
       - phase
       - state
+    DistinctValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The field's value
+        count:
+          type: integer
+          description: The number of data items with this value
+      required:
+      - count
+      - value
     FilterDataset:
       type: object
       properties:
@@ -564,6 +700,54 @@ components:
         procuring_entity_regex:
           type: string
           description: A SQL ILIKE pattern for the procuring entity's name
+    GenerateReport:
+      type: object
+      properties:
+        dataset_id:
+          type: integer
+          description: The dataset's ID
+        document_id:
+          type: string
+          description: The ID of the Google Docs template
+        folder_id:
+          type: string
+          description: The ID of the Google Drive folder in which to create the report
+        language:
+          type: string
+          description: The report's language, defaulting to English
+        report_name:
+          type: string
+          description: The report's filename, defaulting to a generated name
+      required:
+      - dataset_id
+      - document_id
+      - folder_id
+    GenerateReportResponse:
+      oneOf:
+      - $ref: '#/components/schemas/GeneratedReport'
+      - $ref: '#/components/schemas/ReportError'
+      - $ref: '#/components/schemas/TemplateError'
+    GeneratedReport:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GeneratedReportStatusEnum'
+        data:
+          $ref: '#/components/schemas/ReportFile'
+        failed_tags:
+          type: array
+          items:
+            type: string
+          description: The tags that could not be rendered
+      required:
+      - data
+      - failed_tags
+      - status
+    GeneratedReportStatusEnum:
+      enum:
+      - ok
+      type: string
+      description: '* `ok` - ok'
     PhaseEnum:
       enum:
       - CONTRACTING_PROCESS
@@ -578,6 +762,57 @@ components:
         * `TIME_VARIANCE` - Time Variance
         * `CHECKED` - Checked
         * `DELETED` - Deleted
+    ReportError:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ReportErrorStatusEnum'
+        data:
+          $ref: '#/components/schemas/ReportReason'
+      required:
+      - data
+      - status
+    ReportErrorStatusEnum:
+      enum:
+      - report_error
+      type: string
+      description: '* `report_error` - report_error'
+    ReportFile:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The ID of the Google Docs report
+      required:
+      - file_id
+    ReportReason:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: The reason the report could not be created
+      required:
+      - reason
+    Settings:
+      type: object
+      properties:
+        user:
+          type: string
+          description: The service account that the template and folder must be shared
+            with
+        template:
+          type: object
+          additionalProperties:
+            type: string
+          description: The ID of the default Google Docs template, by language
+        folder:
+          type: string
+          description: The ID of the default Google Drive folder in which to create
+            reports
+      required:
+      - folder
+      - template
+      - user
     StateEnum:
       enum:
       - IN_PROGRESS
@@ -596,6 +831,47 @@ components:
       required:
       - phase
       - state
+    TagError:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: The reason the tag could not be rendered
+        full_tag:
+          type: string
+          nullable: true
+          description: The tag as extracted from the template
+        template_id:
+          type: string
+          nullable: true
+          description: The ID of the Google Docs template
+      required:
+      - full_tag
+      - reason
+      - template_id
+    TemplateError:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/TemplateErrorStatusEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagError'
+        failed_tags:
+          type: array
+          items:
+            type: string
+          description: The tags that could not be rendered
+      required:
+      - data
+      - failed_tags
+      - status
+    TemplateErrorStatusEnum:
+      enum:
+      - template_error
+      type: string
+      description: '* `template_error` - template_error'
   securitySchemes:
     basicAuth:
       type: http

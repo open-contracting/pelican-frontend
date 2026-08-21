@@ -86,7 +86,7 @@ import { BSpinner } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useDatasetStore } from "@/stores/dataset.js";
 import "vue-json-pretty/lib/styles.css";
 import VueJsonPretty from "vue-json-pretty";
 import CheckDetailResultBox from "@/components/CheckDetailResultBox.vue";
@@ -97,14 +97,14 @@ import { useFormatters } from "@/composables/useFormatters";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 const route = useRoute();
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { t } = useI18n();
 const { formatNumber } = useFormatters();
 const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
 const previewMetadata = ref(null);
 
-const check = computed(() => store.getters.fieldLevelCheckByPath(route.params.path));
+const check = computed(() => datasetStore.fieldLevelCheckByPath(route.params.path));
 
 const allExamples = computed(() => {
   if (!check.value) {

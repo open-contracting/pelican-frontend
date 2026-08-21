@@ -116,15 +116,16 @@ class ViewsTests(PelicanTestCase):
         with self.assertNumQueries(0, using="pelican_backend"):
             response = self.client.get("/api/dataset-filter-items/")
 
-            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.status_code, 405)
 
     def test_dataset_filter_items_invalid(self):
         for input_message in (
             {},
             {"dataset_id_original": 1},  # missing filter_message key
             {"filter_message": {}},  # missing dataset_id_original key
-            {"dataset_id_original": "1", "filter_message": {}},  # incorrect dataset_id_original type
+            {"dataset_id_original": "anything", "filter_message": {}},  # incorrect dataset_id_original type
             {"dataset_id_original": 1, "filter_message": []},  # incorrect filter_message type
+            {"dataset_id_original": 1, "filter_message": {"buyer": "MOF"}},  # incorrect buyer type
         ):
             with (
                 self.subTest(input_message=input_message),
@@ -343,33 +344,6 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with({"dataset_id": 123}, "wiper_init")
-
-    def test_datasets_find_by_name_no_name(self):
-        self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/find_by_name/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {})
-
-    def test_datasets_find_by_name_no_match(self):
-        self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/find_by_name/?name=other")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {})
-
-    def test_datasets_find_by_name(self):
-        dataset = self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/find_by_name/?name=anything")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {"id": dataset.pk})
 
     def test_datasets_field_level_report(self):
         dataset = self.create(Dataset, name="anything")

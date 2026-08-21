@@ -1,12 +1,10 @@
 import time
 
-import simplejson as json
 from django.conf import settings
 from django.db import connections
 from django.db.models import Count, F, OuterRef, Subquery
-from django.http import HttpResponseBadRequest, JsonResponse, StreamingHttpResponse
+from django.http import HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
@@ -26,86 +24,6 @@ from api.models import (
     TimeVarianceLevelCheck,
 )
 from api.rabbitmq import publish
-
-
-@csrf_exempt
-def app_settings(request):
-    return JsonResponse(
-        {
-            "user": settings.GOOGLE_DRIVE_USER,
-            "template": {
-                "en": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
-                "es": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE_ES"],
-            },
-            "folder": settings.GOOGLE_DRIVE_FOLDER,
-        },
-    )
-
-
-@csrf_exempt
-def dataset_filter_items(request):
-    if request.method == "GET":
-        return HttpResponseBadRequest(reason="Only POST method is accepted.")
-
-    body_unicode = request.body.decode("utf-8")
-    input_message = json.loads(body_unicode)
-
-    # checking input_message correctness
-    if (
-        "dataset_id_original" not in input_message
-        or not isinstance(input_message["dataset_id_original"], int)
-        or "filter_message" not in input_message
-        or not isinstance(input_message["filter_message"], dict)
-    ):
-        return HttpResponseBadRequest(reason="Input message is malformed, will be dropped.")
-
-    dataset_id_original = input_message["dataset_id_original"]
-    filter_message = input_message["filter_message"]
-
-    # See similar code in dataset_filter.py in pelican-backend.
-    variables = {"dataset_id_original": dataset_id_original}
-    parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]
-
-    if "release_date_from" in filter_message:
-        variables["release_date_from"] = filter_message["release_date_from"]
-        parts.append("data->>'date' >= %(release_date_from)s")
-
-    if "release_date_to" in filter_message:
-        variables["release_date_to"] = filter_message["release_date_to"]
-        parts.append("data->>'date' <= %(release_date_to)s")
-
-    if "buyer" in filter_message:
-        variables["buyer"] = filter_message["buyer"]
-        parts.append("data->'buyer'->>'name' = ANY(%(buyer)s)")
-
-    if "buyer_regex" in filter_message:
-        variables["buyer_regex"] = filter_message["buyer_regex"]
-        parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
-
-    if "procuring_entity" in filter_message:
-        variables["procuring_entity"] = filter_message["procuring_entity"]
-        parts.append("data->'tender'->'procuringEntity'->>'name' = ANY(%(procuring_entity)s)")
-
-    if "procuring_entity_regex" in filter_message:
-        variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
-        parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
-
-    with connections["pelican_backend"].cursor() as cursor:
-        cursor.execute(SQL(" AND ".join(parts)), variables)
-        items = cursor.fetchall()[0][0]
-
-    return JsonResponse({"items": items})
-
-
-# field is in the format: tender.procuringEntity.name
-def dataset_distinct_values(request, dataset_id, field, query=""):
-    lookup = "data__" + "__".join(field.split("."))
-    kwargs = {"dataset_id": dataset_id, f"{lookup}__icontains": query}
-    data_items_query = (
-        DataItem.objects.filter(**kwargs).values(lookup).annotate(count=Count(lookup)).order_by("-count")
-    )
-    query_set = data_items_query.values_list(lookup, "count").distinct()[:200]
-    return JsonResponse([{"value": el[0], "count": el[1]} for el in query_set], safe=False)
 
 
 class DataItemSerializer(serializers.ModelSerializer):
@@ -168,6 +86,24 @@ class FilterDatasetSerializer(serializers.Serializer):
     procuring_entity_regex = serializers.CharField(
         required=False, help_text="A SQL ILIKE pattern for the procuring entity's name"
     )
+
+
+class CountDatasetFilterItemsSerializer(serializers.Serializer):
+    dataset_id_original = serializers.IntegerField(help_text="The ID of the dataset to filter")
+    filter_message = FilterDatasetSerializer(help_text="The filter to apply")
+
+
+class DistinctValueSerializer(serializers.Serializer):
+    value = serializers.CharField(help_text="The field's value")
+    count = serializers.IntegerField(help_text="The number of data items with this value")
+
+
+class SettingsSerializer(serializers.Serializer):
+    user = serializers.CharField(help_text="The service account that the template and folder must be shared with")
+    template = serializers.DictField(
+        child=serializers.CharField(), help_text="The ID of the default Google Docs template, by language"
+    )
+    folder = serializers.CharField(help_text="The ID of the default Google Drive folder in which to create reports")
 
 
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -275,20 +211,6 @@ class DatasetViewSet(viewsets.ViewSet):
         """Publish a message to RabbitMQ to wipe the dataset."""
         publish({"dataset_id": pk}, "wiper_init")
         return Response(status=status.HTTP_202_ACCEPTED)
-
-    @extend_schema(responses={200: {"type": "object", "properties": {"id": {"type": "integer"}}}})
-    @action(detail=False)
-    def find_by_name(self, request):
-        """
-        Return the ID of the dataset with the name given in the `name` query string parameter, as an object.
-
-        ``{"id": 123}`` for example, or ``{}`` if no name matches.
-        """
-        try:
-            dataset = self.get_queryset().get(name=request.query_params.get("name"))
-            return Response({"id": dataset.pk})
-        except Dataset.DoesNotExist:
-            return Response({})
 
     @extend_schema(responses={200: {"type": "object"}})
     @action(detail=True)
@@ -448,4 +370,95 @@ class ResourceLevelFailures(views.APIView):
             ORDER BY 1
             """,
             {"dataset_id": pk, "name": name},
+        )
+
+
+class CountDatasetFilterItems(views.APIView):
+    @extend_schema(
+        request=CountDatasetFilterItemsSerializer,
+        responses={200: {"type": "object", "properties": {"items": {"type": "integer"}}}},
+    )
+    def post(self, request, format=None):
+        """
+        Return the number of data items that the filter matches, as an object.
+
+        ``{"items": 123}`` for example.
+        """
+        serializer = CountDatasetFilterItemsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        filter_message = serializer.validated_data["filter_message"]
+
+        # See similar code in dataset_filter.py in pelican-backend.
+        variables = {"dataset_id_original": serializer.validated_data["dataset_id_original"]}
+        parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]
+
+        if "release_date_from" in filter_message:
+            variables["release_date_from"] = filter_message["release_date_from"]
+            parts.append("data->>'date' >= %(release_date_from)s")
+
+        if "release_date_to" in filter_message:
+            variables["release_date_to"] = filter_message["release_date_to"]
+            parts.append("data->>'date' <= %(release_date_to)s")
+
+        if "buyer" in filter_message:
+            variables["buyer"] = filter_message["buyer"]
+            parts.append("data->'buyer'->>'name' = ANY(%(buyer)s)")
+
+        if "buyer_regex" in filter_message:
+            variables["buyer_regex"] = filter_message["buyer_regex"]
+            parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
+
+        if "procuring_entity" in filter_message:
+            variables["procuring_entity"] = filter_message["procuring_entity"]
+            parts.append("data->'tender'->'procuringEntity'->>'name' = ANY(%(procuring_entity)s)")
+
+        if "procuring_entity_regex" in filter_message:
+            variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
+            parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
+
+        with connections["pelican_backend"].cursor() as cursor:
+            cursor.execute(SQL(" AND ".join(parts)), variables)
+            items = cursor.fetchall()[0][0]
+
+        return Response({"items": items})
+
+
+def distinct_values_response(dataset_id, field, query):
+    lookup = "data__" + "__".join(field.split("."))
+    kwargs = {"dataset_id": dataset_id, f"{lookup}__icontains": query}
+    data_items_query = (
+        DataItem.objects.filter(**kwargs).values(lookup).annotate(count=Count(lookup)).order_by("-count")
+    )
+    query_set = data_items_query.values_list(lookup, "count").distinct()[:200]
+    return Response([{"value": value, "count": count} for value, count in query_set])
+
+
+# The field is in dot notation, like tender.procuringEntity.name.
+class DatasetDistinctValues(views.APIView):
+    @extend_schema(operation_id="dataset_distinct_values", responses=DistinctValueSerializer(many=True))
+    def get(self, request, dataset_id, field, format=None):
+        """Return the field's 200 most common values, with their counts, in descending order."""
+        return distinct_values_response(dataset_id, field, "")
+
+
+class DatasetDistinctValuesSearch(views.APIView):
+    @extend_schema(operation_id="dataset_distinct_values_search", responses=DistinctValueSerializer(many=True))
+    def get(self, request, dataset_id, field, query, format=None):
+        """Return the field's 200 most common values containing the query, with their counts, in descending order."""
+        return distinct_values_response(dataset_id, field, query)
+
+
+class AppSettings(views.APIView):
+    @extend_schema(responses=SettingsSerializer)
+    def get(self, request, format=None):
+        """Return the settings that the frontend needs in order to generate a report."""
+        return Response(
+            {
+                "user": settings.GOOGLE_DRIVE_USER,
+                "template": {
+                    "en": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
+                    "es": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE_ES"],
+                },
+                "folder": settings.GOOGLE_DRIVE_FOLDER,
+            }
         )

@@ -5,7 +5,7 @@
         <SearchInput
           :placeholder="$t('dataset.search')"
           :preset="search"
-          @search="$store.commit('setDatasetSearch', $event)"
+          @search="ui.datasetSearch = $event"
         />
       </div>
     </div>
@@ -133,18 +133,18 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { BModal } from "bootstrap-vue-next";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
-import { useStore } from "vuex";
+import api from "@/api.js";
 import { CONFIG, PHASES, STATES } from "@/config.js";
+import { useUiStore } from "@/stores/ui.js";
 import DatasetFilterModal from "./DatasetFilterModal.vue";
 import DatasetPickerRow from "./DatasetPickerRow.vue";
 import DatasetReportModal from "./DatasetReportModal.vue";
 import SearchInput from "./SearchInput.vue";
 import SortButtons from "./SortButtons.vue";
 
-const store = useStore();
+const ui = useUiStore();
 
 const datasets = ref([]);
 const filteredDataset = ref(null);
@@ -153,13 +153,13 @@ const reportDataset = ref(null);
 const filterModal = useTemplateRef("filter-modal");
 const reportModal = useTemplateRef("report-modal");
 
-const search = computed(() => store.getters.datasetSearch);
+const search = computed(() => ui.datasetSearch);
 const sortedBy = computed(() => {
-  const value = store.getters.datasetSortedBy;
+  const value = ui.datasetSorting?.by;
   return value == null ? "created" : value;
 });
 const isAscendingSorted = computed(() => {
-  const value = store.getters.datasetSortedAscending;
+  const value = ui.datasetSorting?.asc;
   return value == null ? false : value;
 });
 
@@ -216,7 +216,7 @@ function sortBy(by, asc = true) {
   }
 
   datasets.value.sort((a, b) => (asc ? comp(a, b) : comp(b, a)));
-  store.commit("setDatasetSorting", { by: by, asc: asc });
+  ui.datasetSorting = { by: by, asc: asc };
 }
 
 onMounted(() => {
@@ -231,7 +231,7 @@ onMounted(() => {
     return result;
   };
 
-  axios
+  api
     .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
     .then((response) => {
       datasets.value = buildDatasetsTree(response.data, null);
@@ -240,9 +240,7 @@ onMounted(() => {
       }
       sortBy(sortedBy.value, isAscendingSorted.value);
     })
-    .catch((error) => {
-      throw new Error(error);
-    });
+    .catch(() => {});
 });
 </script>
 

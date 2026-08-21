@@ -143,12 +143,9 @@
               </div>
             </div>
 
-            <div
-              v-if="checkType == 'single_value_share'"
-              class="single_value_share"
-            >
+            <div v-if="checkType == 'single_value_share'">
               <div class="chart_envelope">
-                <FrequencyChart :check="check" />
+                <FrequencyChart :check="check" :ticks="ticks" />
               </div>
             </div>
           </div>
@@ -160,10 +157,10 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
+import { useDatasetStore } from "@/stores/dataset.js";
 
 const { formatNumber, formatPercentage2D } = useFormatters();
 
@@ -173,7 +170,7 @@ import PercentileChart from "./PercentileChart.vue";
 import Tooltip from "./Tooltip.vue";
 
 const props = defineProps(["check"]);
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { navigate } = useClickable();
 
 const checkType = computed(() => DATASET_CHECK_TYPES[props.check.name]);
@@ -186,7 +183,7 @@ const detailRouterArguments = computed(() => ({
   name: "datasetCheckDetail",
   params: {
     check: props.check.name,
-    datasetId: store.getters.datasetId,
+    datasetId: datasetStore.datasetId,
   },
 }));
 </script>

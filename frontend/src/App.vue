@@ -4,6 +4,7 @@
       id="app"
       class="container-fluid"
     >
+      <ErrorAlert />
       <router-view />
     </div>
   </BApp>
@@ -11,4 +12,5 @@
 
 <script setup>
 import { BApp } from "bootstrap-vue-next";
+import ErrorAlert from "@/components/ErrorAlert.vue";
 </script>

@@ -3,13 +3,13 @@ Update a check
 
 If a major change is made to a check in Pelican backend, its ``version`` is expected to be updated.
 
-Pelican frontend should then be updated to support all versions of the check, to be able to render both new and old reports.
+Pelican frontend should then be updated to support *all* versions of the check, to be able to render both new and old reports. (Pelican frontend does not pre-emptively disallow new versions, since breaking changes to Pelican backend are avoided.) For example, changing the histogram bins (buckets) in Pelican backend would require supporting more bins in:
 
-Pelican frontend does not pre-emptively disallow new versions, since breaking changes to Pelican backend are avoided.
+-  ``exporter/leaf_tags/dataset.py``
+-  ``frontend/src/components/FrequencyChart.vue``
 
-.. tip::
+If you reword a check's name or description in ``frontend/src/messages/en.json``, update ``frontend/src/messages/es.json``. See :ref:`i18n`. To find missed updates:
 
-   For example, changing the histogram bins (buckets) in Pelican backend would require supporting more bins in:
+.. code-block:: bash
 
-   -  ``exporter/leaf_tags/dataset.py``
-   -  ``frontend/src/components/FrequencyChart.vue``
+   git log -p frontend/src/messages/en.json

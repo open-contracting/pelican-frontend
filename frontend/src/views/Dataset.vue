@@ -33,13 +33,13 @@
 import { BCol, BRow } from "bootstrap-vue-next";
 import { onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import { DATASET_CHECK_SECTIONS } from "@/config.js";
+import { useUiStore } from "@/stores/ui.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
-const store = useStore();
+const ui = useUiStore();
 const { t } = useI18n();
 
 const sections = Object.keys(DATASET_CHECK_SECTIONS);
@@ -60,10 +60,10 @@ const filters = [
 ];
 
 watch(filterIndex, (newFilterIndex) => {
-  store.commit("setDatasetLevelFilterIndex", newFilterIndex);
+  ui.datasetLevelFilterIndex = newFilterIndex;
 });
 
 onBeforeMount(() => {
-  filterIndex.value = store.getters.datasetLevelFilterIndex;
+  filterIndex.value = ui.datasetLevelFilterIndex;
 });
 </script>

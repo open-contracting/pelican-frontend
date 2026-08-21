@@ -9,6 +9,7 @@
   "passed": "Passed",
   "failed": "Failed",
   "notAvailable": "Not applicable",
+  "requestError": "The request failed. Reload the page, or try again later.",
   "tryAgain": "Try again",
   "close": "Close window",
   "created": "Created",

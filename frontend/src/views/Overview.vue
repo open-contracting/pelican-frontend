@@ -267,15 +267,15 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import Tooltip from "@/components/Tooltip.vue";
 import { useFormatters } from "@/composables/useFormatters";
+import { useDatasetStore } from "@/stores/dataset.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
-const store = useStore();
+const datasetStore = useDatasetStore();
 const { formatNumber } = useFormatters();
 
-const dataset = computed(() => store.getters.dataset);
+const dataset = computed(() => datasetStore.dataset);
 
 function getMetaData(type) {
   return dataset.value?.meta?.[type];

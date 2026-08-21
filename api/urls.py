@@ -20,16 +20,16 @@ urlpatterns = [
     path("schema/", drfviews.SpectacularAPIView.as_view(), name="schema"),
     path("schema/swagger-ui/", drfviews.SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("schema/redoc/", drfviews.SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
-    path("dataset-filter-items/", views.dataset_filter_items, name="dataset-filter-items"),
+    path("dataset-filter-items/", views.CountDatasetFilterItems.as_view(), name="dataset-filter-items"),
     path(
-        "dataset-distinct-values/<dataset_id>/<field>/",
-        views.dataset_distinct_values,
+        "dataset-distinct-values/<int:dataset_id>/<str:field>/",
+        views.DatasetDistinctValues.as_view(),
         name="dataset-distinct-values",
     ),
     path(
-        "dataset-distinct-values/<dataset_id>/<field>/<query>/",
-        views.dataset_distinct_values,
+        "dataset-distinct-values/<int:dataset_id>/<str:field>/<str:query>/",
+        views.DatasetDistinctValuesSearch.as_view(),
         name="dataset-distinct-values-query",
     ),
-    path("settings/", views.app_settings, name="settings"),
+    path("settings/", views.AppSettings.as_view(), name="settings"),
 ]
