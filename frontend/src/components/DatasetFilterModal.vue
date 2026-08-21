@@ -83,11 +83,11 @@
         <button
           type="button"
           class="btn btn-primary submit_button"
-          :disabled="items == 0 || (dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids) || gettingCountsToken != null"
+          :disabled="items == 0 || (dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids) || gettingCountsController != null"
           @click="createDatasetFilter"
         >
           {{ $t("datasetFilter.submit") }}
-          <span v-if="gettingCountsToken == null">
+          <span v-if="gettingCountsController == null">
             <span
               v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases?.total_unique_ocids"
             >({{ formatNumber(items) }} from {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
@@ -97,7 +97,7 @@
             >({{ $t("datasetFilter.itemsAll") }})</span>
           </span>
           <BSpinner
-            v-if="gettingCountsToken != null"
+            v-if="gettingCountsController != null"
             style="width: 1.2rem; height: 1.2rem"
           />
         </button>
@@ -107,11 +107,11 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { BAlert, BSpinner } from "bootstrap-vue-next";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import api from "@/api.js";
 import { useFormatters } from "@/composables/useFormatters";
 import { CONFIG } from "@/config.js";
 import DatasetValuesMultiselect from "./DatasetValuesMultiselect.vue";
@@ -135,7 +135,7 @@ const buyerNameRegex = ref("");
 const procuringEntityNameRegex = ref("");
 
 // shallowRef, so that the identity check below compares the source rather than a reactive proxy of it.
-const gettingCountsToken = shallowRef(null);
+const gettingCountsController = shallowRef(null);
 let filteredItemsTimeout = null;
 const filteredItemsTimeoutLimit = 400;
 
@@ -189,54 +189,45 @@ function datasetFilterItems() {
     return;
   }
 
-  // https://axios-http.com/docs/cancellation
-  if (gettingCountsToken.value != null) {
-    gettingCountsToken.value.cancel();
-  }
+  gettingCountsController.value?.abort();
 
-  const source = axios.CancelToken.source();
-  gettingCountsToken.value = source;
+  const controller = new AbortController();
+  gettingCountsController.value = controller;
 
-  axios
-    .post(
+  api
+    .postJSON(
       `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
       {
         dataset_id_original: Number.parseInt(props.dataset.id, 10),
         filter_message: datasetFilterMessage(),
       },
-      {
-        cancelToken: source.token,
-      },
+      controller.signal,
     )
-    .then((response) => {
-      if (response.status === 200) {
-        items.value = response.data.items;
-      } else {
-        items.value = null;
-      }
+    .then(async (response) => {
+      items.value = response.ok ? (await response.json()).items : null;
     })
     .catch((error) => {
-      if (!axios.isCancel(error)) {
+      if (error.name !== "AbortError") {
         throw new Error(error);
       }
     })
     .finally(() => {
-      // A cancelled request has been replaced, and the newer one owns the token.
-      if (gettingCountsToken.value === source) {
-        gettingCountsToken.value = null;
+      // A cancelled request has been replaced, and the newer one owns the controller.
+      if (gettingCountsController.value === controller) {
+        gettingCountsController.value = null;
       }
     });
 }
 
 function createDatasetFilter() {
   isSubmitting.value = true;
-  axios
-    .post(
+  api
+    .postJSON(
       `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, props.dataset.id)}`,
       datasetFilterMessage(),
     )
     .then((response) => {
-      if (response.status === 200) {
+      if (response.ok) {
         submitResult.value = t("datasetFilter.submitResultOk");
       } else {
         submitResult.value = t("datasetFilter.submitResultFailed");

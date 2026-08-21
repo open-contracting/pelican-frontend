@@ -1,13 +1,34 @@
-import axios from "axios";
 import { useErrorStore } from "@/stores/error.js";
 
-// Requests through this instance report their failure via ErrorAlert, so callers can ignore the rejection.
-// Use axios directly where the caller renders its own error.
-const api = axios.create();
+// Requests through get() report their failure via ErrorAlert, so callers can ignore the rejection.
+async function get(url) {
+  let response;
 
-api.interceptors.response.use(null, (error) => {
-  useErrorStore().record(error);
-  return Promise.reject(error);
-});
+  try {
+    response = await fetch(url);
+  } catch (error) {
+    // The request never reached the server, so there is no status code.
+    useErrorStore().record(0);
+    throw error;
+  }
 
-export default api;
+  // fetch resolves whatever the status, so a failure has to be raised here.
+  if (!response.ok) {
+    useErrorStore().record(response.status);
+    throw new Error(`${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+// postJSON() reports nothing and returns the response, for a caller that renders its own errors.
+function postJSON(url, body, signal) {
+  return fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal,
+  });
+}
+
+export default { get, postJSON };

@@ -233,8 +233,8 @@ onMounted(() => {
 
   api
     .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
-    .then((response) => {
-      datasets.value = buildDatasetsTree(response.data, null);
+    .then((data) => {
+      datasets.value = buildDatasetsTree(data, null);
       for (const item of datasets.value) {
         item.ancestor_name = item.ancestor_id && datasets.value.find((e) => e.id === item.ancestor_id)?.name;
       }

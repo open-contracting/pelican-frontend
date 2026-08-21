@@ -357,9 +357,9 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
 import { ref } from "vue";
+import api from "@/api.js";
 import { CONFIG } from "@/config.js";
 import { useSettingsStore } from "@/stores/settings.js";
 import Loader from "./Loader.vue";
@@ -407,22 +407,21 @@ function createDatasetReport() {
     data.report_name = reportName.value.trim();
   }
 
-  axios
-    .post(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
-    .then((response) => {
-      if (response.data.failed_tags && response.data.failed_tags.length === 0) {
-        failedTags.value = null;
-      } else {
-        failedTags.value = response.data.failed_tags;
-      }
-
-      if (response.status === 200) {
-        submitStatus.value = response.data.status;
-        submitData.value = response.data.data;
-      } else {
+  api
+    .postJSON(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
+    .then(async (response) => {
+      if (!response.ok) {
         submitStatus.value = "server_error";
         errorMessage.value = response.statusText;
+        return;
       }
+
+      // The endpoint reports its own failures as a status in a 200 response.
+      const body = await response.json();
+
+      failedTags.value = body.failed_tags?.length ? body.failed_tags : null;
+      submitStatus.value = body.status;
+      submitData.value = body.data;
     })
     .catch((error) => {
       submitStatus.value = "server_error";

@@ -51,7 +51,6 @@
 </template>
 
 <script setup>
-import axios from "axios";
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Multiselect from "vue-multiselect";
@@ -66,7 +65,7 @@ const { t } = useI18n();
 const options = ref([]);
 const selected = ref([]);
 const isLoading = ref(false);
-let cancelToken = null;
+let controller = null;
 
 watch(selected, (value) => {
   emit(
@@ -76,10 +75,7 @@ watch(selected, (value) => {
 });
 
 function asyncFind(query) {
-  if (cancelToken != null) {
-    cancelToken.cancel();
-    cancelToken = null;
-  }
+  controller?.abort();
   isLoading.value = true;
   options.value = [];
   let url = `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetDistinctValues}${props.datasetId}/${props.jsonPath}/`;
@@ -87,14 +83,23 @@ function asyncFind(query) {
     url += `${query}/`;
   }
 
-  cancelToken = axios.CancelToken.source();
-  axios
-    .get(url, { cancelToken: cancelToken.token })
+  controller = new AbortController();
+  fetch(url, { signal: controller.signal })
     .then((response) => {
-      options.value = response.data;
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      options.value = data;
       isLoading.value = false;
     })
     .catch((error) => {
+      // A newer request has replaced this one, and owns the loading state.
+      if (error.name === "AbortError") {
+        return;
+      }
       isLoading.value = false;
       throw new Error(error);
     });

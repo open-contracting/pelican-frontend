@@ -63,10 +63,10 @@ export const useDatasetStore = defineStore("dataset", () => {
   }
 
   async function loadDataset(id) {
-    const response = await api.get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${id}`);
+    const data = await api.get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}${id}`);
 
     reset();
-    dataset.value = response.data;
+    dataset.value = data;
 
     await Promise.all([
       loadResourceLevelStats(),
@@ -80,12 +80,12 @@ export const useDatasetStore = defineStore("dataset", () => {
     resourceLevelStats.value = null;
 
     const formatted = CONFIG.apiEndpoints.resourceLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const report = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
-    for (const key in response.data) {
-      response.data[key].name = key;
-      data.push(response.data[key]);
+    for (const key in report) {
+      report[key].name = key;
+      data.push(report[key]);
     }
 
     resourceLevelStats.value = data;
@@ -101,12 +101,12 @@ export const useDatasetStore = defineStore("dataset", () => {
     const formatted = CONFIG.apiEndpoints.resourceLevelDetail
       .replace(/{id}/g, dataset.value.id)
       .replace(/{name}/g, checkName);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const detail = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
-    response.data.examples_filled = true;
+    detail.examples_filled = true;
     const updatedStats = [].concat(resourceLevelStats.value);
     updatedStats.forEach((item, i) => {
-      if (item.name === checkName) Object.assign(updatedStats[i], response.data);
+      if (item.name === checkName) Object.assign(updatedStats[i], detail);
     });
 
     resourceLevelStats.value = updatedStats;
@@ -116,12 +116,12 @@ export const useDatasetStore = defineStore("dataset", () => {
     datasetLevelStats.value = null;
 
     const formatted = CONFIG.apiEndpoints.datasetLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const report = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
-    for (const key in response.data) {
-      response.data[key].name = key;
-      data.push(response.data[key]);
+    for (const key in report) {
+      report[key].name = key;
+      data.push(report[key]);
     }
 
     datasetLevelStats.value = data;
@@ -133,9 +133,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     }
 
     const formatted = CONFIG.apiEndpoints.dataItem.replace(/{id}/g, itemId);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
-
-    dataItems.value.push(response.data);
+    dataItems.value.push(await api.get(`${CONFIG.apiBaseUrl}${formatted}`));
   }
 
   async function loadFieldLevelStats() {
@@ -152,11 +150,11 @@ export const useDatasetStore = defineStore("dataset", () => {
     };
 
     const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const report = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
-    for (const key in response.data) {
-      const item = response.data[key];
+    for (const key in report) {
+      const item = report[key];
       data.push({
         ...item,
         path: key,
@@ -178,12 +176,12 @@ export const useDatasetStore = defineStore("dataset", () => {
     }
 
     const formatted = CONFIG.apiEndpoints.fieldLevelDetail.replace(/{id}/g, dataset.value.id).replace(/{name}/g, path);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const detail = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
-    response.data.examples_filled = true;
+    detail.examples_filled = true;
     const updatedStats = [].concat(fieldLevelStats.value);
     updatedStats.forEach((item, i) => {
-      if (item.path === path) Object.assign(updatedStats[i], response.data);
+      if (item.path === path) Object.assign(updatedStats[i], detail);
     });
 
     fieldLevelStats.value = updatedStats;
@@ -193,12 +191,12 @@ export const useDatasetStore = defineStore("dataset", () => {
     timeVarianceLevelStats.value = null;
 
     const formatted = CONFIG.apiEndpoints.timeVarianceLevelReport.replace(/{id}/g, dataset.value.id);
-    const response = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
+    const report = await api.get(`${CONFIG.apiBaseUrl}${formatted}`);
 
     const data = [];
-    for (const key in response.data) {
-      response.data[key].name = key;
-      data.push(response.data[key]);
+    for (const key in report) {
+      report[key].name = key;
+      data.push(report[key]);
     }
 
     timeVarianceLevelStats.value = data;
