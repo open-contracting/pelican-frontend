@@ -83,7 +83,7 @@
   </dashboard>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BButtonGroup, BCol, BRow } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref, useTemplateRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -92,12 +92,13 @@ import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import { useUiStore } from "@/stores/ui.js";
+import type { FieldLevelCheck } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const ui = useUiStore();
 const { t } = useI18n();
 
-const fieldCheckTableRef = useTemplateRef("field-check-table");
+const fieldCheckTableRef = useTemplateRef<InstanceType<typeof FieldCheckTable>>("field-check-table");
 
 const filterIndex = ref(0);
 
@@ -108,7 +109,7 @@ const filterNames = [
   t("field.filterDropdown.passedOnly"),
 ];
 
-const filters = [
+const filters: ((item: FieldLevelCheck) => boolean)[] = [
   () => true,
   (item) => item.coverage.failed_count > 0,
   (item) => item.quality.failed_count > 0,
@@ -116,7 +117,7 @@ const filters = [
 ];
 
 const layout = computed(() => ui.fieldCheckLayout);
-const search = computed(() => ui.fieldCheckSearch);
+const search = computed(() => ui.fieldCheckSearch ?? undefined);
 
 watch(filterIndex, (newFilterIndex) => {
   ui.fieldLevelFilterIndex = newFilterIndex;
@@ -127,7 +128,7 @@ onBeforeMount(() => {
 });
 
 function resetTableSorting() {
-  fieldCheckTableRef.value.resetSorting();
+  fieldCheckTableRef.value?.resetSorting();
 }
 </script>
 

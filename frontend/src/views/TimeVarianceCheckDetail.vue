@@ -1,7 +1,7 @@
 <template>
   <dashboard-detail>
     <template
-      v-if="loaded"
+      v-if="check"
       #content
     >
       <h2>{{ $t("timeLevel." + check.name + ".name") }}</h2>
@@ -408,7 +408,7 @@
   </dashboard-detail>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BSpinner } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import VueJsonPretty from "vue-json-pretty";
@@ -419,6 +419,7 @@ import InlineBar from "@/components/InlineBar.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
+import type { JSONData } from "@/types.js";
 import { withoutExamples } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
@@ -430,9 +431,8 @@ const { previewDataItem, previewData, loadingPreviewData, selectedKey, download,
 
 const showMore = ref(false);
 
-const check = computed(() => datasetStore.timeVarianceLevelCheckByName(route.params.check));
-const loaded = computed(() => check.value != null);
-const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
+const check = computed(() => datasetStore.timeVarianceLevelCheckByName(String(route.params.check)));
+const previewMetadata = computed(() => (check.value == null ? null : (withoutExamples(check.value.meta) as JSONData)));
 </script>
 
 <style scoped lang="scss">

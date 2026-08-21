@@ -3,6 +3,7 @@ import { useToast } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDatasetStore } from "@/stores/dataset.js";
+import type { JSONData } from "@/types.js";
 
 // Above this, some browsers can crash while rendering the JSON data.
 const maxJSONLines = 3000;
@@ -20,7 +21,9 @@ export function useDataItem() {
   const selectedKey = ref<string | null>(null);
 
   const previewData = computed(() =>
-    previewDataItemId.value == null ? undefined : datasetStore.dataItemById(previewDataItemId.value)?.data,
+    previewDataItemId.value == null
+      ? undefined
+      : (datasetStore.dataItemById(previewDataItemId.value)?.data as JSONData | undefined),
   );
 
   let fileLink: HTMLAnchorElement | undefined;

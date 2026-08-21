@@ -1,7 +1,7 @@
 <template>
   <dashboard-detail>
     <template
-      v-if="loaded"
+      v-if="check"
       #content
     >
       <div class="row">
@@ -29,7 +29,7 @@
         class="result_box"
       >
         <div v-if="checkType === 'percentile'">
-          <PercentileChart :check="check" :ticks="ticks" show-count />
+          <PercentileChart v-if="ticks" :check="check" :ticks="ticks" show-count />
         </div>
 
         <div v-else-if="checkType === 'code'">
@@ -51,7 +51,7 @@
             </thead>
             <tbody>
               <tr
-                v-for="(item, index) in check.meta.most_frequent"
+                v-for="(item, index) in top3Meta.most_frequent"
                 :key="index"
               >
                 <td>{{ item.value_str }}</td>
@@ -70,21 +70,21 @@
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
-                {{ formatNumber(check.meta.total_passed) }}
+                {{ formatNumber(numericMeta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.passed") }}
             </div>
 
             <div class="numeric_result color_failed col-4">
               <div class="check_numeric_value">
-                {{ formatNumber(check.meta.total_processed - check.meta.total_passed) }}
+                {{ formatNumber(numericMeta.total_processed - numericMeta.total_passed) }}
               </div>
               {{ $t("datasetLevel.numeric.failed") }}
             </div>
 
             <div class="numeric_result color_na col-4">
               <div class="check_numeric_value">
-                {{ formatNumber(check.meta.total_processed) }}
+                {{ formatNumber(numericMeta.total_processed) }}
               </div>
               {{ $t("datasetLevel.numeric.processed") }}
             </div>
@@ -98,7 +98,7 @@
           <div class="row text-start">
             <div class="col-7 specifics">
               <span
-                v-for="(item, index) in check.meta.specifics"
+                v-for="(item, index) in biggestShareMeta.specifics"
                 :key="index"
               >
                 <h3>{{ index }}</h3>
@@ -115,12 +115,12 @@
                     color_ok: check.result === true
                   }"
                 >
-                  {{ formatPercentage2D(check.meta.ocid_share) }}
+                  {{ formatPercentage2D(biggestShareMeta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
                 <div class="col col-12 text-center ocid_count">
-                  {{ $t("datasetLevel.ocid_share", { share: $n(check.meta.ocid_count), total: $n(check.meta.total_ocid_count) }) }}
+                  {{ $t("datasetLevel.ocid_share", { share: $n(biggestShareMeta.ocid_count), total: $n(biggestShareMeta.total_ocid_count) }) }}
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@
         </div>
 
         <div v-else-if="checkType === 'single_value_share'">
-          <FrequencyChart :check="check" :ticks="ticks" show-count />
+          <FrequencyChart v-if="ticks" :check="check" :ticks="ticks" show-count />
         </div>
       </div>
 
@@ -172,7 +172,7 @@
   </dashboard-detail>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BSpinner } from "bootstrap-vue-next";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
@@ -187,6 +187,16 @@ import PercentileChart from "@/components/PercentileChart.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
+import type {
+  BiggestShareMeta,
+  CodeMeta,
+  DatasetLevelMeta,
+  ExampleSection,
+  JSONData,
+  NumericMeta,
+  PercentileMeta,
+  Top3Meta,
+} from "@/types.js";
 import { orderedShares, withoutExamples } from "@/util.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
@@ -197,23 +207,27 @@ const datasetStore = useDatasetStore();
 const { t } = useI18n();
 const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const check = computed(() => datasetStore.datasetLevelCheckByName(route.params.check));
-const loaded = computed(() => check.value != null);
-const previewMetadata = computed(() => (check.value == null ? null : withoutExamples(check.value.meta)));
-const checkType = computed(() => DATASET_CHECK_TYPES[check.value?.name]);
-const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[check.value?.name]);
-const ticks = computed(() => DATASET_CHECK_TICKS[check.value?.name]);
+const check = computed(() => datasetStore.datasetLevelCheckByName(String(route.params.check)));
+const previewMetadata = computed(() => (check.value == null ? null : (withoutExamples(check.value.meta) as JSONData)));
+const checkType = computed(() => (check.value == null ? undefined : DATASET_CHECK_TYPES[check.value.name]));
+const reportOnly = computed(() => (check.value == null ? undefined : DATASET_CHECK_REPORT_ONLY[check.value.name]));
+const ticks = computed(() => (check.value == null ? undefined : DATASET_CHECK_TICKS[check.value.name]));
+
+// The template renders each of these in the branch for the check type whose meta has that shape.
+const meta = computed<DatasetLevelMeta>(() => check.value?.meta ?? {});
+const numericMeta = computed(() => meta.value as NumericMeta);
+const top3Meta = computed(() => meta.value as Top3Meta);
+const biggestShareMeta = computed(() => meta.value as BiggestShareMeta);
+
 const exampleSections = computed(() => {
-  const sections = [];
+  const sections: ExampleSection[] = [];
 
   if (!check.value) {
     return sections;
   }
 
-  const meta = check.value.meta;
-
   if (checkType.value === "code") {
-    for (const [code, share] of orderedShares(meta.shares ?? {})) {
+    for (const [code, share] of orderedShares((meta.value as CodeMeta).shares ?? {})) {
       if (share.examples.length > 0) {
         sections.push({
           header: code,
@@ -222,7 +236,7 @@ const exampleSections = computed(() => {
       }
     }
   } else if (checkType.value === "percentile") {
-    for (const [range, examples] of Object.entries(meta.examples ?? {})) {
+    for (const [range, examples] of Object.entries((meta.value as PercentileMeta).examples ?? {})) {
       if (examples.length > 0) {
         sections.push({
           header: t(`datasetLevel.charts.label_${range}`),
@@ -231,7 +245,7 @@ const exampleSections = computed(() => {
       }
     }
   } else if (checkType.value === "top3") {
-    for (const value of meta.most_frequent ?? []) {
+    for (const value of top3Meta.value.most_frequent ?? []) {
       if (value.examples.length > 0) {
         sections.push({
           header: value.value_str,
@@ -240,24 +254,24 @@ const exampleSections = computed(() => {
       }
     }
   } else if (checkType.value === "numeric") {
-    if (meta.failed_examples?.length > 0) {
+    if (numericMeta.value.failed_examples?.length) {
       sections.push({
         header: t("datasetLevel.numeric.failedExamples"),
-        examples: meta.failed_examples,
+        examples: numericMeta.value.failed_examples,
       });
     }
 
-    if (meta.passed_examples?.length > 0) {
+    if (numericMeta.value.passed_examples?.length) {
       sections.push({
         header: t("datasetLevel.numeric.passedExamples"),
-        examples: meta.passed_examples,
+        examples: numericMeta.value.passed_examples,
       });
     }
   } else if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
-    if (meta.examples?.length > 0) {
+    if (biggestShareMeta.value.examples?.length) {
       sections.push({
         header: t("datasetLevel.examples"),
-        examples: meta.examples,
+        examples: biggestShareMeta.value.examples,
       });
     }
   }

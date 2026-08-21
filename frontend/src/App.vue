@@ -10,7 +10,7 @@
   </BApp>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BApp } from "bootstrap-vue-next";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 </script>
