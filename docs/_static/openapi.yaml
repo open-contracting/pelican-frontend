@@ -583,6 +583,53 @@ paths:
           description: ''
 components:
   schemas:
+    CollectionMetadata:
+      type: object
+      properties:
+        publisher:
+          type: string
+          nullable: true
+          description: The publisher's name
+        ocid_prefix:
+          type: string
+          nullable: true
+          description: The OCID prefix
+        published_from:
+          type: string
+          nullable: true
+          description: The earliest release date
+        published_to:
+          type: string
+          nullable: true
+          description: The latest release date
+        data_license:
+          type: string
+          nullable: true
+          description: The URL of the data license
+        publication_policy:
+          type: string
+          nullable: true
+          description: The URL of the publication policy
+        extensions:
+          type: array
+          items: {}
+          description: The extensions the data uses
+      required:
+      - data_license
+      - extensions
+      - ocid_prefix
+      - publication_policy
+      - published_from
+      - published_to
+      - publisher
+    CompiledReleases:
+      type: object
+      properties:
+        total_unique_ocids:
+          type: integer
+          description: The number of distinct OCIDs
+      required:
+      - total_unique_ocids
     CountDatasetFilterItems:
       type: object
       properties:
@@ -633,7 +680,8 @@ components:
         name:
           type: string
           maxLength: 255
-        meta: {}
+        meta:
+          $ref: '#/components/schemas/DatasetMeta'
         ancestor_id:
           type: integer
           maximum: 9223372036854775807
@@ -660,6 +708,7 @@ components:
       required:
       - filter_message
       - id
+      - meta
       - name
       - parent_id
       - parent_name
@@ -685,6 +734,26 @@ components:
       type: object
       additionalProperties:
         $ref: '#/components/schemas/DatasetLevelCheck'
+    DatasetMeta:
+      type: object
+      properties:
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
+        kingfisher_metadata:
+          $ref: '#/components/schemas/KingfisherMetadata'
+        data_quality_tool_metadata:
+          $ref: '#/components/schemas/PelicanMetadata'
+        compiled_releases:
+          $ref: '#/components/schemas/CompiledReleases'
+        tender_lifecycle:
+          allOf:
+          - $ref: '#/components/schemas/TenderLifecycle'
+          description: The number of objects in each stage
+      required:
+      - collection_metadata
+      - compiled_releases
+      - kingfisher_metadata
+      - tender_lifecycle
     DistinctValue:
       type: object
       properties:
@@ -987,6 +1056,30 @@ components:
       - ok
       type: string
       description: '* `ok` - ok'
+    KingfisherMetadata:
+      type: object
+      properties:
+        collection_id:
+          type: integer
+          description: The compiled collection ID in Kingfisher Process
+        processing_start:
+          type: string
+          description: When Kingfisher Process started storing the original collection
+        processing_end:
+          type: string
+          description: When Kingfisher Process finished storing the compiled collection
+    PelicanMetadata:
+      type: object
+      properties:
+        processing_start:
+          type: string
+          description: When Pelican started processing the dataset
+        processing_end:
+          type: string
+          description: When Pelican finished processing the dataset
+      required:
+      - processing_end
+      - processing_start
     PhaseEnum:
       enum:
       - CONTRACTING_PROCESS
@@ -1268,6 +1361,25 @@ components:
       - template_error
       type: string
       description: '* `template_error` - template_error'
+    TenderLifecycle:
+      type: object
+      properties:
+        planning:
+          type: integer
+        tender:
+          type: integer
+        award:
+          type: integer
+        contract:
+          type: integer
+        implementation:
+          type: integer
+      required:
+      - award
+      - contract
+      - implementation
+      - planning
+      - tender
     TimeVarianceLevelCheck:
       type: object
       properties:

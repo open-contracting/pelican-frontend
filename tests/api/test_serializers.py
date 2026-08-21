@@ -5,6 +5,7 @@ from django.test import SimpleTestCase
 
 from api.views import (
     DatasetLevelCheckSerializer,
+    DatasetMetaSerializer,
     FieldLevelCheckDetailSerializer,
     FieldLevelCheckSerializer,
     ResourceLevelCheckDetailSerializer,
@@ -50,5 +51,13 @@ class SerializerTests(SimpleTestCase):
         for name, check in REPORTS["dataset_level_report"].items():
             with self.subTest(name=name):
                 serializer = DatasetLevelCheckSerializer(data=check)
+
+                self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_dataset_meta(self):
+        # The sparse entry has the null fields and the absent group that production datasets show.
+        for key in ("dataset_meta", "dataset_meta_sparse"):
+            with self.subTest(key=key):
+                serializer = DatasetMetaSerializer(data=REPORTS[key])
 
                 self.assertTrue(serializer.is_valid(), serializer.errors)

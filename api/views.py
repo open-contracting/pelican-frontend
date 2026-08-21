@@ -6,7 +6,7 @@ from django.db.models import Count, F, OuterRef, Subquery
 from django.http import HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from drf_spectacular.extensions import OpenApiSerializerExtension
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_field
 from psycopg.sql import SQL
 from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
@@ -33,7 +33,63 @@ class DataItemSerializer(serializers.ModelSerializer):
         fields = ["id", "data"]
 
 
+class CollectionMetadataSerializer(serializers.Serializer):
+    publisher = serializers.CharField(allow_null=True, help_text="The publisher's name")
+    ocid_prefix = serializers.CharField(allow_null=True, help_text="The OCID prefix")
+    published_from = serializers.CharField(allow_null=True, help_text="The earliest release date")
+    published_to = serializers.CharField(allow_null=True, help_text="The latest release date")
+    data_license = serializers.CharField(allow_null=True, help_text="The URL of the data license")
+    publication_policy = serializers.CharField(allow_null=True, help_text="The URL of the publication policy")
+    # An OCDS extension's own metadata, whose properties vary by extension.
+    extensions = serializers.ListField(child=serializers.JSONField(), help_text="The extensions the data uses")
+
+
+class PelicanMetadataSerializer(serializers.Serializer):
+    processing_start = serializers.CharField(help_text="When Pelican started processing the dataset")
+    processing_end = serializers.CharField(help_text="When Pelican finished processing the dataset")
+
+
+# Empty if the collection has no rows in Kingfisher Process.
+class KingfisherMetadataSerializer(serializers.Serializer):
+    collection_id = serializers.IntegerField(
+        required=False, help_text="The compiled collection ID in Kingfisher Process"
+    )
+    processing_start = serializers.CharField(
+        required=False, help_text="When Kingfisher Process started storing the original collection"
+    )
+    processing_end = serializers.CharField(
+        required=False, help_text="When Kingfisher Process finished storing the compiled collection"
+    )
+
+
+class CompiledReleasesSerializer(serializers.Serializer):
+    total_unique_ocids = serializers.IntegerField(help_text="The number of distinct OCIDs")
+
+
+class TenderLifecycleSerializer(serializers.Serializer):
+    planning = serializers.IntegerField()
+    tender = serializers.IntegerField()
+    award = serializers.IntegerField()
+    contract = serializers.IntegerField()
+    implementation = serializers.IntegerField()
+
+
+class DatasetMetaSerializer(serializers.Serializer):
+    collection_metadata = CollectionMetadataSerializer()
+    kingfisher_metadata = KingfisherMetadataSerializer()
+    # Pelican's own metadata, written when it finishes, so a dataset still being processed has none.
+    data_quality_tool_metadata = PelicanMetadataSerializer(required=False)
+    compiled_releases = CompiledReleasesSerializer()
+    tender_lifecycle = TenderLifecycleSerializer(help_text="The number of objects in each stage")
+
+
+@extend_schema_field(DatasetMetaSerializer)
+class DatasetMetaField(serializers.JSONField):
+    """Document the column's structure without validating it, so that a new key is not dropped."""
+
+
 class DatasetSerializer(serializers.ModelSerializer):
+    meta = DatasetMetaField()
     phase = serializers.CharField()
     state = serializers.CharField()
     parent_id = serializers.IntegerField()
