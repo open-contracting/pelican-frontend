@@ -28,7 +28,9 @@ export const STATES = ["IN_PROGRESS", "OK"];
 // Sync with the example keys in the dataset-level and time-based checks.
 export const EXAMPLE_KEYS = new Set(["examples", "failed_examples", "passed_examples"]);
 
-export const DATASET_CHECK_REPORT_ONLY = {
+export type DatasetCheckType = "code" | "percentile" | "numeric" | "top3" | "biggest_share" | "single_value_share";
+
+export const DATASET_CHECK_REPORT_ONLY: Record<string, boolean | undefined> = {
   "distribution.tender_award_criteria": true,
   "distribution.tender_submission_method": true,
   "distribution.milestone_type": true,
@@ -38,7 +40,7 @@ export const DATASET_CHECK_REPORT_ONLY = {
 };
 
 // Sync with CHECK_TYPES in dataset.py
-export const DATASET_CHECK_TYPES = {
+export const DATASET_CHECK_TYPES: Record<string, DatasetCheckType | undefined> = {
   // code
   "distribution.main_procurement_category": "code",
   "distribution.tender_status": "code",
@@ -72,7 +74,7 @@ export const DATASET_CHECK_TYPES = {
 };
 
 // Sync with check descriptions.
-export const DATASET_CHECK_TICKS = {
+export const DATASET_CHECK_TICKS: Record<string, [number, number] | undefined> = {
   // code
   "distribution.main_procurement_category": [0, 0.95],
   "distribution.tender_status": [0.001, 0.99],
@@ -89,7 +91,7 @@ export const DATASET_CHECK_TICKS = {
 };
 
 // Key order determines the order of the sections in the dataset-level view.
-export const DATASET_CHECK_SECTIONS = {
+export const DATASET_CHECK_SECTIONS: Record<string, string[] | undefined> = {
   status_distribution: [
     "distribution.tender_status",
     "distribution.awards_status",
@@ -167,7 +169,7 @@ export const RESOURCE_CHECK_ORDER = [
 ];
 
 // Sync with check descriptions.
-export const DATASET_CHECK_STYLES = {
+export const DATASET_CHECK_STYLES: Record<string, string[] | undefined> = {
   // code
   "distribution.main_procurement_category": [],
   "distribution.tender_status": ["active", "complete"],
