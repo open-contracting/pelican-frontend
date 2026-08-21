@@ -77,26 +77,27 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { FieldLevelCounts, ResourceLevelCheck } from "@/types.js";
 import InlineBar from "./InlineBar.vue";
 
-defineProps({
-  check: Object,
-  ok: Boolean,
-  failed: Boolean,
-  na: Boolean,
-  individualPass: Boolean,
-  individualNonPass: Boolean,
-  passedLabel: {
-    type: String,
-    default: "passed",
+withDefaults(
+  defineProps<{
+    check: ResourceLevelCheck | FieldLevelCounts;
+    ok?: boolean;
+    failed?: boolean;
+    na?: boolean;
+    individualPass?: boolean;
+    individualNonPass?: boolean;
+    passedLabel?: string;
+    failedLabel?: string;
+    classes?: string;
+  }>(),
+  {
+    passedLabel: "passed",
+    failedLabel: "failed",
   },
-  failedLabel: {
-    type: String,
-    default: "failed",
-  },
-  classes: String,
-});
+);
 </script>
 
 <style scoped lang="scss">

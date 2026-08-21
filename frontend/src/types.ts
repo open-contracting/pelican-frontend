@@ -8,6 +8,7 @@ export type DatasetLevelReport = Schemas["DatasetLevelReport"];
 export type DistinctValue = Schemas["DistinctValue"];
 export type ExampleMeta = Schemas["ExampleMeta"];
 export type FieldLevelCheckDetail = Schemas["FieldLevelCheckDetail"];
+export type FieldLevelCounts = Schemas["FieldLevelCounts"];
 export type FieldLevelExample = Schemas["FieldLevelExample"];
 export type FieldLevelReport = Schemas["FieldLevelReport"];
 export type FilterDataset = Schemas["FilterDataset"];
@@ -19,6 +20,12 @@ export type ResourceLevelReport = Schemas["ResourceLevelReport"];
 export type Settings = Schemas["Settings"];
 export type TimeVarianceExample = Schemas["TimeVarianceExample"];
 export type TimeVarianceLevelReport = Schemas["TimeVarianceLevelReport"];
+
+/** A dataset in the picker's tree: the datasets filtered from it, and the name of the dataset it follows. */
+export type DatasetNode = Dataset & {
+  filtered_children: DatasetNode[];
+  ancestor_name?: string;
+};
 
 // The dataset-level and time-based reports key each check by name, and the store moves the key into the check.
 
