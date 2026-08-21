@@ -21,19 +21,19 @@
   </BInputGroup>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BButton, BFormInput, BInputGroup, BInputGroupText } from "bootstrap-vue-next";
 import { onMounted, ref, watch } from "vue";
 
-const props = defineProps({
-  placeholder: String,
-  preset: String,
-});
+const props = defineProps<{
+  placeholder?: string;
+  preset?: string;
+}>();
 
-const emit = defineEmits(["search"]);
+const emit = defineEmits<{ search: [value: string | null] }>();
 
-const search = ref(null);
-let submitTimeout = null;
+const search = ref<string | null>(null);
+let submitTimeout: ReturnType<typeof setTimeout> | undefined;
 
 watch(search, (value) => {
   if (submitTimeout) {
@@ -44,7 +44,7 @@ watch(search, (value) => {
 });
 
 onMounted(() => {
-  search.value = props.preset;
+  search.value = props.preset ?? null;
 });
 </script>
 

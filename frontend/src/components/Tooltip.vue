@@ -14,11 +14,11 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BTooltip } from "bootstrap-vue-next";
 import { useId } from "vue";
 
-defineProps(["text"]);
+defineProps<{ text: string }>();
 
 const tooltipId = useId();
 </script>
