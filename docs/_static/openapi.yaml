@@ -566,7 +566,7 @@ components:
         extensions:
           type: array
           items: {}
-          description: The extensions the data uses
+          description: The declared extensions
       required:
       - data_license
       - extensions
@@ -740,7 +740,7 @@ components:
           $ref: '#/components/schemas/FieldLevelGroup'
         examples_filled:
           type: boolean
-          description: Whether the examples are in the database
+          description: Whether the examples are filled in
         processing_order:
           type: integer
           description: The order in which to display the field
@@ -758,14 +758,14 @@ components:
           $ref: '#/components/schemas/FieldLevelGroupDetail'
         examples_filled:
           type: boolean
-          description: Whether the examples are in the database
+          description: Whether the examples are filled in
         processing_order:
           type: integer
           description: The order in which to display the field
         time:
           type: number
           format: double
-          description: The number of seconds the request took
+          description: The duration of the request, in seconds
       required:
       - coverage
       - examples_filled
@@ -1072,7 +1072,7 @@ components:
           description: The check's name
         total_count:
           type: integer
-          description: The number of compiled releases the check was applied to
+          description: The number of compiled releases to which the check was applied
         passed_count:
           type: integer
           description: The number of compiled releases that passed
@@ -1081,7 +1081,7 @@ components:
           description: The number of compiled releases that failed
         undefined_count:
           type: integer
-          description: The number of compiled releases the check did not apply to
+          description: The number of compiled releases for which the check was inapplicable
         individual_application_count:
           type: integer
           description: The number of times the check was applied
@@ -1093,7 +1093,7 @@ components:
           description: The number of times the check failed
         examples_filled:
           type: boolean
-          description: Whether the examples are in the database
+          description: Whether the examples are filled in
         passed_examples:
           type: array
           items:
@@ -1127,7 +1127,7 @@ components:
           description: The check's name
         total_count:
           type: integer
-          description: The number of compiled releases the check was applied to
+          description: The number of compiled releases to which the check was applied
         passed_count:
           type: integer
           description: The number of compiled releases that passed
@@ -1136,7 +1136,7 @@ components:
           description: The number of compiled releases that failed
         undefined_count:
           type: integer
-          description: The number of compiled releases the check did not apply to
+          description: The number of compiled releases for which the check was inapplicable
         individual_application_count:
           type: integer
           description: The number of times the check was applied
@@ -1148,7 +1148,7 @@ components:
           description: The number of times the check failed
         examples_filled:
           type: boolean
-          description: Whether the examples are in the database
+          description: Whether the examples are filled in
         passed_examples:
           type: array
           items:
@@ -1164,7 +1164,7 @@ components:
         time:
           type: number
           format: double
-          description: The number of seconds the request took
+          description: The duration of the request, in seconds
       required:
       - examples_filled
       - failed_count

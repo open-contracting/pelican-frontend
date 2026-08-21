@@ -40,7 +40,7 @@ class CollectionMetadataSerializer(serializers.Serializer):
     data_license = serializers.CharField(allow_null=True, help_text="The URL of the data license")
     publication_policy = serializers.CharField(allow_null=True, help_text="The URL of the publication policy")
     # An OCDS extension's own metadata, whose properties vary by extension.
-    extensions = serializers.ListField(child=serializers.JSONField(), help_text="The extensions the data uses")
+    extensions = serializers.ListField(child=serializers.JSONField(), help_text="The declared extensions")
 
 
 class PelicanMetadataSerializer(serializers.Serializer):
@@ -76,7 +76,7 @@ class TenderLifecycleSerializer(serializers.Serializer):
 class DatasetMetaSerializer(serializers.Serializer):
     collection_metadata = CollectionMetadataSerializer()
     kingfisher_metadata = KingfisherMetadataSerializer()
-    # Pelican's own metadata, written when it finishes, so a dataset still being processed has none.
+    # Pelican writes its metadata when it finishes, so an in-progress dataset has none.
     data_quality_tool_metadata = PelicanMetadataSerializer(required=False)
     compiled_releases = CompiledReleasesSerializer()
     tender_lifecycle = TenderLifecycleSerializer(help_text="The number of objects in each stage")
@@ -207,7 +207,7 @@ class ReportSerializerExtension(OpenApiSerializerExtension):
 
 
 # The counts are per occurrence of the field, which can exceed the number of compiled releases.
-# The examples are null until the field_level/{name}/ endpoint fills them.
+# Only field_level/{name}/ returns the examples. In a report, they are null.
 class FieldLevelCountsSerializer(serializers.Serializer):
     total_count = serializers.IntegerField(help_text="The number of times the check was applied")
     passed_count = serializers.IntegerField(help_text="The number of times the check passed")
@@ -223,7 +223,7 @@ class FieldLevelGroupSerializer(FieldLevelCountsSerializer):
 class FieldLevelCheckSerializer(serializers.Serializer):
     coverage = FieldLevelGroupSerializer()
     quality = FieldLevelGroupSerializer()
-    examples_filled = serializers.BooleanField(help_text="Whether the examples are in the database")
+    examples_filled = serializers.BooleanField(help_text="Whether the examples are filled in")
     processing_order = serializers.IntegerField(help_text="The order in which to display the field")
 
 
@@ -243,20 +243,22 @@ class FieldLevelGroupDetailSerializer(FieldLevelCountsDetailSerializer):
 class FieldLevelCheckDetailSerializer(FieldLevelCheckSerializer):
     coverage = FieldLevelGroupDetailSerializer()
     quality = FieldLevelGroupDetailSerializer()
-    time = serializers.FloatField(help_text="The number of seconds the request took")
+    time = serializers.FloatField(help_text="The duration of the request, in seconds")
 
 
-# The examples are empty until the compiled_release_level/{name}/ endpoint fills them.
+# Only compiled_release_level/{name}/ returns the examples. In a report, they are empty.
 class ResourceLevelCheckSerializer(serializers.Serializer):
     name = serializers.CharField(help_text="The check's name")
-    total_count = serializers.IntegerField(help_text="The number of compiled releases the check was applied to")
+    total_count = serializers.IntegerField(help_text="The number of compiled releases to which the check was applied")
     passed_count = serializers.IntegerField(help_text="The number of compiled releases that passed")
     failed_count = serializers.IntegerField(help_text="The number of compiled releases that failed")
-    undefined_count = serializers.IntegerField(help_text="The number of compiled releases the check did not apply to")
+    undefined_count = serializers.IntegerField(
+        help_text="The number of compiled releases for which the check was inapplicable"
+    )
     individual_application_count = serializers.IntegerField(help_text="The number of times the check was applied")
     individual_passed_count = serializers.IntegerField(help_text="The number of times the check passed")
     individual_failed_count = serializers.IntegerField(help_text="The number of times the check failed")
-    examples_filled = serializers.BooleanField(help_text="Whether the examples are in the database")
+    examples_filled = serializers.BooleanField(help_text="Whether the examples are filled in")
     passed_examples = ResourceLevelExampleSerializer(many=True)
     failed_examples = ResourceLevelExampleSerializer(many=True)
     undefined_examples = ResourceLevelExampleSerializer(many=True)
@@ -267,7 +269,7 @@ class ResourceLevelReportSerializer(ReportSerializer):
 
 
 class ResourceLevelCheckDetailSerializer(ResourceLevelCheckSerializer):
-    time = serializers.FloatField(help_text="The number of seconds the request took")
+    time = serializers.FloatField(help_text="The duration of the request, in seconds")
 
 
 # The meta of these two checks varies by check. See docs/browse.rst for its semantics.

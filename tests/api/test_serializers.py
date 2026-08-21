@@ -19,8 +19,8 @@ with (Path(__file__).parent.parent / "fixtures" / "reports.json").open() as f:
 
 class SerializerTests(SimpleTestCase):
     """
-    The report views return the ``report`` table's JSON verbatim, so the serializers document the responses without
-    validating them. These tests are what keeps the two in agreement.
+    The report views return the ``report`` table's JSON verbatim. Nothing checks it against the serializers that
+    describe it, so these tests do, using entries from the fixture.
     """
 
     def test_field_level_report(self):
