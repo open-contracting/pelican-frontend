@@ -16,14 +16,14 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  label: String,
-  asc: Boolean,
-  active: Boolean,
-});
+<script setup lang="ts">
+defineProps<{
+  label?: string;
+  asc?: boolean;
+  active?: boolean;
+}>();
 
-defineEmits(["asc", "desc"]);
+defineEmits<{ asc: []; desc: [] }>();
 </script>
 
 <style scoped lang="scss">

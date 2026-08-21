@@ -10,7 +10,7 @@
   </BAlert>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BAlert } from "bootstrap-vue-next";
 import { computed } from "vue";
 import { useErrorStore } from "@/stores/error.js";

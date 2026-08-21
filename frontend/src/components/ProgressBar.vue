@@ -4,19 +4,23 @@
       <div
         v-if="b.value"
         :class="['inner', b.class]"
-        :style="{ width: b.value + '%', 'background-color': b.color }"
+        :style="{ width: b.value + '%' }"
       />
     </template>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps(["value", "ok", "failed"]);
+const props = defineProps<{
+  value?: number;
+  ok?: number;
+  failed?: number;
+}>();
 
 const allBars = computed(() => {
-  const result = [];
+  const result: { value: number; class?: string }[] = [];
 
   if (props.value) {
     result.push({ value: props.value });
