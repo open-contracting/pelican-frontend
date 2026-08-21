@@ -1,14 +1,14 @@
 import numeral from "numeral";
 
 export function useFormatters() {
-  const formatNumber = (value) => {
+  const formatNumber = (value: number | undefined) => {
     if (value === undefined) {
       return value;
     }
     return numeral(value).format("0,0");
   };
 
-  const formatPercentage = (value) => {
+  const formatPercentage = (value: number) => {
     const percentage = value * 100;
     const rounded = Math.round(percentage);
 
@@ -21,7 +21,7 @@ export function useFormatters() {
     return `${numeral(rounded).format("0")}%`;
   };
 
-  const formatPercentage2D = (value) => {
+  const formatPercentage2D = (value: number) => {
     const percentage = value * 100;
     const rounded = Math.round(percentage * 100) / 100;
 
