@@ -1,5 +1,6 @@
 import { computed } from "vue";
 import { useUiStore } from "@/stores/ui.js";
+import type { FieldLevelCheck } from "@/types.js";
 
 export function useFieldCheckSearch() {
   const ui = useUiStore();
@@ -7,13 +8,13 @@ export function useFieldCheckSearch() {
   const searchRaw = computed(() => ui.fieldCheckSearch);
   const search = computed(() => searchRaw.value?.toLowerCase());
 
-  function comparator(by, asc) {
+  function comparator(by: string, asc: boolean) {
     if (by === "path") {
-      return (a, b) => a.path.localeCompare(b.path);
+      return (a: FieldLevelCheck, b: FieldLevelCheck) => a.path.localeCompare(b.path);
     }
 
     if (by === "coverage") {
-      return (a, b) => {
+      return (a: FieldLevelCheck, b: FieldLevelCheck) => {
         let comparison = a.coverageOkRatio - b.coverageOkRatio;
         if (comparison === 0) {
           comparison = a.coverage.total_count - b.coverage.total_count;
@@ -27,7 +28,7 @@ export function useFieldCheckSearch() {
 
     if (by === "quality") {
       // Checks without a quality score sort last, whichever direction the rest sort in.
-      return (a, b) => {
+      return (a: FieldLevelCheck, b: FieldLevelCheck) => {
         if (a.quality.total_count === 0) {
           if (b.quality.total_count === 0) {
             return a.path.localeCompare(b.path);
@@ -49,10 +50,10 @@ export function useFieldCheckSearch() {
       };
     }
 
-    return (a, b) => a.processing_order - b.processing_order;
+    return (a: FieldLevelCheck, b: FieldLevelCheck) => a.processing_order - b.processing_order;
   }
 
-  function sorted(checks, by, asc = true) {
+  function sorted(checks: FieldLevelCheck[] | null | undefined, by: string, asc = true) {
     if (checks == null) {
       return [];
     }
@@ -61,11 +62,11 @@ export function useFieldCheckSearch() {
     return [...checks].sort((a, b) => (asc ? compare(a, b) : compare(b, a)));
   }
 
-  function setSorting(by, asc = true) {
+  function setSorting(by: string, asc = true) {
     ui.fieldCheckSorting = { by, asc };
   }
 
-  function highlightSearch(path) {
+  function highlightSearch(path: string) {
     if (!search.value) {
       return path;
     }
@@ -74,7 +75,7 @@ export function useFieldCheckSearch() {
     return path.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
   }
 
-  function highlightSearchLast(path) {
+  function highlightSearchLast(path: string) {
     const name = path.substring(path.lastIndexOf(".") + 1);
 
     if (!search.value || !isPathSearched(path)) {
@@ -90,7 +91,7 @@ export function useFieldCheckSearch() {
     return name.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
   }
 
-  function isPathSearched(path) {
+  function isPathSearched(path: string) {
     return !search.value || !path || path.toLowerCase().includes(search.value);
   }
 
