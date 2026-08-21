@@ -92,11 +92,13 @@ API documentation
 
    :ref:`api`
 
-If you edit ``serializers.py`` or ``views.py``, regenerate the OpenAPI document:
+If you edit ``serializers.py`` or ``views.py``, regenerate the OpenAPI document, and the frontend's types:
 
 .. code-block:: bash
 
    ./manage.py spectacular --fail-on-warn --file docs/_static/openapi.yaml
+   cd frontend
+   pnpm exec openapi-typescript ../docs/_static/openapi.yaml -o src/schema.d.ts
 
 Pelican backend integration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -117,6 +119,15 @@ To update ``api/models.py`` following changes to Pelican backend's database sche
 
 Frontend
 ~~~~~~~~
+
+Check the types:
+
+.. code-block:: bash
+
+   cd frontend
+   pnpm exec vue-tsc --build
+
+``src/schema.d.ts`` describes each API response, and is generated from the OpenAPI document, as above. ``src/types.ts`` names the types that components use, and describes what the OpenAPI document can't: the fields that the store derives, and the shapes that the frontend reads from a dataset-level check's free-form ``meta``.
 
 Use ``$t`` in templates and ``useI18n()`` in ``<script setup>``. `vue-i18n documents both <https://vue-i18n.intlify.dev/guide/advanced/composition.html>`__.
 
