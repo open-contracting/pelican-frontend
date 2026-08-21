@@ -36,7 +36,7 @@
   </dashboard>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BCol, BRow } from "bootstrap-vue-next";
 import { computed, onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -45,6 +45,7 @@ import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
 import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
+import type { TimeVarianceLevelCheck as TimeVarianceCheck } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const datasetStore = useDatasetStore();
@@ -59,7 +60,7 @@ const filterNames = [
   t("timeLevel.filterDropdown.passedOnly"),
 ];
 
-const filters = [
+const filters: ((item: TimeVarianceCheck) => boolean)[] = [
   () => true,
   (item) => item.coverage_result !== true || item.check_result !== true,
   (item) => item.coverage_result === true && item.check_result === true,
@@ -68,7 +69,7 @@ const filters = [
 const loaded = computed(() => datasetStore.datasetLevelStats != null);
 
 const timeVarianceLevelStats = computed(() => {
-  return datasetStore.timeVarianceLevelStats.filter(filters[filterIndex.value]);
+  return datasetStore.timeVarianceLevelStats?.filter(filters[filterIndex.value]) ?? [];
 });
 
 watch(filterIndex, (newFilterIndex) => {

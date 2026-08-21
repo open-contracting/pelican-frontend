@@ -81,7 +81,7 @@
   </dashboard-detail>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BSpinner } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -94,6 +94,7 @@ import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
+import type { JSONData } from "@/types.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
 
 const { formatNumber } = useFormatters();
@@ -103,19 +104,15 @@ const datasetStore = useDatasetStore();
 const { t } = useI18n();
 const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const previewMetadata = ref(null);
+const previewMetadata = ref<JSONData>(null);
 
-const check = computed(() => datasetStore.resourceLevelStats?.find((item) => item.name === route.params.check));
+const check = computed(() => datasetStore.resourceLevelCheckByName(String(route.params.check)));
 const allExamples = computed(() => {
   if (!check.value) {
     return [];
   }
 
-  let examples = [];
-  examples = examples.concat(check.value.failed_examples);
-  examples = examples.concat(check.value.passed_examples);
-  examples = examples.concat(check.value.undefined_examples);
-  return examples;
+  return [...check.value.failed_examples, ...check.value.passed_examples, ...check.value.undefined_examples];
 });
 const exampleSections = computed(() => {
   const sections = [];
@@ -152,7 +149,7 @@ const exampleSections = computed(() => {
   return sections;
 });
 
-function preview(itemId) {
+function preview(itemId: number) {
   previewDataItem(itemId);
 
   const result = allExamples.value.find((element) => element.meta.item_id === itemId);

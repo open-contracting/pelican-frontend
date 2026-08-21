@@ -3,7 +3,7 @@
     <h2>{{ $t("sections.overview") }}</h2>
 
     <div
-      v-if="dataset.filter_message"
+      v-if="filter"
       class="row"
     >
       <div class="col col-12 col-xl-6 filtered">
@@ -27,25 +27,25 @@
               {{ $t("datasetFilter.releaseDateFrom") }}
             </dt>
             <dd class="col-6">
-              {{ dataset.filter_message.release_date_from }}
+              {{ filter?.release_date_from }}
             </dd>
             <dt class="col-6">
               {{ $t("datasetFilter.releaseDateTo") }}
             </dt>
             <dd class="col-6">
-              {{ dataset.filter_message.release_date_to }}
+              {{ filter?.release_date_to }}
             </dd>
             <dt class="col-6">
               {{ $t("datasetFilter.buyerNameRegex") }}
             </dt>
             <dd class="col-6">
-              {{ dataset.filter_message.buyer_regex }}
+              {{ filter?.buyer_regex }}
             </dd>
             <dt class="col-6">
               {{ $t("datasetFilter.procuringEntityNameRegex") }}
             </dt>
             <dd class="col-6">
-              {{ dataset.filter_message.procuring_entity_regex }}
+              {{ filter?.procuring_entity_regex }}
             </dd>
             <dt class="col-6">
               {{ $t("datasetFilter.buyerName") }}
@@ -80,7 +80,7 @@
             </dt>
             <dd class="col-8 d-flex align-items-center break_word">
               <span class="ocid_count bold">{{
-                formatNumber(compiled_releases.total_unique_ocids)
+                formatNumber(compiled_releases?.total_unique_ocids)
               }}</span>
             </dd>
             <dt class="col-4 d-flex align-items-center">
@@ -121,36 +121,16 @@
               {{ $t("overview.extensions") }}
             </dt>
             <dd class="col-8">
-              <template v-for="(e, i) in collection.extensions" :key="i">
-                <span
-                  v-if="e.hasOwnProperty('name')"
-                >
-                  <a
-                    v-if="
-                      e.hasOwnProperty('documentationUrl') &&
-                        (e.documentationUrl.hasOwnProperty('en')
-                          ? e.documentationUrl['en'] != ''
-                          : e.documentationUrl != '')
-                    "
-                    :href="
-                      e.documentationUrl.hasOwnProperty('en')
-                        ? e.documentationUrl['en']
-                        : e.documentationUrl
-                    "
-                    target="_blank"
-                  >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
-                  <a
-                    v-else-if="e.hasOwnProperty('repositoryUrl')"
-                    :href="e.repositoryUrl"
-                    target="_blank"
-                  >{{ e.name.hasOwnProperty("en") ? e.name["en"] : e.name }}</a>
-                  <a
-                    v-else
-                    target="_blank"
-                  >{{
-                    e.name.hasOwnProperty("en") ? e.name["en"] : e.name
-                  }}</a><template v-if="i + 1 < collection.extensions.length">, </template>
-                </span>
+              <template v-for="(e, i) in extensions" :key="i">
+                <a
+                  v-if="e.url"
+                  :href="e.url"
+                  target="_blank"
+                >{{ e.name }}</a>
+                <a
+                  v-else
+                  target="_blank"
+                >{{ e.name }}</a><template v-if="i + 1 < extensions.length">, </template>
               </template>
             </dd>
             <dt class="col-4 d-flex align-items-center">
@@ -233,7 +213,7 @@
         </h4>
         <div class="result_box">
           <div class="row">
-            <template v-for="n in ['planning', 'tender', 'award', 'contract', 'implementation']" :key="n">
+            <template v-for="n in PHASE_NAMES" :key="n">
               <div
                 class="col col-sm-2 col-md text-center lifecycle_phase"
               >
@@ -247,7 +227,7 @@
                   >
                 </div>
                 <div class="lifecycle_value">
-                  <strong>{{ formatNumber(lifecycle[n]) }}</strong>
+                  <strong>{{ formatNumber(lifecycle?.[n]) }}</strong>
                 </div>
               </div>
               <div
@@ -265,41 +245,51 @@
   </dashboard>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import { useDatasetStore } from "@/stores/dataset.js";
+import type { FilterDataset } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
+
+const PHASE_NAMES = ["planning", "tender", "award", "contract", "implementation"] as const;
+
+/** The value itself, if a string, or its English text, if localized. */
+function localized(value: unknown) {
+  if (typeof value === "string") {
+    return value;
+  }
+  if (value !== null && typeof value === "object" && "en" in value) {
+    return String((value as Record<string, unknown>).en);
+  }
+  return "";
+}
 
 const datasetStore = useDatasetStore();
 const { formatNumber } = useFormatters();
 
 const dataset = computed(() => datasetStore.dataset);
 
-function getMetaData(type) {
-  return dataset.value?.meta?.[type];
-}
+// The API documents a filtered dataset's filter as free-form, being the request body as submitted.
+const filter = computed(() => dataset.value?.filter_message as FilterDataset | undefined);
 
-const collection = computed(() => getMetaData("collection_metadata"));
-const kingfisher = computed(() => getMetaData("kingfisher_metadata"));
-const data_quality = computed(() => getMetaData("data_quality_tool_metadata"));
-const compiled_releases = computed(() => getMetaData("compiled_releases"));
-const lifecycle = computed(() => getMetaData("tender_lifecycle"));
+const collection = computed(() => dataset.value?.meta.collection_metadata);
+// An extension's metadata is free-form: its name and URL are either a string or an object of localized strings.
+const extensions = computed(() =>
+  (collection.value?.extensions ?? []).flatMap((extension) => {
+    const e = extension as Record<string, unknown>;
+    const name = localized(e.name);
+    return name ? [{ name, url: localized(e.documentationUrl) || localized(e.repositoryUrl) }] : [];
+  }),
+);
+const kingfisher = computed(() => dataset.value?.meta.kingfisher_metadata);
+const data_quality = computed(() => dataset.value?.meta.data_quality_tool_metadata);
+const compiled_releases = computed(() => dataset.value?.meta.compiled_releases);
+const lifecycle = computed(() => dataset.value?.meta.tender_lifecycle);
 
-const filtered_procuring_entity = computed(() => {
-  if (dataset.value.filter_message.procuring_entity) {
-    return dataset.value.filter_message.procuring_entity;
-  }
-  return [];
-});
-
-const filtered_buyer = computed(() => {
-  if (dataset.value.filter_message.buyer) {
-    return dataset.value.filter_message.buyer;
-  }
-  return [];
-});
+const filtered_procuring_entity = computed(() => filter.value?.procuring_entity ?? []);
+const filtered_buyer = computed(() => filter.value?.buyer ?? []);
 </script>
 
 <style scoped lang="scss">

@@ -81,7 +81,7 @@
   </dashboard-detail>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BSpinner } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -94,7 +94,12 @@ import ExampleBoxes from "@/components/ExampleBoxes.vue";
 import Tooltip from "@/components/Tooltip.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
+import type { ExampleSection, FieldLevelExample, JSONData } from "@/types.js";
 import DashboardDetail from "./layouts/DashboardDetail.vue";
+
+type Group = "coverage" | "quality";
+
+const GROUPS = ["coverage", "quality"] as const;
 
 const route = useRoute();
 const datasetStore = useDatasetStore();
@@ -102,90 +107,64 @@ const { t } = useI18n();
 const { formatNumber } = useFormatters();
 const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
-const previewMetadata = ref(null);
+const previewMetadata = ref<JSONData>(null);
 
-const check = computed(() => datasetStore.fieldLevelCheckByPath(route.params.path));
+const check = computed(() => datasetStore.fieldLevelCheckByPath(String(route.params.path)));
 
 const allExamples = computed(() => {
-  if (!check.value) {
-    return { coverage: [], quality: [] };
+  const result: Record<Group, FieldLevelExample[]> = { coverage: [], quality: [] };
+
+  if (check.value) {
+    for (const group of GROUPS) {
+      for (const value of Object.values(check.value[group].checks)) {
+        result[group] = result[group].concat(value.failed_examples ?? []);
+      }
+      result[group] = result[group].concat(check.value[group].passed_examples ?? []);
+    }
   }
 
-  const result = { coverage: [], quality: [] };
-  if (check.value.coverage) {
-    for (const value of Object.values(check.value.coverage.checks)) {
-      result.coverage = result.coverage.concat(value.failed_examples ?? []);
-    }
-    result.coverage = result.coverage.concat(check.value.coverage.passed_examples ?? []);
-  }
-  if (check.value.quality) {
-    for (const value of Object.values(check.value.quality.checks)) {
-      result.quality = result.quality.concat(value.failed_examples ?? []);
-    }
-    result.quality = result.quality.concat(check.value.quality.passed_examples ?? []);
-  }
   return result;
 });
 
 const exampleSections = computed(() => {
-  const sections = [];
-  let failed;
+  const sections: ExampleSection[] = [];
+
   if (check.value) {
-    for (const key of Object.keys(check.value.coverage.checks)) {
-      failed = check.value.coverage.checks[key].failed_examples;
-      if (failed?.length > 0) {
-        sections.push({
-          id: `coverage_${key}`,
-          prefix: t("fieldDetail.coverage.failureSamplesPrefix"),
-          header: t(`fieldDetail.coverage.${key}.name`),
-          examples: failed.map((val) => val.meta),
-          group: "coverage",
-        });
+    for (const group of GROUPS) {
+      for (const [key, counts] of Object.entries(check.value[group].checks)) {
+        const failed = counts.failed_examples;
+        if (failed?.length) {
+          sections.push({
+            id: `${group}_${key}`,
+            prefix: t(`fieldDetail.${group}.failureSamplesPrefix`),
+            header: t(`fieldDetail.${group}.${key}.name`),
+            examples: failed.map((val) => val.meta),
+            group,
+          });
+        }
       }
     }
 
-    for (const key of Object.keys(check.value.quality.checks)) {
-      failed = check.value.quality.checks[key].failed_examples;
-      if (failed?.length > 0) {
-        sections.push({
-          id: `quality_${key}`,
-          prefix: t("fieldDetail.quality.failureSamplesPrefix"),
-          header: t(`fieldDetail.quality.${key}.name`),
-          examples: failed.map((val) => val.meta),
-          group: "quality",
-        });
-      }
-    }
-
-    const passedSection = {
-      id: "passed",
-      header: t("core.passedExamples"),
-      examples: [],
-    };
-    if (check.value.quality.passed_examples?.length > 0) {
-      passedSection.examples = check.value.quality.passed_examples.map((val) => val.meta);
-    } else if (check.value.coverage.passed_examples?.length > 0) {
-      passedSection.examples = check.value.coverage.passed_examples.map((val) => val.meta);
-    }
-    if (passedSection.examples.length > 0) {
-      sections.push(passedSection);
+    const passed = check.value.quality.passed_examples?.length
+      ? check.value.quality.passed_examples
+      : (check.value.coverage.passed_examples ?? []);
+    if (passed.length > 0) {
+      sections.push({
+        id: "passed",
+        header: t("core.passedExamples"),
+        examples: passed.map((val) => val.meta),
+      });
     }
   }
 
   return sections;
 });
 
-function preview(itemId, group) {
+function preview(itemId: number, group?: Group) {
   previewDataItem(itemId);
 
-  let result;
-  if (group) {
-    result = allExamples.value[group].find((e) => e.meta.item_id === itemId);
-  } else {
-    result = Object.values(allExamples.value)
-      .flat()
-      .find((e) => e.meta.item_id === itemId);
-  }
+  const examples = group ? allExamples.value[group] : Object.values(allExamples.value).flat();
+  const result = examples.find((e) => e.meta.item_id === itemId);
 
   if (result) {
     previewMetadata.value = result.result;

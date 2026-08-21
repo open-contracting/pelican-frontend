@@ -134,7 +134,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BNav, BNavItem, BSpinner } from "bootstrap-vue-next";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
@@ -144,7 +144,7 @@ const route = useRoute();
 const datasetStore = useDatasetStore();
 
 // A check detail page is a sibling route, not a child, so vue-router marks no link active.
-const isSection = (name) => route.path.startsWith(`/${name}/`);
+const isSection = (name: string) => route.path.startsWith(`/${name}/`);
 
 const datasetId = computed(() => datasetStore.datasetId);
 const fieldLoaded = computed(() => datasetStore.fieldLevelStats != null);

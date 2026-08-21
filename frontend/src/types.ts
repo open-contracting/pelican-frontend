@@ -104,6 +104,9 @@ export interface FieldCheckTreeNode {
   [segment: string]: FieldCheckTreeNode | FieldLevelCheck | undefined;
 }
 
+/** A JSON value, as VueJsonPretty renders it. */
+export type JSONData = string | number | boolean | unknown[] | Record<string, unknown> | null;
+
 /** A table's sort order: the column, and its direction. */
 export interface Sorting {
   by: string;

@@ -7,7 +7,7 @@
   </plain>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import DatasetPicker from "@/components/DatasetPicker.vue";
 import Plain from "./layouts/Plain.vue";
 </script>

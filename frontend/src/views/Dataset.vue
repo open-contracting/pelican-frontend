@@ -29,7 +29,7 @@
   </dashboard>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BCol, BRow } from "bootstrap-vue-next";
 import { onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -37,6 +37,7 @@ import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import { DATASET_CHECK_SECTIONS } from "@/config.js";
 import { useUiStore } from "@/stores/ui.js";
+import type { DatasetLevelCheck } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const ui = useUiStore();
@@ -52,7 +53,7 @@ const filterNames = [
   t("datasetLevel.filterDropdown.calculatedOnly"),
 ];
 
-const filters = [
+const filters: ((item: DatasetLevelCheck) => boolean)[] = [
   () => true,
   (item) => item.result === false,
   (item) => item.result === true,

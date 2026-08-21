@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import DatasetHeader from "@/components/DatasetHeader.vue";
 import MainMenu from "./MainMenu.vue";
 </script>
