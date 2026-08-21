@@ -481,7 +481,7 @@
   "overview": {
     "collection_metadata": "Collection Metadata",
     "kingfisher_metadata": "Kingfisher Metadata",
-    "dqt_metadata": "Data Quality Tool Metadata",
+    "dqt_metadata": "Pelican Metadata",
     "collection_metadata_tooltip": "The OCID prefix and package metadata are extracted from the first compiled release.",
     "compiled_releases": {
       "title": "Compiled Releases",
