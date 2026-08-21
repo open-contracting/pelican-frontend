@@ -4,15 +4,21 @@ type Schemas = components["schemas"];
 
 export type DataItem = Schemas["DataItem"];
 export type Dataset = Schemas["Dataset"];
+export type DatasetLevelReport = Schemas["DatasetLevelReport"];
 export type DistinctValue = Schemas["DistinctValue"];
 export type ExampleMeta = Schemas["ExampleMeta"];
+export type FieldLevelCheckDetail = Schemas["FieldLevelCheckDetail"];
 export type FieldLevelExample = Schemas["FieldLevelExample"];
+export type FieldLevelReport = Schemas["FieldLevelReport"];
 export type FilterDataset = Schemas["FilterDataset"];
 export type GenerateReportResponse = Schemas["GenerateReportResponse"];
 export type ResourceLevelCheck = Schemas["ResourceLevelCheck"];
+export type ResourceLevelCheckDetail = Schemas["ResourceLevelCheckDetail"];
 export type ResourceLevelExample = Schemas["ResourceLevelExample"];
+export type ResourceLevelReport = Schemas["ResourceLevelReport"];
 export type Settings = Schemas["Settings"];
 export type TimeVarianceExample = Schemas["TimeVarianceExample"];
+export type TimeVarianceLevelReport = Schemas["TimeVarianceLevelReport"];
 
 // The dataset-level and time-based reports key each check by name, and the store moves the key into the check.
 
@@ -96,6 +102,12 @@ export interface SingleValueShareMeta extends DatasetLevelMeta {
 export interface FieldCheckTreeNode {
   _check?: FieldLevelCheck;
   [segment: string]: FieldCheckTreeNode | FieldLevelCheck | undefined;
+}
+
+/** A table's sort order: the column, and its direction. */
+export interface Sorting {
+  by: string;
+  asc: boolean;
 }
 
 /** A group of examples, as ExampleBoxes renders it. */
