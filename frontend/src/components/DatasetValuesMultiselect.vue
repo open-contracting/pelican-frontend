@@ -39,33 +39,37 @@
         </div>
       </div>
     </template>
-    <template #clear="props">
+    <template #clear>
       <div
         v-if="selected.length"
         class="multiselect__clear"
-        @mousedown.prevent.stop="clearAll(props.search)"
+        @mousedown.prevent.stop="clearAll()"
       />
     </template>
     <template #noResult>{{ $t("datasetValuesMultiselect.noResult") }}</template>
   </multiselect>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import { CONFIG } from "@/config.js";
+import type { DistinctValue } from "@/types.js";
 
-const props = defineProps(["datasetId", "jsonPath"]);
-const emit = defineEmits(["selected"]);
+const props = defineProps<{
+  datasetId: number;
+  jsonPath: string;
+}>();
+const emit = defineEmits<{ selected: [values: string[]] }>();
 
 const { t } = useI18n();
 
-const options = ref([]);
-const selected = ref([]);
+const options = ref<DistinctValue[]>([]);
+const selected = ref<DistinctValue[]>([]);
 const isLoading = ref(false);
-let controller = null;
+let controller: AbortController | null = null;
 
 watch(selected, (value) => {
   emit(
@@ -74,7 +78,7 @@ watch(selected, (value) => {
   );
 });
 
-function asyncFind(query) {
+function asyncFind(query: string) {
   controller?.abort();
   isLoading.value = true;
   options.value = [];
@@ -91,17 +95,17 @@ function asyncFind(query) {
       }
       return response.json();
     })
-    .then((data) => {
+    .then((data: DistinctValue[]) => {
       options.value = data;
       isLoading.value = false;
     })
-    .catch((error) => {
+    .catch((error: unknown) => {
       // A newer request has replaced this one, and owns the loading state.
-      if (error.name === "AbortError") {
+      if (error instanceof Error && error.name === "AbortError") {
         return;
       }
       isLoading.value = false;
-      throw new Error(error);
+      throw error;
     });
 }
 
@@ -109,7 +113,7 @@ function clearAll() {
   selected.value = [];
 }
 
-function limitText(count) {
+function limitText(count: number) {
   return t("datasetValuesMultiselect.limitText", { n: count });
 }
 

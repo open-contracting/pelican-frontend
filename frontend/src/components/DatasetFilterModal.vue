@@ -16,7 +16,7 @@
       $t("datasetFilter.statusFailed")
     }}</BAlert>
     <form
-      v-if="!isSubmitting"
+      v-if="!isSubmitting && dataset"
       class="modal_box align-items-center"
     >
       <div class="row mb-3">
@@ -49,7 +49,7 @@
         <div class="col-8">
           <DatasetValuesMultiselect
             @selected="updateBuyerName"
-            :dataset-id="dataset?.id"
+            :dataset-id="dataset.id"
             json-path="buyer.name"
           />
         </div>
@@ -59,7 +59,7 @@
         <div class="col-8">
           <DatasetValuesMultiselect
             @selected="updateProcuringEntityName"
-            :dataset-id="dataset?.id"
+            :dataset-id="dataset.id"
             json-path="tender.procuringEntity.name"
           />
         </div>
@@ -113,18 +113,21 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BAlert, BSpinner } from "bootstrap-vue-next";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/api.js";
 import { useFormatters } from "@/composables/useFormatters";
 import { CONFIG } from "@/config.js";
+import type { Dataset, FilterDataset, FilterItemsCount } from "@/types.js";
 import DatasetValuesMultiselect from "./DatasetValuesMultiselect.vue";
 import Loader from "./Loader.vue";
 
-const props = defineProps(["dataset"]);
-const emit = defineEmits(["close"]);
+const props = defineProps<{
+  dataset: Dataset | null;
+}>();
+const emit = defineEmits<{ close: [] }>();
 
 const router = useRouter();
 const { formatNumber } = useFormatters();
@@ -132,21 +135,21 @@ const { formatNumber } = useFormatters();
 const isSubmitting = ref(false);
 const isSubmitted = ref(false);
 const submitFailed = ref(false);
-const items = ref(null);
-const releaseDateFrom = ref(null);
-const releaseDateTo = ref(null);
-const buyerName = ref([]);
-const procuringEntityName = ref([]);
+const items = ref<number | null>(null);
+const releaseDateFrom = ref("");
+const releaseDateTo = ref("");
+const buyerName = ref<string[]>([]);
+const procuringEntityName = ref<string[]>([]);
 const buyerNameRegex = ref("");
 const procuringEntityNameRegex = ref("");
 
 // shallowRef, so that the identity check below compares the source rather than a reactive proxy of it.
-const gettingCountsController = shallowRef(null);
-let filteredItemsTimeout = null;
+const gettingCountsController = shallowRef<AbortController | null>(null);
+let filteredItemsTimeout: ReturnType<typeof setTimeout> | undefined;
 const filteredItemsTimeoutLimit = 400;
 
 const firstDate = computed(() => {
-  const publishedFrom = props.dataset.meta.collection_metadata.published_from;
+  const publishedFrom = props.dataset?.meta.collection_metadata.published_from;
   if (publishedFrom) {
     return publishedFrom.substring(0, 10);
   }
@@ -154,7 +157,7 @@ const firstDate = computed(() => {
 });
 
 const lastDate = computed(() => {
-  const publishedTo = props.dataset.meta.collection_metadata.published_to;
+  const publishedTo = props.dataset?.meta.collection_metadata.published_to;
   if (publishedTo) {
     return publishedTo.substring(0, 10);
   }
@@ -166,7 +169,7 @@ function datasetFilterMessage() {
     return null;
   }
 
-  const data = {};
+  const data: FilterDataset = {};
 
   if (releaseDateFrom.value > firstDate.value) {
     data.release_date_from = releaseDateFrom.value;
@@ -204,17 +207,17 @@ function datasetFilterItems() {
     .postJSON(
       `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
       {
-        dataset_id_original: Number.parseInt(props.dataset.id, 10),
+        dataset_id_original: props.dataset.id,
         filter_message: datasetFilterMessage(),
       },
       controller.signal,
     )
     .then(async (response) => {
-      items.value = response.ok ? (await response.json()).items : null;
+      items.value = response.ok ? (((await response.json()) as FilterItemsCount).items ?? null) : null;
     })
-    .catch((error) => {
-      if (error.name !== "AbortError") {
-        throw new Error(error);
+    .catch((error: unknown) => {
+      if (!(error instanceof Error) || error.name !== "AbortError") {
+        throw error;
       }
     })
     .finally(() => {
@@ -226,11 +229,15 @@ function datasetFilterItems() {
 }
 
 function createDatasetFilter() {
+  if (props.dataset == null) {
+    return;
+  }
+
   isSubmitting.value = true;
   submitFailed.value = false;
   api
     .postJSON(
-      `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, props.dataset.id)}`,
+      `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, String(props.dataset.id))}`,
       datasetFilterMessage(),
     )
     .then((response) => {
@@ -242,7 +249,8 @@ function createDatasetFilter() {
 
       setTimeout(() => {
         emit("close");
-        router.go();
+        // Reload, so that the picker lists the dataset that the filter creates.
+        router.go(0);
       }, 2000);
     })
     // Restore the form, so that the filter can be submitted again.
@@ -252,11 +260,11 @@ function createDatasetFilter() {
     });
 }
 
-function updateBuyerName(value) {
+function updateBuyerName(value: string[]) {
   buyerName.value = value;
 }
 
-function updateProcuringEntityName(value) {
+function updateProcuringEntityName(value: string[]) {
   procuringEntityName.value = value;
 }
 
