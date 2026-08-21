@@ -92,14 +92,11 @@ API documentation
 
    :ref:`api`
 
-If you edit ``views.py``, regenerate the OpenAPI document. CI fails if it is out-of-date.
+If you edit ``views.py``, regenerate the OpenAPI document:
 
 .. code-block:: bash
 
    ./manage.py spectacular --fail-on-warn --file docs/_static/openapi.yaml
-
-``--fail-on-warn`` catches an endpoint that drf-spectacular cannot describe, like a response it
-falls back to a free-form object for, or two paths that resolve to the same operation ID.
 
 Pelican backend integration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

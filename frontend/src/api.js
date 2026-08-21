@@ -1,6 +1,6 @@
 import { useErrorStore } from "@/stores/error.js";
 
-// Report a failure via ErrorAlert, so that a caller can ignore it.
+// This reports an error via ErrorAlert. Callers don't need to handle errors.
 async function get(url) {
   let response;
 
@@ -20,7 +20,7 @@ async function get(url) {
   return response.json();
 }
 
-// Return the response without reporting a failure, for a caller that renders its own errors.
+// Callers need to handle errors.
 function postJSON(url, body, signal) {
   return fetch(url, {
     method: "POST",

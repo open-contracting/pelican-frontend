@@ -6,12 +6,15 @@ This changelog only notes major changes, to notify other developers.
 2026-08-20
 ----------
 
--  refactor: Remove the ``GET api/datasets/find_by_name/`` endpoint. Its only caller was the Data Registry, which no longer uses Pelican.
--  feat: Describe the ``api/settings/``, ``api/dataset-filter-items/`` and ``api/dataset-distinct-values/`` endpoints in the OpenAPI document. ``POST api/dataset-filter-items/`` accepts a numeric string as ``dataset_id_original``, and a GET returns 405 instead of 400.
--  feat: Describe the ``api/generate-report`` endpoint in the OpenAPI document. It accepts a numeric string as ``dataset_id``, and a GET returns 405 instead of 200.
--  feat: Describe the responses of the field-level and compiled release-level report and detail endpoints in the OpenAPI document, in place of free-form objects. The responses are unchanged.
--  feat: Describe the responses of the dataset-level and time-based report endpoints, and the dataset's ``meta``, likewise. Only each check's ``meta`` remains a free-form object, since its properties vary by check.
--  refactor: Remove the ``GET api/datasets/{id}/status/`` and ``GET api/datasets/{id}/metadata/`` endpoints. Like ``find_by_name``, their only caller was the Data Registry, which no longer uses Pelican.
+-  feat: Describe the ``api/settings/``, ``api/dataset-filter-items/``, ``api/dataset-distinct-values/`` and ``api/generate-report`` endpoints in the OpenAPI document.
+
+   -  ``POST api/dataset-filter-items/`` accepts a numeric string as ``dataset_id_original``, and a GET returns 405 instead of 400.
+   -  ``POST api/generate-report`` accepts a numeric string as ``dataset_id``, and a GET returns 405 instead of 200.
+
+-  feat: Describe the responses of the field-level and compiled release-level report and detail endpoints in the OpenAPI document.
+-  feat: Describe the responses of the dataset-level and time-based report endpoints in the OpenAPI document. Each check's ``meta`` remains a free-form object.
+-  feat: Describe the ``meta`` of the ``api/datasets/`` endpoints in the OpenAPI document, describing the collection's metadata.
+-  refactor: Remove the ``GET api/datasets/find_by_name/``, ``GET api/datasets/{id}/status/`` and ``GET api/datasets/{id}/metadata/`` endpoints. Their only caller was the Data Registry, which no longer uses Pelican.
 
 2023-01-26
 ----------
