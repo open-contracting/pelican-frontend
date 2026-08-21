@@ -1,3 +1,4 @@
+import type { ColorVariant } from "bootstrap-vue-next";
 import { useToast } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -14,22 +15,24 @@ export function useDataItem() {
   const { t } = useI18n();
   const { create: showToast } = useToast();
 
-  const previewDataItemId = ref(null);
+  const previewDataItemId = ref<number | null>(null);
   const loadingPreviewData = ref(false);
-  const selectedKey = ref(null);
+  const selectedKey = ref<string | null>(null);
 
-  const previewData = computed(() => datasetStore.dataItemById(previewDataItemId.value)?.data);
+  const previewData = computed(() =>
+    previewDataItemId.value == null ? undefined : datasetStore.dataItemById(previewDataItemId.value)?.data,
+  );
 
-  let fileLink;
-  let previousFileURL;
+  let fileLink: HTMLAnchorElement | undefined;
+  let previousFileURL: string | undefined;
   let previewRequest = 0;
 
-  function toast(body, variant) {
+  function toast(body: string, variant: ColorVariant) {
     showToast({ body, variant, pos: "middle-center" });
   }
 
   // `key` identifies the control that requested the preview, for the caller to highlight it.
-  function previewDataItem(itemId, key = null) {
+  function previewDataItem(itemId: number, key: string | null = null) {
     // A later click supersedes this one, whose response is then ignored.
     const request = ++previewRequest;
     loadingPreviewData.value = true;
@@ -39,7 +42,7 @@ export function useDataItem() {
         if (request !== previewRequest) {
           return;
         }
-        if (datasetStore.dataItemJSONLines(itemId) < maxJSONLines) {
+        if ((datasetStore.dataItemJSONLines(itemId) ?? 0) < maxJSONLines) {
           previewDataItemId.value = itemId;
           selectedKey.value = key;
         } else {
@@ -64,11 +67,16 @@ export function useDataItem() {
       });
   }
 
-  function download(itemId) {
+  function download(itemId: number) {
     datasetStore
       .loadDataItem(itemId)
       .then(() => {
         const result = datasetStore.dataItemById(itemId);
+
+        if (result == null) {
+          throw new DataItemNotFound();
+        }
+
         const fileURL = window.URL.createObjectURL(
           new Blob([JSON.stringify(result.data, null, 2)], { type: "application/json" }),
         );
@@ -97,18 +105,24 @@ export function useDataItem() {
       });
   }
 
-  async function copyToClipboard(itemId) {
+  async function copyToClipboard(itemId: number) {
     // WebKit rejects write() with a DOMException rather than the error below, so keep our own reference to it.
-    let reason;
+    let reason: Error | undefined;
     // write() must be called during the click, so pass the data as a promise instead of awaiting it here.
     const blob = datasetStore.loadDataItem(itemId).then(
       () => {
-        if (datasetStore.dataItemJSONLines(itemId) >= maxJSONLines) {
+        const json = datasetStore.dataItemJSON(itemId);
+
+        if (json == null) {
+          reason = new DataItemNotFound();
+          throw reason;
+        }
+        if ((datasetStore.dataItemJSONLines(itemId) ?? 0) >= maxJSONLines) {
           reason = new DataItemTooLarge();
           throw reason;
         }
         // Chromium rejects a blob whose type differs from the item's, and a blob has none unless given one.
-        return new Blob([datasetStore.dataItemJSON(itemId)], { type: "text/plain" });
+        return new Blob([json], { type: "text/plain" });
       },
       () => {
         reason = new DataItemNotFound();
@@ -127,7 +141,7 @@ export function useDataItem() {
       } else if (cause instanceof DataItemNotFound) {
         toast(t("preview.nonExisting"), "danger");
       } else {
-        toast(cause.message, "danger");
+        toast(cause instanceof Error ? cause.message : String(cause), "danger");
       }
     }
   }

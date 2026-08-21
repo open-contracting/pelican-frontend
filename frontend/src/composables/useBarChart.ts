@@ -26,28 +26,37 @@ export const BAR_CHART_OPTIONS = {
   fontSize: 14,
 };
 
+/** A row of a chart's data: the label, the share, then the annotation and style columns. */
+export type ChartRow = (string | number | { role: string })[];
+
 // The annotations are bold and monospace, unlike the labels.
 export const ANNOTATION_FONT = `bold ${BAR_CHART_OPTIONS.fontSize}px ${BAR_CHART_OPTIONS.annotations.textStyle.fontName}`;
 
-const context = document.createElement("canvas").getContext("2d");
+// A canvas element always has a 2D context. getContext() is nullable for the contexts that a browser can lack.
+const context = document.createElement("canvas").getContext("2d") as CanvasRenderingContext2D;
 
 /** The width in pixels of the widest text, as the chart draws it. */
-export function textWidth(texts, font = `${BAR_CHART_OPTIONS.fontSize}px ${BAR_CHART_OPTIONS.fontName}`) {
+export function textWidth(texts: string[], font = `${BAR_CHART_OPTIONS.fontSize}px ${BAR_CHART_OPTIONS.fontName}`) {
   context.font = font;
   return Math.max(...texts.map((text) => context.measureText(text).width));
 }
 
 /** Color a bar by whether its share is within the check's thresholds. */
-export function shareStyle(share, ticks) {
+export function shareStyle(share: number, ticks: [number, number]) {
   return ticks[0] <= share && share <= ticks[1] ? "color: #919C03" : "color: #d0021b";
 }
 
+interface BarChartProps {
+  ticks: [number, number];
+  showCount?: boolean;
+}
+
 /** Build the data and options for a bar chart. ``bars`` returns one entry per bar, top to bottom. */
-export function useBarChart(props, bars) {
+export function useBarChart(props: BarChartProps, bars: () => { key: string; share: number; count: number }[]) {
   const { t } = useI18n();
   const { formatNumber, formatPercentage } = useFormatters();
 
-  const chartData = ref([
+  const chartData = ref<ChartRow[]>([
     [t("datasetLevel.charts.group"), t("datasetLevel.charts.share"), { role: "annotation" }, { role: "style" }],
   ]);
 
