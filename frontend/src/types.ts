@@ -6,7 +6,7 @@ export type DataItem = Schemas["DataItem"];
 export type Dataset = Schemas["Dataset"];
 export type DatasetLevelReport = Schemas["DatasetLevelReport"];
 export type DistinctValue = Schemas["DistinctValue"];
-export type ExampleMeta = Schemas["ExampleMeta"];
+type ExampleMeta = Schemas["ExampleMeta"];
 export type FieldLevelCheckDetail = Schemas["FieldLevelCheckDetail"];
 export type FieldLevelCounts = Schemas["FieldLevelCounts"];
 export type FieldLevelExample = Schemas["FieldLevelExample"];
@@ -19,10 +19,8 @@ export type GenerateReport = Schemas["GenerateReport"];
 export type GenerateReportResponse = Schemas["GenerateReportResponse"];
 export type ResourceLevelCheck = Schemas["ResourceLevelCheck"];
 export type ResourceLevelCheckDetail = Schemas["ResourceLevelCheckDetail"];
-export type ResourceLevelExample = Schemas["ResourceLevelExample"];
 export type ResourceLevelReport = Schemas["ResourceLevelReport"];
 export type Settings = Schemas["Settings"];
-export type TimeVarianceExample = Schemas["TimeVarianceExample"];
 export type TimeVarianceLevelReport = Schemas["TimeVarianceLevelReport"];
 
 /** A dataset in the picker's tree: the datasets filtered from it, and the name of the dataset it follows. */
@@ -64,7 +62,7 @@ export interface CodeMeta extends DatasetLevelMeta {
   shares: Record<string, CodeShare>;
 }
 
-export interface CodeShare {
+interface CodeShare {
   share: number;
   count: number;
   examples: ExampleMeta[];
@@ -87,7 +85,7 @@ export interface Top3Meta extends DatasetLevelMeta {
   most_frequent: MostFrequentValue[];
 }
 
-export interface MostFrequentValue {
+interface MostFrequentValue {
   value_str: string;
   share: number;
   count: number;
