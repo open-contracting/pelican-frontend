@@ -18,25 +18,33 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { DATASET_CHECK_SECTIONS } from "@/config.js";
 import { useDatasetStore } from "@/stores/dataset.js";
+import type { DatasetLevelCheck as Check } from "@/types.js";
 import DatasetLevelCheck from "./DatasetLevelCheck.vue";
 import Loader from "./Loader.vue";
 
-const props = defineProps(["section", "filter"]);
+const props = defineProps<{
+  section: string;
+  filter: (check: Check) => boolean;
+}>();
 
 const datasetStore = useDatasetStore();
 
 const loaded = computed(() => datasetStore.datasetLevelStats != null);
 
 const datasetLevelStats = computed(() => {
-  if (!(props.section in DATASET_CHECK_SECTIONS)) {
+  const names = DATASET_CHECK_SECTIONS[props.section];
+
+  if (!names) {
     return [];
   }
-  return DATASET_CHECK_SECTIONS[props.section]
+
+  return names
     .map((item) => datasetStore.datasetLevelCheckByName(item))
+    .filter((check) => check != null)
     .filter(props.filter);
 });
 </script>
