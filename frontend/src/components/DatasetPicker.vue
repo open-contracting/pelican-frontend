@@ -132,12 +132,13 @@
   </BModal>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BModal } from "bootstrap-vue-next";
 import { computed, onMounted, ref, useTemplateRef } from "vue";
 import api from "@/api.js";
 import { CONFIG, PHASES, STATES } from "@/config.js";
 import { useUiStore } from "@/stores/ui.js";
+import type { Dataset, DatasetNode } from "@/types.js";
 import DatasetFilterModal from "./DatasetFilterModal.vue";
 import DatasetPickerRow from "./DatasetPickerRow.vue";
 import DatasetReportModal from "./DatasetReportModal.vue";
@@ -146,14 +147,14 @@ import SortButtons from "./SortButtons.vue";
 
 const ui = useUiStore();
 
-const datasets = ref([]);
-const filteredDataset = ref(null);
-const reportDataset = ref(null);
+const datasets = ref<DatasetNode[]>([]);
+const filteredDataset = ref<DatasetNode | null>(null);
+const reportDataset = ref<DatasetNode | null>(null);
 
-const filterModal = useTemplateRef("filter-modal");
-const reportModal = useTemplateRef("report-modal");
+const filterModal = useTemplateRef<InstanceType<typeof BModal>>("filter-modal");
+const reportModal = useTemplateRef<InstanceType<typeof BModal>>("report-modal");
 
-const search = computed(() => ui.datasetSearch);
+const search = computed(() => ui.datasetSearch ?? undefined);
 const sortedBy = computed(() => {
   const value = ui.datasetSorting?.by;
   return value == null ? "created" : value;
@@ -163,36 +164,36 @@ const isAscendingSorted = computed(() => {
   return value == null ? false : value;
 });
 
-function showFilter(dataset) {
+function showFilter(dataset: DatasetNode) {
   filteredDataset.value = dataset;
-  filterModal.value.show();
+  filterModal.value?.show();
 }
 
-function showReport(dataset) {
+function showReport(dataset: DatasetNode) {
   reportDataset.value = dataset;
-  reportModal.value.show();
+  reportModal.value?.show();
 }
 
 function hideFilterModal() {
-  filterModal.value.hide();
+  filterModal.value?.hide();
 }
 
 function hideReportModal() {
-  reportModal.value.hide();
+  reportModal.value?.hide();
 }
 
-function isSearched(name) {
+function isSearched(name: string) {
   return !search.value || name.toLowerCase().includes(search.value.toLowerCase());
 }
 
-function sortBy(by, asc = true) {
+function sortBy(by: string, asc = true) {
   if (!datasets.value) {
     return;
   }
 
-  let comp;
+  let comp: (a: DatasetNode, b: DatasetNode) => number;
   if (by === "created") {
-    comp = (a, b) => a.created.localeCompare(b.created);
+    comp = (a, b) => (a.created ?? "").localeCompare(b.created ?? "");
   } else if (by === "name") {
     comp = (a, b) => a.name.localeCompare(b.name);
   } else if (by === "size") {
@@ -220,7 +221,7 @@ function sortBy(by, asc = true) {
 }
 
 onMounted(() => {
-  const buildDatasetsTree = (allDatasets, parent_id) => {
+  const buildDatasetsTree = (allDatasets: DatasetNode[], parent_id: number | null) => {
     const result = [];
     for (const item of allDatasets) {
       if (item.parent_id === parent_id) {
@@ -232,11 +233,13 @@ onMounted(() => {
   };
 
   api
-    .get(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
+    .get<Dataset[]>(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
     .then((data) => {
-      datasets.value = buildDatasetsTree(data, null);
+      datasets.value = buildDatasetsTree(data as DatasetNode[], null);
       for (const item of datasets.value) {
-        item.ancestor_name = item.ancestor_id && datasets.value.find((e) => e.id === item.ancestor_id)?.name;
+        if (item.ancestor_id) {
+          item.ancestor_name = datasets.value.find((e) => e.id === item.ancestor_id)?.name;
+        }
       }
       sortBy(sortedBy.value, isAscendingSorted.value);
     })

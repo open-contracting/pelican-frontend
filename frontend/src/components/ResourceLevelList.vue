@@ -30,26 +30,29 @@
   </tr>
   <template v-if="showChecks">
     <ResourceLevelRow
-      v-for="(value, name, index) in resourceLevelStats"
-      :key="name"
+      v-for="value in resourceLevelStats"
+      :key="value.name"
       :check="value"
       :name="value.name"
-      :index="index"
     />
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useFormatters } from "@/composables/useFormatters";
 import { RESOURCE_CHECK_ORDER } from "@/config.js";
 import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
+import type { ResourceLevelCheck } from "@/types.js";
 import ResourceLevelRow from "./ResourceLevelRow.vue";
 import Tooltip from "./Tooltip.vue";
 
-const props = defineProps(["section", "filter"]);
+const props = defineProps<{
+  section: string;
+  filter: (check: ResourceLevelCheck) => boolean;
+}>();
 
 const datasetStore = useDatasetStore();
 const ui = useUiStore();

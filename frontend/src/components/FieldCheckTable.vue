@@ -54,15 +54,18 @@
   </table>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
+import type { FieldLevelCheck } from "@/types.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
 import SortButtons from "./SortButtons.vue";
 
-const props = defineProps(["filter"]);
+const props = defineProps<{
+  filter: (check: FieldLevelCheck) => boolean;
+}>();
 const datasetStore = useDatasetStore();
 const ui = useUiStore();
 
@@ -93,7 +96,7 @@ function resetSorting() {
   setSorting("processingOrder");
 }
 
-function isSearched(check) {
+function isSearched(check: FieldLevelCheck | undefined) {
   return check && isPathSearched(check.path);
 }
 
