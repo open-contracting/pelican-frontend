@@ -83,12 +83,14 @@ import pathlib, re
 vues = sorted(pathlib.Path("frontend/src").rglob("*.vue"))
 templates = {p: (re.search(r"<template>(.*)</template>", p.read_text(), re.S) or [None, ""])[1] for p in vues}
 
+
 def selectors(body):
     body = re.sub(r"/\*.*?\*/", "", body, flags=re.S)
     out, depth, buf = [], 0, ""
     for ch in body:
         if ch == "{":
-            if depth == 0: out.append(" ".join(buf.split()))
+            if depth == 0:
+                out.append(" ".join(buf.split()))
             depth, buf = depth + 1, ""
         elif ch == "}":
             depth, buf = depth - 1, ""
@@ -96,14 +98,18 @@ def selectors(body):
             buf += ch
     return [x for x in out if x and not x.startswith("@")]
 
+
 for p in vues:
     for m in re.finditer(r"<style([^>]*)>(.*?)</style>", p.read_text(), re.S):
         if "scoped" in m.group(1):
             continue
         for sel in selectors(m.group(2)):
             names = re.findall(r"[.#]([\w-]+)", sel)
-            used = [o.name for o in vues
-                    if names and all(re.search(rf'class="[^"]*\b{n}\b|id="{n}"', templates[o]) for n in names)]
+            used = [
+                o.name
+                for o in vues
+                if names and all(re.search(rf'class="[^"]*\b{n}\b|id="{n}"', templates[o]) for n in names)
+            ]
             print(f"{p.name:34} {sel:44} {used}")
 ```
 
