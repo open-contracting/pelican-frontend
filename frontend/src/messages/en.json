@@ -34,8 +34,6 @@
     "submit": "Filter",
     "items": "selected",
     "itemsAll": "criteria will not limit the parent dataset",
-    "submitResultOk": "Ok",
-    "submitResultFailed": "Failed",
     "releaseDateFromTo": "Release date from - to",
     "releaseDateFrom": "Release date from",
     "releaseDateTo": "Release date to",

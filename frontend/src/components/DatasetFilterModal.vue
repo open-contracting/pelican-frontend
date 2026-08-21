@@ -1,8 +1,8 @@
 <template>
   <span class="just_holder">
-    <Loader v-if="isSubmitting && submitResult == null" />
+    <Loader v-if="isSubmitting && !isSubmitted" />
     <BAlert
-      v-if="isSubmitting && submitResult != null"
+      v-if="isSubmitted"
       variant="success"
       :model-value="true"
     >{{
@@ -109,7 +109,6 @@
 <script setup>
 import { BAlert, BSpinner } from "bootstrap-vue-next";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
-import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import api from "@/api.js";
 import { useFormatters } from "@/composables/useFormatters";
@@ -121,11 +120,10 @@ const props = defineProps(["dataset"]);
 const emit = defineEmits(["close"]);
 
 const router = useRouter();
-const { t } = useI18n();
 const { formatNumber } = useFormatters();
 
 const isSubmitting = ref(false);
-const submitResult = ref(null);
+const isSubmitted = ref(false);
 const items = ref(null);
 const releaseDateFrom = ref(null);
 const releaseDateTo = ref(null);
@@ -227,19 +225,16 @@ function createDatasetFilter() {
       datasetFilterMessage(),
     )
     .then((response) => {
-      if (response.ok) {
-        submitResult.value = t("datasetFilter.submitResultOk");
-      } else {
-        submitResult.value = t("datasetFilter.submitResultFailed");
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
       }
+
+      isSubmitted.value = true;
 
       setTimeout(() => {
         emit("close");
         router.go();
       }, 2000);
-    })
-    .catch((error) => {
-      throw new Error(error);
     });
 }
 
