@@ -15,7 +15,7 @@ import FieldCheckDetail from "./views/FieldCheckDetail.vue";
 import ResourceCheckDetail from "./views/ResourceCheckDetail.vue";
 import TimeVarianceCheckDetail from "./views/TimeVarianceCheckDetail.vue";
 
-async function load(datasetId, after) {
+async function load(datasetId: string, after?: () => Promise<void>) {
   const datasetStore = useDatasetStore();
 
   try {
@@ -52,7 +52,7 @@ const router = createRouter({
       name: "overview",
       component: Overview,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
@@ -61,7 +61,7 @@ const router = createRouter({
       name: "field",
       component: Field,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
@@ -70,7 +70,7 @@ const router = createRouter({
       name: "resource",
       component: Resource,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
@@ -79,7 +79,7 @@ const router = createRouter({
       name: "dataset",
       component: Dataset,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
@@ -88,7 +88,7 @@ const router = createRouter({
       name: "time",
       component: Time,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
@@ -97,7 +97,9 @@ const router = createRouter({
       name: "resourceCheckDetail",
       component: ResourceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId, () => useDatasetStore().loadResourceLevelCheckDetail(to.params.check));
+        load(String(to.params.datasetId), () =>
+          useDatasetStore().loadResourceLevelCheckDetail(String(to.params.check)),
+        );
         next();
       },
     },
@@ -106,7 +108,7 @@ const router = createRouter({
       name: "datasetCheckDetail",
       component: DatasetCheckDetail,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
@@ -115,7 +117,7 @@ const router = createRouter({
       name: "fieldCheckDetail",
       component: FieldCheckDetail,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId, () => useDatasetStore().loadFieldLevelCheckDetail(to.params.path));
+        load(String(to.params.datasetId), () => useDatasetStore().loadFieldLevelCheckDetail(String(to.params.path)));
         next();
       },
     },
@@ -124,7 +126,7 @@ const router = createRouter({
       name: "timeVarianceCheckDetail",
       component: TimeVarianceCheckDetail,
       beforeEnter: (to, _from, next) => {
-        load(to.params.datasetId);
+        load(String(to.params.datasetId));
         next();
       },
     },
