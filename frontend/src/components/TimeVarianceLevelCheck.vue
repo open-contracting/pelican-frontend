@@ -92,12 +92,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
+import type { TimeVarianceLevelCheck } from "@/types.js";
 
-const props = defineProps(["check"]);
+const props = defineProps<{
+  check: TimeVarianceLevelCheck;
+}>();
 const { formatPercentage } = useFormatters();
 const { navigate } = useClickable();
 

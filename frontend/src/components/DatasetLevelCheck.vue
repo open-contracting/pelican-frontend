@@ -84,7 +84,7 @@
 
             <div v-if="checkType == 'percentile'">
               <div class="chart_envelope">
-                <PercentileChart :check="check" :ticks="ticks" />
+                <PercentileChart v-if="ticks" :check="check" :ticks="ticks" />
               </div>
             </div>
 
@@ -92,9 +92,9 @@
               v-if="checkType == 'numeric'"
               class="text-center"
             >
-              <span class="check_numeric_value">{{ formatNumber(check.meta.total_passed) }}</span><span
+              <span class="check_numeric_value">{{ formatNumber(numericMeta.total_passed) }}</span><span
                 class="check_numeric_count"
-              > / {{ formatNumber(check.meta.total_processed) }}</span>
+              > / {{ formatNumber(numericMeta.total_processed) }}</span>
             </div>
 
             <div
@@ -108,7 +108,7 @@
                 >
                   <tbody>
                     <tr
-                      v-for="(item, index) in check.meta.most_frequent"
+                      v-for="(item, index) in top3Meta.most_frequent"
                       :key="index"
                     >
                       <td>{{ item.value_str }}</td>
@@ -133,19 +133,19 @@
                     color_ok: check.result == true
                   }"
                 >
-                  {{ formatPercentage2D(check.meta.ocid_share) }}
+                  {{ formatPercentage2D(biggestShareMeta.ocid_share) }}
                 </div>
               </div>
               <div class="row">
                 <div class="col col-12 text-center ocid_count">
-                  {{ $t("datasetLevel.ocid_share", { share: $n(check.meta.ocid_count), total: $n(check.meta.total_ocid_count) }) }}
+                  {{ $t("datasetLevel.ocid_share", { share: $n(biggestShareMeta.ocid_count), total: $n(biggestShareMeta.total_ocid_count) }) }}
                 </div>
               </div>
             </div>
 
             <div v-if="checkType == 'single_value_share'">
               <div class="chart_envelope">
-                <FrequencyChart :check="check" :ticks="ticks" />
+                <FrequencyChart v-if="ticks" :check="check" :ticks="ticks" />
               </div>
             </div>
           </div>
@@ -155,12 +155,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
 import { useDatasetStore } from "@/stores/dataset.js";
+import type { BiggestShareMeta, DatasetLevelCheck, NumericMeta, Top3Meta } from "@/types.js";
 
 const { formatNumber, formatPercentage2D } = useFormatters();
 
@@ -169,13 +170,20 @@ import FrequencyChart from "./FrequencyChart.vue";
 import PercentileChart from "./PercentileChart.vue";
 import Tooltip from "./Tooltip.vue";
 
-const props = defineProps(["check"]);
+const props = defineProps<{
+  check: DatasetLevelCheck;
+}>();
 const datasetStore = useDatasetStore();
 const { navigate } = useClickable();
 
 const checkType = computed(() => DATASET_CHECK_TYPES[props.check.name]);
 const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[props.check.name]);
 const ticks = computed(() => DATASET_CHECK_TICKS[props.check.name]);
+
+// The template renders each of these in the branch for the check type whose meta has that shape.
+const numericMeta = computed(() => props.check.meta as NumericMeta);
+const top3Meta = computed(() => props.check.meta as Top3Meta);
+const biggestShareMeta = computed(() => props.check.meta as BiggestShareMeta);
 
 const clickable = computed(() => props.check.result !== undefined && checkType.value !== undefined);
 
