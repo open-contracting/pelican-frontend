@@ -1,100 +1,51 @@
-Comparing to production
-=======================
+Compare to production
+=====================
 
-`pelican.open-contracting.org <https://pelican.open-contracting.org>`__ runs ``main``. Point a local server at the same database, and dataset IDs match, so any page can be opened side by side with its production counterpart. The frontend has no automated tests, so this is the check that a branch has not regressed.
+The frontend has no automated tests (:issue:`73`). Check for regressions by comparing to production.
 
 .. attention::
 
-   Configured this way, the local backend reads the **production** database and publishes to the **production** RabbitMQ. Browsing is safe. These endpoints are not:
+   When navigating production, do not click the submit buttons of the *Dataset filtering* and *Export report* modals. Call production's API with ``GET`` only – apart from ``POST dataset-filter-items/``, which runs a ``COUNT`` only. Locally, these are harmless, as long as no ``credentials.json`` file exists and no ``RABBIT_URL`` environment variable is set.
 
-   -  ``DatasetViewSet.create`` (``POST datasets/``) publishes ``ocds_kingfisher_extractor_init``. No page reaches it.
-   -  ``DatasetViewSet.filter`` (``POST datasets/{id}/filter/``) publishes ``dataset_filter_extractor_init``. The filter modal's **submit** button reaches it.
-   -  ``DatasetViewSet.destroy`` (``DELETE datasets/{id}/``) publishes ``wiper_init``. No page reaches it.
-   -  ``POST generate-report`` creates Google Docs through the service account. The report modal's **submit** button reaches it.
+Setup
+-----
 
-   Opening either modal and editing its fields is safe: ``dataset_filter_items`` is a POST, but it only reads, and exercising it is how the filter modal's watcher gets tested. Only the two submit buttons are dangerous.
+#. Copy ``.env.example`` to ``.env`` and add your database and HTTP authentication credentials.
 
-Configuration
--------------
+   .. code-block:: bash
 
-Copy ``.env.example`` to ``.env`` and fill in ``PELICAN_BACKEND_DATABASE_URL`` and ``PELICAN_PRODUCTION_URL``. Git ignores ``.env``. Load it when starting the backend, rather than exporting the variables into a shell, so that the credentials stay out of shell history:
+      cp .env.example .env
 
-.. code-block:: bash
+#. Start the backend server:
 
-   uv run --env-file .env manage.py runserver
+   .. code-block:: bash
 
-Set nothing else. Pelican backend's database is the only one this procedure needs to read from production, and leaving the other settings at their defaults is what keeps the session read-only in practice:
+      uv run --env-file .env manage.py runserver
 
--  ``DATABASE_URL`` selects this project's own database, where the ``exporter`` app records a report. Unset, an export is recorded locally.
--  ``RABBIT_URL`` and ``RABBIT_EXCHANGE_NAME`` are read only when publishing, which only the endpoints in the warning above do. Unset, a message would go to a local broker.
--  ``KINGFISHER_PROCESS_DATABASE_URL`` is read only by ``DatasetViewSet.create``, which no page reaches.
+#. Start the frontend server (see :ref:`development`).
 
-Without ``--env-file``, the backend reads whichever local databases the defaults name, which is a useful way to check that a change works before pointing anything at production.
+Choose datasets
+---------------
 
-Start the frontend server as usual (see :ref:`development`). Do not use ``vite preview``: it does not proxy ``/api``, so a build served that way gets no data, and every page looks broken for the wrong reason.
+Find a set of datasets to exercise:
 
-Choosing datasets
------------------
+-  Time checks (otherwise, ``/time/:id/detail/:check`` is unreachable)
+-  All six dataset check types:
 
-No one dataset exercises everything. Select for:
+   -  ``code``
+   -  ``percentile`` ("… value distribution")
+   -  ``top3`` ("… value repetition")
+   -  ``numeric`` ("Other" section)
+   -  ``biggest_share`` ("Buyer repetition")
+   -  ``single_value_share`` ("Buyer distribution")
 
--  Time checks, without which ``/time/:id/detail/:check`` is unreachable
--  All six dataset check types
--  A mix of passing and failing checks, since threshold colouring only diverges when shares straddle ``DATASET_CHECK_TICKS``
--  Enough field and resource checks to sort and search
-
-Query the report endpoints instead of clicking around. For example, to find the datasets that have time checks:
-
-.. code-block:: bash
-
-   curl -s http://localhost:8000/api/datasets/ | python3 -c "
-   import json, sys, urllib.request
-   for i in json.load(sys.stdin):
-       with urllib.request.urlopen(f\"http://localhost:8000/api/datasets/{i['id']}/time_based_report/\", timeout=30) as r:
-           if json.load(r):
-               print(i['id'])
-   "
-
-Routes
-------
-
-``/``
-   Dataset list, four sort columns, search
-
-``/overview/:id``
-   Metadata blocks, tooltips
-
-``/field/:id``
-   Table and tree layouts, search, filter dropdown, reset sorting
-
-``/resource/:id``
-   Three sections, expand and collapse, average scores
-
-``/dataset/:id``
-   Five sections in order, check cards, charts
-
-``/time/:id``
-   Check list
-
-``/field/:id/detail/:path``
-   Result boxes, example boxes, preview pane
-
-``/resource/:id/detail/:check``
-   Example boxes, preview pane
-
-``/dataset/:id/detail/:check``
-   One visit per check type, plus one check that could not run
-
-``/time/:id/detail/:check``
-   Example boxes, new and old row pairs
-
-Load each route **directly**, as well as reaching it in-app. The store is cold on the first path and warm on the second, and that difference is what exposes render bugs in the detail views.
-
-Screenshots miss interaction, so also exercise: sort buttons, the search debounce, the filter dropdowns on four pages, both modals (**without submitting**), example preview, download and copy to clipboard, tree expand and collapse, tooltips, and detail links. Close and reopen both modals, too, which is how fields turned out to persist between openings.
+-  A mix of passing and failing dataset-level checks
+-  A mix of passing, failing and N/A compiled release-level checks
+-  A mix of passing and failing field-level quality checks
 
 Gotchas
 -------
 
--  Restart the frontend server after editing ``src/scss/_variables.scss``. Vite injects it through ``css.preprocessorOptions.scss.additionalData`` and does not track it as a dependency, so variable changes do not reach already-compiled CSS on hot reload. Component ``<style>`` blocks hot-reload normally.
--  Clipboard permissions are granted only to a headed browser, so headless testing of copy is worthless.
--  Engines disagree about the clipboard: Chromium rejects a blob whose type differs from the ``ClipboardItem``'s, and WebKit rejects ``write()`` with a ``DOMException`` rather than the underlying error. Test copy in both.
+-  A route loaded directly has a cold store, and a route reached in-app has a warm store. The detail views can render differently in each case, so try both.
+-  After editing ``src/scss/_variables.scss``, you need to restart the frontend server.
+-  If testing the *Copy to clipboard* feature, test it in both Chromium and WebKit, which behave differently: Chromium rejects a ``Blob`` whose type differs from the ``ClipboardItem``'s, and WebKit rejects ``write()`` with a ``DOMException`` rather than the underlying error.

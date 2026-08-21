@@ -4,7 +4,6 @@ dist
 .coverage
 /htmlcov
 /.env
-/.claude/settings.local.json
 /credentials.json
 /google_drive_cache
 /static

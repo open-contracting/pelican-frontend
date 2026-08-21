@@ -7,13 +7,14 @@ description: Find visual and behavioural differences between a local pelican-fro
 
 Both sides read the same database, so dataset IDs match and pages are directly comparable.
 
-`docs/contributing/compare-to-production.rst` carries what a human also needs: the endpoints that
-must never be triggered, how to configure `.env`, how to choose datasets, and the route checklist.
-**Read it first** — the safety section is not optional, and the browsing you do here reaches a
-production database. This file is the technique for driving the comparison from a terminal.
+`docs/contributing/compare-to-production.rst` carries what a human also needs: what must not be
+clicked or called on production, how to configure `.env`, what to select a dataset for, and the
+gotchas. **Read it first** — the attention block is not optional, and the browsing you do here
+reaches a production database. This file is the technique for driving the comparison from a
+terminal, and it is where the routes and the actions to perform on each one live.
 
-Written during the Vue 2 → 3 migration. The techniques generalise; the specifics (ports, class
-names, which datasets have which checks) may not.
+The techniques generalise; the specifics (ports, class names, which datasets have which checks)
+may not.
 
 ## Setup
 
@@ -23,6 +24,9 @@ Backend on :8000, frontend on :8080:
 nohup uv run --env-file .env manage.py runserver > /tmp/django.log 2>&1 &
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8000/api/datasets/
 ```
+
+Pass `.env` with `--env-file`, and never export its variables into the shell: that puts the
+credentials in the shell history, and in anything that later dumps the environment.
 
 ```bash
 cd frontend && pnpm exec vite
@@ -47,6 +51,25 @@ agent-browser --session prod open \
 
 Only the session's first navigation needs them; later ones inherit the credentials. Never bake
 them into a screenshot path.
+
+### Choose datasets
+
+The RST lists what to select for. One request answers most of it, since `datasets/` carries
+`ancestor_id` and `meta`. `ancestor_id` is what the picker's *Time-based checks* column keys on, so
+this is the same signal a human reads off the home page:
+
+```bash
+curl -s http://localhost:8000/api/datasets/ | python3 -c "
+import json, sys
+for i in json.load(sys.stdin):
+    if i['ancestor_id']:
+        print(i['id'], i['name'])
+"
+```
+
+A dataset still being processed can have an `ancestor_id` and an empty `time_based_report`, so read
+that endpoint to confirm before settling on one. `dataset_level_report` gives the check types a
+dataset ran.
 
 ## Audit the source first
 
@@ -90,6 +113,29 @@ last wins); a selector matching **nothing** (dead, safe to delete). Compare the 
 deduplicating — identical bodies are harmless, differing bodies are a bug waiting for a load-order
 change.
 
+## Coverage
+
+Ten routes, with what each one is worth looking at:
+
+- `/` — dataset list, four sort columns, search
+- `/overview/:id` — metadata blocks, tooltips
+- `/field/:id` — table and tree layouts, search, filter dropdown, reset sorting
+- `/resource/:id` — three sections, expand and collapse, average scores
+- `/dataset/:id` — five sections in order, check cards, charts
+- `/time/:id` — check list
+- `/field/:id/detail/:path` — result boxes, example boxes, preview pane
+- `/resource/:id/detail/:check` — example boxes, preview pane
+- `/dataset/:id/detail/:check` — one visit per check type, plus one check that could not run
+- `/time/:id/detail/:check` — example boxes, new and old row pairs
+
+Load each route **directly**, as well as reaching it in-app. The store is cold on the first path and
+warm on the second, and that difference is what exposes render bugs in the detail views.
+
+Screenshots miss interaction, so also exercise: sort buttons, the search debounce, the filter
+dropdowns on four pages, both modals (**without submitting**), example preview, download, tree
+expand and collapse, tooltips, and detail links. Close and reopen both modals, too, which is how
+fields turned out to persist between openings.
+
 ## Probing
 
 Run the same probe against both sessions and diff the numbers. Use `eval --stdin` with a quoted
@@ -122,15 +168,17 @@ agent-browser --session dev  screenshot --full /tmp/dev-field.png
 agent-browser --session dev  diff screenshot --baseline /tmp/prod-field.png
 ```
 
-The mismatch percentage is not a pass or fail — Bootstrap 4 against Bootstrap 5 differs everywhere
-by a few pixels. Use the diff image to **locate** regions worth measuring, then measure them.
+The mismatch percentage is not a pass or fail — for example, Bootstrap 4 against Bootstrap 5
+differed everywhere by a few pixels. Use the diff image to **locate** regions worth measuring, then
+measure them.
 
 ### Geometry
 
-Round to integers and compare. Expect systematic small differences from Bootstrap 4 → 5 — content
-width 1029 vs 1035 from gutters, form rows a few px shorter — and treat anything larger as a
-finding. Element height is the fastest signal that something wrapped or moved: an action bar at
-92px against production's 54px means a control fell onto a second line.
+Round to integers and compare. Expect systematic small differences whenever the two sides differ in
+framework version — for example, Bootstrap 4 → 5 changed content width from 1029 to 1035 through
+gutters, and shortened form rows by a few pixels — and treat anything larger as a finding. Element
+height is the fastest signal that something wrapped or moved: an action bar at 92px against
+production's 54px means a control fell onto a second line.
 
 ### Breakpoints
 
@@ -230,10 +278,10 @@ for (const sheet of document.styleSheets) {
 ```
 
 This found `.table td.label { width: 80px }` leaking out of an unscoped `FrequencyChart` block onto
-every result box in the app. Watch for the general case: **the CSS order flipped between webpack
-and Vite**, so rules that lost to Bootstrap in production now win, and declarations that had never
-applied became effective. When a component rule and a Bootstrap rule have equal specificity, decide
-which one you want rather than relying on order.
+every result box in the app. Watch for the general case: a build change can flip the CSS order, so
+that rules which used to lose now win, and declarations that had never applied become effective —
+for example, moving from webpack to Vite did exactly that. When a component rule and a Bootstrap
+rule have equal specificity, decide which one you want rather than relying on order.
 
 ### Hit testing
 
@@ -277,18 +325,23 @@ appeared, and then a spinner that never stopped.
 To see what the network is doing underneath, count requests, completions and aborts:
 
 ```javascript
-const send = XMLHttpRequest.prototype.send, open_ = XMLHttpRequest.prototype.open;
+const original = window.fetch;
 window.__n = { started: 0, done: 0, aborted: 0 };
-XMLHttpRequest.prototype.open = function (m, u, ...r) { this.__u = u; return open_.call(this, m, u, ...r); };
-XMLHttpRequest.prototype.send = function (...r) {
-  if (String(this.__u).includes("dataset-filter-items")) {
-    window.__n.started++;
-    this.addEventListener("loadend", () => window.__n.done++);
-    this.addEventListener("abort", () => window.__n.aborted++);
+window.fetch = (url, options) => {
+  if (!String(url).includes("dataset-filter-items")) {
+    return original(url, options);
   }
-  return send.apply(this, r);
+  window.__n.started++;
+  return original(url, options).then(
+    (response) => { window.__n.done++; return response; },
+    (error) => { window.__n[error.name === "AbortError" ? "aborted" : "done"]++; throw error; },
+  );
 };
 ```
+
+`done` counts a failure too, since fetch resolves whatever the status, and a cancelled request
+rejects with an `AbortError` rather than firing an event. Hooking `window.fetch` catches every
+request, including those the shared `api` module makes.
 
 To expose a race, make the first request slow — throttle the network, or delay the endpoint — then
 trigger a second one before it lands and check which response wins.
@@ -322,8 +375,9 @@ line. An error thrown during render makes Vue abandon the update, so the symptom
 
 ### Whether a subtree re-renders
 
-To tell "this value is wrong" from "this subtree is stale", add a ref that changes on a timer and
-print it in both places:
+To tell "this value is wrong" from "this subtree is stale", add a ref to the component that changes
+on a timer, and print it in both places. `ref` is not in the page's scope, so this one is an edit to
+the source rather than an `eval`:
 
 ```javascript
 const tick = ref(0);
@@ -371,15 +425,15 @@ and note that a component throwing in the slot you are *not* watching is easy to
 - `agent-browser open` is a full page load, so it clears anything installed with `eval`.
 - The agent-browser daemon returns `Resource temporarily unavailable` when busy. Re-run, or use a
   separate `--session`.
-- Playwright driven directly is steadier than the daemon for clipboard work, which additionally
-  needs a headed browser.
-- Production is Bootstrap 4 and BootstrapVue; local is Bootstrap 5 and bootstrap-vue-next. Expect
-  renamed classes (`text-right` → `text-end`, `text-muted` → `text-body-secondary`),
-  `.form-control` losing its fixed height, `.col-*` setting `width` rather than `flex-basis`, and
-  `.row > *` gaining `width: 100%`. `.table` also moves from styling cells by descent to
-  `.table > :not(caption) > * > *`, which needs a row group — and Vue builds the DOM rather than
-  parsing it, so a `<table>` written without a `<tbody>` never gets the implicit one the HTML parser
-  would have inserted, and loses its borders.
+- Clipboard permissions are granted only to a headed browser, and Playwright driven directly is
+  steadier than the daemon for that work.
+- When the two sides differ in UI framework version, expect renamed classes and changed layout
+  primitives. Bootstrap 4 → 5, for example, renamed `text-right` to `text-end` and `text-muted` to
+  `text-body-secondary`, dropped `.form-control`'s fixed height, made `.col-*` set `width` rather
+  than `flex-basis`, and gave `.row > *` a `width` of `100%`.
+- Bootstrap 5 styles table cells through `.table > :not(caption) > * > *`, which needs a row group.
+  Vue builds the DOM rather than parsing it, so a `<table>` written without a `<tbody>` never gets
+  the implicit one the HTML parser would have inserted, and loses its borders.
 - Bootstrap 5 labels a background in black unless it contrasts with white at 4.5:1, so themed
   buttons can change text colour. `$min-contrast-ratio` is the knob.
 - Check what an element is allowed to contain before wrapping content in it. `.form-text` belongs on

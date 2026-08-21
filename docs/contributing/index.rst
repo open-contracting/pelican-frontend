@@ -31,12 +31,6 @@ Install development dependencies:
 
    pip install -r requirements_dev.txt
 
-The defaults name local databases, so no configuration is needed to work against a local Pelican backend. To point a setting elsewhere, as :doc:`compare-to-production` does, copy ``.env.example`` to ``.env`` and fill in what differs. Git ignores ``.env``. Pass it to the commands that need it, rather than exporting its variables into a shell:
-
-.. code-block:: bash
-
-   uv run --env-file .env manage.py runserver
-
 Run database migrations:
 
 .. code-block:: bash
