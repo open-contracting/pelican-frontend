@@ -220,6 +220,33 @@ class ResourceLevelCheckDetailSerializer(ResourceLevelCheckSerializer):
     time = serializers.FloatField(help_text="The number of seconds the request took")
 
 
+# The meta of these two checks varies by check. See docs/browse.rst for its semantics.
+class DatasetLevelCheckSerializer(serializers.Serializer):
+    result = serializers.BooleanField(allow_null=True, help_text="Whether the check passed, or null if not applicable")
+    value = serializers.IntegerField(allow_null=True)
+    meta = serializers.JSONField(help_text="Any additional data to help interpret the result")
+
+
+class DatasetLevelReportSerializer(ReportSerializer):
+    check_serializer = DatasetLevelCheckSerializer
+
+
+class TimeVarianceLevelCheckSerializer(serializers.Serializer):
+    coverage_result = serializers.BooleanField(
+        allow_null=True, help_text="Whether the coverage check passed, or null if not applicable"
+    )
+    coverage_value = serializers.IntegerField(allow_null=True)
+    check_result = serializers.BooleanField(
+        allow_null=True, help_text="Whether the check passed, or null if not applicable"
+    )
+    check_value = serializers.IntegerField(allow_null=True)
+    meta = serializers.JSONField(help_text="Any additional data to help interpret the result")
+
+
+class TimeVarianceLevelReportSerializer(ReportSerializer):
+    check_serializer = TimeVarianceLevelCheckSerializer
+
+
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Return OCDS data that passed or failed a check."""
 
@@ -338,10 +365,10 @@ class DatasetViewSet(viewsets.ViewSet):
         """Return a report of the dataset's compiled release-level checks, by check name."""
         return Response(get_object_or_404(Report, dataset=pk, type="resource_level_check").data)
 
-    @extend_schema(responses={200: {"type": "object"}})
+    @extend_schema(responses=DatasetLevelReportSerializer)
     @action(detail=True)
     def dataset_level_report(self, request, pk=None):
-        """Return a report of the dataset's dataset-level checks."""
+        """Return a report of the dataset's dataset-level checks, by check name."""
         return self.get_report(
             DatasetLevelCheck,
             [
@@ -351,10 +378,10 @@ class DatasetViewSet(viewsets.ViewSet):
             ],
         )
 
-    @extend_schema(responses={200: {"type": "object"}})
+    @extend_schema(responses=TimeVarianceLevelReportSerializer)
     @action(detail=True)
     def time_based_report(self, request, pk=None):
-        """Return a report of the dataset's time-based checks."""
+        """Return a report of the dataset's time-based checks, by check name."""
         return self.get_report(
             TimeVarianceLevelCheck,
             [

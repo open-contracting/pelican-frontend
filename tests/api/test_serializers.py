@@ -4,6 +4,7 @@ from pathlib import Path
 from django.test import SimpleTestCase
 
 from api.views import (
+    DatasetLevelCheckSerializer,
     FieldLevelCheckDetailSerializer,
     FieldLevelCheckSerializer,
     ResourceLevelCheckDetailSerializer,
@@ -44,3 +45,10 @@ class SerializerTests(SimpleTestCase):
         serializer = ResourceLevelCheckDetailSerializer(data=REPORTS["compiled_release_level_detail"])
 
         self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_dataset_level_report(self):
+        for name, check in REPORTS["dataset_level_report"].items():
+            with self.subTest(name=name):
+                serializer = DatasetLevelCheckSerializer(data=check)
+
+                self.assertTrue(serializer.is_valid(), serializer.errors)

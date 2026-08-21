@@ -104,6 +104,86 @@
       "undefined_examples": []
     }
   },
+  "dataset_level_report": {
+    "distribution.buyer": {
+      "meta": {
+        "reason": "there are not enough resources with check-specific properties",
+        "version": 1.0
+      },
+      "result": null,
+      "value": null
+    },
+    "distribution.tender_status": {
+      "meta": {
+        "shares": {
+          "active": {
+            "count": 15,
+            "examples": [
+              {
+                "item_id": 21,
+                "ocid": "commodo labore consequat in deserunt"
+              }
+            ],
+            "share": 0.16304347826086957
+          }
+        },
+        "version": 1.0
+      },
+      "result": true,
+      "value": 100
+    },
+    "distribution.tender_value_repetition": {
+      "meta": {
+        "most_frequent": [
+          {
+            "amount": -73099995,
+            "count": 1,
+            "currency": "PGK",
+            "examples": [
+              {
+                "item_id": 1,
+                "ocid": "Exc"
+              }
+            ],
+            "share": 0.010309278350515464,
+            "value_str": "-73099995 PGK"
+          }
+        ],
+        "total_processed": 97,
+        "version": 1.0
+      },
+      "result": true,
+      "value": 3
+    },
+    "misc.url_availability": {
+      "meta": {
+        "failed_examples": [
+          {
+            "item_id": 58,
+            "ocid": "in dolor ut Ut",
+            "path": "tender.documents[2].url",
+            "status": "ERROR",
+            "value": "http://4eKyGA4cb.com"
+          }
+        ],
+        "passed_examples": [
+          {
+            "item_id": 58,
+            "ocid": "in dolor ut Ut",
+            "path": "contracts[0].implementation.documents[0].url",
+            "status": "OK",
+            "value": "http://k4.com"
+          }
+        ],
+        "total_failed": 88,
+        "total_passed": 12,
+        "total_processed": 100,
+        "version": 1.0
+      },
+      "result": false,
+      "value": 12
+    }
+  },
   "field_level_detail": {
     "coverage": {
       "checks": {

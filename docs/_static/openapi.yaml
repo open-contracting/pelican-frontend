@@ -290,7 +290,8 @@ paths:
   /api/datasets/{id}/dataset_level_report/:
     get:
       operationId: datasets_dataset_level_report_retrieve
-      description: Return a report of the dataset's dataset-level checks.
+      description: Return a report of the dataset's dataset-level checks, by check
+        name.
       parameters:
       - in: path
         name: id
@@ -308,7 +309,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/DatasetLevelReport'
           description: ''
   /api/datasets/{id}/field_level/{name}/:
     get:
@@ -473,7 +474,7 @@ paths:
   /api/datasets/{id}/time_based_report/:
     get:
       operationId: datasets_time_based_report_retrieve
-      description: Return a report of the dataset's time-based checks.
+      description: Return a report of the dataset's time-based checks, by check name.
       parameters:
       - in: path
         name: id
@@ -491,7 +492,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/TimeVarianceLevelReport'
           description: ''
   /api/generate-report:
     post:
@@ -664,6 +665,26 @@ components:
       - parent_name
       - phase
       - state
+    DatasetLevelCheck:
+      type: object
+      properties:
+        result:
+          type: boolean
+          nullable: true
+          description: Whether the check passed, or null if not applicable
+        value:
+          type: integer
+          nullable: true
+        meta:
+          description: Any additional data to help interpret the result
+      required:
+      - meta
+      - result
+      - value
+    DatasetLevelReport:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DatasetLevelCheck'
     DistinctValue:
       type: object
       properties:
@@ -1247,6 +1268,35 @@ components:
       - template_error
       type: string
       description: '* `template_error` - template_error'
+    TimeVarianceLevelCheck:
+      type: object
+      properties:
+        coverage_result:
+          type: boolean
+          nullable: true
+          description: Whether the coverage check passed, or null if not applicable
+        coverage_value:
+          type: integer
+          nullable: true
+        check_result:
+          type: boolean
+          nullable: true
+          description: Whether the check passed, or null if not applicable
+        check_value:
+          type: integer
+          nullable: true
+        meta:
+          description: Any additional data to help interpret the result
+      required:
+      - check_result
+      - check_value
+      - coverage_result
+      - coverage_value
+      - meta
+    TimeVarianceLevelReport:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/TimeVarianceLevelCheck'
   securitySchemes:
     basicAuth:
       type: http
