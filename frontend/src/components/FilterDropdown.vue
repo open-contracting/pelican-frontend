@@ -21,20 +21,23 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BDropdown, BDropdownItemButton } from "bootstrap-vue-next";
 import { onMounted, ref } from "vue";
 
-const props = defineProps({
-  filterNames: Array,
-  startIndex: { type: Number, default: 0 },
-});
+const props = withDefaults(
+  defineProps<{
+    filterNames: string[];
+    startIndex?: number;
+  }>(),
+  { startIndex: 0 },
+);
 
-const emit = defineEmits(["newSelectedIndex"]);
+const emit = defineEmits<{ newSelectedIndex: [index: number] }>();
 
 const selectedIndex = ref(0);
 
-function clickItem(index) {
+function clickItem(index: number) {
   selectedIndex.value = index;
   emit("newSelectedIndex", index);
 }

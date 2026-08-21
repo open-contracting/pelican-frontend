@@ -6,15 +6,16 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { GChart } from "vue-google-charts";
 import { useBarChart } from "@/composables/useBarChart";
+import type { DatasetLevelCheck, PercentileMeta } from "@/types.js";
 
-const props = defineProps({
-  check: { type: Object, required: true },
-  ticks: { type: Array, required: true },
-  showCount: Boolean,
-});
+const props = defineProps<{
+  check: DatasetLevelCheck;
+  ticks: [number, number];
+  showCount?: boolean;
+}>();
 
 const ranges = [
   ["0_1", "datasetLevel.charts.label_0_1"],
@@ -24,11 +25,13 @@ const ranges = [
   ["50_100", "datasetLevel.charts.label_50_100"],
 ];
 
-const { chartData, chartOptions } = useBarChart(props, () =>
-  ranges.map(([range, key]) => ({
+const { chartData, chartOptions } = useBarChart(props, () => {
+  const meta = props.check.meta as PercentileMeta;
+
+  return ranges.map(([range, key]) => ({
     key,
-    share: props.check.meta.shares[range],
-    count: props.check.meta.counts[range],
-  })),
-);
+    share: meta.shares[range],
+    count: meta.counts[range],
+  }));
+});
 </script>

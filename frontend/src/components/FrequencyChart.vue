@@ -6,15 +6,16 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { GChart } from "vue-google-charts";
 import { useBarChart } from "@/composables/useBarChart";
+import type { DatasetLevelCheck, SingleValueShareMeta } from "@/types.js";
 
-const props = defineProps({
-  check: { type: Object, required: true },
-  ticks: { type: Array, required: true },
-  showCount: Boolean,
-});
+const props = defineProps<{
+  check: DatasetLevelCheck;
+  ticks: [number, number];
+  showCount?: boolean;
+}>();
 
 const ranges = [
   ["1", "datasetLevel.charts.label_1"],
@@ -24,10 +25,12 @@ const ranges = [
   ["100+", "datasetLevel.charts.label_100"],
 ];
 
-const { chartData, chartOptions } = useBarChart(props, () =>
-  ranges.map(([range, key]) => {
-    const count = props.check.meta.counts[range].total_unique_count;
-    return { key, share: count / props.check.meta.total_unique_count, count };
-  }),
-);
+const { chartData, chartOptions } = useBarChart(props, () => {
+  const meta = props.check.meta as SingleValueShareMeta;
+
+  return ranges.map(([range, key]) => {
+    const count = meta.counts[range].total_unique_count;
+    return { key, share: count / meta.total_unique_count, count };
+  });
+});
 </script>

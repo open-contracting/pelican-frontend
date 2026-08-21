@@ -3,11 +3,11 @@
     <span class="name">{{ dataset.name }}</span>
     ({{ $t("dataset.id") }} {{ dataset.id }})
     | {{ $t("dataset.size") }} {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
-    | {{ $t("created") }} {{ dataset.meta.data_quality_tool_metadata.processing_start }}
+    | {{ $t("created") }} {{ dataset.meta.data_quality_tool_metadata?.processing_start }}
   </h1>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useFormatters } from "@/composables/useFormatters";
 import { useDatasetStore } from "@/stores/dataset.js";
