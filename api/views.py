@@ -19,7 +19,6 @@ from api.models import (
     DatasetFilter,
     DatasetLevelCheck,
     FieldLevelCheckExamples,
-    ProgressMonitorDataset,
     Report,
     ResourceLevelCheckExamples,
     TimeVarianceLevelCheck,
@@ -111,11 +110,6 @@ class DatasetSerializer(serializers.ModelSerializer):
             "parent_name",
             "filter_message",
         ]
-
-
-class StatusSerializer(serializers.Serializer):
-    state = serializers.ChoiceField(choices=ProgressMonitorDataset.State.choices)
-    phase = serializers.ChoiceField(choices=ProgressMonitorDataset.Phase.choices)
 
 
 class CreateDatasetSerializer(serializers.Serializer):
@@ -448,23 +442,6 @@ class DatasetViewSet(viewsets.ViewSet):
                 "meta",
             ],
         )
-
-    @extend_schema(responses=StatusSerializer)
-    @action(detail=True)
-    def status(self, request, pk=None):
-        """Return the dataset's status, as an object like `{"phase": "CHECKED", "state": "OK"}`, or `{}` if not set."""
-        try:
-            progress = self.get_object_or_404(self.get_queryset().select_related("progress")).progress
-            return Response({"phase": progress.phase, "state": progress.state})
-        except ProgressMonitorDataset.DoesNotExist:
-            return Response({})
-
-    @extend_schema(responses={200: {"type": "object"}})
-    @action(detail=True)
-    def metadata(self, request, pk=None):
-        """Return the dataset's collection metadata."""
-        meta = self.get_object_or_404(self.get_queryset().values_list("meta__collection_metadata", flat=True))
-        return Response(meta or {})
 
 
 class FieldLevelDetail(views.APIView):

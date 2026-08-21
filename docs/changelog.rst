@@ -11,6 +11,7 @@ This changelog only notes major changes, to notify other developers.
 -  feat: Describe the ``api/generate-report`` endpoint in the OpenAPI document. It accepts a numeric string as ``dataset_id``, and a GET returns 405 instead of 200.
 -  feat: Describe the responses of the field-level and compiled release-level report and detail endpoints in the OpenAPI document, in place of free-form objects. The responses are unchanged.
 -  feat: Describe the responses of the dataset-level and time-based report endpoints, and the dataset's ``meta``, likewise. Only each check's ``meta`` remains a free-form object, since its properties vary by check.
+-  refactor: Remove the ``GET api/datasets/{id}/status/`` and ``GET api/datasets/{id}/metadata/`` endpoints. Like ``find_by_name``, their only caller was the Data Registry, which no longer uses Pelican.
 
 2023-01-26
 ----------

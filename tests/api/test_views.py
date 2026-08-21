@@ -443,53 +443,6 @@ class ViewsTests(PelicanTestCase):
                 },
             )
 
-    def test_datasets_status_no_progress(self):
-        dataset = self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {})
-
-    def test_datasets_status_no_values(self):
-        dataset = self.create(Dataset, name="anything")
-        self.create(ProgressMonitorDataset, dataset=dataset)
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {"phase": "", "state": ""})
-
-    def test_datasets_status(self):
-        dataset = self.create(Dataset, name="anything")
-        self.create(ProgressMonitorDataset, dataset=dataset, phase="CHECKED", state="OK")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/status/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {"phase": "CHECKED", "state": "OK"})
-
-    def test_datasets_metadata_no_values(self):
-        dataset = self.create(Dataset, name="anything")
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/metadata/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {})
-
-    def test_datasets_metadata(self):
-        dataset = self.create(Dataset, name="anything", meta={"collection_metadata": {"ocid_prefix": "ocds-213czf"}})
-
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get(f"/api/datasets/{dataset.pk}/metadata/")
-
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.text, {"ocid_prefix": "ocds-213czf"})
-
     def test_field_level_detail(self):
         dataset = self.create(Dataset, name="anything")
         self.create(
@@ -702,18 +655,6 @@ class ViewsTests(PelicanTestCase):
             response = self.client.get("/api/datasets/123/time_based_report/")
 
             self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
-
-    def test_datasets_status_no_dataset(self):
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/123/status/")
-
-            self.assertEqual(response.status_code, 404)
-
-    def test_datasets_metadata_no_dataset(self):
-        with self.assertNumQueries(1, using="pelican_backend"):
-            response = self.client.get("/api/datasets/123/metadata/")
-
-            self.assertEqual(response.status_code, 404)
 
     def test_field_level_detail_no_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):

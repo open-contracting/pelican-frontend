@@ -424,53 +424,6 @@ paths:
       responses:
         '202':
           description: No response body
-  /api/datasets/{id}/metadata/:
-    get:
-      operationId: datasets_metadata_retrieve
-      description: Return the dataset's collection metadata.
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - datasets
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-          description: ''
-  /api/datasets/{id}/status/:
-    get:
-      operationId: datasets_status_retrieve
-      description: 'Return the dataset''s status, as an object like `{"phase": "CHECKED",
-        "state": "OK"}`, or `{}` if not set.'
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - datasets
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Status'
-          description: ''
   /api/datasets/{id}/time_based_report/:
     get:
       operationId: datasets_time_based_report_retrieve
@@ -1080,20 +1033,6 @@ components:
       required:
       - processing_end
       - processing_start
-    PhaseEnum:
-      enum:
-      - CONTRACTING_PROCESS
-      - DATASET
-      - TIME_VARIANCE
-      - CHECKED
-      - DELETED
-      type: string
-      description: |-
-        * `CONTRACTING_PROCESS` - Contracting Process
-        * `DATASET` - Dataset
-        * `TIME_VARIANCE` - Time Variance
-        * `CHECKED` - Checked
-        * `DELETED` - Deleted
     ReportError:
       type: object
       properties:
@@ -1302,24 +1241,6 @@ components:
       - folder
       - template
       - user
-    StateEnum:
-      enum:
-      - IN_PROGRESS
-      - OK
-      type: string
-      description: |-
-        * `IN_PROGRESS` - In Progress
-        * `OK` - Ok
-    Status:
-      type: object
-      properties:
-        state:
-          $ref: '#/components/schemas/StateEnum'
-        phase:
-          $ref: '#/components/schemas/PhaseEnum'
-      required:
-      - phase
-      - state
     TagError:
       type: object
       properties:
