@@ -1314,7 +1314,7 @@ components:
           description: The data item's ID in the ancestor dataset
         new_item_ocid:
           type: string
-          description: The pair's OCID, as set in this dataset
+          description: The same value as ocid, since a pair is matched on it
         new_item_id:
           type: integer
           description: The data item's ID in this dataset
@@ -1363,7 +1363,7 @@ components:
           description: The number of compiled releases to which the check applied
         coverage_count:
           type: integer
-          description: The number of pairs found among them
+          description: The number of pairs among the compiled releases
         ok_count:
           type: integer
           description: The number of pairs that passed

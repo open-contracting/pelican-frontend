@@ -290,13 +290,13 @@ class DatasetLevelReportSerializer(ReportSerializer):
 class TimeVarianceExampleSerializer(serializers.Serializer):
     ocid = serializers.CharField(help_text="The pair's OCID")
     item_id = serializers.IntegerField(help_text="The data item's ID in the ancestor dataset")
-    new_item_ocid = serializers.CharField(help_text="The pair's OCID, as set in this dataset")
+    new_item_ocid = serializers.CharField(help_text="The same value as ocid, since a pair is matched on it")
     new_item_id = serializers.IntegerField(help_text="The data item's ID in this dataset")
 
 
 class TimeVarianceMetaSerializer(serializers.Serializer):
     total_count = serializers.IntegerField(help_text="The number of compiled releases to which the check applied")
-    coverage_count = serializers.IntegerField(help_text="The number of pairs found among them")
+    coverage_count = serializers.IntegerField(help_text="The number of pairs among the compiled releases")
     ok_count = serializers.IntegerField(help_text="The number of pairs that passed")
     failed_count = serializers.IntegerField(help_text="The number of pairs that failed")
     examples = TimeVarianceExampleSerializer(many=True, help_text="A sample of up to 50 pairs that failed")
