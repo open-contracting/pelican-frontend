@@ -8,6 +8,13 @@
     >{{
       $t("datasetFilter.statusOk")
     }}</BAlert>
+    <BAlert
+      v-if="submitFailed"
+      variant="danger"
+      :model-value="true"
+    >{{
+      $t("datasetFilter.statusFailed")
+    }}</BAlert>
     <form
       v-if="!isSubmitting"
       class="modal_box align-items-center"
@@ -124,6 +131,7 @@ const { formatNumber } = useFormatters();
 
 const isSubmitting = ref(false);
 const isSubmitted = ref(false);
+const submitFailed = ref(false);
 const items = ref(null);
 const releaseDateFrom = ref(null);
 const releaseDateTo = ref(null);
@@ -219,6 +227,7 @@ function datasetFilterItems() {
 
 function createDatasetFilter() {
   isSubmitting.value = true;
+  submitFailed.value = false;
   api
     .postJSON(
       `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, props.dataset.id)}`,
@@ -235,6 +244,11 @@ function createDatasetFilter() {
         emit("close");
         router.go();
       }, 2000);
+    })
+    // Restore the form, so that the filter can be submitted again.
+    .catch(() => {
+      isSubmitting.value = false;
+      submitFailed.value = true;
     });
 }
 

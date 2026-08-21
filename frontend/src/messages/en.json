@@ -43,7 +43,8 @@
     "buyerNameRegexTooltip": "Standard SQL ILIKE pattern",
     "procuringEntityNameRegex": "Procuring entity name pattern",
     "procuringEntityNameRegexTooltip": "Standard SQL ILIKE pattern",
-    "statusOk": "Calculation will start in a moment."
+    "statusOk": "Calculation will start in a moment.",
+    "statusFailed": "The filter could not be submitted. Try again later."
   },
   "datasetReport": {
     "headline": "Export report",
