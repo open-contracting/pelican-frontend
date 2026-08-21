@@ -1,30 +1,31 @@
 import { defineStore } from "pinia";
 import { ref, shallowRef } from "vue";
+import type { FieldLevelCheck, Sorting } from "@/types.js";
 
 export const useUiStore = defineStore("ui", () => {
-  const datasetSearch = ref(null);
-  const datasetSorting = ref(null);
+  const datasetSearch = ref<string | null>(null);
+  const datasetSorting = ref<Sorting | null>(null);
   const datasetLevelFilterIndex = ref(0);
-  const fieldCheckExpandedNodes = ref(new Set());
-  const fieldCheckLayout = ref("table");
-  const fieldCheckSearch = ref(null);
-  const fieldCheckSorting = ref(null);
+  const fieldCheckExpandedNodes = ref(new Set<string>());
+  const fieldCheckLayout = ref<"table" | "tree">("table");
+  const fieldCheckSearch = ref<string | null>(null);
+  const fieldCheckSorting = ref<Sorting | null>(null);
   // A predicate, not a value, so it must not be made reactive.
-  const fieldLevelFilter = shallowRef(() => true);
+  const fieldLevelFilter = shallowRef<(check: FieldLevelCheck) => boolean>(() => true);
   const fieldLevelFilterIndex = ref(0);
-  const resourceCheckExpandedNodes = ref(new Set());
+  const resourceCheckExpandedNodes = ref(new Set<string>());
   const resourceLevelFilterIndex = ref(0);
   const timeLevelFilterIndex = ref(0);
 
-  function isFieldCheckExpanded(path) {
+  function isFieldCheckExpanded(path: string) {
     return fieldCheckExpandedNodes.value.has(path);
   }
 
-  function expandFieldCheck(path) {
+  function expandFieldCheck(path: string) {
     fieldCheckExpandedNodes.value.add(path);
   }
 
-  function collapseFieldCheck(path) {
+  function collapseFieldCheck(path: string) {
     for (const node of [...fieldCheckExpandedNodes.value]) {
       if (node.startsWith(path)) {
         fieldCheckExpandedNodes.value.delete(node);
@@ -32,15 +33,15 @@ export const useUiStore = defineStore("ui", () => {
     }
   }
 
-  function isResourceCheckExpanded(section) {
+  function isResourceCheckExpanded(section: string) {
     return resourceCheckExpandedNodes.value.has(section);
   }
 
-  function expandResourceCheck(section) {
+  function expandResourceCheck(section: string) {
     resourceCheckExpandedNodes.value.add(section);
   }
 
-  function collapseResourceCheck(section) {
+  function collapseResourceCheck(section: string) {
     for (const node of [...resourceCheckExpandedNodes.value]) {
       if (node.startsWith(section)) {
         resourceCheckExpandedNodes.value.delete(node);
@@ -57,15 +58,14 @@ export const useUiStore = defineStore("ui", () => {
   }
 
   /** Expand the field checks that the search matches, and their ancestors. */
-  function setExpandedNodesForSearch(stats) {
-    const isPathSearched = (path) => {
-      return !!path?.toLowerCase().includes(fieldCheckSearch.value.toLowerCase());
-    };
-
+  function setExpandedNodesForSearch(stats: FieldLevelCheck[] | null) {
     if (stats) {
       fieldCheckExpandedNodes.value = new Set();
 
       if (fieldCheckSearch.value) {
+        const search = fieldCheckSearch.value.toLowerCase();
+        const isPathSearched = (path: string) => path.toLowerCase().includes(search);
+
         let nodes = [];
         const remaining = [];
         // select paths that match the search

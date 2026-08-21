@@ -1,8 +1,8 @@
 import { useErrorStore } from "@/stores/error.js";
 
 // This reports an error via ErrorAlert. Callers don't need to handle errors.
-async function get(url) {
-  let response;
+async function get<T>(url: string): Promise<T> {
+  let response: Response;
 
   try {
     response = await fetch(url);
@@ -21,7 +21,7 @@ async function get(url) {
 }
 
 // Callers need to handle errors.
-function postJSON(url, body, signal) {
+function postJSON(url: string, body: unknown, signal?: AbortSignal) {
   return fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
