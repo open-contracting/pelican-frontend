@@ -184,39 +184,40 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BSpinner } from "bootstrap-vue-next";
 import { ref } from "vue";
 import { useDataItem } from "@/composables/useDataItem.js";
+import type { ExampleSection } from "@/types.js";
 
-defineProps({
-  exampleSections: Array,
-  loading: Boolean,
-});
+defineProps<{
+  exampleSections: ExampleSection[];
+  loading?: boolean;
+}>();
 
-const emit = defineEmits(["preview"]);
+const emit = defineEmits<{ preview: [itemId: number, group?: ExampleSection["group"]] }>();
 
 const { download, copyToClipboard } = useDataItem();
 
-const openSections = ref([]);
-const selectedKey = ref(null);
-const selectedSection = ref(null);
+const openSections = ref<string[]>([]);
+const selectedKey = ref<number | null>(null);
+const selectedSection = ref<string | null>(null);
 
-function preview(key, section, itemId, group) {
+function preview(key: number, section: string, itemId: number, group?: ExampleSection["group"]) {
   selectedKey.value = key;
   selectedSection.value = section;
   emit("preview", itemId, group);
 }
 
-function showMore(section) {
+function showMore(section: string) {
   openSections.value.push(section);
 }
 
-function showLess(section) {
+function showLess(section: string) {
   openSections.value = openSections.value.filter((item) => item !== section);
 }
 
-function isExpanded(section) {
+function isExpanded(section: string) {
   return openSections.value.includes(section);
 }
 </script>

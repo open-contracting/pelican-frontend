@@ -71,17 +71,21 @@
   </tr>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
 import { useDatasetStore } from "@/stores/dataset.js";
+import type { FieldLevelCheck } from "@/types.js";
 import ProgressBar from "./ProgressBar.vue";
 
-const props = defineProps({
-  check: Object,
-  showStats: { type: Boolean, default: true },
-});
+const props = withDefaults(
+  defineProps<{
+    check: FieldLevelCheck;
+    showStats?: boolean;
+  }>(),
+  { showStats: true },
+);
 
 const datasetStore = useDatasetStore();
 const { navigate } = useClickable();

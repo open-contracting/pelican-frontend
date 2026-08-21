@@ -100,24 +100,31 @@
   </template>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BCol, BLink, BRow } from "bootstrap-vue-next";
 import { useFormatters } from "@/composables/useFormatters";
 import { PHASES } from "@/config";
+import type { DatasetNode } from "@/types.js";
 import ProgressBar from "./ProgressBar.vue";
 
 const { formatNumber } = useFormatters();
 
 defineOptions({ name: "DatasetPickerRow" });
 
-defineProps(["dataset", "depth"]);
-defineEmits(["dataset-filter", "dataset-report"]);
+withDefaults(
+  defineProps<{
+    dataset: DatasetNode;
+    depth?: number;
+  }>(),
+  { depth: 0 },
+);
+defineEmits<{ "dataset-filter": [dataset: DatasetNode]; "dataset-report": [dataset: DatasetNode] }>();
 
-function getDatasetProgress(dataset) {
+function getDatasetProgress(dataset: DatasetNode) {
   return (PHASES.indexOf(dataset.phase) + 1) * 25;
 }
 
-function isDatasetImported(dataset) {
+function isDatasetImported(dataset: DatasetNode) {
   return dataset.phase === "CHECKED" && dataset.state === "OK";
 }
 </script>
