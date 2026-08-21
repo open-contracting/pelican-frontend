@@ -386,9 +386,11 @@ const options = [
 ];
 const reportLanguage = ref("en");
 
-const failedTags = computed(() =>
-  result.value?.status === "ok" && result.value.failed_tags.length ? result.value.failed_tags : null,
-);
+// A report and a template error both list the tags that could not be rendered.
+const failedTags = computed(() => {
+  const tags = result.value != null && "failed_tags" in result.value ? result.value.failed_tags : [];
+  return tags.length ? tags : null;
+});
 
 // The radio's value is the selected language, which its model types loosely.
 function setDocumentId(value: unknown) {
