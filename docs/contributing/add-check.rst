@@ -1,12 +1,12 @@
 Add a check
 ===========
 
+.. _i18n:
+
 Internationalization (i18n)
 ---------------------------
 
-``frontend/src/messages/en.json`` is the source of every message, and ``es.json`` translates the names and descriptions of checks. The frontend and the exporter fall back to English for any message that ``es.json`` omits.
-
-If you reword a name or description, translate it again, or the translation misreports the check. ``git log -p frontend/src/messages/en.json`` reports the wording to review.
+``frontend/src/messages/en.json`` is the message catalog, and ``es.json`` translates checks' names and descriptions. The frontend and the exporter fall back to English for messages missing from ``es.json``.
 
 The frontend renders a message as HTML, and the exporter renders it as plain text. Use only:
 

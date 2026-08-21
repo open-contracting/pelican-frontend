@@ -3,6 +3,7 @@ node_modules
 dist
 .coverage
 /htmlcov
+/.env
 /credentials.json
 /google_drive_cache
 /static
