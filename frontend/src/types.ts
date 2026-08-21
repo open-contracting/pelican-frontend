@@ -1,4 +1,4 @@
-import type { components } from "@/schema.js";
+import type { components, operations } from "@/schema.js";
 
 type Schemas = components["schemas"];
 
@@ -12,6 +12,10 @@ export type FieldLevelCounts = Schemas["FieldLevelCounts"];
 export type FieldLevelExample = Schemas["FieldLevelExample"];
 export type FieldLevelReport = Schemas["FieldLevelReport"];
 export type FilterDataset = Schemas["FilterDataset"];
+/** The number of data items that a filter matches. */
+export type FilterItemsCount =
+  operations["dataset_filter_items_create"]["responses"][200]["content"]["application/json"];
+export type GenerateReport = Schemas["GenerateReport"];
 export type GenerateReportResponse = Schemas["GenerateReportResponse"];
 export type ResourceLevelCheck = Schemas["ResourceLevelCheck"];
 export type ResourceLevelCheckDetail = Schemas["ResourceLevelCheckDetail"];

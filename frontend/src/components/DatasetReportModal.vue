@@ -1,8 +1,8 @@
 <template>
   <span class="just_holder">
     <Loader v-if="isSubmitting" />
-    <span v-if="submitStatus != null">
-      <span v-if="submitStatus == 'ok' && !failedTags">
+    <span v-if="result != null">
+      <span v-if="result.status == 'ok' && !failedTags">
         <BAlert
           class="submit-result"
           variant="success"
@@ -14,10 +14,10 @@
         </BAlert>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:</span>
         <a
-          :href="'https://docs.google.com/document/d/' + submitData.file_id"
+          :href="'https://docs.google.com/document/d/' + result.data.file_id"
           target="_blank"
         >
-          {{ "https://docs.google.com/document/d/" + submitData.file_id }}
+          {{ "https://docs.google.com/document/d/" + result.data.file_id }}
         </a>
         <BRow class="buttons">
           <BCol>
@@ -48,7 +48,7 @@
           </BCol>
         </BRow>
       </span>
-      <span v-if="submitStatus == 'ok' && failedTags">
+      <span v-if="result.status == 'ok' && failedTags">
         <BAlert
           class="submit-result"
           variant="warning"
@@ -62,14 +62,14 @@
         <div class="margin_bottom">
           <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
           <a
-            :href="'https://docs.google.com/document/d/' + submitData.file_id"
+            :href="'https://docs.google.com/document/d/' + result.data.file_id"
             target="_blank"
           >
-            {{ "https://docs.google.com/document/d/" + submitData.file_id }}
+            {{ "https://docs.google.com/document/d/" + result.data.file_id }}
           </a>
         </div>
       </span>
-      <span v-if="submitStatus == 'template_error'">
+      <span v-if="result.status == 'template_error'">
         <BAlert
           class="submit-result"
           variant="danger"
@@ -79,7 +79,7 @@
         </BAlert>
         <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
         <div
-          v-for="(error, index) in submitData"
+          v-for="(error, index) in result.data"
           :key="index"
         >
           <div>reason: {{ error.reason }}</div>
@@ -123,7 +123,7 @@
           </BCol>
         </BRow>
       </span>
-      <span v-if="submitStatus == 'report_error'">
+      <span v-if="result.status == 'report_error'">
         <BAlert
           class="submit-result"
           variant="danger"
@@ -132,7 +132,7 @@
           <span>{{ $t("datasetReport.status.reportError") }}</span>
         </BAlert>
 
-        <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ submitData.reason }}
+        <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ result.data.reason }}
         <BRow class="buttons">
           <BCol>
             <button
@@ -162,7 +162,7 @@
           </BCol>
         </BRow>
       </span>
-      <span v-if="submitStatus == 'server_error'">
+      <span v-if="result.status == 'server_error'">
         <BAlert
           class="submit-result"
           variant="danger"
@@ -171,7 +171,7 @@
           <BRow>
             <BCol class="width">
               {{ $t("datasetReport.status.serverError") }}<br>
-              {{ errorMessage }}
+              {{ result.message }}
             </BCol>
           </BRow>
         </BAlert>
@@ -246,7 +246,7 @@
       </span>
     </span>
     <form
-      v-if="!isSubmitting && submitStatus == null"
+      v-if="!isSubmitting && result == null"
       class="modal_box align-items-center"
     >
       <div class="row mb-3 section_row">
@@ -356,16 +356,22 @@
   </span>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import api from "@/api.js";
 import { CONFIG } from "@/config.js";
 import { useSettingsStore } from "@/stores/settings.js";
+import type { Dataset, GenerateReport, GenerateReportResponse } from "@/types.js";
 import Loader from "./Loader.vue";
 
-const props = defineProps(["dataset"]);
-defineEmits(["close"]);
+/** The response, or the failure that prevented one. */
+type ReportResult = GenerateReportResponse | { status: "server_error"; message: string };
+
+const props = defineProps<{
+  dataset: Dataset | null;
+}>();
+defineEmits<{ close: [] }>();
 
 const settingsStore = useSettingsStore();
 
@@ -373,17 +379,23 @@ const isSubmitting = ref(false);
 const documentId = ref(settingsStore.settings.template.en);
 const folderId = ref(settingsStore.settings.folder);
 const reportName = ref("");
-const submitStatus = ref(null);
-const submitData = ref(null);
-const errorMessage = ref(null);
-const failedTags = ref(null);
+const result = ref<ReportResult | null>(null);
 const options = [
   { value: "en", text: "English" },
   { value: "es", text: "Español" },
 ];
 const reportLanguage = ref("en");
 
-function setDocumentId(value) {
+const failedTags = computed(() =>
+  result.value?.status === "ok" && result.value.failed_tags.length ? result.value.failed_tags : null,
+);
+
+// The radio's value is the selected language, which its model types loosely.
+function setDocumentId(value: unknown) {
+  if (typeof value !== "string") {
+    return;
+  }
+
   // Only change the template if it is one of the default values.
   if (Object.values(settingsStore.settings.template).includes(documentId.value)) {
     documentId.value = settingsStore.settings.template[value];
@@ -394,11 +406,10 @@ function createDatasetReport() {
   if (props.dataset == null) {
     return;
   }
-  errorMessage.value = null;
   isSubmitting.value = true;
 
-  const data = {
-    dataset_id: Number.parseInt(props.dataset.id, 10),
+  const data: GenerateReport = {
+    dataset_id: props.dataset.id,
     document_id: documentId.value,
     folder_id: folderId.value,
     language: reportLanguage.value,
@@ -411,21 +422,15 @@ function createDatasetReport() {
     .postJSON(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
     .then(async (response) => {
       if (!response.ok) {
-        submitStatus.value = "server_error";
-        errorMessage.value = response.statusText;
+        result.value = { status: "server_error", message: response.statusText };
         return;
       }
 
       // The endpoint returns 200 even when the export fails, reporting it in the body's status property.
-      const body = await response.json();
-
-      failedTags.value = body.failed_tags?.length ? body.failed_tags : null;
-      submitStatus.value = body.status;
-      submitData.value = body.data;
+      result.value = (await response.json()) as GenerateReportResponse;
     })
-    .catch((error) => {
-      submitStatus.value = "server_error";
-      errorMessage.value = error;
+    .catch((error: unknown) => {
+      result.value = { status: "server_error", message: error instanceof Error ? error.message : String(error) };
     })
     .finally(() => {
       isSubmitting.value = false;
@@ -433,11 +438,11 @@ function createDatasetReport() {
 }
 
 function retry() {
-  submitStatus.value = null;
+  result.value = null;
   createDatasetReport();
 }
 
-function fileIdFormatter(value) {
+function fileIdFormatter(value: string) {
   let valueMatch = value.match(/\/d\/([^/]+)/);
   if (valueMatch == null) {
     valueMatch = value.match(/\/folders\/([^/]+)/);
