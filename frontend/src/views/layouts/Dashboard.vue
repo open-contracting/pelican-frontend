@@ -8,8 +8,9 @@
     >
       <!-- Inside the envelope, which indents the content past the fixed sidebar. -->
       <div class="main_envelope">
-        <SiteHeader />
-        <DatasetHeader />
+        <SiteHeader>
+          <DatasetHeader />
+        </SiteHeader>
         <slot />
       </div>
     </main>
