@@ -8,7 +8,7 @@ Pelican frontend should then be updated to support *all* versions of the check, 
 -  ``exporter/leaf_tags/dataset.py``
 -  ``frontend/src/components/FrequencyChart.vue``
 
-If you reword a check's name or description in ``frontend/src/messages/en.json``, update ``frontend/src/messages/es.json``. See :ref:`i18n`. To find missed updates:
+If you reword a check's name or description in ``frontend/src/messages/en.json``, update ``frontend/src/messages/es.json``. See :doc:`translate`. To find missed updates:
 
 .. code-block:: bash
 
