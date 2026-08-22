@@ -1,5 +1,6 @@
 <template>
   <GChart
+    ref="chart"
     type="BarChart"
     :data="chartData"
     :options="chartOptions"

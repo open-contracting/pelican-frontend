@@ -1,4 +1,5 @@
-import { computed } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
+import type { GChart } from "vue-google-charts";
 import { useI18n } from "vue-i18n";
 import { useFormatters } from "@/composables/useFormatters";
 
@@ -41,6 +42,12 @@ export function textWidth(texts: string[], font = `${BAR_CHART_OPTIONS.fontSize}
   return Math.max(...texts.map((text) => context.measureText(text).width));
 }
 
+// Google Charts draws an annotation this far after its bar. Reserving less clips it.
+export const GAP = 12;
+
+// Elide long labels instead of crowding the bars.
+export const MAX_LABEL_WIDTH = 0.5;
+
 /** Color a bar by whether its share is within the check's thresholds. */
 export function shareStyle(share: number, ticks: [number, number]) {
   return ticks[0] <= share && share <= ticks[1] ? "color: #919C03" : "color: #d0021b";
@@ -56,38 +63,55 @@ export function useBarChart(props: BarChartProps, bars: () => { key: string; sha
   const { t } = useI18n();
   const { formatNumber, formatPercentage } = useFormatters();
 
-  // Computed, not built once, so that the labels and the annotations follow the reader's language.
+  const element = useTemplateRef<InstanceType<typeof GChart>>("chart");
+  // The chart's width is only known once it is in the document.
+  const width = ref(0);
+
+  onMounted(() => {
+    width.value = element.value?.$el.clientWidth ?? 0;
+  });
+
+  const rows = computed(() =>
+    bars().map(({ key, share, count }, index) => ({
+      label: t(key),
+      share,
+      annotation: props.showCount ? `${formatPercentage(share)} (${formatNumber(count)})` : formatPercentage(share),
+      // Only the first bar is colored, as the check's thresholds apply to it alone.
+      style: index === 0 ? shareStyle(share, props.ticks) : "",
+    })),
+  );
+
   const chartData = computed<ChartRow[]>(() => [
     [t("datasetLevel.charts.group"), t("datasetLevel.charts.share"), { role: "annotation" }, { role: "style" }],
-    ...bars().map(({ key, share, count }, index) => [
-      t(key),
-      share,
-      props.showCount ? `${formatPercentage(share)} (${formatNumber(count)})` : formatPercentage(share),
-      // Only the first bar is colored, as the check's thresholds apply to it alone.
-      index === 0 ? shareStyle(share, props.ticks) : "",
-    ]),
+    ...rows.value.map(({ label, share, annotation, style }) => [label, share, annotation, style]),
   ]);
 
-  const chartOptions = {
-    ...BAR_CHART_OPTIONS,
-    height: 200,
-    // Room for the widest label, which Google Charts otherwise wraps onto a second line, and for the
-    // annotation after the longest bar.
-    chartArea: {
-      top: 0,
-      left: "42%",
-      width: "43%",
-      height: 180,
-    },
-    hAxis: {
-      viewWindow: {
-        min: 0,
-        max: 1,
+  const chartOptions = computed(() => {
+    const labelWidth = Math.min(textWidth(rows.value.map((row) => row.label)) + GAP, width.value * MAX_LABEL_WIDTH);
+    const annotationWidth = textWidth(
+      rows.value.map((row) => row.annotation),
+      ANNOTATION_FONT,
+    );
+
+    return {
+      ...BAR_CHART_OPTIONS,
+      height: 200,
+      chartArea: {
+        top: 0,
+        height: 180,
+        left: `${(labelWidth / width.value) * 100}%`,
+        width: `${((width.value - labelWidth - annotationWidth - GAP) / width.value) * 100}%`,
       },
-      ticks: props.ticks.slice(1),
-      format: "percent",
-    },
-  };
+      hAxis: {
+        viewWindow: {
+          min: 0,
+          max: 1,
+        },
+        ticks: props.ticks.slice(1),
+        format: "percent",
+      },
+    };
+  });
 
   return { chartData, chartOptions };
 }
