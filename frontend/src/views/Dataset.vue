@@ -47,10 +47,10 @@ const sections = Object.keys(DATASET_CHECK_SECTIONS);
 const filterIndex = ref(0);
 
 const filterNames = [
-  t("datasetLevel.filterDropdown.all"),
-  t("datasetLevel.filterDropdown.failedOnly"),
-  t("datasetLevel.filterDropdown.passedOnly"),
-  t("datasetLevel.filterDropdown.calculatedOnly"),
+  t("filterDropdown.all"),
+  t("filterDropdown.failedOnly"),
+  t("filterDropdown.passedOnly"),
+  t("filterDropdown.calculatedOnly"),
 ];
 
 const filters: ((item: DatasetLevelCheck) => boolean)[] = [

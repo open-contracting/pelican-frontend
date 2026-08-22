@@ -42,7 +42,7 @@
               <tr>
                 <th>{{ $t("datasetLevel.top3.value") }}</th>
                 <th class="text-center">
-                  {{ $t("datasetLevel.top3.share") }}
+                  {{ $t("datasetLevel.charts.share") }}
                 </th>
                 <th class="text-center">
                   {{ $t("datasetLevel.top3.count") }}

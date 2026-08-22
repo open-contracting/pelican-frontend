@@ -29,11 +29,11 @@
               <th
                 class="col-1 text-end"
                 scope="col"
-              >{{ $t("resourceLevel.ok") }}</th>
+              >{{ $t("passed") }}</th>
               <th
                 class="col-1 text-end"
                 scope="col"
-              >{{ $t("resourceLevel.failed") }}</th>
+              >{{ $t("failed") }}</th>
               <th
                 class="col-1 text-end"
                 scope="col"
@@ -85,10 +85,10 @@ const { t } = useI18n();
 const filterIndex = ref(0);
 
 const filterNames = [
-  t("resourceLevel.filterDropdown.all"),
-  t("resourceLevel.filterDropdown.failedOnly"),
-  t("resourceLevel.filterDropdown.passedOnly"),
-  t("resourceLevel.filterDropdown.calculatedOnly"),
+  t("filterDropdown.all"),
+  t("filterDropdown.failedOnly"),
+  t("filterDropdown.passedOnly"),
+  t("filterDropdown.calculatedOnly"),
 ];
 
 const filters: ((item: ResourceLevelCheck) => boolean)[] = [

@@ -71,7 +71,7 @@
             v-model="buyerNameRegex"
             class="regex_input"
           >
-          <small class="form-text text-body-secondary">{{ $t("datasetFilter.buyerNameRegexTooltip") }}</small>
+          <small class="form-text text-body-secondary">{{ $t("datasetFilter.regexTooltip") }}</small>
         </div>
       </div>
       <div class="row mb-3 procuring_row">
@@ -82,7 +82,7 @@
             class="regex_input"
           >
           <small class="form-text text-body-secondary">{{
-            $t("datasetFilter.procuringEntityNameRegexTooltip")
+            $t("datasetFilter.regexTooltip")
           }}</small>
         </div>
       </div>
