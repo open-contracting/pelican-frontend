@@ -13,7 +13,14 @@ import { GChart } from "vue-google-charts";
 import type { GoogleChartOptions } from "vue-google-charts/dist/types";
 import { useI18n } from "vue-i18n";
 import type { ChartRow } from "@/composables/useBarChart.js";
-import { ANNOTATION_FONT, BAR_CHART_OPTIONS, shareStyle, textWidth } from "@/composables/useBarChart.js";
+import {
+  ANNOTATION_FONT,
+  BAR_CHART_OPTIONS,
+  GAP,
+  MAX_LABEL_WIDTH,
+  shareStyle,
+  textWidth,
+} from "@/composables/useBarChart.js";
 import { useFormatters } from "@/composables/useFormatters.js";
 import { DATASET_CHECKS } from "@/config.js";
 import type { CodeMeta, DatasetLevelCheck } from "@/types.js";
@@ -37,10 +44,6 @@ const { formatPercentage, formatNumber } = useFormatters();
 const element = useTemplateRef<InstanceType<typeof GChart>>("chart");
 
 const ROW_HEIGHT = 30;
-// Google Charts draws an annotation this far after its bar. Reserving less clips it.
-const GAP = 12;
-// Elide long labels instead of crowding the bars.
-const MAX_LABEL_WIDTH = 0.5;
 // Beyond this many bars, a limited chart merges the remaining shares into the last one.
 const MAX_BARS = 10;
 
