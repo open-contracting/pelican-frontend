@@ -10,6 +10,7 @@ Contributing
    update-check
    translate
    compare-to-production
+   refresh-fixtures
 
 Setup
 -----
@@ -38,12 +39,12 @@ Run database migrations:
 
    ./manage.py migrate
 
-If you don't have an instance of `Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__, create its database and load fixtures:
+If you don't have an instance of `Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__, create its database and load the fixture, whose contents :doc:`refresh-fixtures` describes:
 
 .. code-block:: bash
 
    createdb pelican_backend
-   gunzip -c tests/fixtures/pelican-backend.sql | psql pelican_backend
+   gunzip -c tests/fixtures/pelican-backend.sql.gz | psql pelican_backend
 
 Frontend
 ~~~~~~~~
@@ -85,6 +86,8 @@ The Django project is made up of two apps:
 
 -  ``api``: Serves API requests
 -  ``exporter``: Generates the exports to Google Docs
+
+.. _api-documentation:
 
 API documentation
 ^^^^^^^^^^^^^^^^^
