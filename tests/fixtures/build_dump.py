@@ -24,8 +24,9 @@ import psycopg
 
 # 96 is the only dataset with all six dataset-level meta shapes. 34 is the only one with time-based checks, whose
 # examples pair its data items with its ancestor's, so 25 is here too. 20 is the only filtered dataset whose
-# collection metadata is null, and 17 is the parent that the dataset picker names.
-DATASETS = [17, 20, 25, 34, 96]
+# collection metadata is null, and 17 is the parent that the dataset picker names. 44 stopped before its reports were
+# written, so it has no Pelican metadata, and it is the only one that declares extensions.
+DATASETS = [17, 20, 25, 34, 44, 96]
 # The number of examples to keep per array, which is one section of a detail page. Each costs a data item, so this is
 # a sample, not the up-to-50 that a page shows: ExampleBoxes.vue only collapses a section above five entries.
 EXAMPLES = 3

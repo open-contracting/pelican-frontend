@@ -63,8 +63,9 @@ class SerializerTests(SimpleTestCase):
                 self.assertTrue(serializer.is_valid(), serializer.errors)
 
     def test_dataset_meta(self):
-        # The sparse entry is a dataset whose collection metadata is null, apart from its dates.
-        for key in ("dataset_meta", "dataset_meta_sparse"):
+        # The sparse entry's collection metadata is null, apart from its dates, and the in-progress entry has no
+        # Pelican metadata, since Pelican writes it last.
+        for key in ("dataset_meta", "dataset_meta_sparse", "dataset_meta_in_progress"):
             with self.subTest(key=key):
                 serializer = DatasetMetaSerializer(data=REPORTS[key])
 
