@@ -69,6 +69,7 @@
     },
     "link": "Link",
     "reason": "Reason",
+    "fullTag": "Full tag",
     "documentId": "Main template ID",
     "documentIdTooltip": "ID or URL of the main template in Google Docs",
     "documentIdPermissions": "The template and sub-templates must be editable by {user}.",
