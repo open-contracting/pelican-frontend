@@ -69,6 +69,7 @@
     },
     "link": "Enlace",
     "reason": "Motivo",
+    "fullTag": "Etiqueta completa",
     "documentId": "ID de la plantilla principal",
     "documentIdTooltip": "ID o URL de la plantilla principal en Google Docs",
     "documentIdPermissions": "{user} debe poder editar la plantilla y las subplantillas.",

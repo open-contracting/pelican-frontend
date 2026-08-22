@@ -82,10 +82,10 @@
           v-for="(error, index) in result.data"
           :key="index"
         >
-          <div>reason: {{ error.reason }}</div>
-          <div>full tag: {{ error.full_tag }}</div>
+          <div>{{ $t("datasetReport.reason") }}: {{ error.reason }}</div>
+          <div>{{ $t("datasetReport.fullTag") }}: {{ error.full_tag }}</div>
           <div>
-            <span>link: </span>
+            <span>{{ $t("datasetReport.link") }}: </span>
             <a
               :href="'https://docs.google.com/document/d/' + error.template_id"
               target="_blank"
