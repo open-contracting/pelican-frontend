@@ -204,7 +204,7 @@ function datasetFilterItems() {
   gettingCountsController.value = controller;
 
   api
-    .postJSON(
+    .postJSON<FilterItemsCount>(
       `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.datasetFilterItems}`,
       {
         dataset_id_original: props.dataset.id,
@@ -212,8 +212,8 @@ function datasetFilterItems() {
       },
       controller.signal,
     )
-    .then(async (response) => {
-      items.value = response.ok ? (((await response.json()) as FilterItemsCount).items ?? null) : null;
+    .then((result) => {
+      items.value = result.ok ? (result.data.items ?? null) : null;
     })
     .catch((error: unknown) => {
       if (!(error instanceof Error) || error.name !== "AbortError") {
@@ -236,7 +236,7 @@ function createDatasetFilter() {
   isSubmitting.value = true;
   submitFailed.value = false;
   api
-    .postJSON(
+    .post(
       `${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetFilter.replace(/{id}/g, String(props.dataset.id))}`,
       datasetFilterMessage(),
     )

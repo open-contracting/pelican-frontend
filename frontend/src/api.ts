@@ -1,5 +1,8 @@
 import { useErrorStore } from "@/stores/error.js";
 
+/** The response body, if the request succeeded, or the status that explains why it didn't. */
+type PostResult<T> = { ok: true; data: T } | { ok: false; status: number; statusText: string };
+
 // This reports an error via ErrorAlert. Callers don't need to handle errors.
 async function get<T>(url: string): Promise<T> {
   let response: Response;
@@ -20,8 +23,8 @@ async function get<T>(url: string): Promise<T> {
   return response.json();
 }
 
-// Callers need to handle errors.
-function postJSON(url: string, body: unknown, signal?: AbortSignal) {
+// Callers need to handle errors. Use this for an endpoint that returns no body to parse.
+function post(url: string, body: unknown, signal?: AbortSignal) {
   return fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -30,4 +33,15 @@ function postJSON(url: string, body: unknown, signal?: AbortSignal) {
   });
 }
 
-export default { get, postJSON };
+// Callers need to handle errors.
+async function postJSON<T>(url: string, body: unknown, signal?: AbortSignal): Promise<PostResult<T>> {
+  const response = await post(url, body, signal);
+
+  if (!response.ok) {
+    return { ok: false, status: response.status, statusText: response.statusText };
+  }
+
+  return { ok: true, data: await response.json() };
+}
+
+export default { get, post, postJSON };
