@@ -10,6 +10,7 @@
   "failed": "Failed",
   "notAvailable": "Not applicable",
   "filterDropdown": {
+    "show": "Show:",
     "all": "All",
     "failedOnly": "Failed only",
     "passedOnly": "Passed only",
