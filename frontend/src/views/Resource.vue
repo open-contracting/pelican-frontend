@@ -84,12 +84,12 @@ const { t } = useI18n();
 
 const filterIndex = ref(0);
 
-const filterNames = [
+const filterNames = computed(() => [
   t("filterDropdown.all"),
   t("filterDropdown.failedOnly"),
   t("filterDropdown.passedOnly"),
   t("filterDropdown.calculatedOnly"),
-];
+]);
 
 const filters: ((item: ResourceLevelCheck) => boolean)[] = [
   () => true,
