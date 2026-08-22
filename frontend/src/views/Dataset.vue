@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { BCol, BRow } from "bootstrap-vue-next";
-import { onBeforeMount, ref, watch } from "vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
@@ -46,12 +46,12 @@ const { t } = useI18n();
 const sections = Object.keys(DATASET_CHECK_SECTIONS);
 const filterIndex = ref(0);
 
-const filterNames = [
+const filterNames = computed(() => [
   t("filterDropdown.all"),
   t("filterDropdown.failedOnly"),
   t("filterDropdown.passedOnly"),
   t("filterDropdown.calculatedOnly"),
-];
+]);
 
 const filters: ((item: DatasetLevelCheck) => boolean)[] = [
   () => true,

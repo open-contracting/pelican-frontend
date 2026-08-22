@@ -1,4 +1,4 @@
-import { onMounted, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useFormatters } from "@/composables/useFormatters";
 
@@ -56,16 +56,27 @@ export function useBarChart(props: BarChartProps, bars: () => { key: string; sha
   const { t } = useI18n();
   const { formatNumber, formatPercentage } = useFormatters();
 
-  const chartData = ref<ChartRow[]>([
+  // Computed, not built once, so that the labels and the annotations follow the reader's language.
+  const chartData = computed<ChartRow[]>(() => [
     [t("datasetLevel.charts.group"), t("datasetLevel.charts.share"), { role: "annotation" }, { role: "style" }],
+    ...bars().map(({ key, share, count }, index) => [
+      t(key),
+      share,
+      props.showCount ? `${formatPercentage(share)} (${formatNumber(count)})` : formatPercentage(share),
+      // Only the first bar is colored, as the check's thresholds apply to it alone.
+      index === 0 ? shareStyle(share, props.ticks) : "",
+    ]),
   ]);
 
   const chartOptions = {
     ...BAR_CHART_OPTIONS,
     height: 200,
+    // Room for the widest label, which Google Charts otherwise wraps onto a second line, and for the
+    // annotation after the longest bar.
     chartArea: {
       top: 0,
-      width: "50%",
+      left: "42%",
+      width: "43%",
       height: 180,
     },
     hAxis: {
@@ -77,18 +88,6 @@ export function useBarChart(props: BarChartProps, bars: () => { key: string; sha
       format: "percent",
     },
   };
-
-  onMounted(() => {
-    chartData.value.push(
-      ...bars().map(({ key, share, count }, index) => [
-        t(key),
-        share,
-        props.showCount ? `${formatPercentage(share)} (${formatNumber(count)})` : formatPercentage(share),
-        // Only the first bar is colored, as the check's thresholds apply to it alone.
-        index === 0 ? shareStyle(share, props.ticks) : "",
-      ]),
-    );
-  });
 
   return { chartData, chartOptions };
 }
