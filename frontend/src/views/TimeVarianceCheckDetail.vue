@@ -110,6 +110,7 @@
             </tr>
           </thead>
           <tbody>
+            <!-- The OCID repeats. Showing it once would need a different layout. -->
             <template v-for="(item, index) in check.meta.examples.slice(0, 5)" :key="index">
               <tr
                 class="new_row"
