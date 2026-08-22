@@ -26,7 +26,7 @@ Rebuild
 What the dump contains
 ----------------------
 
-``DATASETS`` in ``build_dump.py`` names the datasets, and the comment above it says what each one covers. Between them, they exercise every page: the time-based checks that only a dataset with an ancestor has, all six dataset-level check types, a code chart with more values than it draws bars for, a filtered dataset and its parent, and a dataset whose collection metadata is null.
+``DATASETS`` in ``build_dump.py`` names the datasets, and the comment above it says what each one covers. Between them, they exercise every page: the time-based checks that only a dataset with an ancestor has, all six dataset-level check types, a code chart with more values than it draws bars for, a filtered dataset and its parent, a dataset whose collection metadata is null, and one that stopped before its reports were written, which is the only state in which a page can be missing its report.
 
 The rows are copied as they are, with no scrubbing. A report is an aggregate of the data items it is about, so replacing a publisher's name or an OCID would decouple the two: the check results, charts and examples would no longer follow from the data on display. Choose datasets whose publishers publish openly.
 

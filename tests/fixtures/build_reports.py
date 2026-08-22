@@ -23,10 +23,12 @@ OUT = Path("tests", "fixtures", "reports.json")
 DATASET = 96
 # The only dataset with time-based checks.
 TIME_DATASET = 34
-# A dataset whose collection metadata is set throughout, and the one whose publisher, OCID prefix, license and
-# publication policy are null.
+# A dataset whose collection metadata is set throughout, the one whose publisher, OCID prefix, license and
+# publication policy are null, and the one that stopped before Pelican wrote its metadata, which is also the only one
+# that declares extensions.
 META_DATASET = 34
 SPARSE_META_DATASET = 20
+IN_PROGRESS_META_DATASET = 44
 
 # Two field-level checks: one whose quality group has checks, one whose quality group has none.
 FIELD_PATHS = ("ocid", "id")
@@ -92,7 +94,7 @@ def trim(value):
             if key == "examples" or key.endswith("_examples"):
                 # A percentile check groups its examples by band.
                 value[key] = child[:1] if isinstance(child, list) else {band: e[:1] for band, e in child.items()}
-            elif isinstance(child, list) and key == "most_frequent":
+            elif isinstance(child, list) and key in {"most_frequent", "extensions"}:
                 value[key] = trim(child[:1])
             elif isinstance(child, dict) and key == "shares":
                 value[key] = trim(dict(list(child.items())[:1]))
@@ -141,7 +143,7 @@ def checks(tables, table, dataset_id, fields, names=None):
 def meta(tables, dataset_id):
     for row in tables["dataset"]:
         if row["id"] == str(dataset_id):
-            return json.loads(row["meta"])
+            return trim(json.loads(row["meta"]))
     raise KeyError(dataset_id)
 
 
@@ -186,6 +188,7 @@ def main():
                 ),
                 "dataset_meta": meta(tables, META_DATASET),
                 "dataset_meta_sparse": meta(tables, SPARSE_META_DATASET),
+                "dataset_meta_in_progress": meta(tables, IN_PROGRESS_META_DATASET),
             },
             indent=2,
             sort_keys=True,

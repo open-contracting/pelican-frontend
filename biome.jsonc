@@ -8,7 +8,9 @@
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 119,
-    "includes": ["**", "!release-schema.json"]
+    // reports.json is written by tests/fixtures/build_reports.py, which expands every array, so formatting it here
+    // would make each rebuild dirty the file.
+    "includes": ["**", "!release-schema.json", "!tests/fixtures/reports.json"]
   },
   "overrides": [
     {

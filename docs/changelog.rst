@@ -6,7 +6,7 @@ This changelog only notes major changes, to notify other developers.
 2026-08-21
 ----------
 
--  chore: Rebuild ``tests/fixtures/pelican-backend.sql.gz`` from production, with scripts, and document what it contains. It now has time-based checks, every dataset-level check type, and a filtered dataset. :issue:`301`
+-  chore: Rebuild ``tests/fixtures/pelican-backend.sql.gz`` from production, with scripts, and document what it contains. It now has time-based checks, every dataset-level check type, a filtered dataset, and a dataset still being processed. :issue:`301`
 -  feat: A field-level report's ``passed_examples`` and ``failed_examples`` are absent, rather than null. Only ``api/datasets/{id}/field_level/{path}/`` returns them.
 
 2026-08-20
