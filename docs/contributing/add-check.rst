@@ -6,7 +6,7 @@ Names and descriptions
 
 .. seealso::
 
-   :ref:`i18n`, for the Spanish term to use for each of Pelican's nouns
+   :doc:`translate`
 
 Every check has a ``name`` and a ``description``, which a list of checks renders. The exporter renders both as plain text, so use only the markup it converts:
 
