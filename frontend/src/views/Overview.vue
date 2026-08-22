@@ -247,6 +247,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import Tooltip from "@/components/Tooltip.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import { useDatasetStore } from "@/stores/dataset.js";
@@ -255,19 +256,22 @@ import Dashboard from "./layouts/Dashboard.vue";
 
 const PHASE_NAMES = ["planning", "tender", "award", "contract", "implementation"] as const;
 
-/** The value itself, if a string, or its English text, if localized. */
+const datasetStore = useDatasetStore();
+const { formatNumber } = useFormatters();
+const { locale } = useI18n();
+
+/** The value itself, if a string, or its text in this language, in English, or in whichever it has. */
 function localized(value: unknown) {
   if (typeof value === "string") {
     return value;
   }
-  if (value !== null && typeof value === "object" && "en" in value) {
-    return String((value as Record<string, unknown>).en);
+  if (value !== null && typeof value === "object") {
+    const texts = value as Record<string, unknown>;
+    const text = texts[locale.value] ?? texts.en ?? Object.values(texts)[0];
+    return typeof text === "string" ? text : "";
   }
   return "";
 }
-
-const datasetStore = useDatasetStore();
-const { formatNumber } = useFormatters();
 
 const dataset = computed(() => datasetStore.dataset);
 
