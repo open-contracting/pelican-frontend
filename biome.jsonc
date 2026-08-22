@@ -16,10 +16,12 @@
       "linter": {
         "rules": {
           "correctness": {
+            // A component that only a template renders, and a value that only a template reads, are both used.
             "noUnusedImports": "off",
             "noUnusedVariables": "off"
           },
           "style": {
+            // A component that a template renders, and a script only names as a type, is not a type-only import.
             "useImportType": "off"
           }
         }
