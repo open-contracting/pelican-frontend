@@ -251,7 +251,6 @@ import { useI18n } from "vue-i18n";
 import Tooltip from "@/components/Tooltip.vue";
 import { useFormatters } from "@/composables/useFormatters";
 import { useDatasetStore } from "@/stores/dataset.js";
-import type { FilterDataset } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
 
 const PHASE_NAMES = ["planning", "tender", "award", "contract", "implementation"] as const;
@@ -275,8 +274,7 @@ function localized(value: unknown) {
 
 const dataset = computed(() => datasetStore.dataset);
 
-// The API documents a filtered dataset's filter as free-form, being the request body as submitted.
-const filter = computed(() => dataset.value?.filter_message as FilterDataset | undefined);
+const filter = computed(() => dataset.value?.filter_message);
 
 const collection = computed(() => dataset.value?.meta.collection_metadata);
 // An extension's metadata is free-form: its name and URL are either a string or an object of localized strings.

@@ -662,6 +662,8 @@ components:
           nullable: true
           description: The name of the dataset that was filtered
         filter_message:
+          allOf:
+          - $ref: '#/components/schemas/FilterDataset'
           nullable: true
           description: The filter that created the dataset
       required:
