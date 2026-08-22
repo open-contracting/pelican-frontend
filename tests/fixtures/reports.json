@@ -435,6 +435,41 @@
       }
     }
   },
+  "field_level_report_sparse": {
+    "ocid": {
+      "coverage": {
+        "checks": {
+          "exists": {
+            "failed_count": 0,
+            "passed_count": 36977,
+            "total_count": 36977
+          },
+          "non_empty": {
+            "failed_count": 0,
+            "passed_count": 36977,
+            "total_count": 36977
+          }
+        },
+        "failed_count": 0,
+        "passed_count": 36977,
+        "total_count": 36977
+      },
+      "examples_filled": false,
+      "processing_order": 0,
+      "quality": {
+        "checks": {
+          "ocid_prefix_check": {
+            "failed_count": 0,
+            "passed_count": 36977,
+            "total_count": 36977
+          }
+        },
+        "failed_count": 0,
+        "passed_count": 36977,
+        "total_count": 36977
+      }
+    }
+  },
   "time_based_report": {
     "coherent.dates": {
       "check_result": true,
