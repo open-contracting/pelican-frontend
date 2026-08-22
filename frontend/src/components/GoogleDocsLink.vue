@@ -13,6 +13,6 @@ const props = defineProps<{
   documentId: string | null;
 }>();
 
-// A template error names no document if it failed before reaching one.
+// A template error's template_id is null if the error is not attributed to a template.
 const url = computed(() => (props.documentId ? `https://docs.google.com/document/d/${props.documentId}` : null));
 </script>

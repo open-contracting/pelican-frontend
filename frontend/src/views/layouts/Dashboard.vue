@@ -6,7 +6,6 @@
       role="main"
       class="main main_content col col-12"
     >
-      <!-- Inside the envelope, which indents the content past the fixed sidebar. -->
       <div class="main_envelope">
         <SiteHeader>
           <DatasetHeader />

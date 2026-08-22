@@ -6,10 +6,7 @@
         :to="{ name: 'home' }"
       >{{ $t("header") }}</RouterLink>
 
-      <!-- What the page is about, from a layout that knows. -->
       <slot />
-
-      <!-- #188 hangs the signed-in reader and a sign-out control here. -->
 
       <label
         class="visually-hidden"
@@ -41,7 +38,6 @@ const { locale, setLocale } = useLocale();
 <style scoped lang="scss">
 @import "@/scss/variables";
 
-// No horizontal padding, so the header lines up with the content below it.
 .site_header {
     padding: 10px 0 30px;
 }

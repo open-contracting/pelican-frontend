@@ -1,35 +1,29 @@
 Internationalization (i18n)
 ===========================
 
-``frontend/src/messages/en.json`` is the message catalog, and ``es.json`` is its Spanish translation.
+Source messages (``en.json``)
+-----------------------------
 
-Neither the frontend nor the exporter requires a translation to be complete: both fall back to English for a message it omits.
-
-If two keys would hold the same text, prefer one key that serves both places. Where one key does, prefer a noun to an adjective: a translation might have to agree an adjective with a different subject in each place.
+If two keys would hold the same text, prefer one key that serves both contexts. In such cases, prefer a noun to an adjective, because a translation might have to agree an adjective with a different subject in each context.
 
 Write ``{'$'}`` for a dollar sign, which vue-i18n otherwise interprets.
 
-Spanish translation
--------------------
-
-Pelican's prose reuses the same nouns across hundreds of messages, so a term has to be settled once and then applied. Two sources settle a term:
-
-#. The `OCDS Glossary <https://docs.google.com/spreadsheets/d/171VRailLhqC3Pmw3Qkh4lIgUkmtSa7t4H2h7yntSZg8/edit?gid=1728079542#gid=1728079542>`__, for the contracting nouns.
-#. The `standard's Spanish catalogs <https://github.com/open-contracting/standard/tree/latest/docs/locale/es/LC_MESSAGES>`__, for anything OCDS names.
-
-The terms below are the ones neither source names.
+Spanish translation (``es.json``)
+---------------------------------
 
 Terms
 ~~~~~
 
+We ensure that key terms are translated consistently by referring to the `OCDS Glossary <https://docs.google.com/spreadsheets/d/171VRailLhqC3Pmw3Qkh4lIgUkmtSa7t4H2h7yntSZg8/edit?gid=1728079542#gid=1728079542>`__ and the standard's `Spanish translations <https://github.com/open-contracting/standard/tree/latest/docs/locale/es/LC_MESSAGES>`__, plus:
+
 collection
-  colección. All compiled releases from one source at one point in time, which is what a dataset-level check operates on. Not *recopilación* or *recolección*, which name the act of collecting rather than its result.
+  colección. All compiled releases from one source at one point in time, which is what a dataset-level check operates on.
 dataset
-  conjunto de datos. What Pelican processes, and what a filter derives another of. Keep it distinct from a collection: the interface shows both.
+  conjunto de datos. What Pelican processes, and what filtering a dataset produces. Keep it distinct from a collection: the interface shows both.
 check
-  comprobación. The named thing a reader selects and reads a description of. Not *verificación* or *revisión*.
+  comprobación. A named rule that Pelican applies to a dataset, like "Award reference" or "Monetary values are realistic".
 test
-  prueba. One application of a check. The interface counts both: ``resourceLevel.count_header`` counts the compiled releases a check was applied to, and ``resourceLevel.application_count_header`` counts the individual tests run over them.
+  prueba. One application of a check. The interface counts both: ``resourceLevel.count_header`` counts the compiled releases to which a check was applied, and ``resourceLevel.application_count_header`` counts the individual tests performed.
 coverage
   cobertura
 quality
@@ -42,7 +36,7 @@ pass, fail
 Wording
 ~~~~~~~
 
-Reuse ``es.json``'s rendering of a recurring sentence:
+Reuse ``es.json``'s patterns for recurring sentences:
 
 The test is skipped if…
   La prueba se omite si…
