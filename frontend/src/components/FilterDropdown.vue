@@ -1,6 +1,6 @@
 <template>
   <span class="filter_dropdown_group">
-    <span id="show_prefix">Show:</span>
+    <span id="show_prefix">{{ $t("filterDropdown.show") }}</span>
     <BDropdown
       id="filter_dropdown"
       class="filter_dropdown"
