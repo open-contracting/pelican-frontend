@@ -421,15 +421,15 @@ function createDatasetReport() {
   }
 
   api
-    .postJSON(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
-    .then(async (response) => {
+    .postJSON<GenerateReportResponse>(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
+    .then((response) => {
       if (!response.ok) {
         result.value = { status: "server_error", message: response.statusText };
         return;
       }
 
       // The endpoint returns 200 even when the export fails, reporting it in the body's status property.
-      result.value = (await response.json()) as GenerateReportResponse;
+      result.value = response.data;
     })
     .catch((error: unknown) => {
       result.value = { status: "server_error", message: error instanceof Error ? error.message : String(error) };
