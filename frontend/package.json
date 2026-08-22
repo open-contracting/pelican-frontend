@@ -11,7 +11,6 @@
     "@fortawesome/vue-fontawesome": "^3.1.2",
     "bootstrap": "^5.3.8",
     "bootstrap-vue-next": "^0.43.5",
-    "numeral": "^2.0.6",
     "pinia": "^4.0.3",
     "vue": "^3.5.25",
     "vue-google-charts": "^1.1.0",
@@ -22,7 +21,6 @@
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
-    "@types/numeral": "^2.0.5",
     "@vitejs/plugin-vue": "^6.0.4",
     "@vue/tsconfig": "^0.9.1",
     "knip": "^6.32.1",
