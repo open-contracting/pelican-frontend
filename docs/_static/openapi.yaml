@@ -1329,8 +1329,8 @@ components:
         coverage_value:
           type: integer
           nullable: true
-          description: The percentage of the check's compiled releases that are also
-            in this dataset, or null if it applied to none
+          description: The percentage of the ancestor dataset's applicable compiled
+            releases that are paired, or null if the check applied to none
         coverage_result:
           type: boolean
           nullable: true
@@ -1360,10 +1360,11 @@ components:
       properties:
         total_count:
           type: integer
-          description: The number of compiled releases to which the check applied
+          description: The number of the ancestor dataset's compiled releases to which
+            the check applies
         coverage_count:
           type: integer
-          description: The number of pairs among the compiled releases
+          description: The number of those that are paired
         ok_count:
           type: integer
           description: The number of pairs that passed

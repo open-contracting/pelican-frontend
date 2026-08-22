@@ -275,8 +275,10 @@ class TimeVarianceExampleSerializer(serializers.Serializer):
 
 
 class TimeVarianceMetaSerializer(serializers.Serializer):
-    total_count = serializers.IntegerField(help_text="The number of compiled releases to which the check applied")
-    coverage_count = serializers.IntegerField(help_text="The number of pairs among the compiled releases")
+    total_count = serializers.IntegerField(
+        help_text="The number of the ancestor dataset's compiled releases to which the check applies"
+    )
+    coverage_count = serializers.IntegerField(help_text="The number of those that are paired")
     ok_count = serializers.IntegerField(help_text="The number of pairs that passed")
     failed_count = serializers.IntegerField(help_text="The number of pairs that failed")
     examples = TimeVarianceExampleSerializer(many=True, help_text="A sample of up to 50 pairs that failed")
@@ -286,8 +288,8 @@ class TimeVarianceMetaSerializer(serializers.Serializer):
 class TimeVarianceLevelCheckSerializer(serializers.Serializer):
     coverage_value = serializers.IntegerField(
         allow_null=True,
-        help_text="The percentage of the check's compiled releases that are also in this dataset, or null if it "
-        "applied to none",
+        help_text="The percentage of the ancestor dataset's applicable compiled releases that are paired, or "
+        "null if the check applied to none",
     )
     coverage_result = serializers.BooleanField(allow_null=True, help_text="Whether coverage_value exceeds 95")
     check_value = serializers.IntegerField(
