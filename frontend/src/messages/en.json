@@ -29,13 +29,20 @@
     "name": "Name",
     "size": "Count",
     "phase": "Status",
+    "phases": {
+      "CONTRACTING_PROCESS": "Field and compiled release",
+      "DATASET": "Collection",
+      "TIME_VARIANCE": "Time",
+      "CHECKED": "Checked",
+      "DELETED": "Deleted"
+    },
     "search": "Search report by name",
     "timeVariance": "Time-based checks"
   },
   "datasetFilter": {
     "headline": "Dataset filtering",
     "submit": "Filter",
-    "items": "selected",
+    "items": "{items} from {total} selected",
     "itemsAll": "criteria will not limit the parent dataset",
     "releaseDateFromTo": "Release date from - to",
     "releaseDateFrom": "Release date from",

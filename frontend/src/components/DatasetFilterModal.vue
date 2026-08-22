@@ -97,8 +97,7 @@
           <span v-if="gettingCountsController == null">
             <span
               v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases.total_unique_ocids"
-            >({{ formatNumber(items) }} from {{ formatNumber(dataset.meta.compiled_releases.total_unique_ocids) }}
-              {{ $t("datasetFilter.items") }})</span>
+            >({{ $t("datasetFilter.items", { items: formatNumber(items), total: formatNumber(dataset.meta.compiled_releases.total_unique_ocids) }) }})</span>
             <span
               v-if="dataset != null && items == dataset.meta.compiled_releases.total_unique_ocids"
             >({{ $t("datasetFilter.itemsAll") }})</span>
