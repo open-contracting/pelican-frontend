@@ -13,40 +13,12 @@
           </span>
         </BAlert>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:</span>
-        <a
-          :href="'https://docs.google.com/document/d/' + result.data.file_id"
-          target="_blank"
-        >
-          {{ "https://docs.google.com/document/d/" + result.data.file_id }}
-        </a>
-        <BRow class="buttons">
-          <BCol>
-            <button
-              class="variant-success btn-success"
-              href="#"
-              @click.stop.prevent="retry"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'redo-alt']"
-                class="icon"
-              />
-              {{ $t("tryAgain") }}
-            </button>
-          </BCol>
-          <BCol class="right-align">
-            <button
-              class="variant-success btn-success"
-              href="#"
-              @click.stop.prevent="$emit('close')"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'window-close']"
-                class="icon"
-              />
-              {{ $t("close") }}
-            </button>
-          </BCol>
-        </BRow>
+        <GoogleDocsLink :document-id="result.data.file_id" />
+        <RetryOrCloseButtons
+          variant="success"
+          @retry="retry"
+          @close="$emit('close')"
+        />
       </span>
       <span v-if="result.status == 'ok' && failedTags">
         <BAlert
@@ -61,12 +33,7 @@
 
         <div class="margin_bottom">
           <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
-          <a
-            :href="'https://docs.google.com/document/d/' + result.data.file_id"
-            target="_blank"
-          >
-            {{ "https://docs.google.com/document/d/" + result.data.file_id }}
-          </a>
+          <GoogleDocsLink :document-id="result.data.file_id" />
         </div>
       </span>
       <span v-if="result.status == 'template_error'">
@@ -82,46 +49,18 @@
           v-for="(error, index) in result.data"
           :key="index"
         >
-          <div>{{ $t("datasetReport.reason") }}: {{ error.reason }}</div>
-          <div>{{ $t("datasetReport.fullTag") }}: {{ error.full_tag }}</div>
+          <div><span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ error.reason }}</div>
+          <div><span class="info_prefix">{{ $t("datasetReport.fullTag") }}:</span> {{ error.full_tag }}</div>
           <div>
-            <span>{{ $t("datasetReport.link") }}: </span>
-            <a
-              :href="'https://docs.google.com/document/d/' + error.template_id"
-              target="_blank"
-            >
-              {{ "https://docs.google.com/document/d/" + error.template_id }}
-            </a>
+            <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
+            <GoogleDocsLink :document-id="error.template_id" />
           </div>
         </div>
-        <BRow class="buttons">
-          <BCol>
-            <button
-              class="variant-danger btn-danger"
-              href="#"
-              @click.stop.prevent="retry"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'redo-alt']"
-                class="icon"
-              />
-              {{ $t("tryAgain") }}
-            </button>
-          </BCol>
-          <BCol class="right-align">
-            <button
-              class="variant-danger btn-danger"
-              href="#"
-              @click.stop.prevent="$emit('close')"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'window-close']"
-                class="icon"
-              />
-              {{ $t("close") }}
-            </button>
-          </BCol>
-        </BRow>
+        <RetryOrCloseButtons
+          variant="danger"
+          @retry="retry"
+          @close="$emit('close')"
+        />
       </span>
       <span v-if="result.status == 'report_error'">
         <BAlert
@@ -133,34 +72,11 @@
         </BAlert>
 
         <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ result.data.reason }}
-        <BRow class="buttons">
-          <BCol>
-            <button
-              class="variant-danger btn-danger"
-              href="#"
-              @click.stop.prevent="retry"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'redo-alt']"
-                class="icon"
-              />
-              {{ $t("tryAgain") }}
-            </button>
-          </BCol>
-          <BCol class="right-align">
-            <button
-              class="variant-danger btn-danger"
-              href="#"
-              @click.stop.prevent="$emit('close')"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'window-close']"
-                class="icon"
-              />
-              {{ $t("close") }}
-            </button>
-          </BCol>
-        </BRow>
+        <RetryOrCloseButtons
+          variant="danger"
+          @retry="retry"
+          @close="$emit('close')"
+        />
       </span>
       <span v-if="result.status == 'server_error'">
         <BAlert
@@ -175,34 +91,11 @@
             </BCol>
           </BRow>
         </BAlert>
-        <BRow>
-          <BCol>
-            <button
-              class="variant-danger btn-danger"
-              href="#"
-              @click.stop.prevent="retry"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'redo-alt']"
-                class="icon"
-              />
-              {{ $t("tryAgain") }}
-            </button>
-          </BCol>
-          <BCol class="right-align">
-            <button
-              class="variant-danger btn-danger"
-              href="#"
-              @click.stop.prevent="$emit('close')"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'window-close']"
-                class="icon"
-              />
-              {{ $t("close") }}
-            </button>
-          </BCol>
-        </BRow>
+        <RetryOrCloseButtons
+          variant="danger"
+          @retry="retry"
+          @close="$emit('close')"
+        />
       </span>
       <span v-if="failedTags != null">
         <span class="info_prefix">{{ $t("datasetReport.warningList") }}:</span>
@@ -215,34 +108,11 @@
           </li>
         </ul>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}</span>
-        <BRow class="buttons">
-          <BCol>
-            <button
-              class="variant-warning btn-warning"
-              href="#"
-              @click.stop.prevent="retry"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'redo-alt']"
-                class="icon"
-              />
-              {{ $t("tryAgain") }}
-            </button>
-          </BCol>
-          <BCol class="right-align">
-            <button
-              class="variant-warning btn-warning"
-              href="#"
-              @click.stop.prevent="$emit('close')"
-            >
-              <FontAwesomeIcon
-                :icon="['fas', 'window-close']"
-                class="icon"
-              />
-              {{ $t("close") }}
-            </button>
-          </BCol>
-        </BRow>
+        <RetryOrCloseButtons
+          variant="warning"
+          @retry="retry"
+          @close="$emit('close')"
+        />
       </span>
     </span>
     <form
@@ -364,7 +234,9 @@ import { useLocale } from "@/composables/useLocale";
 import { CONFIG, LOCALES } from "@/config.js";
 import { useSettingsStore } from "@/stores/settings.js";
 import type { Dataset, GenerateReport, GenerateReportResponse } from "@/types.js";
+import GoogleDocsLink from "./GoogleDocsLink.vue";
 import Loader from "./Loader.vue";
+import RetryOrCloseButtons from "./RetryOrCloseButtons.vue";
 
 /** The response, or the failure that prevented one. */
 type ReportResult = GenerateReportResponse | { status: "server_error"; message: string };
@@ -458,41 +330,12 @@ function fileIdFormatter(value: string) {
     justify-content: space-between;
 }
 
-.variant-success {
-    color: #606602;
-}
-
-.variant-danger {
-    color: #6c010e;
-}
-
 .margin_bottom {
     margin-bottom: 1em;
 }
 
 .base_input {
     font-family: $font-family-mono;
-}
-
-.icon {
-    margin-right: 0.5em;
-}
-
-.buttons {
-    margin-top: 1em;
-}
-
-.right-align {
-    text-align: right;
-    align-items: flex-end;
-}
-
-.btn-danger,
-.btn-warning,
-.btn-success {
-    border-radius: 5px;
-    border: 1px solid $na_color;
-    padding: 1em;
 }
 
 .info_prefix {
