@@ -13,7 +13,7 @@ from api.serializers import (
     TimeVarianceLevelCheckSerializer,
 )
 
-# Entries from tests/fixtures/pelican-backend.sql.gz, built by tests/fixtures/build_reports.py.
+# Entries from tests/fixtures/pelican-backend.sql.gz, written by the refreshfixtures command.
 with (Path(__file__).parent.parent / "fixtures" / "reports.json").open() as f:
     REPORTS = json.load(f)
 
@@ -63,8 +63,8 @@ class SerializerTests(SimpleTestCase):
                 self.assertTrue(serializer.is_valid(), serializer.errors)
 
     def test_dataset_meta(self):
-        # The sparse entry's collection metadata is null, apart from its dates, and the in-progress entry has no
-        # Pelican metadata, since Pelican writes it last.
+        # The sparse entry's collection metadata is null, apart from its dates.
+        # The in-progress entry has no Pelican metadata, since Pelican writes it last.
         for key in ("dataset_meta", "dataset_meta_sparse", "dataset_meta_in_progress"):
             with self.subTest(key=key):
                 serializer = DatasetMetaSerializer(data=REPORTS[key])
