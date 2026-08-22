@@ -221,26 +221,22 @@ function sortBy(by: string, asc = true) {
 }
 
 onMounted(() => {
-  const buildDatasetsTree = (allDatasets: DatasetNode[], parent_id: number | null) => {
-    const result = [];
-    for (const item of allDatasets) {
-      if (item.parent_id === parent_id) {
-        item.filtered_children = buildDatasetsTree(allDatasets, item.id);
-        result.push(item);
-      }
-    }
-    return result;
-  };
+  const buildDatasetsTree = (allDatasets: Dataset[], parentId: number | null): DatasetNode[] =>
+    allDatasets
+      .filter((item) => item.parent_id === parentId)
+      .map((item) => ({ ...item, filtered_children: buildDatasetsTree(allDatasets, item.id) }));
 
   api
     .get<Dataset[]>(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.dataset}`)
     .then((data) => {
-      datasets.value = buildDatasetsTree(data as DatasetNode[], null);
-      for (const item of datasets.value) {
-        if (item.ancestor_id) {
-          item.ancestor_name = datasets.value.find((e) => e.id === item.ancestor_id)?.name;
+      const tree = buildDatasetsTree(data, null);
+      for (const node of tree) {
+        if (node.ancestor_id) {
+          node.ancestor_name = data.find((item) => item.id === node.ancestor_id)?.name;
         }
       }
+
+      datasets.value = tree;
       sortBy(sortedBy.value, isAscendingSorted.value);
     })
     .catch(() => {});
