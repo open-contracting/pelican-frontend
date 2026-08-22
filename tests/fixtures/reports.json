@@ -1,23 +1,18 @@
 {
   "compiled_release_level_detail": {
     "examples_filled": false,
-    "failed_count": 67,
+    "failed_count": 120,
     "failed_examples": [
       {
         "meta": {
-          "item_id": 1,
-          "ocid": "Exc"
+          "item_id": 16031440,
+          "ocid": "ocds-t0126k-PROC-ZAMH2025-0122-1-26"
         },
         "result": {
           "application_count": 1,
           "meta": {
-            "processed_awards": [
-              {
-                "id": "officiaoccaecat exercitation en",
-                "path": "awards[0]",
-                "result": false
-              }
-            ]
+            "awards_count": 5,
+            "contracts_count": 0
           },
           "pass_count": 0,
           "result": false,
@@ -25,28 +20,20 @@
         }
       }
     ],
-    "individual_application_count": 176,
-    "individual_failed_count": 80,
-    "individual_passed_count": 96,
-    "name": "coherent.awards_status",
-    "passed_count": 14,
+    "individual_application_count": 415,
+    "individual_failed_count": 120,
+    "individual_passed_count": 295,
+    "name": "coherent.tender_status",
+    "passed_count": 295,
     "passed_examples": [
       {
         "meta": {
-          "item_id": 12,
-          "ocid": "aliqua consequat labore commodo esse"
+          "item_id": 16024475,
+          "ocid": "ocds-t0126k-PROC-NEDIV-0604-3-26/ReAd-001"
         },
         "result": {
           "application_count": 1,
-          "meta": {
-            "processed_awards": [
-              {
-                "id": "enim consequat velit dolore mollit",
-                "path": "awards[4]",
-                "result": true
-              }
-            ]
-          },
+          "meta": null,
           "pass_count": 1,
           "result": true,
           "version": 1.0
@@ -54,18 +41,18 @@
       }
     ],
     "time": 0.05,
-    "total_count": 97,
-    "undefined_count": 16,
+    "total_count": 36977,
+    "undefined_count": 36562,
     "undefined_examples": [
       {
         "meta": {
-          "item_id": 4,
-          "ocid": "Excepteur pariatur"
+          "item_id": 16019592,
+          "ocid": "ocds-t0126k-PROC-Min of Gender-0090-1-26"
         },
         "result": {
           "application_count": null,
           "meta": {
-            "reason": "no award with an id is inactive"
+            "reason": "tender.status is blank"
           },
           "pass_count": null,
           "result": null,
@@ -75,39 +62,90 @@
     ]
   },
   "compiled_release_level_report": {
-    "coherent.awards_status": {
-      "examples_filled": false,
-      "failed_count": 67,
-      "failed_examples": [],
-      "individual_application_count": 176,
-      "individual_failed_count": 80,
-      "individual_passed_count": 96,
-      "name": "coherent.awards_status",
-      "passed_count": 14,
-      "passed_examples": [],
-      "total_count": 97,
-      "undefined_count": 16,
-      "undefined_examples": []
-    },
     "coherent.dates": {
       "examples_filled": false,
-      "failed_count": 97,
+      "failed_count": 0,
       "failed_examples": [],
-      "individual_application_count": 2279,
-      "individual_failed_count": 1128,
-      "individual_passed_count": 1151,
+      "individual_application_count": 814,
+      "individual_failed_count": 0,
+      "individual_passed_count": 814,
       "name": "coherent.dates",
-      "passed_count": 0,
+      "passed_count": 120,
       "passed_examples": [],
-      "total_count": 97,
-      "undefined_count": 0,
+      "total_count": 36977,
+      "undefined_count": 36857,
+      "undefined_examples": []
+    },
+    "coherent.tender_status": {
+      "examples_filled": false,
+      "failed_count": 120,
+      "failed_examples": [],
+      "individual_application_count": 415,
+      "individual_failed_count": 120,
+      "individual_passed_count": 295,
+      "name": "coherent.tender_status",
+      "passed_count": 295,
+      "passed_examples": [],
+      "total_count": 36977,
+      "undefined_count": 36562,
       "undefined_examples": []
     }
   },
   "dataset_level_report": {
     "distribution.buyer": {
       "meta": {
-        "reason": "there are not enough resources with check-specific properties",
+        "counts": {
+          "1": {
+            "total_ocid_count": 0,
+            "total_unique_count": 0
+          },
+          "100+": {
+            "total_ocid_count": 30394,
+            "total_unique_count": 93
+          },
+          "21_50": {
+            "total_ocid_count": 2258,
+            "total_unique_count": 65
+          },
+          "2_20": {
+            "total_ocid_count": 314,
+            "total_unique_count": 22
+          },
+          "51_100": {
+            "total_ocid_count": 4011,
+            "total_unique_count": 56
+          }
+        },
+        "examples": [],
+        "total_ocid_count": 36977,
+        "total_unique_count": 236,
+        "version": 2.0
+      },
+      "result": true,
+      "value": 100
+    },
+    "distribution.buyer_repetition": {
+      "meta": {
+        "examples": [
+          {
+            "item_id": 16006061,
+            "ocid": "ocds-t0126k-PROC-EGENCO-0512-2-26"
+          }
+        ],
+        "ocid_count": 3209,
+        "ocid_share": 0.08678367633934608,
+        "specifics": {
+          "buyer.id": "a3f76f3a-dfe1-430f-8daf-9c7f4a26d728"
+        },
+        "total_ocid_count": 36977,
+        "version": 2.0
+      },
+      "result": true,
+      "value": 100
+    },
+    "distribution.contracts_status": {
+      "meta": {
+        "reason": "no compiled releases set necessary fields",
         "version": 1.0
       },
       "result": null,
@@ -117,101 +155,179 @@
       "meta": {
         "shares": {
           "active": {
-            "count": 15,
+            "count": 370,
             "examples": [
               {
-                "item_id": 21,
-                "ocid": "commodo labore consequat in deserunt"
+                "item_id": 16028281,
+                "ocid": "ocds-t0126k-PROC-PVHES-0061-3-26"
               }
             ],
-            "share": 0.16304347826086957
+            "share": 0.891566265060241
           }
         },
         "version": 1.0
       },
-      "result": true,
-      "value": 100
+      "result": false,
+      "value": 0
+    },
+    "distribution.tender_value": {
+      "meta": {
+        "counts": {
+          "0_1": 4,
+          "1_5": 16,
+          "20_50": 120,
+          "50_100": 215,
+          "5_20": 60
+        },
+        "examples": {
+          "0_1": [
+            {
+              "abs_amount": 4605639,
+              "item_id": 16024802,
+              "ocid": "ocds-t0126k-PROC-NCC-0033-1-26",
+              "path": "tender.value",
+              "value": {
+                "amount": 8000000000,
+                "currency": "MWK"
+              }
+            }
+          ],
+          "1_5": [
+            {
+              "abs_amount": 853789,
+              "item_id": 16015223,
+              "ocid": "ocds-t0126k-PROC-Malawi Prison Service-0590-1-26",
+              "path": "tender.value",
+              "value": {
+                "amount": 1483033063,
+                "currency": "MWK"
+              }
+            }
+          ],
+          "20_50": [
+            {
+              "abs_amount": 18494,
+              "item_id": 16028292,
+              "ocid": "ocds-t0126k-PROC-PPDA-0146-1-26",
+              "path": "tender.value",
+              "value": {
+                "amount": 32125500,
+                "currency": "MWK"
+              }
+            }
+          ],
+          "50_100": [
+            {
+              "abs_amount": 4317,
+              "item_id": 16012932,
+              "ocid": "ocds-t0126k-PROC-LCC-0003-3-26",
+              "path": "tender.value",
+              "value": {
+                "amount": 7500000,
+                "currency": "MWK"
+              }
+            }
+          ],
+          "5_20": [
+            {
+              "abs_amount": 86355,
+              "item_id": 16014191,
+              "ocid": "ocds-t0126k-PROC-MCC-0100-2-26",
+              "path": "tender.value",
+              "value": {
+                "amount": 150000000,
+                "currency": "MWK"
+              }
+            }
+          ]
+        },
+        "shares": {
+          "0_1": 0.5371167092720579
+        },
+        "sum": 14734442,
+        "sums": {
+          "0_1": 7914115,
+          "1_5": 2876808,
+          "20_50": 1151815,
+          "50_100": 324512,
+          "5_20": 2467192
+        },
+        "version": 1.0
+      },
+      "result": false,
+      "value": 0
     },
     "distribution.tender_value_repetition": {
       "meta": {
         "most_frequent": [
           {
-            "amount": -73099995,
-            "count": 1,
-            "currency": "PGK",
+            "amount": 5000000.0,
+            "count": 14,
+            "currency": "MWK",
             "examples": [
               {
-                "item_id": 1,
-                "ocid": "Exc"
+                "item_id": 15996160,
+                "ocid": "ocds-t0126k-PROC-001-0090-1-26"
               }
             ],
-            "share": 0.010309278350515464,
-            "value_str": "-73099995 PGK"
+            "share": 0.033734939759036145,
+            "value_str": "5000000.0 MWK"
           }
         ],
-        "total_processed": 97,
+        "total_processed": 415,
         "version": 1.0
       },
       "result": true,
-      "value": 3
+      "value": 9
     },
     "misc.url_availability": {
       "meta": {
         "failed_examples": [
           {
-            "item_id": 58,
-            "ocid": "in dolor ut Ut",
-            "path": "tender.documents[2].url",
+            "item_id": 15997717,
+            "ocid": "ocds-t0126k-PROC-0050-0017-1-26",
             "status": "ERROR",
-            "value": "http://4eKyGA4cb.com"
+            "value": "undefined/data/ocds/view-document/plan-activity/573222d9-01aa-4b13-b715-2bcee848be26"
           }
         ],
-        "passed_examples": [
-          {
-            "item_id": 58,
-            "ocid": "in dolor ut Ut",
-            "path": "contracts[0].implementation.documents[0].url",
-            "status": "OK",
-            "value": "http://k4.com"
-          }
-        ],
-        "total_failed": 88,
-        "total_passed": 12,
+        "passed_examples": [],
+        "total_failed": 100,
+        "total_passed": 0,
         "total_processed": 100,
         "version": 1.0
       },
       "result": false,
-      "value": 12
+      "value": 0
     }
   },
   "dataset_meta": {
     "collection_metadata": {
-      "data_license": "http://m0n4m.com",
+      "data_license": "http://opendatacommons.org/licenses/pddl/1.0/",
       "extensions": [],
-      "ocid_prefix": "dolore",
-      "publication_policy": "http://n3v5YbWM0.com",
-      "published_from": "2031-01-20 00.34.58",
-      "published_to": "5130-05-16 17.17.40",
-      "publisher": "occaecat voluptate"
+      "ocid_prefix": "ocds-ozzobm",
+      "publication_policy": "http://www.rppa.gov.rw/",
+      "published_from": "2016-08-18 06.37.39",
+      "published_to": "2024-07-24 12.17.35",
+      "publisher": "Rwanda Public Procurement Authority (RPPA)"
     },
     "compiled_releases": {
-      "total_unique_ocids": 97
+      "total_unique_ocids": 50092
     },
     "data_quality_tool_metadata": {
-      "processing_end": "2023-01-17 19.49.01",
-      "processing_start": "2023-01-17 19.28.29"
+      "processing_end": "2024-08-06 07.54.38",
+      "processing_start": "2024-08-06 07.47.29"
     },
     "kingfisher_metadata": {
-      "collection_id": 3,
-      "processing_end": "2021-09-02 23.21.00",
-      "processing_start": "2021-09-02 23.20.15"
+      "collection_id": 433,
+      "processing_end": "2024-08-05 18.50.29",
+      "processing_start": "2024-08-05 10.20.45"
     },
     "tender_lifecycle": {
-      "award": 291,
-      "contract": 278,
-      "implementation": 278,
-      "planning": 97,
-      "tender": 97
+      "award": 40175,
+      "contract": 0,
+      "implementation": 0,
+      "planning": 49719,
+      "tender": 29120
     }
   },
   "dataset_meta_sparse": {
@@ -220,36 +336,59 @@
       "extensions": [],
       "ocid_prefix": null,
       "publication_policy": null,
-      "published_from": null,
-      "published_to": null,
+      "published_from": "2016-01-04 00.00.00",
+      "published_to": "2023-06-30 00.00.00",
       "publisher": null
     },
     "compiled_releases": {
-      "total_unique_ocids": 97
+      "total_unique_ocids": 2540
     },
-    "kingfisher_metadata": {},
+    "data_quality_tool_metadata": {
+      "processing_end": "2024-05-25 01.43.19",
+      "processing_start": "2024-05-25 01.42.40"
+    },
+    "kingfisher_metadata": {
+      "collection_id": 350,
+      "processing_end": "2024-05-23 19.21.02",
+      "processing_start": "2024-05-23 19.21.02"
+    },
     "tender_lifecycle": {
-      "award": 291,
-      "contract": 278,
-      "implementation": 278,
-      "planning": 97,
-      "tender": 97
+      "award": 4165,
+      "contract": 0,
+      "implementation": 0,
+      "planning": 0,
+      "tender": 2540
     }
   },
   "field_level_detail": {
     "coverage": {
       "checks": {
         "exists": {
-          "failed_count": 0,
-          "failed_examples": [],
-          "passed_count": 97,
+          "failed_count": 1673,
+          "failed_examples": [
+            {
+              "meta": {
+                "item_id": 16024605,
+                "ocid": "ocds-t0126k-PROC-NED-0261-2-26"
+              },
+              "path": "parties[10].contactPoint.telephone",
+              "result": {
+                "name": "exists",
+                "reason": "not set",
+                "result": false,
+                "value": null,
+                "version": 1.0
+              }
+            }
+          ],
+          "passed_count": 4672,
           "passed_examples": [
             {
               "meta": {
-                "item_id": 78,
-                "ocid": "pariatur ipsum id in sint"
+                "item_id": 16014068,
+                "ocid": "ocds-t0126k-PROC-Malawi Prison Service-0081-1-26"
               },
-              "path": "ocid",
+              "path": "parties[20].contactPoint.telephone",
               "result": {
                 "name": "exists",
                 "reason": null,
@@ -259,19 +398,19 @@
               }
             }
           ],
-          "total_count": 97
+          "total_count": 6345
         },
         "non_empty": {
           "failed_count": 0,
           "failed_examples": [],
-          "passed_count": 97,
+          "passed_count": 4672,
           "passed_examples": [
             {
               "meta": {
-                "item_id": 82,
-                "ocid": "sint culpa et eu"
+                "item_id": 16026060,
+                "ocid": "ocds-t0126k-PROC-NRWB-0174-1-26"
               },
-              "path": "ocid",
+              "path": "parties[0].contactPoint.telephone",
               "result": {
                 "name": "non_empty",
                 "reason": null,
@@ -281,21 +420,36 @@
               }
             }
           ],
-          "total_count": 97
+          "total_count": 4672
         }
       },
-      "failed_count": 0,
-      "failed_examples": [],
-      "passed_count": 97,
+      "failed_count": 1673,
+      "failed_examples": [
+        {
+          "meta": {
+            "item_id": 16023465,
+            "ocid": "ocds-t0126k-PROC-MRA-0092-1-26/ReAd-001"
+          },
+          "path": "parties[22].contactPoint.telephone",
+          "result": {
+            "name": "exists",
+            "reason": "not set",
+            "result": false,
+            "value": null,
+            "version": 1.0
+          }
+        }
+      ],
+      "passed_count": 4672,
       "passed_examples": [
         {
           "meta": {
-            "item_id": 22,
-            "ocid": "consectetur dolor enim ut"
+            "item_id": 16027138,
+            "ocid": "ocds-t0126k-PROC-NRWB-0107-1-26"
           },
-          "path": "ocid",
+          "path": "parties[0].contactPoint.telephone",
           "result": {
-            "name": "exists",
+            "name": "non_empty",
             "reason": null,
             "result": true,
             "value": null,
@@ -303,55 +457,85 @@
           }
         }
       ],
-      "total_count": 97
+      "total_count": 6345
     },
     "examples_filled": false,
-    "processing_order": 0,
+    "processing_order": 27,
     "quality": {
       "checks": {
-        "ocid_prefix_check": {
-          "failed_count": 97,
+        "telephone": {
+          "failed_count": 668,
           "failed_examples": [
             {
               "meta": {
-                "item_id": 48,
-                "ocid": "et adipisicing"
+                "item_id": 16025383,
+                "ocid": "ocds-t0126k-PROC-NEDIV-1069-2-26"
               },
-              "path": "ocid",
+              "path": "parties[8].contactPoint.telephone",
               "result": {
-                "name": "ocid_prefix_check",
-                "reason": "ocid prefix not in codelist",
+                "name": "telephone",
+                "reason": "incorrect format: (3) The string supplied is too short to be a phone number.",
                 "result": false,
-                "value": "et adipisicing",
+                "value": "+265 ",
                 "version": 1.0
               }
             }
           ],
-          "passed_count": 0,
-          "passed_examples": [],
-          "total_count": 97
+          "passed_count": 4004,
+          "passed_examples": [
+            {
+              "meta": {
+                "item_id": 16015006,
+                "ocid": "ocds-t0126k-PROC-MACHINGATTC2025-0021-1-26"
+              },
+              "path": "parties[29].contactPoint.telephone",
+              "result": {
+                "name": "telephone",
+                "reason": null,
+                "result": true,
+                "value": null,
+                "version": 1.0
+              }
+            }
+          ],
+          "total_count": 4672
         }
       },
-      "failed_count": 97,
+      "failed_count": 668,
       "failed_examples": [
         {
           "meta": {
-            "item_id": 93,
-            "ocid": "velit pariatur adipisicing nulla"
+            "item_id": 16018100,
+            "ocid": "ocds-t0126k-PROC-MOE25-0112-1-26"
           },
-          "path": "ocid",
+          "path": "parties[19].contactPoint.telephone",
           "result": {
-            "name": "ocid_prefix_check",
-            "reason": "ocid prefix not in codelist",
+            "name": "telephone",
+            "reason": "incorrect format: (3) The string supplied is too short to be a phone number.",
             "result": false,
-            "value": "velit pariatur adipisicing nulla",
+            "value": "+265",
             "version": 1.0
           }
         }
       ],
-      "passed_count": 0,
-      "passed_examples": [],
-      "total_count": 97
+      "passed_count": 4004,
+      "passed_examples": [
+        {
+          "meta": {
+            "item_id": 16023453,
+            "ocid": "ocds-t0126k-PROC-MPS-0001-3-26/ReAd-002"
+          },
+          "path": "parties[18].contactPoint.telephone",
+          "result": {
+            "name": "telephone",
+            "reason": null,
+            "result": true,
+            "value": null,
+            "version": 1.0
+          }
+        }
+      ],
+      "total_count": 4672
     },
     "time": 0.05
   },
@@ -361,33 +545,25 @@
         "checks": {
           "exists": {
             "failed_count": 0,
-            "failed_examples": null,
-            "passed_count": 97,
-            "passed_examples": null,
-            "total_count": 97
+            "passed_count": 36977,
+            "total_count": 36977
           },
           "non_empty": {
             "failed_count": 0,
-            "failed_examples": null,
-            "passed_count": 97,
-            "passed_examples": null,
-            "total_count": 97
+            "passed_count": 36977,
+            "total_count": 36977
           }
         },
         "failed_count": 0,
-        "failed_examples": null,
-        "passed_count": 97,
-        "passed_examples": null,
-        "total_count": 97
+        "passed_count": 36977,
+        "total_count": 36977
       },
       "examples_filled": false,
       "processing_order": 1,
       "quality": {
         "checks": {},
         "failed_count": 0,
-        "failed_examples": null,
         "passed_count": 0,
-        "passed_examples": null,
         "total_count": 0
       }
     },
@@ -396,42 +572,32 @@
         "checks": {
           "exists": {
             "failed_count": 0,
-            "failed_examples": null,
-            "passed_count": 97,
-            "passed_examples": null,
-            "total_count": 97
+            "passed_count": 36977,
+            "total_count": 36977
           },
           "non_empty": {
             "failed_count": 0,
-            "failed_examples": null,
-            "passed_count": 97,
-            "passed_examples": null,
-            "total_count": 97
+            "passed_count": 36977,
+            "total_count": 36977
           }
         },
         "failed_count": 0,
-        "failed_examples": null,
-        "passed_count": 97,
-        "passed_examples": null,
-        "total_count": 97
+        "passed_count": 36977,
+        "total_count": 36977
       },
       "examples_filled": false,
       "processing_order": 0,
       "quality": {
         "checks": {
           "ocid_prefix_check": {
-            "failed_count": 97,
-            "failed_examples": null,
-            "passed_count": 0,
-            "passed_examples": null,
-            "total_count": 97
+            "failed_count": 0,
+            "passed_count": 36977,
+            "total_count": 36977
           }
         },
-        "failed_count": 97,
-        "failed_examples": null,
-        "passed_count": 0,
-        "passed_examples": null,
-        "total_count": 97
+        "failed_count": 0,
+        "passed_count": 36977,
+        "total_count": 36977
       }
     }
   },
@@ -471,38 +637,59 @@
     }
   },
   "time_based_report": {
-    "coherent.dates": {
+    "ocid": {
       "check_result": true,
-      "check_value": 97,
+      "check_value": 100,
       "coverage_result": true,
-      "coverage_value": 100,
+      "coverage_value": 97,
       "meta": {
-        "coverage_count": 97,
-        "examples": [
-          {
-            "item_id": 1,
-            "new_item_id": 98,
-            "new_item_ocid": "ocds-213czf-1",
-            "ocid": "ocds-213czf-1"
-          }
-        ],
-        "failed_count": 3,
-        "ok_count": 94,
-        "total_count": 97,
+        "coverage_count": 40988,
+        "examples": [],
+        "failed_count": 0,
+        "ok_count": 40988,
+        "total_count": 42195,
         "version": 1.0
       }
     },
-    "coherent.tender_status": {
-      "check_result": null,
-      "check_value": null,
-      "coverage_result": null,
-      "coverage_value": null,
+    "phase_stable": {
+      "check_result": false,
+      "check_value": 78,
+      "coverage_result": true,
+      "coverage_value": 97,
       "meta": {
-        "coverage_count": 0,
-        "examples": [],
-        "failed_count": 0,
-        "ok_count": 0,
-        "total_count": 0,
+        "coverage_count": 40988,
+        "examples": [
+          {
+            "item_id": 9363302,
+            "new_item_id": 9551989,
+            "new_item_ocid": "ocds-ozzobm-P000104/2022/2023/0901000000",
+            "ocid": "ocds-ozzobm-P000104/2022/2023/0901000000"
+          }
+        ],
+        "failed_count": 9182,
+        "ok_count": 31806,
+        "total_count": 42195,
+        "version": 1.0
+      }
+    },
+    "tender_title": {
+      "check_result": true,
+      "check_value": 99,
+      "coverage_result": true,
+      "coverage_value": 100,
+      "meta": {
+        "coverage_count": 24108,
+        "examples": [
+          {
+            "item_id": 9349301,
+            "new_item_id": 9535999,
+            "new_item_ocid": "ocds-ozzobm-P000035/2023/2024/0901001015",
+            "ocid": "ocds-ozzobm-P000035/2023/2024/0901001015"
+          }
+        ],
+        "failed_count": 163,
+        "ok_count": 23945,
+        "total_count": 24110,
         "version": 1.0
       }
     }
