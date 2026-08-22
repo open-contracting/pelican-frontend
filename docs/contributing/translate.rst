@@ -38,8 +38,8 @@ quality
   calidad
 field path
   ruta del campo
-failure
-  fallo
+pass, fail
+  Name a result with a noun, *éxito* or *fallo*: one label serves both a single check and a count of compiled releases, of tests or of pairs, so it can agree with none of them. Name the action with a verb, *pasar* or *fallar*: *la prueba pasa*, *no pasan ni fallan*. An adjective is fine where the noun it agrees with is alongside it: *Ejemplos exitosos*, *Solo cobertura fallida*.
 
 Wording
 ~~~~~~~
