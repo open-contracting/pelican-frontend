@@ -12,6 +12,19 @@ class DataItemSerializer(serializers.ModelSerializer):
         fields = ["id", "data"]
 
 
+class FilterDatasetSerializer(serializers.Serializer):
+    release_date_from = serializers.CharField(required=False, help_text="The minimum release date (YYYY-MM-DD)")
+    release_date_to = serializers.CharField(required=False, help_text="The maximum release date (YYYY-MM-DD)")
+    buyer = serializers.ListField(required=False, child=serializers.CharField(), help_text="Names of buyers")
+    buyer_regex = serializers.CharField(required=False, help_text="A SQL ILIKE pattern for the buyer's name")
+    procuring_entity = serializers.ListField(
+        required=False, child=serializers.CharField(), help_text="Names of procuring entities"
+    )
+    procuring_entity_regex = serializers.CharField(
+        required=False, help_text="A SQL ILIKE pattern for the procuring entity's name"
+    )
+
+
 class CollectionMetadataSerializer(serializers.Serializer):
     publisher = serializers.CharField(allow_null=True, help_text="The publisher's name")
     ocid_prefix = serializers.CharField(allow_null=True, help_text="The OCID prefix")
@@ -67,6 +80,11 @@ class DatasetMetaField(serializers.JSONField):
     """Document the column's structure without validating it, so that a new key is not dropped."""
 
 
+@extend_schema_field(FilterDatasetSerializer)
+class FilterMessageField(serializers.JSONField):
+    """Document the column's structure without validating it, so that a new key is not dropped."""
+
+
 class DatasetSerializer(serializers.ModelSerializer):
     meta = DatasetMetaField()
     phase = serializers.CharField()
@@ -74,7 +92,7 @@ class DatasetSerializer(serializers.ModelSerializer):
     # Null, unless the dataset is the result of a filter.
     parent_id = serializers.IntegerField(allow_null=True, help_text="The ID of the dataset that was filtered")
     parent_name = serializers.CharField(allow_null=True, help_text="The name of the dataset that was filtered")
-    filter_message = serializers.JSONField(allow_null=True, help_text="The filter that created the dataset")
+    filter_message = FilterMessageField(allow_null=True, help_text="The filter that created the dataset")
 
     class Meta:
         model = Dataset
@@ -104,19 +122,6 @@ class CreateDatasetSerializer(serializers.Serializer):
     )
     max_items = serializers.IntegerField(
         required=False, help_text="The number of compiled releases to import from Kingfisher Process"
-    )
-
-
-class FilterDatasetSerializer(serializers.Serializer):
-    release_date_from = serializers.CharField(required=False, help_text="The minimum release date (YYYY-MM-DD)")
-    release_date_to = serializers.CharField(required=False, help_text="The maximum release date (YYYY-MM-DD)")
-    buyer = serializers.ListField(required=False, child=serializers.CharField(), help_text="Names of buyers")
-    buyer_regex = serializers.CharField(required=False, help_text="A SQL ILIKE pattern for the buyer's name")
-    procuring_entity = serializers.ListField(
-        required=False, child=serializers.CharField(), help_text="Names of procuring entities"
-    )
-    procuring_entity_regex = serializers.CharField(
-        required=False, help_text="A SQL ILIKE pattern for the procuring entity's name"
     )
 
 

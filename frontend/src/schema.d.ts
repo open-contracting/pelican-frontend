@@ -387,7 +387,7 @@ export interface components {
       /** @description The name of the dataset that was filtered */
       parent_name: string | null;
       /** @description The filter that created the dataset */
-      filter_message: unknown;
+      filter_message: components["schemas"]["FilterDataset"] | null;
     };
     DatasetLevelCheck: {
       /** @description Whether the check passed, or null if not applicable */
