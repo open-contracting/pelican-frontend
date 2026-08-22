@@ -1,28 +1,33 @@
 <template>
   <header class="site_header">
-    <RouterLink
-      class="product"
-      :to="{ name: 'home' }"
-    >{{ $t("header") }}</RouterLink>
+    <div class="site_header_row">
+      <RouterLink
+        class="product"
+        :to="{ name: 'home' }"
+      >{{ $t("header") }}</RouterLink>
 
-    <!-- #188 hangs the signed-in reader and a sign-out control here. -->
+      <!-- What the page is about, from a layout that knows. -->
+      <slot />
 
-    <label
-      class="visually-hidden"
-      for="locale_select"
-    >{{ $t("language") }}</label>
-    <select
-      id="locale_select"
-      class="form-select locale_select"
-      :value="locale"
-      @change="setLocale(($event.target as HTMLSelectElement).value)"
-    >
-      <option
-        v-for="(name, code) in LOCALES"
-        :key="code"
-        :value="code"
-      >{{ name }}</option>
-    </select>
+      <!-- #188 hangs the signed-in reader and a sign-out control here. -->
+
+      <label
+        class="visually-hidden"
+        for="locale_select"
+      >{{ $t("language") }}</label>
+      <select
+        id="locale_select"
+        class="form-select locale_select"
+        :value="locale"
+        @change="setLocale(($event.target as HTMLSelectElement).value)"
+      >
+        <option
+          v-for="(name, code) in LOCALES"
+          :key="code"
+          :value="code"
+        >{{ name }}</option>
+      </select>
+    </div>
   </header>
 </template>
 
@@ -38,11 +43,14 @@ const { locale, setLocale } = useLocale();
 
 // No horizontal padding, so the header lines up with the content below it.
 .site_header {
+    padding: 10px 0 30px;
+}
+
+.site_header_row {
     align-items: center;
     display: flex;
     gap: 15px;
     justify-content: flex-end;
-    padding: 10px 0;
 }
 
 .product {
