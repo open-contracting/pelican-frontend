@@ -4,13 +4,13 @@
     "examples": "Generando ejemplos aleatorios… Esto tarda un tiempo en conjuntos de datos grandes. Tenga paciencia.",
     "data": "Cargando la vista previa de los datos. Tenga paciencia."
   },
-  "passed": "Superada",
-  "failed": "Fallida",
+  "passed": "Éxito",
+  "failed": "Fallo",
   "notAvailable": "No aplicable",
   "filterDropdown": {
     "all": "Todas",
-    "failedOnly": "Solo fallidas",
-    "passedOnly": "Solo superadas",
+    "failedOnly": "Solo con fallos",
+    "passedOnly": "Solo con éxito",
     "calculatedOnly": "Solo calculadas"
   },
   "requestError": "La solicitud falló. Recargue la página o inténtelo de nuevo más tarde.",
@@ -19,8 +19,8 @@
   "created": "Creado",
   "modified": "Modificado",
   "core": {
-    "passedExamples": "Muestra de casos superados",
-    "failedExamples": "Muestra de casos fallidos",
+    "passedExamples": "Muestra de éxitos",
+    "failedExamples": "Muestra de fallos",
     "undefinedExamples": "Muestra de datos no procesados"
   },
   "kingfisherId": "ID de Kingfisher",
@@ -121,7 +121,7 @@
     "new": "nueva"
   },
   "datasetLevel": {
-    "description": "<p>Estas comprobaciones operan sobre una colección: todas las entregas compiladas de una misma fuente en un único momento. Hay cinco tipos de comprobaciones:</p><ul><li><p><b>Distribución</b>: La distribución de los valores de un campo no sugiere omisiones ni inexactitudes. <i>Ejemplos</i>: Si todos los campos <code>procurementMethod</code> tienen el valor 'open', entonces la colección omite o informa incorrectamente los métodos que no son abiertos; si todos los campos <code>tender.status</code> tienen el valor 'active', entonces la colección omite o informa incorrectamente los estados que no son activos.</p></li><li><p><b>Repetición</b>: La repetición de los valores de un campo no sugiere problemas de captura ni de mapeo de datos. <i>Ejemplos</i>: Si el valor del contrato es cero el 10% de las veces, podría haber un problema de mapeo de datos; si el valor de la adjudicación es {'$'}25.000 el 10% de las veces, podría haber un problema de captura de datos.</p></li><li><p><b>Unicidad</b>: Los valores de un campo son únicos en toda la colección.</p></li><li><p><b>Disponibilidad</b>: Una muestra aleatoria de valores de URL no devuelve respuestas con códigos de error HTTP.</p></li><li><p><b>Procesos relacionados</b>: Un campo de referencia a un proceso relacionado tiene un destino válido dentro de la colección, y su <code>title</code> es consistente con el <code>tender.title</code> del destino.</p></li></ul><p>Algunas comprobaciones informan distribuciones, pero no se superan ni fallan; por ejemplo, la distribución de los tipos de documento no tiene un criterio de aprobación.</p><p>Algunas de estas comprobaciones podrían, en principio, servir como señales de alerta. La diferencia es que las señales de alerta son más sensibles. Estas comprobaciones tienen umbrales de fallo más altos; es decir, los datos no solo tienen que ser sospechosos (valores atípicos leves) sino <i>malos</i> (valores atípicos extremos).</p>",
+    "description": "<p>Estas comprobaciones operan sobre una colección: todas las entregas compiladas de una misma fuente en un único momento. Hay cinco tipos de comprobaciones:</p><ul><li><p><b>Distribución</b>: La distribución de los valores de un campo no sugiere omisiones ni inexactitudes. <i>Ejemplos</i>: Si todos los campos <code>procurementMethod</code> tienen el valor 'open', entonces la colección omite o informa incorrectamente los métodos que no son abiertos; si todos los campos <code>tender.status</code> tienen el valor 'active', entonces la colección omite o informa incorrectamente los estados que no son activos.</p></li><li><p><b>Repetición</b>: La repetición de los valores de un campo no sugiere problemas de captura ni de mapeo de datos. <i>Ejemplos</i>: Si el valor del contrato es cero el 10% de las veces, podría haber un problema de mapeo de datos; si el valor de la adjudicación es {'$'}25.000 el 10% de las veces, podría haber un problema de captura de datos.</p></li><li><p><b>Unicidad</b>: Los valores de un campo son únicos en toda la colección.</p></li><li><p><b>Disponibilidad</b>: Una muestra aleatoria de valores de URL no devuelve respuestas con códigos de error HTTP.</p></li><li><p><b>Procesos relacionados</b>: Un campo de referencia a un proceso relacionado tiene un destino válido dentro de la colección, y su <code>title</code> es consistente con el <code>tender.title</code> del destino.</p></li></ul><p>Algunas comprobaciones informan distribuciones, pero no pasan ni fallan; por ejemplo, la distribución de los tipos de documento no tiene un criterio de éxito o fallo.</p><p>Algunas de estas comprobaciones podrían, en principio, servir como señales de alerta. La diferencia es que las señales de alerta son más sensibles. Estas comprobaciones tienen umbrales de fallo más altos; es decir, los datos no solo tienen que ser sospechosos (valores atípicos leves) sino <i>malos</i> (valores atípicos extremos).</p>",
     "subheadline": "Todas las comprobaciones a nivel de colección",
     "examples": "Ejemplos",
     "ocid_share": "{share} de {total} ocids",
@@ -279,11 +279,11 @@
       }
     },
     "numeric": {
-      "passed": "superadas",
-      "processed": "probadas",
-      "failed": "fallidas",
+      "passed": "éxitos",
+      "processed": "pruebas",
+      "failed": "fallos",
       "failedExamples": "Ejemplos fallidos",
-      "passedExamples": "Ejemplos superados"
+      "passedExamples": "Ejemplos exitosos"
     },
     "top3": {
       "value": "Valor",
@@ -298,11 +298,11 @@
     "count_header": "Entregas compiladas comprobadas:",
     "count_header_tooltip": "Cada entrega compilada se comprueba, y o bien pasa, o bien falla, o bien la comprobación no es aplicable.",
     "application_count_header": "Pruebas individuales realizadas:",
-    "application_count_header_tooltip": "Una 'comprobación' puede constar de muchas 'pruebas'; por ejemplo, al comprobar que las fechas de inicio no son posteriores a las fechas de fin, cada par de fecha de inicio y fecha de fin se <i>prueba</i>. Esto muestra la proporción de pruebas superadas o fallidas, en lugar de la proporción de entregas compiladas superadas o fallidas.",
+    "application_count_header_tooltip": "Una 'comprobación' puede constar de muchas 'pruebas'; por ejemplo, al comprobar que las fechas de inicio no son posteriores a las fechas de fin, cada par de fecha de inicio y fecha de fin se <i>prueba</i>. Esto muestra la proporción de pruebas que pasaron o fallaron, en lugar de la proporción de entregas compiladas que pasaron o fallaron.",
     "averageScore": {
-      "description": "{applicable} de {total} comprobaciones son aplicables, con una tasa de aprobación de {average_score}, excluyendo las no aplicables",
+      "description": "{applicable} de {total} comprobaciones son aplicables, con una tasa de éxito de {average_score}, excluyendo las no aplicables",
       "undefined": "sin definir",
-      "tooltip": "La tasa de aprobación se calcula como: todas las superadas / (todas las superadas + todas las fallidas)."
+      "tooltip": "La tasa de éxito se calcula como: todos los éxitos / (todos los éxitos + todos los fallos)."
     },
     "coherent": {
       "categoryName": "Coherencia",
@@ -574,7 +574,7 @@
   },
   "timeLevel": {
     "description": "<p>Estas comprobaciones se centran en los cambios dentro de un conjunto de datos a lo largo del tiempo. Cada comprobación tiene dos pasos:</p><ul><li><b>Encontrar pares:</b> Las entregas compiladas de la colección más antigua se filtran según criterios propios de cada comprobación, y luego se intenta emparejar cada una con una entrega compilada con el mismo OCID en la colección más reciente. Si no se encuentra ningún par, esta prueba falla. <i>Ejemplo</i>: El comprador debería ser invariable a lo largo del tiempo. Si una entrega más antigua establece el campo <code>buyer</code> (cumpliendo así el criterio de la comprobación), entonces se intenta emparejarla con una entrega más reciente.</li><li><b>Comprobar los pares:</b> Una vez encontrado un par, se ejecuta la comprobación. <i>Ejemplo</i>: El comprador debería ser invariable a lo largo del tiempo. Si las dos entregas tienen valores distintos para el campo <code>buyer</code>, esta prueba falla.</li></ul>",
-    "checkResult": "Pares superados",
+    "checkResult": "Pares exitosos",
     "coverageResult": "Pares encontrados",
     "subheadline": "Todas las comprobaciones basadas en el tiempo",
     "coverage": {
@@ -595,7 +595,7 @@
     "ocid": {
       "name": "Persistencia del OCID",
       "description": "Todos los OCIDs de una colección más antigua de una fuente de datos están presentes en esta colección más reciente de la misma fuente.",
-      "descriptionLong": "<p>Todos los OCIDs de una colección más antigua de una fuente de datos están presentes en esta colección más reciente de la misma fuente.</p><p>Esta comprobación siempre tiene los mismos resultados para los pares encontrados y los pares superados, porque no se ejecutan más pruebas en el segundo paso.</p>"
+      "descriptionLong": "<p>Todos los OCIDs de una colección más antigua de una fuente de datos están presentes en esta colección más reciente de la misma fuente.</p><p>Esta comprobación siempre tiene los mismos resultados para los pares encontrados y los pares exitosos, porque no se ejecutan más pruebas en el segundo paso.</p>"
     },
     "tender_title": {
       "name": "Estabilidad del título de la licitación",
