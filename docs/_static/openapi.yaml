@@ -1325,6 +1325,8 @@ components:
       - ocid
     TimeVarianceLevelCheck:
       type: object
+      description: A pair is a compiled release in the ancestor dataset and the one
+        with the same OCID in this dataset.
       properties:
         coverage_value:
           type: integer
@@ -1364,7 +1366,8 @@ components:
             the check applies
         coverage_count:
           type: integer
-          description: The number of those that are paired
+          description: The number of the ancestor dataset's applicable compiled releases
+            that are paired
         ok_count:
           type: integer
           description: The number of pairs that passed

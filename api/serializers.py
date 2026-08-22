@@ -266,7 +266,6 @@ class DatasetLevelReportSerializer(ReportSerializer):
     check_serializer = DatasetLevelCheckSerializer
 
 
-# A pair is a compiled release in the ancestor dataset and the compiled release with the same OCID in this dataset.
 class TimeVarianceExampleSerializer(serializers.Serializer):
     ocid = serializers.CharField(help_text="The pair's OCID")
     item_id = serializers.IntegerField(help_text="The data item's ID in the ancestor dataset")
@@ -278,7 +277,9 @@ class TimeVarianceMetaSerializer(serializers.Serializer):
     total_count = serializers.IntegerField(
         help_text="The number of the ancestor dataset's compiled releases to which the check applies"
     )
-    coverage_count = serializers.IntegerField(help_text="The number of those that are paired")
+    coverage_count = serializers.IntegerField(
+        help_text="The number of the ancestor dataset's applicable compiled releases that are paired"
+    )
     ok_count = serializers.IntegerField(help_text="The number of pairs that passed")
     failed_count = serializers.IntegerField(help_text="The number of pairs that failed")
     examples = TimeVarianceExampleSerializer(many=True, help_text="A sample of up to 50 pairs that failed")
@@ -286,10 +287,12 @@ class TimeVarianceMetaSerializer(serializers.Serializer):
 
 
 class TimeVarianceLevelCheckSerializer(serializers.Serializer):
+    """A pair is a compiled release in the ancestor dataset and the one with the same OCID in this dataset."""
+
     coverage_value = serializers.IntegerField(
         allow_null=True,
-        help_text="The percentage of the ancestor dataset's applicable compiled releases that are paired, or "
-        "null if the check applied to none",
+        help_text="The percentage of the ancestor dataset's applicable compiled releases that are paired, "
+        "or null if the check applied to none",
     )
     coverage_result = serializers.BooleanField(allow_null=True, help_text="Whether coverage_value exceeds 95")
     check_value = serializers.IntegerField(
