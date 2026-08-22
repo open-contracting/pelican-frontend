@@ -1,4 +1,6 @@
 {
+  "header": "Pelican",
+  "language": "Idioma",
   "loader": {
     "generic": "Cargando… Tenga paciencia.",
     "examples": "Generando ejemplos aleatorios… Esto tarda un tiempo en conjuntos de datos grandes. Tenga paciencia.",
