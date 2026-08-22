@@ -1,14 +1,14 @@
 Add a check
 ===========
 
-.. _i18n:
+Names and descriptions
+----------------------
 
-Internationalization (i18n)
----------------------------
+.. seealso::
 
-``frontend/src/messages/en.json`` is the message catalog, and ``es.json`` translates checks' names and descriptions. The frontend and the exporter fall back to English for messages missing from ``es.json``.
+   :ref:`i18n`, for the Spanish term to use for each of Pelican's nouns
 
-The frontend renders a message as HTML, and the exporter renders it as plain text. Use only:
+Every check has a ``name`` and a ``description``, which a list of checks renders. The exporter renders both as plain text, so use only the markup it converts:
 
 -  ``<p>``, around each paragraph, if a message has more than one
 -  ``<ul>`` and ``<li>``, around a list and its items
@@ -16,7 +16,7 @@ The frontend renders a message as HTML, and the exporter renders it as plain tex
 -  ``<i>``, for emphasis, like ``<i>Example</i>``
 -  ``<b>``, around a term that the message defines
 
-Write ``{'$'}`` for a dollar sign, which vue-i18n otherwise interprets.
+Dataset-level and time-based checks also have a ``descriptionLong``, which the check's own page renders in place of the ``description``. Give it the reasons a test is skipped, and the fields a check covers. If it would add nothing, repeat the ``description``, rather than omit the key.
 
 Field-level
 -----------
