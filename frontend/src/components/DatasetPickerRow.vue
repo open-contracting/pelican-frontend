@@ -48,15 +48,6 @@
         </span>
         {{ $t("dataset.phases." + dataset.phase) }}
       </template>
-      <template v-else-if="dataset.state == 'FAILED'">
-        <span class="small_icon">
-          <FontAwesomeIcon
-            :icon="['far', 'times-circle']"
-            class="text-danger"
-          />
-        </span>
-        {{ $t("dataset.phases." + dataset.phase) }}
-      </template>
       <template v-else>
         <BRow class="progress_label g-0">
           <BCol
