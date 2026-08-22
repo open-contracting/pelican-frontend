@@ -695,13 +695,14 @@ export interface components {
       ocid: string;
       /** @description The data item's ID in the ancestor dataset */
       item_id: number;
-      /** @description The pair's OCID, as set in this dataset */
+      /** @description The same value as ocid, since a pair is matched on it */
       new_item_ocid: string;
       /** @description The data item's ID in this dataset */
       new_item_id: number;
     };
+    /** @description A pair is a compiled release in the ancestor dataset and the one with the same OCID in this dataset. */
     TimeVarianceLevelCheck: {
-      /** @description The percentage of the check's compiled releases that are also in this dataset, or null if it applied to none */
+      /** @description The percentage of the ancestor dataset's applicable compiled releases that are paired, or null if the check applied to none */
       coverage_value: number | null;
       /** @description Whether coverage_value exceeds 95 */
       coverage_result: boolean | null;
@@ -715,9 +716,9 @@ export interface components {
       [key: string]: components["schemas"]["TimeVarianceLevelCheck"];
     };
     TimeVarianceMeta: {
-      /** @description The number of compiled releases to which the check applied */
+      /** @description The number of the ancestor dataset's compiled releases to which the check applies */
       total_count: number;
-      /** @description The number of pairs found among them */
+      /** @description The number of the ancestor dataset's applicable compiled releases that are paired */
       coverage_count: number;
       /** @description The number of pairs that passed */
       ok_count: number;
