@@ -3,7 +3,7 @@ from pathlib import Path
 
 from django.test import SimpleTestCase
 
-from api.views import (
+from api.serializers import (
     DatasetLevelCheckSerializer,
     DatasetMetaSerializer,
     FieldLevelCheckDetailSerializer,

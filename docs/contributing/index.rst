@@ -92,7 +92,7 @@ API documentation
 
    :ref:`api`
 
-If you edit ``views.py``, regenerate the OpenAPI document:
+If you edit ``serializers.py`` or ``views.py``, regenerate the OpenAPI document:
 
 .. code-block:: bash
 
