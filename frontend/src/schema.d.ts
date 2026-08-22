@@ -382,8 +382,11 @@ export interface components {
       modified?: string | null;
       phase: string;
       state: string;
-      parent_id: number;
-      parent_name: string;
+      /** @description The ID of the dataset that was filtered */
+      parent_id: number | null;
+      /** @description The name of the dataset that was filtered */
+      parent_name: string | null;
+      /** @description The filter that created the dataset */
       filter_message: unknown;
     };
     DatasetLevelCheck: {
@@ -444,8 +447,8 @@ export interface components {
       passed_count: number;
       /** @description The number of times the check failed */
       failed_count: number;
-      passed_examples: components["schemas"]["FieldLevelExample"][] | null;
-      failed_examples: components["schemas"]["FieldLevelExample"][] | null;
+      passed_examples?: components["schemas"]["FieldLevelExample"][] | null;
+      failed_examples?: components["schemas"]["FieldLevelExample"][] | null;
     };
     FieldLevelCountsDetail: {
       /** @description The number of times the check was applied */
@@ -485,8 +488,8 @@ export interface components {
       passed_count: number;
       /** @description The number of times the check failed */
       failed_count: number;
-      passed_examples: components["schemas"]["FieldLevelExample"][] | null;
-      failed_examples: components["schemas"]["FieldLevelExample"][] | null;
+      passed_examples?: components["schemas"]["FieldLevelExample"][] | null;
+      failed_examples?: components["schemas"]["FieldLevelExample"][] | null;
       /** @description The checks, by name */
       checks: {
         [key: string]: components["schemas"]["FieldLevelCounts"];

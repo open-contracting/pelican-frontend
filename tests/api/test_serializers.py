@@ -13,7 +13,8 @@ from api.serializers import (
     TimeVarianceLevelCheckSerializer,
 )
 
-# Entries from tests/fixtures/pelican-backend.sql.gz, with the example arrays cut to one entry each.
+# Entries from tests/fixtures/pelican-backend.sql.gz, with the example arrays cut to one entry each. The sparse
+# field-level entry is from production, whose reports omit the example keys that the dump's reports set to null.
 with (Path(__file__).parent.parent / "fixtures" / "reports.json").open() as f:
     REPORTS = json.load(f)
 
@@ -25,11 +26,12 @@ class SerializerTests(SimpleTestCase):
     """
 
     def test_field_level_report(self):
-        for path, check in REPORTS["field_level_report"].items():
-            with self.subTest(path=path):
-                serializer = FieldLevelCheckSerializer(data=check)
+        for key in ("field_level_report", "field_level_report_sparse"):
+            for path, check in REPORTS[key].items():
+                with self.subTest(key=key, path=path):
+                    serializer = FieldLevelCheckSerializer(data=check)
 
-                self.assertTrue(serializer.is_valid(), serializer.errors)
+                    self.assertTrue(serializer.is_valid(), serializer.errors)
 
     def test_field_level_detail(self):
         serializer = FieldLevelCheckDetailSerializer(data=REPORTS["field_level_detail"])

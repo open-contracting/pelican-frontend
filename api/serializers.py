@@ -71,9 +71,10 @@ class DatasetSerializer(serializers.ModelSerializer):
     meta = DatasetMetaField()
     phase = serializers.CharField()
     state = serializers.CharField()
-    parent_id = serializers.IntegerField()
-    parent_name = serializers.CharField()
-    filter_message = serializers.JSONField()
+    # Null, unless the dataset is the result of a filter.
+    parent_id = serializers.IntegerField(allow_null=True, help_text="The ID of the dataset that was filtered")
+    parent_name = serializers.CharField(allow_null=True, help_text="The name of the dataset that was filtered")
+    filter_message = serializers.JSONField(allow_null=True, help_text="The filter that created the dataset")
 
     class Meta:
         model = Dataset
@@ -189,13 +190,14 @@ class ReportSerializerExtension(OpenApiSerializerExtension):
 
 
 # The counts are per occurrence of the field, which can exceed the number of compiled releases.
-# Only field_level/{name}/ returns the examples. In a report, they are null.
+# Only field_level/{name}/ returns the examples. A report omits them, and the older dump in tests/fixtures sets
+# them to null, so they are both optional and nullable.
 class FieldLevelCountsSerializer(serializers.Serializer):
     total_count = serializers.IntegerField(help_text="The number of times the check was applied")
     passed_count = serializers.IntegerField(help_text="The number of times the check passed")
     failed_count = serializers.IntegerField(help_text="The number of times the check failed")
-    passed_examples = FieldLevelExampleSerializer(many=True, allow_null=True)
-    failed_examples = FieldLevelExampleSerializer(many=True, allow_null=True)
+    passed_examples = FieldLevelExampleSerializer(many=True, required=False, allow_null=True)
+    failed_examples = FieldLevelExampleSerializer(many=True, required=False, allow_null=True)
 
 
 class FieldLevelGroupSerializer(FieldLevelCountsSerializer):
