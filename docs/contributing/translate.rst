@@ -7,7 +7,7 @@ Internationalization (i18n)
 
 Neither the frontend nor the exporter requires a translation to be complete: both fall back to English for a message it omits.
 
-If two keys would hold the same text, prefer one key that serves both places.
+If two keys would hold the same text, prefer one key that serves both places. Where one key does, prefer a noun to an adjective: a translation might have to agree an adjective with a different subject in each place.
 
 Write ``{'$'}`` for a dollar sign, which vue-i18n otherwise interprets.
 
@@ -39,7 +39,7 @@ quality
 field path
   ruta del campo
 pass, fail
-  Name a result with a noun, *éxito* or *fallo*: one label serves both a single check and a count of compiled releases, of tests or of pairs, so it can agree with none of them. Name the action with a verb, *pasar* or *fallar*: *la prueba pasa*, *no pasan ni fallan*. An adjective is fine where the noun it agrees with is alongside it: *Ejemplos exitosos*, *Solo cobertura fallida*.
+  A result is a noun, *éxito* or *fallo*. The action is a verb, *pasar* or *fallar*: *la prueba pasa*, *no pasan ni fallan*. An adjective is fine where the noun it agrees with is alongside it: *Ejemplos exitosos*, *Solo cobertura fallida*.
 
 Wording
 ~~~~~~~

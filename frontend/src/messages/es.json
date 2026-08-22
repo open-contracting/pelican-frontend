@@ -29,13 +29,20 @@
     "name": "Nombre",
     "size": "Cantidad",
     "phase": "Estado",
+    "phases": {
+      "CONTRACTING_PROCESS": "Campo y entrega compilada",
+      "DATASET": "Colección",
+      "TIME_VARIANCE": "Tiempo",
+      "CHECKED": "Comprobado",
+      "DELETED": "Eliminado"
+    },
     "search": "Buscar informe por nombre",
     "timeVariance": "Comprobaciones basadas en el tiempo"
   },
   "datasetFilter": {
     "headline": "Filtrado del conjunto de datos",
     "submit": "Filtrar",
-    "items": "seleccionados",
+    "items": "{items} de {total} seleccionados",
     "itemsAll": "los criterios no limitarán el conjunto de datos padre",
     "releaseDateFromTo": "Fecha de la entrega desde - hasta",
     "releaseDateFrom": "Fecha de la entrega desde",

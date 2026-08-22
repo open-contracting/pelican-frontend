@@ -37,7 +37,7 @@
             class="text-success"
           />
         </span>
-        {{ dataset.phase }}
+        {{ $t("dataset.phases." + dataset.phase) }}
       </template>
       <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
         <span class="small_icon">
@@ -46,7 +46,7 @@
             class="text-danger"
           />
         </span>
-        {{ dataset.phase }}
+        {{ $t("dataset.phases." + dataset.phase) }}
       </template>
       <template v-else-if="dataset.state == 'FAILED'">
         <span class="small_icon">
@@ -55,7 +55,7 @@
             class="text-danger"
           />
         </span>
-        {{ dataset.phase }}
+        {{ $t("dataset.phases." + dataset.phase) }}
       </template>
       <template v-else>
         <BRow class="progress_label g-0">
@@ -64,7 +64,7 @@
             :key="p"
           >
             <template v-if="p == dataset.phase">
-              {{ p }}
+              {{ $t("dataset.phases." + p) }}
             </template>
           </BCol>
         </BRow>
