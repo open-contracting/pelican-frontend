@@ -4,17 +4,17 @@
       <tr>
         <th>
           <div class="d-flex align-items-center">
-            <div>{{ $t("field.table.head.object") }}</div>
+            <div>{{ $t("field.path") }}</div>
           </div>
         </th>
         <th>
           <div class="d-flex justify-content-center align-items-center">
-            <span>{{ $t("field.table.head.coverage") }}</span>
+            <span>{{ $t("field.coverage") }}</span>
           </div>
         </th>
         <th>
           <div class="d-flex justify-content-center align-items-center">
-            <span>{{ $t("field.table.head.quality") }}</span>
+            <span>{{ $t("field.quality") }}</span>
           </div>
         </th>
       </tr>

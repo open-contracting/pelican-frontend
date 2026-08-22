@@ -57,7 +57,7 @@
           <tbody>
             <tr>
               <td class="text-end label">
-                <span class="check_name">{{ $t("timeLevel.check.ok") }}</span>
+                <span class="check_name">{{ $t("passed") }}</span>
               </td>
               <td>
                 <InlineBar
@@ -71,7 +71,7 @@
             </tr>
             <tr>
               <td class="text-end label">
-                <span class="check_name">{{ $t("timeLevel.check.failed") }}</span>
+                <span class="check_name">{{ $t("failed") }}</span>
               </td>
               <td>
                 <InlineBar

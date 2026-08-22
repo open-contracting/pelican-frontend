@@ -4,7 +4,7 @@
       <tr>
         <th @click="setSorting('path')">
           <SortButtons
-            :label="$t('field.table.head.object')"
+            :label="$t('field.path')"
             :active="sortedBy == 'path'"
             :asc="isAscendingSorted"
             @asc="setSorting('path')"
@@ -14,7 +14,7 @@
         <th @click="setSorting('coverage')">
           <div class="d-flex justify-content-center">
             <SortButtons
-              :label="$t('field.table.head.coverage')"
+              :label="$t('field.coverage')"
               :active="sortedBy == 'coverage'"
               :asc="isAscendingSorted"
               @asc="setSorting('coverage')"
@@ -25,7 +25,7 @@
         <th @click="setSorting('quality')">
           <div class="d-flex justify-content-center">
             <SortButtons
-              :label="$t('field.table.head.quality')"
+              :label="$t('field.quality')"
               :active="sortedBy == 'quality'"
               :asc="isAscendingSorted"
               @asc="setSorting('quality')"

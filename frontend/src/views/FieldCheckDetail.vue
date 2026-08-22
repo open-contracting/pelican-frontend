@@ -4,11 +4,11 @@
       v-if="check"
       #content
     >
-      <h2>{{ $t("fieldDetail.path") }}: {{ check.path }}</h2>
+      <h2>{{ $t("field.path") }}: {{ check.path }}</h2>
 
       <template v-for="(c, k) in check.coverage.checks" :key="k">
         <h5>
-          <span class="category_name"> {{ $t("fieldDetail.coverage.label") }}: </span>
+          <span class="category_name"> {{ $t("field.coverage") }}: </span>
           &ldquo;{{ $t("fieldDetail.coverage." + k + ".name") }}&rdquo;
           <span class="bold">
             {{ formatNumber(c.passed_count + c.failed_count) }}
@@ -26,7 +26,7 @@
 
       <template v-for="(c, k) in check.quality.checks" :key="k">
         <h5>
-          <span class="category_name"> {{ $t("fieldDetail.quality.label") }}: </span>
+          <span class="category_name"> {{ $t("field.quality") }}: </span>
           &ldquo;{{ $t("fieldDetail.quality." + k + ".name") }}&rdquo;
           <span class="bold">
             {{ formatNumber(c.passed_count + c.failed_count) }}

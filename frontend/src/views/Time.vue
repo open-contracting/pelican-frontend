@@ -54,11 +54,7 @@ const { t } = useI18n();
 
 const filterIndex = ref(0);
 
-const filterNames = [
-  t("timeLevel.filterDropdown.all"),
-  t("timeLevel.filterDropdown.failedOnly"),
-  t("timeLevel.filterDropdown.passedOnly"),
-];
+const filterNames = [t("filterDropdown.all"), t("filterDropdown.failedOnly"), t("filterDropdown.passedOnly")];
 
 const filters: ((item: TimeVarianceCheck) => boolean)[] = [
   () => true,

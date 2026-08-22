@@ -7,6 +7,12 @@
   "passed": "Passed",
   "failed": "Failed",
   "notAvailable": "Not applicable",
+  "filterDropdown": {
+    "all": "All",
+    "failedOnly": "Failed only",
+    "passedOnly": "Passed only",
+    "calculatedOnly": "Calculated only"
+  },
   "requestError": "The request failed. Reload the page, or try again later.",
   "tryAgain": "Try again",
   "close": "Close window",
@@ -37,9 +43,8 @@
     "buyerName": "Buyer name",
     "procuringEntityName": "Procuring entity name",
     "buyerNameRegex": "Buyer name pattern",
-    "buyerNameRegexTooltip": "Standard SQL ILIKE pattern",
     "procuringEntityNameRegex": "Procuring entity name pattern",
-    "procuringEntityNameRegexTooltip": "Standard SQL ILIKE pattern",
+    "regexTooltip": "Standard SQL ILIKE pattern",
     "statusOk": "Calculation will start in a moment.",
     "statusFailed": "The filter could not be submitted. Try again later."
   },
@@ -256,7 +261,7 @@
       "url_availability": {
         "name": "URL availability",
         "description": "A random sample of 100 URL values return no responses with HTTP error codes.",
-        "descriptionLong": "<p>A random sample of 100 URL values return responses without HTTP error codes. The URL fields are:</p><ul><li><code>planning.documents.url</code></li><li><code>tender.documents.url</code></li><li><code>awards.documents.url</code></li><li><code>contracts.documents.url</code></li><li><code>contracts.implementation.documents.url</code></li></ul><p>The test is skipped if fewer than 100 URL values are present.</p>"
+        "descriptionLong": "<p>A random sample of 100 URL values return no responses with HTTP error codes. The URL fields are:</p><ul><li><code>planning.documents.url</code></li><li><code>tender.documents.url</code></li><li><code>awards.documents.url</code></li><li><code>contracts.documents.url</code></li><li><code>contracts.implementation.documents.url</code></li></ul><p>The test is skipped if fewer than 100 URL values are present.</p>"
       }
     },
     "consistent": {
@@ -282,21 +287,12 @@
     },
     "top3": {
       "value": "Value",
-      "share": "Share",
       "count": "Occurrences"
-    },
-    "filterDropdown": {
-      "all": "All",
-      "failedOnly": "Failed only",
-      "passedOnly": "Passed only",
-      "calculatedOnly": "Calculated only"
     }
   },
   "resourceLevel": {
     "description": "<p>These checks operate on individual compiled releases; each compiled release is analyzed in isolation. There are three types of checks:</p><ul><li><p><b>Coherence</b>: The data makes sense and is possible. <i>Example</i>: A start date that is after an end date is incoherent.</p></li><li><p><b>Consistency</b>: If the value of one field implies the value of another field, the values should be identical or commensurate. <i>Examples</i>: The entry in the <code>parties</code> array that is referenced from the <code>buyer</code> field should have 'buyer' in its <code>roles</code> array; the monetary value of an award should be commensurate with the monetary values of its related contracts.</p></li><li><p><b>Reference</b>: A reference field has a valid target. <i>Examples</i>: Every <code>awardID</code> in every contract matches the <code>id</code> of an award; every <code>buyer.id</code> matches the <code>id</code> of a party.</p></li><li><p>A check is 'N/A' if the relevant fields are not set; any other reasons to skip a test are noted for each check. <i>Example</i>: If the <code>contracts.awardID</code> field is not set, then the reference check is not run.</p></li></ul>",
     "subheadline": "All Compiled Release-Level Checks",
-    "ok": "Passed",
-    "failed": "Failed",
     "na": "N/A",
     "check": "Check",
     "count_header": "Compiled releases checked:",
@@ -464,12 +460,6 @@
         "name": "Award reference",
         "description": "Each <code>contracts[].awardID</code> is present and matches the <code>id</code> of exactly one award."
       }
-    },
-    "filterDropdown": {
-      "all": "All",
-      "failedOnly": "Failed only",
-      "passedOnly": "Passed only",
-      "calculatedOnly": "Calculated only"
     }
   },
   "overview": {
@@ -511,31 +501,23 @@
     "title": "Field-Level Checks",
     "description": "<p>These checks operate on individual fields within compiled releases; each occurrence of each field is analyzed in isolation. There are two types of checks:</p><ul><li><p><b>Coverage:</b> There is one check per field in the release schema. If a field is set, and its value is neither null nor empty (whether it is an object, array or string), then the coverage test passes.</p><p>If a field is on an object in an array, then the coverage test is run for each object in the array. <i>Example</i>: There are 100 compiled releases, all of which have 5 parties. The check for the <code>parties</code> field will be reported out of 100, but the checks for its child fields (like <code>parties.id</code>) will be reported out of 500.</p><p>Child fields are reported in the context of their parent field. <i>Example</i>: There are 100 compiled releases, 10 of which set <code>tender</code>. The check for the <code>tender</code> field will be reported out of 100, but the checks for its child fields (like <code>tender.id</code>) will be reported out of 10.</p></li><li><p><b>Quality:</b> If there is a quality check for the field, and if the coverage test passes, then the quality test is run. The quality checks differ per field, and are described in detail on sub-pages. <i>Examples</i>: <code>ocid</code> value has a registered prefix; release date is in the past.</p></li></ul>",
     "all": "All Field-Level Checks",
-    "table": {
-      "head": {
-        "object": "Field path",
-        "coverage": "Coverage",
-        "quality": "Quality"
-      }
-    },
+    "path": "Field path",
+    "coverage": "Coverage",
+    "quality": "Quality",
     "search": "Search field by name",
     "checkedFields": "Checks are not performed on fields in extensions or on additional fields.",
     "resetTableSorting": "Use schema sort order",
     "tableLayout": "Use table layout",
     "treeLayout": "Use tree layout",
     "filterDropdown": {
-      "all": "All",
       "coverageFailedOnly": "Coverage failed only",
-      "qualityFailedOnly": "Quality failed only",
-      "passedOnly": "Passed only"
+      "qualityFailedOnly": "Quality failed only"
     }
   },
   "fieldDetail": {
-    "path": "Field path",
     "set": "Set",
     "notset": "Not set",
     "coverage": {
-      "label": "Coverage",
       "failureSamplesPrefix": "Coverage failure samples",
       "exists": {
         "name": "Field is set",
@@ -547,7 +529,6 @@
       }
     },
     "quality": {
-      "label": "Quality",
       "failureSamplesPrefix": "Quality failure samples",
       "ocid_prefix_check": {
         "name": "OCID prefix is registered",
@@ -604,9 +585,7 @@
     },
     "check": {
       "header": "Checking compiled release pairs:",
-      "header_tooltip": "Once a pair is found, the check is run. <i>Example</i>: The buyer is invariant across time. If the two releases have different values for the <code>buyer</code> field, the test fails.",
-      "ok": "Passed",
-      "failed": "Failed"
+      "header_tooltip": "Once a pair is found, the check is run. <i>Example</i>: The buyer is invariant across time. If the two releases have different values for the <code>buyer</code> field, the test fails."
     },
     "phase_stable": {
       "name": "Stage stability",
@@ -622,11 +601,6 @@
       "name": "Tender title stability",
       "description": "The tender title is invariant across time.",
       "descriptionLong": "<p>The tender title is invariant across time.</p><p>If a compiled release in the older collection sets the <code>tender.title</code> field, then its pair in the newer collection has a matching <code>tender.title</code> field. Values are lowercased and whitespace-normalized for matching.</p>"
-    },
-    "filterDropdown": {
-      "all": "All",
-      "failedOnly": "Failed only",
-      "passedOnly": "Passed only"
     }
   }
 }

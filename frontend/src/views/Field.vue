@@ -103,10 +103,10 @@ const fieldCheckTableRef = useTemplateRef<InstanceType<typeof FieldCheckTable>>(
 const filterIndex = ref(0);
 
 const filterNames = [
-  t("field.filterDropdown.all"),
+  t("filterDropdown.all"),
   t("field.filterDropdown.coverageFailedOnly"),
   t("field.filterDropdown.qualityFailedOnly"),
-  t("field.filterDropdown.passedOnly"),
+  t("filterDropdown.passedOnly"),
 ];
 
 const filters: ((item: FieldLevelCheck) => boolean)[] = [
