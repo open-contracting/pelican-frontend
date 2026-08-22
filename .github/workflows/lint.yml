@@ -10,3 +10,5 @@ jobs:
     with:
       # Copy of release-schema.json to generate template tags.
       ocds-schema-exceptions: release-schema.json
+      # Defer indentation to biome format.
+      ocds-noindent: 'yes'
