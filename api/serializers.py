@@ -195,14 +195,13 @@ class ReportSerializerExtension(OpenApiSerializerExtension):
 
 
 # The counts are per occurrence of the field, which can exceed the number of compiled releases.
-# Only field_level/{name}/ returns the examples. A report omits them, and the older dump in tests/fixtures sets
-# them to null, so they are both optional and nullable.
+# Only field_level/{name}/ returns the examples. A report omits them.
 class FieldLevelCountsSerializer(serializers.Serializer):
     total_count = serializers.IntegerField(help_text="The number of times the check was applied")
     passed_count = serializers.IntegerField(help_text="The number of times the check passed")
     failed_count = serializers.IntegerField(help_text="The number of times the check failed")
-    passed_examples = FieldLevelExampleSerializer(many=True, required=False, allow_null=True)
-    failed_examples = FieldLevelExampleSerializer(many=True, required=False, allow_null=True)
+    passed_examples = FieldLevelExampleSerializer(many=True, required=False)
+    failed_examples = FieldLevelExampleSerializer(many=True, required=False)
 
 
 class FieldLevelGroupSerializer(FieldLevelCountsSerializer):

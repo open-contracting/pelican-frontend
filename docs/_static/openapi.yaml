@@ -797,12 +797,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldLevelExample'
-          nullable: true
         failed_examples:
           type: array
           items:
             $ref: '#/components/schemas/FieldLevelExample'
-          nullable: true
       required:
       - failed_count
       - passed_count
@@ -889,12 +887,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldLevelExample'
-          nullable: true
         failed_examples:
           type: array
           items:
             $ref: '#/components/schemas/FieldLevelExample'
-          nullable: true
         checks:
           type: object
           additionalProperties:

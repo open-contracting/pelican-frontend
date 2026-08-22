@@ -239,16 +239,25 @@ input::placeholder,
   font-size: 13px;
 }
 
-// #sidebar_envelope is fixed, so the content is indented past it.
+// #sidebar_envelope is fixed, so the content is indented past it. ErrorAlert renders above the layout, rather than
+// within it, so it is indented too, on the pages that render the menu.
 @include media-breakpoint-down(xl) {
   .main_envelope {
     padding-left: 75px;
+  }
+
+  #app:has(#sidebar) > .alert {
+    margin-left: 75px;
   }
 }
 
 @include media-breakpoint-up(xl) {
   .main_envelope {
     padding-left: 215px;
+  }
+
+  #app:has(#sidebar) > .alert {
+    margin-left: 215px;
   }
 }
 

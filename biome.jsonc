@@ -8,7 +8,8 @@
   "formatter": {
     "indentStyle": "space",
     "lineWidth": 119,
-    "includes": ["**", "!release-schema.json"]
+    // Ignore files written by Python.
+    "includes": ["**", "!release-schema.json", "!tests/fixtures/reports.json"]
   },
   "overrides": [
     {
