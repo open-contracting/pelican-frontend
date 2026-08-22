@@ -1,11 +1,9 @@
 {
-  "header": "Data Quality Assessment Results",
   "loader": {
     "generic": "Loading… Please be patient.",
     "examples": "Generating random examples… This takes some time for large datasets. Please be patient.",
     "data": "Loading data preview. Please be patient."
   },
-  "ocid": "ocid",
   "passed": "Passed",
   "failed": "Failed",
   "notAvailable": "Not applicable",
@@ -26,8 +24,7 @@
     "size": "Count",
     "phase": "Status",
     "search": "Search report by name",
-    "timeVariance": "Time-based checks",
-    "actions": "actions"
+    "timeVariance": "Time-based checks"
   },
   "datasetFilter": {
     "headline": "Dataset filtering",
@@ -99,8 +96,6 @@
     "nonExisting": "The item was not found in the database. The original dataset might have been deleted."
   },
   "examples": {
-    "failed": "Sample releases with failed rules",
-    "passed": "Sample releases with passed rules",
     "actions": "actions",
     "ocid": "ocid",
     "showMore": "Show more examples",
@@ -126,7 +121,6 @@
     "examples": "Examples",
     "ocid_share": "{share} from {total} ocids",
     "charts": {
-      "count": "Count",
       "share": "Share",
       "group": "Group",
       "label_0_1": "top 1%",
@@ -255,7 +249,7 @@
       "tender_id": {
         "name": "Tender ID is unique",
         "description": "Each <code>tender.id</code> is unique across the collection.",
-        "descriptionLong": "<p>Each <code>tender.id</code> is across within the collection.</p><p>The test is skipped if the field is never present.</p>"
+        "descriptionLong": "<p>Each <code>tender.id</code> is unique across the collection.</p><p>The test is skipped if the field is never present.</p>"
       }
     },
     "misc": {
@@ -484,7 +478,6 @@
     "dqt_metadata": "Pelican Metadata",
     "collection_metadata_tooltip": "The OCID prefix and package metadata are extracted from the first compiled release.",
     "compiled_releases": {
-      "title": "Compiled Releases",
       "value_label": "Total Unique OCIDs"
     },
     "filtered": {
