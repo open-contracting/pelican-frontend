@@ -447,8 +447,8 @@ export interface components {
       passed_count: number;
       /** @description The number of times the check failed */
       failed_count: number;
-      passed_examples?: components["schemas"]["FieldLevelExample"][] | null;
-      failed_examples?: components["schemas"]["FieldLevelExample"][] | null;
+      passed_examples?: components["schemas"]["FieldLevelExample"][];
+      failed_examples?: components["schemas"]["FieldLevelExample"][];
     };
     FieldLevelCountsDetail: {
       /** @description The number of times the check was applied */
@@ -488,8 +488,8 @@ export interface components {
       passed_count: number;
       /** @description The number of times the check failed */
       failed_count: number;
-      passed_examples?: components["schemas"]["FieldLevelExample"][] | null;
-      failed_examples?: components["schemas"]["FieldLevelExample"][] | null;
+      passed_examples?: components["schemas"]["FieldLevelExample"][];
+      failed_examples?: components["schemas"]["FieldLevelExample"][];
       /** @description The checks, by name */
       checks: {
         [key: string]: components["schemas"]["FieldLevelCounts"];
