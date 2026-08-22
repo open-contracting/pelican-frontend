@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 export function useFormatters() {
   const { locale } = useI18n();
 
-  // A reader who reads the interface in Spanish reads 12.047 and 0,25, not 12,047 and 0.25.
+  // A user reading the interface in Spanish reads 12.047 and 0,25, not 12,047 and 0.25.
   const integer = computed(() => new Intl.NumberFormat(locale.value, { maximumFractionDigits: 0 }));
   const twoDecimals = computed(
     () => new Intl.NumberFormat(locale.value, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),

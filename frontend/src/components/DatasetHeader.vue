@@ -25,7 +25,6 @@ const dataset = computed(() => {
 
 <style scoped lang="scss">
 
-// A row of the header, so it spaces itself horizontally and leaves the header to space the row.
 h1 {
     font-size: 13px;
     font-family: $font-family-thin;

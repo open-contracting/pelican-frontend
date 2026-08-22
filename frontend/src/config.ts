@@ -28,7 +28,7 @@ export const STATES = ["IN_PROGRESS", "OK"];
 // Sync with the example keys in the dataset-level and time-based checks.
 export const EXAMPLE_KEYS = new Set(["examples", "failed_examples", "passed_examples"]);
 
-// Sync with the catalogs in src/messages. Each language is named in itself, never translated.
+// Sync with the catalogs in src/messages. Each name is in its own language, and is never translated.
 export const LOCALES: Record<string, string> = { en: "English", es: "Español" };
 
 /** A pair of thresholds, between which a share passes. */

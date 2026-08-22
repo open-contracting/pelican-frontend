@@ -250,7 +250,7 @@ const settingsStore = useSettingsStore();
 const { locale } = useLocale();
 
 const isSubmitting = ref(false);
-// The export defaults to the reader's language, which the reader can still override here.
+// The export defaults to the user's language, which the user can still override here.
 const reportLanguage = ref(locale.value);
 const documentId = ref(settingsStore.settings.template[reportLanguage.value]);
 const folderId = ref(settingsStore.settings.folder);
