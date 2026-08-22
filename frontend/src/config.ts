@@ -28,66 +28,55 @@ export const STATES = ["IN_PROGRESS", "OK"];
 // Sync with the example keys in the dataset-level and time-based checks.
 export const EXAMPLE_KEYS = new Set(["examples", "failed_examples", "passed_examples"]);
 
-export type DatasetCheckType = "code" | "percentile" | "numeric" | "top3" | "biggest_share" | "single_value_share";
+/** A pair of thresholds, between which a share passes. */
+type Ticks = [number, number];
 
-export const DATASET_CHECK_REPORT_ONLY: Record<string, boolean | undefined> = {
-  "distribution.tender_award_criteria": true,
-  "distribution.tender_submission_method": true,
-  "distribution.milestone_type": true,
-  "distribution.document_document_type": true,
-  "distribution.value_currency": true,
-  "distribution.related_process_relation": true,
-};
+// Sync with CHECK_TYPES in dataset.py, and with the check descriptions.
+/**
+ * How to chart a dataset-level check, and what the chart needs: a type whose chart plots thresholds cannot be
+ * declared without them.
+ */
+export type DatasetCheck = {
+  /** Whether the check reports a distribution without passing or failing. */
+  reportOnly?: true;
+} & (
+  | { type: "code"; ticks?: Ticks; styles?: string[] }
+  | { type: "percentile"; ticks: Ticks }
+  | { type: "single_value_share"; ticks: Ticks }
+  | { type: "numeric" | "top3" | "biggest_share" }
+);
 
-// Sync with CHECK_TYPES in dataset.py
-export const DATASET_CHECK_TYPES: Record<string, DatasetCheckType | undefined> = {
+export const DATASET_CHECKS: Record<string, DatasetCheck | undefined> = {
   // code
-  "distribution.main_procurement_category": "code",
-  "distribution.tender_status": "code",
-  "distribution.tender_procurement_method": "code",
-  "distribution.tender_award_criteria": "code",
-  "distribution.tender_submission_method": "code",
-  "distribution.awards_status": "code",
-  "distribution.contracts_status": "code",
-  "distribution.milestone_status": "code",
-  "distribution.milestone_type": "code",
-  "distribution.document_document_type": "code",
-  "distribution.value_currency": "code",
-  "distribution.related_process_relation": "code",
+  "distribution.main_procurement_category": { type: "code", ticks: [0, 0.95], styles: [] },
+  "distribution.tender_status": { type: "code", ticks: [0.001, 0.99], styles: ["active", "complete"] },
+  "distribution.tender_procurement_method": { type: "code", ticks: [0.001, 0.99], styles: ["open"] },
+  "distribution.tender_award_criteria": { type: "code", reportOnly: true },
+  "distribution.tender_submission_method": { type: "code", reportOnly: true },
+  "distribution.awards_status": { type: "code", ticks: [0.001, 0.99], styles: ["active"] },
+  "distribution.contracts_status": { type: "code", ticks: [0.001, 0.99], styles: ["active", "terminated"] },
+  "distribution.milestone_status": { type: "code", ticks: [0.001, 0.99], styles: ["met"] },
+  "distribution.milestone_type": { type: "code", reportOnly: true },
+  "distribution.document_document_type": { type: "code", reportOnly: true },
+  "distribution.value_currency": { type: "code", reportOnly: true },
+  "distribution.related_process_relation": { type: "code", reportOnly: true },
   // percentile
-  "distribution.tender_value": "percentile",
-  "distribution.contracts_value": "percentile",
-  "distribution.awards_value": "percentile",
+  "distribution.tender_value": { type: "percentile", ticks: [0, 0.5] },
+  "distribution.contracts_value": { type: "percentile", ticks: [0, 0.5] },
+  "distribution.awards_value": { type: "percentile", ticks: [0, 0.5] },
   // numeric
-  "misc.url_availability": "numeric",
-  "unique.tender_id": "numeric",
-  "consistent.related_process_title": "numeric",
-  "reference.related_process_identifier": "numeric",
+  "misc.url_availability": { type: "numeric" },
+  "unique.tender_id": { type: "numeric" },
+  "consistent.related_process_title": { type: "numeric" },
+  "reference.related_process_identifier": { type: "numeric" },
   // top3
-  "distribution.tender_value_repetition": "top3",
-  "distribution.contracts_value_repetition": "top3",
-  "distribution.awards_value_repetition": "top3",
+  "distribution.tender_value_repetition": { type: "top3" },
+  "distribution.awards_value_repetition": { type: "top3" },
+  "distribution.contracts_value_repetition": { type: "top3" },
   // biggest_share
-  "distribution.buyer_repetition": "biggest_share",
+  "distribution.buyer_repetition": { type: "biggest_share" },
   // single_value_share
-  "distribution.buyer": "single_value_share",
-};
-
-// Sync with check descriptions.
-export const DATASET_CHECK_TICKS: Record<string, [number, number] | undefined> = {
-  // code
-  "distribution.main_procurement_category": [0, 0.95],
-  "distribution.tender_status": [0.001, 0.99],
-  "distribution.awards_status": [0.001, 0.99],
-  "distribution.contracts_status": [0.001, 0.99],
-  "distribution.milestone_status": [0.001, 0.99],
-  "distribution.tender_procurement_method": [0.001, 0.99],
-  // percentile
-  "distribution.tender_value": [0, 0.5],
-  "distribution.contracts_value": [0, 0.5],
-  "distribution.awards_value": [0, 0.5],
-  // single_value_share
-  "distribution.buyer": [0, 0.5],
+  "distribution.buyer": { type: "single_value_share", ticks: [0, 0.5] },
 };
 
 // Key order determines the order of the sections in the dataset-level view.
@@ -167,14 +156,3 @@ export const RESOURCE_CHECK_ORDER = [
   "coherent.period",
   "coherent.procurement_method_vs_number_of_tenderers",
 ];
-
-// Sync with check descriptions.
-export const DATASET_CHECK_STYLES: Record<string, string[] | undefined> = {
-  // code
-  "distribution.main_procurement_category": [],
-  "distribution.tender_status": ["active", "complete"],
-  "distribution.awards_status": ["active"],
-  "distribution.contracts_status": ["active", "terminated"],
-  "distribution.milestone_status": ["met"],
-  "distribution.tender_procurement_method": ["open"],
-};

@@ -22,11 +22,11 @@
           class="col col-2 col-sm-2 col-lg-2 text-end"
         >
           <span
-            v-if="!reportOnly && check.result == true"
+            v-if="!chart?.reportOnly && check.result == true"
             class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
-            v-if="!reportOnly && check.result == false"
+            v-if="!chart?.reportOnly && check.result == false"
             class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
@@ -61,7 +61,7 @@
             <p v-html="$t('insufficientData.description')" />
           </div>
           <div
-            v-else-if="checkType == null"
+            v-else-if="chart == null"
             class="chart_envelope text-center"
           >
             <img
@@ -76,20 +76,20 @@
             <p v-html="$t('incompatibleCheckVersion.description')" />
           </div>
           <div v-else>
-            <div v-if="checkType == 'code'">
+            <div v-if="chart.type === 'code'">
               <div class="chart_envelope">
                 <CodeChart :check="check" :limit="true" />
               </div>
             </div>
 
-            <div v-if="checkType == 'percentile'">
+            <div v-else-if="chart.type === 'percentile'">
               <div class="chart_envelope">
-                <PercentileChart v-if="ticks" :check="check" :ticks="ticks" />
+                <PercentileChart :check="check" :ticks="chart.ticks" />
               </div>
             </div>
 
             <div
-              v-if="checkType == 'numeric'"
+              v-else-if="chart.type === 'numeric'"
               class="text-center"
             >
               <span class="check_numeric_value">{{ formatNumber(numericMeta.total_passed) }}</span><span
@@ -98,7 +98,7 @@
             </div>
 
             <div
-              v-if="checkType == 'top3'"
+              v-else-if="chart.type === 'top3'"
               class="top3"
             >
               <div class="chart_envelope">
@@ -122,7 +122,7 @@
             </div>
 
             <div
-              v-if="checkType == 'biggest_share'"
+              v-else-if="chart.type === 'biggest_share'"
               class="biggest_share"
             >
               <div class="row">
@@ -143,9 +143,9 @@
               </div>
             </div>
 
-            <div v-if="checkType == 'single_value_share'">
+            <div v-else-if="chart.type === 'single_value_share'">
               <div class="chart_envelope">
-                <FrequencyChart v-if="ticks" :check="check" :ticks="ticks" />
+                <FrequencyChart :check="check" :ticks="chart.ticks" />
               </div>
             </div>
           </div>
@@ -159,7 +159,7 @@
 import { computed } from "vue";
 import { useClickable } from "@/composables/useClickable";
 import { useFormatters } from "@/composables/useFormatters";
-import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
+import { DATASET_CHECKS } from "@/config.js";
 import { useDatasetStore } from "@/stores/dataset.js";
 import type { BiggestShareMeta, DatasetLevelCheck, NumericMeta, Top3Meta } from "@/types.js";
 
@@ -176,16 +176,14 @@ const props = defineProps<{
 const datasetStore = useDatasetStore();
 const { navigate } = useClickable();
 
-const checkType = computed(() => DATASET_CHECK_TYPES[props.check.name]);
-const reportOnly = computed(() => DATASET_CHECK_REPORT_ONLY[props.check.name]);
-const ticks = computed(() => DATASET_CHECK_TICKS[props.check.name]);
+const chart = computed(() => DATASET_CHECKS[props.check.name]);
 
 // The template renders each of these in the branch for the check type whose meta has that shape.
 const numericMeta = computed(() => props.check.meta as NumericMeta);
 const top3Meta = computed(() => props.check.meta as Top3Meta);
 const biggestShareMeta = computed(() => props.check.meta as BiggestShareMeta);
 
-const clickable = computed(() => props.check.result !== undefined && checkType.value !== undefined);
+const clickable = computed(() => props.check.result !== undefined && chart.value !== undefined);
 
 const detailRouterArguments = computed(() => ({
   name: "datasetCheckDetail",

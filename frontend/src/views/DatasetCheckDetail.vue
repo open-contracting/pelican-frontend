@@ -10,11 +10,11 @@
         </div>
         <div class="col col-2 text-end">
           <span
-            v-if="!reportOnly && check.result === true"
+            v-if="!chart?.reportOnly && check.result === true"
             class="badge rounded-pill ok_status"
           >{{ $t("passed") }}</span>
           <span
-            v-if="!reportOnly && check.result === false"
+            v-if="!chart?.reportOnly && check.result === false"
             class="badge rounded-pill failed_status"
           >{{ $t("failed") }}</span>
         </div>
@@ -28,15 +28,15 @@
         v-if="check.meta.reason == null"
         class="result_box"
       >
-        <div v-if="checkType === 'percentile'">
-          <PercentileChart v-if="ticks" :check="check" :ticks="ticks" show-count />
+        <div v-if="chart?.type === 'percentile'">
+          <PercentileChart :check="check" :ticks="chart.ticks" show-count />
         </div>
 
-        <div v-else-if="checkType === 'code'">
+        <div v-else-if="chart?.type === 'code'">
           <CodeChart :check="check" :limit="false" />
         </div>
 
-        <div v-else-if="checkType === 'top3'">
+        <div v-else-if="chart?.type === 'top3'">
           <table class="table table-sm">
             <thead>
               <tr>
@@ -66,7 +66,7 @@
           </table>
         </div>
 
-        <div v-else-if="checkType === 'numeric'">
+        <div v-else-if="chart?.type === 'numeric'">
           <div class="row text-center">
             <div class="numeric_result color_ok col-4">
               <div class="check_numeric_value">
@@ -92,7 +92,7 @@
         </div>
 
         <div
-          v-else-if="checkType === 'biggest_share'"
+          v-else-if="chart?.type === 'biggest_share'"
           class="biggest_share"
         >
           <div class="row text-start">
@@ -127,8 +127,8 @@
           </div>
         </div>
 
-        <div v-else-if="checkType === 'single_value_share'">
-          <FrequencyChart v-if="ticks" :check="check" :ticks="ticks" show-count />
+        <div v-else-if="chart?.type === 'single_value_share'">
+          <FrequencyChart :check="check" :ticks="chart.ticks" show-count />
         </div>
       </div>
 
@@ -186,7 +186,7 @@ import FrequencyChart from "@/components/FrequencyChart.vue";
 import PercentileChart from "@/components/PercentileChart.vue";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { useFormatters } from "@/composables/useFormatters";
-import { DATASET_CHECK_REPORT_ONLY, DATASET_CHECK_TICKS, DATASET_CHECK_TYPES } from "@/config.js";
+import { DATASET_CHECKS } from "@/config.js";
 import type {
   BiggestShareMeta,
   CodeMeta,
@@ -209,9 +209,7 @@ const { previewDataItem, previewData, loadingPreviewData } = useDataItem();
 
 const check = computed(() => datasetStore.datasetLevelCheckByName(String(route.params.check)));
 const previewMetadata = computed(() => (check.value == null ? null : (withoutExamples(check.value.meta) as JSONData)));
-const checkType = computed(() => (check.value == null ? undefined : DATASET_CHECK_TYPES[check.value.name]));
-const reportOnly = computed(() => (check.value == null ? undefined : DATASET_CHECK_REPORT_ONLY[check.value.name]));
-const ticks = computed(() => (check.value == null ? undefined : DATASET_CHECK_TICKS[check.value.name]));
+const chart = computed(() => (check.value == null ? undefined : DATASET_CHECKS[check.value.name]));
 
 // The template renders each of these in the branch for the check type whose meta has that shape.
 const meta = computed<DatasetLevelMeta>(() => check.value?.meta ?? {});
@@ -226,7 +224,7 @@ const exampleSections = computed(() => {
     return sections;
   }
 
-  if (checkType.value === "code") {
+  if (chart.value?.type === "code") {
     for (const [code, share] of orderedShares((meta.value as CodeMeta).shares ?? {})) {
       if (share.examples.length > 0) {
         sections.push({
@@ -235,7 +233,7 @@ const exampleSections = computed(() => {
         });
       }
     }
-  } else if (checkType.value === "percentile") {
+  } else if (chart.value?.type === "percentile") {
     for (const [range, examples] of Object.entries((meta.value as PercentileMeta).examples ?? {})) {
       if (examples.length > 0) {
         sections.push({
@@ -244,7 +242,7 @@ const exampleSections = computed(() => {
         });
       }
     }
-  } else if (checkType.value === "top3") {
+  } else if (chart.value?.type === "top3") {
     for (const value of top3Meta.value.most_frequent ?? []) {
       if (value.examples.length > 0) {
         sections.push({
@@ -253,7 +251,7 @@ const exampleSections = computed(() => {
         });
       }
     }
-  } else if (checkType.value === "numeric") {
+  } else if (chart.value?.type === "numeric") {
     if (numericMeta.value.failed_examples?.length) {
       sections.push({
         header: t("datasetLevel.numeric.failedExamples"),
@@ -267,7 +265,7 @@ const exampleSections = computed(() => {
         examples: numericMeta.value.passed_examples,
       });
     }
-  } else if (checkType.value === "biggest_share" || checkType.value === "single_value_share") {
+  } else if (chart.value?.type === "biggest_share" || chart.value?.type === "single_value_share") {
     if (biggestShareMeta.value.examples?.length) {
       sections.push({
         header: t("datasetLevel.examples"),

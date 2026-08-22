@@ -50,7 +50,7 @@ export type FieldLevelCheck = Schemas["FieldLevelCheck"] & {
 };
 
 // A dataset-level check's meta is documented as free-form, because its properties vary by check. The frontend
-// reads one shape per check type, and renders the rest verbatim. DATASET_CHECK_TYPES maps a check to its shape.
+// reads one shape per check type, and renders the rest verbatim. DATASET_CHECKS maps a check to its type.
 
 /** The properties common to every check. */
 export interface DatasetLevelMeta {

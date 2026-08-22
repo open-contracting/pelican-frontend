@@ -15,7 +15,7 @@ import { useI18n } from "vue-i18n";
 import type { ChartRow } from "@/composables/useBarChart.js";
 import { ANNOTATION_FONT, BAR_CHART_OPTIONS, shareStyle, textWidth } from "@/composables/useBarChart.js";
 import { useFormatters } from "@/composables/useFormatters.js";
-import { DATASET_CHECK_STYLES, DATASET_CHECK_TICKS } from "@/config.js";
+import { DATASET_CHECKS } from "@/config.js";
 import type { CodeMeta, DatasetLevelCheck } from "@/types.js";
 import { orderedShares } from "@/util.js";
 
@@ -34,7 +34,7 @@ const props = defineProps<{
 const { t } = useI18n();
 const { formatPercentage, formatNumber } = useFormatters();
 
-const chart = useTemplateRef<InstanceType<typeof GChart>>("chart");
+const element = useTemplateRef<InstanceType<typeof GChart>>("chart");
 
 const ROW_HEIGHT = 30;
 // Google Charts draws an annotation this far after its bar. Reserving less clips it.
@@ -59,8 +59,9 @@ const chartOptions = ref<GoogleChartOptions>({ ...BAR_CHART_OPTIONS });
 
 onMounted(() => {
   const meta = props.check.meta as CodeMeta;
-  const ticks = DATASET_CHECK_TICKS[props.check.name];
-  const styles = DATASET_CHECK_STYLES[props.check.name];
+  // Only a code check is charted here, and only that type has styles.
+  const chart = DATASET_CHECKS[props.check.name];
+  const { ticks, styles } = chart?.type === "code" ? chart : { ticks: undefined, styles: undefined };
   const bars: Bar[] = [];
 
   for (const [code, share] of orderedShares(meta.shares)) {
@@ -88,7 +89,7 @@ onMounted(() => {
   const height = bars.length * ROW_HEIGHT;
 
   // Reserve room for the widest label and annotation, which Google Charts otherwise elides.
-  const width = chart.value?.$el.clientWidth ?? 0;
+  const width = element.value?.$el.clientWidth ?? 0;
   const labelWidth = Math.min(textWidth(bars.map((bar) => bar.code)) + GAP, width * MAX_LABEL_WIDTH);
   const annotationWidth = textWidth(bars.map(annotation), ANNOTATION_FONT);
 
