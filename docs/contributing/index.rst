@@ -8,6 +8,7 @@ Contributing
    add-metadata
    add-check
    update-check
+   translate
    compare-to-production
 
 Setup
