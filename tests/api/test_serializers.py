@@ -13,7 +13,7 @@ from api.serializers import (
     TimeVarianceLevelCheckSerializer,
 )
 
-# Entries from tests/fixtures/pelican-backend.sql.gz, built by tests/fixtures/build_reports.py.
+# Entries from tests/fixtures/pelican-backend.sql.gz, written by the refreshfixtures command.
 with (Path(__file__).parent.parent / "fixtures" / "reports.json").open() as f:
     REPORTS = json.load(f)
 
