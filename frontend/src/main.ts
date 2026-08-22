@@ -3,6 +3,7 @@ import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import "./scss/main.scss";
+import { initialLocale } from "./composables/useLocale";
 import en from "./messages/en.json";
 import es from "./messages/es.json";
 import { FontAwesomeIcon } from "./plugins/fontawesome";
@@ -11,7 +12,7 @@ import { useSettingsStore } from "./stores/settings.js";
 
 const i18n = createI18n({
   legacy: false,
-  locale: "en",
+  locale: initialLocale(),
   fallbackLocale: "en",
   warnHtmlMessage: false,
   messages: { en, es },

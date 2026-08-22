@@ -261,17 +261,17 @@
         <div class="col-9 top-margin">
           <BRow>
             <BCol
-              v-for="option in options"
-              :key="option.value"
+              v-for="(name, code) in LOCALES"
+              :key="code"
               class="col-6"
             >
               <BFormRadio
                 v-model="reportLanguage"
-                :value="option.value"
+                :value="code"
                 @update:model-value="setDocumentId"
               >
                 <div class="top-margin">
-                  {{ option.text }}
+                  {{ name }}
                 </div>
               </BFormRadio>
             </BCol>
@@ -360,7 +360,8 @@
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
 import { computed, ref } from "vue";
 import api from "@/api.js";
-import { CONFIG } from "@/config.js";
+import { useLocale } from "@/composables/useLocale";
+import { CONFIG, LOCALES } from "@/config.js";
 import { useSettingsStore } from "@/stores/settings.js";
 import type { Dataset, GenerateReport, GenerateReportResponse } from "@/types.js";
 import Loader from "./Loader.vue";
@@ -374,17 +375,15 @@ const props = defineProps<{
 defineEmits<{ close: [] }>();
 
 const settingsStore = useSettingsStore();
+const { locale } = useLocale();
 
 const isSubmitting = ref(false);
-const documentId = ref(settingsStore.settings.template.en);
+// The export defaults to the reader's language, which the reader can still override here.
+const reportLanguage = ref(locale.value);
+const documentId = ref(settingsStore.settings.template[reportLanguage.value]);
 const folderId = ref(settingsStore.settings.folder);
 const reportName = ref("");
 const result = ref<ReportResult | null>(null);
-const options = [
-  { value: "en", text: "English" },
-  { value: "es", text: "Español" },
-];
-const reportLanguage = ref("en");
 
 // A report and a template error both list the tags that could not be rendered.
 const failedTags = computed(() => {
