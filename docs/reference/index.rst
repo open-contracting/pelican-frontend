@@ -33,7 +33,7 @@ SERVICE_ACCOUNT_JSON_FILE
 RABBIT_URL
   The `connection string <https://pika.readthedocs.io/en/stable/examples/using_urlparameters.html#using-urlparameters>`__ for RabbitMQ
 RABBIT_EXCHANGE_NAME
-  The name of the RabbitMQ exchange. Follow the pattern ``pelican_{service}_{environment}`` like ``pelican_data_registry_production``
+  The name of the RabbitMQ exchange, following the pattern ``pelican_{service}_{environment}``, like ``pelican_data_registry_production``
 DEFAULT_BASE_TEMPLATE
   The Google Docs ID for the base template
 DEFAULT_FIELD_TEMPLATE
