@@ -24,7 +24,7 @@
       </a>
     </td>
     <td class="numeric text-end">
-      {{ formatNumber(dataset.meta.compiled_releases.total_unique_ocids) }}
+      {{ formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }}
     </td>
     <td class="numeric text-end">
       {{ dataset.meta.kingfisher_metadata?.collection_id }}

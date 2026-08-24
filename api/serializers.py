@@ -68,12 +68,13 @@ class TenderLifecycleSerializer(serializers.Serializer):
 
 
 class DatasetMetaSerializer(serializers.Serializer):
+    # Pelican backend writes the first two groups when it creates the dataset, the next two when the dataset-level
+    # checks end, and the last when the reports end. A dataset that is still being processed has only the earlier ones.
     collection_metadata = CollectionMetadataSerializer()
     kingfisher_metadata = KingfisherMetadataSerializer()
-    # Pelican writes its metadata when it finishes, so an in-progress dataset has none.
+    compiled_releases = CompiledReleasesSerializer(required=False)
+    tender_lifecycle = TenderLifecycleSerializer(required=False, help_text="The number of objects in each stage")
     data_quality_tool_metadata = PelicanMetadataSerializer(required=False)
-    compiled_releases = CompiledReleasesSerializer()
-    tender_lifecycle = TenderLifecycleSerializer(help_text="The number of objects in each stage")
 
 
 @extend_schema_field(DatasetMetaSerializer)

@@ -684,19 +684,17 @@ components:
           $ref: '#/components/schemas/CollectionMetadata'
         kingfisher_metadata:
           $ref: '#/components/schemas/KingfisherMetadata'
-        data_quality_tool_metadata:
-          $ref: '#/components/schemas/PelicanMetadata'
         compiled_releases:
           $ref: '#/components/schemas/CompiledReleases'
         tender_lifecycle:
           allOf:
           - $ref: '#/components/schemas/TenderLifecycle'
           description: The number of objects in each stage
+        data_quality_tool_metadata:
+          $ref: '#/components/schemas/PelicanMetadata'
       required:
       - collection_metadata
-      - compiled_releases
       - kingfisher_metadata
-      - tender_lifecycle
     DistinctValue:
       type: object
       properties:

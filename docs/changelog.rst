@@ -3,6 +3,11 @@ Changelog
 
 This changelog only notes major changes, to notify other developers.
 
+2026-08-24
+----------
+
+-  fix: ``meta.compiled_releases`` and ``meta.tender_lifecycle`` are optional in the ``api/datasets/`` endpoints' responses. Pelican backend writes them when the dataset-level checks end, so a dataset that is still being processed has neither. :issue:`304`
+
 2026-08-22
 ----------
 

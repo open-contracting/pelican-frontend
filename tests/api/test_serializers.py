@@ -70,3 +70,10 @@ class SerializerTests(SimpleTestCase):
                 serializer = DatasetMetaSerializer(data=REPORTS[key])
 
                 self.assertTrue(serializer.is_valid(), serializer.errors)
+
+    def test_dataset_meta_unprocessed(self):
+        """A dataset being processed has only the groups written when it is created. No fixture entry is one."""
+        groups = ("collection_metadata", "kingfisher_metadata")
+        serializer = DatasetMetaSerializer(data={key: REPORTS["dataset_meta"][key] for key in groups})
+
+        self.assertTrue(serializer.is_valid(), serializer.errors)

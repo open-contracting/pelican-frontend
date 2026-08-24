@@ -90,16 +90,16 @@
         <button
           type="button"
           class="btn btn-primary submit_button"
-          :disabled="items == 0 || (dataset != null && items == dataset.meta.compiled_releases.total_unique_ocids) || gettingCountsController != null"
+          :disabled="items == 0 || (dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids) || gettingCountsController != null"
           @click="createDatasetFilter"
         >
           {{ $t("datasetFilter.submit") }}
           <span v-if="gettingCountsController == null">
             <span
-              v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases.total_unique_ocids"
-            >({{ $t("datasetFilter.items", { items: formatNumber(items), total: formatNumber(dataset.meta.compiled_releases.total_unique_ocids) }) }})</span>
+              v-if="items != null && items > 0 && dataset != null && items != dataset.meta.compiled_releases?.total_unique_ocids"
+            >({{ $t("datasetFilter.items", { items: formatNumber(items), total: formatNumber(dataset.meta.compiled_releases?.total_unique_ocids) }) }})</span>
             <span
-              v-if="dataset != null && items == dataset.meta.compiled_releases.total_unique_ocids"
+              v-if="dataset != null && items == dataset.meta.compiled_releases?.total_unique_ocids"
             >({{ $t("datasetFilter.itemsAll") }})</span>
           </span>
           <BSpinner

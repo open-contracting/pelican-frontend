@@ -202,7 +202,7 @@ function sortBy(by: string, asc = true) {
     comp = (a, b) => a.name.localeCompare(b.name);
   } else if (by === "size") {
     comp = (a, b) =>
-      (a.meta.compiled_releases.total_unique_ocids || -1) - (b.meta.compiled_releases.total_unique_ocids || -1);
+      (a.meta.compiled_releases?.total_unique_ocids || -1) - (b.meta.compiled_releases?.total_unique_ocids || -1);
   } else if (by === "collection_id") {
     comp = (a, b) =>
       (a.meta.kingfisher_metadata.collection_id || -1) - (b.meta.kingfisher_metadata.collection_id || -1);

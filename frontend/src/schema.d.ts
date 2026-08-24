@@ -403,10 +403,10 @@ export interface components {
     DatasetMeta: {
       collection_metadata: components["schemas"]["CollectionMetadata"];
       kingfisher_metadata: components["schemas"]["KingfisherMetadata"];
-      data_quality_tool_metadata?: components["schemas"]["PelicanMetadata"];
-      compiled_releases: components["schemas"]["CompiledReleases"];
+      compiled_releases?: components["schemas"]["CompiledReleases"];
       /** @description The number of objects in each stage */
-      tender_lifecycle: components["schemas"]["TenderLifecycle"];
+      tender_lifecycle?: components["schemas"]["TenderLifecycle"];
+      data_quality_tool_metadata?: components["schemas"]["PelicanMetadata"];
     };
     DistinctValue: {
       /** @description The field's value */
