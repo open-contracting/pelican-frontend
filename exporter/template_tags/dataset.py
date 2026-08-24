@@ -31,7 +31,7 @@ from exporter.messages import message
 from exporter.tag import Tag, TemplateTag
 from exporter.util import quote_list
 
-# Keep in sync with DATASET_CHECK_TYPES in config.js
+# Keep in sync with DATASET_CHECK_TYPES in config.ts
 CHECK_TYPES = {
     # code
     "distribution.main_procurement_category": "code",

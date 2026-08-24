@@ -2,6 +2,6 @@ Add metadata
 ============
 
 #. Update the template in ``frontend/src/views/Overview.vue``.
-#. Add new keys to ``overview`` in ``frontend/src/messages/en.js``.
+#. Add new keys to ``overview`` in ``frontend/src/messages/en.json``.
 #. Update the ``tags`` tuple and return value in ``exporter/template_tags/overview.py``.
 

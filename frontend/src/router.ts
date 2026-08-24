@@ -26,7 +26,7 @@ async function load(datasetId: string, after?: () => Promise<void>) {
     }
     await after?.();
   } catch {
-    // `beforeEnter` doesn't await this, so the rejection must be caught. api.js reported it, so this catch is empty.
+    // `beforeEnter` doesn't await this, so the rejection must be caught. api.ts reported it, so this catch is empty.
   }
 }
 
