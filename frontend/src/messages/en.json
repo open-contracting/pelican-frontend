@@ -64,6 +64,7 @@
   "datasetReport": {
     "headline": "Export report",
     "status": {
+      "waiting": "The report is being created, which can take a few minutes. You can close this window: it will still appear in the export folder.",
       "ok": "Report has been successfully created.",
       "templateError": "Template syntax is invalid.",
       "reportError": "Report creation has failed.",

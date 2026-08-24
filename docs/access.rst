@@ -12,6 +12,8 @@ A publisher's namespace is its spider's name in `Kingfisher Collect <https://kin
 
 A report named otherwise is visible to staff only.
 
+An export, on the other hand, is visible only to the user who requested it, staff member or not.
+
 Add a publisher
 ---------------
 

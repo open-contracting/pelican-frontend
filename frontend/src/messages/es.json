@@ -64,6 +64,7 @@
   "datasetReport": {
     "headline": "Exportar el informe",
     "status": {
+      "waiting": "El informe se está creando, lo que puede tardar unos minutos. Puede cerrar esta ventana: el informe aparecerá igualmente en la carpeta de exportación.",
       "ok": "El informe se creó correctamente.",
       "templateError": "La sintaxis de la plantilla no es válida.",
       "reportError": "Falló la creación del informe.",

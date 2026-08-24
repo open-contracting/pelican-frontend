@@ -3,6 +3,15 @@ Changelog
 
 This changelog only notes major changes, to notify other developers.
 
+2026-08-24
+----------
+
+-  feat: A report is exported out of band. ``POST api/exports/`` publishes a message to RabbitMQ, and returns the export, whose ``id`` the frontend polls at ``GET api/exports/{id}/`` until its ``status`` is no longer ``waiting``. Previously, the report was created within the request, which Cloudflare cut off after 100 seconds, leaving the user with an error and the folder with a report. :issue:`296`
+
+   -  The ``export`` management command creates the reports, and must run as a service alongside the web server.
+   -  A user sees only their own exports. Another user's export is 404.
+   -  ``POST api/generate-report`` is removed. Malformed input is now 400, instead of 200 with a ``report_error`` status.
+
 2026-08-22
 ----------
 

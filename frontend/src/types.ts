@@ -2,11 +2,13 @@ import type { components, operations } from "@/schema.js";
 
 type Schemas = components["schemas"];
 
+export type CreateExport = Schemas["CreateExport"];
 export type DataItem = Schemas["DataItem"];
 export type Dataset = Schemas["Dataset"];
 export type DatasetLevelReport = Schemas["DatasetLevelReport"];
 export type DistinctValue = Schemas["DistinctValue"];
 type ExampleMeta = Schemas["ExampleMeta"];
+export type Export = Schemas["Export"];
 export type FieldLevelCheckDetail = Schemas["FieldLevelCheckDetail"];
 export type FieldLevelCounts = Schemas["FieldLevelCounts"];
 export type FieldLevelExample = Schemas["FieldLevelExample"];
@@ -15,8 +17,6 @@ export type FilterDataset = Schemas["FilterDataset"];
 /** The number of data items that a filter matches. */
 export type FilterItemsCount =
   operations["dataset_filter_items_create"]["responses"][200]["content"]["application/json"];
-export type GenerateReport = Schemas["GenerateReport"];
-export type GenerateReportResponse = Schemas["GenerateReportResponse"];
 export type ResourceLevelCheck = Schemas["ResourceLevelCheck"];
 export type ResourceLevelCheckDetail = Schemas["ResourceLevelCheckDetail"];
 export type ResourceLevelReport = Schemas["ResourceLevelReport"];
