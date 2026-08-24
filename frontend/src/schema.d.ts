@@ -265,7 +265,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/generate-report": {
+  "/api/exports/": {
     parameters: {
       query?: never;
       header?: never;
@@ -274,13 +274,30 @@ export interface paths {
     };
     get?: never;
     put?: never;
+    /** @description Publish a message to RabbitMQ to create a report in Google Docs, and return the export to poll. */
+    post: operations["exports_create"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/exports/{id}/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /**
-     * @description Create a report in Google Docs, and return its file ID.
+     * @description Return the export, whose ``status`` is ``waiting`` until the report is created.
      *
-     *     The response is 200 whether or not the report was created. Its ``status`` is ``ok``, ``report_error`` if
-     *     the report could not be created, or ``template_error`` if the template could not be rendered.
+     *     A created report has a ``file_id``, and might have ``failed_tags``. Otherwise, the ``status`` is
+     *     ``report_error``, with a ``reason``, or ``template_error``, with ``tag_errors``.
      */
-    post: operations["generate_report_create"];
+    get: operations["exports_retrieve"];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -367,6 +384,21 @@ export interface components {
       /** @description The number of compiled releases to import from Kingfisher Process */
       max_items?: number;
     };
+    CreateExport: {
+      /**
+       * Format: int64
+       * @description The dataset's ID
+       */
+      dataset_id: number;
+      /** @description The ID of the Google Docs template */
+      document_id: string;
+      /** @description The ID of the Google Drive folder in which to create the report */
+      folder_id: string;
+      /** @description The report's language, defaulting to English */
+      language?: string;
+      /** @description The report's filename, defaulting to a generated name */
+      report_name?: string;
+    };
     DataItem: {
       readonly id: number;
       data: unknown;
@@ -419,6 +451,25 @@ export interface components {
       ocid: string;
       /** @description The data item's ID */
       item_id: number;
+    };
+    Export: {
+      readonly id: number;
+      /**
+       * @description Whether the report is waiting to be created, was created, or failed
+       *
+       *     * `waiting` - Waiting
+       *     * `ok` - Ok
+       *     * `report_error` - Report Error
+       *     * `template_error` - Template Error
+       */
+      readonly status: components["schemas"]["StatusEnum"];
+      /** @description The ID of the Google Docs report */
+      readonly file_id: string;
+      /** @description The reason the report could not be created */
+      readonly reason: string;
+      readonly tag_errors: components["schemas"]["TagError"][];
+      /** @description The tags that could not be rendered */
+      readonly failed_tags: string[];
     };
     FieldLevelCheck: {
       coverage: components["schemas"]["FieldLevelGroup"];
@@ -527,33 +578,6 @@ export interface components {
       /** @description A SQL ILIKE pattern for the procuring entity's name */
       procuring_entity_regex?: string;
     };
-    GenerateReport: {
-      /** @description The dataset's ID */
-      dataset_id: number;
-      /** @description The ID of the Google Docs template */
-      document_id: string;
-      /** @description The ID of the Google Drive folder in which to create the report */
-      folder_id: string;
-      /** @description The report's language, defaulting to English */
-      language?: string;
-      /** @description The report's filename, defaulting to a generated name */
-      report_name?: string;
-    };
-    GenerateReportResponse:
-      | components["schemas"]["GeneratedReport"]
-      | components["schemas"]["ReportError"]
-      | components["schemas"]["TemplateError"];
-    GeneratedReport: {
-      status: components["schemas"]["GeneratedReportStatusEnum"];
-      data: components["schemas"]["ReportFile"];
-      /** @description The tags that could not be rendered */
-      failed_tags: string[];
-    };
-    /**
-     * @description * `ok` - ok
-     * @enum {string}
-     */
-    GeneratedReportStatusEnum: "ok";
     KingfisherMetadata: {
       /** @description The compiled collection ID in Kingfisher Process */
       collection_id?: number;
@@ -582,23 +606,6 @@ export interface components {
       processing_start: string;
       /** @description When Pelican finished processing the dataset */
       processing_end: string;
-    };
-    ReportError: {
-      status: components["schemas"]["ReportErrorStatusEnum"];
-      data: components["schemas"]["ReportReason"];
-    };
-    /**
-     * @description * `report_error` - report_error
-     * @enum {string}
-     */
-    ReportErrorStatusEnum: "report_error";
-    ReportFile: {
-      /** @description The ID of the Google Docs report */
-      file_id: string;
-    };
-    ReportReason: {
-      /** @description The reason the report could not be created */
-      reason: string;
     };
     ResourceLevelCheck: {
       /** @description The check's name */
@@ -687,6 +694,14 @@ export interface components {
       /** @description The ID of the default Google Drive folder in which to create reports, or blank for non-staff */
       folder: string;
     };
+    /**
+     * @description * `waiting` - Waiting
+     *     * `ok` - Ok
+     *     * `report_error` - Report Error
+     *     * `template_error` - Template Error
+     * @enum {string}
+     */
+    StatusEnum: "waiting" | "ok" | "report_error" | "template_error";
     TagError: {
       /** @description The reason the tag could not be rendered */
       reason: string;
@@ -695,17 +710,6 @@ export interface components {
       /** @description The ID of the Google Docs template */
       template_id: string | null;
     };
-    TemplateError: {
-      status: components["schemas"]["TemplateErrorStatusEnum"];
-      data: components["schemas"]["TagError"][];
-      /** @description The tags that could not be rendered */
-      failed_tags: string[];
-    };
-    /**
-     * @description * `template_error` - template_error
-     * @enum {string}
-     */
-    TemplateErrorStatusEnum: "template_error";
     TenderLifecycle: {
       planning: number;
       tender: number;
@@ -1153,7 +1157,7 @@ export interface operations {
       };
     };
   };
-  generate_report_create: {
+  exports_create: {
     parameters: {
       query?: never;
       header?: never;
@@ -1162,16 +1166,37 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["GenerateReport"];
+        "application/json": components["schemas"]["CreateExport"];
       };
     };
+    responses: {
+      202: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["Export"];
+        };
+      };
+    };
+  };
+  exports_retrieve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
     responses: {
       200: {
         headers: {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["GenerateReportResponse"];
+          "application/json": components["schemas"]["Export"];
         };
       };
     };

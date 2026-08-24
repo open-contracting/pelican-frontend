@@ -1,6 +1,9 @@
 <template>
   <span class="just_holder">
-    <Loader v-if="isSubmitting" />
+    <template v-if="isSubmitting">
+      <Loader />
+      <div class="waiting text-center text-body-secondary">{{ $t("datasetReport.status.waiting") }}</div>
+    </template>
     <span v-if="result != null">
       <span v-if="result.status == 'ok' && !failedTags">
         <BAlert
@@ -13,7 +16,7 @@
           </span>
         </BAlert>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:</span>
-        <GoogleDocsLink :document-id="result.data.file_id" />
+        <GoogleDocsLink :document-id="result.file_id" />
         <RetryOrCloseButtons
           variant="success"
           @retry="retry"
@@ -33,7 +36,7 @@
 
         <div class="margin_bottom">
           <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
-          <GoogleDocsLink :document-id="result.data.file_id" />
+          <GoogleDocsLink :document-id="result.file_id" />
         </div>
       </span>
       <span v-if="result.status == 'template_error'">
@@ -46,7 +49,7 @@
         </BAlert>
         <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
         <div
-          v-for="(error, index) in result.data"
+          v-for="(error, index) in result.tag_errors"
           :key="index"
         >
           <div><span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ error.reason }}</div>
@@ -71,7 +74,7 @@
           <span>{{ $t("datasetReport.status.reportError") }}</span>
         </BAlert>
 
-        <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ result.data.reason }}
+        <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ result.reason }}
         <RetryOrCloseButtons
           variant="danger"
           @retry="retry"
@@ -228,18 +231,21 @@
 
 <script setup lang="ts">
 import { BAlert, BCol, BFormInput, BFormRadio, BRow } from "bootstrap-vue-next";
-import { computed, ref } from "vue";
+import { computed, onUnmounted, ref } from "vue";
 import api from "@/api.js";
 import { useLocale } from "@/composables/useLocale";
 import { CONFIG, LOCALES } from "@/config.js";
 import { useSettingsStore } from "@/stores/settings.js";
-import type { Dataset, GenerateReport, GenerateReportResponse } from "@/types.js";
+import type { CreateExport, Dataset, Export } from "@/types.js";
 import GoogleDocsLink from "./GoogleDocsLink.vue";
 import Loader from "./Loader.vue";
 import RetryOrCloseButtons from "./RetryOrCloseButtons.vue";
 
-/** The response, or the failure that prevented one. */
-type ReportResult = GenerateReportResponse | { status: "server_error"; message: string };
+/** The finished export, or the failure that prevented one. */
+type ReportResult = Export | { status: "server_error"; message: string };
+
+// How long to wait before asking again whether the report is created.
+const POLL_INTERVAL = 2000;
 
 const props = defineProps<{
   dataset: Dataset | null;
@@ -256,6 +262,8 @@ const documentId = ref(settingsStore.settings.template[reportLanguage.value]);
 const folderId = ref(settingsStore.settings.folder);
 const reportName = ref("");
 const result = ref<ReportResult | null>(null);
+
+let pollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 // A report and a template error both list the tags that could not be rendered.
 const failedTags = computed(() => {
@@ -281,7 +289,7 @@ function createDatasetReport() {
   }
   isSubmitting.value = true;
 
-  const data: GenerateReport = {
+  const data: CreateExport = {
     dataset_id: props.dataset.id,
     document_id: documentId.value,
     folder_id: folderId.value,
@@ -292,22 +300,46 @@ function createDatasetReport() {
   }
 
   api
-    .postJSON<GenerateReportResponse>(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createDatasetReport}`, data)
+    .postJSON<Export>(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.createExport}`, data)
     .then((response) => {
       if (!response.ok) {
-        result.value = { status: "server_error", message: response.statusText };
+        fail(response.statusText);
         return;
       }
 
-      // The endpoint returns 200 even when the export fails, reporting it in the body's status property.
-      result.value = response.data;
+      // The report is created out of band, so wait for the export to report the outcome.
+      pollExport(response.data.id);
     })
     .catch((error: unknown) => {
-      result.value = { status: "server_error", message: error instanceof Error ? error.message : String(error) };
-    })
-    .finally(() => {
-      isSubmitting.value = false;
+      fail(error instanceof Error ? error.message : String(error));
     });
+}
+
+function pollExport(id: number) {
+  api
+    .getJSON<Export>(`${CONFIG.apiBaseUrl}${CONFIG.apiEndpoints.export.replace(/{id}/g, String(id))}`)
+    .then((response) => {
+      if (!response.ok) {
+        fail(response.statusText);
+        return;
+      }
+
+      if (response.data.status === "waiting") {
+        pollTimeout = setTimeout(() => pollExport(id), POLL_INTERVAL);
+        return;
+      }
+
+      result.value = response.data;
+      isSubmitting.value = false;
+    })
+    .catch((error: unknown) => {
+      fail(error instanceof Error ? error.message : String(error));
+    });
+}
+
+function fail(message: string) {
+  result.value = { status: "server_error", message };
+  isSubmitting.value = false;
 }
 
 function retry() {
@@ -322,6 +354,9 @@ function fileIdFormatter(value: string) {
   }
   return valueMatch != null ? valueMatch[1] : value;
 }
+
+// Closing the window stops the polling, not the export.
+onUnmounted(() => clearTimeout(pollTimeout));
 </script>
 
 <style scoped lang="scss">
@@ -332,6 +367,11 @@ function fileIdFormatter(value: string) {
 
 .margin_bottom {
     margin-bottom: 1em;
+}
+
+.waiting {
+    /* Sit closer to the loader than its box's bottom margin allows. */
+    margin-top: -1.5rem;
 }
 
 .base_input {

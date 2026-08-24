@@ -413,22 +413,44 @@ paths:
               schema:
                 $ref: '#/components/schemas/TimeVarianceLevelReport'
           description: ''
-  /api/generate-report:
+  /api/exports/:
     post:
-      operationId: generate_report_create
-      description: |-
-        Create a report in Google Docs, and return its file ID.
-
-        The response is 200 whether or not the report was created. Its ``status`` is ``ok``, ``report_error`` if
-        the report could not be created, or ``template_error`` if the template could not be rendered.
+      operationId: exports_create
+      description: Publish a message to RabbitMQ to create a report in Google Docs,
+        and return the export to poll.
       tags:
-      - generate-report
+      - exports
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GenerateReport'
+              $ref: '#/components/schemas/CreateExport'
         required: true
+      security:
+      - basicAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+          description: ''
+  /api/exports/{id}/:
+    get:
+      operationId: exports_retrieve
+      description: |-
+        Return the export, whose ``status`` is ``waiting`` until the report is created.
+
+        A created report has a ``file_id``, and might have ``failed_tags``. Otherwise, the ``status`` is
+        ``report_error``, with a ``reason``, or ``template_error``, with ``tag_errors``.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exports
       security:
       - basicAuth: []
       responses:
@@ -436,7 +458,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenerateReportResponse'
+                $ref: '#/components/schemas/Export'
           description: ''
   /api/schema/:
     get:
@@ -595,6 +617,35 @@ components:
       required:
       - collection_id
       - name
+    CreateExport:
+      type: object
+      properties:
+        dataset_id:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          description: The dataset's ID
+        document_id:
+          type: string
+          description: The ID of the Google Docs template
+          maxLength: 255
+        folder_id:
+          type: string
+          description: The ID of the Google Drive folder in which to create the report
+          maxLength: 255
+        language:
+          type: string
+          description: The report's language, defaulting to English
+          maxLength: 255
+        report_name:
+          type: string
+          description: The report's filename, defaulting to a generated name
+          maxLength: 255
+      required:
+      - dataset_id
+      - document_id
+      - folder_id
     DataItem:
       type: object
       properties:
@@ -721,6 +772,49 @@ components:
       required:
       - item_id
       - ocid
+    Export:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          readOnly: true
+          description: |-
+            Whether the report is waiting to be created, was created, or failed
+
+            * `waiting` - Waiting
+            * `ok` - Ok
+            * `report_error` - Report Error
+            * `template_error` - Template Error
+        file_id:
+          type: string
+          readOnly: true
+          description: The ID of the Google Docs report
+        reason:
+          type: string
+          readOnly: true
+          description: The reason the report could not be created
+        tag_errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagError'
+          readOnly: true
+        failed_tags:
+          type: array
+          items:
+            type: string
+          readOnly: true
+          description: The tags that could not be rendered
+      required:
+      - failed_tags
+      - file_id
+      - id
+      - reason
+      - status
+      - tag_errors
     FieldLevelCheck:
       type: object
       properties:
@@ -943,54 +1037,6 @@ components:
         procuring_entity_regex:
           type: string
           description: A SQL ILIKE pattern for the procuring entity's name
-    GenerateReport:
-      type: object
-      properties:
-        dataset_id:
-          type: integer
-          description: The dataset's ID
-        document_id:
-          type: string
-          description: The ID of the Google Docs template
-        folder_id:
-          type: string
-          description: The ID of the Google Drive folder in which to create the report
-        language:
-          type: string
-          description: The report's language, defaulting to English
-        report_name:
-          type: string
-          description: The report's filename, defaulting to a generated name
-      required:
-      - dataset_id
-      - document_id
-      - folder_id
-    GenerateReportResponse:
-      oneOf:
-      - $ref: '#/components/schemas/GeneratedReport'
-      - $ref: '#/components/schemas/ReportError'
-      - $ref: '#/components/schemas/TemplateError'
-    GeneratedReport:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/GeneratedReportStatusEnum'
-        data:
-          $ref: '#/components/schemas/ReportFile'
-        failed_tags:
-          type: array
-          items:
-            type: string
-          description: The tags that could not be rendered
-      required:
-      - data
-      - failed_tags
-      - status
-    GeneratedReportStatusEnum:
-      enum:
-      - ok
-      type: string
-      description: '* `ok` - ok'
     KingfisherMetadata:
       type: object
       properties:
@@ -1034,37 +1080,6 @@ components:
       required:
       - processing_end
       - processing_start
-    ReportError:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/ReportErrorStatusEnum'
-        data:
-          $ref: '#/components/schemas/ReportReason'
-      required:
-      - data
-      - status
-    ReportErrorStatusEnum:
-      enum:
-      - report_error
-      type: string
-      description: '* `report_error` - report_error'
-    ReportFile:
-      type: object
-      properties:
-        file_id:
-          type: string
-          description: The ID of the Google Docs report
-      required:
-      - file_id
-    ReportReason:
-      type: object
-      properties:
-        reason:
-          type: string
-          description: The reason the report could not be created
-      required:
-      - reason
     ResourceLevelCheck:
       type: object
       properties:
@@ -1251,6 +1266,18 @@ components:
       - template
       - user
       - username
+    StatusEnum:
+      enum:
+      - waiting
+      - ok
+      - report_error
+      - template_error
+      type: string
+      description: |-
+        * `waiting` - Waiting
+        * `ok` - Ok
+        * `report_error` - Report Error
+        * `template_error` - Template Error
     TagError:
       type: object
       properties:
@@ -1269,29 +1296,6 @@ components:
       - full_tag
       - reason
       - template_id
-    TemplateError:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/TemplateErrorStatusEnum'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagError'
-        failed_tags:
-          type: array
-          items:
-            type: string
-          description: The tags that could not be rendered
-      required:
-      - data
-      - failed_tags
-      - status
-    TemplateErrorStatusEnum:
-      enum:
-      - template_error
-      type: string
-      description: '* `template_error` - template_error'
     TenderLifecycle:
       type: object
       properties:

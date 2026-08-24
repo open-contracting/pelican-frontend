@@ -13,9 +13,10 @@ export const CONFIG = {
     resourceLevelDetail: "datasets/{id}/compiled_release_level/{name}/",
     datasetFilterItems: "dataset-filter-items/",
     datasetDistinctValues: "dataset-distinct-values/",
+    export: "exports/{id}/",
     // POST
     createDatasetFilter: "datasets/{id}/filter/",
-    createDatasetReport: "generate-report",
+    createExport: "exports/",
   },
 };
 

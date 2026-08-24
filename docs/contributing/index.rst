@@ -95,6 +95,12 @@ The ``X-Remote-User`` value is set by ``VITE_REMOTE_USER=dev`` in ``frontend/.en
 
 Without the header, every request is 403. See :doc:`../access`.
 
+In a third terminal, start the consumer that creates the reports that the export form requests, via RabbitMQ. Without it, an export waits forever:
+
+.. code-block:: bash
+
+   ./manage.py export
+
 Backend
 ~~~~~~~
 

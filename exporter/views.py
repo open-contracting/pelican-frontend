@@ -1,39 +1,18 @@
-import datetime
-import logging
-
-from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema
-from rest_framework import serializers, views
+from drf_spectacular.utils import extend_schema
+from rest_framework import serializers, status, viewsets
 from rest_framework.response import Response
 
+from api.rabbitmq import publish
 from api.util import get_permitted_dataset
-from exporter.exceptions import GoogleDriveError, TagError
-from exporter.gdocs import Gdocs
-from exporter.messages import DEFAULT_LANGUAGE, MESSAGES
-from exporter.template_tags.base import base as base_tag
+from exporter.models import Export
 
-logger = logging.getLogger(__name__)
+ROUTING_KEY = "report_exporter_init"
 
 
-class GenerateReportSerializer(serializers.Serializer):
-    dataset_id = serializers.IntegerField(help_text="The dataset's ID")
-    document_id = serializers.CharField(allow_blank=True, help_text="The ID of the Google Docs template")
-    folder_id = serializers.CharField(
-        allow_blank=True, help_text="The ID of the Google Drive folder in which to create the report"
-    )
-    language = serializers.CharField(
-        required=False, allow_blank=True, help_text="The report's language, defaulting to English"
-    )
-    report_name = serializers.CharField(
-        required=False, allow_blank=True, help_text="The report's filename, defaulting to a generated name"
-    )
-
-
-class ReportFileSerializer(serializers.Serializer):
-    file_id = serializers.CharField(help_text="The ID of the Google Docs report")
-
-
-class ReportReasonSerializer(serializers.Serializer):
-    reason = serializers.CharField(help_text="The reason the report could not be created")
+class CreateExportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Export
+        fields = ["dataset_id", "document_id", "folder_id", "language", "report_name"]
 
 
 class TagErrorSerializer(serializers.Serializer):
@@ -42,90 +21,46 @@ class TagErrorSerializer(serializers.Serializer):
     template_id = serializers.CharField(allow_null=True, help_text="The ID of the Google Docs template")
 
 
-class GeneratedReportSerializer(serializers.Serializer):
-    status = serializers.ChoiceField(choices=["ok"])
-    data = ReportFileSerializer()
-    failed_tags = serializers.ListField(child=serializers.CharField(), help_text="The tags that could not be rendered")
-
-
-class ReportErrorSerializer(serializers.Serializer):
-    status = serializers.ChoiceField(choices=["report_error"])
-    data = ReportReasonSerializer()
-
-
-class TemplateErrorSerializer(serializers.Serializer):
-    status = serializers.ChoiceField(choices=["template_error"])
-    data = TagErrorSerializer(many=True)
-    failed_tags = serializers.ListField(child=serializers.CharField(), help_text="The tags that could not be rendered")
-
-
-class GenerateReport(views.APIView):
-    @extend_schema(
-        request=GenerateReportSerializer,
-        responses={
-            200: PolymorphicProxySerializer(
-                component_name="GenerateReportResponse",
-                serializers=[GeneratedReportSerializer, ReportErrorSerializer, TemplateErrorSerializer],
-                resource_type_field_name=None,
-            )
-        },
+class ExportSerializer(serializers.ModelSerializer):
+    tag_errors = TagErrorSerializer(many=True, read_only=True)
+    failed_tags = serializers.ListField(
+        child=serializers.CharField(), read_only=True, help_text="The tags that could not be rendered"
     )
-    def post(self, request, format=None):
+
+    class Meta:
+        model = Export
+        fields = ["id", "status", "file_id", "reason", "tag_errors", "failed_tags"]
+        read_only_fields = fields
+
+
+class ExportViewSet(viewsets.GenericViewSet):
+    serializer_class = ExportSerializer
+    lookup_value_converter = "int"
+
+    def get_queryset(self):
+        """Return the user's own exports. Another user's export is 404, whoever requested it."""
+        return Export.objects.filter(user=self.request.user)
+
+    # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
+    @extend_schema(responses=ExportSerializer)
+    def retrieve(self, request, *args, **kwargs):
         """
-        Create a report in Google Docs, and return its file ID.
+        Return the export, whose ``status`` is ``waiting`` until the report is created.
 
-        The response is 200 whether or not the report was created. Its ``status`` is ``ok``, ``report_error`` if
-        the report could not be created, or ``template_error`` if the template could not be rendered.
+        A created report has a ``file_id``, and might have ``failed_tags``. Otherwise, the ``status`` is
+        ``report_error``, with a ``reason``, or ``template_error``, with ``tag_errors``.
         """
-        serializer = GenerateReportSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(
-                {"status": "report_error", "data": {"reason": "Input message is malformed, will be dropped."}}
-            )
+        serializer = self.get_serializer(self.get_object())
+        return Response(serializer.data)
 
-        input_message = serializer.validated_data
+    @extend_schema(request=CreateExportSerializer, responses={202: ExportSerializer})
+    def create(self, request):
+        """Publish a message to RabbitMQ to create a report in Google Docs, and return the export to poll."""
+        serializer = CreateExportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        get_permitted_dataset(request.user, input_message["dataset_id"])
+        get_permitted_dataset(request.user, serializer.validated_data["dataset_id"])
 
-        if "language" in input_message and input_message["language"] in MESSAGES:
-            language = input_message["language"]
-        else:
-            language = DEFAULT_LANGUAGE
-
-        document_id = input_message["document_id"].strip()
-        folder_id = input_message["folder_id"].strip()
-
-        gdocs = None
-
-        failed_tags = []
-        try:
-            gdocs = Gdocs(document_id)
-            base = base_tag(gdocs, input_message["dataset_id"], language)
-            base.set_argument("template", document_id)
-            base.finalize_arguments()
-            content, failed_tags = base.validate_and_render({})
-
-            if "report_name" in input_message:
-                filename = input_message["report_name"]
-            else:
-                filename = f"Report {input_message['dataset_id']} {datetime.datetime.now(tz=datetime.UTC)}"
-
-            file_id = gdocs.upload(folder_id, filename, content)
-
-            response = Response({"status": "ok", "data": {"file_id": file_id}, "failed_tags": failed_tags})
-        except GoogleDriveError as e:
-            logger.exception("Unable to export the report for dataset %s", input_message["dataset_id"])
-            response = Response({"status": "report_error", "data": {"reason": str(e)}})
-        except TagError as e:
-            response = Response(
-                {
-                    "status": "template_error",
-                    "data": [e.as_dict()],  # Can accommodate multiple TagErrors in the future
-                    "failed_tags": failed_tags,
-                }
-            )
-        finally:
-            if gdocs is not None:
-                gdocs.close()
-
-        return response
+        export = serializer.save(user=request.user)
+        publish({"export_id": export.pk}, ROUTING_KEY)
+        return Response(ExportSerializer(export).data, status=status.HTTP_202_ACCEPTED)

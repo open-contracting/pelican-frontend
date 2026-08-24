@@ -1,7 +1,8 @@
-from django.urls import path
+from rest_framework.routers import SimpleRouter
 
-from exporter.views import GenerateReport
+from exporter.views import ExportViewSet
 
-urlpatterns = [
-    path("generate-report", GenerateReport.as_view(), name="generate-report"),
-]
+router = SimpleRouter(use_regex_path=False)
+router.register(r"exports", ExportViewSet, basename="export")
+
+urlpatterns = router.urls
