@@ -1,5 +1,6 @@
 {
   "header": "Pelican",
+  "signedInAs": "Signed in as {username}",
   "language": "Language",
   "loader": {
     "generic": "Loading… Please be patient.",
@@ -17,6 +18,7 @@
     "calculatedOnly": "Calculated only"
   },
   "requestError": "The request failed. Reload the page, or try again later.",
+  "forbiddenError": "You don't have access to this. Contact data@open-contracting.org to request it.",
   "tryAgain": "Try again",
   "close": "Close window",
   "created": "Created",
@@ -39,6 +41,7 @@
       "CHECKED": "Checked",
       "DELETED": "Deleted"
     },
+    "empty": "No reports are shared with you. Contact data@open-contracting.org to request access to your organization's reports.",
     "search": "Search report by name",
     "timeVariance": "Time-based checks"
   },

@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from api.models import DataItem, Dataset
+from exporter.messages import MESSAGES
 
 
 class DataItemSerializer(serializers.ModelSerializer):
@@ -113,7 +114,7 @@ class DatasetSerializer(serializers.ModelSerializer):
 
 class CreateDatasetSerializer(serializers.Serializer):
     name = serializers.CharField(
-        help_text="The name to assign to the dataset",
+        help_text="The name to assign to the dataset, using {spider}_{YYYY-MM-DD} to share it with the publisher",
         validators=[UniqueValidator(queryset=Dataset.objects.all())],
     )
     collection_id = serializers.IntegerField(help_text="The compiled collection ID in Kingfisher Process")
@@ -135,12 +136,21 @@ class DistinctValueSerializer(serializers.Serializer):
     count = serializers.IntegerField(help_text="The number of data items with this value")
 
 
-class SettingsSerializer(serializers.Serializer):
+class UserSettingsSerializer(serializers.Serializer):
+    language = serializers.ChoiceField(choices=sorted(MESSAGES), help_text="The user's preferred language")
+
+
+class SettingsSerializer(UserSettingsSerializer):
+    language = serializers.CharField(allow_blank=True, help_text="The user's preferred language")
+    username = serializers.CharField(help_text="The user's name")
     user = serializers.CharField(help_text="The service account that the template and folder must be shared with")
     template = serializers.DictField(
         child=serializers.CharField(), help_text="The ID of the default Google Docs template, by language"
     )
-    folder = serializers.CharField(help_text="The ID of the default Google Drive folder in which to create reports")
+    folder = serializers.CharField(
+        allow_blank=True,
+        help_text="The ID of the default Google Drive folder in which to create reports, or blank for non-staff",
+    )
 
 
 class ExampleMetaSerializer(serializers.Serializer):

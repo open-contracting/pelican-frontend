@@ -16,9 +16,7 @@ paths:
       tags:
       - data_items
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -45,9 +43,7 @@ paths:
       tags:
       - dataset-distinct-values
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -81,9 +77,7 @@ paths:
       tags:
       - dataset-distinct-values
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -109,9 +103,7 @@ paths:
               $ref: '#/components/schemas/CountDatasetFilterItems'
         required: true
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -129,9 +121,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -153,9 +143,7 @@ paths:
               $ref: '#/components/schemas/CreateDataset'
         required: true
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '202':
           description: No response body
@@ -178,9 +166,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -200,9 +186,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '202':
           description: No response body
@@ -224,9 +208,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -253,9 +235,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -277,9 +257,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -301,9 +279,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -329,9 +305,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -367,9 +341,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -390,9 +362,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -418,9 +388,7 @@ paths:
             schema:
               $ref: '#/components/schemas/FilterDataset'
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '202':
           description: No response body
@@ -437,9 +405,7 @@ paths:
       tags:
       - datasets
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -464,9 +430,7 @@ paths:
               $ref: '#/components/schemas/GenerateReport'
         required: true
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -493,7 +457,6 @@ paths:
       tags:
       - schema
       security:
-      - cookieAuth: []
       - basicAuth: []
       - {}
       responses:
@@ -519,20 +482,37 @@ paths:
   /api/settings/:
     get:
       operationId: settings_retrieve
-      description: Return the settings that the frontend needs in order to generate
-        a report.
+      description: Return the reader's own settings, and the settings that the frontend
+        needs in order to generate a report.
       tags:
       - settings
       security:
-      - cookieAuth: []
       - basicAuth: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Settings'
+          description: ''
+    patch:
+      operationId: settings_partial_update
+      description: Update the reader's own settings, which follow them between browsers.
+      tags:
+      - settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserSettings'
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSettings'
           description: ''
 components:
   schemas:
@@ -601,7 +581,8 @@ components:
       properties:
         name:
           type: string
-          description: The name to assign to the dataset
+          description: The name to assign to the dataset, using {spider}_{YYYY-MM-DD}
+            to share it with the publisher
         collection_id:
           type: integer
           description: The compiled collection ID in Kingfisher Process
@@ -1022,6 +1003,25 @@ components:
         processing_end:
           type: string
           description: When Kingfisher Process finished storing the compiled collection
+    LanguageEnum:
+      enum:
+      - en
+      - es
+      type: string
+      description: |-
+        * `en` - en
+        * `es` - es
+    PatchedUserSettings:
+      type: object
+      properties:
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          description: |-
+            The user's preferred language
+
+            * `en` - en
+            * `es` - es
     PelicanMetadata:
       type: object
       properties:
@@ -1226,6 +1226,12 @@ components:
     Settings:
       type: object
       properties:
+        language:
+          type: string
+          description: The user's preferred language
+        username:
+          type: string
+          description: The user's name
         user:
           type: string
           description: The service account that the template and folder must be shared
@@ -1238,11 +1244,13 @@ components:
         folder:
           type: string
           description: The ID of the default Google Drive folder in which to create
-            reports
+            reports, or blank for non-staff
       required:
       - folder
+      - language
       - template
       - user
+      - username
     TagError:
       type: object
       properties:
@@ -1390,11 +1398,20 @@ components:
       - ok_count
       - total_count
       - version
+    UserSettings:
+      type: object
+      properties:
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          description: |-
+            The user's preferred language
+
+            * `en` - en
+            * `es` - es
+      required:
+      - language
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
-    cookieAuth:
-      type: apiKey
-      in: cookie
-      name: sessionid

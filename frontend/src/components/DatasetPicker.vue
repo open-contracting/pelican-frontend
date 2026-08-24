@@ -88,6 +88,9 @@
       </thead>
 
       <tbody>
+        <tr v-if="isEmpty">
+          <td colspan="6">{{ $t("dataset.empty") }}</td>
+        </tr>
         <template v-for="(item, index) in datasets" :key="index">
           <DatasetPickerRow
             v-if="isSearched(item.name)"
@@ -148,6 +151,7 @@ import SortButtons from "./SortButtons.vue";
 const ui = useUiStore();
 
 const datasets = ref<DatasetNode[]>([]);
+const isEmpty = ref(false);
 const filteredDataset = ref<DatasetNode | null>(null);
 const reportDataset = ref<DatasetNode | null>(null);
 
@@ -237,6 +241,7 @@ onMounted(() => {
       }
 
       datasets.value = tree;
+      isEmpty.value = tree.length === 0;
       sortBy(sortedBy.value, isAscendingSorted.value);
     })
     .catch(() => {});

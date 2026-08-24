@@ -5,6 +5,7 @@ from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema
 from rest_framework import serializers, views
 from rest_framework.response import Response
 
+from api.util import get_permitted_dataset
 from exporter.exceptions import GoogleDriveError, TagError
 from exporter.gdocs import Gdocs
 from exporter.messages import DEFAULT_LANGUAGE, MESSAGES
@@ -83,6 +84,8 @@ class GenerateReport(views.APIView):
             )
 
         input_message = serializer.validated_data
+
+        get_permitted_dataset(request.user, input_message["dataset_id"])
 
         if "language" in input_message and input_message["language"] in MESSAGES:
             language = input_message["language"]

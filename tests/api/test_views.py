@@ -23,6 +23,7 @@ class CreateTests(PelicanTestCase):
     databases = {"default", "pelican_backend", "kingfisher_process"}
 
     def setUp(self):
+        super().setUp()
         with connections["kingfisher_process"].cursor() as cursor:
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS compiled_release (
@@ -103,6 +104,8 @@ class ViewsTests(PelicanTestCase):
         self.assertJSONEqual(
             response.text,
             {
+                "username": "staff",
+                "language": "",
                 "user": "",
                 "template": {
                     "en": "1jSGZKNJP6wBVPwi3JsvdkZ9FSpUwrK2SJxZoQQuJdnM",
@@ -111,6 +114,39 @@ class ViewsTests(PelicanTestCase):
                 "folder": "1ZVwf9cr29E4uCuWaVRiQLJI7_ejE00h3",
             },
         )
+
+    def test_settings_publisher(self):
+        self.sign_in("publisher", spiders=["chile_compra_bulk"])
+
+        response = self.client.get("/api/settings/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(
+            response.text,
+            {
+                "username": "publisher",
+                "language": "",
+                "user": "",
+                "template": {
+                    "en": "1jSGZKNJP6wBVPwi3JsvdkZ9FSpUwrK2SJxZoQQuJdnM",
+                    "es": "1DOxUeeUUjNPxAKu04etMBWyRbKkn8C1ZCskpeXUKJSg",
+                },
+                # The publisher shares a folder of their own with the service account.
+                "folder": "",
+            },
+        )
+
+    def test_settings_language(self):
+        response = self.client.patch("/api/settings/", {"language": "es"}, "application/json")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.text, {"language": "es"})
+        self.assertEqual(self.client.get("/api/settings/").json()["language"], "es")
+
+    def test_settings_language_invalid(self):
+        response = self.client.patch("/api/settings/", {"language": "xx"}, "application/json")
+
+        self.assertEqual(response.status_code, 400)
 
     def test_dataset_filter_items_get(self):
         with self.assertNumQueries(0, using="pelican_backend"):
@@ -171,7 +207,8 @@ class ViewsTests(PelicanTestCase):
         ):
             with (
                 self.subTest(filter_message=filter_message),
-                self.assertNumQueries(1, using="pelican_backend"),
+                # One query to authorize the dataset, and one to count the data items.
+                self.assertNumQueries(2, using="pelican_backend"),
             ):
                 response = self.client.post(
                     "/api/dataset-filter-items/",
@@ -187,7 +224,7 @@ class ViewsTests(PelicanTestCase):
         for name in ("MOF", "MOF", "MOH"):
             self.create(DataItem, dataset=dataset, data={"tender": {"procuringEntity": {"name": name}}})
 
-        with self.assertNumQueries(1, using="pelican_backend"):
+        with self.assertNumQueries(2, using="pelican_backend"):
             response = self.client.get(f"/api/dataset-distinct-values/{dataset.pk}/tender.procuringEntity.name/")
 
             self.assertEqual(response.status_code, 200)
@@ -198,7 +235,7 @@ class ViewsTests(PelicanTestCase):
         for name in ("MOF", "MOF", "MOH"):
             self.create(DataItem, dataset=dataset, data={"tender": {"procuringEntity": {"name": name}}})
 
-        with self.assertNumQueries(1, using="pelican_backend"):
+        with self.assertNumQueries(2, using="pelican_backend"):
             response = self.client.get(f"/api/dataset-distinct-values/{dataset.pk}/tender.procuringEntity.name/moh/")
 
             self.assertEqual(response.status_code, 200)
@@ -309,33 +346,49 @@ class ViewsTests(PelicanTestCase):
 
     @patch("api.views.publish")
     def test_datasets_filter_invalid(self, publish):
-        with self.assertNumQueries(0, using="pelican_backend"):
-            response = self.client.post("/api/datasets/123/filter/", {"buyer": "xxx"}, "application/json")
+        dataset = self.create(Dataset, name="anything")
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.post(f"/api/datasets/{dataset.pk}/filter/", {"buyer": "xxx"}, "application/json")
 
             self.assertEqual(response.status_code, 400)
             publish.assert_not_called()
 
     @patch("api.views.publish")
     def test_datasets_filter_no_values(self, publish):
-        with self.assertNumQueries(0, using="pelican_backend"):
-            response = self.client.post("/api/datasets/123/filter/", {}, "application/json")
+        dataset = self.create(Dataset, name="anything")
+
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.post(f"/api/datasets/{dataset.pk}/filter/", {}, "application/json")
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with(
-                {"dataset_id_original": 123, "filter_message": {}}, "dataset_filter_extractor_init"
+                {"dataset_id_original": dataset.pk, "filter_message": {}},
+                "dataset_filter_extractor_init",
             )
 
     @patch("api.views.publish")
     def test_datasets_filter(self, publish):
-        with self.assertNumQueries(0, using="pelican_backend"):
+        dataset = self.create(Dataset, name="anything")
+
+        with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.post(
-                "/api/datasets/123/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json"
+                f"/api/datasets/{dataset.pk}/filter/", {"buyer": ["MOF"], "xxx": "xxx"}, "application/json"
             )
 
             self.assertEqual(response.status_code, 202)
             publish.assert_called_once_with(
-                {"dataset_id_original": 123, "filter_message": {"buyer": ["MOF"]}}, "dataset_filter_extractor_init"
+                {"dataset_id_original": dataset.pk, "filter_message": {"buyer": ["MOF"]}},
+                "dataset_filter_extractor_init",
             )
+
+    @patch("api.views.publish")
+    def test_datasets_filter_nonexistent_dataset(self, publish):
+        with self.assertNumQueries(1, using="pelican_backend"):
+            response = self.client.post("/api/datasets/123/filter/", {}, "application/json")
+
+            self.assertEqual(response.status_code, 404)
+            publish.assert_not_called()
 
     @patch("api.views.publish")
     def test_datasets_destroy(self, publish):
@@ -632,37 +685,37 @@ class ViewsTests(PelicanTestCase):
 
             self.assertEqual(response.status_code, 404)
 
-    def test_datasets_field_level_report_no_dataset(self):
+    def test_datasets_field_level_report_nonexistent_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/field_level_report/")
 
             self.assertEqual(response.status_code, 404)
 
-    def test_datasets_compiled_release_level_report_no_dataset(self):
+    def test_datasets_compiled_release_level_report_nonexistent_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/compiled_release_level_report/")
 
             self.assertEqual(response.status_code, 404)
 
-    def test_datasets_dataset_level_report_no_dataset(self):
+    def test_datasets_dataset_level_report_nonexistent_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/dataset_level_report/")
 
             self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
 
-    def test_datasets_time_based_report_no_dataset(self):
+    def test_datasets_time_based_report_nonexistent_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/time_based_report/")
 
             self.assertEqual(response.status_code, 200)  # returning 404 requires an additional query
 
-    def test_field_level_detail_no_dataset(self):
+    def test_field_level_detail_nonexistent_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/field_level/ocid/")
 
             self.assertEqual(response.status_code, 404)
 
-    def test_resource_level_detail_no_dataset(self):
+    def test_resource_level_detail_nonexistent_dataset(self):
         with self.assertNumQueries(1, using="pelican_backend"):
             response = self.client.get("/api/datasets/123/compiled_release_level/coherent.dates/")
 

@@ -3,6 +3,15 @@ Changelog
 
 This changelog only notes major changes, to notify other developers.
 
+2026-08-22
+----------
+
+-  feat: Every API request is authenticated, using the username that the proxy forwards as ``X-Remote-User``. An unauthenticated request is 403. See :doc:`access`.
+-  feat: Non-staff users see only the reports in their publishers' namespaces. Another report is 404, rather than 403, wherever its ID appears.
+-  feat: ``POST api/datasets/`` and ``DELETE api/datasets/{id}/`` are staff-only.
+-  feat: ``PATCH api/settings/`` stores the user's preferred language in their account.
+-  feat: ``GET api/settings/`` returns the user's ``username`` and preferred ``language``. ``folder`` is empty for non-staff users.
+
 2026-08-20
 ----------
 

@@ -1,5 +1,6 @@
 {
   "header": "Pelican",
+  "signedInAs": "Sesión iniciada como {username}",
   "language": "Idioma",
   "loader": {
     "generic": "Cargando… Tenga paciencia.",
@@ -17,6 +18,7 @@
     "calculatedOnly": "Solo calculadas"
   },
   "requestError": "La solicitud falló. Recargue la página o inténtelo de nuevo más tarde.",
+  "forbiddenError": "No tiene acceso a esto. Contacte a data@open-contracting.org para solicitarlo.",
   "tryAgain": "Intentar de nuevo",
   "close": "Cerrar ventana",
   "created": "Creado",
@@ -39,6 +41,7 @@
       "CHECKED": "Comprobado",
       "DELETED": "Eliminado"
     },
+    "empty": "No se ha compartido ningún informe con usted. Contacte a data@open-contracting.org para solicitar acceso a los informes de su organización.",
     "search": "Buscar informe por nombre",
     "timeVariance": "Comprobaciones basadas en el tiempo"
   },

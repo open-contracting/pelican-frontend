@@ -3,7 +3,8 @@ import { createApp } from "vue";
 import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import "./scss/main.scss";
-import { initialLocale } from "./composables/useLocale";
+import { initialLocale, rememberLocale } from "./composables/useLocale";
+import { isLocale } from "./config.js";
 import en from "./messages/en.json";
 import es from "./messages/es.json";
 import { FontAwesomeIcon } from "./plugins/fontawesome";
@@ -30,4 +31,11 @@ app.mount("#app");
 
 useSettingsStore()
   .load()
+  .then(({ language }) => {
+    // The account's language wins over the browser's, once it arrives.
+    if (isLocale(language)) {
+      i18n.global.locale.value = language;
+      rememberLocale(language);
+    }
+  })
   .catch(() => {});

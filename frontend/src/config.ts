@@ -29,7 +29,13 @@ export const STATES = ["IN_PROGRESS", "OK"];
 export const EXAMPLE_KEYS = new Set(["examples", "failed_examples", "passed_examples"]);
 
 // Sync with the catalogs in src/messages. Each name is in its own language, and is never translated.
-export const LOCALES: Record<string, string> = { en: "English", es: "Español" };
+export const LOCALES = { en: "English", es: "Español" } as const;
+
+export type Locale = keyof typeof LOCALES;
+
+export function isLocale(value: string): value is Locale {
+  return value in LOCALES;
+}
 
 /** A pair of thresholds, between which a share passes. */
 type Ticks = [number, number];

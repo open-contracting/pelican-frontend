@@ -6,7 +6,7 @@
     :model-value="true"
     @closed="errorStore.clear()"
   >
-    {{ $t("requestError") }}
+    {{ status == 403 ? $t("forbiddenError") : $t("requestError") }}
   </BAlert>
 </template>
 

@@ -42,6 +42,7 @@ if "ALLOWED_HOSTS" in os.environ:
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "drf_spectacular",
     "rest_framework",
+    "accounts.apps.AccountsConfig",
     "api.apps.APIConfig",
     "exporter.apps.ExporterConfig",
 ]
@@ -61,6 +63,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "accounts.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -103,25 +106,6 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/stable/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/stable/topics/i18n/
 
@@ -146,6 +130,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Project-specific Django configuration
 
 STATIC_ROOT = BASE_DIR / "static"
+
+# The proxy authenticates every request, so no backend checks a password.
+# https://docs.djangoproject.com/en/stable/howto/auth-remote-user/
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.RemoteUserBackend"]
 
 # https://docs.djangoproject.com/en/stable/topics/logging/#django-security
 LOGGING = {
@@ -244,7 +232,9 @@ elif not production:
     CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ["accounts.authentication.RemoteUserAuthentication"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
@@ -260,6 +250,10 @@ FATHOM = {
 RABBIT_URL = os.getenv("RABBIT_URL", "amqp://127.0.0.1")
 # The name of the RabbitMQ exchange used by Pelican backend.
 RABBIT_EXCHANGE_NAME = os.getenv("RABBIT_EXCHANGE_NAME", "pelican_development")
+
+# The proxy must authenticate each request, must unset any X-Remote-User header that the client sent, and must
+# set the header to the username. Trust the header only behind such a proxy.
+TRUST_REMOTE_USER = "DJANGO_PROXY" in os.environ
 
 # The path to a service account JSON file, for writing exports to Google Drive.
 # https://developers.google.com/workspace/guides/create-credentials#service-account

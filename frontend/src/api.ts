@@ -4,11 +4,11 @@ import { useErrorStore } from "@/stores/error.js";
 type PostResult<T> = { ok: true; data: T } | { ok: false; status: number; statusText: string };
 
 // This reports an error via ErrorAlert. Callers don't need to handle errors.
-async function get<T>(url: string): Promise<T> {
+async function send(url: string, init?: RequestInit): Promise<Response> {
   let response: Response;
 
   try {
-    response = await fetch(url);
+    response = await fetch(url, init);
   } catch (error) {
     // The request never reached the server, so there is no status code.
     useErrorStore().record(0);
@@ -20,7 +20,21 @@ async function get<T>(url: string): Promise<T> {
     throw new Error(`${response.status} ${response.statusText}`);
   }
 
-  return response.json();
+  return response;
+}
+
+// This reports an error via ErrorAlert. Callers don't need to handle errors.
+async function get<T>(url: string): Promise<T> {
+  return (await send(url)).json();
+}
+
+// This reports an error via ErrorAlert. Callers don't need to handle errors.
+async function patch(url: string, body: unknown): Promise<void> {
+  await send(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 }
 
 // Callers need to handle errors. Use this for an endpoint that returns no body to parse.
@@ -44,4 +58,4 @@ async function postJSON<T>(url: string, body: unknown, signal?: AbortSignal): Pr
   return { ok: true, data: await response.json() };
 }
 
-export default { get, post, postJSON };
+export default { get, patch, post, postJSON };

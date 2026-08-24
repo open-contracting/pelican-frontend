@@ -7,10 +7,11 @@ from django.http import HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from psycopg.sql import SQL
-from rest_framework import mixins, status, views, viewsets
+from rest_framework import mixins, permissions, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from accounts.models import Profile
 from api.models import (
     DataItem,
     Dataset,
@@ -36,26 +37,35 @@ from api.serializers import (
     ResourceLevelReportSerializer,
     SettingsSerializer,
     TimeVarianceLevelReportSerializer,
+    UserSettingsSerializer,
 )
+from api.util import get_permitted_dataset, permitted_datasets
 
 
 class DataItemViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Return OCDS data that passed or failed a check."""
 
-    queryset = DataItem.objects.all()
     serializer_class = DataItemSerializer
     lookup_value_converter = "int"
+
+    def get_queryset(self):
+        return DataItem.objects.filter(dataset__in=permitted_datasets(self.request.user))
 
 
 class DatasetViewSet(viewsets.ViewSet):
     lookup_value_converter = "int"
 
+    def get_permissions(self):
+        if self.action in {"create", "destroy"}:
+            return [permissions.IsAdminUser()]
+        return super().get_permissions()
+
     def get_queryset(self):
-        return Dataset.objects.all()
+        return permitted_datasets(self.request.user)
 
     def get_annotated_queryset(self):
         dataset_filter = DatasetFilter.objects.filter(dataset=OuterRef("pk"))[:1]
-        return Dataset.objects.annotate(
+        return self.get_queryset().annotate(
             phase=F("progress__phase"),
             state=F("progress__state"),
             parent_id=Subquery(dataset_filter.values("parent__id")),
@@ -76,7 +86,7 @@ class DatasetViewSet(viewsets.ViewSet):
         return Response(
             {
                 check.check_name: {field: getattr(check, field) for field in fields}
-                for check in model.objects.filter(dataset=self.kwargs["pk"])
+                for check in model.objects.filter(dataset__in=self.get_queryset(), dataset=self.kwargs["pk"])
             }
         )
 
@@ -133,6 +143,8 @@ class DatasetViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["post"])
     def filter(self, request, pk=None):
         """Publish a message to RabbitMQ to create a filtered dataset."""
+        get_permitted_dataset(request.user, pk)
+
         serializer = FilterDatasetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         message = {"dataset_id_original": pk, "filter_message": serializer.data}
@@ -149,13 +161,17 @@ class DatasetViewSet(viewsets.ViewSet):
     @action(detail=True)
     def field_level_report(self, request, pk=None):
         """Return a report of the dataset's field-level checks, by field path."""
-        return Response(get_object_or_404(Report, dataset=pk, type="field_level_check").data)
+        return Response(
+            get_object_or_404(Report, dataset__in=self.get_queryset(), dataset=pk, type="field_level_check").data
+        )
 
     @extend_schema(responses=ResourceLevelReportSerializer)
     @action(detail=True)
     def compiled_release_level_report(self, request, pk=None):
         """Return a report of the dataset's compiled release-level checks, by check name."""
-        return Response(get_object_or_404(Report, dataset=pk, type="resource_level_check").data)
+        return Response(
+            get_object_or_404(Report, dataset__in=self.get_queryset(), dataset=pk, type="resource_level_check").data
+        )
 
     @extend_schema(responses=DatasetLevelReportSerializer)
     @action(detail=True)
@@ -192,7 +208,13 @@ class FieldLevelDetail(views.APIView):
         """Return a report and examples of one field-level check."""
         start_time = time.time()
 
-        detail = get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name).data[name]
+        detail = get_object_or_404(
+            Report,
+            dataset__in=permitted_datasets(request.user),
+            dataset=pk,
+            type="field_level_check",
+            data__has_key=name,
+        ).data[name]
         data = get_object_or_404(FieldLevelCheckExamples, dataset=pk, path=name).data
 
         for key in ("coverage", "quality"):
@@ -213,7 +235,13 @@ class ResourceLevelDetail(views.APIView):
         """Return a report and examples of one compiled release-level check."""
         start_time = time.time()
 
-        detail = get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name).data[name]
+        detail = get_object_or_404(
+            Report,
+            dataset__in=permitted_datasets(request.user),
+            dataset=pk,
+            type="resource_level_check",
+            data__has_key=name,
+        ).data[name]
         data = get_object_or_404(ResourceLevelCheckExamples, dataset=pk, check_name=name).data
 
         detail.update(data)
@@ -247,7 +275,13 @@ class FieldLevelFailures(views.APIView):
     )
     def get(self, request, pk, name, format=None):
         """Return, one OCID per line, the compiled releases failing the field-level check."""
-        get_object_or_404(Report, dataset=pk, type="field_level_check", data__has_key=name)
+        get_object_or_404(
+            Report,
+            dataset__in=permitted_datasets(request.user),
+            dataset=pk,
+            type="field_level_check",
+            data__has_key=name,
+        )
 
         type = request.query_params.get("type", "quality")
         if type not in {"coverage", "quality"}:
@@ -274,7 +308,13 @@ class ResourceLevelFailures(views.APIView):
     @extend_schema(responses={(200, "text/plain"): {"type": "string"}})
     def get(self, request, pk, name, format=None):
         """Return, one OCID per line, the compiled releases failing the compiled release-level check."""
-        get_object_or_404(Report, dataset=pk, type="resource_level_check", data__has_key=name)
+        get_object_or_404(
+            Report,
+            dataset__in=permitted_datasets(request.user),
+            dataset=pk,
+            type="resource_level_check",
+            data__has_key=name,
+        )
 
         return failures_response(
             f"dataset_{pk}_{name}_failures.txt",
@@ -304,8 +344,10 @@ class CountDatasetFilterItems(views.APIView):
         serializer.is_valid(raise_exception=True)
         filter_message = serializer.validated_data["filter_message"]
 
+        dataset = get_permitted_dataset(request.user, serializer.validated_data["dataset_id_original"])
+
         # See similar code in dataset_filter.py in pelican-backend.
-        variables = {"dataset_id_original": serializer.validated_data["dataset_id_original"]}
+        variables = {"dataset_id_original": dataset.pk}
         parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]
 
         if "release_date_from" in filter_message:
@@ -339,7 +381,9 @@ class CountDatasetFilterItems(views.APIView):
         return Response({"items": items})
 
 
-def distinct_values_response(dataset_id, field, query):
+def distinct_values_response(user, dataset_id, field, query):
+    get_permitted_dataset(user, dataset_id)
+
     lookup = "data__" + "__".join(field.split("."))
     kwargs = {"dataset_id": dataset_id, f"{lookup}__icontains": query}
     data_items_query = (
@@ -354,27 +398,39 @@ class DatasetDistinctValues(views.APIView):
     @extend_schema(operation_id="dataset_distinct_values", responses=DistinctValueSerializer(many=True))
     def get(self, request, dataset_id, field, format=None):
         """Return the field's 200 most common values, with their counts, in descending order."""
-        return distinct_values_response(dataset_id, field, "")
+        return distinct_values_response(request.user, dataset_id, field, "")
 
 
 class DatasetDistinctValuesSearch(views.APIView):
     @extend_schema(operation_id="dataset_distinct_values_search", responses=DistinctValueSerializer(many=True))
     def get(self, request, dataset_id, field, query, format=None):
         """Return the field's 200 most common values containing the query, with their counts, in descending order."""
-        return distinct_values_response(dataset_id, field, query)
+        return distinct_values_response(request.user, dataset_id, field, query)
 
 
 class AppSettings(views.APIView):
     @extend_schema(responses=SettingsSerializer)
     def get(self, request, format=None):
-        """Return the settings that the frontend needs in order to generate a report."""
+        """Return the reader's own settings, and the settings that the frontend needs in order to generate a report."""
+        profile = Profile.objects.filter(user=request.user).first()
         return Response(
             {
+                "username": request.user.username,
+                "language": profile.language if profile else "",
                 "user": settings.GOOGLE_DRIVE_USER,
                 "template": {
                     "en": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE"],
                     "es": settings.GDOCS_TEMPLATES["DEFAULT_BASE_TEMPLATE_ES"],
                 },
-                "folder": settings.GOOGLE_DRIVE_FOLDER,
+                # Only staff can write to GOOGLE_DRIVE_FOLDER. Non-staff must share a folder with the service account.
+                "folder": settings.GOOGLE_DRIVE_FOLDER if request.user.is_staff else "",
             }
         )
+
+    @extend_schema(request=UserSettingsSerializer, responses=UserSettingsSerializer)
+    def patch(self, request, format=None):
+        """Update the reader's own settings, which follow them between browsers."""
+        serializer = UserSettingsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        Profile.objects.update_or_create(user=request.user, defaults=serializer.validated_data)
+        return Response(serializer.data)

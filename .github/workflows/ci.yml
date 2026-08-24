@@ -39,7 +39,7 @@ jobs:
           ./manage.py check --fail-level WARNING
           ./manage.py spectacular --fail-on-warn --file docs/_static/openapi.yaml
           git diff --exit-code docs/_static/openapi.yaml
-          coverage run --source api,core,exporter manage.py test
+          coverage run --source accounts,api,core,exporter manage.py test
       - uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           fail_ci_if_error: true

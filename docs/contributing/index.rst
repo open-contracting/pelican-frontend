@@ -33,11 +33,12 @@ Install development dependencies:
 
    pip install -r requirements_dev.txt
 
-Run database migrations:
+Run database migrations, and create a staff member for the frontend server to sign you in as (``VITE_REMOTE_USER`` in ``frontend/.env.development``):
 
 .. code-block:: bash
 
    ./manage.py migrate
+   ./manage.py createuser --staff dev
 
 If you don't have an instance of `Pelican backend <https://pelican-backend.readthedocs.io/en/latest/>`__, create its database and load the fixture, whose contents :doc:`refresh-fixtures` describes:
 
@@ -66,24 +67,34 @@ Install development dependencies:
 Development
 -----------
 
-In one terminal, start the backend server:
+In one terminal, start the backend server, with ``DJANGO_PROXY`` set, so that it reads the ``X-Remote-User`` header:
 
 .. code-block:: bash
 
-   ./manage.py runserver
+   env DJANGO_PROXY=1 ./manage.py runserver
 
-In another terminal, start the frontend server:
+In another terminal, start the frontend server, which is that proxy, in development: it forwards ``/api``, ``/admin`` and ``/static`` to the backend server, and sets the ``X-Remote-User`` header:
 
 .. code-block:: bash
 
    cd frontend
    pnpm exec vite
 
+The ``X-Remote-User`` value is set by ``VITE_REMOTE_USER=dev`` in ``frontend/.env.development``. Set ``VITE_BACKEND_URL`` in the same file, if the backend server isn't at http://127.0.0.1:8000. To see Pelican as a publisher does, sign in as someone else, and grant them a publisher in the administration site at http://127.0.0.1:8080/admin/:
+
+.. code-block:: bash
+
+   cd frontend
+   env VITE_REMOTE_USER=publisher pnpm exec vite
+
+Without the header, every request is 403. See :doc:`../access`.
+
 Backend
 ~~~~~~~
 
-The Django project is made up of two apps:
+The Django project is made of three apps:
 
+-  ``accounts``: Authenticates and authorizes users
 -  ``api``: Serves API requests
 -  ``exporter``: Generates the exports to Google Docs
 
@@ -103,6 +114,7 @@ If you edit ``serializers.py`` or ``views.py``, regenerate the OpenAPI document 
    ./manage.py spectacular --fail-on-warn --file docs/_static/openapi.yaml
    cd frontend
    pnpm exec openapi-typescript ../docs/_static/openapi.yaml -o src/schema.d.ts
+   biome check --write src/schema.d.ts
 
 Pelican backend integration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

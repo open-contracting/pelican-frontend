@@ -9,6 +9,7 @@ Pelican frontend
 
    browse
    export
+   access
    reference/index
    contributing/index
    api/index

@@ -316,14 +316,15 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** @description Return the settings that the frontend needs in order to generate a report. */
+    /** @description Return the reader's own settings, and the settings that the frontend needs in order to generate a report. */
     get: operations["settings_retrieve"];
     put?: never;
     post?: never;
     delete?: never;
     options?: never;
     head?: never;
-    patch?: never;
+    /** @description Update the reader's own settings, which follow them between browsers. */
+    patch: operations["settings_partial_update"];
     trace?: never;
   };
 }
@@ -357,7 +358,7 @@ export interface components {
       filter_message: components["schemas"]["FilterDataset"];
     };
     CreateDataset: {
-      /** @description The name to assign to the dataset */
+      /** @description The name to assign to the dataset, using {spider}_{YYYY-MM-DD} to share it with the publisher */
       name: string;
       /** @description The compiled collection ID in Kingfisher Process */
       collection_id: number;
@@ -561,6 +562,21 @@ export interface components {
       /** @description When Kingfisher Process finished storing the compiled collection */
       processing_end?: string;
     };
+    /**
+     * @description * `en` - en
+     *     * `es` - es
+     * @enum {string}
+     */
+    LanguageEnum: "en" | "es";
+    PatchedUserSettings: {
+      /**
+       * @description The user's preferred language
+       *
+       *     * `en` - en
+       *     * `es` - es
+       */
+      language?: components["schemas"]["LanguageEnum"];
+    };
     PelicanMetadata: {
       /** @description When Pelican started processing the dataset */
       processing_start: string;
@@ -658,13 +674,17 @@ export interface components {
       [key: string]: components["schemas"]["ResourceLevelCheck"];
     };
     Settings: {
+      /** @description The user's preferred language */
+      language: string;
+      /** @description The user's name */
+      username: string;
       /** @description The service account that the template and folder must be shared with */
       user: string;
       /** @description The ID of the default Google Docs template, by language */
       template: {
         [key: string]: string;
       };
-      /** @description The ID of the default Google Drive folder in which to create reports */
+      /** @description The ID of the default Google Drive folder in which to create reports, or blank for non-staff */
       folder: string;
     };
     TagError: {
@@ -734,6 +754,15 @@ export interface components {
        * @description The check's version
        */
       version: number;
+    };
+    UserSettings: {
+      /**
+       * @description The user's preferred language
+       *
+       *     * `en` - en
+       *     * `es` - es
+       */
+      language: components["schemas"]["LanguageEnum"];
     };
   };
   responses: never;
@@ -1194,6 +1223,29 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["Settings"];
+        };
+      };
+    };
+  };
+  settings_partial_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["PatchedUserSettings"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserSettings"];
         };
       };
     };

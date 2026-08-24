@@ -8,6 +8,11 @@
 
       <slot />
 
+      <span
+        v-if="settings.username"
+        class="username"
+      >{{ $t("signedInAs", { username: settings.username }) }}</span>
+
       <label
         class="visually-hidden"
         for="locale_select"
@@ -29,10 +34,13 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useLocale } from "@/composables/useLocale";
 import { LOCALES } from "@/config.js";
+import { useSettingsStore } from "@/stores/settings.js";
 
 const { locale, setLocale } = useLocale();
+const { settings } = storeToRefs(useSettingsStore());
 </script>
 
 <style scoped lang="scss">
@@ -60,5 +68,11 @@ const { locale, setLocale } = useLocale();
 .locale_select {
     font-size: 13px;
     width: auto;
+}
+
+.username {
+    color: $headings_light_color;
+    font-family: $font-family-thin;
+    font-size: 13px;
 }
 </style>
