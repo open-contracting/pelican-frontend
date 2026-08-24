@@ -1,27 +1,50 @@
 Refresh the fixtures
 ====================
 
-``tests/fixtures/pelican-backend.sql.gz`` is the database to develop against, and ``tests/fixtures/reports.json`` is the set of responses that ``tests/api/test_serializers.py`` hands to the serializers that describe them. ``api/management/commands/refreshfixtures.py`` writes both, and documents which datasets it copies, why each one is there, and what it leaves out.
+``tests/fixtures/pelican-backend.sql.gz`` is a sample database to develop against, and ``tests/fixtures/reports.json`` is used to test serializers.
 
-Refresh them when Pelican backend changes what it writes, or when a check is added, removed or renamed.
+``api/management/commands/refreshfixtures.py`` writes both and documents which datasets it copies, why each one is there, and what it leaves out.
 
-Rebuild
+Refresh the fixtures when Pelican backend changes what it writes, or when a check is added, removed or renamed.
+
+Refresh
 -------
 
-#. Point ``PELICAN_BACKEND_DATABASE_URL`` at the database to copy from, as in :doc:`compare-to-production`.
-#. Rebuild both fixtures. ``pg_dump`` must be at least the server's version.
+#. Copy ``.env.example`` to ``.env``, and set ``PELICAN_BACKEND_DATABASE_URL`` to the database to copy from.
+
+   .. code-block:: bash
+
+      cp .env.example .env
+
+#. Refresh the fixtures. ``pg_dump`` must be at least the server's version.
 
    .. code-block:: bash
 
       uv run --env-file .env manage.py refreshfixtures
 
-#. Load the dump, and check the pages that the new datasets serve (see :doc:`compare-to-production`).
-
-After a rebuild
+After a refresh
 ---------------
 
-A declaration is only as good as its evidence, so check the ones that exist because a fixture shows a shape:
+#. Load the dump.
+#. Check that each dataset shows what it was copied for (see :doc:`compare-to-production`):
 
-#. If the dump no longer shows a shape that a serializer allows, tighten the declaration, and delete the ``reports.json`` entry that covered it. If it shows a new one, do the reverse. Keep a declaration that only Pelican backend's code justifies, and say so in a comment.
-#. Regenerate the OpenAPI document and the frontend's types, if any declaration changed (see :ref:`api-documentation`).
-#. Compare the check names in ``frontend/src/config.ts`` with the new dump's, since a check that neither the config nor the fixture has is invisible until production runs it.
+   -  its row in the dataset picker
+   -  its metadata in the dataset overview
+   -  its charts in the collection page
+   -  its examples in a field-level and a compiled release-level detail page
+   -  its pairs in the time-based pages
+
+#. Match the serializers to what Pelican backend writes (the fixtures being merely evidence of it):
+
+   -  Remove a ``required=False`` or ``allow_null=True`` when neither the dump nor Pelican backend's code has that shape any more, and delete the ``reports.json`` entry that covered it.
+   -  Keep a ``required=False`` or ``allow_null=True`` when only Pelican backend's code has that shape, and state the condition under which it writes it in a comment, as ``KingfisherMetadataSerializer`` does for a collection with no rows in Kingfisher Process.
+   -  Add a ``required=False`` or ``allow_null=True``, and a ``reports.json`` entry, when the dump has a shape that the serializer rejects.
+
+#. If you edit a serializer, :ref:`regenerate the OpenAPI document and the frontend's types<api-documentation>`.
+#. Compare the check names in ``frontend/src/config.ts`` with those in the new dump.
+
+   -  Configure a check that the dump has and the configuration lacks (see :doc:`add-check`).
+
+      .. note:: A dataset-level check that no section lists is never rendered, and a compiled release-level check that ``RESOURCE_CHECK_ORDER`` omits is sorted after the rest.
+
+   -  Remove a check name that Pelican backend no longer writes, and its messages.

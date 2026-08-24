@@ -96,7 +96,7 @@ API documentation
 
    :ref:`api`
 
-If you edit ``serializers.py`` or ``views.py``, regenerate the OpenAPI document, and the frontend's types:
+If you edit ``serializers.py`` or ``views.py``, regenerate the OpenAPI document and the frontend's types:
 
 .. code-block:: bash
 
