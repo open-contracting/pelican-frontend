@@ -64,16 +64,15 @@ class SerializerTests(SimpleTestCase):
 
     def test_dataset_meta(self):
         # The sparse entry's collection metadata is null, apart from its dates.
-        # The in-progress entry has no Pelican metadata, since Pelican writes it last.
-        for key in ("dataset_meta", "dataset_meta_sparse", "dataset_meta_in_progress"):
+        # The unchecked and unreported entries stop after each of the steps in which Pelican backend writes the groups.
+        for key in (
+            "dataset_meta",
+            "dataset_meta_sparse",
+            "dataset_meta_extensions",
+            "dataset_meta_unchecked",
+            "dataset_meta_unreported",
+        ):
             with self.subTest(key=key):
                 serializer = DatasetMetaSerializer(data=REPORTS[key])
 
                 self.assertTrue(serializer.is_valid(), serializer.errors)
-
-    def test_dataset_meta_unprocessed(self):
-        """A dataset being processed has only the groups written when it is created. No fixture entry is one."""
-        groups = ("collection_metadata", "kingfisher_metadata")
-        serializer = DatasetMetaSerializer(data={key: REPORTS["dataset_meta"][key] for key in groups})
-
-        self.assertTrue(serializer.is_valid(), serializer.errors)

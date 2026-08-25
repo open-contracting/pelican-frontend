@@ -41,8 +41,7 @@ TIME_DATASET = 34
 SPARSE_DATASET = 20
 
 # A dataset that stopped before its reports were written, so that a page can be missing its report.
-# A dataset for which Pelican wrote no metadata, for dataset_meta_in_progress.
-# A dataset that declares extensions.
+# A dataset that declares extensions, for dataset_meta_extensions.
 IN_PROGRESS_DATASET = 44
 
 # The datasets to copy. Each one's ancestor and parent are copied, too.
@@ -51,7 +50,13 @@ DATASETS = [ENTRY_DATASET, TIME_DATASET, SPARSE_DATASET, IN_PROGRESS_DATASET]
 META_DATASETS = {
     "dataset_meta": TIME_DATASET,
     "dataset_meta_sparse": SPARSE_DATASET,
-    "dataset_meta_in_progress": IN_PROGRESS_DATASET,
+    "dataset_meta_extensions": IN_PROGRESS_DATASET,
+}
+# Pelican backend writes a dataset's `meta` in three steps, so a dataset it is still processing has only the earlier
+# groups. The database need not hold one, so these entries drop the later groups from a complete `meta`.
+PARTIAL_META = {
+    "dataset_meta_unchecked": ("collection_metadata", "kingfisher_metadata"),
+    "dataset_meta_unreported": ("collection_metadata", "kingfisher_metadata", "compiled_releases", "tender_lifecycle"),
 }
 # Two field-level checks: one whose quality group has checks, one whose quality group has none.
 FIELD_CHECK_PATHS = ("ocid", "id")
@@ -317,6 +322,11 @@ class Command(BaseCommand):
         resource_detail.update(trim(examples["data"], 1))
         resource_detail["time"] = TIME
 
+        metas = {
+            key: trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
+            for key, dataset_id in META_DATASETS.items()
+        }
+
         entries = {
             "field_level_report": {path: field[path] for path in FIELD_CHECK_PATHS},
             "field_level_detail": field_detail,
@@ -334,10 +344,8 @@ class Command(BaseCommand):
                 ("coverage_value", "coverage_result", "check_value", "check_result", "meta"),
                 # Copy the entire report, being three checks.
             ),
-            **{
-                key: trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
-                for key, dataset_id in META_DATASETS.items()
-            },
+            **metas,
+            **{key: {group: metas["dataset_meta"][group] for group in groups} for key, groups in PARTIAL_META.items()},
         }
         if not entries["time_based_report"]:
             sys.exit(f"dataset {TIME_DATASET} has no time-based checks: choose a replacement")
