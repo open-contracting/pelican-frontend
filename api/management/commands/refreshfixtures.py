@@ -230,8 +230,7 @@ class Command(BaseCommand):
 
         tables = {}
         with connections["pelican_backend"].cursor() as cursor:
-            # A deleted dataset is skipped, rather than fatal, so that the rest can be refreshed before a replacement
-            # is found. Its `meta` entry is then absent, and test_dataset_meta fails on it.
+            # A deleted dataset is skipped, so that the rest can be refreshed before a replacement is found.
             cursor.execute("SELECT id FROM dataset WHERE id = ANY(%(ids)s)", {"ids": DATASETS})
             chosen = [row[0] for row in cursor]
             if deleted := sorted(set(DATASETS) - set(chosen)):
@@ -308,6 +307,7 @@ class Command(BaseCommand):
         # Building a reports.json entry trims its row's arrays to one entry, in place, so the dump is written first.
         directory = settings.BASE_DIR / "tests" / "fixtures"
         dump = directory / "pelican-backend.sql.gz"
+        reports = directory / "reports.json"
         dump.write_bytes(gzip.compress("".join(text).encode(), compresslevel=9, mtime=0))
 
         # An entry keeps one example per array, which is all a serializer needs, and all a reader of the file reads.
@@ -333,6 +333,15 @@ class Command(BaseCommand):
         resource_detail.update(trim(examples["data"], 1))
         resource_detail["time"] = TIME
 
+        # A deleted dataset's entry is kept as it was.
+        previous = json.loads(reports.read_text()) if reports.exists() else {}
+        metas = {}
+        for key, dataset_id in META_DATASETS.items():
+            if dataset_id in chosen:
+                metas[key] = trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
+            elif key in previous:
+                metas[key] = previous[key]
+
         entries = {
             "field_level_report": {path: field[path] for path in FIELD_CHECK_PATHS},
             "field_level_detail": field_detail,
@@ -350,18 +359,14 @@ class Command(BaseCommand):
                 ("coverage_value", "coverage_result", "check_value", "check_result", "meta"),
                 # Copy the entire report, being three checks.
             ),
-            **{
-                key: trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
-                for key, dataset_id in META_DATASETS.items()
-                if dataset_id in chosen
-            },
+            **metas,
         }
         if not entries["time_based_report"]:
             sys.exit(f"dataset {TIME_DATASET} has no time-based checks: choose a replacement")
         if absent := set(DATASET_CHECK_NAMES) - set(entries["dataset_level_report"]):
             sys.exit(f"dataset {ENTRY_DATASET} has no {', '.join(sorted(absent))}: choose a replacement per shape")
 
-        (directory / "reports.json").write_text(json.dumps(entries, indent=2, sort_keys=True) + "\n")
+        reports.write_text(json.dumps(entries, indent=2, sort_keys=True) + "\n")
 
         self.stdout.write(
             f"{dump.name}: {dump.stat().st_size:,} bytes, {len(items):,} data items, "
