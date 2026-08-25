@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "test": "vitest run"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
@@ -22,12 +25,15 @@
   "devDependencies": {
     "@types/node": "^24.13.3",
     "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/test-utils": "^2.4.11",
     "@vue/tsconfig": "^0.9.1",
+    "happy-dom": "^20.11.2",
     "knip": "^6.32.1",
     "openapi-typescript": "^7.13.0",
     "sass-embedded": "^1.97.3",
     "typescript": "^5.9.3",
     "vite": "^7.3.6",
+    "vitest": "^4.1.11",
     "vue-tsc": "^3.3.9"
   }
 }
