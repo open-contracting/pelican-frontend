@@ -22,6 +22,8 @@ Refresh
 
       uv run --env-file .env manage.py refreshfixtures
 
+If the command warns about deleted datasets, choose replacements if possible, and refresh again.
+
 After a refresh
 ---------------
 

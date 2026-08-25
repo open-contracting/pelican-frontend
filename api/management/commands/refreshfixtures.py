@@ -221,9 +221,16 @@ class Command(BaseCommand):
 
         tables = {}
         with connections["pelican_backend"].cursor() as cursor:
+            # A deleted dataset is skipped, rather than fatal, so that the rest can be refreshed before a replacement
+            # is found. Its `meta` entry is then absent, and test_dataset_meta fails on it.
             cursor.execute("SELECT id FROM dataset WHERE id = ANY(%(ids)s)", {"ids": DATASETS})
-            if deleted := set(DATASETS) - {row[0] for row in cursor}:
-                sys.exit(f"datasets {sorted(deleted)} are deleted: choose replacements meeting the same criteria")
+            chosen = [row[0] for row in cursor]
+            if deleted := sorted(set(DATASETS) - set(chosen)):
+                message = f"datasets {deleted} are deleted: choose replacements meeting the same criteria"
+                # Every reports.json entry but a `meta` one is taken from these two datasets.
+                if {ENTRY_DATASET, TIME_DATASET}.intersection(deleted):
+                    sys.exit(message)
+                self.stderr.write(self.style.WARNING(message))
 
             # A time-based example pairs a data item with its ancestor's, and the picker names a filtered dataset's
             # parent, so both are copied alongside the chosen datasets.
@@ -233,9 +240,9 @@ class Command(BaseCommand):
                 UNION
                 SELECT dataset_id_original FROM dataset_filter WHERE dataset_id_filtered = ANY(%(ids)s)
                 """,
-                {"ids": DATASETS},
+                {"ids": chosen},
             )
-            datasets = sorted({*DATASETS, *(row[0] for row in cursor)})
+            datasets = sorted({*chosen, *(row[0] for row in cursor)})
 
             # SELECT the example tables, whose rows are used for the sample dump and reports.json entries.
             selected = {table: select(cursor, table, datasets=datasets) for table in EXAMPLE_TABLES}
@@ -337,6 +344,7 @@ class Command(BaseCommand):
             **{
                 key: trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
                 for key, dataset_id in META_DATASETS.items()
+                if dataset_id in chosen
             },
         }
         if not entries["time_based_report"]:
