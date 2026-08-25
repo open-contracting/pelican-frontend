@@ -211,9 +211,12 @@ class Command(BaseCommand):
 
         # Pre-process the pg_dump output. The token in pg_dump's `\restrict` and `\unrestrict` commands is random,
         # so both are cut, so that a re-run writes the same bytes. Remove both, plus everything after the ending.
-        stdout = subprocess.run(  # noqa: S603 # constants and settings
-            arguments, check=True, capture_output=True, text=True, env=environment
-        ).stdout
+        result = subprocess.run(  # noqa: S603 # constants and settings
+            arguments, check=False, capture_output=True, text=True, env=environment
+        )
+        if result.returncode:
+            sys.exit(result.stderr.strip())
+        stdout = result.stdout
         schema, marker, _ = stdout.partition(SCHEMA_END)
         if not marker:
             sys.exit("pg_dump wrote an unexpected ending")
