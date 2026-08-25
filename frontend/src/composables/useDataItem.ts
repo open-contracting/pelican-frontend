@@ -5,9 +5,6 @@ import { useI18n } from "vue-i18n";
 import { useDatasetStore } from "@/stores/dataset.js";
 import type { JSONData } from "@/types.js";
 
-// Above this, some browsers can crash while rendering the JSON data.
-const maxJSONLines = 3000;
-
 class DataItemNotFound extends Error {}
 class DataItemTooLarge extends Error {}
 
@@ -45,7 +42,7 @@ export function useDataItem() {
         if (request !== previewRequest) {
           return;
         }
-        if ((datasetStore.dataItemJSONLines(itemId) ?? 0) < maxJSONLines) {
+        if (!datasetStore.dataItemTooLarge(itemId)) {
           previewDataItemId.value = itemId;
           selectedKey.value = key;
         } else {
@@ -120,7 +117,7 @@ export function useDataItem() {
           reason = new DataItemNotFound();
           throw reason;
         }
-        if ((datasetStore.dataItemJSONLines(itemId) ?? 0) >= maxJSONLines) {
+        if (datasetStore.dataItemTooLarge(itemId)) {
           reason = new DataItemTooLarge();
           throw reason;
         }
