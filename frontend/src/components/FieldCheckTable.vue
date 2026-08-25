@@ -46,8 +46,7 @@
           <RouterLink
             class="check_link"
             :to="to"
-            v-html="highlightSearch(n.path)"
-          />
+          ><MarkedText :segments="highlightSearch(n.path)" /></RouterLink>
         </FieldCheckTableRow>
       </template>
     </tbody>
@@ -61,6 +60,7 @@ import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import type { FieldLevelCheck } from "@/types.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
+import MarkedText from "./MarkedText.vue";
 import SortButtons from "./SortButtons.vue";
 
 const props = defineProps<{

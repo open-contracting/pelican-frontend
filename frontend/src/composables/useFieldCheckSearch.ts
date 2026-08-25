@@ -2,6 +2,34 @@ import { computed } from "vue";
 import { useUiStore } from "@/stores/ui.js";
 import type { FieldLevelCheck } from "@/types.js";
 
+/** A slice of a field's path, marked if the search matches it. */
+export interface PathSegment {
+  text: string;
+  matched: boolean;
+}
+
+const unmatched = (text: string): PathSegment[] => [{ text, matched: false }];
+
+/** Split ``text`` around each occurrence of the lowercase ``search``, marking the occurrences. */
+function markMatches(text: string, search: string): PathSegment[] {
+  const lower = text.toLowerCase();
+  const segments: PathSegment[] = [];
+  let start = 0;
+
+  for (let index = lower.indexOf(search); index !== -1; index = lower.indexOf(search, start)) {
+    if (index > start) {
+      segments.push({ text: text.slice(start, index), matched: false });
+    }
+    segments.push({ text: text.slice(index, index + search.length), matched: true });
+    start = index + search.length;
+  }
+  if (start < text.length) {
+    segments.push({ text: text.slice(start), matched: false });
+  }
+
+  return segments;
+}
+
 export function useFieldCheckSearch() {
   const ui = useUiStore();
 
@@ -66,29 +94,26 @@ export function useFieldCheckSearch() {
     ui.fieldCheckSorting = { by, asc };
   }
 
-  function highlightSearch(path: string) {
+  function highlightSearch(path: string): PathSegment[] {
     if (!search.value) {
-      return path;
+      return unmatched(path);
     }
-    // escape regex special characters
-    const search_esc = search.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-    return path.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
+    return markMatches(path, search.value);
   }
 
-  function highlightSearchLast(path: string) {
+  function highlightSearchLast(path: string): PathSegment[] {
     const name = path.substring(path.lastIndexOf(".") + 1);
 
     if (!search.value || !isPathSearched(path)) {
-      return name;
+      return unmatched(name);
     }
 
-    let search_last = search.value.replace(/^[.]+|[.]+$/g, "");
-    if (search_last.includes(".")) {
-      search_last = search_last.split(".").slice(-1)[0];
+    // Only the search's last segment can match the path's last segment.
+    const last = search.value.split(".").filter(Boolean).at(-1);
+    if (!last) {
+      return unmatched(name);
     }
-    // escape regex special characters
-    const search_esc = search_last.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-    return name.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
+    return markMatches(name, last);
   }
 
   function isPathSearched(path: string) {
