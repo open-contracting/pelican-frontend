@@ -1,6 +1,6 @@
 import { flushPromises } from "@vue/test-utils";
 import { createPinia } from "pinia";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import api from "@/api.js";
 import { useDataItem } from "@/composables/useDataItem.js";
 import { mountComposable, testI18n } from "@/test/helpers.js";
@@ -35,6 +35,10 @@ function composable() {
 beforeEach(() => {
   toast.mockReset();
   apiGet.mockReset();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe("previewDataItem", () => {
@@ -97,6 +101,76 @@ describe("previewDataItem", () => {
     first.resolve(itemOfLines(1, 10));
     await flushPromises();
     expect(previewData.value).toEqual(itemOfLines(2, 10).data);
+  });
+});
+
+describe("download", () => {
+  function stubDownload() {
+    // Record the anchors the composable clicks, without navigating.
+    const clicks: HTMLAnchorElement[] = [];
+    const createElement = document.createElement.bind(document);
+    vi.spyOn(document, "createElement").mockImplementation(((tag: string) => {
+      const element = createElement(tag);
+      if (tag === "a") {
+        element.click = () => clicks.push(element as HTMLAnchorElement);
+      }
+      return element;
+    }) as typeof document.createElement);
+
+    let blobCount = 0;
+    const createObjectURL = vi.fn((_blob: Blob) => `blob:${++blobCount}`);
+    const revokeObjectURL = vi.fn();
+    Object.assign(window.URL, { createObjectURL, revokeObjectURL });
+
+    return { clicks, createObjectURL, revokeObjectURL };
+  }
+
+  it("downloads an item's JSON under a name derived from its ID", async () => {
+    const { clicks, createObjectURL } = stubDownload();
+    apiGet.mockResolvedValueOnce({ id: 5, data: { a: 1 } });
+    const { download } = composable();
+
+    download(5);
+    await flushPromises();
+
+    const [[blob]] = createObjectURL.mock.calls;
+    expect(await blob.text()).toBe('{\n  "a": 1\n}');
+    expect(clicks).toHaveLength(1);
+    expect(clicks[0].getAttribute("download")).toBe("data_item_5.json");
+    expect(clicks[0].getAttribute("href")).toBe("blob:1");
+    expect(toast).toHaveBeenCalledWith(
+      expect.objectContaining({ variant: "primary", body: expect.stringContaining("downloaded") }),
+    );
+  });
+
+  it("reuses one link, revoking the previous download's URL", async () => {
+    const { clicks, createObjectURL, revokeObjectURL } = stubDownload();
+    apiGet.mockImplementation(async (url: string) => ({ id: url.includes("/5/") ? 5 : 6, data: {} }) as never);
+    const { download } = composable();
+
+    download(5);
+    await flushPromises();
+    download(6);
+    await flushPromises();
+
+    expect(createObjectURL).toHaveBeenCalledTimes(2);
+    expect(revokeObjectURL).toHaveBeenCalledExactlyOnceWith("blob:1");
+    expect(clicks).toHaveLength(2);
+    expect(clicks[1]).toBe(clicks[0]);
+  });
+
+  it("reports an item that the backend no longer has, downloading nothing", async () => {
+    const { clicks } = stubDownload();
+    apiGet.mockRejectedValueOnce(new Error("404 Not Found"));
+    const { download } = composable();
+
+    download(5);
+    await flushPromises();
+
+    expect(clicks).toHaveLength(0);
+    expect(toast).toHaveBeenCalledWith(
+      expect.objectContaining({ variant: "danger", body: expect.stringContaining("was not found") }),
+    );
   });
 });
 
