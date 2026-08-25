@@ -110,71 +110,74 @@ describe("isPathSearched", () => {
   });
 });
 
+const plain = (text: string) => ({ text, matched: false });
+const marked = (text: string) => ({ text, matched: true });
+
 describe("highlightSearch", () => {
-  it("returns the path unchanged without a search", () => {
-    expect(useFieldCheckSearch().highlightSearch("tender.items")).toBe("tender.items");
+  it("returns the path unmarked without a search", () => {
+    expect(useFieldCheckSearch().highlightSearch("tender.items")).toEqual([plain("tender.items")]);
   });
 
   it("marks each match, case-insensitively, keeping the path's case", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = "TenDer";
 
-    expect(composable.highlightSearch("tender.items")).toBe("<mark>tender</mark>.items");
-    expect(composable.highlightSearch("Tender.tender")).toBe("<mark>Tender</mark>.<mark>tender</mark>");
+    expect(composable.highlightSearch("tender.items")).toEqual([marked("tender"), plain(".items")]);
+    expect(composable.highlightSearch("Tender.tender")).toEqual([marked("Tender"), plain("."), marked("tender")]);
   });
 
   it("treats regex special characters in the search as literal", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = ".";
 
-    expect(composable.highlightSearch("a.b")).toBe("a<mark>.</mark>b");
+    expect(composable.highlightSearch("a.b")).toEqual([plain("a"), marked("."), plain("b")]);
   });
 });
 
 describe("highlightSearchLast", () => {
-  it("returns the path's last segment without a search", () => {
-    expect(useFieldCheckSearch().highlightSearchLast("tender.items.id")).toBe("id");
+  it("returns the path's last segment unmarked without a search", () => {
+    expect(useFieldCheckSearch().highlightSearchLast("tender.items.id")).toEqual([plain("id")]);
   });
 
   it("marks the last segment of the search within the last segment of the path", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = "items.id";
 
-    expect(composable.highlightSearchLast("tender.items.id")).toBe("<mark>id</mark>");
+    expect(composable.highlightSearchLast("tender.items.id")).toEqual([marked("id")]);
   });
 
   it("ignores the search's leading dots", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = ".id";
 
-    expect(composable.highlightSearchLast("tender.items.id")).toBe("<mark>id</mark>");
+    expect(composable.highlightSearchLast("tender.items.id")).toEqual([marked("id")]);
   });
 
   it("leaves the segment unmarked when a trailing dot keeps the search from matching the path", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = ".id.";
 
-    expect(composable.highlightSearchLast("tender.items.id")).toBe("id");
+    expect(composable.highlightSearchLast("tender.items.id")).toEqual([plain("id")]);
   });
 
   it("leaves the segment unmarked when the search matches an earlier segment only", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = "tender";
 
-    expect(composable.highlightSearchLast("tender.items.id")).toBe("id");
+    expect(composable.highlightSearchLast("tender.items.id")).toEqual([plain("id")]);
   });
 
   it("leaves the segment unmarked when the search matches nothing", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = "awards";
 
-    expect(composable.highlightSearchLast("tender.items.id")).toBe("id");
+    expect(composable.highlightSearchLast("tender.items.id")).toEqual([plain("id")]);
   });
 
   it("marks a partial match within a path without dots", () => {
     const composable = useFieldCheckSearch();
     useUiStore().fieldCheckSearch = "ten";
 
-    expect(composable.highlightSearchLast("tender")).toBe("<mark>ten</mark>der");
+    expect(composable.highlightSearchLast("tender")).toEqual([marked("ten"), plain("der")]);
   });
 });
