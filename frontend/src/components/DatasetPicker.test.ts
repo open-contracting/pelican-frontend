@@ -71,7 +71,7 @@ describe("sorting", () => {
     expect(names).toEqual(["newer", "older", "undated"]);
   });
 
-  it("sorts by size, with a dataset of 0 OCIDs tied with those of unknown size", async () => {
+  it("sorts by size, with a dataset of 0 OCIDs sized, after those of unknown size", async () => {
     const names = await rowNames(
       [
         dataset(1, "large", { ocids: 5 }),
@@ -82,7 +82,7 @@ describe("sorting", () => {
       { by: "size", asc: true },
     );
 
-    expect(names).toEqual(["empty", "unknown", "small", "large"]);
+    expect(names).toEqual(["unknown", "empty", "small", "large"]);
   });
 
   it("sorts by Kingfisher collection ID", async () => {
