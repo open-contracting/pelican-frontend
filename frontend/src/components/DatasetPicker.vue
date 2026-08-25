@@ -190,6 +190,12 @@ function isSearched(name: string) {
   return !search.value || name.toLowerCase().includes(search.value.toLowerCase());
 }
 
+// A value missing from the list sorts last, rather than silently first.
+function rank(values: readonly string[], value: string) {
+  const index = values.indexOf(value);
+  return index === -1 ? values.length : index;
+}
+
 function sortBy(by: string, asc = true) {
   if (!datasets.value) {
     return;
@@ -201,21 +207,15 @@ function sortBy(by: string, asc = true) {
   } else if (by === "name") {
     comp = (a, b) => a.name.localeCompare(b.name);
   } else if (by === "size") {
+    // A dataset of 0 OCIDs has a size, unlike one whose metadata is not filled in yet.
     comp = (a, b) =>
-      (a.meta.compiled_releases.total_unique_ocids || -1) - (b.meta.compiled_releases.total_unique_ocids || -1);
+      (a.meta.compiled_releases.total_unique_ocids ?? -1) - (b.meta.compiled_releases.total_unique_ocids ?? -1);
   } else if (by === "collection_id") {
     comp = (a, b) =>
-      (a.meta.kingfisher_metadata.collection_id || -1) - (b.meta.kingfisher_metadata.collection_id || -1);
+      (a.meta.kingfisher_metadata.collection_id ?? -1) - (b.meta.kingfisher_metadata.collection_id ?? -1);
   } else if (by === "phase") {
-    comp = (a, b) => {
-      if (a.phase === b.phase) {
-        if (a.state === b.state) {
-          return a.id - b.id;
-        }
-        return STATES.indexOf(a.state) - STATES.indexOf(b.state);
-      }
-      return PHASES.indexOf(a.phase) - PHASES.indexOf(b.phase);
-    };
+    comp = (a, b) =>
+      rank(PHASES, a.phase) - rank(PHASES, b.phase) || rank(STATES, a.state) - rank(STATES, b.state) || a.id - b.id;
   } else {
     throw new Error(`Unknown sorting method ${by}`);
   }
