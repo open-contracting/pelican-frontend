@@ -90,6 +90,19 @@ describe("loadDataset", () => {
     expect(ocid.qualityFailedRatio).toBe(0);
   });
 
+  it("derives ratios of 0, not Infinity, from contradictory counts", async () => {
+    const contradictory = { passed_count: 2, failed_count: 1, total_count: 0, checks: {} };
+    const store = await loadReports({
+      ocid: { coverage: contradictory, quality: contradictory, examples_filled: false, processing_order: 1 },
+    });
+
+    const [ocid] = store.fieldLevelStats ?? [];
+    expect(ocid.coverageOkRatio).toBe(0);
+    expect(ocid.coverageFailedRatio).toBe(0);
+    expect(ocid.qualityOkRatio).toBe(0);
+    expect(ocid.qualityFailedRatio).toBe(0);
+  });
+
   it("restores the field check page's defaults", async () => {
     const ui = useUiStore();
     ui.fieldCheckSearch = "tender";

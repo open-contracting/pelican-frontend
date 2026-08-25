@@ -159,15 +159,11 @@ export const useDatasetStore = defineStore("dataset", () => {
   async function loadFieldLevelStats(datasetId: number) {
     fieldLevelStats.value = null;
 
-    const okRatio = (item: { passed_count: number; total_count: number }) => {
-      const result = item.passed_count / item.total_count;
-      return Number.isNaN(result) ? 0 : result;
-    };
+    const okRatio = (item: { passed_count: number; total_count: number }) =>
+      item.total_count ? item.passed_count / item.total_count : 0;
 
-    const failedRatio = (item: { failed_count: number; total_count: number }) => {
-      const result = item.failed_count / item.total_count;
-      return Number.isNaN(result) ? 0 : result;
-    };
+    const failedRatio = (item: { failed_count: number; total_count: number }) =>
+      item.total_count ? item.failed_count / item.total_count : 0;
 
     const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, String(datasetId));
     const report = await api.get<FieldLevelReport>(`${CONFIG.apiBaseUrl}${formatted}`);
