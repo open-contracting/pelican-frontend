@@ -24,6 +24,12 @@ Set up the git pre-commit hook:
    pip install pre-commit
    pre-commit install
 
+Set up the diff driver that shows ``tests/fixtures/pelican-backend.sql.gz`` as text:
+
+.. code-block:: bash
+
+   git config diff.gzip.textconv "gunzip -c"
+
 Backend
 ~~~~~~~
 

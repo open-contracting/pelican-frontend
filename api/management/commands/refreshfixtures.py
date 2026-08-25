@@ -198,10 +198,13 @@ def checks(rows, dataset_id, fields, names=None):
 class Command(BaseCommand):
     help = "Rebuild fixtures from the PELICAN_BACKEND_DATABASE_URL database"
 
+    def add_arguments(self, parser):
+        parser.add_argument("--pg-dump", default="pg_dump", help="the pg_dump command to run")
+
     def handle(self, *args, **options):
         # Prepare the pg_dump command.
         database = settings.DATABASES["pelican_backend"]
-        arguments = ["pg_dump", "--schema-only", "--no-owner", "--no-privileges", "--extension=btree_gin"]
+        arguments = [options["pg_dump"], "--schema-only", "--no-owner", "--no-privileges", "--extension=btree_gin"]
         for option, key in (("--host", "HOST"), ("--port", "PORT"), ("--username", "USER"), ("--dbname", "NAME")):
             if database[key]:
                 arguments.extend([option, str(database[key])])
@@ -211,9 +214,15 @@ class Command(BaseCommand):
 
         # Pre-process the pg_dump output. The token in pg_dump's `\restrict` and `\unrestrict` commands is random,
         # so both are cut, so that a re-run writes the same bytes. Remove both, plus everything after the ending.
-        stdout = subprocess.run(  # noqa: S603 # constants and settings
-            arguments, check=True, capture_output=True, text=True, env=environment
-        ).stdout
+        try:
+            result = subprocess.run(  # noqa: S603 # constants, settings and an option
+                arguments, check=False, capture_output=True, text=True, env=environment
+            )
+        except FileNotFoundError as e:
+            sys.exit(e)
+        if result.returncode:
+            sys.exit(result.stderr.strip())
+        stdout = result.stdout
         schema, marker, _ = stdout.partition(SCHEMA_END)
         if not marker:
             sys.exit("pg_dump wrote an unexpected ending")
@@ -221,9 +230,15 @@ class Command(BaseCommand):
 
         tables = {}
         with connections["pelican_backend"].cursor() as cursor:
+            # A deleted dataset is skipped, so that the rest can be refreshed before a replacement is found.
             cursor.execute("SELECT id FROM dataset WHERE id = ANY(%(ids)s)", {"ids": DATASETS})
-            if deleted := set(DATASETS) - {row[0] for row in cursor}:
-                sys.exit(f"datasets {sorted(deleted)} are deleted: choose replacements meeting the same criteria")
+            chosen = [row[0] for row in cursor]
+            if deleted := sorted(set(DATASETS) - set(chosen)):
+                message = f"datasets {deleted} are deleted: choose replacements meeting the same criteria"
+                # Every reports.json entry but a `meta` one is taken from these two datasets.
+                if {ENTRY_DATASET, TIME_DATASET}.intersection(deleted):
+                    sys.exit(message)
+                self.stderr.write(self.style.WARNING(message))
 
             # A time-based example pairs a data item with its ancestor's, and the picker names a filtered dataset's
             # parent, so both are copied alongside the chosen datasets.
@@ -233,9 +248,9 @@ class Command(BaseCommand):
                 UNION
                 SELECT dataset_id_original FROM dataset_filter WHERE dataset_id_filtered = ANY(%(ids)s)
                 """,
-                {"ids": DATASETS},
+                {"ids": chosen},
             )
-            datasets = sorted({*DATASETS, *(row[0] for row in cursor)})
+            datasets = sorted({*chosen, *(row[0] for row in cursor)})
 
             # SELECT the example tables, whose rows are used for the sample dump and reports.json entries.
             selected = {table: select(cursor, table, datasets=datasets) for table in EXAMPLE_TABLES}
@@ -292,6 +307,7 @@ class Command(BaseCommand):
         # Building a reports.json entry trims its row's arrays to one entry, in place, so the dump is written first.
         directory = settings.BASE_DIR / "tests" / "fixtures"
         dump = directory / "pelican-backend.sql.gz"
+        reports = directory / "reports.json"
         dump.write_bytes(gzip.compress("".join(text).encode(), compresslevel=9, mtime=0))
 
         # An entry keeps one example per array, which is all a serializer needs, and all a reader of the file reads.
@@ -317,6 +333,15 @@ class Command(BaseCommand):
         resource_detail.update(trim(examples["data"], 1))
         resource_detail["time"] = TIME
 
+        # A deleted dataset's entry is kept as it was.
+        previous = json.loads(reports.read_text()) if reports.exists() else {}
+        metas = {}
+        for key, dataset_id in META_DATASETS.items():
+            if dataset_id in chosen:
+                metas[key] = trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
+            elif key in previous:
+                metas[key] = previous[key]
+
         entries = {
             "field_level_report": {path: field[path] for path in FIELD_CHECK_PATHS},
             "field_level_detail": field_detail,
@@ -334,17 +359,14 @@ class Command(BaseCommand):
                 ("coverage_value", "coverage_result", "check_value", "check_result", "meta"),
                 # Copy the entire report, being three checks.
             ),
-            **{
-                key: trim(one(tables["dataset"], id=dataset_id)["meta"], 1, distributions=True)
-                for key, dataset_id in META_DATASETS.items()
-            },
+            **metas,
         }
         if not entries["time_based_report"]:
             sys.exit(f"dataset {TIME_DATASET} has no time-based checks: choose a replacement")
         if absent := set(DATASET_CHECK_NAMES) - set(entries["dataset_level_report"]):
             sys.exit(f"dataset {ENTRY_DATASET} has no {', '.join(sorted(absent))}: choose a replacement per shape")
 
-        (directory / "reports.json").write_text(json.dumps(entries, indent=2, sort_keys=True) + "\n")
+        reports.write_text(json.dumps(entries, indent=2, sort_keys=True) + "\n")
 
         self.stdout.write(
             f"{dump.name}: {dump.stat().st_size:,} bytes, {len(items):,} data items, "

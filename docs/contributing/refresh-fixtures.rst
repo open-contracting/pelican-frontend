@@ -16,11 +16,13 @@ Refresh
 
       cp .env.example .env
 
-#. Refresh the fixtures. ``pg_dump`` must be at least the server's version.
+#. Refresh the fixtures. ``pg_dump`` must be at least the server's version: if the first executable on your ``PATH`` is older, set ``--pg-dump`` to a newer one, like Homebrew's ``/opt/homebrew/opt/postgresql@15/bin/pg_dump``.
 
    .. code-block:: bash
 
       uv run --env-file .env manage.py refreshfixtures
+
+If the command warns about deleted datasets, choose replacements if possible, and refresh again.
 
 After a refresh
 ---------------
