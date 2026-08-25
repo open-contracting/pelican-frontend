@@ -70,6 +70,14 @@ export const useDatasetStore = defineStore("dataset", () => {
     return dataItemJSON(itemId)?.split("\n").length ?? null;
   }
 
+  // From this many lines of JSON, some browsers can crash while rendering the data.
+  // Sync with the "3,000 lines" explanations in the message catalogs.
+  const maxJSONLines = 3000;
+
+  function dataItemTooLarge(itemId: number) {
+    return (dataItemJSONLines(itemId) ?? 0) >= maxJSONLines;
+  }
+
   function reset() {
     fieldLevelStats.value = null;
     datasetLevelStats.value = null;
@@ -215,6 +223,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     dataItemById,
     dataItemJSON,
     dataItemJSONLines,
+    dataItemTooLarge,
     datasetLevelCheckByName,
     fieldLevelCheckByPath,
     resourceLevelCheckByName,
