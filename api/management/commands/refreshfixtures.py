@@ -198,10 +198,13 @@ def checks(rows, dataset_id, fields, names=None):
 class Command(BaseCommand):
     help = "Rebuild fixtures from the PELICAN_BACKEND_DATABASE_URL database"
 
+    def add_arguments(self, parser):
+        parser.add_argument("--pg-dump", default="pg_dump", help="the pg_dump command to run")
+
     def handle(self, *args, **options):
         # Prepare the pg_dump command.
         database = settings.DATABASES["pelican_backend"]
-        arguments = ["pg_dump", "--schema-only", "--no-owner", "--no-privileges", "--extension=btree_gin"]
+        arguments = [options["pg_dump"], "--schema-only", "--no-owner", "--no-privileges", "--extension=btree_gin"]
         for option, key in (("--host", "HOST"), ("--port", "PORT"), ("--username", "USER"), ("--dbname", "NAME")):
             if database[key]:
                 arguments.extend([option, str(database[key])])
@@ -211,9 +214,12 @@ class Command(BaseCommand):
 
         # Pre-process the pg_dump output. The token in pg_dump's `\restrict` and `\unrestrict` commands is random,
         # so both are cut, so that a re-run writes the same bytes. Remove both, plus everything after the ending.
-        result = subprocess.run(  # noqa: S603 # constants and settings
-            arguments, check=False, capture_output=True, text=True, env=environment
-        )
+        try:
+            result = subprocess.run(  # noqa: S603 # constants, settings and an option
+                arguments, check=False, capture_output=True, text=True, env=environment
+            )
+        except FileNotFoundError as e:
+            sys.exit(e)
         if result.returncode:
             sys.exit(result.stderr.strip())
         stdout = result.stdout
