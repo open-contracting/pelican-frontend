@@ -3,16 +3,20 @@ Manage access
 
 A proxy must authenticate every request, with credentials per person, and must forward the username to Django, which signs the user in and creates their account if it doesn't exist. There is no sign-out: the browser holds the credentials.
 
-Who sees what
--------------
+Visibility
+----------
 
-A staff member sees every report. Anyone else sees only the reports in their publishers' namespaces.
+Reports
+~~~~~~~
+
+Staff members see every report. Non-staff see only reports in their publishers' namespaces.
 
 A publisher's namespace is its spider's name in `Kingfisher Collect <https://kingfisher-collect.readthedocs.io/en/latest/>`__, followed by a date, like ``chile_compra_bulk_2026-01-01``. Pelican backend copies a report's name into any report filtered from it, so a filtered report is in the same namespace as its parent.
 
-A report named otherwise is visible to staff only.
+Exports
+~~~~~~~
 
-An export, on the other hand, is visible only to the user who requested it, staff member or not.
+An export's status is visible only to its initiating user. Google Drive manages access to exported documents.
 
 Add a publisher
 ---------------

@@ -28,17 +28,6 @@ async function get<T>(url: string): Promise<T> {
   return (await send(url)).json();
 }
 
-// Callers need to handle errors.
-async function getJSON<T>(url: string): Promise<Result<T>> {
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    return { ok: false, status: response.status, statusText: response.statusText };
-  }
-
-  return { ok: true, data: await response.json() };
-}
-
 // This reports an error via ErrorAlert. Callers don't need to handle errors.
 async function patch(url: string, body: unknown): Promise<void> {
   await send(url, {
@@ -56,6 +45,17 @@ function post(url: string, body: unknown, signal?: AbortSignal) {
     body: JSON.stringify(body),
     signal,
   });
+}
+
+// Callers need to handle errors.
+async function getJSON<T>(url: string): Promise<Result<T>> {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    return { ok: false, status: response.status, statusText: response.statusText };
+  }
+
+  return { ok: true, data: await response.json() };
 }
 
 // Callers need to handle errors.
