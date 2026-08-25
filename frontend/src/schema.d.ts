@@ -292,8 +292,8 @@ export interface paths {
     /**
      * @description Return the export, whose ``status`` is ``waiting`` until the report is created.
      *
-     *     A created report has a ``file_id``, and might have ``failed_tags``. Otherwise, the ``status`` is
-     *     ``report_error``, with a ``reason``, or ``template_error``, with ``tag_errors``.
+     *     If the report is created, the export has a ``document_id``, and might have ``failed_checks``.
+     *     Otherwise, its ``status`` is ``error``, with a ``reason``, or ``template_error``, with ``errors``.
      */
     get: operations["exports_retrieve"];
     put?: never;
@@ -391,13 +391,13 @@ export interface components {
        */
       dataset_id: number;
       /** @description The ID of the Google Docs template */
-      document_id: string;
+      template_id: string;
       /** @description The ID of the Google Drive folder in which to create the report */
       folder_id: string;
       /** @description The report's language, defaulting to English */
       language?: string;
       /** @description The report's filename, defaulting to a generated name */
-      report_name?: string;
+      name?: string;
     };
     DataItem: {
       readonly id: number;
@@ -459,17 +459,25 @@ export interface components {
        *
        *     * `waiting` - Waiting
        *     * `ok` - Ok
-       *     * `report_error` - Report Error
+       *     * `error` - Error
        *     * `template_error` - Template Error
        */
       readonly status: components["schemas"]["StatusEnum"];
-      /** @description The ID of the Google Docs report */
-      readonly file_id: string;
-      /** @description The reason the report could not be created */
+      /** @description The ID of the exported document in Google Docs */
+      readonly document_id: string;
+      /** @description The reason the report couldn't be created */
       readonly reason: string;
-      readonly tag_errors: components["schemas"]["TagError"][];
-      /** @description The tags that could not be rendered */
-      readonly failed_tags: string[];
+      readonly errors: components["schemas"]["ExportError"][];
+      /** @description The checks that couldn't be computed */
+      readonly failed_checks: string[];
+    };
+    ExportError: {
+      /** @description The reason the template couldn't be rendered */
+      readonly reason: string;
+      /** @description The tag as extracted from the template */
+      readonly tag: string;
+      /** @description The ID of the Google Docs template */
+      readonly template_id: string;
     };
     FieldLevelCheck: {
       coverage: components["schemas"]["FieldLevelGroup"];
@@ -697,19 +705,11 @@ export interface components {
     /**
      * @description * `waiting` - Waiting
      *     * `ok` - Ok
-     *     * `report_error` - Report Error
+     *     * `error` - Error
      *     * `template_error` - Template Error
      * @enum {string}
      */
-    StatusEnum: "waiting" | "ok" | "report_error" | "template_error";
-    TagError: {
-      /** @description The reason the tag could not be rendered */
-      reason: string;
-      /** @description The tag as extracted from the template */
-      full_tag: string | null;
-      /** @description The ID of the Google Docs template */
-      template_id: string | null;
-    };
+    StatusEnum: "waiting" | "ok" | "error" | "template_error";
     TenderLifecycle: {
       planning: number;
       tender: number;

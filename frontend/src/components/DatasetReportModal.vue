@@ -5,7 +5,7 @@
       <div class="waiting text-center text-body-secondary">{{ $t("datasetReport.status.waiting") }}</div>
     </template>
     <span v-if="result != null">
-      <span v-if="result.status == 'ok' && !failedTags">
+      <span v-if="result.status == 'ok' && !failedChecks">
         <BAlert
           class="submit-result"
           variant="success"
@@ -16,14 +16,14 @@
           </span>
         </BAlert>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.link") }}:</span>
-        <GoogleDocsLink :document-id="result.file_id" />
+        <GoogleDocsLink :document-id="result.document_id" />
         <RetryOrCloseButtons
           variant="success"
           @retry="retry"
           @close="$emit('close')"
         />
       </span>
-      <span v-if="result.status == 'ok' && failedTags">
+      <span v-if="result.status == 'ok' && failedChecks">
         <BAlert
           class="submit-result"
           variant="warning"
@@ -36,7 +36,7 @@
 
         <div class="margin_bottom">
           <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
-          <GoogleDocsLink :document-id="result.file_id" />
+          <GoogleDocsLink :document-id="result.document_id" />
         </div>
       </span>
       <span v-if="result.status == 'template_error'">
@@ -49,11 +49,11 @@
         </BAlert>
         <div class="info_prefix">{{ $t("datasetReport.errorReport") }}:</div>
         <div
-          v-for="(error, index) in result.tag_errors"
+          v-for="(error, index) in result.errors"
           :key="index"
         >
           <div><span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ error.reason }}</div>
-          <div><span class="info_prefix">{{ $t("datasetReport.fullTag") }}:</span> {{ error.full_tag }}</div>
+          <div><span class="info_prefix">{{ $t("datasetReport.tag") }}:</span> {{ error.tag }}</div>
           <div>
             <span class="info_prefix">{{ $t("datasetReport.link") }}:</span>
             <GoogleDocsLink :document-id="error.template_id" />
@@ -65,13 +65,13 @@
           @close="$emit('close')"
         />
       </span>
-      <span v-if="result.status == 'report_error'">
+      <span v-if="result.status == 'error'">
         <BAlert
           class="submit-result"
           variant="danger"
           :model-value="true"
         >
-          <span>{{ $t("datasetReport.status.reportError") }}</span>
+          <span>{{ $t("datasetReport.status.error") }}</span>
         </BAlert>
 
         <span class="info_prefix">{{ $t("datasetReport.reason") }}:</span> {{ result.reason }}
@@ -100,14 +100,14 @@
           @close="$emit('close')"
         />
       </span>
-      <span v-if="failedTags != null">
+      <span v-if="failedChecks != null">
         <span class="info_prefix">{{ $t("datasetReport.warningList") }}:</span>
         <ul>
           <li
-            v-for="(tag, index) in failedTags"
+            v-for="(check, index) in failedChecks"
             :key="index"
           >
-            {{ tag }}
+            {{ check }}
           </li>
         </ul>
         <span class="info_prefix margin_bottom">{{ $t("datasetReport.warningEnd") }}</span>
@@ -161,11 +161,11 @@
       <div class="row mb-3 section_row">
         <label
           class="col-3 col-form-label"
-        ><div class="label-padding">{{ $t("datasetReport.documentId") }}</div></label>
+        ><div class="label-padding">{{ $t("datasetReport.templateId") }}</div></label>
         <div class="col-9">
           <BFormInput
-            id="documentIdInput"
-            v-model="documentId"
+            id="templateIdInput"
+            v-model="templateId"
             spellcheck="false"
             autocomplete="off"
             class="base_input"
@@ -173,8 +173,8 @@
             :formatter="fileIdFormatter"
           />
           <div class="form-text text-body-secondary">
-            <p>{{ $t("datasetReport.documentIdTooltip") }}</p>
-            <p>{{ $t("datasetReport.documentIdPermissions", {user: settingsStore.settings.user}) }}</p>
+            <p>{{ $t("datasetReport.templateIdTooltip") }}</p>
+            <p>{{ $t("datasetReport.templateIdPermissions", {user: settingsStore.settings.user}) }}</p>
           </div>
         </div>
       </div>
@@ -219,7 +219,7 @@
         <button
           type="button"
           class="btn btn-primary submit_button"
-          :disabled="dataset == null || !documentId || !folderId"
+          :disabled="dataset == null || !templateId || !folderId"
           @click="createDatasetReport"
         >
           {{ $t("datasetReport.submit") }}
@@ -244,7 +244,6 @@ import RetryOrCloseButtons from "./RetryOrCloseButtons.vue";
 /** The finished export, or the failure that prevented one. */
 type ReportResult = Export | { status: "server_error"; message: string };
 
-// How long to wait before asking again whether the report is created.
 const POLL_INTERVAL = 2000;
 
 const props = defineProps<{
@@ -258,17 +257,17 @@ const { locale } = useLocale();
 const isSubmitting = ref(false);
 // The export defaults to the user's language, which the user can still override here.
 const reportLanguage = ref(locale.value);
-const documentId = ref(settingsStore.settings.template[reportLanguage.value]);
+const templateId = ref(settingsStore.settings.template[reportLanguage.value]);
 const folderId = ref(settingsStore.settings.folder);
 const reportName = ref("");
 const result = ref<ReportResult | null>(null);
 
 let pollTimeout: ReturnType<typeof setTimeout> | undefined;
 
-// A report and a template error both list the tags that could not be rendered.
-const failedTags = computed(() => {
-  const tags = result.value != null && "failed_tags" in result.value ? result.value.failed_tags : [];
-  return tags.length ? tags : null;
+// A report and a template error both list the checks that could not be computed.
+const failedChecks = computed(() => {
+  const checks = result.value != null && "failed_checks" in result.value ? result.value.failed_checks : [];
+  return checks.length ? checks : null;
 });
 
 // The radio's value is the selected language, which its model types loosely.
@@ -278,8 +277,8 @@ function setDocumentId(value: unknown) {
   }
 
   // Only change the template if it is one of the default values.
-  if (Object.values(settingsStore.settings.template).includes(documentId.value)) {
-    documentId.value = settingsStore.settings.template[value];
+  if (Object.values(settingsStore.settings.template).includes(templateId.value)) {
+    templateId.value = settingsStore.settings.template[value];
   }
 }
 
@@ -291,12 +290,12 @@ function createDatasetReport() {
 
   const data: CreateExport = {
     dataset_id: props.dataset.id,
-    document_id: documentId.value,
+    template_id: templateId.value,
     folder_id: folderId.value,
     language: reportLanguage.value,
   };
   if (reportName.value.trim() !== "") {
-    data.report_name = reportName.value.trim();
+    data.name = reportName.value.trim();
   }
 
   api
@@ -307,7 +306,6 @@ function createDatasetReport() {
         return;
       }
 
-      // The report is created out of band, so wait for the export to report the outcome.
       pollExport(response.data.id);
     })
     .catch((error: unknown) => {
@@ -355,7 +353,7 @@ function fileIdFormatter(value: string) {
   return valueMatch != null ? valueMatch[1] : value;
 }
 
-// Closing the window stops the polling, not the export.
+// Closing the window stops the polling (not the export).
 onUnmounted(() => clearTimeout(pollTimeout));
 </script>
 

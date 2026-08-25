@@ -1,15 +1,15 @@
 from unittest.mock import patch
 
 from api.models import Dataset
-from exporter.models import Export
+from exporter.models import Export, ExportError
 from tests import PelicanTestCase
 
-INPUT_MESSAGE = {"document_id": "anything", "folder_id": "anything"}
+INPUT_MESSAGE = {"template_id": "anything", "folder_id": "anything"}
 
 
 class ExportTests(PelicanTestCase):
     def create_export(self, user, **kwargs):
-        return self.create(Export, user=user, dataset_id=1, document_id="anything", folder_id="anything", **kwargs)
+        return self.create(Export, user=user, dataset_id=1, template_id="anything", folder_id="anything", **kwargs)
 
     def test_list(self):
         response = self.client.get("/api/exports/")
@@ -29,10 +29,10 @@ class ExportTests(PelicanTestCase):
     def test_create_malformed(self, publish):
         for input_message in (
             {},
-            {"dataset_id": 1},  # missing document_id and folder_id keys
-            INPUT_MESSAGE,  # missing dataset_id key
+            INPUT_MESSAGE,  # missing dataset_id
+            {"dataset_id": 1},  # missing template_id and folder_id
             {"dataset_id": "anything", **INPUT_MESSAGE},  # incorrect dataset_id
-            {"dataset_id": 1, "document_id": "", "folder_id": ""},  # blank document_id and folder_id
+            {"dataset_id": 1, "template_id": "", "folder_id": ""},  # blank template_id and folder_id
         ):
             with self.subTest(input_message=input_message):
                 response = self.client.post("/api/exports/", input_message, "application/json")
@@ -70,34 +70,36 @@ class ExportTests(PelicanTestCase):
             {
                 "dataset_id": dataset.pk,
                 # A pasted ID can have whitespace around it.
-                "document_id": " anything ",
+                "template_id": " anything ",
                 "folder_id": " anything ",
                 "language": "es",
-                "report_name": "Report",
+                "name": "Report",
             },
             "application/json",
         )
 
         export = Export.objects.get()
+
         self.assertEqual(response.status_code, 202)
+
         self.assertJSONEqual(
             response.text,
             {
                 "id": export.pk,
                 "status": "waiting",
-                "file_id": "",
+                "document_id": "",
                 "reason": "",
-                "tag_errors": [],
-                "failed_tags": [],
+                "errors": [],
+                "failed_checks": [],
             },
         )
         publish.assert_called_once_with({"export_id": export.pk}, "report_exporter_init")
         self.assertEqual(export.user, user)
         self.assertEqual(export.dataset_id, dataset.pk)
-        self.assertEqual(export.document_id, "anything")
+        self.assertEqual(export.template_id, "anything")
         self.assertEqual(export.folder_id, "anything")
         self.assertEqual(export.language, "es")
-        self.assertEqual(export.report_name, "Report")
+        self.assertEqual(export.name, "Report")
 
     def test_retrieve_waiting(self):
         export = self.create_export(self.user)
@@ -110,15 +112,17 @@ class ExportTests(PelicanTestCase):
             {
                 "id": export.pk,
                 "status": "waiting",
-                "file_id": "",
+                "document_id": "",
                 "reason": "",
-                "tag_errors": [],
-                "failed_tags": [],
+                "errors": [],
+                "failed_checks": [],
             },
         )
 
     def test_retrieve_ok(self):
-        export = self.create_export(self.user, status=Export.Status.OK, file_id="anything", failed_tags=["{% id %}"])
+        export = self.create_export(
+            self.user, status=Export.Status.OK, document_id="anything", failed_checks=["distribution.tender_value"]
+        )
 
         response = self.client.get(f"/api/exports/{export.pk}/")
 
@@ -128,15 +132,15 @@ class ExportTests(PelicanTestCase):
             {
                 "id": export.pk,
                 "status": "ok",
-                "file_id": "anything",
+                "document_id": "anything",
                 "reason": "",
-                "tag_errors": [],
-                "failed_tags": ["{% id %}"],
+                "errors": [],
+                "failed_checks": ["distribution.tender_value"],
             },
         )
 
-    def test_retrieve_report_error(self):
-        export = self.create_export(self.user, status=Export.Status.REPORT_ERROR, reason="Unable to open the template")
+    def test_retrieve_error(self):
+        export = self.create_export(self.user, status=Export.Status.ERROR, reason="Unable to open the template")
 
         response = self.client.get(f"/api/exports/{export.pk}/")
 
@@ -144,15 +148,16 @@ class ExportTests(PelicanTestCase):
         self.assertEqual(response.json()["reason"], "Unable to open the template")
 
     def test_retrieve_template_error(self):
-        tag_error = {"reason": "Unknown tag", "full_tag": "{% xxx %}", "template_id": "anything"}
-        export = self.create_export(self.user, status=Export.Status.TEMPLATE_ERROR, tag_errors=[tag_error])
+        error = {"reason": "Unknown tag", "tag": "{% xxx %}", "template_id": "anything"}
+        export = self.create_export(self.user, status=Export.Status.TEMPLATE_ERROR)
+        self.create(ExportError, export=export, **error)
 
         response = self.client.get(f"/api/exports/{export.pk}/")
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["tag_errors"], [tag_error])
+        self.assertEqual(response.json()["errors"], [error])
 
-    def test_retrieve_another_users_export(self):
+    def test_retrieve_unauthorized(self):
         export = self.create_export(self.user)
         self.sign_in("staff2", is_staff=True)
 

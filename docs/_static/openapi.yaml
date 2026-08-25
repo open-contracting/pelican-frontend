@@ -441,8 +441,8 @@ paths:
       description: |-
         Return the export, whose ``status`` is ``waiting`` until the report is created.
 
-        A created report has a ``file_id``, and might have ``failed_tags``. Otherwise, the ``status`` is
-        ``report_error``, with a ``reason``, or ``template_error``, with ``tag_errors``.
+        If the report is created, the export has a ``document_id``, and might have ``failed_checks``.
+        Otherwise, its ``status`` is ``error``, with a ``reason``, or ``template_error``, with ``errors``.
       parameters:
       - in: path
         name: id
@@ -626,26 +626,22 @@ components:
           minimum: -9223372036854775808
           format: int64
           description: The dataset's ID
-        document_id:
+        template_id:
           type: string
           description: The ID of the Google Docs template
-          maxLength: 255
         folder_id:
           type: string
           description: The ID of the Google Drive folder in which to create the report
-          maxLength: 255
         language:
           type: string
           description: The report's language, defaulting to English
-          maxLength: 255
-        report_name:
+        name:
           type: string
           description: The report's filename, defaulting to a generated name
-          maxLength: 255
       required:
       - dataset_id
-      - document_id
       - folder_id
+      - template_id
     DataItem:
       type: object
       properties:
@@ -787,34 +783,53 @@ components:
 
             * `waiting` - Waiting
             * `ok` - Ok
-            * `report_error` - Report Error
+            * `error` - Error
             * `template_error` - Template Error
-        file_id:
+        document_id:
           type: string
           readOnly: true
-          description: The ID of the Google Docs report
+          description: The ID of the exported document in Google Docs
         reason:
           type: string
           readOnly: true
-          description: The reason the report could not be created
-        tag_errors:
+          description: The reason the report couldn't be created
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/TagError'
+            $ref: '#/components/schemas/ExportError'
           readOnly: true
-        failed_tags:
+        failed_checks:
           type: array
           items:
             type: string
           readOnly: true
-          description: The tags that could not be rendered
+          description: The checks that couldn't be computed
       required:
-      - failed_tags
-      - file_id
+      - document_id
+      - errors
+      - failed_checks
       - id
       - reason
       - status
-      - tag_errors
+    ExportError:
+      type: object
+      properties:
+        reason:
+          type: string
+          readOnly: true
+          description: The reason the template couldn't be rendered
+        tag:
+          type: string
+          readOnly: true
+          description: The tag as extracted from the template
+        template_id:
+          type: string
+          readOnly: true
+          description: The ID of the Google Docs template
+      required:
+      - reason
+      - tag
+      - template_id
     FieldLevelCheck:
       type: object
       properties:
@@ -1270,32 +1285,14 @@ components:
       enum:
       - waiting
       - ok
-      - report_error
+      - error
       - template_error
       type: string
       description: |-
         * `waiting` - Waiting
         * `ok` - Ok
-        * `report_error` - Report Error
+        * `error` - Error
         * `template_error` - Template Error
-    TagError:
-      type: object
-      properties:
-        reason:
-          type: string
-          description: The reason the tag could not be rendered
-        full_tag:
-          type: string
-          nullable: true
-          description: The tag as extracted from the template
-        template_id:
-          type: string
-          nullable: true
-          description: The ID of the Google Docs template
-      required:
-      - full_tag
-      - reason
-      - template_id
     TenderLifecycle:
       type: object
       properties:

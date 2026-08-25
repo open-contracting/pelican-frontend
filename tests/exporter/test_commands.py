@@ -11,34 +11,38 @@ MODULE = "exporter.management.commands.export"
 class ExportTests(PelicanTestCase):
     def setUp(self):
         super().setUp()
-        # Each test runs in a transaction, which closing the connection would roll back.
-        self.enterContext(patch(f"{MODULE}.close_old_connections"))
         self.ack = self.enterContext(patch(f"{MODULE}.ack"))
         self.gdocs = self.enterContext(patch(f"{MODULE}.Gdocs"))
         self.base_tag = self.enterContext(patch(f"{MODULE}.base_tag"))
         self.base_tag.return_value.validate_and_render.return_value = ("content", [])
         self.gdocs.return_value.upload.return_value = "file"
         self.export = self.create(
-            Export, user=self.user, dataset_id=1, document_id="template", folder_id="folder", language="es"
+            Export, user=self.user, dataset_id=1, template_id="template", folder_id="folder", language="es"
         )
 
     def run_callback(self):
+        """Run the callback and reload the export. The message is acked, whatever the outcome."""
         callback(Mock(), Mock(), Mock(delivery_tag=1), Mock(), {"export_id": self.export.pk})
         self.export.refresh_from_db()
+        self.ack.assert_called_once()
+
+    def assert_export(self, status, *, document_id="", reason="", errors=(), failed_checks=()):
+        """Assert the export's result. Each field is empty by default, so a test states only what it expects."""
+        self.assertEqual(self.export.status, status)
+        self.assertEqual(self.export.document_id, document_id)
+        self.assertEqual(self.export.reason, reason)
+        self.assertEqual(list(self.export.errors.values("reason", "tag", "template_id")), list(errors))
+        self.assertEqual(self.export.failed_checks, list(failed_checks))
 
     def test_ok(self):
-        self.base_tag.return_value.validate_and_render.return_value = ("content", ["{% id %}"])
+        self.base_tag.return_value.validate_and_render.return_value = ("content", ["distribution.tender_value"])
 
         self.run_callback()
 
-        self.assertEqual(self.export.status, Export.Status.OK)
-        self.assertEqual(self.export.file_id, "file")
-        self.assertEqual(self.export.failed_tags, ["{% id %}"])
-        self.assertEqual(self.export.reason, "")
+        self.assert_export(Export.Status.OK, document_id="file", failed_checks=["distribution.tender_value"])
         self.gdocs.assert_called_once_with("template")
         self.base_tag.assert_called_once_with(self.gdocs.return_value, 1, "es")
         self.gdocs.return_value.close.assert_called_once_with()
-        self.ack.assert_called_once()
 
     def test_default_language(self):
         self.export.language = "xx"
@@ -48,45 +52,42 @@ class ExportTests(PelicanTestCase):
 
         self.base_tag.assert_called_once_with(self.gdocs.return_value, 1, "en")
 
-    def test_default_report_name(self):
+    def test_default_name(self):
         self.run_callback()
 
         folder_id, filename, content = self.gdocs.return_value.upload.call_args[0]
+
         self.assertEqual(folder_id, "folder")
         self.assertRegex(filename, r"^Report 1 \d{4}-\d{2}-\d{2} ")
         self.assertEqual(content, "content")
 
-    def test_report_name(self):
-        self.export.report_name = "Report"
+    def test_name(self):
+        self.export.name = "Report"
         self.export.save()
 
         self.run_callback()
 
         self.gdocs.return_value.upload.assert_called_once_with("folder", "Report", "content")
 
-    def test_report_error(self):
-        self.gdocs.side_effect = GoogleDriveError("Unable to open the template")
-
-        with self.assertLogs(MODULE, level="ERROR"):
-            self.run_callback()
-
-        self.assertEqual(self.export.status, Export.Status.REPORT_ERROR)
-        self.assertEqual(self.export.reason, "Google Drive Error: Unable to open the template")
-        self.assertEqual(self.export.file_id, "")
-        self.ack.assert_called_once()
-
     def test_template_error(self):
         self.base_tag.return_value.validate_and_render.side_effect = TagError("Unknown tag", "{% xxx %}", "template")
 
         self.run_callback()
 
-        self.assertEqual(self.export.status, Export.Status.TEMPLATE_ERROR)
-        self.assertEqual(
-            self.export.tag_errors, [{"reason": "Unknown tag", "full_tag": "{% xxx %}", "template_id": "template"}]
+        self.assert_export(
+            Export.Status.TEMPLATE_ERROR,
+            errors=[{"reason": "Unknown tag", "tag": "{% xxx %}", "template_id": "template"}],
         )
-        self.assertEqual(self.export.failed_tags, [])
         self.gdocs.return_value.close.assert_called_once_with()
-        self.ack.assert_called_once()
+
+    def test_drive_error(self):
+        self.gdocs.side_effect = GoogleDriveError("Unable to open the template")
+
+        with self.assertLogs(MODULE, level="ERROR"):
+            self.run_callback()
+
+        self.assert_export(Export.Status.ERROR, reason="Google Drive Error: Unable to open the template")
+        self.gdocs.return_value.close.assert_not_called()  # never opened
 
     def test_unexpected_error(self):
         self.base_tag.return_value.validate_and_render.side_effect = ValueError("anything")
@@ -94,6 +95,5 @@ class ExportTests(PelicanTestCase):
         with self.assertLogs(MODULE, level="ERROR"):
             self.run_callback()
 
-        self.assertEqual(self.export.status, Export.Status.REPORT_ERROR)
-        self.assertEqual(self.export.reason, "An unexpected error occurred.")
-        self.ack.assert_called_once()
+        self.assert_export(Export.Status.ERROR, reason="An unexpected error occurred.")
+        self.gdocs.return_value.close.assert_called_once_with()

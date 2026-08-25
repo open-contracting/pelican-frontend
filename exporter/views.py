@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from api.rabbitmq import publish
 from api.util import get_permitted_dataset
-from exporter.models import Export
+from exporter.models import Export, ExportError
 
 ROUTING_KEY = "report_exporter_init"
 
@@ -12,24 +12,25 @@ ROUTING_KEY = "report_exporter_init"
 class CreateExportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Export
-        fields = ["dataset_id", "document_id", "folder_id", "language", "report_name"]
+        fields = ["dataset_id", "template_id", "folder_id", "language", "name"]
 
 
-class TagErrorSerializer(serializers.Serializer):
-    reason = serializers.CharField(help_text="The reason the tag could not be rendered")
-    full_tag = serializers.CharField(allow_null=True, help_text="The tag as extracted from the template")
-    template_id = serializers.CharField(allow_null=True, help_text="The ID of the Google Docs template")
+class ExportErrorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExportError
+        fields = ["reason", "tag", "template_id"]
+        read_only_fields = fields
 
 
 class ExportSerializer(serializers.ModelSerializer):
-    tag_errors = TagErrorSerializer(many=True, read_only=True)
-    failed_tags = serializers.ListField(
-        child=serializers.CharField(), read_only=True, help_text="The tags that could not be rendered"
+    errors = ExportErrorSerializer(many=True, read_only=True)
+    failed_checks = serializers.ListField(
+        child=serializers.CharField(), read_only=True, help_text="The checks that couldn't be computed"
     )
 
     class Meta:
         model = Export
-        fields = ["id", "status", "file_id", "reason", "tag_errors", "failed_tags"]
+        fields = ["id", "status", "document_id", "reason", "errors", "failed_checks"]
         read_only_fields = fields
 
 
@@ -38,7 +39,7 @@ class ExportViewSet(viewsets.GenericViewSet):
     lookup_value_converter = "int"
 
     def get_queryset(self):
-        """Return the user's own exports. Another user's export is 404, whoever requested it."""
+        """Return the user's own exports. Another user's export 404's."""
         return Export.objects.filter(user=self.request.user)
 
     # https://github.com/encode/django-rest-framework/blob/2db0c0b/rest_framework/mixins.py#L51
@@ -47,8 +48,8 @@ class ExportViewSet(viewsets.GenericViewSet):
         """
         Return the export, whose ``status`` is ``waiting`` until the report is created.
 
-        A created report has a ``file_id``, and might have ``failed_tags``. Otherwise, the ``status`` is
-        ``report_error``, with a ``reason``, or ``template_error``, with ``tag_errors``.
+        If the report is created, the export has a ``document_id``, and might have ``failed_checks``.
+        Otherwise, its ``status`` is ``error``, with a ``reason``, or ``template_error``, with ``errors``.
         """
         serializer = self.get_serializer(self.get_object())
         return Response(serializer.data)
@@ -63,4 +64,5 @@ class ExportViewSet(viewsets.GenericViewSet):
 
         export = serializer.save(user=request.user)
         publish({"export_id": export.pk}, ROUTING_KEY)
+
         return Response(ExportSerializer(export).data, status=status.HTTP_202_ACCEPTED)
