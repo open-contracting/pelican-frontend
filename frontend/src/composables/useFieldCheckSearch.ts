@@ -36,46 +36,21 @@ export function useFieldCheckSearch() {
   const searchRaw = computed(() => ui.fieldCheckSearch);
   const search = computed(() => searchRaw.value?.toLowerCase());
 
-  function comparator(by: string, asc: boolean) {
+  const byPath = (a: FieldLevelCheck, b: FieldLevelCheck) => a.path.localeCompare(b.path);
+
+  function comparator(by: string) {
     if (by === "path") {
-      return (a: FieldLevelCheck, b: FieldLevelCheck) => a.path.localeCompare(b.path);
+      return byPath;
     }
 
     if (by === "coverage") {
-      return (a: FieldLevelCheck, b: FieldLevelCheck) => {
-        let comparison = a.coverageOkRatio - b.coverageOkRatio;
-        if (comparison === 0) {
-          comparison = a.coverage.total_count - b.coverage.total_count;
-        }
-        if (comparison === 0) {
-          comparison = a.path.localeCompare(b.path);
-        }
-        return comparison;
-      };
+      return (a: FieldLevelCheck, b: FieldLevelCheck) =>
+        a.coverageOkRatio - b.coverageOkRatio || a.coverage.total_count - b.coverage.total_count || byPath(a, b);
     }
 
     if (by === "quality") {
-      // Checks without a quality score sort last, whichever direction the rest sort in.
-      return (a: FieldLevelCheck, b: FieldLevelCheck) => {
-        if (a.quality.total_count === 0) {
-          if (b.quality.total_count === 0) {
-            return a.path.localeCompare(b.path);
-          }
-          return asc ? 1 : -1;
-        }
-        if (b.quality.total_count === 0) {
-          return asc ? -1 : 1;
-        }
-
-        let comparison = a.qualityOkRatio - b.qualityOkRatio;
-        if (comparison === 0) {
-          comparison = a.quality.total_count - b.quality.total_count;
-        }
-        if (comparison === 0) {
-          comparison = a.path.localeCompare(b.path);
-        }
-        return comparison;
-      };
+      return (a: FieldLevelCheck, b: FieldLevelCheck) =>
+        a.qualityOkRatio - b.qualityOkRatio || a.quality.total_count - b.quality.total_count || byPath(a, b);
     }
 
     return (a: FieldLevelCheck, b: FieldLevelCheck) => a.processing_order - b.processing_order;
@@ -86,8 +61,20 @@ export function useFieldCheckSearch() {
       return [];
     }
 
-    const compare = comparator(by, asc);
-    return [...checks].sort((a, b) => (asc ? compare(a, b) : compare(b, a)));
+    const direction = asc ? 1 : -1;
+    const compare = comparator(by);
+
+    // Checks without a quality score sort last, whichever direction the rest sort in.
+    if (by === "quality") {
+      const scored = checks.filter((check) => check.quality.total_count !== 0);
+      const unscored = checks.filter((check) => check.quality.total_count === 0);
+      return [
+        ...scored.sort((a, b) => direction * compare(a, b)),
+        ...unscored.sort((a, b) => direction * byPath(a, b)),
+      ];
+    }
+
+    return [...checks].sort((a, b) => direction * compare(a, b));
   }
 
   function setSorting(by: string, asc = true) {
