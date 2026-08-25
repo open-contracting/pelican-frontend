@@ -27,7 +27,8 @@ export const useUiStore = defineStore("ui", () => {
 
   function collapseFieldCheck(path: string) {
     for (const node of [...fieldCheckExpandedNodes.value]) {
-      if (node.startsWith(path)) {
+      // A bare prefix would also match a sibling like "tenderers" when collapsing "tender".
+      if (node === path || node.startsWith(`${path}.`)) {
         fieldCheckExpandedNodes.value.delete(node);
       }
     }
@@ -43,7 +44,7 @@ export const useUiStore = defineStore("ui", () => {
 
   function collapseResourceCheck(section: string) {
     for (const node of [...resourceCheckExpandedNodes.value]) {
-      if (node.startsWith(section)) {
+      if (node === section || node.startsWith(`${section}.`)) {
         resourceCheckExpandedNodes.value.delete(node);
       }
     }

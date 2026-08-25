@@ -23,14 +23,14 @@ describe("expanding and collapsing", () => {
     expect(ui.isFieldCheckExpanded("awards")).toBe(true);
   });
 
-  it("collapses a sibling that extends the collapsed node's name", () => {
+  it("keeps a sibling expanded whose name extends the collapsed node's", () => {
     const ui = useUiStore();
     ui.expandFieldCheck("tender");
     ui.expandFieldCheck("tenderers");
 
     ui.collapseFieldCheck("tender");
 
-    expect(ui.isFieldCheckExpanded("tenderers")).toBe(false);
+    expect(ui.isFieldCheckExpanded("tenderers")).toBe(true);
   });
 });
 
