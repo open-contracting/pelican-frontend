@@ -74,4 +74,5 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec vue-tsc --build
+      - run: pnpm test
       - run: pnpm exec vite build
