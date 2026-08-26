@@ -75,8 +75,12 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec vue-tsc --build
-      - run: pnpm test
+      - run: pnpm exec vitest run --coverage
       - run: pnpm exec vite build
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          files: frontend/coverage/lcov.info
+          fail_ci_if_error: true
   # Without `if: always()`, a failed dependency would skip `build`, and a skipped job satisfies a required status check.
   build:
     needs: [backend, frontend]
