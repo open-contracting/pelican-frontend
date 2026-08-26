@@ -41,7 +41,7 @@ A signed-in user with no associated publishers sees an empty homepage.
 Add a staff member
 ------------------
 
-A staff member sees every report, creates and deletes reports, and exports to ``GOOGLE_DRIVE_FOLDER``. Only a staff member reaches the administration site.
+A staff member sees every report, creates and deletes reports, and exports to ``GOOGLE_DRIVE_FOLDER``. Staff members can access the administration site, and require *Superuser status* to make changes.
 
 After adding their credentials to the proxy, run:
 
@@ -49,4 +49,4 @@ After adding their credentials to the proxy, run:
 
    ./manage.py createuser --staff USERNAME
 
-Or, if the person already has an account, check *Staff status* in the administration site.
+Or, if the person already has an account, check *Staff status* and *Superuser status* in the administration site.

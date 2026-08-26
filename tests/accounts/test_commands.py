@@ -16,14 +16,20 @@ class CreateUserTests(TestCase):
     def test_create_staff(self):
         call_command("createuser", "--staff", "morgan")
 
-        self.assertTrue(User.objects.get(username="morgan").is_staff)
+        user = User.objects.get(username="morgan")
+
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_superuser)
 
     def test_promote(self):
         User.objects.create_user("morgan")
 
         call_command("createuser", "--staff", "morgan")
 
-        self.assertTrue(User.objects.get(username="morgan").is_staff)
+        user = User.objects.get(username="morgan")
+
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_superuser)
 
     def test_existing_staff_is_not_demoted(self):
         User.objects.create_user("morgan", is_staff=True)
