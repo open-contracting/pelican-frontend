@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { fileURLToPath, URL } from "node:url";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig, loadEnv } from "vite";
@@ -47,6 +48,16 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       sourcemap: true,
+    },
+    test: {
+      environment: "happy-dom",
+      setupFiles: ["./src/test/setup.ts"],
+      coverage: {
+        // Measure the whole source, not only the files the tests import.
+        include: ["src/**/*.{ts,vue}"],
+        exclude: ["src/test/**"],
+        reporter: ["text", "lcov"],
+      },
     },
   };
 });

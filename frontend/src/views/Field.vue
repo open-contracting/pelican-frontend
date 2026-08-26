@@ -73,11 +73,11 @@
       <FieldCheckTable
         v-if="layout == 'table'"
         ref="field-check-table"
-        :filter="filters[filterIndex]"
+        :filter="FIELD_LEVEL_FILTERS[filterIndex]"
       />
       <FieldCheckTree
         v-else-if="layout == 'tree'"
-        :filter="filters[filterIndex]"
+        :filter="FIELD_LEVEL_FILTERS[filterIndex]"
       />
     </div>
   </dashboard>
@@ -91,6 +91,7 @@ import FieldCheckTable from "@/components/FieldCheckTable.vue";
 import FieldCheckTree from "@/components/FieldCheckTree.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import { FIELD_LEVEL_FILTERS } from "@/filters.js";
 import { useUiStore } from "@/stores/ui.js";
 import type { FieldLevelCheck } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
@@ -108,13 +109,6 @@ const filterNames = computed(() => [
   t("field.filterDropdown.qualityFailedOnly"),
   t("filterDropdown.passedOnly"),
 ]);
-
-const filters: ((item: FieldLevelCheck) => boolean)[] = [
-  () => true,
-  (item) => item.coverage.failed_count > 0,
-  (item) => item.quality.failed_count > 0,
-  (item) => item.coverage.failed_count === 0 && item.quality.failed_count === 0 && item.coverage.passed_count > 0,
-];
 
 const layout = computed(() => ui.fieldCheckLayout);
 const search = computed(() => ui.fieldCheckSearch ?? undefined);
