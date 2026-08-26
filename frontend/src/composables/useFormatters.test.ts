@@ -51,10 +51,9 @@ describe("formatPercentage", () => {
 });
 
 describe("formatPercentage2D", () => {
-  it("rounds a ratio to two decimals, in the reader's language and its sign convention", () => {
+  it("rounds a ratio to two decimals, in the reader's language, with the sign attached", () => {
     expect(formatters("en").formatPercentage2D(0.123456)).toBe("12.35%");
-    // Spanish sets the sign off with a non-breaking space.
-    expect(formatters("es").formatPercentage2D(0.123456)).toBe("12,35\u00A0%");
+    expect(formatters("es").formatPercentage2D(0.123456)).toBe("12,35%");
   });
 
   it("keeps exact bounds exact", () => {

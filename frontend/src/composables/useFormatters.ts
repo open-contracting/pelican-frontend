@@ -14,28 +14,27 @@ export function useFormatters() {
     return integer.value.format(value);
   };
 
+  // The sign stays attached in every language, as elsewhere in the interface, rather than
+  // spaced off as Intl's percent style would in Spanish.
   const percentFormatter = (digits: number) => {
     const formatter = computed(
       () =>
-        new Intl.NumberFormat(locale.value, {
-          style: "percent",
-          minimumFractionDigits: digits,
-          maximumFractionDigits: digits,
-        }),
+        new Intl.NumberFormat(locale.value, { minimumFractionDigits: digits, maximumFractionDigits: digits }),
     );
-    const factor = 10 ** (digits + 2);
+    const factor = 10 ** digits;
 
     // A percentage that rounds to 0 or 100 without being either is reported as short of it.
     return (value: number) => {
-      const rounded = Math.round(value * factor) / factor;
+      const percentage = value * 100;
+      const rounded = Math.round(percentage * factor) / factor;
 
-      if (rounded === 0 && value !== 0) {
-        return `>${formatter.value.format(0)}`;
+      if (rounded === 0 && percentage !== 0) {
+        return `>${formatter.value.format(0)}%`;
       }
-      if (rounded === 1 && value !== 1) {
-        return `<${formatter.value.format(1)}`;
+      if (rounded === 100 && percentage !== 100) {
+        return `<${formatter.value.format(100)}%`;
       }
-      return formatter.value.format(value);
+      return `${formatter.value.format(rounded)}%`;
     };
   };
 
