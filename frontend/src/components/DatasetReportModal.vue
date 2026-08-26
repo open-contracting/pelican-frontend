@@ -315,10 +315,11 @@ function retry() {
   createDatasetReport();
 }
 
+// A copied link carries a query string ("?usp=sharing") or a fragment, which are not part of the ID.
 function fileIdFormatter(value: string) {
-  let valueMatch = value.match(/\/d\/([^/]+)/);
+  let valueMatch = value.match(/\/d\/([^/?#]+)/);
   if (valueMatch == null) {
-    valueMatch = value.match(/\/folders\/([^/]+)/);
+    valueMatch = value.match(/\/folders\/([^/?#]+)/);
   }
   return valueMatch != null ? valueMatch[1] : value;
 }

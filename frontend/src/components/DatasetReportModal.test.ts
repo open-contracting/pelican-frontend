@@ -109,7 +109,15 @@ describe("the file ID formatter", () => {
     expect(formatter("https://docs.google.com/document/d/DOC_ID/edit")).toBe("DOC_ID");
     expect(formatter("https://drive.google.com/drive/folders/FOLDER_ID")).toBe("FOLDER_ID");
     expect(formatter("BARE_ID")).toBe("BARE_ID");
-    // A query string is not stripped, so a "Copy link" URL keeps its ?usp=sharing suffix.
-    expect(formatter("https://drive.google.com/drive/folders/FOLDER_ID?usp=sharing")).toBe("FOLDER_ID?usp=sharing");
+  });
+
+  it("drops a copied link's query string and fragment", () => {
+    const wrapper = mountModal();
+    const formatter = wrapper.findAllComponents(BFormInput)[0].props("formatter") as (value: string) => string;
+
+    expect(formatter("https://drive.google.com/drive/folders/FOLDER_ID?usp=sharing")).toBe("FOLDER_ID");
+    expect(formatter("https://docs.google.com/document/d/DOC_ID?usp=drive_link")).toBe("DOC_ID");
+    expect(formatter("https://docs.google.com/document/d/DOC_ID#heading=h.abc")).toBe("DOC_ID");
+    expect(formatter("https://docs.google.com/document/d/DOC_ID/edit#heading=h.abc")).toBe("DOC_ID");
   });
 });
