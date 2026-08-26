@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 export function useFormatters() {
   const { locale } = useI18n();
 
-  // A user reading the interface in Spanish reads 12.047 and 25,5 %, not 12,047 and 25.5%.
+  // A user reading the interface in Spanish reads 12.047 and 25,5%, not 12,047 and 25.5%.
   const integer = computed(() => new Intl.NumberFormat(locale.value, { maximumFractionDigits: 0 }));
 
   const formatNumber = (value: number | undefined) => {
@@ -14,8 +14,7 @@ export function useFormatters() {
     return integer.value.format(value);
   };
 
-  // The sign stays attached in every language, as elsewhere in the interface, rather than
-  // spaced off as Intl's percent style would in Spanish.
+  // Intl's percent style would space the sign off in Spanish, unlike the rest of the interface.
   const percentFormatter = (digits: number) => {
     const formatter = computed(
       () => new Intl.NumberFormat(locale.value, { minimumFractionDigits: digits, maximumFractionDigits: digits }),
