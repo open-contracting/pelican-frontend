@@ -1,12 +1,9 @@
-import logging
+from functools import partial
 
 from django.conf import settings
-from django.db import connections
+from django.db import close_old_connections
 from yapw.clients import AsyncConsumer, Blocking
-from yapw.decorators import decorate
-from yapw.methods import nack
-
-logger = logging.getLogger(__name__)
+from yapw.decorators import discard
 
 
 def publish(*args, **kwargs):
@@ -23,20 +20,5 @@ def consume(*args, **kwargs):
     client.start()
 
 
-def decorator(decode, callback, state, channel, method, properties, body):
-    """
-    Close the database connections opened by the callback, before returning.
-
-    If the callback raises an exception, discard the message: requeueing it might upload a duplicate document,
-    and shutting down would stop every other export.
-    """
-
-    def errback(exception):
-        logger.error("Unhandled exception when consuming %r, discarding message", body, exc_info=exception)
-        nack(state, channel, method.delivery_tag, requeue=False)
-
-    def finalback():
-        for connection in connections.all():
-            connection.close()
-
-    decorate(decode, callback, state, channel, method, properties, body, errback, finalback)
+# Django closes old connections between requests. A consumer similarly needs to close old connections between messages.
+close_old_connections_and_discard = partial(discard, finalback=close_old_connections)

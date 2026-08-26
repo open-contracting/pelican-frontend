@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from yapw.methods import ack
 
-from api.rabbitmq import consume, decorator
+from api.rabbitmq import close_old_connections_and_discard, consume
 from exporter import exceptions
 from exporter.gdocs import Gdocs
 from exporter.messages import DEFAULT_LANGUAGE, MESSAGES
@@ -20,7 +20,8 @@ class Command(BaseCommand):
     help = "Create the reports that POST api/exports/ requests"
 
     def handle(self, *args, **options):
-        consume(on_message_callback=callback, queue=ROUTING_KEY, decorator=decorator)
+        # If the callback raises an exception, discard the message, as requeueing it might upload a duplicate document.
+        consume(on_message_callback=callback, queue=ROUTING_KEY, decorator=close_old_connections_and_discard)
 
 
 def callback(client_state, channel, method, properties, input_message):
