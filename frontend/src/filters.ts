@@ -25,6 +25,7 @@ export const RESOURCE_LEVEL_FILTERS: ((item: ResourceLevelCheck) => boolean)[] =
 
 export const TIME_VARIANCE_LEVEL_FILTERS: ((item: TimeVarianceLevelCheck) => boolean)[] = [
   () => true,
-  (item) => item.coverage_result !== true || item.check_result !== true,
+  // A check that applied to nothing has no result, and is no more failed than it is passed.
+  (item) => item.coverage_result === false || item.check_result === false,
   (item) => item.coverage_result === true && item.check_result === true,
 ];

@@ -75,17 +75,20 @@ describe("RESOURCE_LEVEL_FILTERS", () => {
 });
 
 describe("TIME_VARIANCE_LEVEL_FILTERS", () => {
-  it("counts a check as failed unless both of its results passed", () => {
+  it("counts a check as failed only when a result failed, not when it is absent", () => {
     const items = [
       { name: "bothPassed", coverage_result: true, check_result: true },
       { name: "checkFailed", coverage_result: true, check_result: false },
       { name: "coverageFailed", coverage_result: false, check_result: true },
+      // No pairs were found, so the coverage failed and the check itself has no result.
+      { name: "noPairs", coverage_result: false, check_result: null },
+      // The check applied to no compiled release, so the card reports insufficient data.
       { name: "notApplicable", coverage_result: null, check_result: null },
     ] as (TimeVarianceLevelCheck & { name: string })[];
 
     expect(kept(TIME_VARIANCE_LEVEL_FILTERS, items)).toEqual([
-      ["bothPassed", "checkFailed", "coverageFailed", "notApplicable"],
-      ["checkFailed", "coverageFailed", "notApplicable"],
+      ["bothPassed", "checkFailed", "coverageFailed", "noPairs", "notApplicable"],
+      ["checkFailed", "coverageFailed", "noPairs"],
       ["bothPassed"],
     ]);
   });
