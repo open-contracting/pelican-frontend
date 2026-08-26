@@ -42,8 +42,8 @@ afterEach(() => {
 });
 
 describe("previewDataItem", () => {
-  it("previews an item below the size limit, remembering which control asked", async () => {
-    const item = itemOfLines(1, 2999);
+  it("previews an item at the size limit, remembering which control asked", async () => {
+    const item = itemOfLines(1, 3000);
     apiGet.mockResolvedValueOnce(item);
     const { previewDataItem, previewData, loadingPreviewData, selectedKey } = composable();
 
@@ -57,8 +57,8 @@ describe("previewDataItem", () => {
     expect(toast).not.toHaveBeenCalled();
   });
 
-  it("refuses an item at the size limit, explaining why", async () => {
-    apiGet.mockResolvedValueOnce(itemOfLines(1, 3000));
+  it("refuses an item of more than 3,000 lines, explaining why", async () => {
+    apiGet.mockResolvedValueOnce(itemOfLines(1, 3001));
     const { previewDataItem, previewData } = composable();
 
     previewDataItem(1);
@@ -191,9 +191,9 @@ describe("copyToClipboard", () => {
     return write;
   }
 
-  it("copies an item below the size limit", async () => {
+  it("copies an item at the size limit", async () => {
     const write = stubClipboard();
-    apiGet.mockResolvedValueOnce(itemOfLines(1, 2999));
+    apiGet.mockResolvedValueOnce(itemOfLines(1, 3000));
     const { copyToClipboard } = composable();
 
     await copyToClipboard(1);
@@ -204,9 +204,9 @@ describe("copyToClipboard", () => {
     );
   });
 
-  it("refuses an item at the size limit, explaining why", async () => {
+  it("refuses an item of more than 3,000 lines, explaining why", async () => {
     stubClipboard();
-    apiGet.mockResolvedValueOnce(itemOfLines(1, 3000));
+    apiGet.mockResolvedValueOnce(itemOfLines(1, 3001));
     const { copyToClipboard } = composable();
 
     await copyToClipboard(1);
