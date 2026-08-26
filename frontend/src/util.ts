@@ -1,4 +1,5 @@
 import { EXAMPLE_KEYS } from "@/config.js";
+import type { FieldCheckTreeNode, FieldLevelCheck } from "@/types.js";
 
 export function orderedShares<T extends { count: number }>(shares: Record<string, T>): [string, T][] {
   const items: [string, T][] = Object.keys(shares).map((key) => [key, shares[key]]);
@@ -20,4 +21,24 @@ export function withoutExamples(value: unknown): unknown {
     return result;
   }
   return value;
+}
+
+/** Nest the checks by the segments of their paths. The insertion order determines the order they render in. */
+export function fieldCheckTree(checks: FieldLevelCheck[]): FieldCheckTreeNode {
+  const root: FieldCheckTreeNode = { children: new Map() };
+
+  for (const check of checks) {
+    let node = root;
+    for (const segment of check.path.split(".")) {
+      let child = node.children.get(segment);
+      if (!child) {
+        child = { children: new Map() };
+        node.children.set(segment, child);
+      }
+      node = child;
+    }
+    node.check = check;
+  }
+
+  return root;
 }
