@@ -43,6 +43,7 @@ import { useI18n } from "vue-i18n";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TimeVarianceLevelCheck from "@/components/TimeVarianceLevelCheck.vue";
+import { TIME_VARIANCE_LEVEL_FILTERS } from "@/filters.js";
 import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import type { TimeVarianceLevelCheck as TimeVarianceCheck } from "@/types.js";
@@ -60,16 +61,10 @@ const filterNames = computed(() => [
   t("filterDropdown.passedOnly"),
 ]);
 
-const filters: ((item: TimeVarianceCheck) => boolean)[] = [
-  () => true,
-  (item) => item.coverage_result !== true || item.check_result !== true,
-  (item) => item.coverage_result === true && item.check_result === true,
-];
-
 const loaded = computed(() => datasetStore.datasetLevelStats != null);
 
 const timeVarianceLevelStats = computed(() => {
-  return datasetStore.timeVarianceLevelStats?.filter(filters[filterIndex.value]) ?? [];
+  return datasetStore.timeVarianceLevelStats?.filter(TIME_VARIANCE_LEVEL_FILTERS[filterIndex.value]) ?? [];
 });
 
 watch(filterIndex, (newFilterIndex) => {
