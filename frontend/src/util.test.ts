@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { orderedShares, withoutExamples } from "@/util.js";
+import type { FieldLevelCheck } from "@/types.js";
+import { fieldCheckTree, orderedShares, withoutExamples } from "@/util.js";
 
 describe("orderedShares", () => {
   it("orders entries by count, largest first", () => {
@@ -51,5 +52,40 @@ describe("withoutExamples", () => {
 
   it("keeps keys that only resemble example keys", () => {
     expect(withoutExamples({ examples2: [1], my_examples: [2] })).toEqual({ examples2: [1], my_examples: [2] });
+  });
+});
+
+describe("fieldCheckTree", () => {
+  const check = (path: string) => ({ path }) as FieldLevelCheck;
+  const segments = (node?: { children: Map<string, unknown> }) => [...(node?.children.keys() ?? [])];
+
+  it("nests the checks by the segments of their paths", () => {
+    const tree = fieldCheckTree([check("tender"), check("tender.items"), check("tender.items.id")]);
+
+    expect(segments(tree)).toEqual(["tender"]);
+    const tender = tree.children.get("tender");
+    expect(tender?.check?.path).toBe("tender");
+    expect(segments(tender)).toEqual(["items"]);
+    expect(tender?.children.get("items")?.children.get("id")?.check?.path).toBe("tender.items.id");
+  });
+
+  it("creates the ancestors that no check occupies", () => {
+    const tree = fieldCheckTree([check("tender.items.id")]);
+
+    const tender = tree.children.get("tender");
+    expect(tender?.check).toBeUndefined();
+    expect(tender?.children.get("items")?.check).toBeUndefined();
+    expect(tender?.children.get("items")?.children.get("id")?.check?.path).toBe("tender.items.id");
+  });
+
+  it("keeps the checks in the order given, at every depth", () => {
+    const tree = fieldCheckTree([check("planning.budget"), check("awards"), check("planning.rationale")]);
+
+    expect(segments(tree)).toEqual(["planning", "awards"]);
+    expect(segments(tree.children.get("planning"))).toEqual(["budget", "rationale"]);
+  });
+
+  it("returns an empty tree for no checks", () => {
+    expect(fieldCheckTree([]).children.size).toBe(0);
   });
 });
