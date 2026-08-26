@@ -18,8 +18,7 @@ export function useFormatters() {
   // spaced off as Intl's percent style would in Spanish.
   const percentFormatter = (digits: number) => {
     const formatter = computed(
-      () =>
-        new Intl.NumberFormat(locale.value, { minimumFractionDigits: digits, maximumFractionDigits: digits }),
+      () => new Intl.NumberFormat(locale.value, { minimumFractionDigits: digits, maximumFractionDigits: digits }),
     );
     const factor = 10 ** digits;
 
