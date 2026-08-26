@@ -52,7 +52,7 @@
             >
               <ResourceLevelList
                 :section="name"
-                :filter="filters[filterIndex]"
+                :filter="RESOURCE_LEVEL_FILTERS[filterIndex]"
               />
             </template>
           </tbody>
@@ -73,6 +73,7 @@ import FilterDropdown from "@/components/FilterDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import ResourceLevelList from "@/components/ResourceLevelList.vue";
 import { RESOURCE_CHECK_SECTIONS } from "@/config.js";
+import { RESOURCE_LEVEL_FILTERS } from "@/filters.js";
 import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
 import type { ResourceLevelCheck } from "@/types.js";
@@ -90,13 +91,6 @@ const filterNames = computed(() => [
   t("filterDropdown.passedOnly"),
   t("filterDropdown.calculatedOnly"),
 ]);
-
-const filters: ((item: ResourceLevelCheck) => boolean)[] = [
-  () => true,
-  (item) => item.failed_count > 0,
-  (item) => item.failed_count === 0 && item.passed_count > 0,
-  (item) => item.passed_count > 0 || item.failed_count > 0,
-];
 
 const loaded = computed(() => datasetStore.resourceLevelStats != null);
 
