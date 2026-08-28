@@ -23,11 +23,6 @@ MIME_TYPE = "application/vnd.oasis.opendocument.text"
 
 
 class Gdocs:
-    # If modifying these scopes, delete the file token.pickle.
-    SCOPES = ["https://www.googleapis.com/auth/documents"]
-
-    """Init (authentication etc.) of all necessary services,"""
-
     def __init__(self, main_template_id: str):
         if not default_storage.exists(settings.SERVICE_ACCOUNT_JSON_FILE):
             raise RuntimeError("Unable to find token file")
