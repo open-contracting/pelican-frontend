@@ -35,7 +35,8 @@ import { computed, onMounted, watch } from "vue";
 import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import { useDatasetStore } from "@/stores/dataset.js";
 import { useUiStore } from "@/stores/ui.js";
-import type { FieldLevelCheck, FieldCheckTreeNode as Node } from "@/types.js";
+import type { FieldLevelCheck } from "@/types.js";
+import { fieldCheckTree } from "@/util.js";
 import FieldCheckTreeNode from "./FieldCheckTreeNode.vue";
 
 const props = defineProps<{
@@ -47,26 +48,7 @@ const ui = useUiStore();
 const { search, sorted } = useFieldCheckSearch();
 
 const stats = computed(() => datasetStore.fieldLevelStats);
-const tree = computed(() => {
-  const root: Node = { children: new Map() };
-
-  // Insertion order determines the order in which the nodes render.
-  for (const n of sorted(stats.value, "processingOrder")) {
-    let node = root;
-    for (const p of n.path.split(".")) {
-      let child = node.children.get(p);
-      if (!child) {
-        child = { children: new Map() };
-        node.children.set(p, child);
-      }
-      node = child;
-    }
-
-    node.check = n;
-  }
-
-  return root;
-});
+const tree = computed(() => fieldCheckTree(sorted(stats.value, "processingOrder")));
 
 watch(search, () => {
   ui.setExpandedNodesForSearch(stats.value);

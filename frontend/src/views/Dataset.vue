@@ -23,7 +23,7 @@
     <template v-for="(section, index) in sections" :key="index">
       <DatasetLevelSection
         :section="section"
-        :filter="filters[filterIndex]"
+        :filter="DATASET_LEVEL_FILTERS[filterIndex]"
       />
     </template>
   </dashboard>
@@ -36,6 +36,7 @@ import { useI18n } from "vue-i18n";
 import DatasetLevelSection from "@/components/DatasetLevelSection.vue";
 import FilterDropdown from "@/components/FilterDropdown.vue";
 import { DATASET_CHECK_SECTIONS } from "@/config.js";
+import { DATASET_LEVEL_FILTERS } from "@/filters.js";
 import { useUiStore } from "@/stores/ui.js";
 import type { DatasetLevelCheck } from "@/types.js";
 import Dashboard from "./layouts/Dashboard.vue";
@@ -52,13 +53,6 @@ const filterNames = computed(() => [
   t("filterDropdown.passedOnly"),
   t("filterDropdown.calculatedOnly"),
 ]);
-
-const filters: ((item: DatasetLevelCheck) => boolean)[] = [
-  () => true,
-  (item) => item.result === false,
-  (item) => item.result === true,
-  (item) => item.result != null,
-];
 
 watch(filterIndex, (newFilterIndex) => {
   ui.datasetLevelFilterIndex = newFilterIndex;

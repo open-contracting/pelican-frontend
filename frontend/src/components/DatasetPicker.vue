@@ -91,7 +91,7 @@
         <tr v-if="isEmpty">
           <td colspan="6">{{ $t("dataset.empty") }}</td>
         </tr>
-        <template v-for="(item, index) in datasets" :key="index">
+        <template v-for="(item, index) in sortedDatasets" :key="index">
           <DatasetPickerRow
             v-if="isSearched(item.name)"
             :dataset="item"
@@ -190,38 +190,43 @@ function isSearched(name: string) {
   return !search.value || name.toLowerCase().includes(search.value.toLowerCase());
 }
 
-function sortBy(by: string, asc = true) {
-  if (!datasets.value) {
-    return;
-  }
+// A value missing from the list sorts last, rather than silently first.
+function rank(values: readonly string[], value: string) {
+  const index = values.indexOf(value);
+  return index === -1 ? values.length : index;
+}
 
-  let comp: (a: DatasetNode, b: DatasetNode) => number;
+function comparator(by: string): (a: DatasetNode, b: DatasetNode) => number {
   if (by === "created") {
-    comp = (a, b) => (a.created ?? "").localeCompare(b.created ?? "");
-  } else if (by === "name") {
-    comp = (a, b) => a.name.localeCompare(b.name);
-  } else if (by === "size") {
-    comp = (a, b) =>
-      (a.meta.compiled_releases.total_unique_ocids || -1) - (b.meta.compiled_releases.total_unique_ocids || -1);
-  } else if (by === "collection_id") {
-    comp = (a, b) =>
-      (a.meta.kingfisher_metadata.collection_id || -1) - (b.meta.kingfisher_metadata.collection_id || -1);
-  } else if (by === "phase") {
-    comp = (a, b) => {
-      if (a.phase === b.phase) {
-        if (a.state === b.state) {
-          return a.id - b.id;
-        }
-        return STATES.indexOf(a.state) - STATES.indexOf(b.state);
-      }
-      return PHASES.indexOf(a.phase) - PHASES.indexOf(b.phase);
-    };
-  } else {
-    throw new Error(`Unknown sorting method ${by}`);
+    return (a, b) => (a.created ?? "").localeCompare(b.created ?? "");
   }
+  if (by === "name") {
+    return (a, b) => a.name.localeCompare(b.name);
+  }
+  if (by === "size") {
+    // A dataset of 0 OCIDs has a size, unlike one whose metadata is not filled in yet.
+    return (a, b) =>
+      (a.meta.compiled_releases.total_unique_ocids ?? -1) - (b.meta.compiled_releases.total_unique_ocids ?? -1);
+  }
+  if (by === "collection_id") {
+    return (a, b) =>
+      (a.meta.kingfisher_metadata.collection_id ?? -1) - (b.meta.kingfisher_metadata.collection_id ?? -1);
+  }
+  if (by === "phase") {
+    return (a, b) =>
+      rank(PHASES, a.phase) - rank(PHASES, b.phase) || rank(STATES, a.state) - rank(STATES, b.state) || a.id - b.id;
+  }
+  throw new Error(`Unknown sorting method ${by}`);
+}
 
-  datasets.value.sort((a, b) => (asc ? comp(a, b) : comp(b, a)));
-  ui.datasetSorting = { by: by, asc: asc };
+const sortedDatasets = computed(() => {
+  const compare = comparator(sortedBy.value);
+  const direction = isAscendingSorted.value ? 1 : -1;
+  return [...datasets.value].sort((a, b) => direction * compare(a, b));
+});
+
+function sortBy(by: string, asc = true) {
+  ui.datasetSorting = { by, asc };
 }
 
 onMounted(() => {
@@ -242,7 +247,6 @@ onMounted(() => {
 
       datasets.value = tree;
       isEmpty.value = tree.length === 0;
-      sortBy(sortedBy.value, isAscendingSorted.value);
     })
     .catch(() => {});
 });

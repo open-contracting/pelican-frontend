@@ -39,7 +39,7 @@
         </span>
         {{ $t("dataset.phases." + dataset.phase) }}
       </template>
-      <template v-else-if="dataset.phase == 'DELETED' && dataset.state == 'OK'">
+      <template v-else-if="dataset.phase == 'DELETED'">
         <span class="small_icon">
           <FontAwesomeIcon
             :icon="['fas', 'ban']"

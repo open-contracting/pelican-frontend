@@ -32,8 +32,7 @@
         class="check_link name flex-fill"
         :to="to"
         :title="path"
-        v-html="highlightSearchLast(path)"
-      />
+      ><MarkedText :segments="highlightSearchLast(path)" /></RouterLink>
     </div>
   </FieldCheckTableRow>
 
@@ -52,6 +51,7 @@ import { useFieldCheckSearch } from "@/composables/useFieldCheckSearch.js";
 import { useUiStore } from "@/stores/ui.js";
 import type { FieldCheckTreeNode as Node } from "@/types.js";
 import FieldCheckTableRow from "./FieldCheckTableRow.vue";
+import MarkedText from "./MarkedText.vue";
 
 defineOptions({ name: "TreeNode" });
 

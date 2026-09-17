@@ -2,52 +2,55 @@ import { computed } from "vue";
 import { useUiStore } from "@/stores/ui.js";
 import type { FieldLevelCheck } from "@/types.js";
 
+/** A slice of a field's path, marked if the search matches it. */
+export interface PathSegment {
+  text: string;
+  matched: boolean;
+}
+
+const unmatched = (text: string): PathSegment[] => [{ text, matched: false }];
+
+/** Split ``text`` around each occurrence of the lowercase ``search``, marking the occurrences. */
+function markMatches(text: string, search: string): PathSegment[] {
+  const lower = text.toLowerCase();
+  const segments: PathSegment[] = [];
+  let start = 0;
+
+  for (let index = lower.indexOf(search); index !== -1; index = lower.indexOf(search, start)) {
+    if (index > start) {
+      segments.push({ text: text.slice(start, index), matched: false });
+    }
+    segments.push({ text: text.slice(index, index + search.length), matched: true });
+    start = index + search.length;
+  }
+  if (start < text.length) {
+    segments.push({ text: text.slice(start), matched: false });
+  }
+
+  return segments;
+}
+
 export function useFieldCheckSearch() {
   const ui = useUiStore();
 
   const searchRaw = computed(() => ui.fieldCheckSearch);
   const search = computed(() => searchRaw.value?.toLowerCase());
 
-  function comparator(by: string, asc: boolean) {
+  const byPath = (a: FieldLevelCheck, b: FieldLevelCheck) => a.path.localeCompare(b.path);
+
+  function comparator(by: string) {
     if (by === "path") {
-      return (a: FieldLevelCheck, b: FieldLevelCheck) => a.path.localeCompare(b.path);
+      return byPath;
     }
 
     if (by === "coverage") {
-      return (a: FieldLevelCheck, b: FieldLevelCheck) => {
-        let comparison = a.coverageOkRatio - b.coverageOkRatio;
-        if (comparison === 0) {
-          comparison = a.coverage.total_count - b.coverage.total_count;
-        }
-        if (comparison === 0) {
-          comparison = a.path.localeCompare(b.path);
-        }
-        return comparison;
-      };
+      return (a: FieldLevelCheck, b: FieldLevelCheck) =>
+        a.coverageOkRatio - b.coverageOkRatio || a.coverage.total_count - b.coverage.total_count || byPath(a, b);
     }
 
     if (by === "quality") {
-      // Checks without a quality score sort last, whichever direction the rest sort in.
-      return (a: FieldLevelCheck, b: FieldLevelCheck) => {
-        if (a.quality.total_count === 0) {
-          if (b.quality.total_count === 0) {
-            return a.path.localeCompare(b.path);
-          }
-          return asc ? 1 : -1;
-        }
-        if (b.quality.total_count === 0) {
-          return asc ? -1 : 1;
-        }
-
-        let comparison = a.qualityOkRatio - b.qualityOkRatio;
-        if (comparison === 0) {
-          comparison = a.quality.total_count - b.quality.total_count;
-        }
-        if (comparison === 0) {
-          comparison = a.path.localeCompare(b.path);
-        }
-        return comparison;
-      };
+      return (a: FieldLevelCheck, b: FieldLevelCheck) =>
+        a.qualityOkRatio - b.qualityOkRatio || a.quality.total_count - b.quality.total_count || byPath(a, b);
     }
 
     return (a: FieldLevelCheck, b: FieldLevelCheck) => a.processing_order - b.processing_order;
@@ -58,37 +61,46 @@ export function useFieldCheckSearch() {
       return [];
     }
 
-    const compare = comparator(by, asc);
-    return [...checks].sort((a, b) => (asc ? compare(a, b) : compare(b, a)));
+    const direction = asc ? 1 : -1;
+    const compare = comparator(by);
+
+    // Checks without a quality score sort last, whichever direction the rest sort in.
+    if (by === "quality") {
+      const scored = checks.filter((check) => check.quality.total_count !== 0);
+      const unscored = checks.filter((check) => check.quality.total_count === 0);
+      return [
+        ...scored.sort((a, b) => direction * compare(a, b)),
+        ...unscored.sort((a, b) => direction * byPath(a, b)),
+      ];
+    }
+
+    return [...checks].sort((a, b) => direction * compare(a, b));
   }
 
   function setSorting(by: string, asc = true) {
     ui.fieldCheckSorting = { by, asc };
   }
 
-  function highlightSearch(path: string) {
+  function highlightSearch(path: string): PathSegment[] {
     if (!search.value) {
-      return path;
+      return unmatched(path);
     }
-    // escape regex special characters
-    const search_esc = search.value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-    return path.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
+    return markMatches(path, search.value);
   }
 
-  function highlightSearchLast(path: string) {
+  function highlightSearchLast(path: string): PathSegment[] {
     const name = path.substring(path.lastIndexOf(".") + 1);
 
     if (!search.value || !isPathSearched(path)) {
-      return name;
+      return unmatched(name);
     }
 
-    let search_last = search.value.replace(/^[.]+|[.]+$/g, "");
-    if (search_last.includes(".")) {
-      search_last = search_last.split(".").slice(-1)[0];
+    // Only the search's last segment can match the path's last segment.
+    const last = search.value.split(".").filter(Boolean).at(-1);
+    if (!last) {
+      return unmatched(name);
     }
-    // escape regex special characters
-    const search_esc = search_last.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-    return name.replace(new RegExp(`(${search_esc})`, "ig"), "<mark>$1</mark>");
+    return markMatches(name, last);
   }
 
   function isPathSearched(path: string) {

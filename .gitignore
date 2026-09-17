@@ -2,6 +2,7 @@ __pycache__
 node_modules
 dist
 .coverage
+/frontend/coverage
 /htmlcov
 /.env
 /credentials.json
