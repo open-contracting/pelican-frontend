@@ -55,7 +55,7 @@ google-auth-httplib2==0.2.0
     # via google-api-python-client
 googleapis-common-protos==1.65.0
     # via google-api-core
-gunicorn==26.0.0
+gunicorn[setproctitle]==26.0.0
     # via -r requirements_base.in
 httplib2==0.32.0
     # via
@@ -144,9 +144,9 @@ uritemplate==3.0.1
     # via
     #   drf-spectacular
     #   google-api-python-client
-urllib3==2.7.0
+urllib3==2.8.0
     # via
     #   requests
     #   sentry-sdk
-yapw==0.2.3
+yapw[perf]==0.2.3
     # via -r requirements_base.in
