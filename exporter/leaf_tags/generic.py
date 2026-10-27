@@ -1,6 +1,6 @@
 """Factories for leaf tags."""
 
-import datetime
+import datetime as dt
 from typing import Any
 
 from lxml import etree
@@ -63,7 +63,7 @@ def generate_timestamp_leaf_tag(key: str, datetime_format: str) -> type[LeafTag]
     @argument("mode", choices=DATETIME_FORMATS, default="datetime")
     @leaf(key)
     def _tag(tag: LeafTag, data: dict[str, Any]) -> str:
-        d = datetime.datetime.strptime(data[key], datetime_format).replace(tzinfo=datetime.UTC)
+        d = dt.datetime.strptime(data[key], datetime_format).replace(tzinfo=dt.UTC)
         return d.strftime(DATETIME_FORMATS[tag.arguments["mode"]])
 
     return _tag

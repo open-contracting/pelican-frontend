@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import logging
 
 from django.core.management.base import BaseCommand
@@ -38,7 +38,7 @@ def callback(client_state, channel, method, properties, input_message):
         base.finalize_arguments()
         content, export.failed_checks = base.validate_and_render({})
 
-        filename = export.name or f"Report {export.dataset_id} {datetime.datetime.now(tz=datetime.UTC)}"
+        filename = export.name or f"Report {export.dataset_id} {dt.datetime.now(tz=dt.UTC)}"
 
         export.document_id = gdocs.upload(export.folder_id, filename, content)
         export.status = Export.Status.OK
