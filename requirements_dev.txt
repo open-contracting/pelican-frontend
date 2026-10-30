@@ -159,7 +159,7 @@ pycparser==3.0
     # via
     #   -r requirements_base.txt
     #   cffi
-pyparsing==3.1.0
+pyparsing==3.3.3
     # via
     #   -r requirements_base.txt
     #   httplib2
