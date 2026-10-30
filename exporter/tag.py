@@ -266,7 +266,7 @@ class TagExpression:
     arguments: dict[str, str]
 
     @classmethod
-    def parse(cls, string: str) -> "TagExpression":
+    def parse(cls, string: str) -> TagExpression:
         """
         Parse the string as a tag.
 

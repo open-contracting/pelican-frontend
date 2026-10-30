@@ -32,7 +32,7 @@ class TagError(PelicanError):
         self.full_tag = full_tag
         self.template_id = template_id
 
-    def fill(self, full_tag: str, template_id: str) -> "TagError":
+    def fill(self, full_tag: str, template_id: str) -> TagError:
         """
         Add metadata to the exception to assist in debugging.
 

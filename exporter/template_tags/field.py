@@ -11,9 +11,7 @@ from exporter.tag import TemplateTag, argument, template
 
 
 # See similar code in Pelican backend's field_level/definitions.py.
-def _descend(
-    value: dict[str, Any], new_path: tuple[str, ...], dot_path: str, refs: tuple[str, ...]
-) -> Generator[str, None, None]:
+def _descend(value: dict[str, Any], new_path: tuple[str, ...], dot_path: str, refs: tuple[str, ...]) -> Generator[str]:
     if hasattr(value, "__reference__"):
         refs += (value.__reference__["$ref"][14:],)  # remove #/definitions/
 
@@ -23,7 +21,7 @@ def _descend(
 
 def _paths(
     properties: dict[str, Any], path: tuple[str, ...] | None = None, refs: tuple[str, ...] | None = None
-) -> Generator[str, None, None]:
+) -> Generator[str]:
     if path is None:
         path = ()
     if refs is None:
