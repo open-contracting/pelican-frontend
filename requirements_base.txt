@@ -112,7 +112,7 @@ pyparsing==3.1.0
     # via
     #   httplib2
     #   matplotlib
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via matplotlib
 pyyaml==6.0.2
     # via drf-spectacular
@@ -138,6 +138,8 @@ six==1.16.0
     #   python-dateutil
 sqlparse==0.6.0
     # via django
+tzdata==2026.5
+    # via python-dateutil
 uritemplate==3.0.1
     # via
     #   drf-spectacular
