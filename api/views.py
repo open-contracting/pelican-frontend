@@ -6,7 +6,6 @@ from django.db.models import Count, F, OuterRef, Subquery
 from django.http import HttpResponseBadRequest, StreamingHttpResponse
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from psycopg.sql import SQL
 from rest_framework import mixins, permissions, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -347,35 +346,30 @@ class CountDatasetFilterItems(views.APIView):
         dataset = get_permitted_dataset(request.user, serializer.validated_data["dataset_id_original"])
 
         # See similar code in dataset_filter.py in pelican-backend.
-        variables = {"dataset_id_original": dataset.pk}
-        parts = ["SELECT count(*) FROM data_item WHERE dataset_id = %(dataset_id_original)s"]
+        statement = t"SELECT count(*) FROM data_item WHERE dataset_id = {dataset.pk}"
 
         if "release_date_from" in filter_message:
-            variables["release_date_from"] = filter_message["release_date_from"]
-            parts.append("data->>'date' >= %(release_date_from)s")
+            statement += t" AND data->>'date' >= {filter_message['release_date_from']}"
 
         if "release_date_to" in filter_message:
-            variables["release_date_to"] = filter_message["release_date_to"]
-            parts.append("data->>'date' <= %(release_date_to)s")
+            statement += t" AND data->>'date' <= {filter_message['release_date_to']}"
 
         if "buyer" in filter_message:
-            variables["buyer"] = filter_message["buyer"]
-            parts.append("data->'buyer'->>'name' = ANY(%(buyer)s)")
+            statement += t" AND data->'buyer'->>'name' = ANY({filter_message['buyer']})"
 
         if "buyer_regex" in filter_message:
-            variables["buyer_regex"] = filter_message["buyer_regex"]
-            parts.append("data->'buyer'->>'name' ILIKE %(buyer_regex)s")
+            statement += t" AND data->'buyer'->>'name' ILIKE {filter_message['buyer_regex']}"
 
         if "procuring_entity" in filter_message:
-            variables["procuring_entity"] = filter_message["procuring_entity"]
-            parts.append("data->'tender'->'procuringEntity'->>'name' = ANY(%(procuring_entity)s)")
+            statement += t" AND data->'tender'->'procuringEntity'->>'name' = ANY({filter_message['procuring_entity']})"
 
         if "procuring_entity_regex" in filter_message:
-            variables["procuring_entity_regex"] = filter_message["procuring_entity_regex"]
-            parts.append("data->'tender'->'procuringEntity'->>'name' ILIKE %(procuring_entity_regex)s")
+            statement += (
+                t" AND data->'tender'->'procuringEntity'->>'name' ILIKE {filter_message['procuring_entity_regex']}"
+            )
 
         with connections["pelican_backend"].cursor() as cursor:
-            cursor.execute(SQL(" AND ".join(parts)), variables)
+            cursor.execute(statement)
             items = cursor.fetchall()[0][0]
 
         return Response({"items": items})
