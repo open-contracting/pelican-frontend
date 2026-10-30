@@ -55,7 +55,7 @@ google-auth-httplib2==0.2.0
     # via google-api-python-client
 googleapis-common-protos==1.65.0
     # via google-api-core
-gunicorn[setproctitle]==26.0.0
+gunicorn==26.0.0
     # via -r requirements_base.in
 httplib2==0.32.0
     # via
@@ -112,7 +112,7 @@ pyparsing==3.1.0
     # via
     #   httplib2
     #   matplotlib
-python-dateutil==2.8.0
+python-dateutil==2.9.0.post0
     # via matplotlib
 pyyaml==6.0.2
     # via drf-spectacular
@@ -138,8 +138,6 @@ six==1.16.0
     #   python-dateutil
 sqlparse==0.6.0
     # via django
-typing-extensions==4.7.1
-    # via psycopg
 uritemplate==3.0.1
     # via
     #   drf-spectacular
@@ -148,5 +146,5 @@ urllib3==2.8.0
     # via
     #   requests
     #   sentry-sdk
-yapw[perf]==0.2.3
+yapw==0.2.3
     # via -r requirements_base.in

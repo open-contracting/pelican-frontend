@@ -15,7 +15,7 @@ Contributing
 Setup
 -----
 
-Create a Python 3.11 virtual environment.
+Create a Python 3.13 virtual environment.
 
 Set up the git pre-commit hook:
 
