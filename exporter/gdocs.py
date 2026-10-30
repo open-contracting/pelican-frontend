@@ -97,7 +97,7 @@ class Gdocs:
                     data = zipread.read(item.filename)
                     zipwrite.writestr(item, data)
 
-        shutil.move(f"{zip_file_path}_copy", zip_file_path)
+        Path(f"{zip_file_path}_copy").move(zip_file_path)
 
     def get_content(self, file_id: str) -> etree._Element:
         with (
