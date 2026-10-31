@@ -4,13 +4,15 @@ Decorators to construct tags.
 Use these for leaf tags if :doc:`generic` is insufficient.
 """
 
-from collections.abc import Callable
-from typing import Any
-
-from lxml import etree
+from typing import TYPE_CHECKING, Any
 
 from exporter.tag import LeafTag, Tag, TemplateTag
 from exporter.util import quote_list
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    from lxml import etree
 
 
 def template(

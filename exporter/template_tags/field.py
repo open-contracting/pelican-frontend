@@ -1,5 +1,4 @@
-from collections.abc import Generator
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import jsonref
 from django.conf import settings
@@ -8,6 +7,9 @@ from api.models import FieldLevelCheckExamples, Report
 from exporter.leaf_tags.field import description, failed_examples, name, passed_examples, result_box_image
 from exporter.leaf_tags.generic import generate_count_leaf_tag, generate_key_leaf_tag
 from exporter.tag import TemplateTag, argument, template
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 # See similar code in Pelican backend's field_level/definitions.py.

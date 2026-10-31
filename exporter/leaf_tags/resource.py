@@ -1,10 +1,11 @@
-from typing import Any
-
-from lxml import etree
+from typing import TYPE_CHECKING, Any
 
 from exporter import graphs
 from exporter.tag import LeafTag, leaf
 from exporter.util import box_image
+
+if TYPE_CHECKING:
+    from lxml import etree
 
 
 @leaf("resultBoxImage")

@@ -1,10 +1,11 @@
-from typing import Any
-
-from lxml import etree
+from typing import TYPE_CHECKING, Any
 
 from exporter import graphs
 from exporter.tag import LeafTag, argument, leaf
 from exporter.util import MODES, box_image, sample_and_format
+
+if TYPE_CHECKING:
+    from lxml import etree
 
 # These are not typos: "_" is replaced with "-" in template_tags/dataset.py.
 COUNT_RANGES = {"1", "2-20", "21-50", "51-100", "100+"}

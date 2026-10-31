@@ -1,10 +1,9 @@
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings
 
 from api.models import DatasetLevelCheck
 from exporter.exceptions import CheckNotComputedError
-from exporter.gdocs import Gdocs
 from exporter.leaf_tags.dataset import (
     buyer_count,
     code_count,
@@ -30,6 +29,9 @@ from exporter.leaf_tags.generic import generate_key_leaf_tag, generate_sample_le
 from exporter.messages import message
 from exporter.tag import Tag, TemplateTag
 from exporter.util import quote_list
+
+if TYPE_CHECKING:
+    from exporter.gdocs import Gdocs
 
 # Keep in sync with DATASET_CHECK_TYPES in config.ts
 CHECK_TYPES = {

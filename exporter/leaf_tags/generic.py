@@ -1,12 +1,13 @@
 """Factories for leaf tags."""
 
 import datetime as dt
-from typing import Any
-
-from lxml import etree
+from typing import TYPE_CHECKING, Any
 
 from exporter.tag import LeafTag, argument, leaf
 from exporter.util import LEVELS, MODES, sample_and_format
+
+if TYPE_CHECKING:
+    from lxml import etree
 
 DATETIME_FORMATS = {
     "datetime": "%Y-%m-%d %H:%M:%S",

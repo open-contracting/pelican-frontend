@@ -1,8 +1,6 @@
-import builtins
 import re
-from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from django.conf import settings
 from lxml import etree
@@ -16,8 +14,13 @@ from exporter.exceptions import (
     TagSyntaxError,
     UnknownTagError,
 )
-from exporter.gdocs import Gdocs
 from exporter.util import quote_list
+
+if TYPE_CHECKING:
+    import builtins
+    from collections.abc import Callable
+
+    from exporter.gdocs import Gdocs
 
 
 class Tag:
