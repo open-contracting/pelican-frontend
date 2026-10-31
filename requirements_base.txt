@@ -4,7 +4,7 @@ asgiref==3.12.1
     # via
     #   django
     #   django-cors-headers
-attrs==23.2.0
+attrs==26.1.0
     # via
     #   jsonschema
     #   referencing
@@ -41,7 +41,7 @@ drf-spectacular==0.30.0
     # via -r requirements_base.in
 fonttools==4.61.0
     # via matplotlib
-google-api-core==2.19.2
+google-api-core==2.43.0
     # via google-api-python-client
 google-api-python-client==2.143.0
     # via -r requirements_base.in
@@ -53,9 +53,9 @@ google-auth==2.56.3
     #   google-auth-httplib2
 google-auth-httplib2==0.2.0
     # via google-api-python-client
-googleapis-common-protos==1.65.0
+googleapis-common-protos==1.76.0
     # via google-api-core
-gunicorn[setproctitle]==26.0.0
+gunicorn==26.0.0
     # via -r requirements_base.in
 httplib2==0.32.0
     # via
@@ -67,7 +67,7 @@ inflection==0.5.1
     # via drf-spectacular
 jsonref==1.1.0
     # via -r requirements_base.in
-jsonschema==4.21.1
+jsonschema==4.26.0
     # via drf-spectacular
 jsonschema-specifications==2023.12.1
     # via jsonschema
@@ -81,6 +81,8 @@ numpy==2.5.4
     # via
     #   contourpy
     #   matplotlib
+opentelemetry-api==1.45.1
+    # via google-api-core
 orjson==3.11.6
     # via yapw
 packaging==23.1
@@ -93,9 +95,9 @@ pillow==13.0.0
     # via
     #   -r requirements_base.in
     #   matplotlib
-proto-plus==1.24.0
+proto-plus==1.29.0
     # via google-api-core
-protobuf==5.29.6
+protobuf==7.36.2
     # via
     #   google-api-core
     #   googleapis-common-protos
@@ -116,7 +118,7 @@ python-dateutil==3.0.0
     # via matplotlib
 pyyaml==6.0.3
     # via drf-spectacular
-referencing==0.34.0
+referencing==0.37.0
     # via
     #   jsonschema
     #   jsonschema-specifications
@@ -138,6 +140,8 @@ six==1.16.0
     #   python-dateutil
 sqlparse==0.6.0
     # via django
+typing-extensions==4.16.0
+    # via opentelemetry-api
 tzdata==2026.5
     # via python-dateutil
 uritemplate==3.0.1
@@ -148,5 +152,5 @@ urllib3==2.8.0
     # via
     #   requests
     #   sentry-sdk
-yapw[perf]==0.2.3
+yapw==0.2.3
     # via -r requirements_base.in

@@ -5,7 +5,7 @@ asgiref==3.12.1
     #   -r requirements_base.txt
     #   django
     #   django-cors-headers
-attrs==23.2.0
+attrs==26.1.0
     # via
     #   -r requirements_base.txt
     #   jsonschema
@@ -56,7 +56,7 @@ fonttools==4.61.0
     # via
     #   -r requirements_base.txt
     #   matplotlib
-google-api-core==2.19.2
+google-api-core==2.43.0
     # via
     #   -r requirements_base.txt
     #   google-api-python-client
@@ -72,11 +72,11 @@ google-auth-httplib2==0.2.0
     # via
     #   -r requirements_base.txt
     #   google-api-python-client
-googleapis-common-protos==1.65.0
+googleapis-common-protos==1.76.0
     # via
     #   -r requirements_base.txt
     #   google-api-core
-gunicorn[setproctitle]==26.0.0
+gunicorn==26.0.0
     # via -r requirements_base.txt
 httplib2==0.32.0
     # via
@@ -93,7 +93,7 @@ inflection==0.5.1
     #   drf-spectacular
 jsonref==1.1.0
     # via -r requirements_base.txt
-jsonschema==4.21.1
+jsonschema==4.26.0
     # via
     #   -r requirements_base.txt
     #   drf-spectacular
@@ -114,10 +114,12 @@ numpy==2.5.4
     #   -r requirements_base.txt
     #   contourpy
     #   matplotlib
-orjson==3.11.6
+opentelemetry-api==1.45.1
     # via
     #   -r requirements_base.txt
-    #   yapw
+    #   google-api-core
+orjson==3.11.6
+    # via -r requirements_base.txt
 packaging==23.1
     # via
     #   -r requirements_base.txt
@@ -131,17 +133,17 @@ pillow==13.0.0
     # via
     #   -r requirements_base.txt
     #   matplotlib
-proto-plus==1.24.0
+proto-plus==1.29.0
     # via
     #   -r requirements_base.txt
     #   google-api-core
-protobuf==5.29.6
+protobuf==7.36.2
     # via
     #   -r requirements_base.txt
     #   google-api-core
     #   googleapis-common-protos
     #   proto-plus
-psycopg[c]==3.3.4
+psycopg==3.3.4
     # via
     #   -r requirements.in
     #   -r requirements_base.txt
@@ -172,7 +174,7 @@ pyyaml==6.0.3
     # via
     #   -r requirements_base.txt
     #   drf-spectacular
-referencing==0.34.0
+referencing==0.37.0
     # via
     #   -r requirements_base.txt
     #   jsonschema
@@ -189,9 +191,7 @@ rpds-py==2026.9.1
 sentry-sdk==2.73.0
     # via -r requirements_base.txt
 setproctitle==1.3.7
-    # via
-    #   -r requirements_base.txt
-    #   gunicorn
+    # via -r requirements_base.txt
 shortuuid==1.0.1
     # via -r requirements_base.txt
 six==1.16.0
@@ -203,6 +203,10 @@ sqlparse==0.6.0
     # via
     #   -r requirements_base.txt
     #   django
+typing-extensions==4.16.0
+    # via
+    #   -r requirements_base.txt
+    #   opentelemetry-api
 tzdata==2026.5
     # via
     #   -r requirements_base.txt
@@ -217,5 +221,5 @@ urllib3==2.8.0
     #   -r requirements_base.txt
     #   requests
     #   sentry-sdk
-yapw[perf]==0.2.3
+yapw==0.2.3
     # via -r requirements_base.txt
