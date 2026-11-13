@@ -20,7 +20,7 @@ jobs:
       - name: Run Pelican backend migrations and load Kingfisher Process fixtures
         shell: bash
         run: |
-          curl -sS \
+          curl -fsS \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/002_constraints.sql \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/20260815031218354_not_null.sql \
