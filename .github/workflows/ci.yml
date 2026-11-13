@@ -18,6 +18,7 @@ jobs:
       - run: ./manage.py --help
       - run: pip install -r requirements_dev.txt
       - name: Run Pelican backend migrations and load Kingfisher Process fixtures
+        shell: bash
         run: |
           curl -sS \
             https://raw.githubusercontent.com/open-contracting/pelican-backend/main/pelican/migrations/001_base.sql \
