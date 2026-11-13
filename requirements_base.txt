@@ -55,7 +55,7 @@ google-auth-httplib2==0.2.0
     # via google-api-python-client
 googleapis-common-protos==1.76.0
     # via google-api-core
-gunicorn==26.0.0
+gunicorn[setproctitle]==26.0.0
     # via -r requirements_base.in
 httplib2==0.32.0
     # via
@@ -81,7 +81,7 @@ numpy==2.5.4
     # via
     #   contourpy
     #   matplotlib
-opentelemetry-api==1.45.1
+opentelemetry-api==1.45.2
     # via google-api-core
 orjson==3.11.6
     # via yapw
@@ -152,5 +152,5 @@ urllib3==2.8.0
     # via
     #   requests
     #   sentry-sdk
-yapw==0.3.0
+yapw[perf]==0.3.0
     # via -r requirements_base.in
