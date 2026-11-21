@@ -34,5 +34,5 @@ class ConstantsTests(SimpleTestCase):
         self.assertEqual(array("STATES"), list(ProgressMonitorDataset.State.values))
 
     def test_phases(self):
-        # The frontend's phases are the steps of the progress bar, which a deleted dataset never reaches.
+        # The frontend's phases are the progress bar's steps, so they omit DELETED, which it shows as a status instead.
         self.assertEqual([*array("PHASES"), "DELETED"], list(ProgressMonitorDataset.Phase.values))
