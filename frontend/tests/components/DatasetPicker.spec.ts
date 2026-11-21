@@ -5,8 +5,8 @@ import api from "@/api.js";
 import DatasetPicker from "@/components/DatasetPicker.vue";
 import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 import { useUiStore } from "@/stores/ui.js";
-import { testI18n } from "@/test/helpers.js";
 import type { Dataset, Sorting } from "@/types.js";
+import { testI18n } from "../helpers.js";
 
 vi.mock("@/api.js", () => ({ default: { get: vi.fn() } }));
 

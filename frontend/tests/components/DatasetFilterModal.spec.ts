@@ -2,8 +2,8 @@ import { shallowMount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import api from "@/api.js";
 import DatasetFilterModal from "@/components/DatasetFilterModal.vue";
-import { testI18n } from "@/test/helpers.js";
 import type { Dataset } from "@/types.js";
+import { testI18n } from "../helpers.js";
 
 const { go } = vi.hoisted(() => ({ go: vi.fn() }));
 

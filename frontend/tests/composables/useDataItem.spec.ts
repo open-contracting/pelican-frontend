@@ -3,8 +3,8 @@ import { createPinia } from "pinia";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import api from "@/api.js";
 import { useDataItem } from "@/composables/useDataItem.js";
-import { mountComposable, testI18n } from "@/test/helpers.js";
 import type { DataItem } from "@/types.js";
+import { mountComposable, testI18n } from "../helpers.js";
 
 const { toast } = vi.hoisted(() => ({ toast: vi.fn() }));
 

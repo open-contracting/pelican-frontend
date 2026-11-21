@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import api from "@/api.js";
 import { initialLocale, rememberLocale, useLocale } from "@/composables/useLocale.js";
-import { mountComposable, testI18n } from "@/test/helpers.js";
+import { mountComposable, testI18n } from "../helpers.js";
 
 vi.mock("@/api.js", () => ({ default: { patch: vi.fn(async () => {}) } }));
 

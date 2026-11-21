@@ -7,8 +7,8 @@ import DatasetReportModal from "@/components/DatasetReportModal.vue";
 import GoogleDocsLink from "@/components/GoogleDocsLink.vue";
 import RetryOrCloseButtons from "@/components/RetryOrCloseButtons.vue";
 import { useSettingsStore } from "@/stores/settings.js";
-import { testI18n } from "@/test/helpers.js";
 import type { Dataset, Export } from "@/types.js";
+import { testI18n } from "../helpers.js";
 
 vi.mock("@/api.js", () => ({ default: { getJSON: vi.fn(), patch: vi.fn(), postJSON: vi.fn() } }));
 

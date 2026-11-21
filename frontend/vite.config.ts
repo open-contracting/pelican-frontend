@@ -51,11 +51,10 @@ export default defineConfig(({ mode }) => {
     },
     test: {
       environment: "happy-dom",
-      setupFiles: ["./src/test/setup.ts"],
+      setupFiles: ["./tests/setup.ts"],
       coverage: {
         // Measure the whole source, not only the files the tests import.
         include: ["src/**/*.{ts,vue}"],
-        exclude: ["src/test/**"],
         reporter: ["text", "lcov"],
       },
     },

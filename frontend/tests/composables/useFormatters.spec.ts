@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { useFormatters } from "@/composables/useFormatters.js";
-import { mountComposable, testI18n } from "@/test/helpers.js";
+import { mountComposable, testI18n } from "../helpers.js";
 
 function formatters(locale = "en") {
   const i18n = testI18n();

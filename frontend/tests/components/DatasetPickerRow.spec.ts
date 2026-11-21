@@ -2,8 +2,8 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import DatasetPickerRow from "@/components/DatasetPickerRow.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
-import { testI18n } from "@/test/helpers.js";
 import type { DatasetNode } from "@/types.js";
+import { testI18n } from "../helpers.js";
 
 function dataset(phase: string, state: string): DatasetNode {
   return {

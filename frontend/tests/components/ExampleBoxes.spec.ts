@@ -1,8 +1,8 @@
 import { shallowMount } from "@vue/test-utils";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ExampleBoxes from "@/components/ExampleBoxes.vue";
-import { testI18n } from "@/test/helpers.js";
 import type { ExampleSection } from "@/types.js";
+import { testI18n } from "../helpers.js";
 
 const { download, copyToClipboard } = vi.hoisted(() => ({ download: vi.fn(), copyToClipboard: vi.fn() }));
 

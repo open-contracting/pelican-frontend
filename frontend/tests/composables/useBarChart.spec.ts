@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { shareStyle, useBarChart } from "@/composables/useBarChart.js";
-import { mountComposable, testI18n } from "@/test/helpers.js";
+import { mountComposable, testI18n } from "../helpers.js";
 
 describe("shareStyle", () => {
   it("colors a share within the check's thresholds as passing, inclusively", () => {
