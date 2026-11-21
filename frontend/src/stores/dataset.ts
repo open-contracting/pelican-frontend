@@ -70,6 +70,14 @@ export const useDatasetStore = defineStore("dataset", () => {
     return dataItemJSON(itemId)?.split("\n").length ?? null;
   }
 
+  // Above this many lines of JSON, some browsers can crash while rendering the data.
+  // Sync with the "more than 3,000 lines" explanations in the message catalogs.
+  const maxJSONLines = 3000;
+
+  function dataItemTooLarge(itemId: number) {
+    return (dataItemJSONLines(itemId) ?? 0) > maxJSONLines;
+  }
+
   function reset() {
     fieldLevelStats.value = null;
     datasetLevelStats.value = null;
@@ -151,15 +159,11 @@ export const useDatasetStore = defineStore("dataset", () => {
   async function loadFieldLevelStats(datasetId: number) {
     fieldLevelStats.value = null;
 
-    const okRatio = (item: { passed_count: number; total_count: number }) => {
-      const result = item.passed_count / item.total_count;
-      return Number.isNaN(result) ? 0 : result;
-    };
+    const okRatio = (item: { passed_count: number; total_count: number }) =>
+      item.total_count ? item.passed_count / item.total_count : 0;
 
-    const failedRatio = (item: { failed_count: number; total_count: number }) => {
-      const result = item.failed_count / item.total_count;
-      return Number.isNaN(result) ? 0 : result;
-    };
+    const failedRatio = (item: { failed_count: number; total_count: number }) =>
+      item.total_count ? item.failed_count / item.total_count : 0;
 
     const formatted = CONFIG.apiEndpoints.fieldLevelReport.replace(/{id}/g, String(datasetId));
     const report = await api.get<FieldLevelReport>(`${CONFIG.apiBaseUrl}${formatted}`);
@@ -215,6 +219,7 @@ export const useDatasetStore = defineStore("dataset", () => {
     dataItemById,
     dataItemJSON,
     dataItemJSONLines,
+    dataItemTooLarge,
     datasetLevelCheckByName,
     fieldLevelCheckByPath,
     resourceLevelCheckByName,
