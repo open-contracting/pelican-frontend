@@ -59,8 +59,8 @@ def percentile_count(tag: LeafTag, data: dict[str, Any]) -> str:
 @leaf("sum")
 def percentile_sum(tag: LeafTag, data: dict[str, Any]) -> str:
     if "percentageRange" in tag.arguments:
-        return str(data["sums"][tag.arguments["percentageRange"]])
-    return str(sum(data["sums"].values()))
+        return f"{data['sums'][tag.arguments['percentageRange']]:.0f}"
+    return f"{sum(data['sums'].values()):.0f}"
 
 
 @argument("percentageRange", choices=PERCENTAGE_RANGES)
